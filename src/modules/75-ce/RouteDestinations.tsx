@@ -18,6 +18,7 @@ import type { AccountPathProps, Module } from '@common/interfaces/RouteInterface
 import NotFoundPage from '@common/pages/404/NotFoundPage'
 import { MinimalLayout } from '@common/layouts'
 import SessionToken from 'framework/utils/SessionToken'
+import ChildAppMounter from 'microfrontends/ChildAppMounter'
 
 import CESideNav from '@ce/components/CESideNav/CESideNav'
 import { ModuleName } from 'framework/types/ModuleName'
@@ -98,6 +99,9 @@ featureFactory.registerFeaturesByModule('ce', {
     }
   }
 })
+
+// eslint-disable-next-line import/no-unresolved
+const CcmMicroFrontendPath = React.lazy(() => import('ccmui/MicroFrontendApp'))
 
 const CESideNavProps: SidebarContext = {
   navComponent: CESideNav,
@@ -299,7 +303,7 @@ const CERoutes: React.FC = () => {
           <BudgetDetails />
         </RouteWithLayout>
 
-        <RouteWithLayout
+        {/* <RouteWithLayout
           licenseRedirectData={licenseRedirectData}
           sidebarProps={CESideNavProps}
           path={routes.toCERecommendations({ ...accountPathProps, ...projectPathProps })}
@@ -307,7 +311,7 @@ const CERoutes: React.FC = () => {
           pageName={PAGE_NAME.CERecommendationList}
         >
           <RecommendationList />
-        </RouteWithLayout>
+        </RouteWithLayout> */}
         <RouteWithLayout
           licenseRedirectData={licenseRedirectData}
           sidebarProps={CESideNavProps}
@@ -475,6 +479,9 @@ const CERoutes: React.FC = () => {
           pageName={PAGE_NAME.CEOverviewPage}
         >
           <OverviewPage />
+        </RouteWithLayout>
+        <RouteWithLayout path={routes.toCEMicro({ ...accountPathProps })} sidebarProps={CESideNavProps}>
+          <ChildAppMounter ChildApp={CcmMicroFrontendPath} />
         </RouteWithLayout>
         <Route path="*">
           <NotFoundPage />

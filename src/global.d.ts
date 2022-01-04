@@ -109,6 +109,10 @@ declare module 'sto/App' {
   const ChildApp: ChildAppComponent
   export default ChildApp
 }
+declare module 'ccmui/MicroFrontendApp' {
+  const ChildApp: ChildAppComponent
+  export default ChildApp
+}
 
 declare module 'sto/PipelineSecurityView' {
   import type { PipelineSecurityViewProps } from '@pipeline/interfaces/STOApp'
