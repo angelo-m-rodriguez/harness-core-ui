@@ -13,10 +13,6 @@ import type { FileStoreNodeDTO } from 'services/cd-ng'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { RootNodesList } from '@filestore/components/NavNodeList/NavNodesList'
-import React from 'react'
-import { Container, Layout } from '@wings-software/uicore'
-import { Color } from '@harness/design-system'
-import { NewFileButton } from '@filestore/common/NewFile/NewFile'
 
 import css from './StoreExplorer.module.scss'
 

@@ -27,16 +27,6 @@ export const NewFileButton: React.FC<NewFileButtonProps> = ({
   const newFileModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FILE })
   const newFolderModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FOLDER })
 
-import useNewFileModal from '@filestore/common/useNewFileModal/useNewFileModal'
-import useNewFolderModal from '@filestore/common/useNewFolderModal/useNewFolderModal'
-import useUploadFile from '@filestore/common/useUpload/useUpload'
-
-import { useStrings } from 'framework/strings'
-
-export const NewFileButton: React.FC = (): React.ReactElement => {
-  const { getString } = useStrings()
-  const newFileModal = useNewFileModal()
-  const newFolderModal = useNewFolderModal()
   const newUploadFile = useUploadFile()
 
   const menuItems = [
