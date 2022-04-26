@@ -14,7 +14,7 @@ import { firstLetterToUpperCase } from '@filestore/utils/textUtils'
 import css from './FileStorePopover.module.scss'
 
 export interface FileStorePopoverItem {
-  ComponentRenderer: any
+  ComponentRenderer: React.ReactElement
   onClick: () => void
   label: string
   disabled?: boolean

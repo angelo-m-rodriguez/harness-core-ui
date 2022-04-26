@@ -4,7 +4,7 @@ noFilesDescription: 'Directly drag and drop files/folders here, or use  the “+
 noFilesInFolderTitle: 'No files in this folder'
 view:
   fileType: 'file type'
-  fileUsage: 'file usage'
+  fileUsage: 'File Usage'
   lastModifiedBy: 'last modified by'
   replaceFile: 'Replace file'
   noPreview: 'No preview available'
@@ -14,3 +14,5 @@ editFileDetails: 'Edit File Details'
 newFolder: 'New Folder'
 uploadFileFolder: 'Upload File/Folder'
 folderSuccessCreated: 'Folder {{name}} created'
+fileSuccessCreated: 'File {{name}} created'
+

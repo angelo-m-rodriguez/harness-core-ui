@@ -4,21 +4,22 @@
  * that can be found in the licenses directory at the root of this repository, also available at
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
+import React, { useContext } from 'react'
+import { Container } from '@wings-software/uicore'
+import EmptyNodeView from '@filestore/components/EmptyNodeView/EmptyNodeView'
+import { useStrings } from 'framework/strings'
+import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
+import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 
-import React from 'react'
-import { Container, Layout } from '@wings-software/uicore'
+export default function StoreView(): React.ReactElement {
+  const { getString } = useStrings()
+  const { currentNode } = useContext(FileStoreContext)
 
-export interface StoreViewProps {
-  title?: string
-}
-
-export default function StoreView({ title = '' }: StoreViewProps): React.ReactElement {
   return (
-    <Layout.Vertical height="100%" width="100%">
-      <Container padding="xlarge">
-        {title}
-        {/* TODO: Implement design */}
-      </Container>
-    </Layout.Vertical>
+    <Container padding="xlarge" style={{ width: '100%' }}>
+      {currentNode?.type === FileStoreNodeTypes.FOLDER && !currentNode?.children?.length && (
+        <EmptyNodeView title={getString('filestore.noFilesInFolderTitle')} />
+      )}
+    </Container>
   )
 }

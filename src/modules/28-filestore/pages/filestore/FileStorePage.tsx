@@ -5,28 +5,36 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import { Layout } from '@wings-software/uicore'
+import { Layout, PageSpinner } from '@harness/uicore'
+
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { Page } from '@common/exports'
 import type { ProjectPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { getLinkForAccountResources } from '@common/utils/BreadcrumbUtils'
 import { useStrings } from 'framework/strings'
-import NoFilesView from '@filestore/components/NoFilesView/NoFilesView'
+
+import EmptyNodeView from '@filestore/components/EmptyNodeView/EmptyNodeView'
 import StoreExplorer from '@filestore/components/StoreExplorer/StoreExplorer'
 import StoreView from '@filestore/components/StoreView/StoreView'
+import { FileStoreContext, FileStoreContextProvider } from '@filestore/components/FileStoreContext/FileStoreContext'
+import { FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 
-const FileStorePage: React.FC = () => {
+const FileStore: React.FC = () => {
   const params = useParams<PipelineType<ProjectPathProps>>()
   const { accountId, orgIdentifier, projectIdentifier } = params
   const { getString } = useStrings()
-  const [fileStore, setFileStore] = useState<string[]>([])
+
+  const { fileStore, getRootNodes, dataLoading } = useContext(FileStoreContext)
 
   useEffect(() => {
-    setTimeout(() => {
-      setFileStore([' a'])
-    }, 50000)
+    getRootNodes({
+      identifier: FILE_STORE_ROOT,
+      name: FILE_STORE_ROOT,
+      type: FileStoreNodeTypes.FOLDER
+    })
   }, [])
 
   return (
@@ -40,20 +48,32 @@ const FileStorePage: React.FC = () => {
         title={getString('resourcePage.fileStore')}
       />
       <Page.Body>
-        {!fileStore.length ? (
-          <NoFilesView
-            title={getString('filestore.noFilesInStore')}
-            description={getString('filestore.noFilesTitle')}
-          />
+        {dataLoading ? (
+          <PageSpinner />
         ) : (
-          <Layout.Horizontal height="100%">
-            <StoreExplorer />
-            <StoreView />
-          </Layout.Horizontal>
+          <>
+            {!fileStore?.length ? (
+              <EmptyNodeView
+                title={getString('filestore.noFilesInStore')}
+                description={getString('filestore.noFilesTitle')}
+              />
+            ) : (
+              <Layout.Horizontal height="100%">
+                <StoreExplorer fileStore={fileStore} />
+                <StoreView />
+              </Layout.Horizontal>
+            )}
+          </>
         )}
       </Page.Body>
     </>
   )
 }
 
-export default FileStorePage
+export default function FileStorePage(): React.ReactElement {
+  return (
+    <FileStoreContextProvider>
+      <FileStore />
+    </FileStoreContextProvider>
+  )
+}

@@ -39,6 +39,12 @@ interface ComponentRendererProps {
   iconSrc: string
 }
 
+export const ComponentRenderer = ({ iconSrc, title }: ComponentRendererProps): React.ReactElement => (
+  <Layout.Horizontal spacing="small">
+    <img src={iconSrc} alt={title} />
+    <Text lineClamp={1}>{title}</Text>
+  </Layout.Horizontal>
+)
 export const ComponentRenderer = (props: ComponentRendererProps): React.ReactElement => {
   const { iconSrc, title } = props
 

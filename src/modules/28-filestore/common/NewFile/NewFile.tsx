@@ -8,6 +8,25 @@
 import React from 'react'
 
 import FileStorePopover from '@filestore/common/FileStorePopover/FileStorePopover'
+import useUploadFile from '@filestore/common/useUpload/useUpload'
+import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
+import { useStrings } from 'framework/strings'
+import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import type { FileStoreNodeDTO } from 'services/cd-ng'
+
+interface NewFileButtonProps {
+  parentIdentifier: string
+  callback: (node: FileStoreNodeDTO) => void
+}
+
+export const NewFileButton: React.FC<NewFileButtonProps> = ({
+  parentIdentifier,
+  callback
+}: NewFileButtonProps): React.ReactElement => {
+  const { getString } = useStrings()
+  const newFileModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FILE })
+  const newFolderModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FOLDER })
+
 import useNewFileModal from '@filestore/common/useNewFileModal/useNewFileModal'
 import useNewFolderModal from '@filestore/common/useNewFolderModal/useNewFolderModal'
 import useUploadFile from '@filestore/common/useUpload/useUpload'
