@@ -5,21 +5,35 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 import React, { useContext } from 'react'
-import { Container } from '@wings-software/uicore'
+import { Container, Layout, PageSpinner } from '@harness/uicore'
 import EmptyNodeView from '@filestore/components/EmptyNodeView/EmptyNodeView'
 import { useStrings } from 'framework/strings'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import NodesList from '@filestore/components/NodesList/NodesList'
+import FileView from '@filestore/components/FileView/FileView'
 
 export default function StoreView(): React.ReactElement {
   const { getString } = useStrings()
-  const { currentNode } = useContext(FileStoreContext)
+  const { currentNode, loading } = useContext(FileStoreContext)
+
+  if (loading) {
+    return <PageSpinner />
+  }
+
+  if (currentNode?.type === FileStoreNodeTypes.FOLDER && !currentNode?.children?.length) {
+    return (
+      <Container padding="xlarge" style={{ width: '100%' }}>
+        <EmptyNodeView title={getString('filestore.noFilesInFolderTitle')} />
+      </Container>
+    )
+  }
 
   return (
-    <Container padding="xlarge" style={{ width: '100%' }}>
-      {currentNode?.type === FileStoreNodeTypes.FOLDER && !currentNode?.children?.length && (
-        <EmptyNodeView title={getString('filestore.noFilesInFolderTitle')} />
-      )}
-    </Container>
+    <Layout.Horizontal width="100%">
+      <Container padding="xlarge" style={{ width: '100%' }}>
+        {currentNode?.type === FileStoreNodeTypes.FOLDER ? <NodesList /> : <FileView />}
+      </Container>
+    </Layout.Horizontal>
   )
 }

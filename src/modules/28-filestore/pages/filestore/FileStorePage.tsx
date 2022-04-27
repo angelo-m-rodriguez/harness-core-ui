@@ -21,20 +21,31 @@ import StoreView from '@filestore/components/StoreView/StoreView'
 import { FileStoreContext, FileStoreContextProvider } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import { useGetFolderNodes } from 'services/cd-ng'
 
 const FileStore: React.FC = () => {
   const params = useParams<PipelineType<ProjectPathProps>>()
   const { accountId, orgIdentifier, projectIdentifier } = params
   const { getString } = useStrings()
 
-  const { fileStore, getRootNodes, dataLoading } = useContext(FileStoreContext)
+  const { fileStore, setFileStore, setCurrentNode } = useContext(FileStoreContext)
 
+  const { mutate: getRootNodes, loading } = useGetFolderNodes({
+    queryParams: {
+      accountIdentifier: accountId,
+      projectIdentifier,
+      orgIdentifier
+    }
+  })
   useEffect(() => {
-    getRootNodes({
-      identifier: FILE_STORE_ROOT,
-      name: FILE_STORE_ROOT,
-      type: FileStoreNodeTypes.FOLDER
-    })
+    getRootNodes({ identifier: FILE_STORE_ROOT, name: FILE_STORE_ROOT, type: FileStoreNodeTypes.FOLDER }).then(
+      response => {
+        if (response?.data?.children) {
+          setFileStore(response.data.children)
+          setCurrentNode(response.data)
+        }
+      }
+    )
   }, [])
 
   return (
@@ -48,7 +59,7 @@ const FileStore: React.FC = () => {
         title={getString('resourcePage.fileStore')}
       />
       <Page.Body>
-        {dataLoading ? (
+        {loading ? (
           <PageSpinner />
         ) : (
           <>

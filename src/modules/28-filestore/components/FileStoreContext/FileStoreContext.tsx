@@ -17,17 +17,16 @@ interface FileStoreContextState {
   currentNode: FileStoreNodeDTO
   setCurrentNode: (node: FileStoreNodeDTO) => void
   fileStore: FileStoreNodeDTO[] | undefined
-  getRootNodes: (node: FileStoreNodeDTO) => void
+  setFileStore: (nodes: FileStoreNodeDTO[]) => void
   dataLoading: boolean
   setDataLoading: (trigger: boolean) => void
-  nodeToUpdate: string
-  setNodeToUpdate: (id: string) => void
+  getNode: (node: FileStoreNodeDTO) => void
+  loading: boolean
 }
 export const FileStoreContext = createContext({} as FileStoreContextState)
 
 export const FileStoreContextProvider: React.FC = props => {
   const [dataLoading, setDataLoading] = useState<boolean>(true)
-  const [nodeToUpdate, setNodeToUpdate] = useState<string>('')
   const [currentNode, setCurrentNode] = useState<FileStoreNodeDTO>({
     identifier: FILE_STORE_ROOT,
     name: FILE_STORE_ROOT,
@@ -38,7 +37,7 @@ export const FileStoreContextProvider: React.FC = props => {
   const params = useParams<PipelineType<ProjectPathProps>>()
   const { accountId, orgIdentifier, projectIdentifier } = params
 
-  const { mutate: getFolderNodes } = useGetFolderNodes({
+  const { mutate: getFolderNodes, loading } = useGetFolderNodes({
     queryParams: {
       accountIdentifier: accountId,
       projectIdentifier,
@@ -46,19 +45,15 @@ export const FileStoreContextProvider: React.FC = props => {
     }
   })
 
-  const getRootNodes = async (nodeParams: FileStoreNodeDTO): Promise<void> => {
-    setDataLoading(true)
-    getFolderNodes({ ...nodeParams, children: undefined })
-      .then(response => {
-        if (nodeParams.identifier === FILE_STORE_ROOT) {
-          setFileStore(response?.data?.children)
-        }
-        if (response?.data) {
-          setCurrentNode(response?.data)
-        }
-        setDataLoading(false)
-      })
-      .catch(() => setDataLoading(false))
+  const getNode = async (nodeParams: FileStoreNodeDTO): Promise<void> => {
+    getFolderNodes({ ...nodeParams, children: undefined }).then(response => {
+      if (nodeParams.identifier === FILE_STORE_ROOT) {
+        setFileStore(response?.data?.children)
+      }
+      if (response?.data) {
+        setCurrentNode(response?.data)
+      }
+    })
   }
 
   return (
@@ -67,11 +62,11 @@ export const FileStoreContextProvider: React.FC = props => {
         currentNode,
         setCurrentNode,
         fileStore,
-        getRootNodes,
         dataLoading,
         setDataLoading,
-        nodeToUpdate,
-        setNodeToUpdate
+        getNode,
+        setFileStore,
+        loading
       }}
     >
       {props.children}

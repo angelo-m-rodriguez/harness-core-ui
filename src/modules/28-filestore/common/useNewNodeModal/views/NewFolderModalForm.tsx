@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Container,
   Formik,
@@ -25,7 +25,7 @@ import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
-import { useCreate, useGetFolderNodes } from 'services/cd-ng'
+import { useCreate } from 'services/cd-ng'
 import { FileStoreNodeTypes, NewFolderDTO } from '@filestore/interfaces/FileStore'
 
 interface NewFolderModalData {
@@ -34,23 +34,19 @@ interface NewFolderModalData {
   onSubmit?: (resourceGroup: NewFolderDTO) => void
   close: () => void
   parentIdentifier: string
-  callback: (node: any) => void
+  callback: (node: NewFolderDTO) => void
 }
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
   const { close, parentIdentifier, callback } = props
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
-  const { mutate: createFolder } = useCreate({
+  const { mutate: createFolder, loading } = useCreate({
     queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
   })
 
-  const { mutate: getFolderNodes } = useGetFolderNodes({
-    queryParams: {
-      accountIdentifier: accountId,
-      projectIdentifier,
-      orgIdentifier
-    }
-  })
+  useEffect(() => {
+    return () => close()
+  }, [])
 
   const { getString } = useStrings()
   const { showSuccess } = useToaster()
@@ -67,16 +63,11 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
       const response = await createFolder(data as any)
 
       if (response.status === 'SUCCESS') {
-        getFolderNodes({
+        showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
+        callback({
           identifier: parentIdentifier,
           name: '',
           type: FileStoreNodeTypes.FOLDER
-        }).then(res => {
-          if (res?.data) {
-            callback(res.data)
-            showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
-            close()
-          }
         })
       }
     } catch (e) {
@@ -113,6 +104,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
                 onCancel={close}
                 confirmText={getString('create')}
                 cancelText={getString('cancel')}
+                loading={loading}
               />
             </Layout.Vertical>
           </Form>

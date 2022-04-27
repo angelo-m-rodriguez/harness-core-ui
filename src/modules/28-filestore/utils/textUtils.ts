@@ -5,4 +5,19 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import { FileUsage } from '@filestore/interfaces/FileStore'
+
 export const firstLetterToUpperCase = (value: string): string => `${value.charAt(0).toUpperCase()}${value.slice(1)}`
+
+export const getFileUsageNameByType = (type: FileUsage): string => {
+  switch (type) {
+    case FileUsage.MANIFEST_FILE:
+      return 'Manifest'
+    case FileUsage.CONFIG:
+      return 'Config'
+    case FileUsage.SCRIPT:
+      return 'Script'
+    default:
+      return ''
+  }
+}

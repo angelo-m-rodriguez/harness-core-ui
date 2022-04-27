@@ -5,14 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useContext } from 'react'
-import { defaultTo } from 'lodash-es'
+import React from 'react'
 import { Container, Layout, Text } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import filestoreIllustration from '@filestore/images/no-files-state.svg'
 import { useStrings } from 'framework/strings'
 import { NewFileButton } from '@filestore/common/NewFile/NewFile'
-import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 import css from './EmptyNodeView.module.scss'
 
@@ -23,19 +21,12 @@ export interface EmptyNodeViewProps {
   customImgSrc?: string
 }
 
-export default function EmptyNodeView({
-  title,
-  description = '',
-  customImgSrc
-}: EmptyNodeViewProps): React.ReactElement {
+export default function EmptyNodeView({ title, description = '' }: EmptyNodeViewProps): React.ReactElement {
   const { getString } = useStrings()
-  const { currentNode, setCurrentNode } = useContext(FileStoreContext)
-  const imgSrc = defaultTo(customImgSrc, filestoreIllustration)
   return (
     <Container height={'100%'}>
-      {/* <PageSpinner /> */}
       <Layout.Vertical spacing={'xxlarge'} height={'100%'} flex={{ align: 'center-center' }}>
-        <img src={imgSrc} width={'220px'} />
+        <img src={filestoreIllustration} width={'220px'} />
         <Container>
           <Text font={{ weight: 'bold', size: 'medium', align: 'center' }} color={Color.GREY_600}>
             {title}
@@ -51,7 +42,7 @@ export default function EmptyNodeView({
             </Text>
           </Container>
         </Container>
-        <NewFileButton parentIdentifier={currentNode.identifier} callback={setCurrentNode} />
+        <NewFileButton />
       </Layout.Vertical>
     </Container>
   )

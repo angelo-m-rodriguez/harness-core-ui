@@ -6,7 +6,6 @@
  */
 
 import React, { useState, useContext, PropsWithChildren, ReactElement } from 'react'
-import { useParams } from 'react-router-dom'
 
 import { Container, Layout, Text } from '@harness/uicore'
 import { Color } from '@harness/design-system'
@@ -16,14 +15,13 @@ import RootFolderIcon from '@filestore/images/root-folder.svg'
 import ClosedFolderIcon from '@filestore/images/closed-folder.svg'
 import OpenFolderIcon from '@filestore/images/open-folder.svg'
 import FileIcon from '@filestore/images/file-.svg'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreNodeTypes, StoreNodeType } from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
-import { FileStoreNodeDTO, useGetFolderNodes } from 'services/cd-ng'
 import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
+import type { FileStoreNodeDTO } from 'services/cd-ng'
 
 import css from './NavNodeList.module.scss'
 
@@ -44,22 +42,13 @@ export const FolderNodesList = ({ fileStore }: FolderNodesListProps): React.Reac
 )
 
 export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>): ReactElement => {
-  const { identifier, name, type } = props
-  const { currentNode, setCurrentNode, getRootNodes } = useContext(FileStoreContext)
+  const { identifier, type } = props
+  const { currentNode, setCurrentNode, getNode, loading } = useContext(FileStoreContext)
 
-  const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const [childNodes, setChildNodes] = useState<FileStoreNodeDTO[]>([])
   const [isOpenNode, setIsOpenNode] = useState<boolean>(false)
   const isActiveNode = React.useMemo(() => currentNode.identifier === identifier, [currentNode, identifier])
   const isRootNode = React.useMemo(() => identifier === FILE_STORE_ROOT, [identifier])
-
-  const { mutate: getFolderNodes, loading } = useGetFolderNodes({
-    queryParams: {
-      accountIdentifier: accountId,
-      projectIdentifier,
-      orgIdentifier
-    }
-  })
 
   React.useEffect(() => {
     if (currentNode?.children && currentNode.identifier === identifier && currentNode.identifier !== FILE_STORE_ROOT) {
@@ -67,31 +56,20 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     }
   }, [currentNode, identifier])
 
-  const getNodesCallback = (): void => {
-    getFolderNodes({
-      identifier,
-      name,
-      type
-    }).then(res => {
-      if (res?.data?.children) {
-        setChildNodes(res.data.children)
-        setCurrentNode({
-          ...props,
-          children: res.data.children
-        })
-      }
-    })
-  }
-
   const handleGetNodes = (e: React.MouseEvent): void => {
     e.stopPropagation()
     if (!loading) {
       setIsOpenNode(true)
-      setCurrentNode(props)
+      if (currentNode.identifier !== identifier) {
+        setCurrentNode(props)
+      }
       if (!isRootNode) {
-        getNodesCallback()
+        getNode({
+          ...props,
+          children: undefined
+        })
       } else {
-        getRootNodes({
+        getNode({
           identifier: FILE_STORE_ROOT,
           name: FILE_STORE_ROOT,
           type: FileStoreNodeTypes.FOLDER
@@ -117,12 +95,12 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
   const newFileMenuItem = useNewNodeModal({
     parentIdentifier: identifier,
     type: FileStoreNodeTypes.FILE,
-    callback: () => getNodesCallback()
+    callback: getNode
   })
   const newFolderMenuItem = useNewNodeModal({
     parentIdentifier: identifier,
     type: FileStoreNodeTypes.FOLDER,
-    callback: () => getNodesCallback()
+    callback: getNode
   })
 
   const optionsMenuItems: Item[] = [
@@ -146,8 +124,12 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
 
   return (
     <Layout.Vertical style={{ marginLeft: !isRootNode ? '3%' : 'none', cursor: 'pointer' }} key={identifier}>
-      <div className={cx(css.mainNode, isActiveNode && css.activeNode)} style={{ position: 'relative' }}>
-        <div style={{ display: 'flex' }} onClick={handleGetNodes}>
+      <div
+        className={cx(css.mainNode, isActiveNode && css.activeNode)}
+        style={{ position: 'relative' }}
+        onClick={handleGetNodes}
+      >
+        <div style={{ display: 'flex' }}>
           <img src={getNodeIcon(type)} alt={type} />
           <Text font={{ size: 'normal' }} color={!isActiveNode ? Color.PRIMARY_9 : Color.GREY_0}>
             {props.name}

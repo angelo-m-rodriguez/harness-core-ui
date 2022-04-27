@@ -43,7 +43,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
   const { close, parentIdentifier, callback } = props
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
 
-  const { mutate: createFolder } = useCreate({
+  const { mutate: createFolder, loading } = useCreate({
     queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
   })
   const { mutate: getFolderNodes } = useGetFolderNodes({
@@ -130,6 +130,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
                 onCancel={close}
                 confirmText={getString('create')}
                 cancelText={getString('cancel')}
+                loading={loading}
               />
             </Layout.Vertical>
           </Form>

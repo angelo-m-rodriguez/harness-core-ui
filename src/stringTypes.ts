@@ -1125,7 +1125,7 @@ export interface StringsMap {
   'filestore.noFilesTitle': string
   'filestore.uploadFileFolder': string
   'filestore.view.cannotRender': string
-  'filestore.view.fileType': string
+  'filestore.view.fileName': string
   'filestore.view.fileUsage': string
   'filestore.view.lastModifiedBy': string
   'filestore.view.noPreview': string

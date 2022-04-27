@@ -5,13 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useContext } from 'react'
+import React from 'react'
 import { Container, Layout } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { NewFileButton } from '@filestore/common/NewFile/NewFile'
 import type { FileStoreNodeDTO } from 'services/cd-ng'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
-import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { RootNodesList } from '@filestore/components/NavNodeList/NavNodesList'
 
 import css from './StoreExplorer.module.scss'
@@ -22,12 +21,10 @@ export interface StoreExplorerProps {
 }
 
 export default function StoreExplorer({ fileStore }: StoreExplorerProps): React.ReactElement {
-  const { getRootNodes } = useContext(FileStoreContext)
-
   return (
     <Layout.Vertical height="100%">
       <Container background={Color.GREY_0} padding={{ top: 'medium', left: 'medium' }} className={css.explorer}>
-        <NewFileButton parentIdentifier={FILE_STORE_ROOT} callback={getRootNodes} />
+        <NewFileButton parentIdentifier={FILE_STORE_ROOT} />
         <RootNodesList rootStore={fileStore} />
       </Container>
     </Layout.Vertical>

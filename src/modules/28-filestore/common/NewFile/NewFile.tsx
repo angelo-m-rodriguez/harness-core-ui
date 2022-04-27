@@ -5,27 +5,32 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useContext } from 'react'
 
 import FileStorePopover from '@filestore/common/FileStorePopover/FileStorePopover'
 import useUploadFile from '@filestore/common/useUpload/useUpload'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import { useStrings } from 'framework/strings'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 interface NewFileButtonProps {
-  parentIdentifier: string
-  callback: (node: FileStoreNodeDTO) => void
+  parentIdentifier?: string
 }
 
-export const NewFileButton: React.FC<NewFileButtonProps> = ({
-  parentIdentifier,
-  callback
-}: NewFileButtonProps): React.ReactElement => {
+export const NewFileButton: React.FC<NewFileButtonProps> = (): React.ReactElement => {
+  const { currentNode, getNode } = useContext(FileStoreContext)
   const { getString } = useStrings()
-  const newFileModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FILE })
-  const newFolderModal = useNewNodeModal({ parentIdentifier, callback, type: FileStoreNodeTypes.FOLDER })
+  const newFileModal = useNewNodeModal({
+    parentIdentifier: currentNode.identifier,
+    callback: getNode,
+    type: FileStoreNodeTypes.FILE
+  })
+  const newFolderModal = useNewNodeModal({
+    parentIdentifier: currentNode.identifier,
+    callback: getNode,
+    type: FileStoreNodeTypes.FOLDER
+  })
 
   const newUploadFile = useUploadFile()
 

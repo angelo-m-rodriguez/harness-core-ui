@@ -14,17 +14,18 @@ interface FooterRendererProps {
   onCancel: () => void
   confirmText: string
   cancelText: string
-  disableSubmit?: boolean
   type?: 'submit' | undefined
+  loading?: boolean
 }
 
 export const FooterRenderer = (props: FooterRendererProps): React.ReactElement => {
-  const { onSubmit, onCancel, confirmText, cancelText, disableSubmit = false, type } = props
+  const { onSubmit, onCancel, confirmText, cancelText, type, loading = false } = props
   return (
     <Layout.Horizontal spacing="small" padding="none" margin="none">
       <Button
         type={type}
-        disabled={disableSubmit}
+        disabled={loading}
+        loading={loading}
         onClick={onSubmit}
         text={confirmText}
         variation={ButtonVariation.PRIMARY}
