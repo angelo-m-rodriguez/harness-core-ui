@@ -5,20 +5,29 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 import React from 'react'
-import { Container } from '@harness/uicore'
-// import EmptyNodeView from '@filestore/components/EmptyNodeView/EmptyNodeView'
-// import { useStrings } from 'framework/strings'
-// import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
-// import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
-// import NodesList from '@filestore/components/NodesList/NodesList'
+import { Container, Tabs } from '@harness/uicore'
+import { useStrings } from 'framework/strings'
+import FileDetails from '@filestore/components/FileView/FileDetails/FileDetails'
+
+import css from '@filestore/components/FileView/FileView.module.scss'
 
 export default function FileView(): React.ReactElement {
-  //   const { getString } = useStrings()
-  //   const { currentNode, loading } = useContext(FileStoreContext)
-
+  const { getString } = useStrings()
   return (
-    <Container padding="xlarge" style={{ width: '100%' }}>
-      File view
+    <Container style={{ width: '100%' }} className={css.mainFileView}>
+      <Tabs
+        id={'serviceLandingPageTabs'}
+        defaultSelectedTabId={'details'}
+        tabList={[
+          {
+            id: 'details',
+            title: getString('details'),
+            panel: <FileDetails />
+          },
+          { id: 'referencedBy', title: getString('refrencedBy'), panel: <div /> },
+          { id: 'activityLog', title: getString('activityLog'), panel: <div /> }
+        ]}
+      />
     </Container>
   )
 }

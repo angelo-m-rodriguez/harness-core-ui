@@ -15,19 +15,21 @@ import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 interface NewFileButtonProps {
-  parentIdentifier?: string
+  parentIdentifier: string
 }
 
-export const NewFileButton: React.FC<NewFileButtonProps> = (): React.ReactElement => {
-  const { currentNode, getNode } = useContext(FileStoreContext)
+export const NewFileButton: React.FC<NewFileButtonProps> = (props: NewFileButtonProps): React.ReactElement => {
+  const { parentIdentifier } = props
+  const { getNode } = useContext(FileStoreContext)
   const { getString } = useStrings()
+
   const newFileModal = useNewNodeModal({
-    parentIdentifier: currentNode.identifier,
+    parentIdentifier,
     callback: getNode,
     type: FileStoreNodeTypes.FILE
   })
   const newFolderModal = useNewNodeModal({
-    parentIdentifier: currentNode.identifier,
+    parentIdentifier,
     callback: getNode,
     type: FileStoreNodeTypes.FOLDER
   })

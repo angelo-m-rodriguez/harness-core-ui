@@ -32,7 +32,7 @@ const useNewNodeModal = ({ parentIdentifier, type, callback }: NewNodeModal): Fi
           NewNodeForm: NewFileModalForm,
           title: getString('filestore.newFile'),
           icon: FileAddIcon,
-          height: 430
+          height: 460
         }
       case FileStoreNodeTypes.FOLDER:
         return {
@@ -59,7 +59,7 @@ const useNewNodeModal = ({ parentIdentifier, type, callback }: NewNodeModal): Fi
         <NewNodeForm editMode={true} close={hideModal} parentIdentifier={parentIdentifier} callback={callback} />
       </Dialog>
     ),
-    []
+    [parentIdentifier]
   )
 
   return {

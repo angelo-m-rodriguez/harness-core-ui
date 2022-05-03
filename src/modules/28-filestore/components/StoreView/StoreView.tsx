@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 import React, { useContext } from 'react'
-import { Container, Layout, PageSpinner } from '@harness/uicore'
+import { Container, PageSpinner } from '@harness/uicore'
 import EmptyNodeView from '@filestore/components/EmptyNodeView/EmptyNodeView'
 import { useStrings } from 'framework/strings'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
@@ -30,10 +30,8 @@ export default function StoreView(): React.ReactElement {
   }
 
   return (
-    <Layout.Horizontal width="100%">
-      <Container padding="xlarge" style={{ width: '100%' }}>
-        {currentNode?.type === FileStoreNodeTypes.FOLDER ? <NodesList /> : <FileView />}
-      </Container>
-    </Layout.Horizontal>
+    <Container style={{ width: '100%' }}>
+      {currentNode?.type === FileStoreNodeTypes.FOLDER ? <NodesList /> : <FileView />}
+    </Container>
   )
 }

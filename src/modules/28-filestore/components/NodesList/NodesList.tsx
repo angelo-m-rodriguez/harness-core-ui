@@ -8,8 +8,9 @@
 import React, { useContext } from 'react'
 import type { Column, Renderer, CellProps } from 'react-table'
 import { Position } from '@blueprintjs/core'
+import ReactTimeago from 'react-timeago'
 
-import { Layout, TableV2, Text } from '@harness/uicore'
+import { Layout, TableV2, Text, Container } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import type { FileStoreNodeDTO } from 'services/cd-ng'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
@@ -28,9 +29,9 @@ export interface StoreViewProps {
 }
 
 interface FileStoreNodeRenderDTO extends FileStoreNodeDTO {
-  fileUsage: FileStoreNodeTypes
-  lastModified: string
-  lastModifiedBy: string
+  fileUsage: FileUsage
+  lastModifiedBy: string | number
+  lastModifiedAt: string | number
 }
 
 const RenderColumnName: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
@@ -48,7 +49,7 @@ const RenderColumnName: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) 
   return (
     <Layout.Horizontal style={{ alignItems: 'center' }}>
       <img src={getNodeIcon(original.type)} style={{ marginRight: 10 }} />
-      <Text color={Color.GREY_800} font={{ size: 'small' }} width={230} lineClamp={1}>
+      <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
         {original.name}
       </Text>
     </Layout.Horizontal>
@@ -58,16 +59,19 @@ const RenderColumnName: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) 
 const RenderColumnType: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
   const { original } = row
   return (
-    <Text color={Color.GREY_800} font={{ size: 'small' }} width={230} lineClamp={1}>
+    <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
       {original.type === FileStoreNodeTypes.FOLDER ? 'Folder' : 'File'}
     </Text>
   )
 }
 
-const RenderColumnFileUsage: Renderer<CellProps<FileStoreNodeRenderDTO>> = () => {
+const RenderColumnFileUsage: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
+  const { original } = row
   return (
-    <Text color={Color.GREY_800} font={{ size: 'small' }} width={230} lineClamp={1}>
-      {getFileUsageNameByType(FileUsage.CONFIG)}
+    <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
+      {original.type === FileStoreNodeTypes.FILE && original?.fileUsage
+        ? getFileUsageNameByType(original.fileUsage)
+        : ''}
     </Text>
   )
 }
@@ -75,8 +79,8 @@ const RenderColumnFileUsage: Renderer<CellProps<FileStoreNodeRenderDTO>> = () =>
 const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
   const { original } = row
   return (
-    <Text color={Color.GREY_800} font={{ size: 'small' }} width={230} lineClamp={1}>
-      {original?.lastModified ? original.lastModified : ''}
+    <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
+      <ReactTimeago date={original.lastModifiedAt} />
     </Text>
   )
 }
@@ -84,8 +88,8 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
 const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
   const { original } = row
   return (
-    <Text color={Color.GREY_800} font={{ size: 'small' }} width={230} lineClamp={1}>
-      {original?.lastModifiedBy ? original.lastModifiedBy : ''}
+    <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
+      {original.lastModifiedBy}
     </Text>
   )
 }
@@ -97,11 +101,7 @@ const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = () => {
       onClick: () => null
     }
   ]
-  return (
-    <Layout.Horizontal style={{ alignItems: 'center' }}>
-      <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />
-    </Layout.Horizontal>
-  )
+  return <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />
 }
 
 const NodesList: React.FC = () => {
@@ -151,18 +151,16 @@ const NodesList: React.FC = () => {
     }
   ]
   return (
-    <>
+    <Container padding="xlarge">
       {currentNode?.children?.length ? (
-        <Layout.Vertical height="100%" width="100%">
-          <TableV2
-            columns={columns}
-            data={currentNode.children}
-            name="FileStoreView"
-            onRowClick={node => getNode(node)}
-          />
-        </Layout.Vertical>
+        <TableV2
+          columns={columns}
+          data={currentNode.children}
+          name="FileStoreView"
+          onRowClick={node => getNode(node)}
+        />
       ) : null}
-    </>
+    </Container>
   )
 }
 

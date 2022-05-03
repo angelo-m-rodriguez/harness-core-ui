@@ -15,14 +15,21 @@ import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/Fi
 const useUploadFile = (): FileStorePopoverItem => {
   const { getString } = useStrings()
   const [file, setFile] = useState<File>()
+  // const [content, setContent] = useState<string | ArrayBuffer>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (file) {
       const data = new FormData()
-      data.append('title', 'dadasda')
+      data.append('title', 'file')
 
       data.append('File', file)
+      // const reader = new FileReader()
+      // reader.addEventListener('load', e => {
+      //   if (e?.target?.result) {
+      //     setContent(e.target.result)
+      //   }
+      // })
     }
   }, [file])
 
@@ -37,7 +44,7 @@ const useUploadFile = (): FileStorePopoverItem => {
     if (!event.target.files?.length) {
       return
     } else {
-      setFile(event.target.files)
+      setFile(event.target.files[0])
     }
   }
 

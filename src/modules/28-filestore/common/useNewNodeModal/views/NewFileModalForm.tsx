@@ -27,7 +27,7 @@ import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import { useCreate, useGetFolderNodes, FileStoreNodeDTO } from 'services/cd-ng'
-
+import { getFileUsageNameByType } from '@filestore/utils/textUtils'
 import { FileStoreNodeTypes, FileUsage, NewFileDTO, NewFileFormDTO } from '@filestore/interfaces/FileStore'
 
 interface NewFileModalData {
@@ -40,7 +40,7 @@ interface NewFileModalData {
 }
 
 const NewFileForm: React.FC<NewFileModalData> = props => {
-  const { close, parentIdentifier, callback } = props
+  const { close, parentIdentifier, callback, editMode = false } = props
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
 
   const { mutate: createFolder, loading } = useCreate({
@@ -87,7 +87,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
 
   const fileUsageItems = React.useMemo(() => {
     return Object.values(FileUsage).map((fs: FileUsage) => ({
-      label: fs,
+      label: getFileUsageNameByType(fs),
       value: fs
     }))
   }, [])
@@ -98,11 +98,11 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
         name: '',
         identifier: '',
         description: '',
-        fileUsage: ''
+        fileUsage: FileUsage.MANIFEST_FILE
       }}
       formName="newFolder"
       validationSchema={Yup.object().shape({
-        name: NameSchema(),
+        // name: NameSchema(),
         identifier: IdentifierSchema(),
         fileUsage: NameSchema({ requiredErrorMsg: 'fileusage req' })
       })}
@@ -117,7 +117,12 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
             <Layout.Vertical style={{ justifyContent: 'space-between' }} height="100%">
               <Container>
                 <ModalErrorHandler bind={setModalErrorHandler} />
-                <NameIdDescriptionTags formikProps={formikProps} />
+                <NameIdDescriptionTags
+                  formikProps={formikProps}
+                  identifierProps={{
+                    isIdentifierEditable: editMode
+                  }}
+                />
                 <FormInput.Select
                   style={{ width: 180 }}
                   items={fileUsageItems}

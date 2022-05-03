@@ -5,12 +5,13 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { Container, Layout, Text } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import filestoreIllustration from '@filestore/images/no-files-state.svg'
 import { useStrings } from 'framework/strings'
 import { NewFileButton } from '@filestore/common/NewFile/NewFile'
+import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 import css from './EmptyNodeView.module.scss'
 
@@ -23,6 +24,11 @@ export interface EmptyNodeViewProps {
 
 export default function EmptyNodeView({ title, description = '' }: EmptyNodeViewProps): React.ReactElement {
   const { getString } = useStrings()
+  const { currentNode } = useContext(FileStoreContext)
+
+  const NewButton = React.useMemo(() => {
+    return <NewFileButton parentIdentifier={currentNode.identifier} />
+  }, [currentNode])
   return (
     <Container height={'100%'}>
       <Layout.Vertical spacing={'xxlarge'} height={'100%'} flex={{ align: 'center-center' }}>
@@ -42,7 +48,7 @@ export default function EmptyNodeView({ title, description = '' }: EmptyNodeView
             </Text>
           </Container>
         </Container>
-        <NewFileButton />
+        {NewButton}
       </Layout.Vertical>
     </Container>
   )
