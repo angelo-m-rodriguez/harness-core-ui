@@ -23,6 +23,7 @@ import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import type { FileStoreNodeDTO } from 'services/cd-ng'
 
+import useDelete from '@filestore/common/useDelete/useDelete'
 import css from './NavNodeList.module.scss'
 
 export interface FolderNodesListProps {
@@ -102,6 +103,7 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     type: FileStoreNodeTypes.FOLDER,
     callback: getNode
   })
+  const deleteMenuItem = useDelete(identifier, props.name, type)
 
   const optionsMenuItems: Item[] = [
     {
@@ -111,6 +113,10 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     {
       text: newFolderMenuItem.ComponentRenderer,
       onClick: newFolderMenuItem.onClick
+    },
+    {
+      text: deleteMenuItem.ComponentRenderer,
+      onClick: deleteMenuItem.onClick
     }
   ]
 

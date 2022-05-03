@@ -23,6 +23,7 @@ import FileIcon from '@filestore/images/file-.svg'
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import type { StoreNodeType } from '@filestore/interfaces/FileStore'
 import { getFileUsageNameByType } from '@filestore/utils/textUtils'
+import useDelete from "@filestore/common/useDelete/useDelete";
 
 export interface StoreViewProps {
   title?: string
@@ -30,8 +31,6 @@ export interface StoreViewProps {
 
 interface FileStoreNodeRenderDTO extends FileStoreNodeDTO {
   fileUsage: FileUsage
-  lastModifiedBy: string | number
-  lastModifiedAt: string | number
 }
 
 const RenderColumnName: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
@@ -80,7 +79,7 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
   const { original } = row
   return (
     <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
-      <ReactTimeago date={original.lastModifiedAt} />
+      { original.lastModifiedAt && <ReactTimeago date={original.lastModifiedAt} /> }
     </Text>
   )
 }
@@ -94,11 +93,15 @@ const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = 
   )
 }
 
-const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = () => {
+
+const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
+  const { original } = row
+  const deleteMenuItem = useDelete(original.identifier, original.name, original.type)
+
   const optionsMenuItems: Item[] = [
     {
-      text: 'test1',
-      onClick: () => null
+      text: deleteMenuItem.ComponentRenderer,
+      onClick: deleteMenuItem.onClick
     }
   ]
   return <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />

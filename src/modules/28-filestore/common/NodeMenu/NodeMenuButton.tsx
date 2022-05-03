@@ -31,6 +31,7 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
       onInteraction={nextOpenState => {
         setMenuOpen(nextOpenState)
       }}
+      boundary="viewport"
       popoverClassName={css.popover}
       position={position}
       content={
@@ -46,6 +47,7 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
                     e.stopPropagation()
                     if (item?.onClick) {
                       item.onClick(e)
+                      setMenuOpen(false)
                     }
                   }}
                 />

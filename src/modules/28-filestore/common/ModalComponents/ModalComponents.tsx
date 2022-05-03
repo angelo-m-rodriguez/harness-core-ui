@@ -37,12 +37,14 @@ export const FooterRenderer = (props: FooterRendererProps): React.ReactElement =
 
 interface ComponentRendererProps {
   title: string
-  iconSrc: string
+  iconSrc?: string
+  icon?: React.ReactNode
 }
 
-export const ComponentRenderer = ({ iconSrc, title }: ComponentRendererProps): React.ReactElement => (
+export const ComponentRenderer = ({ iconSrc, icon, title }: ComponentRendererProps): React.ReactElement => (
   <Layout.Horizontal spacing="small">
-    <img src={iconSrc} alt={title} />
+    {icon && icon}
+    {iconSrc && <img src={iconSrc} alt={title} />}
     <Text lineClamp={1}>{title}</Text>
   </Layout.Horizontal>
 )
