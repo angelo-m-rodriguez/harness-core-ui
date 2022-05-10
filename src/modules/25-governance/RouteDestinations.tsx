@@ -129,7 +129,7 @@ export const GovernanceRouteDestinations: React.FC<{
             <Container
               style={{
                 position: 'fixed',
-                top: 0,
+                top: '50%',
                 left: '290px',
                 width: 'calc(100% - 290px)',
                 height: `100%`
