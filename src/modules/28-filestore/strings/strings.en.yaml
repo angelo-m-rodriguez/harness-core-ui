@@ -17,6 +17,6 @@ confirmDeleteFile: 'Are you sure you want to delete {{entity}} <strong>{{ name }
 deletedSuccessMessage: '{{type}} "{{name}}" deleted'
 folderSuccessCreated: 'Folder {{name}} created'
 fileSuccessCreated: 'File {{name}} created'
-fileReferenceText: "can't be deleted as it is being referenced by other entities. To see the list of entities referencing this file,"
+fileReferenceText: "can't be deleted as it is being referenced by other entities. To delete your files, please remove the reference file from these entities."
 cantDeleteFile: "Unable to delete {{type}}"
 referenceButtonText: "Go view references"

@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import type { FileStoreNodeDTO } from 'services/cd-ng'
 import type { ProjectPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useGetFolderNodes } from 'services/cd-ng'
-import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import {FILE_VIEW_TAB, FileStoreNodeTypes} from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 
 interface FileStoreContextState {
@@ -21,7 +21,9 @@ interface FileStoreContextState {
   dataLoading: boolean
   setDataLoading: (trigger: boolean) => void
   getNode: (node: FileStoreNodeDTO) => void
-  loading: boolean
+  loading: boolean,
+  activeTab: string,
+  setActiveTab: (tab: FILE_VIEW_TAB) => void
 }
 export const FileStoreContext = createContext({} as FileStoreContextState)
 
@@ -33,6 +35,7 @@ export const FileStoreContextProvider: React.FC = props => {
     type: FileStoreNodeTypes.FOLDER,
     children: []
   } as FileStoreNodeDTO)
+  const [activeTab, setActiveTab] = useState<FILE_VIEW_TAB>(FILE_VIEW_TAB.DETAILS)
   const [fileStore, setFileStore] = useState<FileStoreNodeDTO[]>()
   const params = useParams<PipelineType<ProjectPathProps>>()
   const { accountId, orgIdentifier, projectIdentifier } = params
@@ -66,7 +69,9 @@ export const FileStoreContextProvider: React.FC = props => {
         setDataLoading,
         getNode,
         setFileStore,
-        loading
+        loading,
+        activeTab,
+        setActiveTab
       }}
     >
       {props.children}

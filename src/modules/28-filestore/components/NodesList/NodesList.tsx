@@ -84,11 +84,10 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
   )
 }
 
-const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
-  const { original } = row
+const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = () => {
   return (
     <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
-      {original.lastModifiedBy}
+       {/*{original.lastModifiedBy}*/}
     </Text>
   )
 }

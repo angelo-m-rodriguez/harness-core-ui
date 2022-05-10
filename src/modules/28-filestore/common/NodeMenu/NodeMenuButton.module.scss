@@ -6,10 +6,9 @@
  */
 
 .popover {
-  background: var(--primary-9-dark);
-  //   :global {
-  //     .bp3-menu {
-  //       background-color: var(--primary-9-dark);
-  //     }
-  //   }
+  :global {
+    .StyledProps--main {
+      color: var(--white) !important;
+    }
+  }
 }

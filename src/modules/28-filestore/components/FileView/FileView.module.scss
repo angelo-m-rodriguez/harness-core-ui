@@ -9,6 +9,13 @@
   :global {
     .bp3-tab-list {
       padding: var(--spacing-medium);
+      padding-bottom: 0;
+      background: var(--white) !important;
+      border-bottom: 1px solid var(--grey-300);
+    }
+
+    .bp3-tab-panel {
+      margin-top: 0;
     }
   }
 }

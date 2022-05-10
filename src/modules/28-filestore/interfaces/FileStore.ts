@@ -18,6 +18,12 @@ export enum FileUsage {
   SCRIPT = 'SCRIPT'
 }
 
+export enum FILE_VIEW_TAB {
+  DETAILS = 'details',
+  REFERENCED_BY = 'referencedBy',
+  ACTIVITY_LOG = 'activityLog'
+}
+
 export interface NewFolderDTO {
   name: string
   identifier: string

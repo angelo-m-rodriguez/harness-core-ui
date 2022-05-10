@@ -6,7 +6,7 @@
  */
 
 import React, { ReactElement, Fragment, useState } from 'react'
-import { IMenuItemProps, Menu, PopoverPosition } from '@blueprintjs/core'
+import {Classes, IMenuItemProps, Menu, PopoverPosition} from '@blueprintjs/core'
 import { Button, ButtonProps, Popover } from '@harness/uicore'
 
 import css from './NodeMenuButton.module.scss'
@@ -32,6 +32,7 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
         setMenuOpen(nextOpenState)
       }}
       boundary="viewport"
+      className={Classes.DARK}
       popoverClassName={css.popover}
       position={position}
       content={
