@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 
 import FileStorePopover from '@filestore/common/FileStorePopover/FileStorePopover'
 import useUploadFile from '@filestore/common/useUpload/useUpload'
@@ -13,6 +13,8 @@ import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import { useStrings } from 'framework/strings'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
+import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
+import { FileStoreActionTypes } from '@filestore/utils/constants'
 
 interface NewFileButtonProps {
   parentIdentifier: string
@@ -20,37 +22,51 @@ interface NewFileButtonProps {
 
 export const NewFileButton: React.FC<NewFileButtonProps> = (props: NewFileButtonProps): React.ReactElement => {
   const { parentIdentifier } = props
-  const { getNode } = useContext(FileStoreContext)
+  const fileStoreContext = useContext(FileStoreContext)
+  const { isCachedNode, currentNode } = fileStoreContext
   const { getString } = useStrings()
 
+  const configNewNode = useMemo(() => {
+    return {
+      parentIdentifier,
+      editMode: false,
+      tempNode: isCachedNode(currentNode.identifier),
+      fileStoreContext,
+      currentNode: currentNode
+    }
+  }, [isCachedNode, currentNode, fileStoreContext, parentIdentifier])
+
   const newFileModal = useNewNodeModal({
-    parentIdentifier,
-    callback: getNode,
+    ...configNewNode,
     type: FileStoreNodeTypes.FILE
   })
   const newFolderModal = useNewNodeModal({
-    parentIdentifier,
-    callback: getNode,
+    ...configNewNode,
     type: FileStoreNodeTypes.FOLDER
   })
 
-  const newUploadFile = useUploadFile()
+  const newUploadFile = useUploadFile({
+    isBtn: false
+  })
 
-  const menuItems = [
+  const menuItems: FileStorePopoverItem[] = [
     {
       ComponentRenderer: newFileModal.ComponentRenderer,
       label: newFileModal.label,
-      onClick: newFileModal.onClick
+      onClick: newFileModal.onClick,
+      actionType: FileStoreActionTypes.CREATE_NODE
     },
     {
       ComponentRenderer: newFolderModal.ComponentRenderer,
       label: newFolderModal.label,
-      onClick: newFolderModal.onClick
+      onClick: newFolderModal.onClick,
+      actionType: FileStoreActionTypes.CREATE_NODE
     },
     {
       ComponentRenderer: newUploadFile.ComponentRenderer,
       label: newUploadFile.label,
-      onClick: newUploadFile.onClick
+      onClick: newUploadFile.onClick,
+      actionType: FileStoreActionTypes.UPLOAD_NODE
     }
   ]
 

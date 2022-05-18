@@ -25,8 +25,9 @@ import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
-import { useCreate } from 'services/cd-ng'
+import { useCreate, useUpdate } from 'services/cd-ng'
 import { FileStoreNodeTypes, NewFolderDTO } from '@filestore/interfaces/FileStore'
+import type { FileStoreContextState, FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 interface NewFolderModalData {
   data?: NewFolderDTO
@@ -34,13 +35,35 @@ interface NewFolderModalData {
   onSubmit?: (resourceGroup: NewFolderDTO) => void
   close: () => void
   parentIdentifier: string
-  callback: (node: NewFolderDTO) => void
+  fileStoreContext: FileStoreContextState
 }
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
-  const { close, parentIdentifier, callback } = props
+  const { close, fileStoreContext, editMode } = props
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
-  const { mutate: createFolder, loading } = useCreate({
+  const { currentNode, getNode } = fileStoreContext
+  const [initialValues, setInitialValues] = useState<NewFolderDTO>({
+    name: '',
+    identifier: '',
+    type: FileStoreNodeTypes.FOLDER
+  })
+
+  useEffect(() => {
+    if (currentNode && editMode) {
+      setInitialValues({
+        name: currentNode.name,
+        identifier: currentNode.identifier,
+        type: FileStoreNodeTypes.FOLDER
+      })
+    }
+  }, [currentNode, editMode])
+
+  const { mutate: createFolder, loading: createLoading } = useCreate({
+    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+  })
+
+  const { mutate: updateFolder, loading: updateLoading } = useUpdate({
+    identifier: currentNode.identifier,
     queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
   })
 
@@ -54,33 +77,49 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
 
   const handleSubmit = async (values: NewFolderDTO): Promise<void> => {
     const { identifier, name, type } = values
+    const getConfig: FileStoreNodeDTO = {
+      identifier: currentNode?.identifier,
+      name: editMode ? name : currentNode.name,
+      type: FileStoreNodeTypes.FOLDER
+    }
     try {
       const data = new FormData()
       data.append('identifier', identifier)
       data.append('name', name)
       data.append('type', type)
-      data.append('parentIdentifier', parentIdentifier)
-      const response = await createFolder(data as any)
-
-      if (response.status === 'SUCCESS') {
-        showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
-        callback({
-          identifier: parentIdentifier,
-          name: '',
-          type: FileStoreNodeTypes.FOLDER
-        })
+      if (editMode && currentNode?.parentIdentifier) {
+        data.append('parentIdentifier', currentNode.parentIdentifier)
+      } else {
+        data.append('parentIdentifier', currentNode.identifier)
       }
+
+      if (editMode) {
+        const updateResponse = await updateFolder(data as any)
+        if (updateResponse.status === 'SUCCESS') {
+          getNode(getConfig)
+          showSuccess(getString('filestore.folderSuccessSaved', { name: values.name }))
+        }
+      } else {
+        const createResponse = await createFolder(data as any)
+
+        if (createResponse.status === 'SUCCESS') {
+          showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
+          getNode(getConfig, {
+            setNewCurrentNode: true,
+            newNode: { ...createResponse.data } as FileStoreNodeDTO,
+            type: FileStoreNodeTypes.FOLDER
+          })
+        }
+      }
+      close()
     } catch (e) {
       modalErrorHandler?.showDanger(e.data.message)
     }
   }
   return (
     <Formik<NewFolderDTO>
-      initialValues={{
-        name: '',
-        identifier: '',
-        type: FileStoreNodeTypes.FOLDER
-      }}
+      initialValues={initialValues}
+      enableReinitialize
       formName="newFolder"
       validationSchema={Yup.object().shape({
         name: NameSchema(),
@@ -97,14 +136,14 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
             <Layout.Vertical style={{ justifyContent: 'space-between' }} height="100%">
               <Container>
                 <ModalErrorHandler bind={setModalErrorHandler} />
-                <NameId identifierProps={{ isIdentifierEditable: true }} />
+                <NameId identifierProps={{ isIdentifierEditable: !editMode }} />
               </Container>
               <FooterRenderer
                 type="submit"
                 onCancel={close}
-                confirmText={getString('create')}
+                confirmText={editMode ? getString('save') : getString('create')}
                 cancelText={getString('cancel')}
-                loading={loading}
+                loading={editMode ? updateLoading : createLoading}
               />
             </Layout.Vertical>
           </Form>

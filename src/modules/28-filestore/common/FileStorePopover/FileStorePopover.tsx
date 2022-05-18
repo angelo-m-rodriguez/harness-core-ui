@@ -9,6 +9,8 @@ import React from 'react'
 import cx from 'classnames'
 import { useToggleOpen, Popover, ButtonVariation, Button, IconName } from '@harness/uicore'
 import { Menu, Position } from '@blueprintjs/core'
+import type { FileStoreActionTypes } from '@filestore/utils/constants'
+
 import { firstLetterToUpperCase } from '@filestore/utils/textUtils'
 
 import css from './FileStorePopover.module.scss'
@@ -18,6 +20,7 @@ export interface FileStorePopoverItem {
   onClick: () => void
   label: string
   disabled?: boolean
+  actionType: FileStoreActionTypes
 }
 
 export interface FileStoreActionPopoverProps {
@@ -61,7 +64,7 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
                 onClick={e => {
                   e.stopPropagation()
                   onClick()
-                  toggle()
+                  // close()
                 }}
               >
                 {ComponentRenderer}

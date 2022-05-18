@@ -7,7 +7,7 @@
 
 import React from 'react'
 
-import { Dialog } from '@harness/uicore'
+import { Dialog, Icon } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 
 import { useStrings } from 'framework/strings'
@@ -15,6 +15,7 @@ import FolderAddIcon from '@filestore/images/folder-add.svg'
 import FileAddIcon from '@filestore/images/file-add.svg'
 import { ComponentRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
+import { FileStoreActionTypes } from '@filestore/utils/constants'
 
 import NewFolderModalForm from '@filestore/common/useNewNodeModal/views/NewFolderModalForm'
 import NewFileModalForm from '@filestore/common/useNewNodeModal/views/NewFileModalForm'
@@ -22,7 +23,14 @@ import { FileStoreNodeTypes, NewNodeModal } from '@filestore/interfaces/FileStor
 
 import css from './useNewNodeModal.module.scss'
 
-const useNewNodeModal = ({ parentIdentifier, type, callback }: NewNodeModal): FileStorePopoverItem => {
+const useNewNodeModal = ({
+  parentIdentifier,
+  type,
+  editMode = false,
+  tempNode,
+  currentNode,
+  fileStoreContext
+}: NewNodeModal): FileStorePopoverItem => {
   const { getString } = useStrings()
 
   const getNodeConfigs = (typeNode: FileStoreNodeTypes): any => {
@@ -30,14 +38,14 @@ const useNewNodeModal = ({ parentIdentifier, type, callback }: NewNodeModal): Fi
       case FileStoreNodeTypes.FILE:
         return {
           NewNodeForm: NewFileModalForm,
-          title: getString('filestore.newFile'),
+          title: editMode ? getString('filestore.editFileDetails') : getString('filestore.newFile'),
           icon: FileAddIcon,
           height: 460
         }
       case FileStoreNodeTypes.FOLDER:
         return {
           NewNodeForm: NewFolderModalForm,
-          title: getString('filestore.newFolder'),
+          title: editMode ? getString('filestore.editFolderDetails') : getString('filestore.newFolder'),
           icon: FolderAddIcon,
           height: 302
         }
@@ -56,16 +64,26 @@ const useNewNodeModal = ({ parentIdentifier, type, callback }: NewNodeModal): Fi
         className={css.layout}
         usePortal
       >
-        <NewNodeForm editMode={true} close={hideModal} parentIdentifier={parentIdentifier} callback={callback} />
+        <NewNodeForm
+          editMode={editMode}
+          close={hideModal}
+          parentIdentifier={parentIdentifier}
+          tempNode={tempNode}
+          currentNode={currentNode}
+          fileStoreContext={fileStoreContext}
+        />
       </Dialog>
     ),
-    [parentIdentifier]
+    [parentIdentifier, editMode, tempNode, currentNode, fileStoreContext]
   )
 
   return {
-    ComponentRenderer: <ComponentRenderer iconSrc={icon} title={title} />,
+    ComponentRenderer: (
+      <ComponentRenderer iconSrc={!editMode && icon} title={title} icon={editMode && <Icon name="Edit" />} />
+    ),
     onClick: showModal,
-    label: title
+    label: title,
+    actionType: editMode ? FileStoreActionTypes.UPDATE_NODE : FileStoreActionTypes.CREATE_NODE
   }
 }
 

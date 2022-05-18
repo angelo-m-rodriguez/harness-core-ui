@@ -6,3 +6,31 @@
  */
 
 export const FILE_STORE_ROOT = 'Root'
+
+export enum ExtensionType {
+  YAML = 'yaml',
+  JSON = 'json',
+  TEXT = 'txt',
+  BASH = 'sh',
+  POWER_SHELL = 'ps'
+}
+
+export enum LanguageType {
+  YAML = 'yaml',
+  JSON = 'json',
+  TEXT = 'plaintext',
+  BASH = 'shell',
+  POWER_SHELL = 'powershell'
+}
+
+export enum FSErrosType {
+  UNSUPPORTED_FORMAT = 'UNSUPPORTED_FORMAT',
+  FILE_USAGE = 'FILE_USAGE'
+}
+
+export enum FileStoreActionTypes {
+  CREATE_NODE = 'CREATE_NODE',
+  DELETE_NODE = 'DELETE_NODE',
+  UPDATE_NODE = 'UPDATE_NODE',
+  UPLOAD_NODE = 'UPLOAD_NODE'
+}

@@ -7,16 +7,21 @@ view:
   fileUsage: 'File Usage'
   replaceFile: 'Replace file'
   noPreview: 'No preview available'
-  cannotRender: 'The file uploaded cannot be rendered'
   lastModifiedBy: 'Last modified by'
 newFile: 'New File'
 editFileDetails: 'Edit File Details'
+editFolderDetails: 'Edit Folder Details'
 newFolder: 'New Folder'
 uploadFileFolder: 'Upload File/Folder'
 confirmDeleteFile: 'Are you sure you want to delete {{entity}} <strong>{{ name }}</strong>?'
 deletedSuccessMessage: '{{type}} "{{name}}" deleted'
-folderSuccessCreated: 'Folder {{name}} created'
-fileSuccessCreated: 'File {{name}} created'
+folderSuccessCreated: 'Folder "{{name}}" created'
+fileSuccessCreated: 'File "{{name}}" created'
+folderSuccessSaved: 'Folder "{{name}}" saved'
+fileSuccessSaved: 'File "{{name}}" saved'
 fileReferenceText: "can't be deleted as it is being referenced by other entities. To delete your files, please remove the reference file from these entities."
-cantDeleteFile: "Unable to delete {{type}}"
-referenceButtonText: "Go view references"
+cantDeleteFile: 'Unable to delete {{type}}'
+referenceButtonText: 'Go view references'
+errors:
+  fileUsage: 'File Usage is required'
+  cannotRender: 'File format not support, so it can only be previewed'

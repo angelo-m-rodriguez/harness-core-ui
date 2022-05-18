@@ -6,7 +6,7 @@
  */
 
 import React, { ReactElement, Fragment, useState } from 'react'
-import {Classes, IMenuItemProps, Menu, PopoverPosition} from '@blueprintjs/core'
+import { Classes, IMenuItemProps, Menu, PopoverPosition } from '@blueprintjs/core'
 import { Button, ButtonProps, Popover } from '@harness/uicore'
 
 import css from './NodeMenuButton.module.scss'
@@ -48,7 +48,7 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
                     e.stopPropagation()
                     if (item?.onClick) {
                       item.onClick(e)
-                      setMenuOpen(false)
+                      // setMenuOpen(false)
                     }
                   }}
                 />

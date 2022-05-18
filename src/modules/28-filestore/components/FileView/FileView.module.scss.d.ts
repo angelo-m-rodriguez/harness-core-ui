@@ -7,6 +7,10 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
+  readonly fileDetails: string
+  readonly fileEditPanel: string
+  readonly fileInfoContainer: string
+  readonly fileName: string
   readonly mainFileView: string
 }
 export default styles

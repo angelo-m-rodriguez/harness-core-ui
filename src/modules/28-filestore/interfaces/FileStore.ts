@@ -5,7 +5,8 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
+import type { FileStoreNodeDTO, FileStoreContextState } from '@filestore/components/FileStoreContext/FileStoreContext'
+import type { NGTag } from 'services/cd-ng'
 
 export enum FileStoreNodeTypes {
   FILE = 'FILE',
@@ -31,11 +32,10 @@ export interface NewFolderDTO {
 }
 
 export interface NewFileDTO extends NewFolderDTO {
-  fileUsage: string
+  fileUsage: FileUsage | string | null
   description?: string
-  tags?: {
-    [key: string]: string
-  }
+  tags?: NGTag[]
+  content?: string
 }
 
 export type NewFileFormDTO = Omit<NewFileDTO, 'type'>
@@ -48,9 +48,12 @@ export type StoreNodeType = 'FILE' | 'FOLDER'
 
 export interface NewNodeConfig {
   parentIdentifier: string
-  callback: (node: FileStoreNodeDTO) => void
 }
 
 export interface NewNodeModal extends NewNodeConfig {
-  type: StoreNodeType
+  type: FileStoreNodeTypes
+  tempNode?: FileStoreNodeDTO | undefined
+  editMode?: boolean
+  currentNode?: FileStoreNodeDTO
+  fileStoreContext?: FileStoreContextState
 }

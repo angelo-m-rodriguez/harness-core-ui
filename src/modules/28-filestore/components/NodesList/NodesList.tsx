@@ -12,9 +12,8 @@ import ReactTimeago from 'react-timeago'
 
 import { Layout, TableV2, Text, Container } from '@harness/uicore'
 import { Color } from '@harness/design-system'
-import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
+import type { FileStoreNodeDTO } from 'services/cd-ng'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
-import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import { useStrings } from 'framework/strings'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import FolderIcon from '@filestore/images/closed-folder.svg'
@@ -22,7 +21,7 @@ import FileIcon from '@filestore/images/file-.svg'
 
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import type { StoreNodeType } from '@filestore/interfaces/FileStore'
-import { getFileUsageNameByType } from '@filestore/utils/textUtils'
+import { getFileUsageNameByType, getMenuOptionItems } from '@filestore/utils/textUtils'
 import useDelete from '@filestore/common/useDelete/useDelete'
 
 export interface StoreViewProps {
@@ -84,30 +83,28 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
   )
 }
 
-const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = () => {
+const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({ row }) => {
+  const { original } = row
   return (
     <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
-      {/*{original.lastModifiedBy}*/}
+      {original.lastModifiedBy?.name}
     </Text>
   )
 }
 
 const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
   const { original } = row
+
   const deleteMenuItem = useDelete(original.identifier, original.name, original.type)
 
-  const optionsMenuItems: Item[] = [
-    {
-      text: deleteMenuItem.ComponentRenderer,
-      onClick: deleteMenuItem.onClick
-    }
-  ]
+  const optionsMenuItems = getMenuOptionItems([deleteMenuItem])
+
   return <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />
 }
 
 const NodesList: React.FC = () => {
   const { getString } = useStrings()
-  const { currentNode, getNode } = useContext(FileStoreContext)
+  const { currentNode, getNode, setCurrentNode } = useContext(FileStoreContext)
   const columns: Column<FileStoreNodeDTO>[] = [
     {
       Header: getString('filestore.view.fileName'),
@@ -158,7 +155,13 @@ const NodesList: React.FC = () => {
           columns={columns}
           data={currentNode.children}
           name="FileStoreView"
-          onRowClick={node => getNode(node)}
+          onRowClick={node => {
+            if (node.type === FileStoreNodeTypes.FILE) {
+              setCurrentNode(node)
+            } else {
+              getNode(node)
+            }
+          }}
         />
       ) : null}
     </Container>

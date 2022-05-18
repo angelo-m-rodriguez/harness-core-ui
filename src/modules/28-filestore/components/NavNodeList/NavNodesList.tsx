@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState, useContext, PropsWithChildren, ReactElement } from 'react'
+import React, { useState, useContext, PropsWithChildren, ReactElement, useEffect, useMemo } from 'react'
 
 import { Container, Layout, Text } from '@harness/uicore'
 import { Color } from '@harness/design-system'
@@ -19,9 +19,10 @@ import { FileStoreContext } from '@filestore/components/FileStoreContext/FileSto
 import { FileStoreNodeTypes, StoreNodeType } from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
-import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
+import useUploadFile, { UPLOAD_EVENTS } from '@filestore/common/useUpload/useUpload'
+import { getMenuOptionItems } from '@filestore/utils/textUtils'
 
 import useDelete from '@filestore/common/useDelete/useDelete'
 import css from './NavNodeList.module.scss'
@@ -44,29 +45,64 @@ export const FolderNodesList = ({ fileStore }: FolderNodesListProps): React.Reac
 
 export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>): ReactElement => {
   const { identifier, type } = props
-  const { currentNode, setCurrentNode, getNode, loading } = useContext(FileStoreContext)
+  const context = useContext(FileStoreContext)
+  const { currentNode, setCurrentNode, getNode, loading, tempNodes, isCachedNode } = context
 
   const [childNodes, setChildNodes] = useState<FileStoreNodeDTO[]>([])
   const [isOpenNode, setIsOpenNode] = useState<boolean>(false)
+  const [nodeItem, setNodeItem] = useState<FileStoreNodeDTO>(props)
+  const uploadFile = useUploadFile({
+    isBtn: false,
+    eventMethod: UPLOAD_EVENTS.UPLOAD
+  })
+
+  useEffect(() => {
+    if (identifier === FILE_STORE_ROOT) {
+      setIsOpenNode(true)
+    }
+  }, [identifier])
+
+  useEffect(() => {
+    const cachedNode = isCachedNode(props.identifier)
+    if (cachedNode && props.type === FileStoreNodeTypes.FILE) {
+      setNodeItem({
+        ...props,
+        ...cachedNode
+      })
+    }
+  }, [tempNodes, isCachedNode, props])
+
   const isActiveNode = React.useMemo(() => currentNode.identifier === identifier, [currentNode, identifier])
   const isRootNode = React.useMemo(() => identifier === FILE_STORE_ROOT, [identifier])
 
-  React.useEffect(() => {
-    if (currentNode?.children && currentNode.identifier === identifier && currentNode.identifier !== FILE_STORE_ROOT) {
+  useEffect(() => {
+    if (currentNode.identifier === nodeItem.identifier) {
+      setNodeItem(prevState => {
+        return {
+          ...prevState,
+          ...currentNode
+        }
+      })
+    }
+    if (currentNode?.children && isActiveNode && !isRootNode) {
+      setNodeItem(currentNode)
       setChildNodes(currentNode.children)
     }
-  }, [currentNode, identifier])
+  }, [currentNode, isActiveNode, isRootNode, setNodeItem])
 
   const handleGetNodes = (e: React.MouseEvent): void => {
     e.stopPropagation()
     if (!loading) {
       setIsOpenNode(true)
-      if (currentNode.identifier !== identifier) {
-        setCurrentNode(props)
+      if (!isActiveNode) {
+        setCurrentNode(nodeItem)
+      }
+      if (props.type === FileStoreNodeTypes.FILE) {
+        return
       }
       if (!isRootNode) {
         getNode({
-          ...props,
+          ...nodeItem,
           children: undefined
         })
       } else {
@@ -93,32 +129,33 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     }
   }
 
+  const configNewNode = useMemo(() => {
+    return {
+      parentIdentifier: identifier,
+      editMode: false,
+      tempNode: context.isCachedNode(identifier),
+      currentNode: context.currentNode,
+      fileStoreContext: context,
+      type: context.currentNode.type as FileStoreNodeTypes
+    }
+  }, [identifier, context])
+
   const newFileMenuItem = useNewNodeModal({
-    parentIdentifier: identifier,
-    type: FileStoreNodeTypes.FILE,
-    callback: getNode
+    ...configNewNode
   })
   const newFolderMenuItem = useNewNodeModal({
-    parentIdentifier: identifier,
-    type: FileStoreNodeTypes.FOLDER,
-    callback: getNode
+    ...configNewNode
+  })
+  const editMenuItem = useNewNodeModal({
+    ...configNewNode,
+    editMode: true
   })
   const deleteMenuItem = useDelete(identifier, props.name, type)
 
-  const optionsMenuItems: Item[] = [
-    {
-      text: newFileMenuItem.ComponentRenderer,
-      onClick: newFileMenuItem.onClick
-    },
-    {
-      text: newFolderMenuItem.ComponentRenderer,
-      onClick: newFolderMenuItem.onClick
-    },
-    {
-      text: deleteMenuItem.ComponentRenderer,
-      onClick: deleteMenuItem.onClick
-    }
-  ]
+  const optionsMenuItems = getMenuOptionItems(
+    [newFileMenuItem, newFolderMenuItem, uploadFile, '-', editMenuItem, deleteMenuItem],
+    nodeItem.type as FileStoreNodeTypes
+  )
 
   const NodesList = React.useMemo(() => {
     return (
@@ -137,8 +174,17 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
       >
         <div style={{ display: 'flex' }}>
           <img src={getNodeIcon(type)} alt={type} />
-          <Text font={{ size: 'normal' }} color={!isActiveNode ? Color.PRIMARY_9 : Color.GREY_0}>
-            {props.name}
+          <Text
+            font={{ size: 'normal' }}
+            color={!isActiveNode ? Color.PRIMARY_9 : Color.GREY_0}
+            style={{
+              maxWidth: 150,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {nodeItem.name}
           </Text>
         </div>
         {isActiveNode &&

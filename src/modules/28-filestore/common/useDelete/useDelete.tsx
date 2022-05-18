@@ -5,21 +5,21 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, {useCallback, useContext} from 'react'
+import React, { useCallback, useContext } from 'react'
 
-import {Icon} from '@harness/uicore'
-import {Text, useConfirmationDialog, useToaster} from "@wings-software/uicore";
-import {Intent} from "@blueprintjs/core";
-import {useParams} from "react-router-dom";
-import {capitalize as _capitalize, defaultTo as _defaultTo, lowerCase as _lowerCase} from 'lodash-es'
-import {String, useStrings} from 'framework/strings'
-import {FileStoreNodeDTO, useDeleteFile} from "services/cd-ng";
-import type {FileStorePopoverItem} from "@filestore/common/FileStorePopover/FileStorePopover";
-import type {ProjectPathProps} from "@common/interfaces/RouteInterfaces";
-import {FileStoreContext} from "@filestore/components/FileStoreContext/FileStoreContext";
-import {FILE_VIEW_TAB, FileStoreNodeTypes} from "@filestore/interfaces/FileStore";
-import {FILE_STORE_ROOT} from "@filestore/utils/constants";
-import {ComponentRenderer} from '../ModalComponents/ModalComponents'
+import { Icon } from '@harness/uicore'
+import { Text, useConfirmationDialog, useToaster } from '@wings-software/uicore'
+import { Intent } from '@blueprintjs/core'
+import { useParams } from 'react-router-dom'
+import { capitalize as _capitalize, defaultTo as _defaultTo, lowerCase as _lowerCase } from 'lodash-es'
+import { String, useStrings } from 'framework/strings'
+import { FileStoreNodeDTO, useDeleteFile } from 'services/cd-ng'
+import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
+import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
+import { FILE_VIEW_TAB, FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { ComponentRenderer } from '../ModalComponents/ModalComponents'
 
 const useDelete = (identifier: string, name: string, type: string): FileStorePopoverItem => {
   const { getString } = useStrings()
@@ -29,11 +29,16 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
 
   const getConfirmationDialogContent = (): JSX.Element => {
     return (
-        <div className={'filestoreDeleteDialog'}>
-          <String useRichText stringID="filestore.confirmDeleteFile" vars={{
+      <div className={'filestoreDeleteDialog'}>
+        <String
+          useRichText
+          stringID="filestore.confirmDeleteFile"
+          vars={{
             entity: _lowerCase(type),
-            name: name }} />
-        </div>
+            name: name
+          }}
+        />
+      </div>
     )
   }
 
@@ -47,12 +52,12 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
 
   const { openDialog: openReferenceErrorDialog } = useConfirmationDialog({
     contentText: (
-        <span>
-          <Text inline font={{ weight: 'bold' }}>
-            {`${name} `}
-          </Text>
-          {getString('filestore.fileReferenceText')}
-        </span>
+      <span>
+        <Text inline font={{ weight: 'bold' }}>
+          {`${name} `}
+        </Text>
+        {getString('filestore.fileReferenceText')}
+      </span>
     ),
     titleText: getString('filestore.cantDeleteFile'),
     confirmButtonText: type === 'FILE' ? getString('filestore.referenceButtonText') : undefined,
@@ -96,10 +101,10 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
           if (deleted) {
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
             getNode({
-                identifier: FILE_STORE_ROOT,
-                name: FILE_STORE_ROOT,
-                type: FileStoreNodeTypes.FOLDER,
-                children: []
+              identifier: FILE_STORE_ROOT,
+              name: FILE_STORE_ROOT,
+              type: FileStoreNodeTypes.FOLDER,
+              children: []
             } as FileStoreNodeDTO)
           }
         } catch (err) {
@@ -118,7 +123,8 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
   return {
     ComponentRenderer: <ComponentRenderer icon={icon} title={getString('delete')} />,
     onClick: handleClick,
-    label: getString('delete')
+    label: getString('delete'),
+    actionType: FileStoreActionTypes.DELETE_NODE
   }
 }
 

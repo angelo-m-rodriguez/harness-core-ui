@@ -1118,9 +1118,14 @@ export interface StringsMap {
   'filestore.confirmDeleteFile': string
   'filestore.deletedSuccessMessage': string
   'filestore.editFileDetails': string
+  'filestore.editFolderDetails': string
+  'filestore.errors.cannotRender': string
+  'filestore.errors.fileUsage': string
   'filestore.fileReferenceText': string
   'filestore.fileSuccessCreated': string
+  'filestore.fileSuccessSaved': string
   'filestore.folderSuccessCreated': string
+  'filestore.folderSuccessSaved': string
   'filestore.newFile': string
   'filestore.newFolder': string
   'filestore.noFilesDescription': string
@@ -1129,7 +1134,6 @@ export interface StringsMap {
   'filestore.noFilesTitle': string
   'filestore.referenceButtonText': string
   'filestore.uploadFileFolder': string
-  'filestore.view.cannotRender': string
   'filestore.view.fileName': string
   'filestore.view.fileUsage': string
   'filestore.view.lastModifiedBy': string

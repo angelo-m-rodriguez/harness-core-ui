@@ -29,13 +29,13 @@ export interface FileStoreNodeDTO extends NodeDTO {
   parentName?: string
 }
 
-interface FileStoreContextState {
+export interface FileStoreContextState {
   currentNode: FileStoreNodeDTO
   setCurrentNode: (node: FileStoreNodeDTO) => void
   fileStore: FileStoreNodeDTO[] | undefined
   setFileStore: (nodes: FileStoreNodeDTO[]) => void
   updateFileStore: (nodes: FileStoreNodeDTO[]) => void
-  getNode: (node: FileStoreNodeDTO) => void
+  getNode: (node: FileStoreNodeDTO, config?: GetNodeConfig) => void
   loading: boolean
   activeTab: string
   setActiveTab: (tab: FILE_VIEW_TAB) => void

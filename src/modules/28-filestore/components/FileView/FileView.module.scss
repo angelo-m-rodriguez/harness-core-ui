@@ -7,15 +7,55 @@
 
 .mainFileView {
   :global {
+    .bp3-tabs {
+      height: 100%;
+      .bp3-tab-panel {
+        height: 100%;
+      }
+    }
+    .bp3-tab-panel {
+      margin-top: 0px !important;
+    }
     .bp3-tab-list {
       padding: var(--spacing-medium);
       padding-bottom: 0;
       background: var(--white) !important;
       border-bottom: 1px solid var(--grey-300);
     }
+  }
+}
 
-    .bp3-tab-panel {
-      margin-top: 0;
+.fileEditPanel {
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.fileInfoContainer {
+  padding: var(--spacing-xsmall);
+  border-radius: var(--spacing-xsmall);
+  border: 1px solid var(--grey-200);
+}
+.fileName {
+  border-right: 1px solid var(--grey-1000);
+  padding-right: var(--spacing-small);
+}
+
+.fileDetails {
+  :global {
+    .monaco-editor {
+      .overflow-guard {
+        padding-top: var(--spacing-medium);
+      }
+      .view-lines {
+        padding-left: var(--spacing-medium);
+      }
+      .margin {
+        width: 64px;
+        background-color: var(--primary-bg);
+        padding-top: var(--spacing-medium);
+        div.line-numbers {
+          left: 30px !important;
+        }
+      }
     }
   }
 }
