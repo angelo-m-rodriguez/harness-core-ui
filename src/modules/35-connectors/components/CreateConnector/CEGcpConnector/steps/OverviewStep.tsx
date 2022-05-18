@@ -28,7 +28,8 @@ import {
   ConnectorFilterProperties,
   useGetConnectorListV2,
   GetConnectorListV2QueryParams,
-  Failure
+  Failure,
+  GcpBillingExportSpec
 } from 'services/cd-ng'
 import { Description, Tags } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 import { CE_GCP_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
@@ -43,11 +44,16 @@ interface OverviewDetails {
   tags: Record<string, any>
 }
 
+export interface ExistingCURDetails extends GcpBillingExportSpec {
+  projectId: string
+}
+
 export interface CEGcpConnectorDTO extends ConnectorInfoDTO {
   spec: GcpCloudCostConnector
   includeBilling?: boolean
   isEditMode?: boolean
   serviceAccount?: string
+  existingCurReports?: ExistingCURDetails[]
 }
 
 interface OverviewProps extends StepProps<CEGcpConnectorDTO> {
@@ -112,14 +118,43 @@ const OverviewStep: React.FC<OverviewProps> = props => {
       ...omit(formData, ['projectId']),
       type: 'GcpCloudCost',
       spec: newSpec,
-      isEditMode: isEditMode
+      isEditMode: isEditMode,
+      existingCurReports: []
+    }
+
+    let includesBilling
+    if (connectorInfo?.spec?.featuresEnabled) {
+      includesBilling = connectorInfo?.spec?.featuresEnabled.includes('BILLING')
+    }
+
+    const curReportExistFilterParams: ConnectorFilterProperties = {
+      ...filterParams,
+      ccmConnectorFilter: {
+        featuresEnabled: ['BILLING']
+      }
     }
 
     try {
       const response = await fetchConnectors(filterParams)
       if (response.status == 'SUCCESS') {
         if (response?.data?.pageItemCount == 0 || isEditMode) {
-          if (nextStep) nextStep(payload)
+          const curResponse = await fetchConnectors(curReportExistFilterParams)
+          if (curResponse.status == 'SUCCESS') {
+            if (curResponse?.data?.pageItemCount == 0 || includesBilling) {
+              nextStep?.(payload)
+            } else {
+              const existingCurReports: ExistingCURDetails[] =
+                curResponse.data?.content?.map(ele => ({
+                  projectId: ele?.connector?.spec?.projectId,
+                  datasetId: ele.connector?.spec?.billingExportSpec?.datasetId,
+                  tableId: ele.connector?.spec?.billingExportSpec?.tableId
+                })) || []
+              payload.existingCurReports = existingCurReports
+              nextStep?.(payload)
+            }
+          } else {
+            throw response as Failure
+          }
         } else {
           setIsLoading(false)
           setIsUniqueConnector(false)
