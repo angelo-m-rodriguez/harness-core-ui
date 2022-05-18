@@ -21,7 +21,7 @@ import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
 import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 import useDelete from '@filestore/common/useDelete/useDelete'
 import css from './NavNodeList.module.scss'

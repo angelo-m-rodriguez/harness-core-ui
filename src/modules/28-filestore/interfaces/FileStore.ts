@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 export enum FileStoreNodeTypes {
   FILE = 'FILE',

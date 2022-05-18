@@ -12,7 +12,7 @@ import ReactTimeago from 'react-timeago'
 
 import { Layout, TableV2, Text, Container } from '@harness/uicore'
 import { Color } from '@harness/design-system'
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
 import type { Item } from '@filestore/common/NodeMenu/NodeMenuButton'
 import { useStrings } from 'framework/strings'
@@ -23,7 +23,7 @@ import FileIcon from '@filestore/images/file-.svg'
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import type { StoreNodeType } from '@filestore/interfaces/FileStore'
 import { getFileUsageNameByType } from '@filestore/utils/textUtils'
-import useDelete from "@filestore/common/useDelete/useDelete";
+import useDelete from '@filestore/common/useDelete/useDelete'
 
 export interface StoreViewProps {
   title?: string
@@ -79,7 +79,7 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
   const { original } = row
   return (
     <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
-      { original.lastModifiedAt && <ReactTimeago date={original.lastModifiedAt} /> }
+      {original.lastModifiedAt && <ReactTimeago date={original.lastModifiedAt} />}
     </Text>
   )
 }
@@ -87,11 +87,10 @@ const RenderColumnLastModified: Renderer<CellProps<FileStoreNodeRenderDTO>> = ({
 const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = () => {
   return (
     <Text color={Color.GREY_800} font={{ size: 'small' }} lineClamp={1}>
-       {/*{original.lastModifiedBy}*/}
+      {/*{original.lastModifiedBy}*/}
     </Text>
   )
 }
-
 
 const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
   const { original } = row

@@ -9,7 +9,7 @@ import React, { useContext } from 'react'
 import { Container, Layout } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { NewFileButton } from '@filestore/common/NewFile/NewFile'
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { RootNodesList } from '@filestore/components/NavNodeList/NavNodesList'
 import { FileStoreContext } from '../FileStoreContext/FileStoreContext'
 
