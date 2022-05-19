@@ -55,7 +55,7 @@ export default function ReferencedBy(): React.ReactElement {
     const {getString} = useStrings()
 
     const RenderColumnEntity: Renderer<CellProps<EntitySetupUsageDTO>> = ({row}) => {
-        const entity = row.original.referredEntity
+        const entity = row.original.referredByEntity
 
         return (
             <Layout.Horizontal>
@@ -89,7 +89,7 @@ export default function ReferencedBy(): React.ReactElement {
         () => [
             {
                 Header: getString('entity'),
-                accessor: row => row.referredEntity?.name,
+                accessor: row => row.referredByEntity?.name,
                 id: 'entity',
                 width: '50%',
                 Cell: RenderColumnEntity

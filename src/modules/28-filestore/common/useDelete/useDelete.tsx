@@ -62,18 +62,7 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
     titleText: getString('filestore.cantDeleteFile'),
     confirmButtonText: type === 'FILE' ? getString('filestore.referenceButtonText') : undefined,
     cancelButtonText: getString('cancel'),
-    intent: Intent.DANGER,
-    onCloseDialog: async (isConfirmed: boolean) => {
-      if (isConfirmed) {
-        setCurrentNode({
-          identifier,
-          name,
-          type: 'FILE',
-          children: []
-        } as FileStoreNodeDTO)
-        setActiveTab(FILE_VIEW_TAB.REFERENCED_BY)
-      }
-    }
+    intent: Intent.DANGER
   })
 
   const handleFileDeleteError = (code: string, message: string): void => {

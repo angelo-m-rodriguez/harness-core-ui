@@ -67,7 +67,7 @@ const ConnectorDetailsPage: React.FC<ConnectorDetailsPageProps> = props => {
 
   const viewToLabelMap: Record<ConnectorDetailsView, string> = {
     [ConnectorDetailsView.overview]: getString('overview'),
-    [ConnectorDetailsView.referencedBy]: getString('refrencedBy'),
+    [ConnectorDetailsView.referencedBy]: getString('referencedBy'),
     [ConnectorDetailsView.activityHistory]: getString('activityHistoryLabel')
   }
 

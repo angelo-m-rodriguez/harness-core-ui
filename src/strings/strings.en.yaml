@@ -126,7 +126,7 @@ ticketingSystems: Ticketing Systems
 monitoringAndLoggingSystems: Monitoring and Logging Systems
 secretManagers: Secret Managers
 connection: Connection
-refrencedBy: Referenced by
+referencedBy: Referenced by
 activityHistoryLabel: Activity History
 connectionMode: Connection Mode
 credType: Credential Type

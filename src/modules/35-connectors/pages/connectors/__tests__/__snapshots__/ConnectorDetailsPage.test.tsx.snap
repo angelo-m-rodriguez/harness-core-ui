@@ -194,7 +194,7 @@ exports[`Connector DetailsPage Page Test Initial snapshot should match render 1`
           <span
             class="bp3-text-overflow-ellipsis bp3-fill"
           >
-            refrencedBy
+            referencedBy
           </span>
         </span>
         <span
@@ -735,7 +735,7 @@ exports[`Connector DetailsPage Page Test Initial snapshot should match render at
           <span
             class="bp3-text-overflow-ellipsis bp3-fill"
           >
-            refrencedBy
+            referencedBy
           </span>
         </span>
         <span
