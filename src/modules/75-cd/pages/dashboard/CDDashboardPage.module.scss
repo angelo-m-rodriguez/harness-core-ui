@@ -64,12 +64,9 @@ $header-height: 80px;
 
 .healthCards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 110px 120px;
+  grid-template-columns: 3fr 1fr;
   grid-gap: var(--spacing-medium);
-  > :first-child {
-    grid-row: 1/3;
-  }
+  min-width: 470px;
   .healthCard {
     box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.04), 0px 2px 4px rgba(96, 97, 112, 0.16);
     padding: var(--spacing-medium) !important;
@@ -78,7 +75,6 @@ $header-height: 80px;
     min-width: 0;
     .cardHeader {
       margin-bottom: 12px !important;
-      // color: #4f5162 !important;
       font-weight: 500 !important;
       font-size: 12px !important;
       letter-spacing: 0.2px;
@@ -91,12 +87,47 @@ $header-height: 80px;
         font-weight: 600 !important;
         line-height: 1;
         color: var(--grey-800) !important;
-        font-size: 28px !important;
+        font-size: 24px !important;
+        margin-bottom: var(--spacing-7);
       }
     }
     .chartWrap {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      max-width: 125px;
+      justify-content: space-between;
+    }
+    .layoutParent {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .childCard {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 120px;
+      grid-gap: var(--spacing-medium);
+      div[class*='healthCard']:nth-child(1) {
+        background-color: var(--green-50) !important;
+      }
+      div[class*='healthCard']:nth-child(2) {
+        background-color: var(--red-50) !important;
+      }
+      div[class*='healthCard']:nth-child(3) {
+        background-color: var(--primary-1) !important;
+      }
+      .cardText {
+        padding-bottom: var(--spacing-1);
+        margin-bottom: 0;
+      }
+      .chartWrap {
+        display: flex;
+        flex-direction: column !important;
+      }
+      .layoutParent {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }
@@ -165,5 +196,29 @@ $header-height: 80px;
   justify-content: space-between;
 }
 .topDepPiechart {
-  flex-direction: row-reverse !important;
+  flex-direction: column-reverse !important;
+}
+.totalCard {
+  box-shadow: 0px 0px 1px rgb(40 41 61 / 4%), 0px 2px 4px rgb(96 97 112 / 16%);
+  padding: var(--spacing-medium) !important;
+  border-radius: 4px;
+  background-color: var(--grey-0) !important;
+  min-width: 0;
+  max-height: 245px;
+  .cardHeader {
+    padding-bottom: var(--spacing-8);
+  }
+}
+.labelStyles {
+  height: 100%;
+  ul {
+    padding-left: 0;
+  }
+  padding-top: var(--spacing-7) !important;
+
+  .listStyles {
+    font-weight: 500 !important;
+    font-size: var(--font-size-xsmall) !important;
+    color: var(--grey-500);
+  }
 }

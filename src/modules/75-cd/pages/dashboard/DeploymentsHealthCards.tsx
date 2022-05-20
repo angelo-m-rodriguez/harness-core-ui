@@ -7,7 +7,6 @@
 
 import React, { useMemo } from 'react'
 import { Container, Text, Icon, Layout } from '@wings-software/uicore'
-import cx from 'classnames'
 import { Color, FontVariation } from '@harness/design-system'
 import HighchartsReact from 'highcharts-react-official'
 import Highcharts from 'highcharts'
@@ -15,6 +14,7 @@ import Highcharts from 'highcharts'
 import { useParams } from 'react-router-dom'
 import { Classes } from '@blueprintjs/core'
 import merge from 'lodash-es/merge'
+import { isEmpty } from 'lodash-es'
 import moment from 'moment'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -27,11 +27,13 @@ import styles from './CDDashboardPage.module.scss'
 
 export interface HealthCardProps {
   title: string
-  text: any
+  text?: any
   rate?: number
   primaryChartOptions?: any
   secondaryChartOptions?: any
   layout: 'vertical' | 'horizontal'
+  children?: any
+  isParent?: boolean
   isLoading?: boolean
   pieChartProps?: any
   showPieChart?: boolean
@@ -149,7 +151,7 @@ export default function DeploymentsHealthCards(props: any) {
         color: 'var(--primary-7)'
       }
     ],
-    size: 36,
+    size: 60,
     customCls: styles.topDepPiechart,
     showInRevOrder: true,
 
@@ -161,20 +163,18 @@ export default function DeploymentsHealthCards(props: any) {
   }
 
   const labelsHtml = (
-    <Layout.Vertical
-      flex={{ alignItems: 'flex-end' }}
-      height="100%"
-      padding={{ top: 'xsmall', bottom: 'xsmall', right: 'large' }}
-    >
-      <ul>
-        {pieChartProps.items.map(({ label, formattedValue, value, color }) => (
-          <li style={{ fontWeight: 500, fontSize: 15, color }} key={`${label}_${value}`}>
-            <Text font={{ size: 'xsmall' }} color={Color.GREY_500} key={label}>{`${label} (${
-              formattedValue ? formattedValue : value
-            })`}</Text>
-          </li>
-        ))}
-      </ul>
+    <Layout.Vertical className={styles.labelStyles}>
+      {!isEmpty(pieChartProps.items) ? (
+        <ul>
+          {pieChartProps.items.map(({ label, formattedValue, value, color }) => (
+            <li style={{ color }} key={`${label}_${value}`}>
+              <Text className={styles.listStyles} key={label}>{`${label} (${
+                formattedValue ? formattedValue : value
+              })`}</Text>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </Layout.Vertical>
   )
 
@@ -185,68 +185,68 @@ export default function DeploymentsHealthCards(props: any) {
       <Text className={styles.healthCardTitle}>{title}</Text>
       <Container className={styles.healthCards}>
         <HealthCard
-          title="Total Deployments"
+          title="Total Executions"
           text={data?.data?.healthDeploymentInfo?.total?.count}
           isLoading={loading}
           layout="vertical"
+          rate={50} //todo
           primaryChartOptions={chartsData?.totalChartOptions}
-          secondaryChartOptions={chartsData?.totalBarChartOptions}
+          isParent={true}
           showLineChart={data?.data?.healthDeploymentInfo?.total?.count ? true : false}
+        >
+          <HealthCard
+            title="Successful"
+            text={data?.data?.healthDeploymentInfo?.success?.count}
+            rate={data?.data?.healthDeploymentInfo?.success?.rate}
+            isLoading={loading}
+            layout="vertical"
+            primaryChartOptions={chartsData?.successChartOptions}
+          />
+          <HealthCard
+            title="Failed"
+            text={data?.data?.healthDeploymentInfo?.failure?.count}
+            rate={data?.data?.healthDeploymentInfo?.failure?.rate}
+            isLoading={loading}
+            layout="vertical"
+            primaryChartOptions={chartsData?.failureChartOptions}
+          />
+          <HealthCard
+            title="Active"
+            text={data?.data?.healthDeploymentInfo?.failure?.count}
+            rate={data?.data?.healthDeploymentInfo?.failure?.rate}
+            isLoading={loading}
+            layout="vertical"
+            primaryChartOptions={chartsData?.failureChartOptions}
+          />
+        </HealthCard>
+
+        <TotalDepHealthCard
+          title={'Environment Changes'}
+          layout={'horizontal'}
+          pieChartProps={pieChartProps}
           showPieChart={
             data?.data?.healthDeploymentInfo?.total?.nonProduction !== 0 ||
             data?.data?.healthDeploymentInfo?.total?.production !== 0
           }
-          pieChartProps={pieChartProps}
-        />
-        <HealthCard
-          title="Successful Deployments"
-          text={data?.data?.healthDeploymentInfo?.success?.count}
-          rate={data?.data?.healthDeploymentInfo?.success?.rate}
-          isLoading={loading}
-          layout="horizontal"
-          primaryChartOptions={chartsData?.successChartOptions}
-        />
-        <HealthCard
-          title="Failed Deployments"
-          text={data?.data?.healthDeploymentInfo?.failure?.count}
-          rate={data?.data?.healthDeploymentInfo?.failure?.rate}
-          isLoading={loading}
-          layout="horizontal"
-          primaryChartOptions={chartsData?.failureChartOptions}
         />
       </Container>
     </Container>
   )
 }
 
-function TotalDepHealthCard({
-  title,
-  text,
-  layout,
-  isLoading,
-  pieChartProps = {},
-  showPieChart = false
-}: HealthCardProps) {
+function TotalDepHealthCard({ title, layout, pieChartProps = {}, showPieChart = false }: HealthCardProps) {
   return (
-    <Container
-      font={{ variation: FontVariation.SMALL_SEMI }}
-      color={Color.GREY_600}
-      className={cx(styles.healthCard, styles.totalDepCard)}
-    >
-      <Container style={layout === 'horizontal' ? { display: 'flex', justifyContent: 'space-between' } : {}}>
-        <Text className={styles.cardHeader}>{title}</Text>
-        <Container className={styles.textAndRate}>
-          {isLoading ? (
-            <Container height={30} width={100} className={Classes.SKELETON} />
-          ) : (
-            <Text className={styles.cardText}>{text}</Text>
-          )}
-        </Container>
-      </Container>
-      <div className={styles.separator}></div>
-      {showPieChart && (
-        <Container className={styles.chartWrap}>
-          <PieChart size={65} {...pieChartProps} />
+    <Container font={{ variation: FontVariation.SMALL_SEMI }} color={Color.GREY_600}>
+      {showPieChart ? (
+        <Layout.Vertical className={styles.totalCard}>
+          <Container style={layout === 'horizontal' ? { display: 'flex', justifyContent: 'space-between' } : {}}>
+            <Text className={styles.cardHeader}>{title}</Text>
+          </Container>
+          {showPieChart && <PieChart {...pieChartProps} />}
+        </Layout.Vertical>
+      ) : (
+        <Container className={styles.totalCard} height="100%">
+          <Text className={styles.cardHeader}>{title}</Text>
         </Container>
       )}
     </Container>
@@ -260,82 +260,96 @@ export function HealthCard({
   primaryChartOptions,
   secondaryChartOptions,
   layout,
+  children,
   isLoading,
-  pieChartProps = {},
-  showPieChart = false
+  isParent = false
 }: HealthCardProps) {
-  if (showPieChart) {
-    return (
-      <TotalDepHealthCard
-        title={title}
-        text={text}
-        layout={layout}
-        pieChartProps={pieChartProps}
-        showPieChart={showPieChart}
-      />
-    )
-  }
-
   return (
     <Container font={{ variation: FontVariation.SMALL_SEMI }} color={Color.GREY_600} className={styles.healthCard}>
       <Text className={styles.cardHeader}>{title}</Text>
       <Container style={layout === 'horizontal' ? { display: 'flex', justifyContent: 'space-between' } : {}}>
-        <Container className={styles.textAndRate}>
-          {isLoading ? (
-            <Container height={30} width={100} className={Classes.SKELETON} />
-          ) : (
-            <Text className={styles.cardText}>{text}</Text>
-          )}
-        </Container>
+        <Container className={styles.layoutParent}>
+          <Container className={styles.textAndRate}>
+            {isLoading ? (
+              <Container height={30} width={100} className={Classes.SKELETON} />
+            ) : (
+              <>
+                <Text className={styles.cardText} lineClamp={1} tooltip={<Text padding={'small'}>{text}</Text>}>
+                  {text}
+                </Text>
+                {typeof rate === 'number' && rate && !isLoading && isParent ? (
+                  <Container flex>
+                    <Text
+                      margin={{ left: 'small' }}
+                      style={{
+                        color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      }}
+                    >
+                      {Math.abs(roundNumber(rate)!)}%
+                    </Text>
+                    <Icon
+                      size={14}
+                      name={rate >= 0 ? 'caret-up' : 'caret-down'}
+                      style={{
+                        color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      }}
+                    />
+                  </Container>
+                ) : null}
+              </>
+            )}
+          </Container>
 
-        {primaryChartOptions && !isLoading && rate ? (
-          <Container className={styles.chartWrap}>
-            <HighchartsReact highcharts={Highcharts} options={primaryChartOptions} />
-            {typeof rate === 'number' && rate && !isLoading ? (
-              <Container flex>
-                <Text
-                  margin={{ left: 'xsmall' }}
-                  style={{
-                    color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
-                  }}
-                >
-                  {Math.abs(roundNumber(rate)!)}%
-                </Text>
-                <Icon
-                  size={14}
-                  name={rate >= 0 ? 'caret-up' : 'caret-down'}
-                  style={{
-                    color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
-                  }}
-                />
-              </Container>
-            ) : null}
-          </Container>
-        ) : null}
-        {secondaryChartOptions && !isLoading && rate ? (
-          <Container className={styles.chartWrap} margin={{ top: 'large' }}>
-            <HighchartsReact highcharts={Highcharts} options={secondaryChartOptions} />
-            {typeof rate === 'number' && rate && !isLoading ? (
-              <Container flex>
-                <Text
-                  margin={{ left: 'xsmall' }}
-                  style={{
-                    color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
-                  }}
-                >
-                  {Math.abs(roundNumber(rate)!)}%
-                </Text>
-                <Icon
-                  size={14}
-                  name={rate >= 0 ? 'caret-up' : 'caret-down'}
-                  style={{
-                    color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
-                  }}
-                />
-              </Container>
-            ) : null}
-          </Container>
-        ) : null}
+          {primaryChartOptions && !isLoading && rate ? (
+            <Container className={styles.chartWrap}>
+              <HighchartsReact highcharts={Highcharts} options={primaryChartOptions} />
+              {typeof rate === 'number' && rate && !isLoading && !isParent ? (
+                <Container flex={{ alignItems: 'center', justifyContent: 'flex-start' }}>
+                  <Text
+                    margin={{ left: 'xsmall' }}
+                    style={{
+                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                    }}
+                  >
+                    {Math.abs(roundNumber(rate)!)}%
+                  </Text>
+                  <Icon
+                    size={14}
+                    name={rate >= 0 ? 'caret-up' : 'caret-down'}
+                    style={{
+                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                    }}
+                  />
+                </Container>
+              ) : null}
+            </Container>
+          ) : null}
+          {secondaryChartOptions && !isLoading && rate ? (
+            <Container className={styles.chartWrap} margin={{ top: 'large' }}>
+              <HighchartsReact highcharts={Highcharts} options={secondaryChartOptions} />
+              {typeof rate === 'number' && rate && !isLoading ? (
+                <Container flex>
+                  <Text
+                    margin={{ left: 'xsmall' }}
+                    style={{
+                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                    }}
+                  >
+                    {Math.abs(roundNumber(rate)!)}%
+                  </Text>
+                  <Icon
+                    size={14}
+                    name={rate >= 0 ? 'caret-up' : 'caret-down'}
+                    style={{
+                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                    }}
+                  />
+                </Container>
+              ) : null}
+            </Container>
+          ) : null}
+        </Container>
+        <Container className={styles.childCard}>{children}</Container>
       </Container>
     </Container>
   )
