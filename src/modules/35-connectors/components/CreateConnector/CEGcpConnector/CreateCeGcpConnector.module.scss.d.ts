@@ -14,6 +14,7 @@ declare const styles: {
   readonly commandsContainer: string
   readonly connectorExistBox: string
   readonly dataFields: string
+  readonly existingCurTable: string
   readonly extention: string
   readonly gcpConnector: string
   readonly grantPermissionSteps: string

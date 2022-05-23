@@ -170,6 +170,25 @@
       padding: var(--spacing-large) 0 0 0;
     }
   }
+
+  .existingCURTable {
+    overflow: scroll;
+    max-height: 250px;
+    line-height: 18px;
+    width: 100%;
+    padding-top: var(--spacing-small);
+    table {
+      width: 100%;
+      background: var(--white);
+    }
+    thead {
+      background: var(--grey-100);
+      font-size: var(--font-size-small) !important;
+    }
+    tr {
+      font-size: var(--font-size-small) !important;
+    }
+  }
 }
 
 .extention {

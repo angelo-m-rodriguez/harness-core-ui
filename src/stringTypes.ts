@@ -1829,6 +1829,10 @@ export interface StringsMap {
   'connectors.ceGcp.chooseRequirements.heading': string
   'connectors.ceGcp.chooseRequirements.info': string
   'connectors.ceGcp.chooseRequirements.name': string
+  'connectors.ceGcp.existingCurTable.nextStepHint1': string
+  'connectors.ceGcp.existingCurTable.nextStepHint2': string
+  'connectors.ceGcp.existingCurTable.projectId': string
+  'connectors.ceGcp.existingCurTable.searchPlaceholder': string
   'connectors.ceGcp.gcp': string
   'connectors.ceGcp.grantPermission.bigQueryButtonText': string
   'connectors.ceGcp.grantPermission.heading': string

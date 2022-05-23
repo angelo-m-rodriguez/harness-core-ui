@@ -790,6 +790,11 @@ ceGcp:
     otherLinks: 'Other Links:'
     link1: 'https://cloud.google.com/billing/docs/how-to/export-data-bigquery-setup'
     link2: 'Harness Docs (https://ngdocs.harness.io/article/kxnsritjls)'
+  existingCurTable:
+    projectId: 'Project ID'
+    searchPlaceholder: 'Enter Project ID'
+    nextStepHint1: 'If the GCP Project Id you entered is covered by any of the above, select and click “Continue >” to proceed.'
+    nextStepHint2: '{{ $.connectors.ceAws.curExising.nextStepHint2 }}'
   chooseRequirements:
     name: '{{ $.connectors.ceAws.steps.req }}'
     heading: '{{ $.connectors.ceAws.steps.req }}'
