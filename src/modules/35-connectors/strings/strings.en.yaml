@@ -69,7 +69,7 @@ connectorEmptyState: 'There are no connectors in your project'
 readMore: 'Read more'
 connectorsTitle: 'Resources: Connectors'
 parameters: Parameters
-validationPath: Validation Path
+validationPath: Validation Pathzs
 addHeader: Add Header
 addParameter: Add Parameter
 baseURL: Base URL
@@ -291,7 +291,7 @@ docker:
   dockerHub: 'DockerHub'
   harbour: 'Harbour'
   quay: 'Quay'
-  other: 'Other (Docker V2 compliant)'
+  other: 'Other (Docker V2 compliant)'zs
   dockerRepository: Docker Repository
 jenkins:
   bearerTokenRequired: Bearer token is required

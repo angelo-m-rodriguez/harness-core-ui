@@ -24,6 +24,52 @@ export const getIconNameForTag = (tag: string): IconName => {
   }
 }
 
+const entitySubTypeToTagMap:
+  | {
+      [key in ConnectorInfoDTO['type']]: GetYamlSnippetMetadataQueryParams['tags'][number]
+    }
+  | any = {
+  K8sCluster: 'k8s',
+  Git: 'git',
+  Splunk: 'splunk',
+  AppDynamics: 'appdynamics',
+  Vault: 'vault',
+  AzureKeyVault: 'azurekeyvault',
+  DockerRegistry: 'docker',
+  Local: 'local',
+  GcpKms: 'gcpkms',
+  Gcp: 'gcp',
+  Aws: 'aws',
+  AwsKms: 'awskms',
+  Artifactory: 'artifactory',
+  Jira: 'jira',
+  // eslint-disable-next-line
+  // @ts-ignore
+  ServiceNow: 'servicenow',
+  Nexus: 'nexus',
+  Github: 'github',
+  Gitlab: 'gitlab',
+  Bitbucket: 'bitbucket',
+  CEAws: 'ceaws',
+  CEAzure: 'ceazure',
+  CEK8sCluster: 'cek8s',
+  Codecommit: 'codecommit',
+  HttpHelmRepo: 'httphelmrepo',
+  NewRelic: 'newrelic',
+  GcpCloudCost: 'gcpcloudcost',
+  Prometheus: 'prometheus',
+  Datadog: 'datadog',
+  SumoLogic: 'sumologic',
+  Dynatrace: 'dynatrace',
+  AwsSecretManager: 'awssecretmanager',
+  PagerDuty: 'pagerduty',
+  CustomHealth: 'customhealth',
+  ErrorTracking: 'errortracking',
+  Pdc: 'pdc',
+  Azure: 'azure',
+  AzureRepo: 'azurerepo'
+}
+
 export const getSnippetTags = (
   entityType: GetYamlSchemaQueryParams['entityType'],
   entitySubType?: ConnectorInfoDTO['type'] | Module

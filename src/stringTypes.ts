@@ -2056,7 +2056,6 @@ export interface StringsMap {
   'connectors.helmRepo.helmRepoUrl': string
   'connectors.httpHelm.httpHelmRepoUrl': string
   'connectors.ifReq': string
-  'connectors.jenkins.bearerTokenRequired': string
   'connectors.jenkins.jenkins': string
   'connectors.jenkins.jenkinsUrl': string
   'connectors.jenkins.jenkinsUrlRequired': string
@@ -9925,6 +9924,10 @@ export interface StringsMap {
    * @deprecated migrate this string to module level file
    */
   'validation.authType': string
+  /**
+   * @deprecated migrate this string to module level file
+   */
+  'validation.bearerToken': string
   /**
    * @deprecated migrate this string to module level file
    */
