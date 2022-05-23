@@ -19,6 +19,7 @@ import {
   useUpdateConnector
 } from 'services/cd-ng'
 import CreateCeGcpConnector from '../CreateCeGcpConnector'
+import BillingExport from '../steps/BillingExport'
 
 const commonProps = {
   accountId: 'dummy',
@@ -27,6 +28,25 @@ const commonProps = {
   setIsEditMode: noop,
   onClose: jest.fn(),
   onSuccess: noop
+}
+
+const mockedConnector = {
+  name: 'gcp_1',
+  identifier: 'gcp_1',
+  description: null,
+  orgIdentifier: null,
+  projectIdentifier: null,
+  tags: {},
+  type: 'GcpCloudCost',
+  spec: {
+    featuresEnabled: ['BILLING', 'VISIBILITY'],
+    projectId: 'id-1234',
+    serviceAccountEmail: '502@gserviceaccount.com',
+    billingExportSpec: {
+      datasetId: 'BillingReport',
+      tableId: 'gcp_billing_export_harnessio_gcp'
+    }
+  }
 }
 
 jest.mock('services/cd-ng')
@@ -170,6 +190,51 @@ describe('Create Secret Manager Wizard', () => {
     expect(commonProps.onClose).toBeCalled()
 
     expect(container).toMatchSnapshot()
+  })
+
+  test('should show billing table for exising billing connectors', async () => {
+    jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
+      CE_AS_GCP_VM_SUPPORT: true
+    })
+    useGetConnectorListV2Mock.mockImplementation(() => ({
+      mutate: async () => {
+        return {
+          status: 'SUCCESS',
+          data: {
+            pageItemCount: 1,
+            content: [mockedConnector]
+          }
+        }
+      }
+    }))
+
+    const { getByText } = render(
+      <TestWrapper path="/account/:accountId/resources/connectors" pathParams={{ accountId: 'dummy' }}>
+        <BillingExport
+          name={'connectors.ceGcp.billingExport.heading'}
+          prevStepData={{
+            name: 'gcp-con',
+            identifier: 'igcp-con-id',
+            type: 'Gcp',
+            spec: {
+              billingExportSpec: { datasetId: 'dataset-id', tableId: 'table-id' },
+              featuresEnabled: ['BILLING'],
+              projectId: '',
+              serviceAccountEmail: 'string'
+            },
+            existingCurReports: [
+              {
+                projectId: 'id-1234',
+                datasetId: 'data-set-id',
+                tableId: 'table-id'
+              }
+            ]
+          }}
+        />
+      </TestWrapper>
+    )
+
+    expect(getByText('id-1234')).toBeDefined()
   })
 
   test('should throw an error when connectors already exist for a given gcpProjectId', async () => {
