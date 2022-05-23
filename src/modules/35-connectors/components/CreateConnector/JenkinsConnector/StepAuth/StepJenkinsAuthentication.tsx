@@ -126,7 +126,7 @@ const StepJenkinsAuthentication: React.FC<StepProps<StepJenkinsAuthenticationPro
             }),
             bearerToken: Yup.object().when('authType', {
               is: val => val === AuthTypes.BEARER_TOKEN,
-              then: Yup.object().required(getString('validation.bearerToken')),
+              then: Yup.object().required(getString('connectors.jenkins.bearerTokenRequired')),
               otherwise: Yup.object().nullable()
             })
           })}
