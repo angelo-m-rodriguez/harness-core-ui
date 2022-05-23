@@ -1,10 +1,10 @@
-import type {FilterDataInterface, FilterInterface} from "@common/components/Filter/Constants";
+import type { FilterDataInterface, FilterInterface } from "@common/components/Filter/Constants";
 import type {
   EmbeddedUserDetailsDTO,
   FilesFilterProperties,
   FilterDTO,
 } from "services/cd-ng";
-import {StringUtils} from "@common/exports";
+import { StringUtils } from "@common/exports";
 
 export type FileStoreFilterFormType = Omit<FilesFilterProperties, 'createdBy'> & {
   createdBy?: string
@@ -15,16 +15,20 @@ export const createRequestBodyPayload = ({
                                            data,
                                            projectIdentifier,
                                            orgIdentifier,
+                                           accountIdentifier,
+                                           referenceIdentifier,
                                            createdByList
                                          }: {
   isUpdate: boolean
   data: FilterDataInterface<FileStoreFilterFormType, FilterInterface>
   projectIdentifier: string
   orgIdentifier: string,
-  createdByList:  EmbeddedUserDetailsDTO[]
+  accountIdentifier: string,
+  referenceIdentifier?: string,
+  createdByList: EmbeddedUserDetailsDTO[]
 }): FilterDTO => {
   const {
-    metadata: {name: _name, filterVisibility, identifier},
+    metadata: { name: _name, filterVisibility, identifier },
     formValues
   } = data
 
@@ -38,7 +42,19 @@ export const createRequestBodyPayload = ({
     filterVisibility: filterVisibility,
     filterProperties: {
       createdBy: createdBy,
-      referencedBy: formValues.referencedBy,
+      ...(
+        formValues.referencedBy && referenceIdentifier ? {
+          referencedBy: {
+            type: formValues.referencedBy,
+            entityRef: {
+              identifier: referenceIdentifier,
+              orgIdentifier,
+              projectIdentifier,
+              accountIdentifier
+            }
+          }
+        } : {}
+      ),
       fileUsage: formValues.fileUsage,
       tags: formValues.tags,
       filterType: 'FileStore'

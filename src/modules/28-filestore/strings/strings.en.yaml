@@ -25,3 +25,9 @@ referenceButtonText: 'Go view references'
 errors:
   fileUsage: 'File Usage is required'
   cannotRender: 'File format not support, so it can only be previewed'
+filter:
+  fileUsage: 'File Usage'
+  fileUsagePlaceholder: 'Type to view suggestions'
+  createdBy: 'Created by'
+  referencedBy: 'Referenced by'
+  referenceName: 'Name'

@@ -48,7 +48,7 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
                     e.stopPropagation()
                     if (item?.onClick) {
                       item.onClick(e)
-                      // setMenuOpen(false)
+                      setMenuOpen(false)
                     }
                   }}
                 />

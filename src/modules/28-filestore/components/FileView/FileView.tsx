@@ -22,7 +22,7 @@ export default function FileView(): React.ReactElement {
     <Container background={Color.WHITE} style={{ width: '100%', height: '100%' }} className={css.mainFileView}>
       <Tabs
         id={'serviceLandingPageTabs'}
-        defaultSelectedTabId={activeTab}
+        selectedTabId={activeTab}
         onChange={tabId => setActiveTab(tabId as FILE_VIEW_TAB)}
         tabList={[
           {
@@ -32,7 +32,7 @@ export default function FileView(): React.ReactElement {
           },
           {
             id: FILE_VIEW_TAB.REFERENCED_BY,
-            title: getString('refrencedBy'),
+            title: getString('referencedBy'),
             panel: <ReferencedBy />
           },
           { id: FILE_VIEW_TAB.ACTIVITY_LOG, title: getString('activityLog'), panel: <div /> }

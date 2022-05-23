@@ -11,7 +11,7 @@ import type { PipelineInfoConfig, ServiceDefinition } from 'services/cd-ng'
 export enum ServiceTabs {
   SUMMARY = 'summaryTab',
   Configuration = 'configuration',
-  REFERENCED_BY = 'refrencedByTab',
+  REFERENCED_BY = 'referencedByTab',
   ActivityLog = 'activityLog'
 }
 

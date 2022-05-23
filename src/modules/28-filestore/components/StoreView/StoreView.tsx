@@ -30,7 +30,7 @@ export default function StoreView(): React.ReactElement {
   }
 
   return (
-    <Container style={{ width: '100%', overflow: 'hidden', overflowY: 'scroll' }}>
+    <Container style={{ width: '100%', height: "calc(100vh - 75px)", overflow: 'hidden', overflowY: 'scroll' }}>
       {currentNode?.type === FileStoreNodeTypes.FOLDER ? <NodesList /> : <FileView />}
     </Container>
   )

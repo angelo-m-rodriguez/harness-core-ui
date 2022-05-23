@@ -37,6 +37,7 @@ export interface FileStoreContextState {
   updateFileStore: (nodes: FileStoreNodeDTO[]) => void
   getNode: (node: FileStoreNodeDTO, config?: GetNodeConfig) => void
   loading: boolean
+  setLoading: (loading: boolean) => void
   activeTab: string
   setActiveTab: (tab: FILE_VIEW_TAB) => void
   updateCurrentNode: (node: FileStoreNodeDTO) => void
@@ -59,6 +60,7 @@ export const FileStoreContext = createContext({} as FileStoreContextState)
 export const FileStoreContextProvider: React.FC = props => {
   const [tempNodes, setTempNodes] = useState<FileStoreNodeDTO[]>([])
   const [activeTab, setActiveTab] = useState<FILE_VIEW_TAB>(FILE_VIEW_TAB.DETAILS)
+  const [loading, setLoading] = useState<boolean>(false)
   const [currentNode, setCurrentNodeState] = useState<FileStoreNodeDTO>({
     identifier: FILE_STORE_ROOT,
     name: FILE_STORE_ROOT,
@@ -69,7 +71,7 @@ export const FileStoreContextProvider: React.FC = props => {
   const params = useParams<PipelineType<ProjectPathProps>>()
   const { accountId, orgIdentifier, projectIdentifier } = params
 
-  const { mutate: getFolderNodes, loading } = useGetFolderNodes({
+  const { mutate: getFolderNodes, loading: isGettingFolderNodes } = useGetFolderNodes({
     queryParams: {
       accountIdentifier: accountId,
       projectIdentifier,
@@ -148,7 +150,8 @@ export const FileStoreContextProvider: React.FC = props => {
         fileStore,
         getNode,
         setFileStore,
-        loading,
+        loading: loading || isGettingFolderNodes,
+        setLoading,
         updateCurrentNode,
         updateFileStore,
         tempNodes,
