@@ -19,7 +19,11 @@ export default function FileView(): React.ReactElement {
   const { activeTab, setActiveTab } = useContext(FileStoreContext)
 
   return (
-    <Container background={Color.WHITE} style={{ width: '100%', height: '100%' }} className={css.mainFileView}>
+    <Container
+      background={Color.WHITE}
+      style={{ width: '100%', height: 'calc(100vh - 200px)' }}
+      className={css.mainFileView}
+    >
       <Tabs
         id={'serviceLandingPageTabs'}
         selectedTabId={activeTab}

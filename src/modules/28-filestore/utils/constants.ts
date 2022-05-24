@@ -6,7 +6,7 @@
  */
 
 export const FILE_STORE_ROOT = 'Root'
-export const SEARCH_FILES = "SEARCH"
+export const SEARCH_FILES = 'SEARCH'
 
 export enum ExtensionType {
   YAML = 'yaml',

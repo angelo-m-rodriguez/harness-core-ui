@@ -40,7 +40,9 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
           {items.map((item: Item, key: number) => (
             <Fragment key={key}>
               {item === '-' ? (
-                <Menu.Divider />
+                key === 0 ? null : (
+                  <Menu.Divider />
+                )
               ) : (
                 <Menu.Item
                   text={item.text}

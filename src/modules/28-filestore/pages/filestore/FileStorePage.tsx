@@ -13,12 +13,16 @@ import {
   Container,
   ExpandingSearchInput,
   FormInput,
+  PageError,
   SelectOption,
-} from "@wings-software/uicore";
-import { debounce, pick } from "lodash-es";
+  shouldShowError
+} from '@wings-software/uicore'
+import { debounce, pick } from 'lodash-es'
 import { useModalHook } from '@harness/use-modal'
+import type { GetDataError } from 'restful-react'
+import type { FormikProps } from 'formik'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
-import { Page, StringUtils } from '@common/exports'
+import { Page, StringUtils, useToaster } from '@common/exports'
 import type { ProjectPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { getLinkForAccountResources } from '@common/utils/BreadcrumbUtils'
 import { useStrings } from 'framework/strings'
@@ -29,11 +33,12 @@ import { FileStoreContext, FileStoreContextProvider } from '@filestore/component
 import { FILE_STORE_ROOT, SEARCH_FILES } from '@filestore/utils/constants'
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import {
+  Failure,
   FilesFilterProperties,
   FileStoreNodeDTO,
   FilterDTO,
-  GetFolderNodesQueryParams,
-  GetReferencedByInScopeQueryParams, ListFilesWithFilterQueryParams,
+  GetReferencedByInScopeQueryParams,
+  ListFilesWithFilterQueryParams,
   useDeleteFilter,
   useGetCreatedByList,
   useGetEntityTypes,
@@ -44,22 +49,22 @@ import {
   usePostFilter,
   useUpdateFilter
 } from 'services/cd-ng'
-import FilterSelector from "@common/components/Filter/FilterSelector/FilterSelector";
+import FilterSelector from '@common/components/Filter/FilterSelector/FilterSelector'
 import {
-  flattenObject, getFilterByIdentifier,
+  flattenObject,
+  getFilterByIdentifier,
   isObjectEmpty,
   removeNullAndEmpty,
   UNSAVED_FILTER
-} from "@common/components/Filter/utils/FilterUtils";
-import {
-  createRequestBodyPayload, FileStoreFilterFormType,
-} from "@filestore/utils/RequestUtils";
-import { Filter, FilterRef } from "@common/components/Filter/Filter";
-import type { CrudOperation } from "@common/components/Filter/FilterCRUD/FilterCRUD";
-import type { FilterDataInterface, FilterInterface } from "@common/components/Filter/Constants";
-import { getFileUsageNameByType } from "@filestore/utils/textUtils";
+} from '@common/components/Filter/utils/FilterUtils'
+import { createRequestBodyPayload, FileStoreFilterFormType } from '@filestore/utils/RequestUtils'
+import { Filter, FilterRef } from '@common/components/Filter/Filter'
+import type { CrudOperation } from '@common/components/Filter/FilterCRUD/FilterCRUD'
+import type { FilterDataInterface, FilterInterface } from '@common/components/Filter/Constants'
+import { getFileUsageNameByType } from '@filestore/utils/textUtils'
 
-import css from "./FileStorePage.module.scss";
+import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import css from './FileStorePage.module.scss'
 
 const fileUsageOptions: SelectOption[] = [
   {
@@ -76,32 +81,66 @@ const fileUsageOptions: SelectOption[] = [
   }
 ]
 
+const NO_SELECTION = { label: '', value: '' }
+
+interface FileStoreFilterFormProps<T> {
+  formikProps?: FormikProps<T>
+}
+
 const FileStore: React.FC = () => {
   const params = useParams<PipelineType<ProjectPathProps>>()
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FilterDTO[]>()
   const [isRefreshingFilters, setIsRefreshingFilters] = useState<boolean>(false)
+  const { getRBACErrorMessage } = useRBACError()
+  const [filesFetchError, setFilesFetchError] = useState<GetDataError<Failure | Error>>()
   const [referencedByEntitySelected, setReferencedByEntitySelected] = useState<string>()
   const [referenceIdentifier, setReferenceIdentifier] = useState<string>()
   const [appliedFilter, setAppliedFilter] = useState<FilterDTO | null>()
   const { accountId, orgIdentifier, projectIdentifier } = params
   const { getString } = useStrings()
+  const { showError } = useToaster()
   const filterRef = React.useRef<FilterRef<FilterDTO> | null>(null)
   const { fileStore, setFileStore, setCurrentNode, setLoading } = useContext(FileStoreContext)
 
-  const defaultQueryParams: GetFolderNodesQueryParams = {
-    projectIdentifier,
-    orgIdentifier,
-    accountIdentifier: accountId
-  }
-
   const { mutate: getRootNodes, loading } = useGetFolderNodes({
-    queryParams: defaultQueryParams
+    queryParams: {
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId
+    }
   })
 
-  const { data: createdByListResponse } = useGetCreatedByList({ queryParams: defaultQueryParams })
+  const { data: createdByListResponse } = useGetCreatedByList({
+    queryParams: {
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId
+    }
+  })
 
-  const { data: entityTypeResponse } = useGetEntityTypes({ queryParams: defaultQueryParams })
+  const { data: referencedByListForScopeResponse } = useGetReferencedByInScope({
+    queryParams: {
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId,
+      entityType: referencedByEntitySelected as GetReferencedByInScopeQueryParams['entityType']
+    }
+  })
+
+  const { data: entityTypeResponse } = useGetEntityTypes({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
+  const { mutate: getFilesWithFilter } = useListFilesWithFilter({
+    queryParams: {
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId
+    }
+  })
 
   const {
     loading: isFetchingFilters,
@@ -118,7 +157,7 @@ const FileStore: React.FC = () => {
 
   const { mutate: createFilter } = usePostFilter({
     queryParams: {
-      accountIdentifier: accountId,
+      accountIdentifier: accountId
     }
   })
 
@@ -137,101 +176,118 @@ const FileStore: React.FC = () => {
     }
   })
 
-  const { mutate: getFilesWithFilter } = useListFilesWithFilter({ queryParams: defaultQueryParams })
-
   const reset = (): void => {
-    refetchFileStoreList(defaultQueryParams)
+    setReferencedByEntitySelected(undefined)
+    setFilesFetchError(undefined)
+    refetchFileStoreList({
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId
+    })
     setAppliedFilter(undefined)
   }
 
-  const { data: referencedByListForScopeResponse } = useGetReferencedByInScope({
-    queryParams: {
-      ...defaultQueryParams,
-      entityType: referencedByEntitySelected as GetReferencedByInScopeQueryParams["entityType"]
-    }
-  })
-
-  const referenceNameOptions: SelectOption[] = (referencedByListForScopeResponse?.data?.content || []).map((entity) => ({
+  const referenceNameOptions: SelectOption[] = (referencedByListForScopeResponse?.data?.content || []).map(entity => ({
     label: entity.referredEntity?.name || '',
     value: entity.referredEntity?.entityRef?.identifier || ''
   }))
 
   const createdByOptions: SelectOption[] = (createdByListResponse?.data || []).map(user => ({
-      label: user.name || '',
-      value: user.email || ''
-    })
-  )
+    label: user.name || '',
+    value: user.email || ''
+  }))
 
   const referencedByOptions: SelectOption[] = (entityTypeResponse?.data || []).map(entityType => ({
-      label: entityType,
-      value: entityType
-    })
-  )
+    label: entityType,
+    value: entityType
+  }))
 
-  const [selectedCreatedBy, setSelectedCreatedBy] = useState<SelectOption>()
+  const FileStoreFilterForm = (props: FileStoreFilterFormProps<FileStoreFilterFormType>): React.ReactElement => {
+    const fileUsage = props.formikProps?.values.fileUsage
+    const createdBy = props.formikProps?.values.createdBy
+    const referencedBy = props.formikProps?.values.referencedBy
 
-  const FileStoreFilterForm = (): React.ReactElement => {
     return (
       <>
         <FormInput.Select
+          selectProps={{
+            addClearBtn: true
+          }}
           items={fileUsageOptions}
           name="fileUsage"
           label={getString('filestore.filter.fileUsage')}
           key="fileUsage"
+          value={fileUsage ? fileUsageOptions.find((option: SelectOption) => option.value === fileUsage) : NO_SELECTION}
           placeholder={getString('filestore.filter.fileUsagePlaceholder')}
         />
-        <FormInput.KVTagInput name="tags" label={getString('tagsLabel')} key="tags"/>
+        <FormInput.KVTagInput name="tags" label={getString('tagsLabel')} key="tags" />
         <FormInput.Select
+          selectProps={{
+            addClearBtn: true
+          }}
           items={createdByOptions}
-          value={selectedCreatedBy}
-          onChange={() => setSelectedCreatedBy({ value: "bl", label: "bla" })}
+          value={createdBy ? createdByOptions.find((option: SelectOption) => option.value === createdBy) : NO_SELECTION}
           name="createdBy"
           label={getString('filestore.filter.createdBy')}
           key="createdBy"
         />
         <FormInput.Select
+          selectProps={{
+            addClearBtn: true
+          }}
           items={referencedByOptions}
           onChange={option => setReferencedByEntitySelected(option.value as string)}
           name="referencedBy"
+          value={
+            referencedBy
+              ? referencedByOptions.find((option: SelectOption) => option.value === referencedBy)
+              : NO_SELECTION
+          }
           label={getString('filestore.filter.referencedBy')}
           key="referencedBy"
         />
-        {
-          referencedByEntitySelected &&
+        {referencedByEntitySelected && (
           <FormInput.Select
-            style={{ marginLeft: 20, paddingLeft: 20, borderLeft: "1px solid #CBCBCB" }}
+            style={{ marginLeft: 20, paddingLeft: 20, borderLeft: '1px solid #CBCBCB' }}
             items={referenceNameOptions}
-            onChange={option => setReferenceIdentifier(option.value as string)}
+            value={
+              referenceIdentifier
+                ? referenceNameOptions.find((option: SelectOption) => option.value === referenceIdentifier)
+                : NO_SELECTION
+            }
+            onChange={option => {
+              setReferenceIdentifier(option.value as string)
+            }}
             name="referenceName"
             label={getString('filestore.filter.referenceName')}
             key="referenceName"
           />
-        }
+        )}
       </>
     )
   }
 
   const refetchFileStoreList = React.useCallback(
-    async (
-      params?: ListFilesWithFilterQueryParams,
-      filter?: FilesFilterProperties
-    ): Promise<void> => {
+    async (queryParams?: ListFilesWithFilterQueryParams, filter?: FilesFilterProperties): Promise<void> => {
       const { tags, fileUsage, createdBy, referencedBy } = filter || {}
 
       const requestBodyPayload = Object.assign(
         filter
           ? {
-            tags,
-            fileUsage,
-            createdBy: (createdByListResponse?.data || []).find(user => user.email === createdBy),
-            referencedBy: (referencedBy && referenceIdentifier) ? {
-              type: referencedBy,
-              entityRef: {
-                identifier: referenceIdentifier,
-                ...params
-              }
-            } : null,
-          }
+              tags,
+              fileUsage,
+              createdBy: (createdByListResponse?.data || []).find(user => user.email === createdBy),
+              referencedBy:
+                referencedBy && referenceIdentifier
+                  ? {
+                      type: referencedBy,
+                      entityRef: {
+                        identifier: referenceIdentifier,
+                        ...queryParams
+                      }
+                    }
+                  : null
+            }
           : {},
         {
           filterType: 'FileStore'
@@ -245,15 +301,16 @@ const FileStore: React.FC = () => {
         const { status, data } = await getFilesWithFilter(sanitizedFilterRequest, { queryParams: params })
         /* istanbul ignore else */
         if (status === 'SUCCESS') {
-          const filteredFiles: FileStoreNodeDTO[] = data?.content?.map(file => ({
-            identifier: file.identifier,
-            lastModifiedBy: file.lastModifiedBy,
-            lastModifiedAt: file.lastModifiedAt,
-            name: file.name,
-            parentIdentifier: file.parentIdentifier,
-            fileUsage: file.fileUsage,
-            type: file.type
-          })) || []
+          const filteredFiles: FileStoreNodeDTO[] =
+            data?.content?.map(file => ({
+              identifier: file.identifier,
+              lastModifiedBy: file.lastModifiedBy,
+              lastModifiedAt: file.lastModifiedAt,
+              name: file.name,
+              parentIdentifier: file.parentIdentifier,
+              fileUsage: file.fileUsage,
+              type: file.type
+            })) || []
 
           setCurrentNode({
             identifier: SEARCH_FILES,
@@ -263,12 +320,15 @@ const FileStore: React.FC = () => {
           })
         }
       } /* istanbul ignore next */ catch (e) {
-
+        if (shouldShowError(e)) {
+          showError(getRBACErrorMessage(e))
+        }
+        setFilesFetchError(e)
       }
 
       setLoading(false)
     },
-    [createdByListResponse]
+    [createdByListResponse, referenceIdentifier]
   )
 
   useEffect(() => {
@@ -288,8 +348,13 @@ const FileStore: React.FC = () => {
   ): Promise<void> => {
     setIsRefreshingFilters(true)
     const requestBodyPayload = createRequestBodyPayload({
-      accountIdentifier: "",
-      isUpdate, data, projectIdentifier, orgIdentifier, createdByList: createdByListResponse?.data || []
+      projectIdentifier,
+      orgIdentifier,
+      accountIdentifier: accountId,
+      isUpdate,
+      data,
+      referenceIdentifier,
+      createdByList: createdByListResponse?.data || []
     })
     const saveOrUpdateHandler = filterRef.current?.saveOrUpdateFilterHandler
     if (saveOrUpdateHandler && typeof saveOrUpdateHandler === 'function') {
@@ -320,7 +385,10 @@ const FileStore: React.FC = () => {
 
   const handleFilterClick = (identifier: string): void => {
     if (identifier !== unsavedFilter.identifier) {
-      const filter = getFilterByIdentifier(filters || [], identifier);
+      const filter = getFilterByIdentifier(filters || [], identifier)
+      const { referencedBy } = (filter?.filterProperties as FilesFilterProperties) || {}
+      setReferencedByEntitySelected(referencedBy?.type)
+      setReferenceIdentifier(referencedBy?.entityRef?.identifier)
       setAppliedFilter(filter)
     }
   }
@@ -338,10 +406,12 @@ const FileStore: React.FC = () => {
     event?.preventDefault()
     /* istanbul ignore else */
     if (option.value) {
-      const selectedFilter = getFilterByIdentifier((filters || []), option.value?.toString())
+      const selectedFilter = getFilterByIdentifier(filters || [], option.value?.toString())
       setAppliedFilter(selectedFilter)
       const updatedQueryParams = {
-        ...defaultQueryParams,
+        projectIdentifier,
+        orgIdentifier,
+        accountIdentifier: accountId,
         searchTerm
       }
       refetchFileStoreList(updatedQueryParams, selectedFilter?.filterProperties)
@@ -357,18 +427,31 @@ const FileStore: React.FC = () => {
           createdBy: formData.createdBy,
           referencedBy: formData.referencedBy,
           fileUsage: formData.fileUsage,
-          tags: formData.tags,
+          tags: formData.tags
         }
-        refetchFileStoreList(defaultQueryParams, filterFromFormData)
+        refetchFileStoreList(
+          {
+            projectIdentifier,
+            orgIdentifier,
+            accountIdentifier: accountId
+          },
+          filterFromFormData
+        )
         setAppliedFilter({ ...unsavedFilter, filterProperties: filterFromFormData })
         hideFilterDrawer()
       }
     }
 
-    const { tags, fileUsage, createdBy } = (appliedFilter?.filterProperties as FilesFilterProperties) || {}
+    const { tags, fileUsage, createdBy, referencedBy } =
+      (appliedFilter?.filterProperties as FilesFilterProperties) || {}
     const { name = '', filterVisibility } = appliedFilter || {}
 
-    console.log(createdBy)
+    const initialFilterValues = {
+      tags,
+      fileUsage,
+      createdBy: typeof createdBy === 'string' ? createdBy : createdBy?.email,
+      referencedBy: typeof referencedBy === 'string' ? referencedBy : referencedBy?.type
+    }
 
     return (
       <Filter<FileStoreFilterFormType, FilterDTO>
@@ -379,11 +462,7 @@ const FileStore: React.FC = () => {
         }}
         filters={filters}
         initialFilter={{
-          formValues: {
-            tags,
-            fileUsage,
-            createdBy: typeof createdBy === 'string' ? createdBy : createdBy?.email
-          },
+          formValues: initialFilterValues,
           metadata: {
             name,
             filterVisibility: filterVisibility,
@@ -395,7 +474,7 @@ const FileStore: React.FC = () => {
         onDelete={handleDelete}
         onFilterSelect={handleFilterClick}
         isRefreshingFilters={isRefreshingFilters}
-        formFields={<FileStoreFilterForm/>}
+        formFields={<FileStoreFilterForm />}
         dataSvcConfig={
           new Map<CrudOperation, (...rest: any[]) => Promise<any>>([
             ['ADD', createFilter],
@@ -413,25 +492,27 @@ const FileStore: React.FC = () => {
     filters,
     appliedFilter,
     searchTerm,
-    referencedByEntitySelected,
+    createdByOptions,
+    referenceNameOptions,
+    referencedByEntitySelected
   ])
 
   const fieldToLabelMapping = new Map<string, string>()
   fieldToLabelMapping.set('fileUsage', getString('filestore.filter.fileUsage'))
+  fieldToLabelMapping.set('tags', getString('tagsLabel'))
   fieldToLabelMapping.set('createdBy', getString('filestore.filter.createdBy'))
   fieldToLabelMapping.set('referencedBy', getString('filestore.filter.referencedBy'))
-  fieldToLabelMapping.set('tags', getString('tagsLabel'))
 
   /* Through expandable filter text search */
   const debouncedFilesSearch = useCallback(
     debounce((query: string): void => {
-
       const updatedQueryParams = {
-        defaultQueryParams,
+        projectIdentifier,
+        orgIdentifier,
+        accountIdentifier: accountId,
         searchTerm: query
       }
       refetchFileStoreList(updatedQueryParams, appliedFilter?.filterProperties)
-
     }, 500),
     [refetchFileStoreList, appliedFilter?.filterProperties]
   )
@@ -476,7 +557,18 @@ const FileStore: React.FC = () => {
 
       <Page.Body>
         {loading ? (
-          <PageSpinner/>
+          <PageSpinner />
+        ) : /* istanbul ignore next */ filesFetchError && shouldShowError(filesFetchError) ? (
+          <div style={{ paddingTop: '200px' }}>
+            <PageError
+              message={(filesFetchError?.data as Error)?.message || filesFetchError?.message}
+              onClick={(e: React.MouseEvent<Element, MouseEvent>) => {
+                e.preventDefault()
+                e.stopPropagation()
+                reset()
+              }}
+            />
+          </div>
         ) : (
           <>
             {!fileStore?.length ? (
@@ -486,8 +578,8 @@ const FileStore: React.FC = () => {
               />
             ) : (
               <Layout.Horizontal height="100%">
-                <StoreExplorer fileStore={fileStore}/>
-                <StoreView/>
+                <StoreExplorer fileStore={fileStore} />
+                <StoreView />
               </Layout.Horizontal>
             )}
           </>
@@ -500,7 +592,7 @@ const FileStore: React.FC = () => {
 export default function FileStorePage(): React.ReactElement {
   return (
     <FileStoreContextProvider>
-      <FileStore/>
+      <FileStore />
     </FileStoreContextProvider>
   )
 }
