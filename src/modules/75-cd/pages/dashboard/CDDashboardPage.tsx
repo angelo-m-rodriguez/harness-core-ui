@@ -153,7 +153,9 @@ export const CDDashboardPage: React.FC = () => {
     queryParams: {
       accountIdentifier: accountId,
       projectIdentifier,
-      orgIdentifier
+      orgIdentifier,
+      startTime: timeRange?.range[0]?.getTime() || 0,
+      endTime: timeRange?.range[1]?.getTime() || 0
     }
   })
 

@@ -189,7 +189,7 @@ export default function DeploymentsHealthCards(props: any) {
           text={data?.data?.healthDeploymentInfo?.total?.count}
           isLoading={loading}
           layout="vertical"
-          rate={50} //todo
+          rate={data?.data?.healthDeploymentInfo?.total?.rate}
           primaryChartOptions={chartsData?.totalChartOptions}
           isParent={true}
           showLineChart={data?.data?.healthDeploymentInfo?.total?.count ? true : false}
@@ -212,8 +212,8 @@ export default function DeploymentsHealthCards(props: any) {
           />
           <HealthCard
             title="Active"
-            text={data?.data?.healthDeploymentInfo?.failure?.count}
-            rate={data?.data?.healthDeploymentInfo?.failure?.rate}
+            text={data?.data?.healthDeploymentInfo?.active?.count}
+            rate={data?.data?.healthDeploymentInfo?.active?.rate}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}

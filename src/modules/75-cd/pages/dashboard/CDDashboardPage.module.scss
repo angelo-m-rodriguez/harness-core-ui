@@ -82,6 +82,7 @@ $header-height: 80px;
     .textAndRate {
       display: flex;
       align-items: baseline;
+      padding-top: var(--spacing-3);
 
       .cardText {
         font-weight: 600 !important;
@@ -116,9 +117,12 @@ $header-height: 80px;
       div[class*='healthCard']:nth-child(3) {
         background-color: var(--primary-1) !important;
       }
-      .cardText {
-        padding-bottom: var(--spacing-1);
-        margin-bottom: 0;
+      .textAndRate {
+        padding-top: 0;
+        .cardText {
+          padding-bottom: var(--spacing-1);
+          margin-bottom: 0;
+        }
       }
       .chartWrap {
         display: flex;

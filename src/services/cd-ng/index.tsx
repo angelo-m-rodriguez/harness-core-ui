@@ -5070,6 +5070,7 @@ export interface HealthDeploymentDashboard {
 }
 
 export interface HealthDeploymentInfo {
+  active?: DeploymentInfo
   failure?: DeploymentInfo
   success?: DeploymentInfo
   total?: TotalDeploymentInfo
@@ -11065,6 +11066,7 @@ export interface TotalDeploymentInfo {
   countList?: DeploymentDateAndCount[]
   nonProduction?: number
   production?: number
+  rate?: number
 }
 
 export interface TransitionTo {
@@ -18608,6 +18610,8 @@ export interface GetDeploymentsQueryParams {
   accountIdentifier: string
   orgIdentifier: string
   projectIdentifier: string
+  startTime: number
+  endTime: number
   top?: number
 }
 
