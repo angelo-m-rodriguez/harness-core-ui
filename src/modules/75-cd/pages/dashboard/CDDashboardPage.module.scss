@@ -108,13 +108,13 @@ $header-height: 80px;
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-rows: 120px;
       grid-gap: var(--spacing-medium);
-      div[class*='healthCard']:nth-child(1) {
+      .healthCard:nth-child(1) {
         background-color: var(--green-50) !important;
       }
-      div[class*='healthCard']:nth-child(2) {
+      .healthCard:nth-child(2) {
         background-color: var(--red-50) !important;
       }
-      div[class*='healthCard']:nth-child(3) {
+      .healthCard:nth-child(3) {
         background-color: var(--primary-1) !important;
       }
       .textAndRate {
