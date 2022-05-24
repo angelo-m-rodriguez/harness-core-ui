@@ -7,7 +7,6 @@
 
 import React, { useState } from 'react'
 import { MultiSelectOption, Layout, Checkbox, MultiSelect, Radio } from '@harness/uicore'
-import produce from 'immer'
 import { defaultTo } from 'lodash-es'
 import { SelectionType } from '@rbac/utils/utils'
 import { useStrings } from 'framework/strings'
@@ -17,8 +16,7 @@ import type { ScopeSelector } from 'services/resourcegroups'
 interface OrgSelectionRendererProps {
   accountIdentifier: string
   orgIdentifier: string
-  index: number
-  setSelectedScopes: React.Dispatch<React.SetStateAction<ScopeSelector[][]>>
+  onChange: (scopes: ScopeSelector[]) => void
   includeProjects?: boolean
   projects?: string[]
 }
@@ -27,8 +25,7 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
   orgIdentifier,
   includeProjects,
   projects,
-  index,
-  setSelectedScopes
+  onChange
 }) => {
   const { getString } = useStrings()
   const [searchTerm, setSearchTerm] = useState('')
@@ -62,6 +59,17 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
     return acc
   }, [])
 
+  const excluding_child_scopes: ScopeSelector = {
+    accountIdentifier,
+    orgIdentifier,
+    filter: 'EXCLUDING_CHILD_SCOPES'
+  }
+  const including_child_scopes: ScopeSelector = {
+    accountIdentifier,
+    orgIdentifier,
+    filter: 'INCLUDING_CHILD_SCOPES'
+  }
+
   return (
     <Layout.Vertical padding={{ top: 'medium' }}>
       <Checkbox
@@ -70,17 +78,13 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
         checked={includeProjectResources}
         onChange={event => {
           setIncludeProjectResources(event.currentTarget.checked)
-          setSelectedScopes(oldVal =>
-            produce(oldVal, draft => {
-              draft[index] = [
-                {
-                  accountIdentifier,
-                  orgIdentifier,
-                  filter: event?.currentTarget?.checked ? 'INCLUDING_CHILD_SCOPES' : 'EXCLUDING_CHILD_SCOPES'
-                }
-              ]
-            })
-          )
+          onChange([
+            {
+              accountIdentifier,
+              orgIdentifier,
+              filter: event?.currentTarget?.checked ? 'INCLUDING_CHILD_SCOPES' : 'EXCLUDING_CHILD_SCOPES'
+            }
+          ])
         }}
       />
       {includeProjectResources && (
@@ -93,17 +97,7 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
               value={SelectionType.ALL}
               checked={projectSelection === SelectionType.ALL}
               onChange={e => {
-                setSelectedScopes(oldVal =>
-                  produce(oldVal, draft => {
-                    draft[index] = [
-                      {
-                        accountIdentifier,
-                        orgIdentifier,
-                        filter: 'INCLUDING_CHILD_SCOPES'
-                      }
-                    ]
-                  })
-                )
+                onChange([including_child_scopes])
                 setProjectSelection(e.currentTarget.value as SelectionType)
               }}
             />
@@ -114,17 +108,7 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
               value={SelectionType.SPECIFIED}
               checked={projectSelection === SelectionType.SPECIFIED}
               onChange={e => {
-                setSelectedScopes(oldVal =>
-                  produce(oldVal, draft => {
-                    draft[index] = [
-                      {
-                        accountIdentifier,
-                        orgIdentifier,
-                        filter: 'EXCLUDING_CHILD_SCOPES'
-                      }
-                    ]
-                  })
-                )
+                onChange([excluding_child_scopes])
                 setProjectSelection(e.currentTarget.value as SelectionType)
               }}
             />
@@ -142,34 +126,21 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
               allowCreatingNewItems={false}
               onChange={
                 /* istanbul ignore next */ items => {
-                  setSelectedScopes(oldVal =>
-                    produce(oldVal, draft => {
-                      draft[index] =
-                        items.length === 0
-                          ? [
-                              {
+                  onChange(
+                    items.length === 0
+                      ? [including_child_scopes]
+                      : [
+                          excluding_child_scopes,
+                          ...items.map(
+                            item =>
+                              ({
                                 accountIdentifier,
                                 orgIdentifier,
-                                filter: 'INCLUDING_CHILD_SCOPES'
-                              }
-                            ]
-                          : [
-                              {
-                                accountIdentifier,
-                                orgIdentifier,
+                                projectIdentifier: item.value.toString(),
                                 filter: 'EXCLUDING_CHILD_SCOPES'
-                              },
-                              ...items.map(
-                                item =>
-                                  ({
-                                    accountIdentifier,
-                                    orgIdentifier,
-                                    projectIdentifier: item.value.toString(),
-                                    filter: 'EXCLUDING_CHILD_SCOPES'
-                                  } as ScopeSelector)
-                              )
-                            ]
-                    })
+                              } as ScopeSelector)
+                          )
+                        ]
                   )
                 }
               }

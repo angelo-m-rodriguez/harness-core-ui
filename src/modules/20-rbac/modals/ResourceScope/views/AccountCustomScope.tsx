@@ -101,10 +101,15 @@ const AccountCustomScope: React.FC<AccountCustomScopeProps> = ({
                 <OrgSelectionRenderer
                   accountIdentifier={accountId}
                   orgIdentifier={org}
-                  index={index}
                   includeProjects={includeProjects(selectedScopes[index])}
                   projects={getAllProjects(selectedScopes[index])}
-                  setSelectedScopes={setSelectedScopes}
+                  onChange={scopes => {
+                    setSelectedScopes(
+                      produce(selectedScopes, draft => {
+                        draft[index] = scopes
+                      })
+                    )
+                  }}
                 />
               ) : null}
               <Button
