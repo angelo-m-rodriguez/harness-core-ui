@@ -27,7 +27,7 @@ import styles from './CDDashboardPage.module.scss'
 
 export interface HealthCardProps {
   title: string
-  text?: any
+  value?: number
   rate?: number
   primaryChartOptions?: any
   secondaryChartOptions?: any
@@ -177,7 +177,7 @@ export default function DeploymentsHealthCards(props: any) {
                 key={label}
                 lineClamp={1}
                 tooltip={<Text padding={'small'}>{value}</Text>}
-                alwaysShowTooltip={formattedValue != value.toString() ? true : false}
+                alwaysShowTooltip={formattedValue !== value.toString()}
               >{`${label} (${formattedValue ? formattedValue : value})`}</Text>
             </li>
           ))}
@@ -194,7 +194,7 @@ export default function DeploymentsHealthCards(props: any) {
       <Container className={styles.healthCards}>
         <HealthCard
           title="Total Executions"
-          text={data?.data?.healthDeploymentInfo?.total?.count}
+          value={data?.data?.healthDeploymentInfo?.total?.count}
           isLoading={loading}
           layout="vertical"
           rate={data?.data?.healthDeploymentInfo?.total?.rate}
@@ -204,7 +204,7 @@ export default function DeploymentsHealthCards(props: any) {
         >
           <HealthCard
             title="Successful"
-            text={data?.data?.healthDeploymentInfo?.success?.count}
+            value={data?.data?.healthDeploymentInfo?.success?.count}
             rate={data?.data?.healthDeploymentInfo?.success?.rate}
             isLoading={loading}
             layout="vertical"
@@ -212,7 +212,7 @@ export default function DeploymentsHealthCards(props: any) {
           />
           <HealthCard
             title="Failed"
-            text={data?.data?.healthDeploymentInfo?.failure?.count}
+            value={data?.data?.healthDeploymentInfo?.failure?.count}
             rate={data?.data?.healthDeploymentInfo?.failure?.rate}
             isLoading={loading}
             layout="vertical"
@@ -220,7 +220,7 @@ export default function DeploymentsHealthCards(props: any) {
           />
           <HealthCard
             title="Active"
-            text={data?.data?.healthDeploymentInfo?.active?.count}
+            value={data?.data?.healthDeploymentInfo?.active?.count}
             rate={data?.data?.healthDeploymentInfo?.active?.rate}
             isLoading={loading}
             layout="vertical"
@@ -263,7 +263,7 @@ function TotalDepHealthCard({ title, layout, pieChartProps = {}, showPieChart = 
 
 export function HealthCard({
   title,
-  text,
+  value,
   rate,
   primaryChartOptions,
   secondaryChartOptions,
@@ -285,10 +285,10 @@ export function HealthCard({
                 <Text
                   className={styles.cardText}
                   lineClamp={1}
-                  tooltip={<Text padding={'small'}>{text}</Text>}
-                  alwaysShowTooltip={numberFormatter(text) != text ? true : false}
+                  tooltip={<Text padding={'small'}>{value}</Text>}
+                  alwaysShowTooltip={numberFormatter(value) !== value?.toString()}
                 >
-                  {numberFormatter(text)}
+                  {numberFormatter(value)}
                 </Text>
                 {typeof rate === 'number' && rate && !isLoading && isParent ? (
                   <Container flex>
