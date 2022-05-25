@@ -371,9 +371,11 @@ monitoringSources:
       recordCount: Current query yields too many records. Please change query to yield one record.
   splunk:
     splunkLogsQuery: SPLUNK Logs Query
+    splunkMetric: Splunk Metrics
     savedSearchQuery: Select saved query
     submitQueryToSeeRecords: Submit query to see records from Splunk
     staleRecordsWarning: Records not upated with latest query. Please fetch records
+    defaultSplunkMetricName: Splunk Metric
   gcoLogs:
     query: QUERY
     gcoLogsServiceInstance: Add service instance

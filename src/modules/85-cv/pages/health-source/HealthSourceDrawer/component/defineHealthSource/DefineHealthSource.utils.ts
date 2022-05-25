@@ -45,7 +45,11 @@ export const validateDuplicateIdentifier = (values: DefineHealthSourceFormInterf
   }
 }
 
-export const getFeatureOption = (type: string, getString: UseStringsReturn['getString']): SelectOption[] => {
+export const getFeatureOption = (
+  type: string,
+  getString: UseStringsReturn['getString'],
+  isSplunkMetricEnabled = false
+): SelectOption[] => {
   switch (type) {
     case Connectors.APP_DYNAMICS:
       return [
@@ -104,13 +108,22 @@ export const getFeatureOption = (type: string, getString: UseStringsReturn['getS
           label: getString('connectors.newRelic.products.fullStackObservability')
         }
       ]
-    case Connectors.SPLUNK:
+    case Connectors.SPLUNK: {
+      const optionalFeature = []
+      if (isSplunkMetricEnabled) {
+        optionalFeature.push({
+          value: SplunkProduct.SPLUNK_METRICS,
+          label: getString('cv.monitoringSources.gco.product.metrics')
+        })
+      }
       return [
         {
           value: SplunkProduct.SPLUNK_LOGS,
           label: getString('cv.monitoringSources.gco.product.logs')
-        }
+        },
+        ...optionalFeature
       ]
+    }
     case Connectors.CUSTOM_HEALTH:
       return [
         {

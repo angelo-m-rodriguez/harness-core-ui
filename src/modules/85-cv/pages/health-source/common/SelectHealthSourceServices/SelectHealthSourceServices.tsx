@@ -20,7 +20,8 @@ export default function SelectHealthSourceServices({
   hideServiceIdentifier = false,
   hideCV,
   hideSLIAndHealthScore,
-  isTemplate
+  isTemplate,
+  showOnlySLI = false
 }: SelectHealthSourceServicesProps): JSX.Element {
   const { getString } = useStrings()
   const { continuousVerification, healthScore, serviceInstance, riskCategory } = values
@@ -39,6 +40,7 @@ export default function SelectHealthSourceServices({
             />
           </>
         ) : null}
+        {showOnlySLI && <FormInput.CheckBox label={getString('cv.slos.sli')} name={HealthSourceServices.SLI} />}
         {!hideCV ? (
           <FormInput.CheckBox
             label={getString('cv.monitoredServices.continuousVerification')}

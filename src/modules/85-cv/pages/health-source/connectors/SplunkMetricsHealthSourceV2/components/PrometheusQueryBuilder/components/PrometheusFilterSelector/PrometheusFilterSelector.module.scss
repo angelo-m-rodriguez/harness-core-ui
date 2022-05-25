@@ -1,0 +1,59 @@
+/*
+ * Copyright 2021 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
+.valueMenu {
+  background-color: var(--white) !important;
+  max-height: 200px;
+  max-width: 350px;
+  overflow-y: scroll;
+  position: relative;
+  top: 35px;
+
+  :global {
+    .bp3-popover-arrow::before {
+      box-shadow: none;
+    }
+  }
+}
+
+.multiSelectCustomization {
+  :global {
+    .bp3-input.bp3-tag-input.bp3-multi-select {
+      height: unset;
+      min-height: 32px;
+    }
+    .bp3-tag {
+      height: unset !important;
+      min-height: 22px;
+    }
+  }
+}
+
+.valuePopover {
+  .valueFilter {
+    width: 100% !important;
+    margin: 0 !important;
+    margin-bottom: var(--spacing-xsmall) !important;
+    padding: var(--spacing-small) !important;
+    height: 40px;
+    position: sticky;
+    top: 0;
+    background: var(--white) !important;
+  }
+  .valueItem {
+    cursor: pointer;
+    padding: var(--spacing-small) !important;
+    &:hover {
+      background-color: var(--primary-7);
+      color: var(--white) !important;
+    }
+  }
+  .popoverError {
+    padding: var(--spacing-medium) !important;
+    width: 300px !important;
+  }
+}

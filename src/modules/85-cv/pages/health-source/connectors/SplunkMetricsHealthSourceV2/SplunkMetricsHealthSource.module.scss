@@ -1,0 +1,51 @@
+/*
+ * Copyright 2021 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
+.main {
+  box-shadow: 0px 0px 1.79261px rgba(40, 41, 61, 0.04), 0px 3.58522px 7.17043px rgba(96, 97, 112, 0.16);
+  background-color: var(--white) !important;
+  margin-bottom: 100px !important;
+
+  .manualQueryWarning {
+    display: flex;
+    border: 1px solid var(--grey-400);
+    padding: var(--spacing-medium) !important;
+    color: var(--black) !important;
+    margin: var(--spacing-large) !important;
+    margin-bottom: 0 !important;
+    border-radius: 5px;
+
+    p:last-child {
+      cursor: pointer;
+    }
+  }
+
+  .content {
+    padding: var(--spacing-large) !important;
+
+    .accordian [data-testid='riskProfile-details'],
+    [data-testid='metricToService-details'],
+    [data-testid='queryBuilder-details'] {
+      padding: 0 !important;
+    }
+
+    .accordian {
+      max-width: 45%;
+      flex-basis: 45%;
+      [class*='details'] {
+        margin: var(--spacing-large) 0 0 var(--spacing-large) !important;
+        background-color: var(--grey-50) !important;
+        padding: var(--spacing-medium) !important;
+      }
+    }
+
+    > div:nth-child(2) {
+      max-width: 55%;
+      flex-basis: 55%;
+    }
+  }
+}
