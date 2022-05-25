@@ -20,8 +20,9 @@ exports[`CardRailView renders correctly when content is empty 1`] = `
             class="StyledProps--font StyledProps--main title"
           >
             repositories
-             
-            (0)
+             (
+            0
+            )
           </p>
         </div>
       </div>
@@ -73,8 +74,9 @@ exports[`CardRailView renders correctly while loading="true" 1`] = `
             class="StyledProps--font StyledProps--main title"
           >
             pipeline.dashboards.activeBuilds
-             
-            (0)
+             (
+            0
+            )
           </p>
         </div>
       </div>

@@ -355,8 +355,9 @@ exports[`CIDashboardPage snapshot test should render properly 1`] = `
                 class="StyledProps--font StyledProps--main title"
               >
                 repositories
-                 
-                (1)
+                 (
+                1
+                )
               </p>
             </div>
           </div>
@@ -497,8 +498,9 @@ exports[`CIDashboardPage snapshot test should render properly 1`] = `
                 class="StyledProps--font StyledProps--main title"
               >
                 pipeline.dashboards.failedBuilds
-                 
-                (2)
+                 (
+                2
+                )
               </p>
             </div>
           </div>
@@ -870,8 +872,9 @@ exports[`CIDashboardPage snapshot test should render properly 1`] = `
                 class="StyledProps--font StyledProps--main title"
               >
                 pipeline.dashboards.activeBuilds
-                 
-                (1)
+                 (
+                1
+                )
               </p>
             </div>
           </div>

@@ -14,7 +14,7 @@ import Highcharts from 'highcharts'
 import { useParams } from 'react-router-dom'
 import { Classes } from '@blueprintjs/core'
 import merge from 'lodash-es/merge'
-import { isEmpty } from 'lodash-es'
+import { defaultTo, isEmpty } from 'lodash-es'
 import moment from 'moment'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -40,6 +40,10 @@ export interface HealthCardProps {
   showLineChart?: boolean
 }
 
+// sonar recommedation
+const green = 'var(--green-600)'
+const red = 'var(--ci-color-red-500)'
+
 export default function DeploymentsHealthCards(props: any) {
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps>()
   const { range, title } = props
@@ -49,8 +53,8 @@ export default function DeploymentsHealthCards(props: any) {
       accountIdentifier: accountId,
       projectIdentifier,
       orgIdentifier,
-      startTime: range?.range[0]?.getTime() || 0,
-      endTime: range?.range[1]?.getTime() || 0
+      startTime: defaultTo(range?.range[0]?.getTime(), 0),
+      endTime: defaultTo(range?.range[1]?.getTime(), 0)
     }
   })
 
@@ -62,7 +66,7 @@ export default function DeploymentsHealthCards(props: any) {
     if (data?.data?.healthDeploymentInfo) {
       const ret: any = {}
       if (data?.data?.healthDeploymentInfo?.total) {
-        const { countList, production, nonProduction } = data?.data?.healthDeploymentInfo?.total || {}
+        const { countList, production, nonProduction } = defaultTo(data?.data?.healthDeploymentInfo?.total, {})
         if (countList?.length) {
           ret.totalChartOptions = merge({}, defaultChartOptions, primaryChartOptions, {
             chart: {
@@ -140,13 +144,13 @@ export default function DeploymentsHealthCards(props: any) {
     items: [
       {
         label: getString('cd.serviceDashboard.nonProd'),
-        value: data?.data?.healthDeploymentInfo?.total?.nonProduction || 0,
+        value: defaultTo(data?.data?.healthDeploymentInfo?.total?.nonProduction, 0),
         formattedValue: numberFormatter(data?.data?.healthDeploymentInfo?.total?.nonProduction),
         color: 'var(--primary-2)'
       },
       {
         label: getString('cd.serviceDashboard.prod'),
-        value: data?.data?.healthDeploymentInfo?.total?.production || 0,
+        value: defaultTo(data?.data?.healthDeploymentInfo?.total?.production, 0),
         formattedValue: numberFormatter(data?.data?.healthDeploymentInfo?.total?.production),
         color: 'var(--primary-7)'
       }
@@ -168,9 +172,13 @@ export default function DeploymentsHealthCards(props: any) {
         <ul>
           {pieChartProps.items.map(({ label, formattedValue, value, color }) => (
             <li style={{ color }} key={`${label}_${value}`}>
-              <Text className={styles.listStyles} key={label}>{`${label} (${
-                formattedValue ? formattedValue : value
-              })`}</Text>
+              <Text
+                className={styles.listStyles}
+                key={label}
+                lineClamp={1}
+                tooltip={<Text padding={'small'}>{value}</Text>}
+                alwaysShowTooltip={formattedValue != value.toString() ? true : false}
+              >{`${label} (${formattedValue ? formattedValue : value})`}</Text>
             </li>
           ))}
         </ul>
@@ -274,24 +282,29 @@ export function HealthCard({
               <Container height={30} width={100} className={Classes.SKELETON} />
             ) : (
               <>
-                <Text className={styles.cardText} lineClamp={1} tooltip={<Text padding={'small'}>{text}</Text>}>
-                  {text}
+                <Text
+                  className={styles.cardText}
+                  lineClamp={1}
+                  tooltip={<Text padding={'small'}>{text}</Text>}
+                  alwaysShowTooltip={numberFormatter(text) != text ? true : false}
+                >
+                  {numberFormatter(text)}
                 </Text>
                 {typeof rate === 'number' && rate && !isLoading && isParent ? (
                   <Container flex>
                     <Text
                       margin={{ left: 'small' }}
                       style={{
-                        color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                        color: rate >= 0 ? green : red
                       }}
                     >
-                      {Math.abs(roundNumber(rate)!)}%
+                      {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
                     </Text>
                     <Icon
                       size={14}
                       name={rate >= 0 ? 'caret-up' : 'caret-down'}
                       style={{
-                        color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                        color: rate >= 0 ? green : red
                       }}
                     />
                   </Container>
@@ -308,16 +321,16 @@ export function HealthCard({
                   <Text
                     margin={{ left: 'xsmall' }}
                     style={{
-                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      color: rate >= 0 ? green : red
                     }}
                   >
-                    {Math.abs(roundNumber(rate)!)}%
+                    {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
                   </Text>
                   <Icon
                     size={14}
                     name={rate >= 0 ? 'caret-up' : 'caret-down'}
                     style={{
-                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      color: rate >= 0 ? green : red
                     }}
                   />
                 </Container>
@@ -332,16 +345,16 @@ export function HealthCard({
                   <Text
                     margin={{ left: 'xsmall' }}
                     style={{
-                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      color: rate >= 0 ? green : red
                     }}
                   >
-                    {Math.abs(roundNumber(rate)!)}%
+                    {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
                   </Text>
                   <Icon
                     size={14}
                     name={rate >= 0 ? 'caret-up' : 'caret-down'}
                     style={{
-                      color: rate >= 0 ? 'var(--green-600)' : 'var(--ci-color-red-500)'
+                      color: rate >= 0 ? green : red
                     }}
                   />
                 </Container>

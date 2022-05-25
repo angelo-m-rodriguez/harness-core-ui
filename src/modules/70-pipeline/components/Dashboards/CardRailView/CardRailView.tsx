@@ -125,12 +125,7 @@ export default function CardRailView({ contentType, isLoading, onShowAll, childr
         <Container className={styles.headerTitle}>
           {icons[contentType]}
           <Text className={styles.title} tooltipProps={{ dataTooltipId: `overview_${contentType}` }}>
-            {titles[contentType]}{' '}
-            {contentType === 'FAILED_DEPLOYMENT' ||
-            contentType ===
-              'ACTIVE_DEPLOYMENT' /* temporary hiding counts for failed deployments and active deployments */
-              ? ``
-              : `(${React.Children.count(children)})`}
+            {titles[contentType]} ({React.Children.count(children)})
           </Text>
         </Container>
         {showRateToggle && contentType === 'REPOSITORY' ? <RateToggle /> : null}
