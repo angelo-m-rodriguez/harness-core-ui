@@ -86,7 +86,7 @@ describe('CDDashboardPage snapshot test', () => {
         <CDDashboardPage />
       </TestWrapper>
     )
-    //1. Deployments Health is visible
+    //1. Deployments Health card is visible
     expect(getByText('Deployments Health')).toBeDefined()
 
     //2. Deployment chart is visible with no data
@@ -100,6 +100,9 @@ describe('CDDashboardPage snapshot test', () => {
 
     //5. activeDeployment card is visible with 1 active deployment
     expect(getByText('pipeline.executionStatus.Running')).toBeDefined()
+
+    //6. Environment Changes card is visible
+    expect(getByText('Environment Changes')).toBeDefined()
   })
 
   test('should bg image when no pipeline/no execution', () => {
