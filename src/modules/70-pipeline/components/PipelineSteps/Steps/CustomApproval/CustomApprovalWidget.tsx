@@ -13,10 +13,11 @@ import type { FormikProps } from 'formik'
 import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import { setFormikRef, StepFormikFowardRef, StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { useStrings } from 'framework/strings'
+import { ApprovalRejectionCriteriaType } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 
 import { getNameAndIdentifierSchema } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
-import { ShellScriptFormData, variableSchema } from './shellScriptTypes'
-import BaseShellScript from './BaseShellScript'
+import { CustomApprovalFormData, variableSchema } from './types'
+import BaseCustomApproval from './BaseCustomApproval'
 import OptionalConfiguration from './OptionalConfiguration'
 
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
@@ -26,17 +27,17 @@ import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
  * https://harness.atlassian.net/wiki/spaces/CDNG/pages/1203634286/Shell+Script
  */
 
-interface ShellScriptWidgetProps {
-  initialValues: ShellScriptFormData
-  onUpdate?: (data: ShellScriptFormData) => void
-  onChange?: (data: ShellScriptFormData) => void
+interface CustomApprovalWidgetProps {
+  initialValues: CustomApprovalFormData
+  onUpdate?: (data: CustomApprovalFormData) => void
+  onChange?: (data: CustomApprovalFormData) => void
   allowableTypes: MultiTypeInputType[]
   readonly?: boolean
   stepViewType?: StepViewType
   isNewStep?: boolean
 }
 
-export function ShellScriptWidget(
+export function CustomApprovalWidget(
   {
     initialValues,
     onUpdate,
@@ -45,58 +46,71 @@ export function ShellScriptWidget(
     isNewStep = true,
     readonly,
     stepViewType
-  }: ShellScriptWidgetProps,
+  }: CustomApprovalWidgetProps,
   formikRef: StepFormikFowardRef
 ): JSX.Element {
   const { getString } = useStrings()
 
-  const defaultSSHSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
+    ...getNameAndIdentifierSchema(getString, stepViewType),
     timeout: getDurationValidationSchema({ minimum: '10s' }).required(getString('validation.timeout10SecMinimum')),
     spec: Yup.object().shape({
-      shell: Yup.string().trim().required(getString('validation.scriptTypeRequired')),
+      retryInterval: getDurationValidationSchema().required(
+        getString('pipeline.customApprovalStep.validation.retryIntervalIsRequired')
+      ),
+      scriptTimeout: getDurationValidationSchema().required(
+        getString('pipeline.customApprovalStep.validation.scriptTimeoutIsRequired')
+      ),
       source: Yup.object().shape({
         spec: Yup.object().shape({
           script: Yup.string().trim().required(getString('common.scriptRequired'))
         })
       }),
       environmentVariables: variableSchema(getString),
-      outputVariables: variableSchema(getString)
-    }),
-    ...getNameAndIdentifierSchema(getString, stepViewType)
+      outputVariables: Yup.array()
+        .min(1, getString('pipeline.customApprovalStep.validation.atLeastOneOutputVariableIsRequired'))
+        .of(
+          Yup.object({
+            name: Yup.string().required(getString('common.validation.nameIsRequired')),
+            value: Yup.string().required(getString('common.validation.valueIsRequired')),
+            type: Yup.string().trim().required(getString('common.validation.typeIsRequired'))
+          })
+        ),
+      approvalCriteria: Yup.object().shape({
+        spec: Yup.object().when('type', {
+          is: ApprovalRejectionCriteriaType.KeyValues,
+          then: Yup.object().shape({
+            conditions: Yup.array().required(
+              getString('pipeline.approvalCriteria.validations.approvalCriteriaCondition')
+            )
+          }),
+          otherwise: Yup.object().shape({
+            expression: Yup.string().trim().required(getString('pipeline.approvalCriteria.validations.expression'))
+          })
+        })
+      })
+    })
   })
 
-  const values: any = {
-    ...initialValues,
-    spec: {
-      ...initialValues.spec,
-      executionTarget: {
-        ...initialValues.spec.executionTarget,
-        connectorRef: undefined
-      }
-    }
-  }
-
-  const validationSchema = defaultSSHSchema
-
   return (
-    <Formik<ShellScriptFormData>
+    <Formik<CustomApprovalFormData>
       onSubmit={submit => {
         onUpdate?.(submit)
       }}
       validate={formValues => {
         onChange?.(formValues)
       }}
-      formName="shellScriptForm"
-      initialValues={values}
+      formName="CustomApprovalForm"
+      initialValues={initialValues}
       validationSchema={validationSchema}
     >
-      {(formik: FormikProps<ShellScriptFormData>) => {
+      {(formik: FormikProps<CustomApprovalFormData>) => {
         // this is required
         setFormikRef(formikRef, formik)
 
         return (
           <React.Fragment>
-            <BaseShellScript
+            <BaseCustomApproval
               isNewStep={isNewStep}
               stepViewType={stepViewType}
               formik={formik}
@@ -117,4 +131,4 @@ export function ShellScriptWidget(
   )
 }
 
-export const ShellScriptWidgetWithRef = React.forwardRef(ShellScriptWidget)
+export const CustomApprovalWidgetWithRef = React.forwardRef(CustomApprovalWidget)

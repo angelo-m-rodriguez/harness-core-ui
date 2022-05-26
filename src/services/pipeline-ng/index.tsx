@@ -49,7 +49,7 @@ export interface ApprovalInstanceResponse {
   id?: string
   lastModifiedAt?: number
   status: 'WAITING' | 'APPROVED' | 'REJECTED' | 'FAILED' | 'EXPIRED'
-  type: 'HarnessApproval' | 'JiraApproval' | 'ServiceNowApproval'
+  type: 'HarnessApproval' | 'JiraApproval' | 'CustomApproval' | 'ServiceNowApproval'
 }
 
 export interface ApproverInput {
@@ -3672,7 +3672,7 @@ export type CreateOverlayInputSetForPipelineBodyRequestBody = string
 export type WebhookEndpointBodyRequestBody = string
 
 export interface GetInitialStageYamlSnippetQueryParams {
-  approvalType: 'HarnessApproval' | 'JiraApproval' | 'ServiceNowApproval'
+  approvalType: 'HarnessApproval' | 'JiraApproval' | 'CustomApproval' | 'ServiceNowApproval'
   routingId?: string
 }
 
@@ -11334,6 +11334,7 @@ export interface GetSchemaYamlQueryParams {
     | 'JiraUpdate'
     | 'JiraApproval'
     | 'HarnessApproval'
+    | 'CustomApproval'
     | 'Barrier'
     | 'FlagConfiguration'
     | 'ShellScript'
@@ -11470,6 +11471,7 @@ export interface GetStepYamlSchemaQueryParams {
     | 'JiraUpdate'
     | 'JiraApproval'
     | 'HarnessApproval'
+    | 'CustomApproval'
     | 'Barrier'
     | 'FlagConfiguration'
     | 'ShellScript'

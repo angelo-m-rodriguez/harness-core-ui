@@ -19,7 +19,7 @@ export type ApprovalData =
   | null
 
 export interface JiraApprovalTabProps {
-  approvalData: ApprovalData
+  approvalData: ApprovalInstanceResponse
   isWaiting: boolean
 }
 
@@ -29,7 +29,8 @@ import headerCss from '@pipeline/pages/execution/ExecutionPipelineView/Execution
 import css from './JiraApprovalTab.module.scss'
 
 export function JiraApprovalTab(props: JiraApprovalTabProps): React.ReactElement {
-  const { approvalData, isWaiting } = props
+  const { isWaiting } = props
+  const approvalData = props.approvalData as ApprovalData
   const wasApproved = !isWaiting && approvalData?.status === ApprovalStatus.APPROVED
   const wasRejected =
     !isWaiting && (approvalData?.status === ApprovalStatus.REJECTED || approvalData?.status === ApprovalStatus.EXPIRED)

@@ -102,7 +102,8 @@ export function getExecutionPipelineNodeType(stepType?: string): ExecutionPipeli
   if (
     stepType === StepType.HarnessApproval ||
     stepType === StepType.JiraApproval ||
-    stepType === StepType.ServiceNowApproval
+    stepType === StepType.ServiceNowApproval ||
+    stepType === StepType.CustomApproval
   ) {
     return ExecutionPipelineNodeType.DIAMOND
   }

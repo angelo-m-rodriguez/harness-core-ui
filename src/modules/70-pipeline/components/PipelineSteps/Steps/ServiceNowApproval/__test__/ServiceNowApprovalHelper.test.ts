@@ -8,7 +8,7 @@
 import type { ApprovalRejectionCriteria } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 import { ApprovalRejectionCriteriaType } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 import { handleOperatorChange } from '@pipeline/components/PipelineSteps/Steps/JiraApproval/helper'
-import { getApprovalRejectionCriteriaForSubmit } from '../helper'
+import { getApprovalRejectionCriteriaForSubmit } from '@pipeline/components/PipelineSteps/Steps/Common/ApprovalCommons'
 import { resetForm } from '../types'
 
 describe('Approval Rejection criteria for submit tests', () => {

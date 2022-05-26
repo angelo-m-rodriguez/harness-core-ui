@@ -615,6 +615,7 @@ export interface StringsMap {
   'common.saveAsTemplate': string
   'common.savedSuccessfully': string
   'common.scope': string
+  'common.scriptRequired': string
   'common.searchOther': string
   'common.searchPlaceholder': string
   'common.seconds': string
@@ -2706,6 +2707,8 @@ export interface StringsMap {
   'pipeline.cloneSuccess': string
   'pipeline.closeStepConfig': string
   'pipeline.collapseIsDisabledWhileStageIsRunning': string
+  'pipeline.commonApprovalStep.execution.allConditionsMsg': string
+  'pipeline.commonApprovalStep.execution.anyConditionsMsg': string
   'pipeline.conditionalExecution.belowExpression': string
   'pipeline.conditionalExecution.condition': string
   'pipeline.conditionalExecution.conditionLabel': string
@@ -2723,6 +2726,20 @@ export interface StringsMap {
   'pipeline.createPipeline.setupHeader': string
   'pipeline.createPipeline.setupLater': string
   'pipeline.createPipeline.setupSubtitle': string
+  'pipeline.customApprovalStep.execution.conditions.equals': string
+  'pipeline.customApprovalStep.execution.conditions.in': string
+  'pipeline.customApprovalStep.execution.conditions.not_equals': string
+  'pipeline.customApprovalStep.execution.conditions.not_in': string
+  'pipeline.customApprovalStep.execution.customApprovalTicket': string
+  'pipeline.customApprovalStep.execution.wasApproved': string
+  'pipeline.customApprovalStep.execution.wasExpired': string
+  'pipeline.customApprovalStep.execution.wasRejected': string
+  'pipeline.customApprovalStep.retryInterval': string
+  'pipeline.customApprovalStep.scriptTimeout': string
+  'pipeline.customApprovalStep.validation.atLeastOneOutputVariableIsRequired': string
+  'pipeline.customApprovalStep.validation.outputVariable': string
+  'pipeline.customApprovalStep.validation.retryIntervalIsRequired': string
+  'pipeline.customApprovalStep.validation.scriptTimeoutIsRequired': string
   'pipeline.dashboardDeploymentsWidget.failed24Hrs.plural': string
   'pipeline.dashboardDeploymentsWidget.failed24Hrs.singular': string
   'pipeline.dashboardDeploymentsWidget.pendingApproval.plural': string
@@ -2975,8 +2992,6 @@ export interface StringsMap {
   'pipeline.invalidRequest': string
   'pipeline.jiraApprovalStep.connectToJira': string
   'pipeline.jiraApprovalStep.connectorRef': string
-  'pipeline.jiraApprovalStep.execution.allConditionsMsg': string
-  'pipeline.jiraApprovalStep.execution.anyConditionsMsg': string
   'pipeline.jiraApprovalStep.execution.conditions.equals': string
   'pipeline.jiraApprovalStep.execution.conditions.in': string
   'pipeline.jiraApprovalStep.execution.conditions.not_equals': string
@@ -3299,6 +3314,7 @@ export interface StringsMap {
   'pipeline.stepCommonFields.validation.mustBeANumber': string
   'pipeline.stepConfigHasChanges': string
   'pipeline.stepDescription.Barrier': string
+  'pipeline.stepDescription.CustomApproval': string
   'pipeline.stepDescription.DockerHub': string
   'pipeline.stepDescription.ECR': string
   'pipeline.stepDescription.FlagConfiguration': string
@@ -3851,7 +3867,6 @@ export interface StringsMap {
   'cd.releaseNameValidation': string
   'cd.requiredPermissions': string
   'cd.resourceCannotBeEmpty': string
-  'cd.scriptRequired': string
   'cd.searchPlaceholder': string
   'cd.secretManagerRequired': string
   'cd.selectArtifact': string

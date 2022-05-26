@@ -59,8 +59,8 @@ describe('SUCCESS', () => {
     await waitFor(() => expect(mockJiraApprovalData.refetch).toBeCalled())
   })
 
-  test('show text when approvalInstanceId is absent', async () => {
-    const { queryByText } = render(
+  test('show spinner when approvalInstanceId is absent', async () => {
+    const { container } = render(
       <TestWrapper>
         <JiraApprovalView
           step={{
@@ -70,7 +70,8 @@ describe('SUCCESS', () => {
       </TestWrapper>
     )
 
-    await waitFor(() => expect(queryByText('pipeline.noApprovalInstanceCreated')).toBeTruthy())
+    const spinner = container.querySelector('.bp3-spinner')
+    expect(spinner).toBeTruthy()
   })
 })
 

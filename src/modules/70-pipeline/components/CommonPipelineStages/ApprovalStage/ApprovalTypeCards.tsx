@@ -10,6 +10,8 @@ import type { FormikValues } from 'formik'
 import { Layout } from '@wings-software/uicore'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { RbacThumbnailItem, RbacThumbnailSelect } from '@rbac/components/RbacThumbnailSelect/RbacThumbnailSelect'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import css from './ApprovalStageMinimalMode.module.scss'
 
@@ -18,6 +20,7 @@ The component to select approval type card in stage
 Used in both minimal view as well as detailed view
 */
 export function ApprovalTypeCards({ isReadonly }: { formikProps: FormikValues; isReadonly?: boolean }): JSX.Element {
+  const isCustomApprovalEnabled = useFeatureFlag(FeatureFlag.NG_CUSTOM_APPROVAL)
   const approvalTypeCardsData: RbacThumbnailItem[] = React.useMemo(
     () => [
       {
@@ -49,10 +52,10 @@ export function ApprovalTypeCards({ isReadonly }: { formikProps: FormikValues; i
         label: 'Custom',
         value: 'CUSTOM_APPROVAL',
         icon: 'other-workload',
-        disabled: true
+        disabled: !isCustomApprovalEnabled
       }
     ],
-    []
+    [isCustomApprovalEnabled]
   )
   return (
     <Layout.Vertical>

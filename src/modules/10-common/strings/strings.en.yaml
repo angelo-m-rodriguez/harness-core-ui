@@ -769,6 +769,7 @@ upgrade: Upgrade
 contactSupport: Contact Support
 or: Or
 startFreePlan: Start {{module}} Free Plan
+scriptRequired: Script is a required field
 exploreAllPlans: Explore all plans
 duration:
   month: 'Last month'

@@ -7,7 +7,8 @@
 
 import type { ApprovalRejectionCriteria } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 import { ApprovalRejectionCriteriaType } from '@pipeline/components/PipelineSteps/Steps/Common/types'
-import { getApprovalRejectionCriteriaForSubmit, handleOperatorChange, resetForm } from '../helper'
+import { getApprovalRejectionCriteriaForSubmit } from '@pipeline/components/PipelineSteps/Steps/Common/ApprovalCommons'
+import { handleOperatorChange, resetForm } from '../helper'
 
 describe('Approval Rejection criteria for submit tests', () => {
   test('if criteria is set properly', () => {

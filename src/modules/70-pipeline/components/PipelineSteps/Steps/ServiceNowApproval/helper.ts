@@ -11,6 +11,7 @@ import type {
   ServiceNowApprovalData,
   ServiceNowTicketTypeSelectOption
 } from '@pipeline/components/PipelineSteps/Steps/ServiceNowApproval/types'
+import { getApprovalRejectionCriteriaForSubmit } from '@pipeline/components/PipelineSteps/Steps/Common/ApprovalCommons'
 import {
   ApprovalRejectionCriteria,
   ApprovalRejectionCriteriaCondition,
@@ -28,54 +29,6 @@ export const processInitialValues = (values: ServiceNowApprovalData): ServiceNow
       rejectionCriteria: getApprovalRejectionCriteriaForInitialValues(values.spec.rejectionCriteria)
     }
   }
-}
-const getApprovalRejectionConditionValuesForSubmit = (values: string | SelectOption | MultiSelectOption[]): string => {
-  // The selected values can be string, selectoption or multiselect options
-  if (typeof values === 'string') {
-    // Simple text input
-    return values
-  }
-  if (Array.isArray(values)) {
-    // Multi select
-    return values.map(v => v.value?.toString()).join(',')
-  }
-  // Single select
-  return values.value.toString()
-}
-
-export const filterNonEmptyConditions = (condition: ApprovalRejectionCriteriaCondition) =>
-  condition.key && condition.value
-
-export const getApprovalRejectionCriteriaForSubmit = (
-  criteria: ApprovalRejectionCriteria
-): ApprovalRejectionCriteria => {
-  // Convert the approval/rejection criteria 'value' field to string/string[], from selectoption
-  const criteriaToReturn: ApprovalRejectionCriteria = {
-    type: criteria.type,
-    spec: {
-      matchAnyCondition: criteria.spec.matchAnyCondition,
-      expression: criteria.spec.expression,
-      conditions: criteria.spec.conditions
-        ?.filter(filterNonEmptyConditions)
-        .map((condition: ApprovalRejectionCriteriaCondition) => {
-          return {
-            key: condition.key,
-            operator: condition.operator,
-            value:
-              getMultiTypeFromValue(condition.value) !== MultiTypeInputType.EXPRESSION
-                ? getApprovalRejectionConditionValuesForSubmit(condition.value)
-                : condition.value
-          }
-        })
-    }
-  }
-  if (criteriaToReturn.type === ApprovalRejectionCriteriaType.Jexl) {
-    delete criteriaToReturn.spec.conditions
-    delete criteriaToReturn.spec.matchAnyCondition
-  } else if (criteriaToReturn.type === ApprovalRejectionCriteriaType.KeyValues) {
-    delete criteriaToReturn.spec.expression
-  }
-  return criteriaToReturn
 }
 
 export const processFormData = (values: ServiceNowApprovalData): ServiceNowApprovalData => {

@@ -25,8 +25,8 @@ import { useVariablesExpression } from '@pipeline/components/PipelineStudio/Pipl
 import {
   ApprovalRejectionCriteriaCondition,
   ApprovalRejectionCriteriaProps,
-  ConditionsInterface,
-  ApprovalRejectionCriteriaType
+  ApprovalRejectionCriteriaType,
+  ConditionsInterface
 } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { errorCheck } from '@common/utils/formikHelpers'
@@ -203,7 +203,9 @@ export function Conditions({
                   intent="primary"
                   data-testid="add-conditions"
                   disabled={isApprovalStepFieldDisabled(readonly)}
-                  onClick={() => push({ key: 'Status', operator: 'equals', value: [] })}
+                  onClick={() =>
+                    push({ key: stepType === StepType.JiraApproval ? 'Status' : '', operator: 'equals', value: [] })
+                  }
                 >
                   {getString('add')}
                 </Button>

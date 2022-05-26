@@ -9,12 +9,11 @@ import React from 'react'
 import type { ExecutionNode, ResponseApprovalInstanceResponse } from 'services/pipeline-ng'
 import type { StepDetailProps } from '@pipeline/factories/ExecutionFactory/types'
 import { BaseApprovalView } from '@pipeline/components/execution/StepDetails/views/BaseApprovalView/BaseApprovalView'
-
-import { JiraApprovalTab } from '@pipeline/components/execution/StepDetails/tabs/JiraApprovalTab/JiraApprovalTab'
+import { CustomApprovalTab } from '@pipeline/components/execution/StepDetails/tabs/CustomApprovalTab/CustomApprovalTab'
 
 export const REFRESH_APPROVAL = 'REFRESH_APPROVAL'
 
-export interface JiraApprovalViewProps extends StepDetailProps {
+export interface CustomApprovalViewProps extends StepDetailProps {
   step: ExecutionNode
   mock?: {
     data?: ResponseApprovalInstanceResponse
@@ -22,6 +21,6 @@ export interface JiraApprovalViewProps extends StepDetailProps {
   }
 }
 
-export function JiraApprovalView(props: JiraApprovalViewProps): React.ReactElement | null {
-  return <BaseApprovalView {...props} approvalTabComponent={JiraApprovalTab} />
+export function CustomApprovalView(props: CustomApprovalViewProps): React.ReactElement | null {
+  return <BaseApprovalView {...props} approvalTabComponent={CustomApprovalTab} />
 }

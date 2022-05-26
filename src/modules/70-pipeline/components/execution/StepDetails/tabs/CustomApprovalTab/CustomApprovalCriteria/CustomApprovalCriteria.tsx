@@ -20,18 +20,18 @@ import type {
 import { String, StringKeys } from 'framework/strings'
 import { Collapse } from '@pipeline/components/execution/StepDetails/common/Collapse/Collapse'
 
-import css from './ServiceNowCriteria.module.scss'
+import css from './CustomApprovalCriteria.module.scss'
 
-const titles: Record<ServiceNowCriteriaProps['type'], StringKeys> = {
+const titles: Record<CustomApprovalCriteriaProps['type'], StringKeys> = {
   approval: 'pipeline.approvalCriteria.approvalCriteria',
   rejection: 'pipeline.approvalCriteria.rejectionCriteria'
 }
 
 const conditionStr: Record<ConditionDTO['operator'], StringKeys> = {
-  equals: 'pipeline.serviceNowApprovalStep.execution.conditions.equals',
-  'not equals': 'pipeline.serviceNowApprovalStep.execution.conditions.not_equals',
-  in: 'pipeline.serviceNowApprovalStep.execution.conditions.in',
-  'not in': 'pipeline.serviceNowApprovalStep.execution.conditions.not_in'
+  equals: 'pipeline.customApprovalStep.execution.conditions.equals',
+  'not equals': 'pipeline.customApprovalStep.execution.conditions.not_equals',
+  in: 'pipeline.customApprovalStep.execution.conditions.in',
+  'not in': 'pipeline.customApprovalStep.execution.conditions.not_in'
 }
 
 function isJexlCriteria(type: CriteriaSpecWrapperDTO['type'], criteria: CriteriaSpecDTO): criteria is JexlCriteriaSpec {
@@ -45,12 +45,12 @@ function isKeyValuesCriteria(
   return criteria && type === 'KeyValues'
 }
 
-export interface ServiceNowCriteriaProps {
+export interface CustomApprovalCriteriaProps {
   type: 'approval' | 'rejection'
   criteria: CriteriaSpecWrapperDTO
 }
 
-export function ServiceNowCriteria(props: ServiceNowCriteriaProps): React.ReactElement | null {
+export function CustomApprovalCriteria(props: CustomApprovalCriteriaProps): React.ReactElement | null {
   const { type, criteria } = props
 
   if (isEmpty(criteria.spec.conditions) && isEmpty(criteria.spec.expression)) {
@@ -60,7 +60,7 @@ export function ServiceNowCriteria(props: ServiceNowCriteriaProps): React.ReactE
   }
 
   return (
-    <Collapse className={css.serviceNowCriteria} title={<String stringID={titles[type]} />} isDefaultOpen>
+    <Collapse className={css.customApprovalCriteria} title={<String stringID={titles[type]} />} isDefaultOpen>
       {isKeyValuesCriteria(criteria.type, criteria.spec) ? (
         <div className={css.collapseContainer}>
           <String

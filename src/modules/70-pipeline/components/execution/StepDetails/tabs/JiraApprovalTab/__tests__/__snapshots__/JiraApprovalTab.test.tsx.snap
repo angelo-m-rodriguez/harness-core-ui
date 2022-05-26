@@ -87,7 +87,7 @@ exports[`<JiraApprovalTab/> tests isWaiting test 1`] = `
               class="collapseContainer"
             >
               <div>
-                pipeline.jiraApprovalStep.execution.allConditionsMsg
+                pipeline.commonApprovalStep.execution.allConditionsMsg
               </div>
               <ul
                 class="conditions"
@@ -269,7 +269,7 @@ exports[`<JiraApprovalTab/> tests not isWaiting test - rejected 1`] = `
               class="collapseContainer"
             >
               <div>
-                pipeline.jiraApprovalStep.execution.allConditionsMsg
+                pipeline.commonApprovalStep.execution.allConditionsMsg
               </div>
               <ul
                 class="conditions"
@@ -451,7 +451,7 @@ exports[`<JiraApprovalTab/> tests not isWaiting test 1`] = `
               class="collapseContainer"
             >
               <div>
-                pipeline.jiraApprovalStep.execution.allConditionsMsg
+                pipeline.commonApprovalStep.execution.allConditionsMsg
               </div>
               <ul
                 class="conditions"

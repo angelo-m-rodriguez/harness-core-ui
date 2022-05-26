@@ -66,8 +66,8 @@ export function JiraCriteria(props: JiraCriteriaProps): React.ReactElement | nul
             tagName="div"
             stringID={
               criteria.spec.matchAnyCondition
-                ? 'pipeline.jiraApprovalStep.execution.anyConditionsMsg'
-                : 'pipeline.jiraApprovalStep.execution.allConditionsMsg'
+                ? 'pipeline.commonApprovalStep.execution.anyConditionsMsg'
+                : 'pipeline.commonApprovalStep.execution.allConditionsMsg'
             }
           />
           <ul className={css.conditions}>
