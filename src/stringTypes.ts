@@ -2058,8 +2058,11 @@ export interface StringsMap {
   'connectors.ifReq': string
   'connectors.jenkins.bearerTokenRequired': string
   'connectors.jenkins.jenkins': string
+  'connectors.jenkins.jenkinsConnectorLabel': string
   'connectors.jenkins.jenkinsUrl': string
   'connectors.jenkins.jenkinsUrlRequired': string
+  'connectors.jenkins.jobNameLabel': string
+  'connectors.jenkins.jobParameterLabel': string
   'connectors.jenkins.passwordAPIToken': string
   'connectors.jenkins.usernamePasswordAPIToken': string
   'connectors.jira.jiraUrl': string
@@ -3301,6 +3304,7 @@ export interface StringsMap {
   'pipeline.stepDescription.HelmDeploy': string
   'pipeline.stepDescription.HelmRollback': string
   'pipeline.stepDescription.JFrogArtifactory': string
+  'pipeline.stepDescription.Jenkins': string
   'pipeline.stepDescription.JiraApproval': string
   'pipeline.stepDescription.JiraCreate': string
   'pipeline.stepDescription.JiraUpdate': string

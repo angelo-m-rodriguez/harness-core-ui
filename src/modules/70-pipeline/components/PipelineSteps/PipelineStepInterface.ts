@@ -75,7 +75,8 @@ export enum StepType {
   CloudFormationRollbackStack = 'RollbackStack',
   CloudFormationDeleteStack = 'DeleteStack',
   CloudFormationCreateStack = 'CreateStack',
-  CreatePR = 'CreatePR'
+  CreatePR = 'CreatePR',
+  JenkinsBuild = 'JenkinsBuild'
 }
 
 export interface PipelineInfrastructureV2 extends PipelineInfrastructure {

@@ -297,6 +297,9 @@ jenkins:
   bearerTokenRequired: Bearer token is required
   usernamePasswordAPIToken: 'Username and Password/APIToken'
   passwordAPIToken: 'Password/APIToken'
+  jenkinsConnectorLabel: 'Jenkins Connector'
+  jobNameLabel: 'Job Name'
+  jobParameterLabel: 'Job Parameter (Optional)'
   jenkins: 'Jenkins'
   jenkinsUrlRequired: 'Jenkins Registry URL is required'
   jenkinsUrl: 'Jenkins Registry URL'
