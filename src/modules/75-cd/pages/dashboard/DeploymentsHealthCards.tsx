@@ -187,41 +187,41 @@ export default function DeploymentsHealthCards(props: any) {
   )
 
   pieChartProps['labelsContent'] = labelsHtml
-
+  const dataInfo = data?.data?.healthDeploymentInfo
   return (
     <Container>
       <Text className={styles.healthCardTitle}>{title}</Text>
       <Container className={styles.healthCards}>
         <HealthCard
           title="Total Executions"
-          value={defaultTo(data?.data?.healthDeploymentInfo?.total?.count, 0)}
+          value={defaultTo(dataInfo?.total?.count, 0)}
           isLoading={loading}
           layout="vertical"
-          rate={defaultTo(data?.data?.healthDeploymentInfo?.total?.rate, 0)}
+          rate={defaultTo(dataInfo?.total?.rate, 0)}
           primaryChartOptions={chartsData?.totalChartOptions}
           isParent={true}
-          showLineChart={data?.data?.healthDeploymentInfo?.total?.count ? true : false}
+          showLineChart={dataInfo?.total?.count ? true : false}
         >
           <HealthCard
             title="Successful"
-            value={defaultTo(data?.data?.healthDeploymentInfo?.success?.count, 0)}
-            rate={defaultTo(data?.data?.healthDeploymentInfo?.success?.rate, 0)}
+            value={defaultTo(dataInfo?.success?.count, 0)}
+            rate={defaultTo(dataInfo?.success?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.successChartOptions}
           />
           <HealthCard
             title="Failed"
-            value={defaultTo(data?.data?.healthDeploymentInfo?.failure?.count, 0)}
-            rate={defaultTo(data?.data?.healthDeploymentInfo?.failure?.rate, 0)}
+            value={defaultTo(dataInfo?.failure?.count, 0)}
+            rate={defaultTo(dataInfo?.failure?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}
           />
           <HealthCard
             title="Active"
-            value={defaultTo(data?.data?.healthDeploymentInfo?.active?.count, 0)}
-            rate={defaultTo(data?.data?.healthDeploymentInfo?.active?.rate, 0)}
+            value={defaultTo(dataInfo?.active?.count, 0)}
+            rate={defaultTo(dataInfo?.active?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}
@@ -232,10 +232,7 @@ export default function DeploymentsHealthCards(props: any) {
           title={'Environment Changes'}
           layout={'horizontal'}
           pieChartProps={pieChartProps}
-          showPieChart={
-            data?.data?.healthDeploymentInfo?.total?.nonProduction !== 0 ||
-            data?.data?.healthDeploymentInfo?.total?.production !== 0
-          }
+          showPieChart={dataInfo?.total?.nonProduction !== 0 || dataInfo?.total?.production !== 0}
         />
       </Container>
     </Container>
