@@ -194,34 +194,34 @@ export default function DeploymentsHealthCards(props: any) {
       <Container className={styles.healthCards}>
         <HealthCard
           title="Total Executions"
-          value={data?.data?.healthDeploymentInfo?.total?.count}
+          value={defaultTo(data?.data?.healthDeploymentInfo?.total?.count, 0)}
           isLoading={loading}
           layout="vertical"
-          rate={data?.data?.healthDeploymentInfo?.total?.rate}
+          rate={defaultTo(data?.data?.healthDeploymentInfo?.total?.rate, 0)}
           primaryChartOptions={chartsData?.totalChartOptions}
           isParent={true}
           showLineChart={data?.data?.healthDeploymentInfo?.total?.count ? true : false}
         >
           <HealthCard
             title="Successful"
-            value={data?.data?.healthDeploymentInfo?.success?.count}
-            rate={data?.data?.healthDeploymentInfo?.success?.rate}
+            value={defaultTo(data?.data?.healthDeploymentInfo?.success?.count, 0)}
+            rate={defaultTo(data?.data?.healthDeploymentInfo?.success?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.successChartOptions}
           />
           <HealthCard
             title="Failed"
-            value={data?.data?.healthDeploymentInfo?.failure?.count}
-            rate={data?.data?.healthDeploymentInfo?.failure?.rate}
+            value={defaultTo(data?.data?.healthDeploymentInfo?.failure?.count, 0)}
+            rate={defaultTo(data?.data?.healthDeploymentInfo?.failure?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}
           />
           <HealthCard
             title="Active"
-            value={data?.data?.healthDeploymentInfo?.active?.count}
-            rate={data?.data?.healthDeploymentInfo?.active?.rate}
+            value={defaultTo(data?.data?.healthDeploymentInfo?.active?.count, 0)}
+            rate={defaultTo(data?.data?.healthDeploymentInfo?.active?.rate, 0)}
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}
