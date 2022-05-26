@@ -81,12 +81,25 @@ describe('CDDashboardPage snapshot test', () => {
   })
 
   test('should render properly', async () => {
-    const { container } = render(
+    const { getByText } = render(
       <TestWrapper defaultAppStoreValues={defaultAppStoreValues}>
         <CDDashboardPage />
       </TestWrapper>
     )
-    expect(container).toMatchSnapshot()
+    //1. Deployments Health is visible
+    expect(getByText('Deployments Health')).toBeDefined()
+
+    //2. Deployment chart is visible with no data
+    expect(getByText('common.noDeployments')).toBeDefined()
+
+    //3. service card with 1 execution
+    expect(getByText('PIPELINE.DASHBOARDS.SUCCESSRATE')).toBeDefined()
+
+    //4. failedDeployment card is visible with 1 failed deployment
+    expect(getByText('pipeline.executionStatus.Failed')).toBeDefined()
+
+    //5. activeDeployment card is visible with 1 active deployment
+    expect(getByText('pipeline.executionStatus.Running')).toBeDefined()
   })
 
   test('should bg image when no pipeline/no execution', () => {
