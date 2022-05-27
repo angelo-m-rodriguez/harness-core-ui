@@ -198,6 +198,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
         })
         set(values, 'sshKey', secretData)
       } catch (e) {
+        /* istanbul ignore next */
         showError(e.data?.message || e.message)
       }
       setFormikInitialValues(values as PDCInfrastructureUI)
@@ -290,8 +291,9 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
       accessor: 'status',
       id: 'action',
       width: '22%',
-      Cell: ({ row }) =>
-        row.original.status === 'FAILED' ? (
+      Cell: ({ row }) => {
+        /* istanbul ignore else */
+        return row.original.status === 'FAILED' ? (
           <Button
             onClick={() => testConnection(row.original.host || '')}
             size={ButtonSize.SMALL}
@@ -300,6 +302,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
             {getString('retry')}
           </Button>
         ) : null
+      }
     },
     {
       Header: '',
@@ -335,6 +338,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
         setErrors(get(hostResults, 'responseMessages', []))
       }
     } catch (e: any) {
+      /* istanbul ignore next */
       if (e.data?.responseMessages) {
         setErrors(e.data?.responseMessages)
       } else {
@@ -376,6 +380,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                   if (hostSpecifics === SpecificHostOption.HOST_NAME) {
                     data.hostFilters = parseHosts(value.hostFilters || '')
                   } else {
+                    /* istanbul ignore next */
                     data.attributeFilters = parseAttributes(value.attributeFilters || '')
                   }
                 }

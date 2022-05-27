@@ -33,7 +33,9 @@ const accountIdParams = { accountId: 'accountId1' }
 
 jest.mock('@common/components/YAMLBuilder/YamlBuilder')
 
-const validateHosts = jest.fn().mockImplementation(() => Promise.resolve({ data: { content: [] }, status: 'SUCCESS' }))
+const validateHosts = jest
+  .fn()
+  .mockImplementation(() => Promise.resolve({ data: [{ host: 'localhost' }, { host: '1.2.3.4' }], status: 'SUCCESS' }))
 const responseMessages: ResponseMessage[] = [{ code: 'ACCESS_DENIED', message: 'error validation' }]
 const validateHostsFailure = jest.fn().mockImplementation(() => Promise.resolve({ responseMessages }))
 
