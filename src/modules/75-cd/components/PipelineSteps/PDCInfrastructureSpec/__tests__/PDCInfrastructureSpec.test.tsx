@@ -77,6 +77,11 @@ const getInitialValuesPreconfiguredWithAttributes = () => ({
   attributeFilters: { hostType: 'DB' }
 })
 
+const getInitialValuePreconfiguredWithHostFilters = () => ({
+  ...getInitialValuesPreconfigured(),
+  hostFilters: ['5.5.5.5', '4.4.4.4']
+})
+
 const getEmptyInitialValues = () => ({
   credentialsRef: ''
 })
@@ -339,6 +344,28 @@ describe('Test PDCInfrastructureSpec behavior - Preconfigured', () => {
         initialValues={getInitialValuesPreconfiguredWithAttributes()}
         template={getRuntimeInputsValues()}
         allValues={getInitialValuesPreconfiguredWithAttributes()}
+        type={StepType.PDC}
+        stepViewType={StepViewType.InputSet}
+        onUpdate={jest.fn()}
+      />
+    )
+
+    await checkForFormInit(container)
+    await openPreviewHosts(getByText)
+    await refreshHosts(getByText)
+
+    await waitFor(() => {
+      expect(getByText('1.2.3.4')).toBeDefined()
+    })
+    await submitForm(getByText)
+  })
+
+  test('test is deploy to custom hosts by hosts filter, and open hosts table', async () => {
+    const { getByText, container } = render(
+      <TestStepWidget
+        initialValues={getInitialValuePreconfiguredWithHostFilters()}
+        template={getRuntimeInputsValues()}
+        allValues={getInitialValuePreconfiguredWithHostFilters()}
         type={StepType.PDC}
         stepViewType={StepViewType.InputSet}
         onUpdate={jest.fn()}

@@ -220,7 +220,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
   )
 
   const fetchHosts = async () => {
-    const formikValues = formikRef.current?.values as any
+    const formikValues = get(formikRef.current, 'values', {}) as PDCInfrastructureUI
     if (isPreconfiguredHosts === PreconfiguredHosts.FALSE) {
       /* istanbul ignore next */
       return new Promise(resolve => resolve(parseHosts(formikValues.hosts)))
@@ -285,7 +285,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
             get(formikRef.current, 'values.sshKey.identifier', '')
           }
           tags={get(formikRef.current, 'values.delegateSelectors', [])}
-          host={row.original.host || ''}
+          host={get(row.original, 'host', '')}
           status={row.original.status}
         />
       )
@@ -299,7 +299,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
         /* istanbul ignore next */
         return row.original.status === 'FAILED' ? (
           <Button
-            onClick={() => testConnection(row.original.host || '')}
+            onClick={() => testConnection(get(row.original, 'host', ''))}
             size={ButtonSize.SMALL}
             variation={ButtonVariation.SECONDARY}
           >
@@ -422,16 +422,18 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                           accountIdentifier={accountId}
                           projectIdentifier={projectIdentifier}
                           orgIdentifier={orgIdentifier}
-                          onChange={(value, scope) => {
-                            /* istanbul ignore next */
-                            formik.setFieldValue('connectorRef', {
-                              label: value.name || '',
-                              value: `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`,
-                              scope: scope,
-                              live: value?.status?.status === 'SUCCESS',
-                              connector: value
-                            })
-                          }}
+                          onChange={
+                            /* istanbul ignore next */ (value, scope) => {
+                              /* istanbul ignore next */
+                              formik.setFieldValue('connectorRef', {
+                                label: value.name || '',
+                                value: `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`,
+                                scope: scope,
+                                live: value?.status?.status === 'SUCCESS',
+                                connector: value
+                              })
+                            }
+                          }
                         />
                         <Layout.Horizontal className={css.hostSpecificContainer}>
                           <RadioGroup
@@ -720,6 +722,7 @@ export class PDCInfrastructureSpec extends PipelineStep<PDCInfrastructureSpecSte
     viewType
   }: ValidateInputSetProps<PdcInfrastructure>): FormikErrors<PdcInfrastructure> {
     const errors: Partial<PdcInfrastructureTemplate> = {}
+    /* istanbul ignore else */
     const isRequired = viewType === StepViewType.DeploymentForm || viewType === StepViewType.TriggerForm
     if (
       isEmpty(data.credentialsRef) &&
