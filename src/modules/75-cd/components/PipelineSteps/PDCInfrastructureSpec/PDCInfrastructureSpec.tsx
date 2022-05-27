@@ -219,6 +219,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
   const fetchHosts = async () => {
     const formikValues = formikRef.current?.values as any
     if (isPreconfiguredHosts === PreconfiguredHosts.FALSE) {
+      /* istanbul ignore next */
       return new Promise(resolve => resolve(parseHosts(formikValues.hosts)))
     }
     let filterData = {}
@@ -292,7 +293,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
       id: 'action',
       width: '22%',
       Cell: ({ row }) => {
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         return row.original.status === 'FAILED' ? (
           <Button
             onClick={() => testConnection(row.original.host || '')}
@@ -335,6 +336,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
         })
         setDetailHosts(Object.values(tempMap) as [])
       } else {
+        /* istanbul ignore next */
         setErrors(get(hostResults, 'responseMessages', []))
       }
     } catch (e: any) {
@@ -453,7 +455,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                             className={css.hostSelect}
                             value={hostSpecificyOptions.find(option => option.value === hostSpecifics)}
                             onChange={option => {
-                              /* istanbul ignore else */
+                              /* istanbul ignore next */
                               const value = option.value.toString()
                               if (value === SpecificHostOption.HOST_NAME) {
                                 formik.setFieldValue('attributeFilters', '')
