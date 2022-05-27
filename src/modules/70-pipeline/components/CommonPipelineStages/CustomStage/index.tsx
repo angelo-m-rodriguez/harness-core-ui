@@ -15,7 +15,7 @@ import { CustomStage } from './CustomStage'
 const getStageAttributes = (_getString: UseStringsReturn['getString']): StageAttributes => ({
   name: 'Custom',
   type: StageType.CUSTOM,
-  icon: 'pipeline-custom',
+  icon: 'custom-stage-icon',
   iconColor: 'var(--pipeline-custom-stage-color)',
   isApproval: false,
   openExecutionStrategy: false
@@ -28,7 +28,7 @@ const getStageEditorImplementation = (isEnabled: boolean, _getString: UseStrings
     title={_getString('pipeline.pipelineSteps.customStage')}
     description={_getString('pipeline.pipelineSteps.customStageDescription')}
     type={StageType.CUSTOM}
-    isComingSoon={true}
+    isComingSoon={false}
     hoverIcon="custom-stage"
     isDisabled={!isEnabled}
     isApproval={false}

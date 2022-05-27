@@ -31,6 +31,33 @@ export const allowedStrategiesAsPerStep: (domain: StageType) => Record<Modes, St
         ],
         [Modes.STAGE]: [Strategy.Ignore, Strategy.Retry, Strategy.MarkAsSuccess, Strategy.Abort]
       }
+    case StageType.CUSTOM:
+      return {
+        [Modes.STEP]: [
+          Strategy.ManualIntervention,
+          // Strategy.StageRollback,
+          Strategy.Ignore,
+          Strategy.Retry,
+          Strategy.MarkAsSuccess,
+          Strategy.Abort
+        ],
+        [Modes.STEP_GROUP]: [
+          Strategy.ManualIntervention,
+          // Strategy.StageRollback,
+          Strategy.Ignore,
+          Strategy.Retry,
+          Strategy.MarkAsSuccess,
+          Strategy.Abort
+        ],
+        [Modes.STAGE]: [
+          Strategy.ManualIntervention,
+          // Strategy.StageRollback,
+          Strategy.Ignore,
+          Strategy.Retry,
+          Strategy.MarkAsSuccess,
+          Strategy.Abort
+        ]
+      }
     case StageType.DEPLOY:
     default:
       return {
@@ -89,6 +116,16 @@ export const errorTypesForStages: Record<StageType, FailureErrorType[]> = {
   [StageType.FEATURE]: [],
   [StageType.SECURITY]: [],
   [StageType.PIPELINE]: [],
-  [StageType.CUSTOM]: [],
+  [StageType.CUSTOM]: [
+    ErrorType.Authentication,
+    ErrorType.Authorization,
+    ErrorType.Connectivity,
+    ErrorType.DelegateProvisioning,
+    ErrorType.Timeout,
+    ErrorType.Unknown,
+    ErrorType.Verification,
+    ErrorType.AllErrors,
+    ErrorType.PolicyEvaluationFailure
+  ],
   [StageType.Template]: []
 }

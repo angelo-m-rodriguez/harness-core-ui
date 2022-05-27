@@ -72,6 +72,7 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
   const isCIEnabled = useFeatureFlag(FeatureFlag.CING_ENABLED)
   const isCDEnabled = useFeatureFlag(FeatureFlag.CDNG_ENABLED)
   const isSTOEnabled = useFeatureFlag(FeatureFlag.SECURITY_STAGE)
+  const isCustomStageEnabled = useFeatureFlag(FeatureFlag.NG_CUSTOM_STAGE)
   const { getString } = useStrings()
 
   return (
@@ -87,7 +88,8 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
           isCDEnabled: licenseInformation['CD'] && isCDEnabled,
           isCFEnabled: licenseInformation['CF'] && isCFEnabled,
           isSTOEnabled,
-          isApprovalStageEnabled: true
+          isApprovalStageEnabled: true,
+          isCustomStageEnabled
         })
       }
       stepsFactory={factory}

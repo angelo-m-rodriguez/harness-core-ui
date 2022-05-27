@@ -437,6 +437,7 @@ type QLCEView {
   reportScheduledConfigured: Boolean!
   timeRange: ViewTimeRangeType
   totalCost: Float!
+  viewPreferences: ViewPreferences
   viewState: ViewState
   viewType: ViewType
 }
@@ -533,10 +534,10 @@ type Query {
     aggregateFunction: [QLCEViewAggregationInput]
     filters: [QLCEViewFilterWrapperInput]
     groupBy: [QLCEViewGroupByInput]
-    includeOthers: Boolean!
     isClusterQuery: Boolean
     limit: Int
     offset: Int
+    preferences: QLCEViewPreferencesInput
     sortCriteria: [QLCEViewSortCriteriaInput]
   ): PerspectiveTimeSeriesData
   "Get total count of rows for query"
@@ -592,6 +593,11 @@ type RecommendClusterRequest {
 type RecommendNodePoolClusterRequest {
   recommendClusterRequest: RecommendClusterRequest
   totalResourceUsage: TotalResourceUsage
+}
+
+type ViewPreferences {
+  includeOthers: Boolean
+  includeUnallocatedCost: Boolean
 }
 
 type RecommendationItemDTO {
@@ -959,6 +965,11 @@ input QLCEViewGroupByInput {
 input QLCEViewMetadataFilterInput {
   isPreview: Boolean!
   viewId: String!
+}
+
+input QLCEViewPreferencesInput {
+  includeOthers: Boolean
+  includeUnallocatedCost: Boolean
 }
 
 input QLCEViewRuleInput {

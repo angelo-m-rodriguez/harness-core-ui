@@ -654,6 +654,7 @@ describe('Add stage view with enabled licences', () => {
     cy.contains('span', 'Use template').should('be.visible')
     cy.findByTestId('stage-CI').should('be.visible')
     cy.findByTestId('stage-Approval').should('be.visible')
+    cy.findByTestId('stage-Custom').should('be.visible')
     cy.findByTestId('stage-SecurityTests').should('be.visible')
   })
 
@@ -709,6 +710,7 @@ describe('Add stage view with disabled licences', () => {
     cy.get('[icon="plus"]').click()
     cy.findByTestId('stage-Deployment').should('be.visible')
     cy.findByTestId('stage-Approval').should('be.visible')
+    cy.findByTestId('stage-Custom').should('be.visible')
 
     cy.get('[data-icon="template-library"]').should('not.exist')
     cy.contains('span', 'Use template').should('not.exist')

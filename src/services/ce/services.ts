@@ -726,7 +726,7 @@ export const FetchPerspectiveTimeSeriesDocument = gql`
       filters: $filters
       groupBy: $groupBy
       limit: $limit
-      includeOthers: false
+      preferences: { includeOthers: false, includeUnallocatedCost: false }
       aggregateFunction: [{ operationType: SUM, columnName: "cost" }]
       sortCriteria: [{ sortType: COST, sortOrder: DESCENDING }]
     ) {
@@ -1115,7 +1115,7 @@ export const FetchWorkloadTimeSeriesDocument = gql`
       groupBy: $groupBy
       limit: 100
       offset: 0
-      includeOthers: false
+      preferences: { includeOthers: false, includeUnallocatedCost: false }
     ) {
       cpuLimit {
         time
@@ -1265,6 +1265,7 @@ export type RecommendationsQuery = {
       monthlyCost: number | null
       monthlySaving: number | null
       recommendationDetails:
+        | { __typename?: 'ECSRecommendationDTO' }
         | {
             __typename?: 'NodeRecommendationDTO'
             recommended: { __typename?: 'RecommendationResponse'; provider: string | null } | null
@@ -2779,6 +2780,7 @@ export type QlceView = {
   reportScheduledConfigured: Scalars['Boolean']
   timeRange: Maybe<ViewTimeRangeType>
   totalCost: Scalars['Float']
+  viewPreferences: Maybe<ViewPreferences>
   viewState: Maybe<ViewState>
   viewType: Maybe<ViewType>
 }
@@ -2860,6 +2862,11 @@ export type QlceViewGroupByInput = {
 export type QlceViewMetadataFilterInput = {
   isPreview: Scalars['Boolean']
   viewId: Scalars['String']
+}
+
+export type QlceViewPreferencesInput = {
+  includeOthers: InputMaybe<Scalars['Boolean']>
+  includeUnallocatedCost: InputMaybe<Scalars['Boolean']>
 }
 
 export type QlceViewRuleInput = {
@@ -3051,10 +3058,10 @@ export type QueryPerspectiveTimeSeriesStatsArgs = {
   aggregateFunction: InputMaybe<Array<InputMaybe<QlceViewAggregationInput>>>
   filters: InputMaybe<Array<InputMaybe<QlceViewFilterWrapperInput>>>
   groupBy: InputMaybe<Array<InputMaybe<QlceViewGroupByInput>>>
-  includeOthers: Scalars['Boolean']
   isClusterQuery: InputMaybe<Scalars['Boolean']>
   limit: InputMaybe<Scalars['Int']>
   offset: InputMaybe<Scalars['Int']>
+  preferences: InputMaybe<QlceViewPreferencesInput>
   sortCriteria: InputMaybe<Array<InputMaybe<QlceViewSortCriteriaInput>>>
 }
 
@@ -3260,6 +3267,12 @@ export enum ViewFieldIdentifier {
   Custom = 'CUSTOM',
   Gcp = 'GCP',
   Label = 'LABEL'
+}
+
+export type ViewPreferences = {
+  __typename?: 'ViewPreferences'
+  includeOthers: Maybe<Scalars['Boolean']>
+  includeUnallocatedCost: Maybe<Scalars['Boolean']>
 }
 
 export enum ViewState {

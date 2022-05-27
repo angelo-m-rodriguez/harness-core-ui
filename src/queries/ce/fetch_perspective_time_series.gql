@@ -12,7 +12,7 @@ query FetchPerspectiveTimeSeries(
     filters: $filters
     groupBy: $groupBy
     limit: $limit
-    includeOthers: false
+    preferences: { includeOthers: false, includeUnallocatedCost: false }
     aggregateFunction: [{ operationType: SUM, columnName: "cost" }]
     sortCriteria: [{ sortType: COST, sortOrder: DESCENDING }]
   ) {

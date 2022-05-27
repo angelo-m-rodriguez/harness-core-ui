@@ -14,10 +14,12 @@ import {
   PageBody,
   PageSpinner,
   Text,
-  PageError
+  PageError,
+  ButtonSize
 } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import { Color } from '@harness/design-system'
+import { Callout } from '@blueprintjs/core'
 import LandingDashboardFactory from '@common/factories/LandingDashboardFactory'
 import { LandingDashboardContextProvider, useLandingDashboardContext } from '@common/factories/LandingDashboardContext'
 import { ModuleName } from 'framework/types/ModuleName'
@@ -29,6 +31,8 @@ import { useGetCounts } from 'services/dashboard-service'
 import LandingDashboardSummaryWidget from '@projects-orgs/components/LandingDashboardSummaryWidget/LandingDashboardSummaryWidget'
 import TimeRangeSelect from '@projects-orgs/components/TimeRangeSelect/TimeRangeSelect'
 import useLandingPageDefaultView, { View } from '@projects-orgs/hooks/useLandingPageDefaultView'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import LandingDashboardWelcomeView from './LandingDashboardWelcomeView'
 import css from './LandingDashboardPage.module.scss'
 
@@ -118,4 +122,38 @@ const LandingDashboardPage: React.FC = () => {
   }
 }
 
-export default LandingDashboardPage
+const LandingDashboardPageWithCallout = () => {
+  const isFeatureFlagEnabled = useFeatureFlag(FeatureFlag.JDK11_UPGRADE_BANNER)
+  const [showBanner, setShowBanner] = useState(isFeatureFlagEnabled)
+  return (
+    <>
+      {showBanner && (
+        <Callout className={css.callout} intent="success" icon={null}>
+          <Text color={Color.BLACK}>
+            To improve Harness security and reliability, all Delegates will start using OpenJDK 11 starting May 31,
+            2022. There is no operational impact. Harness users that installed self-signed certificates into the
+            Delegate default Java KeyStore should follow
+            <a
+              href="https://community.harness.io/t/information-regarding-certificates-and-delegate-upgrade-to-openjdk-11/12074"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <b>&nbsp;these instructions&nbsp;</b>
+            </a>
+            to make sure Delegates continue to use these certificates.
+          </Text>
+          <Button
+            variation={ButtonVariation.ICON}
+            size={ButtonSize.LARGE}
+            icon="cross"
+            onClick={() => setShowBanner(false)}
+          />
+        </Callout>
+      )}
+
+      <LandingDashboardPage />
+    </>
+  )
+}
+
+export default LandingDashboardPageWithCallout

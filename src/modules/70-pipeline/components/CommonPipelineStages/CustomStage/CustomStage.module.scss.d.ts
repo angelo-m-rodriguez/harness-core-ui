@@ -7,8 +7,7 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly callout: string
-  readonly getStartedMainContainer: string
-  readonly timeRangeSelect: string
+  readonly addStageHeading: string
+  readonly customStagePopover: string
 }
 export default styles

@@ -63,7 +63,7 @@ export const stageTypeToIconMap: Record<string, IconName> = {
   Deployment: 'cd-main',
   CI: 'ci-main',
   Pipeline: 'pipeline',
-  Custom: 'pipeline-custom',
+  Custom: 'custom-stage-icon',
   Approval: 'approval-stage-icon'
 }
 

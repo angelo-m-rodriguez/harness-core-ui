@@ -116,7 +116,7 @@ export function getStepPaletteModuleInfosFromStage(
       return [
         {
           module: 'cd',
-          category: stageType === StageType.APPROVAL ? 'Approval' : category,
+          category: stageType === StageType.APPROVAL || stageType === StageType.CUSTOM ? 'Approval' : category,
           shouldShowCommonSteps: true
         },
         {

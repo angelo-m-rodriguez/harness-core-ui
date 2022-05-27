@@ -51,7 +51,7 @@ export const MapStepTypeToIcon: { [key: string]: HarnessIconName } = {
   CI: 'pipeline-build-select',
   Approval: 'approval-stage-icon',
   Pipeline: 'pipeline',
-  Custom: 'pipeline-custom'
+  Custom: 'custom-stage-icon'
 }
 
 interface StagesFilledStateFlags {
