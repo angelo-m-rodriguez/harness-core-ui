@@ -3526,6 +3526,7 @@ export interface StringsMap {
   'cd.cloudFormation.awsURL': string
   'cd.cloudFormation.cfTemplateFile': string
   'cd.cloudFormation.continueStatus': string
+  'cd.cloudFormation.deploymentTypes.pdc': string
   'cd.cloudFormation.errors.awsURL': string
   'cd.cloudFormation.errors.getParam': string
   'cd.cloudFormation.errors.name': string
@@ -3716,8 +3717,22 @@ export interface StringsMap {
   'cd.steps.common.clusterDetails': string
   'cd.steps.common.releaseNamePlaceholder': string
   'cd.steps.common.selectOrEnterClusterPlaceholder': string
+  'cd.steps.common.specifyCredentials': string
   'cd.steps.common.undefinedType': string
   'cd.steps.kubernetesGcpStep.stepName': string
+  'cd.steps.pdcStep.attributesPlaceholder': string
+  'cd.steps.pdcStep.deployAllHostsOption': string
+  'cd.steps.pdcStep.deploySpecificHostsOption': string
+  'cd.steps.pdcStep.hostAttributesOption': string
+  'cd.steps.pdcStep.hostNameOption': string
+  'cd.steps.pdcStep.hostsPlaceholder': string
+  'cd.steps.pdcStep.no': string
+  'cd.steps.pdcStep.noHosts': string
+  'cd.steps.pdcStep.pdcConnectorLabel': string
+  'cd.steps.pdcStep.preconfiguredHostsOption': string
+  'cd.steps.pdcStep.previewHosts': string
+  'cd.steps.pdcStep.specificHostsPlaceholder': string
+  'cd.steps.pdcStep.specifyHostsOption': string
   'cd.steps.serverless.regionPlaceholder': string
   'cd.steps.serverless.stagePlaceholder': string
   'cd.terraformVarFiles': string

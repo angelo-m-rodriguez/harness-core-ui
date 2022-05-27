@@ -17,6 +17,7 @@ import {
   K8sAzureInfrastructure,
   K8SDirectInfrastructure,
   K8sGcpInfrastructure,
+  PdcInfrastructure,
   PipelineInfrastructure,
   StageElementConfig
 } from 'services/cd-ng'
@@ -28,12 +29,14 @@ import type {
   ProvisionersOptions
 } from '@cd/components/PipelineSteps/InfraProvisioning/InfraProvisioning'
 import type { GcpInfrastructureSpec } from '@cd/components/PipelineSteps/GcpInfrastructureSpec/GcpInfrastructureSpec'
+import type { PDCInfrastructureSpec } from '@cd/components/PipelineSteps/PDCInfrastructureSpec/PDCInfrastructureSpec'
 import { useStrings } from 'framework/strings'
 import {
   PipelineContextType,
   usePipelineContext
 } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { StepWidget } from '@pipeline/components/AbstractSteps/StepWidget'
+import { InfraDeploymentType } from '@cd/components/PipelineSteps/PipelineStepsUtil'
 import DeployServiceErrors from '@cd/components/PipelineStudio/DeployServiceSpecifications/DeployServiceErrors'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
@@ -50,7 +53,6 @@ import {
   ServerlessInfraTypes,
   StageType
 } from '@pipeline/utils/stageHelpers'
-import { InfraDeploymentType } from '@cd/components/PipelineSteps/PipelineStepsUtil'
 import type { ServerlessAwsLambdaSpec } from '@cd/components/PipelineSteps/ServerlessAWSLambda/ServerlessAwsLambdaSpec'
 import type { ServerlessGCPSpec } from '@cd/components/PipelineSteps/ServerlessGCP/ServerlessGCPSpec'
 import type { ServerlessAzureSpec } from '@cd/components/PipelineSteps/ServerlessAzure/ServerlessAzureSpec'
@@ -75,7 +77,12 @@ export const deploymentTypeInfraTypeMap = {
   AzureFunctions: InfraDeploymentType.AzureFunctions
 }
 
-type InfraTypes = K8SDirectInfrastructure | K8sGcpInfrastructure | ServerlessInfraTypes | K8sAzureInfrastructure
+type InfraTypes =
+  | K8SDirectInfrastructure
+  | K8sGcpInfrastructure
+  | ServerlessInfraTypes
+  | K8sAzureInfrastructure
+  | PdcInfrastructure
 
 export default function DeployInfraSpecifications(props: React.PropsWithChildren<unknown>): JSX.Element {
   const [initialInfrastructureDefinitionValues, setInitialInfrastructureDefinitionValues] =
@@ -85,7 +92,7 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
   const { getString } = useStrings()
   const { submitFormsForTab } = React.useContext(StageErrorContext)
   const { errorMap } = useValidationErrors()
-  const { NG_AZURE } = useFeatureFlags()
+  const { NG_AZURE, SSH_NG } = useFeatureFlags()
   React.useEffect(() => {
     if (errorMap.size > 0) {
       submitFormsForTab(DeployTabs.INFRASTRUCTURE)
@@ -185,7 +192,11 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
   }, [stage, getStageFromPipeline])
 
   const infraGroups = React.useMemo(
-    () => getInfraGroups(selectedDeploymentType, getString, { NG_AZURE: defaultTo(NG_AZURE, false) }),
+    () =>
+      getInfraGroups(selectedDeploymentType, getString, {
+        NG_AZURE: defaultTo(NG_AZURE, false),
+        SSH_NG: defaultTo(SSH_NG, false)
+      }),
     [selectedDeploymentType, NG_AZURE]
   )
 
@@ -442,6 +453,33 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
               )
             }
             customStepProps={getCustomStepProps('ServerlessAzureFunctions', getString)}
+          />
+        )
+      }
+      case InfraDeploymentType.PDC: {
+        return (
+          <StepWidget<PDCInfrastructureSpec>
+            factory={factory}
+            key={stage?.stage?.identifier}
+            readonly={isReadonly}
+            initialValues={initialInfrastructureDefinitionValues as PDCInfrastructureSpec}
+            type={StepType.PDC}
+            stepViewType={StepViewType.Edit}
+            allowableTypes={allowableTypes}
+            onUpdate={value => {
+              onUpdateInfrastructureDefinition(
+                {
+                  connectorRef: value.connectorRef?.connector?.identifier,
+                  credentialsRef: value.sshKey?.identifier,
+                  attributeFilters: value.attributeFilters,
+                  hostFilters: value.hostFilters,
+                  hosts: value.hosts,
+                  allowSimultaneousDeployments: value.allowSimultaneousDeployments,
+                  delegateSelectors: value.delegateSelectors
+                },
+                InfraDeploymentType.PDC
+              )
+            }}
           />
         )
       }

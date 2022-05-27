@@ -2005,6 +2005,8 @@ export const getInvocationPathsForSecrets = (type: ConnectorInfoDTO['type'] | 'U
       return new Set([/^.+\.secretKeyRef$/])
     case 'Aws':
       return new Set([/^.+\.accessKeyRef$/, /^.+\.secretKeyRef$/])
+    case 'Pdc':
+      return new Set([/^.+\.connectorRef$/, /^.+\.sshKeyRef$/])
     case 'Github':
       return new Set([
         /^.+\.usernameRef$/,

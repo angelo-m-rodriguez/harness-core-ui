@@ -40,7 +40,8 @@ export const ConnectorRefWidthKeys = {
 
 export const connectorTypes: { [key: string]: ConnectorInfoDTO['type'] } = {
   Aws: 'Aws',
-  Gcp: 'Gcp'
+  Gcp: 'Gcp',
+  Pdc: 'Pdc'
 }
 export const stageTypeToIconMap: Record<string, IconName> = {
   Deployment: 'cd-main',

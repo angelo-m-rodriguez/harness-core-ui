@@ -13,9 +13,24 @@ steps:
     clusterDetails: Cluster Details
     selectOrEnterClusterPlaceholder: Select or add Cluster
     releaseNamePlaceholder: Enter Release Name
+    specifyCredentials: Specify Credentials
     undefinedType: Undefined deployment type
   kubernetesGcpStep:
     stepName: Specify your GCP Connector
+  pdcStep:
+    no: No.
+    hostsPlaceholder: Specify list of host names here (comma or new line separated)
+    specificHostsPlaceholder: Specify list of comma separated hosts here
+    attributesPlaceholder: Specify list of comma separated attributes and values. E.g. hostType:DB, region:west
+    hostNameOption: Host names
+    hostAttributesOption: Host attributes
+    specifyHostsOption: Specify hosts here
+    preconfiguredHostsOption: Select preconfigured hosts from Physical Data Center
+    pdcConnectorLabel: Physical Datacentar Connector
+    deployAllHostsOption: Deploy to All hosts
+    deploySpecificHostsOption: Deploy to specific hosts based on
+    previewHosts: Preview Hosts
+    noHosts: No hosts provided
   azureInfraStep:
     azure: 'Microsoft Azure'
     subscription: '{{ $.common.subscriptionId }}'
@@ -271,3 +286,5 @@ cloudFormation:
     awsURL: S3 url required
     getParam: AWS Connector, Region and Template File are required to retrieve parameters
     templateRequired: Template file required
+  deploymentTypes:
+    pdc: PDC
