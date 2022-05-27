@@ -457,11 +457,15 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                             onChange={option => {
                               /* istanbul ignore next */
                               const value = option.value.toString()
+                              /* istanbul ignore next */
                               if (value === SpecificHostOption.HOST_NAME) {
+                                /* istanbul ignore next */
                                 formik.setFieldValue('attributeFilters', '')
                               } else {
+                                /* istanbul ignore next */
                                 formik.setFieldValue('hostFilters', '')
                               }
+                              /* istanbul ignore next */
                               setHostSpecifics(value)
                             }}
                             items={hostSpecificyOptions}
