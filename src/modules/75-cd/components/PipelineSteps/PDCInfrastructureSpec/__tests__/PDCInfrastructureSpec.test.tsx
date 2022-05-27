@@ -63,7 +63,8 @@ const getInitialValuesNoPreconfigured = () => ({
   credentialsRef: 'credentialsRef',
   hosts: ['localhost', '1.2.3.4'],
   delegateSelectors: ['tag1'],
-  sshKey: 'sshkey1'
+  sshKey: 'sshkey1',
+  allowSimultaneousDeployments: true
 })
 
 const getInitialValuesPreconfigured = () => ({
@@ -153,6 +154,12 @@ const updateConnector = async (container: any) => {
   })
 }
 
+const updateTextArea = async (container: any) => {
+  const hostsArea = container.querySelector('textarea')
+  act(() => {
+    fireEvent.change(hostsArea!, { target: { value: 'localhost, 1.2.3.4' } })
+  })
+}
 describe('Test PDCInfrastructureSpec behavior - No Preconfigured', () => {
   beforeEach(() => {
     factory.registerStep(new PDCInfrastructureSpec())
@@ -171,6 +178,7 @@ describe('Test PDCInfrastructureSpec behavior - No Preconfigured', () => {
       />
     )
     await checkForFormInit(container)
+    updateTextArea(container)
     await submitForm(getByText)
     expect(onUpdateHandler).toHaveBeenCalledWith(getInitialValuesNoPreconfigured())
   })
@@ -188,6 +196,7 @@ describe('Test PDCInfrastructureSpec behavior - No Preconfigured', () => {
       />
     )
     await checkForFormInit(container)
+    updateTextArea(container)
     await submitForm(getByText)
     expect(onUpdateHandler).not.toHaveBeenCalled()
   })
@@ -205,11 +214,7 @@ describe('Test PDCInfrastructureSpec behavior - No Preconfigured', () => {
     )
 
     await checkForFormInit(container)
-
-    const hostsArea = container.querySelector('textarea')
-    act(() => {
-      fireEvent.change(hostsArea!, { target: { value: 'localhost, 1.2.3.4' } })
-    })
+    updateTextArea(container)
     await openPreviewHosts(getByText)
     expect(getByText('cd.steps.pdcStep.noHosts')).toBeDefined()
     await submitForm(getByText)
@@ -227,6 +232,7 @@ describe('Test PDCInfrastructureSpec behavior - No Preconfigured', () => {
       />
     )
     await checkForFormInit(container)
+    updateTextArea(container)
     await clickOnPreconfiguredHostsOption(getByText)
     await clickOnDeploySpecificHostsOption(getByText)
     await waitFor(() => {
@@ -274,6 +280,7 @@ describe('Test PDCInfrastructureSpec behavior - Preconfigured', () => {
       />
     )
     await checkForFormInit(container)
+    updateTextArea(container)
     await submitForm(getByText)
     expect(onUpdateHandler).not.toHaveBeenCalled()
   })
@@ -371,6 +378,9 @@ describe('Test PDCInfrastructureSpec behavior - Preconfigured', () => {
 })
 
 describe('test api rejections', () => {
+  beforeEach(() => {
+    factory.registerStep(new PDCInfrastructureSpec())
+  })
   test('test all connections - error fail / reject', async () => {
     jest.spyOn(CDNG, 'listSecretsV2Promise').mockImplementationOnce(() => Promise.resolve(mockListSecrets as any))
     const { getByText, container } = render(
