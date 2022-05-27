@@ -321,6 +321,7 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
       openConnectorModal,
       selectedValue?.connector?.type || type,
       getString,
+      { accountIdentifier, projectIdentifier, orgIdentifier },
       canUpdateSelectedConnector
     )
   } else if (Array.isArray(type) && typeof selectedValue === 'object') {
@@ -329,6 +330,7 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
       openConnectorModal,
       selectedValue?.connector?.type,
       getString,
+      { accountIdentifier, projectIdentifier, orgIdentifier },
       canUpdateSelectedConnector
     )
   }

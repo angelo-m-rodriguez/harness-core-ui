@@ -134,6 +134,7 @@ export function getEditRenderer(
   openConnectorModal: UseCreateConnectorModalReturn['openConnectorModal'],
   type: ConnectorInfoDTO['type'],
   getString: UseStringsReturn['getString'],
+  resourceScope: ResourceScope,
   canUpdate = true
 ): JSX.Element {
   const detailSchema = getConnectorSelectorSchema(selected, getString)
@@ -158,7 +159,7 @@ export function getEditRenderer(
             </Text>
           </Layout.Vertical>
           {canUpdate ? (
-            <Button
+            <RbacButton
               variation={ButtonVariation.SECONDARY}
               text={<String stringID="edit" />}
               onClick={e => {
@@ -167,6 +168,14 @@ export function getEditRenderer(
                   connectorInfo: selected?.connector,
                   gitDetails: selected?.connector?.gitDetails
                 })
+              }}
+              permission={{
+                permission: PermissionIdentifier.UPDATE_CONNECTOR,
+                resource: {
+                  resourceType: ResourceType.CONNECTOR,
+                  resourceIdentifier: selected?.connector?.identifier
+                },
+                resourceScope
               }}
             />
           ) : (
@@ -799,6 +808,7 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
       openConnectorModal,
       (selectedValue as ConnectorSelectedValue)?.connector?.type || type,
       getString,
+      { accountIdentifier, projectIdentifier, orgIdentifier },
       canUpdateSelectedConnector
     )
   } else if (Array.isArray(type) && typeof selectedValue === 'object' && selectedValue) {
@@ -807,6 +817,7 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
       openConnectorModal,
       (selectedValue as ConnectorSelectedValue)?.connector?.type || type[0],
       getString,
+      { accountIdentifier, projectIdentifier, orgIdentifier },
       canUpdateSelectedConnector
     )
   }
