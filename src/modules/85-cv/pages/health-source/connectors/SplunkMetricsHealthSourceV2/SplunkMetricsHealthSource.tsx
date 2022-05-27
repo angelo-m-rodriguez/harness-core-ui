@@ -18,7 +18,6 @@ import { StackdriverDefinition, useGetLabelNames, useGetMetricNames, useGetMetri
 import { useStrings } from 'framework/strings'
 import { NameId } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 import useGroupedSideNaveHook from '@cv/hooks/GroupedSideNaveHook/useGroupedSideNaveHook'
-import { PrometheusQueryBuilder } from './components/PrometheusQueryBuilder/PrometheusQueryBuilder'
 import {
   validateMappings,
   transformPrometheusSetupSourceToHealthSource,
@@ -32,12 +31,9 @@ import {
 import { initializeGroupNames } from '../../common/GroupName/GroupName.utils'
 import CustomMetric from '../../common/CustomMetric/CustomMetric'
 import type { UpdatedHealthSource } from '../../HealthSourceDrawer/HealthSourceDrawerContent.types'
-import { updateMultiSelectOption } from './components/PrometheusQueryBuilder/components/PrometheusFilterSelector/utils'
-import { PrometheusQueryViewer } from './components/PrometheusQueryViewer/PrometheusQueryViewer'
 import SelectHealthSourceServices from '../../common/SelectHealthSourceServices/SelectHealthSourceServices'
-import css from './SplunkMetricsHealthSource.module.scss'
-import { QueryViewer } from '@cv/components/QueryViewer/QueryViewer'
 import SplunkMetricsQueryViewer from './components/SplunkMetricsQueryViewer/SplunkMetricsQueryViewer'
+import css from './SplunkMetricsHealthSource.module.scss'
 
 export interface SplunkMetricsHealthSourceProps {
   data: any
