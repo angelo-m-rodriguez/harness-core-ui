@@ -40,7 +40,10 @@ import {
   listSecretsV2Promise,
   useFilterHostsByConnector,
   useValidateHosts,
-  HostValidationDTO
+  HostValidationDTO,
+  HostDTO,
+  ConnectorResponse,
+  SecretResponseWrapper
 } from 'services/cd-ng'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import { useToaster } from '@common/exports'
@@ -126,7 +129,7 @@ export const parseAttributes = (attributes: string) =>
       set(prev, key, value)
     }
     return prev
-  }, {}) || {}
+  }, {})
 
 const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps> = ({
   initialValues,
@@ -236,7 +239,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
         ? formikValues.connectorRef
         : get(formikValues, 'connectorRef.connector.identifier', '')
     const hostsResponse = await getFilteredHosts(filterData, { queryParams: { identifier } })
-    return hostsResponse.data?.content?.map(item => item.hostname) || []
+    return get(hostsResponse, 'data.content', []).map((item: HostDTO) => item.hostname)
   }
 
   const getHosts = () => {
@@ -312,7 +315,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
       width: '40%',
       Cell: ({ row }) => (
         <Text font={{ size: 'small' }} color={Color.RED_400}>
-          {row.original?.error?.message}
+          {get(row.original, 'error.message', '')}
         </Text>
       )
     }
@@ -321,7 +324,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
   const testConnection = async (testHost?: string) => {
     setErrors([])
     try {
-      const validationHosts = testHost ? [testHost] : detailHosts.map(host => host.host || '')
+      const validationHosts = testHost ? [testHost] : detailHosts.map(host => get(host, 'host', ''))
       const hostResults = await validateHosts({
         hosts: validationHosts,
         tags: get(formikRef, 'current.values.delegateSelectors', [])
@@ -329,10 +332,10 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
       if (hostResults.status === 'SUCCESS') {
         const tempMap: any = {}
         detailHosts.forEach(hostItem => {
-          tempMap[hostItem.host || ''] = hostItem
+          tempMap[get(hostItem, 'host', '')] = hostItem
         }, {})
-        hostResults.data?.forEach(hostRes => {
-          tempMap[hostRes.host || ''] = hostRes
+        get(hostResults, 'data', []).forEach((hostRes: HostValidationDTO) => {
+          tempMap[get(hostRes, 'host', '')] = hostRes
         })
         setDetailHosts(Object.values(tempMap) as [])
       } else {
@@ -409,9 +412,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                     ) : (
                       <Layout.Vertical>
                         <ConnectorReferenceField
-                          error={
-                            formik.submitCount && formik.errors.connectorRef ? formik.errors.connectorRef : undefined
-                          }
+                          error={get(formik, 'errors.connectorRef', undefined)}
                           name="connectorRef"
                           type={['Pdc']}
                           selected={formik.values.connectorRef}
@@ -556,6 +557,7 @@ const GcpInfrastructureSpecEditable: React.FC<GcpInfrastructureSpecEditableProps
                             </Button>
                           </Layout.Horizontal>
                         </Layout.Horizontal>
+                        {/* istanbul ignore next */}
                         {errors.length > 0 && <ErrorHandler responseMessages={errors} />}
                         {isLoading ? (
                           <Label className={'bp3-label'} style={{ margin: 'auto' }}>
@@ -656,15 +658,13 @@ export class PDCInfrastructureSpec extends PipelineStep<PDCInfrastructureSpecSte
             includeAllConnectorsAvailableAtScope: true
           },
           body: { types: ['Pdc'], filterType: 'Connector' }
-        }).then(response => {
-          const data =
-            response?.data?.content?.map(connector => ({
-              label: getConnectorName(connector),
-              insertText: getConnectorValue(connector),
-              kind: CompletionItemKind.Field
-            })) || []
-          return data
-        })
+        }).then(response =>
+          get(response, 'data.content', []).map((connector: ConnectorResponse) => ({
+            label: getConnectorName(connector),
+            insertText: getConnectorValue(connector),
+            kind: CompletionItemKind.Field
+          }))
+        )
       }
     }
 
@@ -698,15 +698,13 @@ export class PDCInfrastructureSpec extends PipelineStep<PDCInfrastructureSpecSte
             pageIndex: 0,
             pageSize: 100
           }
-        }).then(response => {
-          const data =
-            response?.data?.content?.map(secret => ({
-              label: secret.secret.name,
-              insertText: secret.secret.identifier,
-              kind: CompletionItemKind.Field
-            })) || []
-          return data
-        })
+        }).then(response =>
+          get(response, 'data.content', []).map((secret: SecretResponseWrapper) => ({
+            label: secret.secret.name,
+            insertText: secret.secret.identifier,
+            kind: CompletionItemKind.Field
+          }))
+        )
       }
     }
 
@@ -726,7 +724,7 @@ export class PDCInfrastructureSpec extends PipelineStep<PDCInfrastructureSpecSte
     if (
       isEmpty(data.credentialsRef) &&
       isRequired &&
-      getMultiTypeFromValue(template?.credentialsRef) === MultiTypeInputType.RUNTIME
+      getMultiTypeFromValue(get(template, 'credentialsRef', undefined)) === MultiTypeInputType.RUNTIME
     ) {
       errors.credentialsRef = getString?.('fieldRequired', { field: getString('connector') })
     }
