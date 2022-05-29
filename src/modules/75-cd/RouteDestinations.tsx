@@ -149,6 +149,7 @@ import { getBannerText } from './utils/renderMessageUtils'
 import ServiceStudio from './components/Services/ServiceStudio/ServiceStudio'
 import { NewEditServiceModal } from './components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
 import DeployServiceWidget from './components/PipelineSteps/DeployServiceStep/DeployServiceWidget'
+import GetStartedWithCD from './pages/get-started-with-cd/GetStartedWithCD'
 
 // eslint-disable-next-line import/no-unresolved
 const GitOpsServersList = React.lazy(() => import('gitopsui/MicroFrontendApp'))
@@ -470,6 +471,16 @@ export default (
       pageName={PAGE_NAME.DeploymentsList}
     >
       <DeploymentsList />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={CDSideNavProps}
+      pageName={PAGE_NAME.GetStartedWithCD}
+      path={routes.toGetStartedWithCI({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
+      // can be made common - toGetStarted
+    >
+      <GetStartedWithCD />
     </RouteWithLayout>
     <RouteWithLayout
       exact

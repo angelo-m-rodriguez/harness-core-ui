@@ -56,9 +56,12 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
         {OPA_PIPELINE_GOVERNANCE && isCIorCD && (
           <SidebarLink label={getString('common.governance')} to={routes.toGovernance(params as GovernancePathProps)} />
         )}
-        {enabledHostedBuildsForFreeUsers && !showGetStartedTabInMainMenu && module === 'ci' && (
-          <SidebarLink label={getString('getStarted')} to={routes.toGetStartedWithCI({ ...params, module })} />
-        )}
+        {
+          // enabledHostedBuildsForFreeUsers &&
+          !showGetStartedTabInMainMenu && module && ['ci', 'cd'].includes(module) && (
+            <SidebarLink label={getString('getStarted')} to={routes.toGetStartedWithCI({ ...params, module })} />
+          )
+        }
       </Layout.Vertical>
     </NavExpandable>
   )
