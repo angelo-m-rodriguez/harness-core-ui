@@ -133,8 +133,7 @@ export function getEditRenderer(
   openConnectorModal: UseCreateConnectorModalReturn['openConnectorModal'],
   type: ConnectorInfoDTO['type'],
   getString: UseStringsReturn['getString'],
-  resourceScope: ResourceScope,
-  canUpdate = true
+  resourceScope: ResourceScope
 ): JSX.Element {
   const detailSchema = getConnectorSelectorSchema(selected, getString)
   return (
@@ -157,29 +156,25 @@ export function getEditRenderer(
               <String stringID="idLabel" vars={{ id: selected?.connector?.identifier }} />
             </Text>
           </Layout.Vertical>
-          {canUpdate ? (
-            <RbacButton
-              variation={ButtonVariation.SECONDARY}
-              text={<String stringID="edit" />}
-              onClick={e => {
-                e.stopPropagation()
-                openConnectorModal(true, type, {
-                  connectorInfo: selected?.connector,
-                  gitDetails: selected?.connector?.gitDetails
-                })
-              }}
-              permission={{
-                permission: PermissionIdentifier.UPDATE_CONNECTOR,
-                resource: {
-                  resourceType: ResourceType.CONNECTOR,
-                  resourceIdentifier: selected?.connector?.identifier
-                },
-                resourceScope
-              }}
-            />
-          ) : (
-            <></>
-          )}
+          <RbacButton
+            variation={ButtonVariation.SECONDARY}
+            text={<String stringID="edit" />}
+            onClick={e => {
+              e.stopPropagation()
+              openConnectorModal(true, type, {
+                connectorInfo: selected?.connector,
+                gitDetails: selected?.connector?.gitDetails
+              })
+            }}
+            permission={{
+              permission: PermissionIdentifier.UPDATE_CONNECTOR,
+              resource: {
+                resourceType: ResourceType.CONNECTOR,
+                resourceIdentifier: selected?.connector?.identifier
+              },
+              resourceScope
+            }}
+          />
         </Layout.Horizontal>
         <Layout.Vertical margin={{ top: 'medium', bottom: 'medium' }}>
           {detailSchema.map((item, key) => {
@@ -790,25 +785,13 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
     }
   }
 
-  const [canUpdateSelectedConnector] = usePermission(
-    {
-      resource: {
-        resourceType: ResourceType.CONNECTOR,
-        resourceIdentifier: (selectedValue as ConnectorSelectedValue)?.connector?.identifier || ''
-      },
-      permissions: [PermissionIdentifier.UPDATE_CONNECTOR]
-    },
-    []
-  )
-
   if (typeof type === 'string' && typeof selectedValue === 'object' && selectedValue) {
     optionalReferenceSelectProps.editRenderer = getEditRenderer(
       selectedValue as ConnectorSelectedValue,
       openConnectorModal,
       (selectedValue as ConnectorSelectedValue)?.connector?.type || type,
       getString,
-      { accountIdentifier, projectIdentifier, orgIdentifier },
-      canUpdateSelectedConnector
+      { accountIdentifier, projectIdentifier, orgIdentifier }
     )
   } else if (Array.isArray(type) && typeof selectedValue === 'object' && selectedValue) {
     optionalReferenceSelectProps.editRenderer = getEditRenderer(
@@ -816,8 +799,7 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
       openConnectorModal,
       (selectedValue as ConnectorSelectedValue)?.connector?.type || type[0],
       getString,
-      { accountIdentifier, projectIdentifier, orgIdentifier },
-      canUpdateSelectedConnector
+      { accountIdentifier, projectIdentifier, orgIdentifier }
     )
   }
 

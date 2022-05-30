@@ -310,25 +310,13 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
     }
   }
 
-  const [canUpdateSelectedConnector] = usePermission(
-    {
-      resource: {
-        resourceType: ResourceType.CONNECTOR,
-        resourceIdentifier: selectedValue?.connector?.identifier || ''
-      },
-      permissions: [PermissionIdentifier.UPDATE_CONNECTOR]
-    },
-    []
-  )
-
   if (typeof type === 'string' && typeof selectedValue === 'object') {
     optionalReferenceSelectProps.editRenderer = getEditRenderer(
       selectedValue,
       openConnectorModal,
       selectedValue?.connector?.type || type,
       getString,
-      { accountIdentifier, projectIdentifier, orgIdentifier },
-      canUpdateSelectedConnector
+      { accountIdentifier, projectIdentifier, orgIdentifier }
     )
   } else if (Array.isArray(type) && typeof selectedValue === 'object') {
     optionalReferenceSelectProps.editRenderer = getEditRenderer(
@@ -336,8 +324,7 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
       openConnectorModal,
       selectedValue?.connector?.type,
       getString,
-      { accountIdentifier, projectIdentifier, orgIdentifier },
-      canUpdateSelectedConnector
+      { accountIdentifier, projectIdentifier, orgIdentifier }
     )
   }
   const [pagedConnectorData, setPagedConnectorData] = useState<ResponsePageConnectorResponse>({})
