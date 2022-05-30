@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useContext, useMemo } from 'react'
-import { Container, Formik, FormikForm, Text, Layout, SelectOption, Utils, Accordion } from '@wings-software/uicore'
+import { Container, Formik, FormikForm, Layout, SelectOption, Utils, Accordion } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import { noop } from 'lodash-es'
 import { SetupSourceTabsContext } from '@cv/components/CVSetupSourcesView/SetupSourceTabs/SetupSourceTabs'
@@ -14,7 +14,7 @@ import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { GroupName } from '@cv/pages/health-source/common/GroupName/GroupName'
 import { SetupSourceCardHeader } from '@cv/components/CVSetupSourcesView/SetupSourceCardHeader/SetupSourceCardHeader'
 import DrawerFooter from '@cv/pages/health-source/common/DrawerFooter/DrawerFooter'
-import { StackdriverDefinition, useGetLabelNames, useGetMetricNames, useGetMetricPacks } from 'services/cv'
+import { StackdriverDefinition, useGetLabelNames, useGetMetricPacks } from 'services/cv'
 import { useStrings } from 'framework/strings'
 import { NameId } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 import useGroupedSideNaveHook from '@cv/hooks/GroupedSideNaveHook/useGroupedSideNaveHook'
@@ -42,6 +42,8 @@ export interface SplunkMetricsHealthSourceProps {
 
 export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps): JSX.Element {
   const { data: sourceData, onSubmit } = props
+
+  console.log('sourceData', sourceData)
 
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps & { identifier: string }>()
 
@@ -91,7 +93,7 @@ export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps)
 
   return (
     <Formik<MapPrometheusQueryToService>
-      formName="mapPrometheus"
+      formName="mapSplunkMetrics"
       initialValues={initialFormValues}
       isInitialValid={(args: any) =>
         Object.keys(

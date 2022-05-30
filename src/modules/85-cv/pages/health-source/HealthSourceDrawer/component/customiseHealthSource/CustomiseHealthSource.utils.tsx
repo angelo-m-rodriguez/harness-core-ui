@@ -9,7 +9,6 @@ import React from 'react'
 import { isEmpty } from 'lodash-es'
 import GCOLogsMonitoringSource from '@cv/pages/health-source/connectors/GCOLogsMonitoringSource/GCOLogsMonitoringSource'
 import SplunkHealthSource from '@cv/pages/health-source/connectors/SplunkHealthSource/SplunkHealthSource'
-// import SplunkMetricsHealthSource from '@cv/pages/health-source/connectors/SplunkMetricsHealthSource/SplunkMetricsHealthSource'
 import AppDHealthSourceContainer from '@cv/pages/health-source/connectors/AppDynamics/AppDHealthSourceContainer'
 import { PrometheusHealthSource } from '@cv/pages/health-source/connectors/PrometheusHealthSource/PrometheusHealthSource'
 import NewrelicMonitoredSourceContainer from '@cv/pages/health-source/connectors/NewRelic/NewRelicHealthSourceContainer'
@@ -28,8 +27,6 @@ import { CustomHealthProduct } from '@cv/pages/health-source/connectors/CustomHe
 import { SplunkMetricsHealthSource } from '@cv/pages/health-source/connectors/SplunkMetricsHealthSourceV2/SplunkMetricsHealthSource'
 import type { UpdatedHealthSource } from '../../HealthSourceDrawerContent.types'
 import { SplunkProduct } from '../defineHealthSource/DefineHealthSource.constant'
-import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
-import { FeatureFlag } from '@common/featureFlags'
 
 export const LoadSourceByType = ({
   type,

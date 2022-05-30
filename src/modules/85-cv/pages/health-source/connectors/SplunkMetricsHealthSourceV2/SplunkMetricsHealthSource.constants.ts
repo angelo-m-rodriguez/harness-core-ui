@@ -40,22 +40,10 @@ export interface PrometheusSetupSource {
 export type MapPrometheusQueryToService = {
   identifier: string
   metricName: string
-  prometheusMetric?: string
   query: string
-  isManualQuery: boolean
-  serviceFilter?: MultiSelectOption[]
-  envFilter?: MultiSelectOption[]
-  additionalFilter?: MultiSelectOption[]
-  aggregator?: string
-  riskCategory?: string
-  serviceInstance?: string
   recordCount?: number
-  lowerBaselineDeviation?: boolean
-  higherBaselineDeviation?: boolean
   groupName?: SelectOption
   sli?: boolean
-  continuousVerification?: boolean
-  healthScore?: boolean
 }
 
 export type RiskProfileCatgory = 'Performance' | 'Errors' | 'Infrastructure'

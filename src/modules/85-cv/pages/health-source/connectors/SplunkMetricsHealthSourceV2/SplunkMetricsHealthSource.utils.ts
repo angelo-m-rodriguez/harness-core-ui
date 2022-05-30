@@ -47,8 +47,7 @@ export function updateSelectedMetricsMap({
     updatedMap.set(updatedMetric, {
       identifier: updatedMetric.split(' ').join('_'),
       metricName: updatedMetric,
-      query: '',
-      isManualQuery: false
+      query: ''
     })
   }
 
@@ -85,34 +84,6 @@ export function initializeCreatedMetrics(
     createdMetrics: Array.from(mappedMetrics.keys()) || [defaultSelectedMetricName],
     selectedMetricIndex: Array.from(mappedMetrics.keys()).findIndex(metric => metric === selectedMetric)
   }
-}
-
-export function validateAssginComponent(
-  values: MapPrometheusQueryToService,
-  requiredFieldErrors: { [x: string]: string },
-  getString: UseStringsReturn['getString']
-): { [x: string]: string } {
-  if (![values.sli, values.continuousVerification, values.healthScore].some(i => i)) {
-    requiredFieldErrors[PrometheusMonitoringSourceFieldNames.SLI] = getString(
-      'cv.monitoringSources.gco.mapMetricsToServicesPage.validation.baseline'
-    )
-  }
-
-  if (values.continuousVerification || values.healthScore) {
-    if (!values.riskCategory) {
-      requiredFieldErrors[PrometheusMonitoringSourceFieldNames.RISK_CATEGORY] = getString(
-        'cv.monitoringSources.gco.mapMetricsToServicesPage.validation.riskCategory'
-      )
-    }
-
-    if (values.lowerBaselineDeviation !== true && values.higherBaselineDeviation !== true) {
-      requiredFieldErrors[PrometheusMonitoringSourceFieldNames.LOWER_BASELINE_DEVIATION] = getString(
-        'cv.monitoringSources.prometheus.validation.deviation'
-      )
-    }
-  }
-
-  return requiredFieldErrors
 }
 
 export function validateMappings(
@@ -183,9 +154,6 @@ export function validateMappings(
     )
   }
 
-  // requiredFieldErrors = validateAssginComponent(values, { ...requiredFieldErrors }, getString)
-  console.log('requiredFieldErrors final', requiredFieldErrors)
-
   return { ...requiredFieldErrors }
 }
 
@@ -228,21 +196,6 @@ export function transformLabelToPrometheusFilter(options?: MultiSelectOption[]):
   })
 
   return filters
-}
-
-function generateMultiSelectOptionListFromPrometheusFilter(filters?: PrometheusFilter[]): MultiSelectOption[] {
-  if (!filters?.length) {
-    return []
-  }
-
-  const options: MultiSelectOption[] = []
-  for (const filter of filters) {
-    if (filter?.labelName && filter.labelValue) {
-      options.push({ label: `${filter.labelName}:${filter.labelValue}`, value: filter.labelName })
-    }
-  }
-
-  return options
 }
 
 export function transformPrometheusHealthSourceToSetupSource(
@@ -290,25 +243,8 @@ export function transformPrometheusHealthSourceToSetupSource(
       setupSource.mappedServicesAndEnvs.set(metricDefinition.metricName, {
         identifier: metricDefinition.identifier,
         metricName: metricDefinition.metricName,
-        prometheusMetric: metricDefinition.prometheusMetric,
         query: metricDefinition.query || '',
-        isManualQuery: metricDefinition.isManualQuery || false,
-        serviceFilter: generateMultiSelectOptionListFromPrometheusFilter(metricDefinition.serviceFilter),
-        envFilter: generateMultiSelectOptionListFromPrometheusFilter(metricDefinition.envFilter),
-        additionalFilter: generateMultiSelectOptionListFromPrometheusFilter(metricDefinition.additionalFilters),
-        aggregator: metricDefinition.aggregation,
-        riskCategory:
-          metricDefinition?.analysis?.riskProfile?.category && metricDefinition?.analysis?.riskProfile?.metricType
-            ? `${metricDefinition?.analysis?.riskProfile?.category}/${metricDefinition?.analysis?.riskProfile?.metricType}`
-            : '',
-        serviceInstance: metricDefinition?.analysis?.deploymentVerification?.serviceInstanceFieldName,
-        lowerBaselineDeviation:
-          metricDefinition?.analysis?.riskProfile?.thresholdTypes?.includes('ACT_WHEN_LOWER') || false,
-        higherBaselineDeviation:
-          metricDefinition?.analysis?.riskProfile?.thresholdTypes?.includes('ACT_WHEN_HIGHER') || false,
         groupName: { label: metricDefinition.groupName || '', value: metricDefinition.groupName || '' },
-        continuousVerification: metricDefinition?.analysis?.deploymentVerification?.enabled,
-        healthScore: metricDefinition?.analysis?.liveMonitoring?.enabled,
         sli: metricDefinition.sli?.enabled
       })
     }
@@ -330,15 +266,14 @@ export function transformPrometheusSetupSourceToHealthSource(setupSource: Promet
   }
 
   for (const entry of setupSource.mappedServicesAndEnvs.entries()) {
-    const { metricName, identifier, groupName, query, aggregator, sli }: MapPrometheusQueryToService = entry[1]
+    const { metricName, identifier, groupName, query, sli }: MapPrometheusQueryToService = entry[1]
 
     ;(dsConfig.spec as any).metricDefinitions.push({
       identifier,
       groupName: groupName?.value as string,
       metricName,
       query,
-      sli: { enabled: Boolean(sli) },
-      aggregation: aggregator
+      sli: { enabled: Boolean(sli) }
     })
   }
 

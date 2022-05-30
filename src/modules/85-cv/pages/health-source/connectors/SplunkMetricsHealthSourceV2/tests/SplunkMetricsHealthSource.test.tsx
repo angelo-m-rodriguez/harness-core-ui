@@ -125,9 +125,7 @@ describe('Unit tests for PrometheusHealthSource', () => {
     const cloneMockManualQueryData = clone(MockManualQueryData)
     cloneMockManualQueryData.healthSourceList[0].spec.metricDefinitions[0].analysis.deploymentVerification.enabled =
       false
-    cloneMockManualQueryData.healthSourceList[0].spec.metricDefinitions[0].analysis.liveMonitoring.enabled = false
-    // cloneMockManualQueryData.healthSourceList[0].spec.metricDefinitions[0].sli.enabled = false
-    cloneMockManualQueryData.healthSourceList[0].spec.metricDefinitions[0].analysis.riskProfile = {} as any
+
     const { container, getByText } = render(
       <WrapperComponent data={cloneMockManualQueryData} onSubmit={onSubmitMock} />
     )
