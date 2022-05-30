@@ -10,7 +10,6 @@ import { FormGroup, IFormGroupProps, Intent, PopoverInteractionKind } from '@blu
 import {
   Layout,
   Icon,
-  Button,
   Text,
   Tag,
   getMultiTypeFromValue,
