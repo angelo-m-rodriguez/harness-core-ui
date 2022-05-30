@@ -102,8 +102,8 @@ export const JenkinsStepBase = (
                   label: { labelKey: 'pipelineSteps.JenkinsConnectorLabel' },
                   type: Connectors.JENKINS
                 },
-                'spec.repo': {},
-                'spec.tags': {}
+                'spec.jobName': {},
+                'spec.jobParameter': {}
               }}
               formik={formik}
             />
@@ -117,13 +117,8 @@ export const JenkinsStepBase = (
                       stepViewType={stepViewType}
                       readonly={readonly}
                       enableFields={{
-                        'spec.optimize': { shouldHide: buildInfrastructureType === 'VM' },
-                        'spec.dockerfile': {},
-                        'spec.context': {},
-                        'spec.labels': {},
-                        'spec.buildArgs': {},
-                        'spec.target': { tooltipId: 'target' },
-                        'spec.remoteCacheRepo': { shouldHide: buildInfrastructureType === 'VM' }
+                        'spec.unstableStatusAsSuccess': {},
+                        'spec.captureEnvironmentVariable': {}
                       }}
                     />
                     <StepCommonFields disabled={readonly} buildInfrastructureType={buildInfrastructureType} />

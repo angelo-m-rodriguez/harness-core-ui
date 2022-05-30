@@ -10,12 +10,12 @@ import { connect } from 'formik'
 import { getMultiTypeFromValue, MultiTypeInputType, FormikForm } from '@wings-software/uicore'
 import { Connectors } from '@connectors/constants'
 import StepCommonFieldsInputSet from '@ci/components/PipelineSteps/StepCommonFields/StepCommonFieldsInputSet'
-import type { DockerHubStepProps } from './DockerHubStep'
+import type { JenkinsStepProps } from './JenkinsStep'
 import { CIStep } from '../CIStep/CIStep'
 import { ArtifactStepCommon } from '../CIStep/ArtifactStepCommon'
 import css from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
-export const DockerHubStepInputSetBasic: React.FC<DockerHubStepProps> = ({
+export const JenkinsStepInputSetBasic: React.FC<JenkinsStepProps> = ({
   template,
   path,
   readonly,
@@ -31,13 +31,13 @@ export const DockerHubStepInputSetBasic: React.FC<DockerHubStepProps> = ({
         enableFields={{
           ...(getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME && {
             'spec.connectorRef': {
-              label: { labelKey: 'pipelineSteps.dockerHubConnectorLabel', tooltipId: 'dockerHubConnector' },
+              label: { labelKey: 'pipelineSteps.JenkinsConnectorLabel', tooltipId: 'JenkinsConnector' },
               type: Connectors.DOCKER
             }
-          }),
-          ...(getMultiTypeFromValue(template?.spec?.repo) === MultiTypeInputType.RUNTIME && {
-            'spec.repo': {}
           })
+          // ...(getMultiTypeFromValue(template?.spec?.repo) === MultiTypeInputType.RUNTIME && {
+          //   'spec.repo': {}
+          // })
         }}
         path={path || ''}
         isInputSetView={true}
@@ -57,5 +57,5 @@ export const DockerHubStepInputSetBasic: React.FC<DockerHubStepProps> = ({
   )
 }
 
-const DockerHubStepInputSet = connect(DockerHubStepInputSetBasic)
-export { DockerHubStepInputSet }
+const JenkinsStepInputSet = connect(JenkinsStepInputSetBasic)
+export { JenkinsStepInputSet }

@@ -28,9 +28,9 @@ import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProp
 import { loggerFor } from 'framework/logging/logging'
 import { ModuleName } from 'framework/types/ModuleName'
 import type { StringsMap } from 'stringTypes'
-import { DockerHubStepBaseWithRef } from './JenkinsStepBase'
-import { DockerHubStepInputSet } from './JenkinsStepInputSet'
-import { DockerHubStepVariables, DockerHubStepVariablesProps } from './JenkinsStepVariables'
+import { JenkinsStepBaseWithRef } from './JenkinsStepBase'
+import { JenkinsStepInputSet } from './JenkinsStepInputSet'
+import { JenkinsStepVariables, JenkinsStepVariablesProps } from './JenkinsStepVariables'
 import { getInputSetViewValidateFieldsConfig, transformValuesFieldsConfig } from './JenkinsStepFunctionConfigs'
 import { getConnectorSuggestions } from '../EditorSuggestionUtils'
 import type { AllFailureStrategyConfig } from '@pipeline/components/PipelineSteps/AdvancedSteps/FailureStrategyPanel/utils'
@@ -170,7 +170,7 @@ export class DockerHubStep extends PipelineStep<JenkinsStepData> {
 
     if (stepViewType === StepViewType.InputSet || stepViewType === StepViewType.DeploymentForm) {
       return (
-        <DockerHubStepInputSet
+        <JenkinsStepInputSet
           initialValues={initialValues}
           template={inputSetData?.template}
           path={inputSetData?.path || ''}
@@ -183,8 +183,8 @@ export class DockerHubStep extends PipelineStep<JenkinsStepData> {
       )
     } else if (stepViewType === StepViewType.InputVariable) {
       return (
-        <DockerHubStepVariables
-          {...(customStepProps as DockerHubStepVariablesProps)}
+        <JenkinsStepVariables
+          {...(customStepProps as JenkinsStepVariablesProps)}
           initialValues={initialValues}
           onUpdate={onUpdate}
         />
@@ -192,7 +192,7 @@ export class DockerHubStep extends PipelineStep<JenkinsStepData> {
     }
 
     return (
-      <DockerHubStepBaseWithRef
+      <JenkinsStepBaseWithRef
         initialValues={initialValues}
         allowableTypes={allowableTypes}
         onChange={onChange}

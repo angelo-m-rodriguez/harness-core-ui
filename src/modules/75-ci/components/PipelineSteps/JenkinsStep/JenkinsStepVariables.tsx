@@ -8,18 +8,18 @@
 import React from 'react'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import { VariablesListTable } from '@pipeline/components/VariablesListTable/VariablesListTable'
-import type { DockerHubStepData } from './DockerHubStep'
+import type { JenkinsStepData } from './JenkinsStep'
 import { flatObject } from '../StepsFlatObject'
 
-export interface DockerHubStepVariablesProps {
-  initialValues: DockerHubStepData
+export interface JenkinsStepVariablesProps {
+  initialValues: JenkinsStepData
   stageIdentifier: string
-  onUpdate?(data: DockerHubStepData): void
+  onUpdate?(data: JenkinsStepData): void
   metadataMap: Required<VariableMergeServiceResponse>['metadataMap']
-  variablesData: DockerHubStepData
+  variablesData: JenkinsStepData
 }
 
-export const DockerHubStepVariables: React.FC<DockerHubStepVariablesProps> = ({
+export const JenkinsStepVariables: React.FC<JenkinsStepVariablesProps> = ({
   variablesData,
   metadataMap,
   initialValues
