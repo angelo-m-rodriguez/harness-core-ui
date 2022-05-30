@@ -269,6 +269,7 @@ export function ServicePipelineProvider({
         // eslint-disable-next-line react/display-name
         renderPipelineStage: () => <div />,
         fetchPipeline,
+        updatePipelineStoreMetadata: Promise.resolve,
         updateGitDetails: Promise.resolve,
         updateEntityValidityDetails: Promise.resolve,
         updatePipeline,

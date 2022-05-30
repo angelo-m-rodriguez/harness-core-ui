@@ -17,13 +17,12 @@ declare const styles: {
   readonly crossIcon: string
   readonly divider: string
   readonly drag: string
-  readonly dragOver: string
-  readonly dragging: string
   readonly filePath: string
   readonly filePathForm: string
   readonly formComponent: string
   readonly formContainer: string
   readonly formContainerStepOne: string
+  readonly formikError: string
   readonly horizontalFlex: string
   readonly iconPosition: string
   readonly inputWidth: string
@@ -32,8 +31,10 @@ declare const styles: {
   readonly optionalDetails: string
   readonly overrideSelect: string
   readonly overridesInputHeader: string
+  readonly selectInputs: string
   readonly squareCardContainer: string
   readonly templateDropdown: string
+  readonly truncate: string
   readonly wizard: string
 }
 export default styles

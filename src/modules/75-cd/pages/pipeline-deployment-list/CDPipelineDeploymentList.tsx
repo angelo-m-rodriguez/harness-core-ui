@@ -6,6 +6,7 @@
  */
 
 import React from 'react'
+import { defaultTo } from 'lodash-es'
 import { useParams } from 'react-router-dom'
 import PipelineDeploymentList from '@pipeline/pages/pipeline-deployment-list/PipelineDeploymentList'
 import type { GitQueryParams, PipelinePathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
@@ -19,7 +20,7 @@ export default function CDPipelineDeploymentList(): React.ReactElement {
   const { pipelineIdentifier, orgIdentifier, projectIdentifier, accountId } =
     useParams<PipelineType<PipelinePathProps>>()
 
-  const { branch, repoIdentifier } = useQueryParams<GitQueryParams>()
+  const { branch, repoIdentifier, storeType, repoName } = useQueryParams<GitQueryParams>()
   const { getString } = useStrings()
   useDocumentTitle([getString('pipelines'), getString('executionsText')])
 
@@ -28,8 +29,9 @@ export default function CDPipelineDeploymentList(): React.ReactElement {
   }
   const { openRunPipelineModal } = useRunPipelineModal({
     pipelineIdentifier,
-    repoIdentifier,
-    branch
+    repoIdentifier: defaultTo(repoIdentifier, repoName),
+    branch,
+    storeType
   })
 
   const { data: pipeline } = useGetPipelineSummary({

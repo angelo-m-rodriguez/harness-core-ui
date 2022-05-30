@@ -9,7 +9,8 @@ import React from 'react'
 import { act, fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
 import type { StringKeys } from 'framework/strings'
-import { DashboardLayoutViews, DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardLayoutViews, DashboardType } from '@dashboards/types/DashboardTypes'
 import * as customDashboardServices from 'services/custom-dashboards'
 import Dashboards, { DashboardsProps } from '../Dashboards'
 
@@ -20,7 +21,7 @@ const defaultProps: DashboardsProps = {
   view: DashboardLayoutViews.GRID
 }
 
-const defaultTestDashboard: IDashboard = {
+const defaultTestDashboard: DashboardModel = {
   id: '1',
   type: DashboardType.SHARED,
   description: 'testTag',
@@ -30,7 +31,12 @@ const defaultTestDashboard: IDashboard = {
   created_at: '',
   data_source: [],
   last_accessed_at: '',
-  resourceIdentifier: '1'
+  resourceIdentifier: '1',
+  folder: {
+    id: '',
+    title: '',
+    created_at: ''
+  }
 }
 
 const renderComponent = (props: DashboardsProps): RenderResult => {
@@ -101,7 +107,7 @@ describe('Dashboards', () => {
   })
 
   test('it should show edit dashboard form when editDashboard callback triggered', async () => {
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT
     }
@@ -127,7 +133,7 @@ describe('Dashboards', () => {
 
   test('it should trigger delete callback when deleteDashboard triggered', () => {
     const mockCallback = jest.fn()
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT
     }
@@ -152,7 +158,7 @@ describe('Dashboards', () => {
   })
 
   test('it should trigger clone callback when cloneDashboard triggered', async () => {
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT
     }

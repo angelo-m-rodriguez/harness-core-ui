@@ -21,10 +21,12 @@ import type {
   UpdateInputSetForPipelineQueryParams
 } from 'services/pipeline-ng'
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import { UseSaveSuccessResponse, useSaveToGitDialog } from '@common/modals/SaveToGitDialog/useSaveToGitDialog'
 import { getFormattedErrors } from '@pipeline/utils/runPipelineUtils'
 import type { InputSetGitQueryParams, InputSetPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useQueryParams } from '@common/hooks'
+import type { SaveToGitFormV2Interface } from '@common/components/SaveToGitFormV2/SaveToGitFormV2'
 import { useStrings } from 'framework/strings'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
 import { clearNullUndefined } from '@pipeline/utils/inputSetUtils'
@@ -32,6 +34,7 @@ import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 
 interface GetUpdatedGitDetailsReturnType extends EntityGitDetails {
   lastObjectId?: string
+  lastCommitId?: string
   baseBranch?: string
 }
 
@@ -46,6 +49,7 @@ const getUpdatedGitDetails = (
     updatedGitDetails = { ...gitDetails }
     if (isEdit) {
       updatedGitDetails['lastObjectId'] = lastObjectId
+      updatedGitDetails['lastCommitId'] = initialGitDetails.commitId
     }
     if (gitDetails.isNewBranch) {
       updatedGitDetails['baseBranch'] = initialGitDetails.branch
@@ -55,7 +59,11 @@ const getUpdatedGitDetails = (
 }
 
 interface UseSaveInputSetReturnType {
-  handleSubmit: (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails | undefined) => Promise<void>
+  handleSubmit: (
+    inputSetObjWithGitInfo: InputSetDTO,
+    gitDetails?: EntityGitDetails,
+    storeMetadata?: StoreMetadata
+  ) => Promise<void>
 }
 
 interface InputSetInfo {
@@ -81,10 +89,16 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier } = useParams<
     PipelineType<InputSetPathProps> & { accountId: string }
   >()
-  const { repoIdentifier, branch } = useQueryParams<InputSetGitQueryParams>()
+  const { repoIdentifier, branch, repoName, connectorRef, storeType } = useQueryParams<InputSetGitQueryParams>()
 
   const [savedInputSetObj, setSavedInputSetObj] = React.useState<InputSetDTO>({})
   const [initialGitDetails, setInitialGitDetails] = React.useState<EntityGitDetails>({ repoIdentifier, branch })
+  const [initialStoreMetadata, setInitialStoreMetadata] = React.useState<StoreMetadata>({
+    repoName,
+    branch,
+    connectorRef,
+    storeType
+  })
 
   const { isGitSyncEnabled } = React.useContext(AppStoreContext)
 
@@ -110,6 +124,7 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
                 projectIdentifier,
                 pipelineRepoID: repoIdentifier,
                 pipelineBranch: branch,
+                ...(initialStoreMetadata.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
                 ...updatedGitDetails
               }
             })
@@ -125,11 +140,12 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
               projectIdentifier,
               pipelineRepoID: repoIdentifier,
               pipelineBranch: branch,
+              ...(initialStoreMetadata.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
               ...updatedGitDetails
             }
           })
         }
-        if (!isGitSyncEnabled) {
+        if (!isGitSyncEnabled && initialStoreMetadata.storeType !== StoreType.REMOTE) {
           showSuccess(getString('inputSets.inputSetSaved'))
           history.goBack()
         }
@@ -138,8 +154,8 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
         if (!isEmpty(errors)) {
           setFormErrors(errors)
         }
-        // This is done because when git sync is enabled, errors are displayed in a modal
-        if (!isGitSyncEnabled) {
+        // This is done because when git sync is enabled / storeType in REMOTE, errors are displayed in a modal
+        if (!isGitSyncEnabled && initialStoreMetadata.storeType !== StoreType.REMOTE) {
           showError(getRBACErrorMessage(e), undefined, 'pipeline.update.create.inputset')
         } else {
           throw e
@@ -172,26 +188,38 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
 
   const { openSaveToGitDialog } = useSaveToGitDialog<SaveInputSetDTO>({
     onSuccess: (
-      gitData: SaveToGitFormInterface,
+      gitData: SaveToGitFormInterface & SaveToGitFormV2Interface,
       payload?: SaveInputSetDTO,
       objectId?: string
     ): Promise<UseSaveSuccessResponse> => createUpdateInputSet(payload?.inputSet || savedInputSetObj, gitData, objectId)
   })
 
   const handleSubmit = React.useCallback(
-    async (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails) => {
-      const inputSetObj = omit(inputSetObjWithGitInfo, 'repo', 'branch')
+    async (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails, storeMetadata?: StoreMetadata) => {
+      const inputSetObj = omit(
+        inputSetObjWithGitInfo,
+        'repo',
+        'branch',
+        'connectorRef',
+        'repoName',
+        'filePath',
+        'storeType',
+        'remoteType'
+      )
       setSavedInputSetObj(inputSetObj)
-      setInitialGitDetails(gitDetails as EntityGitDetails)
+      setInitialGitDetails(defaultTo(isEdit ? inputSetResponse?.data?.gitDetails : gitDetails, {}))
+      setInitialStoreMetadata(defaultTo(storeMetadata, {}))
+
       if (inputSetObj) {
-        if (isGitSyncEnabled) {
+        if (isGitSyncEnabled || storeMetadata?.storeType === StoreType.REMOTE) {
           openSaveToGitDialog({
             isEditing: isEdit,
             resource: {
               type: 'InputSets',
               name: inputSetObj.name as string,
               identifier: inputSetObj.identifier as string,
-              gitDetails: isEdit ? inputSetResponse?.data?.gitDetails : gitDetails
+              gitDetails: isEdit ? inputSetResponse?.data?.gitDetails : gitDetails,
+              storeMetadata: storeMetadata?.storeType === StoreType.REMOTE ? storeMetadata : undefined
             },
             payload: { inputSet: inputSetObj }
           })

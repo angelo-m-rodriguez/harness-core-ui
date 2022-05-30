@@ -47,7 +47,6 @@ import type {
   PipelineType
 } from '@common/interfaces/RouteInterfaces'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
-import { FormMultiTypeTextAreaField } from '@common/components'
 import { useQueryParams } from '@common/hooks'
 import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
 import type { JiraProjectSelectOption } from '../JiraApproval/types'
@@ -130,9 +129,10 @@ function FormContent({
     } else if (connectorRefFixedValue !== undefined) {
       // Undefined check is needed so that form is not set to dirty as soon as we open
       // This means we've cleared the value or marked runtime/expression
-      // Flush the selected additional fields, and move everything to key value fields
+      // Flush the selected optional fields, and move everything to key value fields
       // formik.setFieldValue('spec.fields', getKVFields(formik.values))
-      formik.setFieldValue('spec.selectedFields', [])
+      formik.setFieldValue('spec.selectedRequiredFields', [])
+      formik.setFieldValue('spec.selectedOptionalFields', [])
     }
   }, [connectorRefFixedValue])
 
@@ -149,9 +149,10 @@ function FormContent({
     } else if (connectorRefFixedValue !== undefined && projectKeyFixedValue !== undefined) {
       // Undefined check is needed so that form is not set to dirty as soon as we open
       // This means we've cleared the value or marked runtime/expression
-      // Flush the selected additional fields, and move everything to key value fields
+      // Flush the selected optional and required fields, and move everything to key value fields
       // formik.setFieldValue('spec.fields', getKVFields(formik.values))
-      formik.setFieldValue('spec.selectedFields', [])
+      formik.setFieldValue('spec.selectedRequiredFields', [])
+      formik.setFieldValue('spec.selectedOptionalFields', [])
     }
   }, [projectKeyFixedValue])
 
@@ -160,27 +161,41 @@ function FormContent({
     if (issueTypeFixedValue) {
       const issueTypeData = projectMetadata?.issuetypes[issueTypeFixedValue]
       const fieldKeys = Object.keys(issueTypeData?.fields || {})
-      const formikSelectedFields: JiraFieldNGWithValue[] = []
+      const formikOptionalFields: JiraFieldNGWithValue[] = []
+      const formikRequiredFields: JiraFieldNGWithValue[] = []
       fieldKeys.forEach(keyy => {
         const field = issueTypeData?.fields[keyy]
-        if (field && keyy !== 'Summary' && keyy !== 'Description') {
+        if (field) {
           const savedValueForThisField = getInitialValueForSelectedField(formik.values.spec.fields, field)
-          if (savedValueForThisField) {
-            formikSelectedFields.push({ ...field, value: savedValueForThisField })
+          if (savedValueForThisField && !field.required) {
+            formikOptionalFields.push({ ...field, value: savedValueForThisField })
           } else if (field.required) {
-            formikSelectedFields.push({ ...field, value: !isEmpty(field.allowedValues) ? [] : '' })
+            formikRequiredFields.push({
+              ...field,
+              //this check is needed for multiselect or single select fields
+              //as these fields accepts value in the form of array and if savedValueForThisField which is
+              //of string is empty, we need to ensure the value is set to empty array
+              value: !isEmpty(field.allowedValues) && !savedValueForThisField ? [] : savedValueForThisField
+            })
           }
         }
       })
-      formik.setFieldValue('spec.selectedFields', formikSelectedFields)
-      const toBeUpdatedKVFields = getKVFieldsToBeAddedInForm(formik.values.spec.fields, [], formikSelectedFields)
+      formik.setFieldValue('spec.selectedRequiredFields', formikRequiredFields)
+      formik.setFieldValue('spec.selectedOptionalFields', formikOptionalFields)
+      const toBeUpdatedKVFields = getKVFieldsToBeAddedInForm(
+        formik.values.spec.fields,
+        [],
+        formikOptionalFields,
+        formikRequiredFields
+      )
       formik.setFieldValue('spec.fields', toBeUpdatedKVFields)
     } else if (issueTypeFixedValue !== undefined) {
       // Undefined check is needed so that form is not set to dirty as soon as we open
       // This means we've cleared the value or marked runtime/expression
       // Flush the selected additional fields, and move everything to key value fields
       // formik.setFieldValue('spec.fields', getKVFields(formik.values))
-      formik.setFieldValue('spec.selectedFields', [])
+      formik.setFieldValue('spec.selectedRequiredFields', [])
+      formik.setFieldValue('spec.selectedOptionalFields', [])
     }
   }, [issueTypeFixedValue, projectMetadata])
 
@@ -219,13 +234,13 @@ function FormContent({
           selectedIssueTypeKey={issueTypeFixedValue || ''}
           jiraType={jiraType}
           projectOptions={projectOptions}
-          selectedFields={formik.values.spec.selectedFields}
+          selectedFields={formik.values.spec.selectedOptionalFields}
           addSelectedFields={(fieldsToBeAdded: JiraFieldNG[]) => {
             formik.setFieldValue(
-              'spec.selectedFields',
+              'spec.selectedOptionalFields',
               getSelectedFieldsToBeAddedInForm(
                 fieldsToBeAdded,
-                formik.values.spec.selectedFields,
+                formik.values.spec.selectedOptionalFields,
                 formik.values.spec.fields
               )
             )
@@ -234,7 +249,7 @@ function FormContent({
           provideFieldList={(fields: JiraCreateFieldType[]) => {
             formik.setFieldValue(
               'spec.fields',
-              getKVFieldsToBeAddedInForm(fields, formik.values.spec.fields, formik.values.spec.selectedFields)
+              getKVFieldsToBeAddedInForm(fields, formik.values.spec.fields, formik.values.spec.selectedOptionalFields)
             )
             hideDynamicFieldsModal()
           }}
@@ -242,7 +257,7 @@ function FormContent({
         />
       </Dialog>
     )
-  }, [projectOptions, connectorRefFixedValue, formik.values.spec.selectedFields, formik.values.spec.fields])
+  }, [projectOptions, connectorRefFixedValue, formik.values.spec.selectedOptionalFields, formik.values.spec.fields])
 
   function AddFieldsButton(): React.ReactElement {
     return (
@@ -434,6 +449,7 @@ function FormContent({
                 // Clear dependent fields
                 if ((value as JiraProjectSelectOption)?.key !== issueTypeFixedValue) {
                   resetForm(formik, 'issueType')
+                  formik.setFieldValue('spec.selectedRequiredFields', [])
                   setCount(count + 1)
                 }
               }
@@ -452,29 +468,12 @@ function FormContent({
             />
           )}
         </div>
-        <div className={cx(stepCss.formGroup, stepCss.lg)}>
-          <FormInput.MultiTextInput
-            label={getString('summary')}
-            name="spec.summary"
-            placeholder={getString('pipeline.jiraCreateStep.summaryPlaceholder')}
-            multiTextInputProps={{
-              expressions,
-              allowableTypes
-            }}
-            disabled={isApprovalStepFieldDisabled(readonly)}
+        <div>
+          <JiraFieldsRenderer
+            selectedFields={formik.values.spec.selectedRequiredFields}
+            renderRequiredFields={true}
+            readonly={readonly}
           />
-          {getMultiTypeFromValue(formik.values.spec.summary) === MultiTypeInputType.RUNTIME && (
-            <ConfigureOptions
-              value={formik.values.spec.summary || ''}
-              type="String"
-              variableName="spec.summary"
-              showRequiredField={false}
-              showDefaultField={false}
-              showAdvanced={true}
-              onChange={value => formik.setFieldValue('spec.summary', value)}
-              isReadonly={readonly}
-            />
-          )}
         </div>
 
         <div className={stepCss.noLookDivider} />
@@ -486,40 +485,18 @@ function FormContent({
           summary={getString('common.optionalConfig')}
           details={
             <div>
-              <div className={cx(stepCss.formGroup)}>
-                <FormMultiTypeTextAreaField
-                  name="spec.description"
-                  label={getString('description')}
-                  className={cx(css.descriptionField)}
-                  multiTypeTextArea={{ enableConfigureOptions: false, expressions, allowableTypes }}
-                  placeholder={getString('common.descriptionPlaceholder')}
-                  disabled={isApprovalStepFieldDisabled(readonly)}
-                />
-                {getMultiTypeFromValue(formik.values.spec.description) === MultiTypeInputType.RUNTIME && (
-                  <ConfigureOptions
-                    value={formik.values.spec.description || ''}
-                    type="String"
-                    variableName="spec.description"
-                    showRequiredField={false}
-                    showDefaultField={false}
-                    showAdvanced={true}
-                    onChange={value => formik.setFieldValue('spec.description', value)}
-                    isReadonly={readonly}
-                  />
-                )}
-              </div>
               {fetchingProjectMetadata ? (
                 <PageSpinner message={getString('pipeline.jiraCreateStep.fetchingFields')} className={css.fetching} />
               ) : (
                 <>
                   <JiraFieldsRenderer
-                    selectedFields={formik.values.spec.selectedFields}
+                    selectedFields={formik.values.spec.selectedOptionalFields}
                     readonly={readonly}
                     onDelete={(index, selectedField) => {
-                      const selectedFieldsAfterRemoval = formik.values.spec.selectedFields?.filter(
+                      const selectedOptionalFieldsAfterRemoval = formik.values.spec.selectedOptionalFields?.filter(
                         (_unused, i) => i !== index
                       )
-                      formik.setFieldValue('spec.selectedFields', selectedFieldsAfterRemoval)
+                      formik.setFieldValue('spec.selectedOptionalFields', selectedOptionalFieldsAfterRemoval)
                       const customFields = formik.values.spec.fields?.filter(field => field.name !== selectedField.name)
                       formik.setFieldValue('spec.fields', customFields)
                     }}
@@ -636,7 +613,11 @@ function JiraCreateStepMode(props: JiraCreateStepModeProps, formikRef: StepFormi
           connectorRef: Yup.string().required(getString('pipeline.jiraApprovalStep.validations.connectorRef')),
           projectKey: Yup.string().required(getString('pipeline.jiraApprovalStep.validations.project')),
           issueType: Yup.string().required(getString('pipeline.jiraApprovalStep.validations.issueType')),
-          summary: Yup.string().trim().required(getString('pipeline.jiraCreateStep.validations.summary'))
+          selectedRequiredFields: Yup.array().of(
+            Yup.object().shape({
+              value: Yup.string().required(getString('pipeline.jiraApprovalStep.validations.requiredField'))
+            })
+          )
         })
       })}
     >

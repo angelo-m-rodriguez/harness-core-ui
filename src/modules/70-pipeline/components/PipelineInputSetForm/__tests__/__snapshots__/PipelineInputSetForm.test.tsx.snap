@@ -244,7 +244,7 @@ exports[`CI enabled CI READONLY mode: CI stage readonly mode 1`] = `
                 data-tooltip-id="ciCodebaseBuildType"
               >
                 <p
-                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                  class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                 >
                   filters.executions.buildType
                 </p>
@@ -345,7 +345,7 @@ exports[`CI enabled CI present in one of the stages: CI codebase input set form 
                 data-tooltip-id="ciCodebaseBuildType"
               >
                 <p
-                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                  class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                 >
                   filters.executions.buildType
                 </p>
@@ -541,7 +541,7 @@ exports[`CI enabled CI present with triggers: CI codebase input set form with tr
                 data-tooltip-id="ciCodebaseBuildType"
               >
                 <p
-                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                  class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                 >
                   filters.executions.buildType
                 </p>
@@ -860,7 +860,7 @@ exports[`CI enabled PR Number build radio option should not be visible for CodeC
                 data-tooltip-id="ciCodebaseBuildType"
               >
                 <p
-                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                  class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                 >
                   filters.executions.buildType
                 </p>
@@ -1125,7 +1125,7 @@ exports[`CI enabled Render CI Codebase all runtime inputs: all inputs as runtime
                 data-tooltip-id="ciCodebaseBuildType"
               >
                 <p
-                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                  class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                 >
                   filters.executions.buildType
                 </p>

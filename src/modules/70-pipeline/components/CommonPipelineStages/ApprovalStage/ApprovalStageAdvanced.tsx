@@ -22,9 +22,13 @@ import css from './ApprovalAdvancedSpecifications.module.scss'
 
 export interface AdvancedSpecifications {
   context?: string
+  conditionalExecutionTooltipId?: string
+  failureStrategyTooltipId?: string
 }
 function ApprovalAdvancedSpecifications({
-  children
+  children,
+  conditionalExecutionTooltipId = 'conditionalExecutionApprovalStage',
+  failureStrategyTooltipId = 'failureStrategyApprovalStage'
 }: React.PropsWithChildren<AdvancedSpecifications>): React.ReactElement {
   const { getString } = useStrings()
   const { trackEvent } = useTelemetry()
@@ -46,9 +50,9 @@ function ApprovalAdvancedSpecifications({
     <div className={cx(css.stageSection, css.editStageGrid)}>
       <div className={css.contentSection} ref={scrollRef}>
         <div className={css.tabHeading}>
-          <span data-tooltip-id="conditionalExecutionApprovalStage">
+          <span data-tooltip-id={conditionalExecutionTooltipId}>
             {getString('pipeline.conditionalExecution.title')}
-            <HarnessDocTooltip tooltipId="conditionalExecutionApprovalStage" useStandAlone={true} />
+            <HarnessDocTooltip tooltipId={conditionalExecutionTooltipId} useStandAlone={true} />
           </span>
         </div>
         {!!stage && (
@@ -76,9 +80,9 @@ function ApprovalAdvancedSpecifications({
           </Card>
         )}
         <div className={css.tabHeading}>
-          <span data-tooltip-id="failureStrategyApprovalStage">
+          <span data-tooltip-id={failureStrategyTooltipId}>
             {getString('pipeline.failureStrategies.title')}
-            <HarnessDocTooltip tooltipId="failureStrategyApprovalStage" useStandAlone={true} />
+            <HarnessDocTooltip tooltipId={failureStrategyTooltipId} useStandAlone={true} />
           </span>
         </div>
         <Card className={css.sectionCard} id="failureStrategy">

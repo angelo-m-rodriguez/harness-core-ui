@@ -7,7 +7,7 @@
 
 import React, { useEffect } from 'react'
 import * as Yup from 'yup'
-import { defaultTo, isEmpty, omit, isUndefined } from 'lodash-es'
+import { defaultTo, isEmpty, omit, isUndefined, noop } from 'lodash-es'
 import {
   Button,
   Container,
@@ -29,6 +29,7 @@ import type { PipelineInfoConfig } from 'services/cd-ng'
 import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
 import type { InputSetGitQueryParams, InputSetPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { NameIdDescriptionTags } from '@common/components'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import { useStrings } from 'framework/strings'
 import { GitSyncStoreProvider } from 'framework/GitRepoStore/GitSyncStoreContext'
 import { usePermission } from '@rbac/hooks/usePermission'
@@ -37,6 +38,7 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { useQueryParams } from '@common/hooks'
 import GitContextForm, { GitContextProps } from '@common/components/GitContextForm/GitContextForm'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
+import { GitSyncForm } from '@gitsync/components/GitSyncForm/GitSyncForm'
 import type { InputSetDTO, InputSetType, Pipeline } from '@pipeline/utils/types'
 import {
   isCloneCodebaseEnabledAtLeastOneStage,
@@ -67,19 +69,26 @@ export const isYamlPresent = (
 ): string | undefined => {
   return template?.data?.inputSetTemplateYaml && pipeline?.data?.yamlPipeline
 }
+
+type InputSetDTOGitDetails = InputSetDTO & GitContextProps & StoreMetadata
 interface FormikInputSetFormProps {
   inputSet: InputSetDTO | InputSetType
   template: ResponseInputSetTemplateWithReplacedExpressionsResponse | null
   pipeline: ResponsePMSPipelineResponseDTO | null
   resolvedTemplatesPipelineYaml?: string
-  handleSubmit: (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails | undefined) => Promise<void>
+  handleSubmit: (
+    inputSetObjWithGitInfo: InputSetDTO,
+    gitDetails?: EntityGitDetails,
+    storeMetadata?: StoreMetadata
+  ) => Promise<void>
   formErrors: Record<string, unknown>
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, unknown>>>
-  formikRef: React.MutableRefObject<FormikProps<InputSetDTO & GitContextProps> | undefined>
+  formikRef: React.MutableRefObject<FormikProps<InputSetDTOGitDetails> | undefined>
   selectedView: SelectedView
   executionView?: boolean
   isEdit: boolean
   isGitSyncEnabled?: boolean
+  gitSimplification?: boolean
   yamlHandler?: YamlBuilderHandlerBinding
   setYamlHandler: React.Dispatch<React.SetStateAction<YamlBuilderHandlerBinding | undefined>>
 }
@@ -109,14 +118,18 @@ function useValidateValues({
   formErrors: Record<string, unknown>
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, unknown>>>
   resolvedPipeline?: PipelineInfoConfig
-}): { validateValues: (values: InputSetDTO & GitContextProps) => Promise<FormikErrors<InputSetDTO>> } {
+}): {
+  validateValues: (values: InputSetDTO & GitContextProps & StoreMetadata) => Promise<FormikErrors<InputSetDTO>>
+} {
   const { getString } = useStrings()
   const NameIdSchema = Yup.object({
     name: NameSchema(),
     identifier: IdentifierSchema()
   })
   return {
-    validateValues: async (values: InputSetDTO & GitContextProps): Promise<FormikErrors<InputSetDTO>> => {
+    validateValues: async (
+      values: InputSetDTO & GitContextProps & StoreMetadata
+    ): Promise<FormikErrors<InputSetDTO>> => {
       let errors: FormikErrors<InputSetDTO> = {}
       try {
         await NameIdSchema.validate(values)
@@ -151,17 +164,31 @@ function useValidateValues({
 }
 
 const onSubmitClick = (
-  formikProps: FormikProps<InputSetDTO & GitContextProps>,
+  formikProps: FormikProps<InputSetDTO & GitContextProps & StoreMetadata>,
   setFormErrors: React.Dispatch<React.SetStateAction<Record<string, unknown>>>,
-  handleSubmit: (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails | undefined) => Promise<void>
+  handleSubmit: (
+    inputSetObjWithGitInfo: InputSetDTO,
+    gitDetails?: EntityGitDetails,
+    storeMetadata?: StoreMetadata
+  ) => Promise<void>
 ): void => {
   formikProps.validateForm().then(errors => {
     setFormErrors(errors)
     if (formikProps?.values.name?.length && formikProps?.values.identifier?.length && isEmpty(formikProps.errors)) {
-      handleSubmit(formikProps.values, {
-        repoIdentifier: formikProps.values.repo,
-        branch: formikProps.values.branch
-      })
+      handleSubmit(
+        formikProps.values,
+        {
+          repoIdentifier: formikProps.values.repo,
+          branch: formikProps.values.branch
+        },
+        {
+          connectorRef: formikProps.values.connectorRef,
+          repoName: formikProps.values.repoName,
+          branch: formikProps.values.branch,
+          filePath: formikProps.values.filePath,
+          storeType: formikProps.values.storeType
+        }
+      )
     }
   })
 }
@@ -180,6 +207,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
     executionView,
     isEdit,
     isGitSyncEnabled,
+    gitSimplification,
     yamlHandler,
     setYamlHandler
   } = props
@@ -187,7 +215,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier } = useParams<
     PipelineType<InputSetPathProps> & { accountId: string }
   >()
-  const { repoIdentifier, branch } = useQueryParams<InputSetGitQueryParams>()
+  const { repoIdentifier, branch, connectorRef, storeType, repoName } = useQueryParams<InputSetGitQueryParams>()
   const history = useHistory()
   const resolvedPipeline = defaultTo(parse(defaultTo(resolvedTemplatesPipelineYaml, ''))?.pipeline, {})
 
@@ -260,18 +288,35 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
           formRefDom.current = ref as HTMLElement
         }}
       >
-        <Formik<InputSetDTO & GitContextProps>
+        <Formik<InputSetDTO & GitContextProps & StoreMetadata>
           initialValues={{
             ...init,
             repo: defaultTo(repoIdentifier, ''),
-            branch: defaultTo(branch, '')
+            branch: defaultTo(branch, ''),
+            connectorRef: defaultTo(connectorRef, ''),
+            repoName: defaultTo(repoName, ''),
+            storeType: defaultTo(storeType, StoreType.INLINE),
+            filePath: inputSet.gitDetails?.filePath
           }}
           enableReinitialize={true}
           formName="inputSetForm"
           validationSchema={NameIdSchema}
           validate={validateValues}
           onSubmit={values => {
-            handleSubmit(values, { repoIdentifier: values.repo, branch: values.branch })
+            handleSubmit(
+              values,
+              {
+                repoIdentifier: values.repo,
+                branch: values.branch
+              },
+              {
+                connectorRef: values.connectorRef,
+                repoName: values.repoName,
+                branch: values.branch,
+                filePath: values.filePath,
+                storeType: values.storeType
+              }
+            )
           }}
         >
           {formikProps => {
@@ -313,6 +358,26 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                                 />
                               </GitSyncStoreProvider>
                             )}
+                            {!isGitSyncEnabled && gitSimplification && storeType === StoreType.REMOTE && (
+                              <Container className={css.gitRemoteDetailsForm}>
+                                <GitSyncForm
+                                  formikProps={formikProps as any}
+                                  handleSubmit={noop}
+                                  isEdit={isEdit}
+                                  showRemoteTypeSelection={false}
+                                  disableFields={
+                                    !isEdit
+                                      ? {
+                                          connectorRef: true,
+                                          repoName: true,
+                                          branch: true,
+                                          filePath: false
+                                        }
+                                      : {}
+                                  }
+                                ></GitSyncForm>
+                              </Container>
+                            )}
                             {showPipelineInputSetForm(resolvedTemplatesPipelineYaml, template) && (
                               <PipelineInputSetForm
                                 path="pipeline"
@@ -352,7 +417,18 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                       <YamlBuilderMemo
                         {...yamlBuilderReadOnlyModeProps}
                         existingJSON={{
-                          inputSet: omit(formikProps?.values, 'inputSetReferences', 'repo', 'branch', 'outdated')
+                          inputSet: omit(
+                            formikProps?.values,
+                            'inputSetReferences',
+                            'repo',
+                            'branch',
+                            'outdated',
+                            'connectorRef',
+                            'repoName',
+                            'filePath',
+                            'storeType',
+                            'remoteType'
+                          )
                         }}
                         bind={setYamlHandler}
                         isReadOnlyMode={!isEditable}
@@ -372,10 +448,20 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                         onClick={() => {
                           const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), '')
                           const inputSetDto: InputSetDTO = parse(latestYaml)?.inputSet
-                          handleSubmit(inputSetDto, {
-                            repoIdentifier: formikProps.values.repo,
-                            branch: formikProps.values.branch
-                          })
+                          handleSubmit(
+                            inputSetDto,
+                            {
+                              repoIdentifier: formikProps.values.repo,
+                              branch: formikProps.values.branch
+                            },
+                            {
+                              connectorRef: formikProps.values.connectorRef,
+                              repoName: formikProps.values.repoName,
+                              branch: formikProps.values.branch,
+                              filePath: formikProps.values.filePath,
+                              storeType: formikProps.values.storeType
+                            }
+                          )
                         }}
                       />
                       &nbsp; &nbsp;

@@ -33,26 +33,31 @@ export function ServicesTable({ services }: ServicesTableProps): React.ReactElem
         {services.map((service, i) => (
           <tr key={`${service.identifier}-${i}`}>
             <td>{service.displayName}</td>
-            <td>
-              {service.artifacts?.primary
-                ? getString('artifactDisplay', {
-                    image: (service.artifacts.primary as unknown as any).imagePath,
-                    tag: (service.artifacts.primary as unknown as any).tag
-                  })
-                : '-'}
-            </td>
-            <td>
-              {service.artifacts?.sidecars && service.artifacts?.sidecars.length > 0
-                ? service.artifacts.sidecars
-                    .map(artifact =>
-                      getString('artifactDisplay', {
-                        image: (artifact as unknown as any).imagePath,
-                        tag: (artifact as unknown as any).tag
-                      })
-                    )
-                    .join(', ')
-                : '-'}
-            </td>
+            <td
+              dangerouslySetInnerHTML={{
+                __html: service.artifacts?.primary
+                  ? getString('artifactDisplay', {
+                      image: (service.artifacts.primary as unknown as any).imagePath,
+                      tag: (service.artifacts.primary as unknown as any).tag
+                    })
+                  : '-'
+              }}
+            />
+            <td
+              dangerouslySetInnerHTML={{
+                __html:
+                  service.artifacts?.sidecars && service.artifacts?.sidecars.length > 0
+                    ? service.artifacts.sidecars
+                        .map(artifact =>
+                          getString('artifactDisplay', {
+                            image: (artifact as unknown as any).imagePath,
+                            tag: (artifact as unknown as any).tag
+                          })
+                        )
+                        .join(', ')
+                    : '-'
+              }}
+            />
           </tr>
         ))}
       </tbody>

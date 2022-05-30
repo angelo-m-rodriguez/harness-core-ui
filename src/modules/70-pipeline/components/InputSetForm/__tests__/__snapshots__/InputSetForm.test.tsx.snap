@@ -2101,7 +2101,7 @@ exports[`Render Forms - Snapshot Testing render inputset with no inputSetRespons
           >
             <a
               class="Breadcrumbs--breadcrumb"
-              href="/account/testAcc/cd/orgs/testOrg/projects/test/pipelines/pipeline/input-sets?branch=feature&repoIdentifier=gitSyncRepo"
+              href="/account/testAcc/cd/orgs/testOrg/projects/test/pipelines/pipeline/input-sets"
             >
               <p
                 class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"

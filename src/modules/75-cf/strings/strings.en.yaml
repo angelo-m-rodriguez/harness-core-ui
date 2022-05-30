@@ -293,12 +293,16 @@ targetDetail:
   removeFromIncludeList: Are you sure you want to remove target <strong>{{targetName}}</strong> from include target group <strong>{{ segmentName}}</strong>? This action cannot be undone.
   removeFromExcludeListTitle: Remove from exclusion list
   removeFromExcludeList: Are you sure you want to remove target <strong>{{targetName}}</strong> from exclusion target group <strong>{{ segmentName}}</strong>? This action cannot be undone.
-  noFlagConfigured: No feature flags configured for this target
+  noFlagConfigured: No Feature Flags configured for this Target
   searchPlaceholder: Search Feature Flags...
   deleteTargetSuccess: Target <strong>{{name}}</strong> deleted.
   flagDisabled: This flag is disabled. The default off value will be served.
   addTargetToTargetGroup: Add Target to Target Group {{name}}
   noTargetGroupsAvailable: No Target Groups available
+targetManagementFlagConfiguration:
+  allFlagsRemoved: All Feature Flags removed
+  addFlag: Add Flag
+  removeFlag: Remove Flag
 selectSegmentModal:
   searchSegmentPlaceholder: Search for Target Group by Name or Description
   flagsUsingSegment: '{{ counter }} flag'
@@ -343,11 +347,14 @@ environments:
     emptyName: 'SDK Key name is required'
     addKey: '+ New SDK Key'
     clientType: '{{ $.cf.testTheFlag.sdkClient }}'
+    clientDescription: 'A client id will be generated as your client-side SDK key.'
     serverType: '{{ $.cf.testTheFlag.sdkServer }}'
+    serverDescription: 'A secret will be generated as your server-side SDK key.'
     deleteTitle: 'Confirm Key Delete?'
     deleteMessage: 'Are you sure you want to delete Key: <strong>{{keyName}}</strong>? You cannot recover it afterwards'
     deleteSuccess: 'Successfully deleted Key: {{keyName}}'
     keyType: 'Key Type'
+    applicableLanguages: 'Applicable Languages:'
     noKeysFoundTitle: There are no SDK keys for this environment
     noKeysFoundMessage: Create an <a href="https://ngdocs.harness.io/article/1j7pdkqh7j-create-a-feature-flag#step_3_create_an_sdk_key" target="_blank" rel="noreferrer"> SDK key</a> for this environment so that your application can connect to our FF client. We support SDK keys for multiple programming languages.
     redactionWarning: Your secret will be redacted once you leave the page. Please make sure to copy and store your secret.
@@ -495,7 +502,6 @@ segmentDetail:
   addFlagNameToTargetGroup: 'Add {{ flagName }} to Target Group'
   addFlagToTargetGroup: Add Flag to Target Group
   addFlags: 'Add {{ flagCount }} Flags'
-  addFlag: Add Flag
   noFlagsAvailable: No flags available
   updateSuccessful: Update successful
   flagsAddedSuccessfully: Flag(s) added successfully

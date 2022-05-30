@@ -22,7 +22,8 @@
     { "uuid": null, "name": "DYNATRACE_APM_ENABLED", "enabled": true, "lastUpdatedAt": 0 },
     { "uuid": null, "name": "SECURITY_STAGE", "enabled": true, "lastUpdatedAt": 0 },
     { "uuid": null, "name": "SERVERLESS_SUPPORT", "enabled": true, "lastUpdatedAt": 0 },
-    { "uuid": null, "name": "ENV_GROUP", "enabled": true, "lastUpdatedAt": 0 }
+    { "uuid": null, "name": "ENV_GROUP", "enabled": true, "lastUpdatedAt": 0 },
+    { "uuid": null, "name": "NG_CUSTOM_STAGE", "enabled": true, "lastUpdatedAt": 0 }
   ],
   "responseMessages": []
 }

@@ -5,6 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import type { StoreType } from '@common/constants/GitSyncTypes'
 import type { StringNGVariable, NumberNGVariable, SecretNGVariable, PipelineInfoConfig } from 'services/cd-ng'
 import type { NodeRunInfo, EntityGitDetails, EntityValidityDetails, InputSetResponse } from 'services/pipeline-ng'
 
@@ -44,6 +45,7 @@ export interface InputSetType {
   gitDetails: EntityGitDetails
   entityValidityDetails: EntityValidityDetails
   outdated?: boolean
+  storeType?: StoreType.INLINE | StoreType.REMOTE
 }
 
 export interface InputSetDTO extends Omit<InputSetResponse, 'identifier' | 'pipeline'> {

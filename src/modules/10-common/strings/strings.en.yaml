@@ -176,6 +176,7 @@ validation:
   environmentIsRequired: 'Environment is required'
   subscription: 'Subscription is required'
   repository: 'Repository is required'
+  projectIsRequired: Project is required
 specify: Specify
 role: Role
 projectViewer: Project Viewer
@@ -282,6 +283,7 @@ repo_provider:
   awscodecommit: AWS Code Commit
   azureDev: Azure Devops
 gitSync:
+  branchFetchFailed: Branch fetch failed
   resourceLabel: '{{resource}} Name'
   rootFolderLabel: Root Folder
   harnessFolderLabel: Harness Folder
@@ -354,6 +356,8 @@ git:
   startPRLabel: Start a pull request to merge
   noBranchesFound: No branches found for configured git repository
   onlyDefaultBranchFound: Cannot find additional branches to raise a pull request.
+  inlineStoreLabel: Pipeline content is stored in Harness
+  remoteStoreLabel: Pipeline content is stored in a Git repository
   validation:
     filePath: '{{$.common.git.filePath}} is required'
     commitMessage: '{{$.common.git.commitMessage}} is required'
@@ -368,6 +372,7 @@ options: Options
 note: Note
 link: link
 errorHandler:
+  possibleReasons: Possible reasons
   issueCouldBe: Issue could be
   tryTheseSuggestions: Try these suggestions
   contactLabel: 'Contact '
@@ -869,3 +874,4 @@ editName: Edit {{name}}
 selectName: Select {{name}}
 override: Override
 plusNewName: + New {{name}}
+fetchingBranches: Fetching branches

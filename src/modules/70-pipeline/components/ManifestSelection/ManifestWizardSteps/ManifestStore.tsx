@@ -73,7 +73,7 @@ function ManifestStore({
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
   const { getString } = useStrings()
-
+  const [isLoadingConnectors, setIsLoadingConnectors] = React.useState<boolean>(true)
   const [selectedStore, setSelectedStore] = useState(prevStepData?.store ?? initialValues.store)
   const [multitypeInputValue, setMultiTypeValue] = useState<MultiTypeInputType | undefined>(undefined)
 
@@ -102,6 +102,7 @@ function ManifestStore({
       return true
     }
     return (
+      !isLoadingConnectors &&
       !!selectedStore &&
       ((getMultiTypeFromValue(connectorRefValue) === MultiTypeInputType.FIXED &&
         !isEmpty((connectorRefValue as ConnectorSelectedValue)?.connector)) ||
@@ -195,6 +196,9 @@ function ManifestStore({
                   >
                     <FormMultiTypeConnectorField
                       key={formik.values.store}
+                      onLoadingFinish={() => {
+                        setIsLoadingConnectors(false)
+                      }}
                       name="connectorRef"
                       label={`${getString(
                         ManifestToConnectorLabelMap[formik.values.store as ManifestStoreExcludingInheritFromManifest]

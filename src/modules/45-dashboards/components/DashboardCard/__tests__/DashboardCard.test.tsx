@@ -8,13 +8,14 @@
 import React from 'react'
 import { act, fireEvent, render, RenderResult, screen, within } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardType } from '@dashboards/types/DashboardTypes'
 import type { StringKeys } from 'framework/strings'
 import DashboardCard, { DashboardCardProps } from '../DashboardCard'
 
 const testTitle = 'test title'
 
-const defaultTestDashboard: IDashboard = {
+const defaultTestDashboard: DashboardModel = {
   id: '1',
   type: DashboardType.SHARED,
   description: 'testTag',
@@ -24,7 +25,12 @@ const defaultTestDashboard: IDashboard = {
   created_at: '',
   data_source: [],
   last_accessed_at: '',
-  resourceIdentifier: '1'
+  resourceIdentifier: '1',
+  folder: {
+    id: '',
+    title: '',
+    created_at: ''
+  }
 }
 
 const defaultProps: DashboardCardProps = {
@@ -75,7 +81,7 @@ describe('DashboardCard', () => {
     const favouriteCount = 1234
     const viewCount = 5678
 
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT,
       favorite_count: favouriteCount,
@@ -114,7 +120,7 @@ describe('DashboardCard', () => {
   })
 
   test('it should trigger callback for editing an account dashboard', async () => {
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT
     }
@@ -136,7 +142,7 @@ describe('DashboardCard', () => {
   })
 
   test('it should trigger callback for deleting an account dashboard', async () => {
-    const testDashboard: IDashboard = {
+    const testDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT
     }

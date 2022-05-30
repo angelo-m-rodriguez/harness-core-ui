@@ -24,7 +24,8 @@
   width: 100% !important;
   height: 32px;
   background: var(--white);
-  border: 1px solid var(--primary-bg);
+  border: 1px solid var(--grey-200);
+  border-radius: 4px;
   align-items: center;
   padding: 10px;
   margin-top: 10px !important;
@@ -103,14 +104,6 @@
   text-decoration: none;
 }
 
-.dragging {
-  background-color: var(--yellow-450) !important;
-}
-
-.dragOver {
-  border-top: 2px solid var(--primary-7);
-}
-
 .drag {
   cursor: move;
 }
@@ -174,4 +167,22 @@
 
 .overridesInputHeader {
   margin-top: var(--spacing-5) !important;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectInputs {
+  :global {
+    .bp3-input {
+      height: auto !important;
+    }
+  }
+}
+
+.formikError {
+  color: var(--red-600) !important;
 }

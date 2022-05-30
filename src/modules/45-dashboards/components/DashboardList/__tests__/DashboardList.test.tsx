@@ -8,13 +8,14 @@
 import React from 'react'
 import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardType } from '@dashboards/types/DashboardTypes'
 import type { StringKeys } from 'framework/strings'
 import DashboardList, { DashboardListProps } from '../DashboardList'
 
 const testTitle = 'test title'
 
-const testDashboard: IDashboard = {
+const testDashboard: DashboardModel = {
   id: '1',
   type: DashboardType.SHARED,
   description: 'testTag',
@@ -24,7 +25,12 @@ const testDashboard: IDashboard = {
   created_at: '',
   data_source: [],
   last_accessed_at: '',
-  resourceIdentifier: '1'
+  resourceIdentifier: '1',
+  folder: {
+    id: '',
+    title: '',
+    created_at: ''
+  }
 }
 
 const defaultProps: DashboardListProps = {
@@ -97,7 +103,7 @@ describe('DashboardList', () => {
   })
 
   test('it should allow for opening of editable context menu on account dashboard data', async () => {
-    const testAccountDashboard: IDashboard = {
+    const testAccountDashboard: DashboardModel = {
       ...testDashboard,
       resourceIdentifier: 'shared',
       type: DashboardType.ACCOUNT
@@ -118,7 +124,7 @@ describe('DashboardList', () => {
 
   test('it should trigger callback for cloning a dashboard', async () => {
     const mockCallback = jest.fn()
-    const testAccountDashboard: IDashboard = {
+    const testAccountDashboard: DashboardModel = {
       ...testDashboard,
       type: DashboardType.ACCOUNT
     }
@@ -141,7 +147,7 @@ describe('DashboardList', () => {
 
   test('it should trigger callback for editing a dashboard', async () => {
     const mockCallback = jest.fn()
-    const testAccountDashboard: IDashboard = {
+    const testAccountDashboard: DashboardModel = {
       ...testDashboard,
       type: DashboardType.ACCOUNT
     }
@@ -164,7 +170,7 @@ describe('DashboardList', () => {
 
   test('it should trigger callback for deleting a dashboard', async () => {
     const mockCallback = jest.fn()
-    const testAccountDashboard: IDashboard = {
+    const testAccountDashboard: DashboardModel = {
       ...testDashboard,
       type: DashboardType.ACCOUNT
     }

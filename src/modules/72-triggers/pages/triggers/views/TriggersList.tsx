@@ -135,7 +135,10 @@ export default function TriggersList(props: TriggersListPropsInterface & GitQuer
   }, [repoIdentifier])
 
   React.useEffect(() => {
-    if (branchesWithStatusData?.data?.defaultBranch?.branchName !== branch) {
+    if (
+      branchesWithStatusData?.data?.defaultBranch &&
+      branchesWithStatusData?.data?.defaultBranch?.branchName !== branch
+    ) {
       setIncompatibleGitSyncBranch(true)
     } else {
       setIncompatibleGitSyncBranch(false)

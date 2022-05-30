@@ -8,6 +8,7 @@
 import React from 'react'
 import { getByRole, queryByRole, render, RenderResult, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Formik } from '@harness/uicore'
 import { merge } from 'lodash-es'
 import { TestWrapper } from '@common/utils/testUtils'
 import type { Features } from 'services/cf'
@@ -27,14 +28,16 @@ const mockFlagWithPagination: Features = {
 const renderComponent = (props: Partial<ListingWithSearchAndPaginationProps> = {}): RenderResult =>
   render(
     <TestWrapper>
-      <ListingWithSearchAndPagination
-        flags={mockFlagWithPagination}
-        isFlagAdded={jest.fn().mockReturnValue(false)}
-        state={AddFlagsToTargetGroupDialogStatus.ok}
-        onSearch={jest.fn()}
-        setPageNumber={jest.fn()}
-        {...props}
-      />
+      <Formik formName="test-form" initialValues={{ flags: {} }} onSubmit={jest.fn()}>
+        <ListingWithSearchAndPagination
+          flags={mockFlagWithPagination}
+          isFlagAdded={jest.fn().mockReturnValue(false)}
+          state={AddFlagsToTargetGroupDialogStatus.ok}
+          onSearch={jest.fn()}
+          setPageNumber={jest.fn()}
+          {...props}
+        />
+      </Formik>
     </TestWrapper>
   )
 

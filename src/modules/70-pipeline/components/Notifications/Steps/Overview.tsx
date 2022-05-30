@@ -32,7 +32,7 @@ function Overview({
         {getString('notifications.nameOftheRule')}
       </Text>
       <Formik
-        initialValues={{ name: '', ...data, ...prevStepData }}
+        initialValues={{ name: '', identifier: '', ...data, ...prevStepData }}
         formName="notificationsOverview"
         validationSchema={Yup.object().shape({
           name: (NameSchema() as Yup.StringSchema<string>).test(
@@ -51,7 +51,11 @@ function Overview({
           return (
             <Form>
               <Container height={400} width={400}>
-                <FormInput.Text name="name" label={getString('notifications.notificationName')} />
+                <FormInput.InputWithIdentifier
+                  inputName="name"
+                  inputLabel={getString('notifications.notificationName')}
+                  isIdentifierEditable={!data}
+                />
               </Container>
               <Button
                 type="submit"

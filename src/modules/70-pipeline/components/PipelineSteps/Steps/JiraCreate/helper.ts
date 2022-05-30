@@ -27,33 +27,25 @@ export const resetForm = (formik: FormikProps<JiraCreateData>, parent: string) =
   }
 }
 
-export const omitSummaryDescription = (fields: JiraCreateFieldType[]): JiraCreateFieldType[] =>
-  fields?.filter(field => field.name !== 'Summary' && field.name !== 'Description')
-
 export const processFieldsForSubmit = (values: JiraCreateData): JiraCreateFieldType[] => {
-  const toReturn: JiraCreateFieldType[] = [
-    {
-      name: 'Summary',
-      value: values.spec.summary || ''
-    },
-    {
-      name: 'Description',
-      value: values.spec.description || ''
-    }
-  ]
-  values.spec.selectedFields?.forEach((field: JiraFieldNGWithValue) => {
-    const name = field.name
-    const value =
-      typeof field.value === 'string' || typeof field.value === 'number'
-        ? field.value
-        : Array.isArray(field.value)
-        ? (field.value as MultiSelectOption[]).map(opt => opt.value.toString()).join(',')
-        : typeof field.value === 'object'
-        ? (field.value as SelectOption).value?.toString()
-        : ''
-    // The return value should be comma separated string or a number
-    toReturn.push({ name, value })
-  })
+  const toReturn: JiraCreateFieldType[] = []
+  const processRequiredOptionalFields = (selectedFields: JiraFieldNGWithValue[] | undefined): void => {
+    selectedFields?.forEach((field: JiraFieldNGWithValue) => {
+      const name = field.name
+      const value =
+        typeof field.value === 'string' || typeof field.value === 'number'
+          ? field.value
+          : Array.isArray(field.value)
+          ? (field.value as MultiSelectOption[]).map(opt => opt.value.toString()).join(',')
+          : typeof field.value === 'object'
+          ? (field.value as SelectOption).value?.toString()
+          : ''
+      // The return value should be comma separated string or a number
+      toReturn.push({ name, value })
+    })
+  }
+  processRequiredOptionalFields(values.spec?.selectedOptionalFields)
+  processRequiredOptionalFields(values.spec?.selectedRequiredFields)
   values.spec.fields?.forEach((kvField: JiraCreateFieldType) => {
     const alreadyExists = toReturn.find(ff => ff.name === kvField.name)
     if (!alreadyExists) {
@@ -115,7 +107,7 @@ export const processFormData = (values: JiraCreateData): JiraCreateData => {
 }
 
 export const getKVFields = (values: JiraCreateData): JiraCreateFieldType[] => {
-  return omitSummaryDescription(processFieldsForSubmit(values))
+  return processFieldsForSubmit(values)
 }
 
 export const processInitialValues = (values: JiraCreateData): JiraCreateData => {
@@ -140,9 +132,7 @@ export const processInitialValues = (values: JiraCreateData): JiraCreateData => 
               key: values.spec.issueType.toString()
             }
           : values.spec.issueType,
-      summary: values.spec.fields?.find(field => field.name === 'Summary')?.value.toString(),
-      description: values.spec.fields?.find(field => field.name === 'Description')?.value.toString(),
-      fields: omitSummaryDescription(values.spec.fields)
+      fields: values.spec.fields
     }
   }
 }
@@ -168,13 +158,15 @@ export const getSelectedFieldsToBeAddedInForm = (
 export const getKVFieldsToBeAddedInForm = (
   newFields: JiraCreateFieldType[],
   existingFields: JiraCreateFieldType[] = [],
-  existingSelectedFields: JiraFieldNGWithValue[] = []
+  existingSelectedFields: JiraFieldNGWithValue[] = [],
+  requiredSelectedFields: JiraFieldNGWithValue[] = []
 ): JiraCreateFieldType[] => {
   const toReturn: JiraCreateFieldType[] = [...existingFields]
   newFields.forEach(field => {
     const alreadyPresent = existingFields.find(existing => existing.name === field.name)
-    const alreadyPresentSelectedField = existingSelectedFields.find(existing => existing.name === field.name)
-    if (!alreadyPresent && !alreadyPresentSelectedField) {
+    const alreadyPresentOptionalField = existingSelectedFields.find(existing => existing.name === field.name)
+    const alreadyPresentRequiredField = requiredSelectedFields.find(existing => existing.name === field.name)
+    if (!alreadyPresent && !alreadyPresentOptionalField && !alreadyPresentRequiredField) {
       toReturn.push(field)
     }
   })

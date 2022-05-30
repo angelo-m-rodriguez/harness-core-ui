@@ -9,18 +9,19 @@
   width: 200px !important;
 }
 
-// this will be deprecated once FFM-1513 is complete
-.tabContainerHeight {
-  height: calc(100% - 140px);
-  overflow-y: auto;
+:global([data-trial-banner-is-visible] ~ * [data-tab-container]) {
+  height: calc(100vh - 200px);
 }
 
 .tabContainer {
+  height: calc(100% - 160px);
+  overflow-y: auto;
   :global {
     .bp3-tab-list {
       border-bottom: 1px solid var(--grey-200) !important;
       background-color: var(--white);
       padding-left: var(--spacing-xlarge);
+      overflow-y: auto;
     }
   }
 }

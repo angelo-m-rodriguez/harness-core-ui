@@ -108,7 +108,7 @@ export class CustomVariables extends Step<CustomVariablesData> {
           (variable.type === 'Number' && (typeof variable.value !== 'number' || isNaN(variable.value)))) &&
         getMultiTypeFromValue(currentVariableTemplate) === MultiTypeInputType.RUNTIME
       ) {
-        set(errors, `variables[${index}].value`, getString?.('fieldRequired', { field: 'Value' }))
+        set(errors, `variables[${index}].value`, getString?.('fieldRequired', { field: variable.name }))
       }
     })
 

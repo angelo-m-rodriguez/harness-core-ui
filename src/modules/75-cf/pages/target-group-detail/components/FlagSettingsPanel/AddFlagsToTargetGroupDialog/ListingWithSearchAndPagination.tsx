@@ -13,7 +13,7 @@ import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerS
 import { NoData } from '@cf/components/NoData/NoData'
 import imageUrl from '@cf/images/Feature_Flags_Teepee.svg'
 import { AddFlagsToTargetGroupDialogStatus as STATUS } from '@cf/pages/target-group-detail/TargetGroupDetailPage.types'
-import FlagsListing from '../FlagsListing/FlagsListing'
+import TargetManagementFlagsListing from '@cf/components/TargetManagementFlagsListing/TargetManagementFlagsListing'
 import css from './ListingWithSearchAndPagination.module.scss'
 
 export interface ListingWithSearchAndPaginationProps {
@@ -49,8 +49,9 @@ const ListingWithSearchAndPagination: FC<ListingWithSearchAndPaginationProps> = 
         )}
 
         {(state === STATUS.ok || state === STATUS.submitting) && (
-          <FlagsListing
+          <TargetManagementFlagsListing
             flags={flags.features || []}
+            includePercentageRollout
             includeAddFlagCheckbox
             disableRowVariations={disableRowVariations}
           />

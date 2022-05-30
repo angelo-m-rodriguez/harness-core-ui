@@ -13,7 +13,8 @@ import { CardBody, Container, TableV2, Text } from '@harness/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
 import routes from '@common/RouteDefinitions'
-import { DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardType } from '@dashboards/types/DashboardTypes'
 import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
@@ -21,10 +22,10 @@ import DashboardTags from '@dashboards/components/DashboardTags/DashboardTags'
 import css from '@dashboards/pages/home/HomePage.module.scss'
 
 export interface DashboardListProps {
-  dashboards: IDashboard[]
-  cloneDashboard: (dashboard: IDashboard) => void
+  dashboards: DashboardModel[]
+  cloneDashboard: (dashboard: DashboardModel) => void
   deleteDashboard: (dashboardId: string) => void
-  editDashboard: (dashboard: IDashboard) => void
+  editDashboard: (dashboard: DashboardModel) => void
 }
 
 const DashboardList: React.FC<DashboardListProps> = ({
@@ -38,7 +39,7 @@ const DashboardList: React.FC<DashboardListProps> = ({
 
   type CustomColumn<T extends Record<string, any>> = Column<T>
 
-  const RenderDashboardName: Renderer<CellProps<IDashboard>> = ({ row }) => {
+  const RenderDashboardName: Renderer<CellProps<DashboardModel>> = ({ row }) => {
     const data = row.original
 
     return (
@@ -56,12 +57,12 @@ const DashboardList: React.FC<DashboardListProps> = ({
     )
   }
 
-  const RenderDashboardTags: Renderer<CellProps<IDashboard>> = ({ row }) => {
+  const RenderDashboardTags: Renderer<CellProps<DashboardModel>> = ({ row }) => {
     const data = row.original
     return <DashboardTags dashboard={data} />
   }
 
-  const RenderMenu: Renderer<CellProps<IDashboard>> = ({ row }) => {
+  const RenderMenu: Renderer<CellProps<DashboardModel>> = ({ row }) => {
     const data = row.original
     return (
       <CardBody.Menu
@@ -116,7 +117,7 @@ const DashboardList: React.FC<DashboardListProps> = ({
     )
   }
 
-  const columns: CustomColumn<IDashboard>[] = [
+  const columns: CustomColumn<DashboardModel>[] = [
     {
       Header: getString('name'),
       id: 'name',
@@ -154,7 +155,7 @@ const DashboardList: React.FC<DashboardListProps> = ({
 
   return (
     <Container className={css.masonry}>
-      <TableV2<IDashboard> className={css.table} columns={columns} data={dashboards} />
+      <TableV2<DashboardModel> className={css.table} columns={columns} data={dashboards} />
     </Container>
   )
 }

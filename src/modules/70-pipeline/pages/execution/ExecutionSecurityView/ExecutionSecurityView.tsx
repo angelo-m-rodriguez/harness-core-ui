@@ -6,15 +6,15 @@
  */
 
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { Container } from '@wings-software/uicore'
-import type { ExecutionPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
+import { RemotePipelineSecurityView, RemoteSTOApp } from '@sto/STOApp'
+import CardRailView from '@pipeline/components/Dashboards/CardRailView/CardRailView'
+import ExecutionCard from '@pipeline/components/ExecutionCard/ExecutionCard'
 import { useExecutionContext } from '@pipeline/context/ExecutionContext'
-import { PipelineSecurityView } from '@sto/PipelineSecurityView'
+import type { STOAppCustomProps } from '@pipeline/interfaces/STOApp'
+import ChildAppMounter from 'microfrontends/ChildAppMounter'
 
 export default function ExecutionSecurityView(): React.ReactElement | null {
-  const { accountId, orgIdentifier, projectIdentifier, pipelineIdentifier, executionIdentifier, module } =
-    useParams<PipelineType<ExecutionPathProps>>()
   const context = useExecutionContext()
   const pipelineExecutionDetail = context?.pipelineExecutionDetail
 
@@ -24,15 +24,9 @@ export default function ExecutionSecurityView(): React.ReactElement | null {
 
   return (
     <Container width="100%" height="100%">
-      <PipelineSecurityView
-        pipelineExecutionDetail={pipelineExecutionDetail}
-        accountId={accountId}
-        module={module}
-        orgIdentifier={orgIdentifier}
-        projectIdentifier={projectIdentifier}
-        pipelineIdentifier={pipelineIdentifier}
-        executionIdentifier={executionIdentifier}
-      />
+      <ChildAppMounter<STOAppCustomProps> ChildApp={RemoteSTOApp} customComponents={{ CardRailView, ExecutionCard }}>
+        <RemotePipelineSecurityView pipelineExecutionDetail={pipelineExecutionDetail} />
+      </ChildAppMounter>
     </Container>
   )
 }

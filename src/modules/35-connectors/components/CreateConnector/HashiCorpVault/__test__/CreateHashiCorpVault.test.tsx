@@ -69,7 +69,8 @@ jest.mock('services/cd-ng', () => ({
   usePutSecretFileV2: jest.fn().mockImplementation(() => ({ mutate: jest.fn() })),
   getSecretV2Promise: jest.fn().mockImplementation(() => Promise.resolve(mockSecret)),
   useGetFileContent: jest.fn().mockImplementation(() => ({ refetch: jest.fn() })),
-  useCreatePR: jest.fn().mockImplementation(() => ({ mutate: jest.fn() }))
+  useCreatePR: jest.fn().mockImplementation(() => ({ mutate: jest.fn() })),
+  useCreatePRV2: jest.fn().mockImplementation(() => ({ mutate: jest.fn() }))
 }))
 
 describe('Create Secret Manager Wizard', () => {

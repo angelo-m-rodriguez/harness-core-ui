@@ -24,6 +24,7 @@ const releaseNameRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a
 export enum InfraDeploymentType {
   KubernetesDirect = 'KubernetesDirect',
   KubernetesGcp = 'KubernetesGcp',
+  PDC = 'Pdc',
   KubernetesAzure = 'KubernetesAzure',
   ServerlessAwsLambda = 'ServerlessAwsLambda',
   ServerlessGoogleFunctions = 'ServerlessGoogleFunctions',
@@ -35,7 +36,8 @@ export enum InfraDeploymentType {
 export const deploymentTypeToInfraTypeMap = {
   [ServiceDeploymentType.ServerlessAwsLambda]: InfraDeploymentType.ServerlessAwsLambda,
   [ServiceDeploymentType.ServerlessAzureFunctions]: InfraDeploymentType.ServerlessAzureFunctions,
-  [ServiceDeploymentType.ServerlessGoogleFunctions]: InfraDeploymentType.ServerlessGoogleFunctions
+  [ServiceDeploymentType.ServerlessGoogleFunctions]: InfraDeploymentType.ServerlessGoogleFunctions,
+  [ServiceDeploymentType.ssh]: InfraDeploymentType.PDC
 }
 
 export function getNameSpaceSchema(
@@ -94,6 +96,10 @@ export function getConnectorSchema(getString: UseStringsReturn['getString']): Yu
   return Yup.string().required(getString('fieldRequired', { field: getString('connector') }))
 }
 
+export function getSshKeyRefSchema(getString: UseStringsReturn['getString']): Yup.StringSchema<string | undefined> {
+  return Yup.string().required(getString('fieldRequired', { field: getString('connector') }))
+}
+
 export function getServiceRefSchema(getString: UseStringsReturn['getString']): Yup.StringSchema<string | undefined> {
   return Yup.string().trim().required(getString('cd.pipelineSteps.serviceTab.serviceIsRequired'))
 }
@@ -127,6 +133,11 @@ const getInfrastructureDefinitionValidationSchema = (
   if (isServerlessDeploymentType(deploymentType)) {
     if (deploymentType === ServiceDeploymentType.ServerlessAwsLambda) {
       return getValidationSchemaWithRegion(getString)
+    }
+    if (deploymentType === ServiceDeploymentType.ssh) {
+      return Yup.object().shape({
+        credentialsRef: getSshKeyRefSchema(getString)
+      })
     } else {
       return getValidationSchema(getString)
     }

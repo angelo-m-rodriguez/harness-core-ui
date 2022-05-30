@@ -56,6 +56,13 @@ const wrapper = ({ children }: React.PropsWithChildren<unknown>) => (
   </TestWrapper>
 )
 
+jest.spyOn(templateServices, 'validateTemplateInputsPromise').mockImplementation(() => {
+  return Promise.resolve({
+    status: 'SUCCESS',
+    data: {}
+  })
+})
+
 describe('TemplateContext', () => {
   test('tests initial state', async () => {
     jest.spyOn(templateServices, 'getTemplateListPromise').mockImplementation(() => {

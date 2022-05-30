@@ -36,6 +36,7 @@ import {
 } from '@pipeline/utils/runPipelineUtils'
 import type { InputSetDTO } from '@pipeline/utils/types'
 
+import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetails'
 import GitPopover from '../GitPopover/GitPopover'
 import { ErrorsStrip } from '../ErrorsStrip/ErrorsStrip'
 
@@ -77,10 +78,14 @@ export default function RunModalHeader(props: RunModalHeaderProps): React.ReactE
     stageExecutionData,
     executionStageList
   } = props
-  const { isGitSyncEnabled } = useAppStore()
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const { getString } = useStrings()
   const stageSelectionRef = useRef(false)
   const [localSelectedStagesData, setLocalSelectedStagesData] = useState(selectedStageData)
+  const isPipelineRemote =
+    isGitSimplificationEnabled &&
+    pipelineResponse?.data?.gitDetails?.repoName &&
+    pipelineResponse?.data?.gitDetails?.branch
 
   const isStageExecutionDisabled = (): boolean => {
     //stageExecutionData?.data is empty array when allowStageExecution is set to false in advanced tab
@@ -186,6 +191,16 @@ export default function RunModalHeader(props: RunModalHeaderProps): React.ReactE
           />
         </div>
       </div>
+      {isPipelineRemote && (
+        <div className={css.gitRemoteDetailsWrapper}>
+          <GitRemoteDetails
+            repoName={pipelineResponse?.data?.gitDetails?.repoName}
+            branch={pipelineResponse?.data?.gitDetails?.branch}
+            filePath={pipelineResponse?.data?.gitDetails?.filePath}
+            flags={{ readOnly: true }}
+          />
+        </div>
+      )}
       {runClicked ? <ErrorsStrip domRef={formRefDom} formErrors={formErrors} /> : null}
     </>
   )

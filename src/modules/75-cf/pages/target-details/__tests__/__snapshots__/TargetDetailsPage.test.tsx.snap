@@ -440,42 +440,34 @@ exports[`TargetDetailPage TargetDetailPage should render data correctly 1`] = `
                     class="StyledProps--font StyledProps--main StyledProps--padding-medium"
                     style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
                   >
-                    <dt>
-                      <p
-                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
-                        style="--text-line-clamp: 1;"
-                      >
-                        identifier
-                      </p>
+                    <dt
+                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
+                      style="--text-line-clamp: 1;"
+                    >
+                      identifier
                     </dt>
-                    <dd>
-                      <p
-                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
-                        style="--text-line-clamp: 2;"
-                      >
-                        t1
-                      </p>
+                    <dd
+                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
+                      style="--text-line-clamp: 2;"
+                    >
+                      t1
                     </dd>
                   </div>
                   <div
                     class="StyledProps--font StyledProps--main StyledProps--padding-medium"
                     style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
                   >
-                    <dt>
-                      <p
-                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
-                        style="--text-line-clamp: 1;"
-                      >
-                        name
-                      </p>
+                    <dt
+                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
+                      style="--text-line-clamp: 1;"
+                    >
+                      name
                     </dt>
-                    <dd>
-                      <p
-                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
-                        style="--text-line-clamp: 2;"
-                      >
-                        t1
-                      </p>
+                    <dd
+                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
+                      style="--text-line-clamp: 2;"
+                    >
+                      t1
                     </dd>
                   </div>
                 </dl>
@@ -989,7 +981,7 @@ exports[`TargetDetailPage TargetDetailPage should render its segments 1`] = `
                 role="tabpanel"
               >
                 <div
-                  class="Layout--vertical StyledProps--main StyledProps--padding-top-xsmall StyledProps--padding-right-xlarge StyledProps--padding-left-xlarge StyledProps--padding-bottom-xlarge"
+                  class="Layout--vertical StyledProps--main"
                   style="gap: var(--spacing-xlarge);"
                 >
                   <div

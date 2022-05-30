@@ -1,0 +1,198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create stack Variable view  initial render 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  initial render inline with no values 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with S3url template 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with inline template 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with parameter overrides 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.inlineParameterFiles
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with parameters 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.parameterFileDetails
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with remote template 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+</div>
+`;
+
+exports[`Create stack Variable view  should render with tags 1`] = `
+<div>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    cd.cloudFormation.templateFile
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  />
+  <p
+    class="StyledProps--font StyledProps--main title"
+  >
+    tagsLabel
+  </p>
+  <div
+    class="variablesListTable variablePaddingL3"
+  >
+    <div
+      class="variableListRow variable-list-row"
+    >
+      <span
+        class="nameSection"
+      />
+      <p
+        class="StyledProps--font Text--lineclamp StyledProps--main valueSection StyledProps--font-variation-body StyledProps--font-weight-semi-bold StyledProps--padding-left-medium StyledProps--color StyledProps--color-black100"
+        style="--text-line-clamp: 1;"
+      >
+        <span
+          class=""
+        >
+          [{ 'key': 'value' }]
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+`;

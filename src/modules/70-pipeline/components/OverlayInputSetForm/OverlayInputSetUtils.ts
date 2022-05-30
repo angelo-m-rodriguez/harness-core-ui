@@ -16,6 +16,7 @@ import type {
 } from 'services/pipeline-ng'
 import type { InputSetDTO } from '@pipeline/utils/types'
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import type { InputSetValue } from '../InputSetSelector/utils'
 
 export const constructInputSetYamlObject = (item: InputSetSummaryResponse) => ({
@@ -34,6 +35,7 @@ export interface GetOverlayCreateUpdateOptionsInterface {
   objectId: string
   initialGitDetails: any
   isEdit: boolean
+  initialStoreMetadata?: StoreMetadata
 }
 
 export const getCreateUpdateRequestBodyOptions = ({
@@ -45,7 +47,8 @@ export const getCreateUpdateRequestBodyOptions = ({
   gitDetails,
   objectId,
   initialGitDetails,
-  isEdit
+  isEdit,
+  initialStoreMetadata
 }: GetOverlayCreateUpdateOptionsInterface):
   | MutateRequestOptions<UpdateOverlayInputSetForPipelineQueryParams, UpdateOverlayInputSetForPipelinePathParams>
   | MutateRequestOptions<CreateOverlayInputSetForPipelineQueryParams, void> => {
@@ -60,13 +63,15 @@ export const getCreateUpdateRequestBodyOptions = ({
         pathParams: { inputSetIdentifier: defaultTo(inputSetObj.identifier, '') },
         queryParams: {
           ...commonQueryParams,
-          ...(gitDetails ? { ...gitDetails, lastObjectId: objectId } : {}),
+          ...(initialStoreMetadata?.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
+          ...(gitDetails ? { ...gitDetails, lastObjectId: objectId, lastCommitId: initialGitDetails.commitId } : {}),
           ...(gitDetails && gitDetails.isNewBranch ? { baseBranch: initialGitDetails.branch } : {})
         }
       }
     : {
         queryParams: {
           ...commonQueryParams,
+          ...(initialStoreMetadata?.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
           ...(gitDetails ?? {}),
           ...(gitDetails && gitDetails.isNewBranch ? { baseBranch: initialGitDetails.branch } : {})
         }

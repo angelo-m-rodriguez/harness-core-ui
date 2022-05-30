@@ -493,8 +493,7 @@ function CICodebaseInputSetFormInternal({
             (isConnectorRuntimeInput && get(formik?.values, codeBaseInputFieldFormName.connectorRef))) && (
             <>
               <Text
-                color={Color.GREY_600}
-                font={{ size: 'small', weight: 'semi-bold' }}
+                font={{ variation: FontVariation.FORM_SUB_SECTION }}
                 tooltipProps={{ dataTooltipId: 'ciCodebaseBuildType' }}
               >
                 {getString('filters.executions.buildType')}

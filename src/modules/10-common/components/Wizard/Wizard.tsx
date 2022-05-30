@@ -18,7 +18,7 @@ import {
 import type { IconName } from '@wings-software/uicore'
 import { useHistory } from 'react-router-dom'
 import cx from 'classnames'
-import { isEqual } from 'lodash-es'
+import { isEqual, noop } from 'lodash-es'
 import { NavigationCheck } from '@common/components/NavigationCheck/NavigationCheck'
 import { useToaster } from '@common/exports'
 import type {
@@ -33,6 +33,7 @@ import {
   renderYamlBuilder,
   FormikPropsInterface
 } from './WizardUtils'
+import { FormikEffect, FormikEffectProps } from '../FormikEffect/FormikEffect'
 import { WizardHeader } from './WizardHeader'
 import { WizardFooter } from './WizardFooter'
 import css from './Wizard.module.scss'
@@ -86,6 +87,7 @@ interface WizardProps {
   wizardType?: string // required for dataTooltip to be unique
   className?: string
   renderErrorsStrip?: () => JSX.Element // component currently only allowed for pipeline components
+  onFormikEffect?: FormikEffectProps['onChange']
 }
 
 const Wizard: React.FC<WizardProps> = ({
@@ -105,7 +107,8 @@ const Wizard: React.FC<WizardProps> = ({
   visualYamlProps = { showVisualYaml: false },
   className = '',
   wizardType,
-  renderErrorsStrip
+  renderErrorsStrip,
+  onFormikEffect = noop
 }) => {
   const { wizardLabel } = wizardMap
   const defaultWizardTabId = wizardMap.panels[0].id
@@ -192,6 +195,7 @@ const Wizard: React.FC<WizardProps> = ({
 
             return (
               <FormikForm className={isYamlView ? css.yamlContainer : ''}>
+                <FormikEffect onChange={onFormikEffect} formik={formikProps} />
                 <NavigationCheck
                   when={true}
                   shouldBlockNavigation={() =>

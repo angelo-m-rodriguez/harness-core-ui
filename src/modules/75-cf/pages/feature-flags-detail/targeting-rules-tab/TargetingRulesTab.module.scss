@@ -5,8 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+:global([data-trial-banner-is-visible] ~ * [data-tab-container]) {
+  height: calc(100vh - 196px);
+}
+
 .tab-container {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 161px);
   display: grid;
   grid-template-rows: 1fr;
   padding-left: var(--spacing-xlarge);

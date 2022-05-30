@@ -135,7 +135,7 @@ describe('RUN PIPELINE MODAL - deploy stage', () => {
       cy.wait(1000)
     })
 
-    it('visual to YAML conversion for stage configuration', () => {
+    it.skip('visual to YAML conversion for stage configuration', () => {
       // Toggle to YAML view
 
       cy.get('[data-name="toggle-option-two"]').click({ force: true })

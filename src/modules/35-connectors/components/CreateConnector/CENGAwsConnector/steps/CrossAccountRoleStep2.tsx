@@ -48,7 +48,7 @@ const CrossAccountRoleStep2: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
     accountId: string
   }>()
   const { prevStepData, nextStep, previousStep } = props
-  const [externalId, setExternalId] = useState<string>('')
+  const [externalId, setExternalId] = useState<string>(prevStepData?.spec.crossAccountAccess.externalId || '')
   const { mutate: createConnector } = useCreateConnector({
     queryParams: { accountIdentifier: accountId }
   })
@@ -132,7 +132,7 @@ const CrossAccountRoleStep2: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
   const instructionsList = [
     {
       type: 'hybrid',
-      renderer: function instructionRenderer() {
+      renderer: () => {
         return (
           <>
             <Text font={{ variation: FontVariation.BODY }} color={Color.GREY_800}>
@@ -204,7 +204,7 @@ const CrossAccountRoleStep2: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
           formName="crossAccountRoleStep2Form"
           initialValues={{
             crossAccountRoleArn: prevStepData?.spec.crossAccountAccess.crossAccountRoleArn || '',
-            externalId: prevStepData?.spec.crossAccountAccess.externalId || externalId || ''
+            externalId: externalId || ''
           }}
           validationSchema={Yup.object().shape({
             crossAccountRoleArn: Yup.string()

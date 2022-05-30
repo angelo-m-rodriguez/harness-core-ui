@@ -465,7 +465,7 @@ exports[`UsersPage Test render data 1`] = `
       class="Layout--vertical StyledProps--main"
     >
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-start"
       >
         <button
           class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--withLeftIcon Button--variation Button--variation-primary"
@@ -494,6 +494,16 @@ exports[`UsersPage Test render data 1`] = `
             class="bp3-button-text"
           >
             rbac.userGroupPage.newUserGroup
+          </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main assignRolesButton Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            rbac.userGroupPage.assignRoles
           </span>
         </button>
       </div>

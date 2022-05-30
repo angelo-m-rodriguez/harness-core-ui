@@ -28,7 +28,6 @@ selectHarnessFolder: Select Harness Folder
 selectDefaultBranch: Select Default Branch
 successfullySavedConnectivityMode: Successfully saved Connectivity Mode
 pathToHarnessFolder: Path to the Harness folder
-fetchingBranches: Fetching branches
 gitEnabledBlockedTooltip: Git Experience cannot be enabled if you have already created Pipelines or Feature Flags
 errorFixed: Error is Fixed by
 fileContent: File Content
@@ -53,4 +52,4 @@ resyncFailToaster: Resync trigger failed
 resyncButtonText: Resync
 editConfigButtonText: Edit config
 configSaveToaster: Full sync config is saved
-branchFetchFailed: Branch fetch failed
+newGitExperienceMessage: New Git Experience has been enabled on this Project that doesn’t require you to enable Git Management explicitly for the Project. Now you can decide to store Pipelines in Git or in Harness at the time of creation. Please select Remote option to store your Pipelines in Git and to store your Pipelines in Harness, select Inline option.

@@ -13,21 +13,31 @@
             "description": "A problem or error.",
             "statuses": [],
             "fields": {
-              "Comment": {
-                "key": "comment",
-                "name": "Comment",
-                "required": false,
+              "Description": {
+                "key": "description",
+                "name": "Description",
+                "required": true,
                 "schema": {
                   "array": false,
-                  "typeStr": null,
+                  "typeStr": "string",
                   "type": "string",
                   "customType": null
                 },
                 "allowedValues": [],
                 "custom": false
+              },
+              "Summary": {
+                "key": "summary",
+                "name": "Summary",
+                "required": true,
+                "schema": {
+                  "array": false,
+                  "typeStr": "string",
+                  "type": "string",
+                  "customType": null
+                }
               }
-            },
-            "subTask": false
+            }
           }
         }
       }

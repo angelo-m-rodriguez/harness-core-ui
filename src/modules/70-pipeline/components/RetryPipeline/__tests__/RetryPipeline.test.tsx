@@ -20,6 +20,7 @@ import { TestWrapper } from '@common/utils/testUtils'
 import { GetInputSetsResponse } from '@pipeline/pages/inputSet-list/__tests__/InputSetListMocks'
 import { fillAtForm, InputTypes } from '@common/utils/JestFormHelper'
 import {
+  getMockFor_Generic_useMutate,
   getMockFor_useGetInputSetsListForPipeline,
   getMockFor_useGetPipeline
 } from '@pipeline/components/RunPipelineModal/__tests__/mocks'
@@ -48,7 +49,8 @@ jest.mock('services/pipeline-ng', () => ({
   useGetInputsetYamlV2: jest.fn(() => mockInputsetYamlV2),
   useRetryPipeline: jest.fn(() => mockPostRetryPipeline),
   useGetRetryStages: jest.fn(() => mockRetryStages),
-  getInputSetForPipelinePromise: jest.fn().mockImplementation(() => Promise.resolve(GetInputSetsResponse.data))
+  getInputSetForPipelinePromise: jest.fn().mockImplementation(() => Promise.resolve(GetInputSetsResponse.data)),
+  useValidateTemplateInputs: jest.fn(() => getMockFor_Generic_useMutate())
 }))
 
 describe('Retry Pipeline tests', () => {

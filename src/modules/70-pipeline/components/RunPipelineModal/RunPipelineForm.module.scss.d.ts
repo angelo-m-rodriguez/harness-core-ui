@@ -20,6 +20,7 @@ declare const styles: {
   readonly footer: string
   readonly footerCheckbox: string
   readonly form: string
+  readonly gitRemoteDetailsWrapper: string
   readonly helpIcon: string
   readonly helpSection: string
   readonly iconInfo: string
@@ -54,6 +55,8 @@ declare const styles: {
   readonly stageSelectionItem: string
   readonly stageWarning: string
   readonly stagesDropdown: string
+  readonly templateErrorModalHeader: string
+  readonly templateErrorView: string
   readonly underlineText: string
   readonly valueProviderRadio: string
 }

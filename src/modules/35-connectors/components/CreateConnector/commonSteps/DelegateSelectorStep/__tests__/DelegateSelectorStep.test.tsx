@@ -60,6 +60,7 @@ jest.mock('services/cd-ng', () => ({
       })
   })),
   useCreatePR: jest.fn().mockImplementation(() => ({ mutate: jest.fn() })),
+  useCreatePRV2: jest.fn().mockImplementation(() => ({ mutate: jest.fn() })),
   useGetFileContent: jest.fn().mockImplementation(() => ({ refetch: jest.fn() })),
   useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => fetchBranches()),
   useListGitSync: jest.fn().mockImplementation(() => gitConfigs),

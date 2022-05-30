@@ -19,6 +19,7 @@ interface GetCDPipelineStagesArgs {
   isCFEnabled?: boolean
   isSTOEnabled?: boolean
   isApprovalStageEnabled?: boolean
+  isCustomStageEnabled?: boolean
 }
 
 export const getCDPipelineStages: (args: GetCDPipelineStagesArgs) => React.ReactElement<PipelineStagesProps> = ({
@@ -28,7 +29,8 @@ export const getCDPipelineStages: (args: GetCDPipelineStagesArgs) => React.React
   isCDEnabled = false,
   isCFEnabled = false,
   isSTOEnabled = false,
-  isApprovalStageEnabled = false
+  isApprovalStageEnabled = false,
+  isCustomStageEnabled = false
 }) => {
   return (
     <PipelineStages {...args}>
@@ -41,7 +43,7 @@ export const getCDPipelineStages: (args: GetCDPipelineStagesArgs) => React.React
       Chained pipeline is hidden as of now, uncomment below statement to unhide it.
       {stagesCollection.getStage(StageType.PIPELINE, false, getString)} 
       */}
-      {stagesCollection.getStage(StageType.CUSTOM, false, getString)}
+      {stagesCollection.getStage(StageType.CUSTOM, isCustomStageEnabled, getString)}
       {stagesCollection.getStage(StageType.Template, false, getString)}
     </PipelineStages>
   )

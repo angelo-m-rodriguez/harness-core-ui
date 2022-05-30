@@ -47,6 +47,7 @@ jest.mock('@common/utils/YamlUtils', () => ({}))
 jest.mock('services/cd-ng', () => ({
   useGetConnector: jest.fn(() => ConnectorResponse),
   useCreatePR: jest.fn(() => noop),
+  useCreatePRV2: jest.fn(() => noop),
   useGetFileContent: jest.fn(() => noop),
   useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => {
     return { data: branchStatusMock, refetch: jest.fn(), loading: false }

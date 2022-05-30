@@ -1,22 +1,22 @@
 # NG Custom Dasbhoards
 
-### Running against local dashboard-service
+### Running UI against local dashboard-service
 
-Update the two dashboard routes in `devServerProxy.config.js` so that the target points to your local dashboard-service.  
-For example,
-
-```json
-  '/dashboard': {
-    target: 'http://localhost:5000'
-  },
-  '/gateway/dashboard': {
-    pathRewrite: { '^/gateway/dashboard': '/dashboard' },
-    target: 'http://localhost:5000'
-  },
-```
-
-Then run
+First run the build  
+This is required after pulling in the latest changes or switching branches
 
 ```shell
-$ TARGET_LOCALHOST=false yarn dev
+yarn
+```
+
+Then start the webpack service pointing to your local dashboard-service
+
+```shell
+TARGET_LOCALHOST=false CUSTOM_DASHBOARDS_API_URL="http://127.0.0.1:5000" yarn dev
+```
+
+### Running Jest tests
+
+```shell
+jest src/modules/45-dashboards --coverage --collectCoverageFrom "src/modules/45-dashboards/**" --coverageReporters text
 ```

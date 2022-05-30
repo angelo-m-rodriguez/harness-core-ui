@@ -118,6 +118,20 @@ export const getInfrastructureDefaultValue = (
         allowSimultaneousDeployments
       }
     }
+    case InfraDeploymentType.PDC: {
+      const { connectorRef, credentialsRef, delegateSelectors, hostFilters, hosts, attributeFilters } =
+        infrastructure?.spec || {}
+
+      return {
+        connectorRef,
+        credentialsRef,
+        allowSimultaneousDeployments,
+        hosts,
+        delegateSelectors,
+        hostFilters,
+        attributeFilters
+      }
+    }
     default: {
       return {}
     }
@@ -140,30 +154,55 @@ export const getInfraGroups = (
   getString: (key: keyof StringsMap, vars?: Record<string, any> | undefined) => string,
   featureFlags: Record<string, boolean>
 ): InfrastructureGroup[] => {
-  const { NG_AZURE } = featureFlags
+  const { NG_AZURE, SSH_NG } = featureFlags
   return isServerlessDeploymentType(deploymentType)
     ? [
         {
           groupLabel: '',
-          items: [
-            {
-              label: getString('common.aws'),
-              icon: 'service-aws',
-              value: InfraDeploymentType.ServerlessAwsLambda
-            },
-            {
-              label: getString('common.gcp'),
-              icon: 'gcp',
-              value: InfraDeploymentType.ServerlessGoogleFunctions,
-              disabled: true
-            },
-            {
-              label: getString('common.azure'),
-              icon: 'service-azure',
-              value: InfraDeploymentType.ServerlessAzureFunctions,
-              disabled: true
-            }
-          ]
+          items: SSH_NG
+            ? [
+                {
+                  label: getString('common.aws'),
+                  icon: 'service-aws',
+                  value: InfraDeploymentType.ServerlessAwsLambda
+                },
+                {
+                  label: getString('common.gcp'),
+                  icon: 'gcp',
+                  value: InfraDeploymentType.ServerlessGoogleFunctions,
+                  disabled: true
+                },
+                {
+                  label: getString('common.azure'),
+                  icon: 'service-azure',
+                  value: InfraDeploymentType.ServerlessAzureFunctions,
+                  disabled: true
+                },
+                {
+                  label: getString('connectors.title.pdcConnector'),
+                  icon: 'pdc',
+                  value: InfraDeploymentType.PDC
+                }
+              ]
+            : [
+                {
+                  label: getString('common.aws'),
+                  icon: 'service-aws',
+                  value: InfraDeploymentType.ServerlessAwsLambda
+                },
+                {
+                  label: getString('common.gcp'),
+                  icon: 'gcp',
+                  value: InfraDeploymentType.ServerlessGoogleFunctions,
+                  disabled: true
+                },
+                {
+                  label: getString('common.azure'),
+                  icon: 'service-azure',
+                  value: InfraDeploymentType.ServerlessAzureFunctions,
+                  disabled: true
+                }
+              ]
         }
       ]
     : [

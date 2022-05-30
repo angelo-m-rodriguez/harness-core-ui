@@ -180,8 +180,17 @@ function ExecutionStrategyRef(
       serviceDefinitionType: serviceDefinitionType(),
       strategyType: selectedStrategy !== 'BlankCanvas' ? selectedStrategy : 'Rolling',
       ...(isVerifyEnabled && { includeVerify: true })
-    }
+    },
+    lazy: true
   })
+
+  const getServiceDefintionType = serviceDefinitionType()
+  useEffect(() => {
+    if (getServiceDefintionType) {
+      refetchStrategyYaml?.()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getServiceDefintionType, selectedStrategy, isVerifyEnabled])
 
   useEffect(() => {
     if (error) {
@@ -240,7 +249,7 @@ function ExecutionStrategyRef(
       refetch()
     } else {
       // for yaml-snippets call fail
-      refetchStrategyYaml()
+      refetchStrategyYaml?.()
     }
   }
   return (

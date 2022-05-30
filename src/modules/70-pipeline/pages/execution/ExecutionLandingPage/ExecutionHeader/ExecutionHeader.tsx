@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { isEmpty } from 'lodash-es'
+import { defaultTo, isEmpty } from 'lodash-es'
 import { ButtonSize, ButtonVariation } from '@wings-software/uicore'
 import routes from '@common/RouteDefinitions'
 import { Duration } from '@common/components/Duration/Duration'
@@ -26,6 +26,7 @@ import type { ExecutionPathProps, PipelineType } from '@common/interfaces/RouteI
 import type { ExecutionStatus } from '@pipeline/utils/statusHelpers'
 import { useExecutionContext } from '@pipeline/context/ExecutionContext'
 import { TagsPopover } from '@common/components'
+import { StoreType } from '@common/constants/GitSyncTypes'
 
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import RetryHistory from '@pipeline/components/RetryPipeline/RetryHistory/RetryHistory'
@@ -155,9 +156,13 @@ export function ExecutionHeader(): React.ReactElement {
               accountId,
               executionIdentifier,
               module,
-              repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+              repoIdentifier: defaultTo(
+                pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+                pipelineExecutionSummary?.gitDetails?.repoName
+              ),
               branch: pipelineExecutionSummary?.gitDetails?.branch,
-              stagesExecuted: pipelineExecutionSummary?.stagesExecuted
+              stagesExecuted: pipelineExecutionSummary?.stagesExecuted,
+              storeType: pipelineExecutionSummary?.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
             }}
             isPipelineInvalid={isPipelineInvalid}
             canEdit={canEdit}

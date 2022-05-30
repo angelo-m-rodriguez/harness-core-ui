@@ -10,23 +10,19 @@ import { render, RenderResult, screen, act, waitFor } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { TestWrapper } from '@common/utils/testUtils'
 import routes from '@common/RouteDefinitions'
-import { useGetTags } from '@dashboards/services/CustomDashboardsService'
+import { useGetAllTags } from 'services/custom-dashboards'
 import FilterTagsSideBar, { FilterTagsSideBarProps } from '../FilterTagsSideBar'
 
 const accountId = 'fmy6_hj3'
-const folderId = 'gh544'
 
-jest.mock('@dashboards/services/CustomDashboardsService', () => ({
-  useGetTags: jest.fn()
+jest.mock('services/custom-dashboards', () => ({
+  useGetAllTags: jest.fn()
 }))
-const useGetTagsMock = useGetTags as jest.Mock
+const useGetAllTagsMock = useGetAllTags as jest.Mock
 
 const renderComponent = (props: Partial<FilterTagsSideBarProps> = {}): RenderResult =>
   render(
-    <TestWrapper
-      path={routes.toCustomDashboardHome({ folderId, accountId })}
-      pathParams={{ accountId: accountId, folderId: folderId }}
-    >
+    <TestWrapper path={routes.toCustomDashboardHome({ accountId })} pathParams={{ accountId: accountId }}>
       <FilterTagsSideBar setFilteredTags={jest.fn()} {...props} />
     </TestWrapper>
   )
@@ -48,7 +44,7 @@ describe('FilterTagsSideBar', () => {
   })
 
   test('it should display loading before data is loaded', async () => {
-    useGetTagsMock.mockReturnValue(buildTagsResponse(true))
+    useGetAllTagsMock.mockReturnValue(buildTagsResponse(true))
 
     renderComponent()
 
@@ -57,7 +53,7 @@ describe('FilterTagsSideBar', () => {
   })
 
   test('it should display no tags message when no filters', async () => {
-    useGetTagsMock.mockReturnValue(buildTagsResponse(false))
+    useGetAllTagsMock.mockReturnValue(buildTagsResponse(false))
 
     renderComponent()
 
@@ -65,7 +61,7 @@ describe('FilterTagsSideBar', () => {
   })
 
   test('it should display each tag', async () => {
-    useGetTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
+    useGetAllTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
 
     renderComponent()
 
@@ -75,7 +71,7 @@ describe('FilterTagsSideBar', () => {
 
   test('it should invoke the set state callback when a tag is clicked', async () => {
     const setFilteredTagsMock = jest.fn()
-    useGetTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
+    useGetAllTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
 
     renderComponent({ setFilteredTags: setFilteredTagsMock })
     expect(setFilteredTagsMock).not.toHaveBeenCalled()
@@ -92,7 +88,7 @@ describe('FilterTagsSideBar', () => {
 
   test('it should not add duplicate tags when clicked', async () => {
     const setFilteredTagsMock = jest.fn()
-    useGetTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
+    useGetAllTagsMock.mockReturnValue(buildTagsResponse(false, 'one,two'))
 
     renderComponent({ setFilteredTags: setFilteredTagsMock })
     expect(setFilteredTagsMock).not.toHaveBeenCalled()

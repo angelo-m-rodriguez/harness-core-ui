@@ -15,7 +15,6 @@ declare const styles: {
   readonly formContainer: string
   readonly switch: string
   readonly tabContainer: string
-  readonly tabContainerHeight: string
   readonly tabTitle: string
 }
 export default styles

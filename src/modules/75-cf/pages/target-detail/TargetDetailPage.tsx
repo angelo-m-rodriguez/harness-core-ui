@@ -15,6 +15,7 @@ import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerS
 import { Page } from '@common/exports'
 import useDeleteTargetDialog from '@cf/pages/target-detail/hooks/useDeleteTargetDialog'
 import LeftBar from './components/LeftBar/LeftBar'
+import FlagSettings from './components/FlagSettings/FlagSettings'
 
 const TargetDetailPage: FC = () => {
   const { activeEnvironment: environmentIdentifier } = useActiveEnvironment()
@@ -78,7 +79,7 @@ const TargetDetailPage: FC = () => {
       metaData={{ environment: envData?.data?.name as string }}
       leftBar={<LeftBar target={target as Target} />}
     >
-      Hello there
+      <FlagSettings target={target as Target} />
     </TargetManagementDetailPageTemplate>
   )
 }

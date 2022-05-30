@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom'
 import { Text, Container, Icon } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import { noop } from 'lodash-es'
+import { Callout } from '@blueprintjs/core'
 import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import useCreateGitSyncModal from '@gitsync/modals/useCreateGitSyncModal'
 import { useStrings } from 'framework/strings'
@@ -22,7 +23,7 @@ import RbacButton from '@rbac/components/Button/Button'
 import css from './NewUserView.module.scss'
 
 const NewUserView: React.FC = () => {
-  const { updateAppStore, selectedProject, selectedOrg } = useAppStore()
+  const { updateAppStore, selectedProject, selectedOrg, isGitSimplificationEnabled } = useAppStore()
   const { refreshStore } = useGitSyncStore()
   const { projectIdentifier } = useParams<ProjectPathProps & ModulePathParams>()
 
@@ -35,31 +36,39 @@ const NewUserView: React.FC = () => {
   })
   const { getString } = useStrings()
   return (
-    <Container className={css.pageContainer}>
-      <Container padding={{ bottom: 'large' }}>
-        <Icon size={120} name="git-landing-page" />
-      </Container>
+    <>
+      {isGitSimplificationEnabled && (
+        <Callout intent="primary" className={css.callout}>
+          {getString('gitsync.newGitExperienceMessage')}
+        </Callout>
+      )}
+      <Container className={css.pageContainer}>
+        <Container padding={{ bottom: 'large' }}>
+          <Icon size={120} name="git-landing-page" />
+        </Container>
 
-      <Text margin="medium" color={Color.GREY_600} font={{ size: 'large', weight: 'semi-bold' }}>
-        {getString('enableGitExperience')}
-      </Text>
-      <Text>{getString('gitExperienceNewUserText')}</Text>
-      <RbacButton
-        intent="primary"
-        margin="large"
-        font={{ size: 'medium' }}
-        className={css.gitEnableBtn}
-        text={getString('enableGitExperience')}
-        onClick={() => openGitSyncModal(true, false, undefined)}
-        permission={{
-          permission: PermissionIdentifier.UPDATE_PROJECT,
-          resource: {
-            resourceType: ResourceType.PROJECT,
-            resourceIdentifier: projectIdentifier
-          }
-        }}
-      />
-    </Container>
+        <Text margin="medium" color={Color.GREY_600} font={{ size: 'large', weight: 'semi-bold' }}>
+          {getString('enableGitExperience')}
+        </Text>
+        <Text>{getString('gitExperienceNewUserText')}</Text>
+        <RbacButton
+          intent="primary"
+          margin="large"
+          font={{ size: 'medium' }}
+          className={css.gitEnableBtn}
+          disabled={isGitSimplificationEnabled}
+          text={getString('enableGitExperience')}
+          onClick={() => openGitSyncModal(true, false, undefined)}
+          permission={{
+            permission: PermissionIdentifier.UPDATE_PROJECT,
+            resource: {
+              resourceType: ResourceType.PROJECT,
+              resourceIdentifier: projectIdentifier
+            }
+          }}
+        />
+      </Container>
+    </>
   )
 }
 

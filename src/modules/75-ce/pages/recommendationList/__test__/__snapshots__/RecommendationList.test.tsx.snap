@@ -1824,6 +1824,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 >
                   <div
                     class="Layout--horizontal StyledProps--main"
+                    style="align-items: center;"
                   >
                     <span
                       class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
@@ -1853,60 +1854,63 @@ exports[`test cases for Recommendation List Page should be able to render the li
                     </span>
                     <div
                       class="Layout--vertical StyledProps--main"
+                      style="flex: 1;"
                     >
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           common.cluster: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             clusterName
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           ce.recommendation.listPage.filters.namespace: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             namespace
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold"
                         >
                           pipelineSteps.workload: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName/namespace/namespace/workload/resource-1/details"
                         >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
                             style="--text-line-clamp: 1;"
                           >
                             resource-1
-                          </span>
+                          </p>
                         </a>
                       </div>
                     </div>
@@ -1949,7 +1953,8 @@ exports[`test cases for Recommendation List Page should be able to render the li
                   style="width: 18%;"
                 >
                   <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    style="--text-line-clamp: 1;"
                   >
                     ce.overview.workload
                   </p>
@@ -1966,6 +1971,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 >
                   <div
                     class="Layout--horizontal StyledProps--main"
+                    style="align-items: center;"
                   >
                     <span
                       class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
@@ -1995,60 +2001,63 @@ exports[`test cases for Recommendation List Page should be able to render the li
                     </span>
                     <div
                       class="Layout--vertical StyledProps--main"
+                      style="flex: 1;"
                     >
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           common.cluster: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName1%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             clusterName1
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           ce.recommendation.listPage.filters.namespace: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName1%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace1%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             namespace1
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold"
                         >
                           pipelineSteps.workload: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName1/namespace/namespace1/workload/resource-2/details"
                         >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
                             style="--text-line-clamp: 1;"
                           >
                             resource-2
-                          </span>
+                          </p>
                         </a>
                       </div>
                     </div>
@@ -2091,7 +2100,8 @@ exports[`test cases for Recommendation List Page should be able to render the li
                   style="width: 18%;"
                 >
                   <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    style="--text-line-clamp: 1;"
                   >
                     ce.overview.workload
                   </p>
@@ -2108,6 +2118,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 >
                   <div
                     class="Layout--horizontal StyledProps--main"
+                    style="align-items: center;"
                   >
                     <span
                       class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
@@ -2137,60 +2148,63 @@ exports[`test cases for Recommendation List Page should be able to render the li
                     </span>
                     <div
                       class="Layout--vertical StyledProps--main"
+                      style="flex: 1;"
                     >
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           common.cluster: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName2%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             clusterName2
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           ce.recommendation.listPage.filters.namespace: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName2%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace2%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             namespace2
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold"
                         >
                           pipelineSteps.workload: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName2/namespace/namespace2/workload/resource-3/details"
                         >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
                             style="--text-line-clamp: 1;"
                           >
                             resource-3
-                          </span>
+                          </p>
                         </a>
                       </div>
                     </div>
@@ -2233,7 +2247,8 @@ exports[`test cases for Recommendation List Page should be able to render the li
                   style="width: 18%;"
                 >
                   <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    style="--text-line-clamp: 1;"
                   >
                     ce.overview.workload
                   </p>
@@ -2250,6 +2265,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 >
                   <div
                     class="Layout--horizontal StyledProps--main"
+                    style="align-items: center;"
                   >
                     <span
                       class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
@@ -2279,60 +2295,63 @@ exports[`test cases for Recommendation List Page should be able to render the li
                     </span>
                     <div
                       class="Layout--vertical StyledProps--main"
+                      style="flex: 1;"
                     >
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           common.cluster: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName3%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             clusterName3
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           ce.recommendation.listPage.filters.namespace: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName3%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace3%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             namespace3
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold"
                         >
                           pipelineSteps.workload: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName3/namespace/namespace3/workload/resource-4/details"
                         >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
                             style="--text-line-clamp: 1;"
                           >
                             resource-4
-                          </span>
+                          </p>
                         </a>
                       </div>
                     </div>
@@ -2375,7 +2394,8 @@ exports[`test cases for Recommendation List Page should be able to render the li
                   style="width: 18%;"
                 >
                   <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    style="--text-line-clamp: 1;"
                   >
                     ce.overview.workload
                   </p>
@@ -2392,6 +2412,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 >
                   <div
                     class="Layout--horizontal StyledProps--main"
+                    style="align-items: center;"
                   >
                     <span
                       class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
@@ -2421,60 +2442,63 @@ exports[`test cases for Recommendation List Page should be able to render the li
                     </span>
                     <div
                       class="Layout--vertical StyledProps--main"
+                      style="flex: 1;"
                     >
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           common.cluster: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName4%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             clusterName4
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="StyledProps--font StyledProps--main"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
                         >
                           ce.recommendation.listPage.filters.namespace: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName4%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace4%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
                         >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                            style="--text-line-clamp: 1;"
                           >
                             namespace4
-                          </span>
+                          </p>
                         </a>
                       </div>
                       <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
+                        class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main nameContainer"
                       >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold"
                         >
                           pipelineSteps.workload: 
-                        </span>
+                        </p>
                         <a
                           href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName4/namespace/namespace4/workload/resource-5/details"
                         >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
+                          <p
+                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
                             style="--text-line-clamp: 1;"
                           >
                             resource-5
-                          </span>
+                          </p>
                         </a>
                       </div>
                     </div>
@@ -2517,7 +2541,8 @@ exports[`test cases for Recommendation List Page should be able to render the li
                   style="width: 18%;"
                 >
                   <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
+                    style="--text-line-clamp: 1;"
                   >
                     ce.overview.workload
                   </p>

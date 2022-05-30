@@ -789,7 +789,7 @@ ceGcp:
     step7: 'Select the BigQuery export tab (this tab is selected by default). On the BigQuery export tab, enable Daily cost detail.'
     otherLinks: 'Other Links:'
     link1: 'https://cloud.google.com/billing/docs/how-to/export-data-bigquery-setup'
-    link2: 'Harness Docs ()'
+    link2: 'Harness Docs (https://ngdocs.harness.io/article/kxnsritjls)'
   chooseRequirements:
     name: '{{ $.connectors.ceAws.steps.req }}'
     heading: '{{ $.connectors.ceAws.steps.req }}'

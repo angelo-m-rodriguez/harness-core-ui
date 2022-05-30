@@ -147,7 +147,8 @@ export default function ExecutionActions(props: ExecutionActionsProps): React.Re
     module,
     branch,
     repoIdentifier,
-    stagesExecuted
+    stagesExecuted,
+    storeType
   } = params
   const { mutate: interrupt } = useHandleInterrupt({
     planExecutionId: executionIdentifier
@@ -275,7 +276,8 @@ export default function ExecutionActions(props: ExecutionActionsProps): React.Re
     executionId: executionIdentifier,
     repoIdentifier,
     branch,
-    stagesExecuted
+    stagesExecuted,
+    storeType
   })
 
   /*--------------------------------------Run Pipeline---------------------------------------------*/

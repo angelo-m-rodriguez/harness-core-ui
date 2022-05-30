@@ -23,7 +23,8 @@ import {
   mockProjectsResponse,
   mockProjectsErrorResponse,
   getJiraCreateEditModePropsWithConnectorId,
-  getJiraFieldRendererProps
+  getJiraRequiredFieldRendererProps,
+  getJiraOptionalFieldRendererProps
 } from './JiraCreateTestHelper'
 import { JiraFieldsRenderer } from '../JiraFieldsRenderer'
 
@@ -190,21 +191,12 @@ describe('Jira Create tests', () => {
       expect(queryByText('pipeline.jiraApprovalStep.validations.project')).toBeTruthy()
       expect(queryByText('pipeline.jiraApprovalStep.validations.issueType')).toBeTruthy()
     })
-    await waitFor(() => expect(queryByText('pipeline.jiraCreateStep.validations.summary')).toBeTruthy())
   })
 
   test('Open a saved step - edit stage view', async () => {
     const ref = React.createRef<StepFormikRef<unknown>>()
     const props = { ...getJiraCreateEditModePropsWithValues() }
-    const {
-      container,
-      getByText,
-      getByTestId,
-      queryByPlaceholderText,
-      getByPlaceholderText,
-      queryByDisplayValue,
-      queryByText
-    } = render(
+    const { container, getByText, getByTestId, queryByDisplayValue, queryByText } = render(
       <TestStepWidget
         initialValues={props.initialValues}
         type={StepType.JiraCreate}
@@ -219,7 +211,6 @@ describe('Jira Create tests', () => {
     expect(queryByDisplayValue('1d')).toBeTruthy()
     expect(queryByDisplayValue('pid1')).toBeTruthy()
     expect(queryByDisplayValue('itd1')).toBeTruthy()
-    expect(queryByDisplayValue('summaryval')).toBeTruthy()
 
     fireEvent.click(getByText('common.optionalConfig'))
 
@@ -227,10 +218,6 @@ describe('Jira Create tests', () => {
     expect(queryByDisplayValue('value1')).toBeTruthy()
     expect(queryByDisplayValue('2233')).toBeTruthy()
     expect(queryByDisplayValue('23-march')).toBeTruthy()
-
-    fireEvent.change(getByPlaceholderText('pipeline.jiraCreateStep.summaryPlaceholder'), {
-      target: { value: 'summary' }
-    })
 
     // Open the fields selector dialog
     act(() => {
@@ -249,15 +236,9 @@ describe('Jira Create tests', () => {
     fireEvent.click(icon![1])
     fireEvent.click(getByText('it1'))
 
-    // Click the new custom field
-    fireEvent.click(getByText('f1'))
-
     // Add the field to jira create form
     const button = dialogContainer?.querySelector('.bp3-button-text')
     fireEvent.click(button!)
-
-    // The selected field should be now added to the main form
-    expect(queryByPlaceholderText('f1')).toBeTruthy()
 
     // Open the fields selector dialog again
     act(() => {
@@ -296,7 +277,6 @@ describe('Jira Create tests', () => {
         fields: [
           { name: 'Summary', value: 'summary' },
           { name: 'Description', value: 'descriptionval' },
-          { name: 'f1', value: '' },
           { name: 'f21', value: 'value1' },
           { name: 'f2', value: 2233 },
           { name: 'date', value: '23-march' },
@@ -307,8 +287,18 @@ describe('Jira Create tests', () => {
     })
   })
 
-  test('Jira Fields Renderer Test', () => {
-    const props = getJiraFieldRendererProps()
+  test('Jira Optional Fields Renderer Test', () => {
+    const props = getJiraOptionalFieldRendererProps()
+    const { container } = render(
+      <TestWrapper>
+        <JiraFieldsRenderer {...props}></JiraFieldsRenderer>
+      </TestWrapper>
+    )
+    expect(container).toMatchSnapshot()
+  })
+
+  test('Jira Required Fields Renderer Test', () => {
+    const props = getJiraRequiredFieldRendererProps()
     const { container } = render(
       <TestWrapper>
         <JiraFieldsRenderer {...props}></JiraFieldsRenderer>
@@ -328,10 +318,8 @@ describe('Jira Create tests', () => {
           connectorRef: '',
           projectKey: '',
           issueType: '',
-          summary: '',
-          description: '',
           fields: [],
-          selectedFields: [],
+          selectedRequiredFields: [],
           delegateSelectors: undefined
         }
       },
@@ -344,10 +332,8 @@ describe('Jira Create tests', () => {
           connectorRef: '',
           projectKey: '',
           issueType: '',
-          summary: '',
-          description: '',
           fields: [],
-          selectedFields: [],
+          selectedRequiredFields: [],
           delegateSelectors: undefined
         }
       },

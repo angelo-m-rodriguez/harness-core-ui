@@ -1087,7 +1087,7 @@ export interface SegmentRequestRequestBody {
   tags?: Tag[]
 }
 
-export type TargetPatchRequestRequestBody = PatchOperation
+export type TargetPatchRequestRequestBody = GitSyncPatchOperation
 
 export type TargetRequestRequestBody = Target
 
@@ -2598,6 +2598,10 @@ export interface GetAllFeaturesQueryParams {
    */
   targetIdentifier?: string
   /**
+   * Identifier of the target to filter on
+   */
+  targetIdentifierFilter?: string
+  /**
    * Parameter to indicate if metrics data is requested in response
    */
   metrics?: boolean
@@ -2609,6 +2613,18 @@ export interface GetAllFeaturesQueryParams {
    * Comma separated identifiers to exclude from the response
    */
   excludedFeatures?: string
+  /**
+   * Filter for flags based on their status (active,never_requested,recently_accessed,potentially_stale)
+   */
+  status?: string
+  /**
+   * Filter for flags based on their lifetime (permanent/temporary)
+   */
+  lifetime?: string
+  /**
+   * Filter for flags based on if they are enabled or disabled
+   */
+  enabled?: boolean
 }
 
 export type GetAllFeaturesProps = Omit<

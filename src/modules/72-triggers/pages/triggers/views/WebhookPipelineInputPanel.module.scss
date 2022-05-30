@@ -54,8 +54,8 @@
     margin: var(--spacing-large);
   }
   .errorHeader {
-    background: #fff9e7;
-    color: #000;
+    background: var(--yellow-100);
+    color: var(--black);
     :global {
       .bp3-icon {
         padding-right: var(--spacing-large);
@@ -71,4 +71,12 @@
 .divider {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: var(--spacing-4);
+}
+
+.refBranchOuter {
+  margin: var(--spacing-large) var(--spacing-large) var(--spacing-xlarge) 0 !important;
+}
+
+.halfWidth {
+  width: 50%;
 }

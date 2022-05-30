@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test cloudformation inline parameter with no data api request errors 1`] = `<div />`;
+
+exports[`Test cloudformation inline parameter with no data should render and remove/add values 1`] = `<div />`;
+
+exports[`Test cloudformation inline parameter with no data should render with git data 1`] = `<div />`;
+
+exports[`Test cloudformation inline parameter with no data should render with git data and make an api request 1`] = `<div />`;
+
+exports[`Test cloudformation inline parameter with no data should render with no data 1`] = `<div />`;

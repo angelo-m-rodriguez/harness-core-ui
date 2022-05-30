@@ -144,6 +144,7 @@ export const ConnectorRefWithImage: React.FC<ConnectorRefWithImageProps> = props
                 </Layout.Horizontal>
               }
               multiTextInputProps={{
+                disabled: readonly,
                 multiTextInputProps: {
                   allowableTypes: AllMultiTypeInputTypesForStep
                 }

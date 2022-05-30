@@ -57,6 +57,7 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
   const isCDEnabled = useFeatureFlag(FeatureFlag.CDNG_ENABLED)
   const isCFEnabled = useFeatureFlag(FeatureFlag.CFNG_ENABLED)
   const isCIEnabled = useFeatureFlag(FeatureFlag.CING_ENABLED)
+  const isCustomStageEnabled = useFeatureFlag(FeatureFlag.NG_CUSTOM_STAGE)
   const { licenseInformation } = useLicenseStore()
   return (
     <PipelineProvider
@@ -70,7 +71,8 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
           licenseInformation['CI'] && isCIEnabled,
           licenseInformation['CD'] && isCDEnabled,
           licenseInformation['CF'] && isCFEnabled,
-          true
+          true,
+          isCustomStageEnabled
         )
       }
       stepsFactory={factory}
@@ -94,14 +96,16 @@ export const getCFPipelineStages: (
   isCIEnabled?: boolean,
   isCDEnabled?: boolean,
   isCFEnabled?: boolean,
-  isApprovalStageEnabled?: boolean
+  isApprovalStageEnabled?: boolean,
+  isCustomStageEnabled?: boolean
 ) => React.ReactElement<PipelineStagesProps> = (
   args,
   getString,
   _isCIEnabled = false,
   _isCDEnabled = false,
   isCFEnabled = false,
-  isApprovalStageEnabled = true
+  isApprovalStageEnabled = true,
+  isCustomStageEnabled = false
 ) => {
   return (
     <PipelineStages {...args}>
@@ -110,7 +114,7 @@ export const getCFPipelineStages: (
       {stagesCollection.getStage(StageType.BUILD, isCIEnabled, getString)}
       {stagesCollection.getStage(StageType.PIPELINE, false, getString)} */}
       {stagesCollection.getStage(StageType.APPROVAL, isApprovalStageEnabled, getString)}
-      {/* {stagesCollection.getStage(StageType.CUSTOM, false, getString)} */}
+      {stagesCollection.getStage(StageType.CUSTOM, isCustomStageEnabled, getString)}
       {stagesCollection.getStage(StageType.Template, false, getString)}
     </PipelineStages>
   )

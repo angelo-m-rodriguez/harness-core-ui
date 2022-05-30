@@ -14,6 +14,7 @@ import { get, isEmpty } from 'lodash-es'
 import { useParams } from 'react-router-dom'
 
 import { useStrings } from 'framework/strings'
+import { FormMultiTypeCheckboxField } from '@common/components'
 import List from '@common/components/List/List'
 
 import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
@@ -120,6 +121,19 @@ export default function TfPlanInputStep(props: TerraformPlanProps): React.ReactE
             style={{ marginBottom: 'var(--spacing-small)' }}
             expressions={expressions}
             isNameOfArrayType
+          />
+        </div>
+      )}
+
+      {getMultiTypeFromValue(inputSetData?.template?.spec?.configuration?.exportTerraformPlanJson) ===
+        MultiTypeInputType.RUNTIME && (
+        <div className={cx(stepCss.formGroup, stepCss.md)}>
+          <FormMultiTypeCheckboxField
+            name={`${
+              isEmpty(inputSetData?.path) ? '' : `${inputSetData?.path}.`
+            }spec.configuration.exportTerraformPlanJson`}
+            label={getString('cd.exportTerraformPlanJson')}
+            multiTypeTextbox={{ expressions, allowableTypes }}
           />
         </div>
       )}

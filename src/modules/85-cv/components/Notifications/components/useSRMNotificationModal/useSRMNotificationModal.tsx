@@ -40,6 +40,7 @@ export const useSRMNotificationModal = ({
   const [view, setView] = useState(Views.CREATE)
   const [index] = useState<number>()
   const [notificationRules, setNotificationRules] = useState<SRMNotification>()
+  const [isEdit, setIsEdit] = useState<boolean>(false)
   const { showError, showSuccess } = useToaster()
   const { getString } = useStrings()
   const queryParams = {
@@ -61,12 +62,12 @@ export const useSRMNotificationModal = ({
 
   const wizardCompleteHandler = async (wizardData?: SRMNotification): Promise<void> => {
     if (wizardData) {
-      const identifier = wizardData?.identifier
+      const identifier = wizardData?.identifier as string
       const notificationsPayload = createNotificationsPayload(orgIdentifier, projectIdentifier, wizardData)
       const name = notificationsPayload?.name
       let latestNotification = null
       try {
-        if (identifier) {
+        if (isEdit) {
           latestNotification = await updateNotificationRuleData(notificationsPayload, {
             queryParams,
             pathParams: {
@@ -147,8 +148,9 @@ export const useSRMNotificationModal = ({
   )
 
   const open = useCallback(
-    (currentNotification?: SRMNotification) => {
+    (currentNotification?: SRMNotification, isEditMode?: boolean) => {
       setNotificationRules(currentNotification)
+      setIsEdit(!!isEditMode)
       if (currentNotification) {
         setView(Views.EDIT)
       } else setView(Views.CREATE)
@@ -158,7 +160,8 @@ export const useSRMNotificationModal = ({
   )
 
   return {
-    openNotificationModal: (currentNotification?: SRMNotification) => open(currentNotification),
+    openNotificationModal: (currentNotification?: SRMNotification, isEditMode?: boolean) =>
+      open(currentNotification, isEditMode),
     closeNotificationModal: hideModal
   }
 }

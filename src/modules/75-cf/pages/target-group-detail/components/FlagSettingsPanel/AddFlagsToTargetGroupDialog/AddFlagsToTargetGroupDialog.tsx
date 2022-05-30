@@ -28,7 +28,6 @@ import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerS
 import { CF_DEFAULT_PAGE_SIZE, getErrorMessage } from '@cf/utils/CFUtils'
 import { NoData } from '@cf/components/NoData/NoData'
 import imageUrl from '@cf/images/Feature_Flags_Teepee.svg'
-import { FormValuesProvider } from '@cf/hooks/useFormValues'
 import { AddFlagsToTargetGroupDialogStatus as STATUS, FlagSettingsFormRow } from '../../../TargetGroupDetailPage.types'
 import usePercentageRolloutValidationSchema from '../../../hooks/usePercentageRolloutValidationSchema'
 import { getAddFlagsInstruction } from '../flagSettingsInstructions'
@@ -179,66 +178,64 @@ const AddFlagsToTargetGroupDialog: FC<AddFlagsToTargetGroupDialogProps> = ({
       initialValues={{ flags: {} }}
       validationSchema={validationSchema}
     >
-      {({ submitForm, values, setFieldValue, errors }) => {
+      {({ submitForm, values }) => {
         const flagCount = Object.values(values.flags).filter(({ added }) => added).length
 
         return (
-          <FormValuesProvider values={values} setField={setFieldValue} errors={errors}>
-            <Dialog
-              className={css.dialog}
-              isOpen
-              enforceFocus={false}
-              title={getString('cf.segmentDetail.addFlagToTargetGroup')}
-              onClose={hideModal}
-              footer={
-                <Layout.Horizontal spacing="small" flex={{ alignItems: 'center' }}>
-                  <Button
-                    variation={ButtonVariation.PRIMARY}
-                    type="submit"
-                    intent="primary"
-                    onClick={submitForm}
-                    disabled={!flagCount || submitting}
-                  >
-                    {getString('cf.segmentDetail.addFlags', { flagCount })}
-                  </Button>
-                  <Button variation={ButtonVariation.SECONDARY} onClick={hideModal}>
-                    {getString('cancel')}
-                  </Button>
-                  {submitting && (
-                    <span data-testid="saving-spinner">
-                      <Spinner size={24} />
-                    </span>
-                  )}
-                </Layout.Horizontal>
-              }
-            >
-              <FormikForm disabled={submitting}>
-                <Layout.Vertical className={css.body} spacing="small">
-                  {state === STATUS.error && (
-                    <Page.Error message={getErrorMessage(flagsError)} onClick={() => refetchFlags()} />
-                  )}
+          <Dialog
+            className={css.dialog}
+            isOpen
+            enforceFocus={false}
+            title={getString('cf.segmentDetail.addFlagToTargetGroup')}
+            onClose={hideModal}
+            footer={
+              <Layout.Horizontal spacing="small" flex={{ alignItems: 'center' }}>
+                <Button
+                  variation={ButtonVariation.PRIMARY}
+                  type="submit"
+                  intent="primary"
+                  onClick={submitForm}
+                  disabled={!flagCount || submitting}
+                >
+                  {getString('cf.segmentDetail.addFlags', { flagCount })}
+                </Button>
+                <Button variation={ButtonVariation.SECONDARY} onClick={hideModal}>
+                  {getString('cancel')}
+                </Button>
+                {submitting && (
+                  <span data-testid="saving-spinner">
+                    <Spinner size={24} />
+                  </span>
+                )}
+              </Layout.Horizontal>
+            }
+          >
+            <FormikForm disabled={submitting}>
+              <Layout.Vertical className={css.body} spacing="small">
+                {state === STATUS.error && (
+                  <Page.Error message={getErrorMessage(flagsError)} onClick={() => refetchFlags()} />
+                )}
 
-                  {state === STATUS.initialLoading && <ContainerSpinner flex={{ align: 'center-center' }} />}
+                {state === STATUS.initialLoading && <ContainerSpinner flex={{ align: 'center-center' }} />}
 
-                  {state === STATUS.noFlags && (
-                    <Container height="100%" flex={{ align: 'center-center' }}>
-                      <NoData imageURL={imageUrl} message={getString('cf.segmentDetail.noFlagsAvailable')} />
-                    </Container>
-                  )}
+                {state === STATUS.noFlags && (
+                  <Container height="100%" flex={{ align: 'center-center' }}>
+                    <NoData imageURL={imageUrl} message={getString('cf.segmentDetail.noFlagsAvailable')} />
+                  </Container>
+                )}
 
-                  {[STATUS.ok, STATUS.loading, STATUS.noSearchResults, STATUS.submitting].includes(state) && (
-                    <ListingWithSearchAndPagination
-                      state={state}
-                      onSearch={onSearch}
-                      flags={flags as Features}
-                      setPageNumber={setPageNumber}
-                      isFlagAdded={identifier => !!values.flags[identifier]?.added}
-                    />
-                  )}
-                </Layout.Vertical>
-              </FormikForm>
-            </Dialog>
-          </FormValuesProvider>
+                {[STATUS.ok, STATUS.loading, STATUS.noSearchResults, STATUS.submitting].includes(state) && (
+                  <ListingWithSearchAndPagination
+                    state={state}
+                    onSearch={onSearch}
+                    flags={flags as Features}
+                    setPageNumber={setPageNumber}
+                    isFlagAdded={identifier => !!values.flags[identifier]?.added}
+                  />
+                )}
+              </Layout.Vertical>
+            </FormikForm>
+          </Dialog>
         )
       }}
     </Formik>

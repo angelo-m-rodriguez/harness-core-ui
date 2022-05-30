@@ -6,6 +6,7 @@
  */
 
 import React from 'react'
+import { defaultTo } from 'lodash-es'
 import type { CellProps, Column, Renderer } from 'react-table'
 import cx from 'classnames'
 import {
@@ -19,8 +20,9 @@ import {
   TagsPopover,
   TableV2,
   Container,
-  ButtonSize
-} from '@wings-software/uicore'
+  ButtonSize,
+  useToggleOpen
+} from '@harness/uicore'
 import { Classes, Menu, Position } from '@blueprintjs/core'
 import { FontVariation, Color } from '@harness/design-system'
 import { useParams } from 'react-router-dom'
@@ -36,9 +38,11 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import RbacButton from '@rbac/components/Button/Button'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { formatCount } from '@common/utils/utils'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
 import { Badge } from '@pipeline/pages/utils/Badge/Badge'
 import { getFeaturePropsForRunPipelineButton } from '@pipeline/utils/runPipelineUtils'
+import { ClonePipelineForm } from './ClonePipelineForm/ClonePipelineForm'
 import { getIconsForPipeline, getStatusColor } from '../PipelineListUtils'
 import css from '../PipelinesPage.module.scss'
 
@@ -77,6 +81,7 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
   }>()
 
   const { confirmDelete } = useDeleteConfirmationDialog(data, 'pipeline', (column as any).onDeletePipeline)
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const [canDelete, canRun] = usePermission(
     {
       resourceScope: {
@@ -99,9 +104,21 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
 
   const { openRunPipelineModal } = useRunPipelineModal({
     pipelineIdentifier: (data.identifier || '') as string,
-    repoIdentifier: data.gitDetails?.repoIdentifier,
-    branch: data.gitDetails?.branch
+    repoIdentifier: defaultTo(data.gitDetails?.repoIdentifier, data.gitDetails?.repoName),
+    branch: data.gitDetails?.branch,
+    storeType: data.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
   })
+
+  const {
+    open: openClonePipelineModal,
+    isOpen: isClonePipelineModalOpen,
+    close: closeClonePipelineModal
+  } = useToggleOpen()
+
+  function handleCloseClonePipelineModal(e?: React.SyntheticEvent): void {
+    e?.stopPropagation()
+    closeClonePipelineModal()
+  }
 
   return (
     <Layout.Horizontal style={{ justifyContent: 'flex-end' }}>
@@ -153,14 +170,15 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
             }}
           />
           <Menu.Divider />
-          {/* <Menu.Item
+          <Menu.Item
             icon="duplicate"
             text={getString('projectCard.clone')}
-            disabled
+            disabled={isGitSyncEnabled || isGitSimplificationEnabled}
             onClick={(e: React.MouseEvent) => {
               e.stopPropagation()
+              openClonePipelineModal()
             }}
-          /> */}
+          />
           <Menu.Item
             icon="trash"
             text={getString('delete')}
@@ -174,6 +192,11 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
           />
         </Menu>
       </Popover>
+      <ClonePipelineForm
+        isOpen={isClonePipelineModalOpen}
+        onClose={handleCloseClonePipelineModal}
+        originalPipeline={data}
+      />
     </Layout.Horizontal>
   )
 }
@@ -315,8 +338,9 @@ const RenderRunPipeline: Renderer<CellProps<PipelineDTO>> = ({ row }): JSX.Eleme
 
   const { openRunPipelineModal } = useRunPipelineModal({
     pipelineIdentifier: (rowdata.identifier || '') as string,
-    repoIdentifier: rowdata.gitDetails?.repoIdentifier,
-    branch: rowdata.gitDetails?.branch
+    repoIdentifier: defaultTo(rowdata.gitDetails?.repoIdentifier, rowdata.gitDetails?.repoName),
+    branch: rowdata.gitDetails?.branch,
+    storeType: rowdata.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
   })
 
   return (

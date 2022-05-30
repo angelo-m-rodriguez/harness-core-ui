@@ -7,7 +7,12 @@
 
 import type { GetDataError } from 'restful-react'
 import type { Failure } from 'services/cd-ng'
-import type { EntityGitDetails, EntityValidityDetails, NGTemplateInfoConfig } from 'services/template-ng'
+import type {
+  EntityGitDetails,
+  EntityValidityDetails,
+  ErrorNodeSummary,
+  NGTemplateInfoConfig
+} from 'services/template-ng'
 import type { TemplateViewData } from '@templates-library/components/TemplateStudio/TemplateContext/TemplateReducer'
 import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
 
@@ -51,6 +56,7 @@ export interface ActionResponse {
   entityValidityDetails?: EntityValidityDetails
   templateYaml?: string
   templateError?: GetDataError<Failure | Error> | null
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 export interface ActionReturnType {

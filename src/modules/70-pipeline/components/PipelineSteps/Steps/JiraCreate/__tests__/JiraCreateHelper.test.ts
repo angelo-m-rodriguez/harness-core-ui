@@ -30,7 +30,7 @@ describe('Jira Create process form data tests', () => {
             value: { label: 'vb2', value: 'vb2' }
           }
         ],
-        selectedFields: [
+        selectedOptionalFields: [
           {
             name: 'f2',
             value: { label: 'vb2', value: 'vb2' },
@@ -71,14 +71,6 @@ describe('Jira Create process form data tests', () => {
         issueType: 'iss',
         fields: [
           {
-            name: 'Summary',
-            value: ''
-          },
-          {
-            name: 'Description',
-            value: ''
-          },
-          {
             name: 'f2',
             value: 'vb2'
           },
@@ -112,7 +104,7 @@ describe('Jira Create process form data tests', () => {
             value: '<+a.b>'
           }
         ],
-        selectedFields: [
+        selectedOptionalFields: [
           {
             name: 'f2',
             value: '<+x.y>',
@@ -139,14 +131,6 @@ describe('Jira Create process form data tests', () => {
         delegateSelectors: undefined,
         issueType: '<+input>',
         fields: [
-          {
-            name: 'Summary',
-            value: ''
-          },
-          {
-            name: 'Description',
-            value: ''
-          },
           {
             name: 'f2',
             value: '<+x.y>'

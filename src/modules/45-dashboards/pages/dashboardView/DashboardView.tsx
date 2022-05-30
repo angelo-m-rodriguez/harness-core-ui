@@ -5,19 +5,20 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Layout } from '@harness/uicore'
+import { Breadcrumb, Layout } from '@harness/uicore'
 import routes from '@common/RouteDefinitions'
 import { Page } from '@common/exports'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
-import {
-  useGetFolderDetail,
-  useGetDashboardDetail,
-  useMutateCreateSignedUrl
-} from '@dashboards/services/CustomDashboardsService'
 import { useDashboardsContext } from '@dashboards/pages/DashboardsContext'
+import {
+  ErrorResponse,
+  useCreateSignedUrl,
+  useGetDashboardDetail,
+  useGetFolderDetail
+} from 'services/custom-dashboards'
 import css from './DashboardView.module.scss'
 
 const DASHBOARDS_ORIGIN = 'https://dashboards.harness.io'
@@ -31,10 +32,19 @@ const DashboardViewPage: React.FC = () => {
   const history = useHistory()
   const query = location.href.split('?')[1]
 
-  const { mutate: createSignedUrl, loading, error } = useMutateCreateSignedUrl(accountId, viewId, location?.host, query)
+  const signedQueryUrl: string = useMemo(
+    () => `/embed/dashboards-next/${viewId}?embed_domain=${location.host}&${query}`,
+    [viewId, query]
+  )
 
-  const generateSignedUrl = async () => {
-    const { resource } = await createSignedUrl({})
+  const {
+    mutate: createSignedUrl,
+    loading,
+    error
+  } = useCreateSignedUrl({ queryParams: { accountId, dashboardId: viewId, src: signedQueryUrl } })
+
+  const generateSignedUrl = async (): Promise<void> => {
+    const { resource } = await createSignedUrl()
     setEmbedUrl(resource)
   }
 
@@ -45,20 +55,20 @@ const DashboardViewPage: React.FC = () => {
   React.useEffect(() => {
     window.addEventListener('message', function (event) {
       if (event.origin === DASHBOARDS_ORIGIN) {
-        const onChangeData = JSON.parse(event?.data)
-        if (onChangeData?.type === 'page:changed' && onChangeData?.page?.url?.includes('embed/explore')) {
+        const onChangeData = JSON.parse(event.data)
+        if (onChangeData && onChangeData.type === 'page:changed' && onChangeData.page?.url?.includes('embed/explore')) {
           history.go(0)
         }
       }
     })
   }, [])
 
-  const { data: folderDetail } = useGetFolderDetail(accountId, folderId)
+  const { data: folderDetail } = useGetFolderDetail({ queryParams: { accountId, folderId } })
 
-  const { data: dashboardDetail } = useGetDashboardDetail(accountId, viewId)
+  const { data: dashboardDetail } = useGetDashboardDetail({ dashboard_id: viewId, queryParams: { accountId } })
 
   React.useEffect(() => {
-    const links = []
+    const links: Breadcrumb[] = []
     if (folderDetail?.resource) {
       links.push({
         url: routes.toCustomFolderHome({ accountId }),
@@ -69,10 +79,11 @@ const DashboardViewPage: React.FC = () => {
         label: folderDetail.resource
       })
     }
-    links.push({
-      url: routes.toViewCustomDashboard({ viewId, folderId, accountId }),
-      label: dashboardDetail?.title
-    })
+    dashboardDetail &&
+      links.push({
+        url: routes.toViewCustomDashboard({ viewId, folderId, accountId }),
+        label: dashboardDetail.title
+      })
     includeBreadcrumbs(links)
   }, [folderDetail, dashboardDetail, accountId, viewId])
 
@@ -80,7 +91,7 @@ const DashboardViewPage: React.FC = () => {
     <Page.Body
       className={css.pageContainer}
       loading={loading}
-      error={error?.data?.message}
+      error={(error?.data as ErrorResponse)?.responseMessages}
       noData={{
         when: () => embedUrl === '',
         icon: 'dashboard',

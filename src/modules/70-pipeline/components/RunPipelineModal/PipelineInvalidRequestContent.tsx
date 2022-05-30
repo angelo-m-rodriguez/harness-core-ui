@@ -12,7 +12,7 @@ import { Color, FontVariation } from '@harness/design-system'
 import type { GetDataError } from 'restful-react'
 import { defaultTo } from 'lodash-es'
 import { useStrings } from 'framework/strings'
-import type { Failure, Error } from 'services/cd-ng'
+import type { Failure, Error } from 'services/pipeline-ng'
 import css from './RunPipelineForm.module.scss'
 
 interface PipelineInvalidRequestContentProps {

@@ -191,7 +191,7 @@ const TargetingRulesTab = ({
     >
       {formikProps => (
         <FormikForm data-testid="targeting-rules-tab-form" disabled={disabled}>
-          <Container className={css.tabContainer}>
+          <Container className={css.tabContainer} data-tab-container>
             <Layout.Vertical
               spacing="small"
               padding={{ left: 'xlarge', right: 'xlarge', bottom: 'xlarge' }}

@@ -5,13 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { Feature, SegmentFlag, WeightedVariation } from 'services/cf'
-
-export interface TargetGroupFlag extends SegmentFlag {
-  flag: Feature
-}
-
-export type TargetGroupFlagsMap = Record<string, TargetGroupFlag>
+import type { WeightedVariation } from 'services/cf'
 
 export interface FlagSettingsFormRow extends FlagSettingsVariationCellFields {
   identifier: string
@@ -22,10 +16,6 @@ export interface FlagSettingsVariationCellFields {
   percentageRollout?: {
     variations: WeightedVariation[]
   }
-}
-
-export interface FlagSettingsFormData {
-  flags: Record<string, FlagSettingsFormRow>
 }
 
 export enum AddFlagsToTargetGroupDialogStatus {

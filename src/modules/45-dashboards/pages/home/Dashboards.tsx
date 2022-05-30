@@ -11,15 +11,16 @@ import { Dialog, Container, Heading, Icon, Layout } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { useModalHook } from '@harness/use-modal'
 import { useStrings } from 'framework/strings'
+import type { DashboardModel } from 'services/custom-dashboards'
 import DashboardCard from '@dashboards/components/DashboardCard/DashboardCard'
-import { DashboardLayoutViews, IDashboard } from '@dashboards/types/DashboardTypes'
+import { DashboardLayoutViews } from '@dashboards/types/DashboardTypes'
 import DashboardList from '@dashboards/components/DashboardList/DashboardList'
 import CloneDashboardForm from './CloneDashboardForm'
 import UpdateDashboardForm from './UpdateDashboardForm'
 import css from './HomePage.module.scss'
 
 export interface DashboardsProps {
-  dashboards: IDashboard[]
+  dashboards: DashboardModel[]
   loading?: boolean
   deleteDashboard: (dashboardId: string) => void
   triggerRefresh: () => void
@@ -33,7 +34,7 @@ const Dashboards: React.FC<DashboardsProps> = ({
   triggerRefresh,
   view
 }): React.ReactElement => {
-  const [selectedDashboard, setSelectedDashboard] = useState<IDashboard>()
+  const [selectedDashboard, setSelectedDashboard] = useState<DashboardModel>()
 
   const [showCloneModal, hideCloneModal] = useModalHook(
     () => (
@@ -55,12 +56,12 @@ const Dashboards: React.FC<DashboardsProps> = ({
 
   const { getString } = useStrings()
 
-  const cloneDashboard = (dashboard: IDashboard): void => {
+  const cloneDashboard = (dashboard: DashboardModel): void => {
     setSelectedDashboard(dashboard)
     showCloneModal()
   }
 
-  const editDashboard = (dashboard: IDashboard): void => {
+  const editDashboard = (dashboard: DashboardModel): void => {
     setSelectedDashboard(dashboard)
     showEditModal()
   }
@@ -76,7 +77,7 @@ const Dashboards: React.FC<DashboardsProps> = ({
           <Layout.Masonry
             gutter={25}
             items={dashboards}
-            renderItem={(dashboard: IDashboard) => (
+            renderItem={(dashboard: DashboardModel) => (
               <DashboardCard
                 dashboard={dashboard}
                 cloneDashboard={cloneDashboard}

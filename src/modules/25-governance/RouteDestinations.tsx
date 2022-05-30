@@ -65,15 +65,13 @@ AuditTrailFactory.registerResourceHandler('GOVERNANCE_POLICY', {
     auditEventData?: AuditEventData
   ) => {
     const { orgIdentifier, accountIdentifier, projectIdentifier } = resourceScope
-    return (auditEventData as any)?.eventModule
-      ? routes.toGovernanceEditPolicy({
-          orgIdentifier,
-          accountId: accountIdentifier,
-          projectIdentifier,
-          module: (auditEventData as any)?.eventModule,
-          policyIdentifier: resource.identifier
-        })
-      : undefined
+    return routes.toGovernanceEditPolicy({
+      orgIdentifier,
+      accountId: accountIdentifier,
+      projectIdentifier,
+      module: (auditEventData as any)?.eventModule,
+      policyIdentifier: resource.identifier
+    })
   }
 })
 
@@ -90,15 +88,13 @@ AuditTrailFactory.registerResourceHandler('GOVERNANCE_POLICY_SET', {
     auditEventData?: AuditEventData
   ) => {
     const { orgIdentifier, accountIdentifier, projectIdentifier } = resourceScope
-    return (auditEventData as any)?.eventModule
-      ? routes.toGovernancePolicySetDetail({
-          orgIdentifier,
-          accountId: accountIdentifier,
-          projectIdentifier,
-          module: (auditEventData as any)?.eventModule,
-          policySetIdentifier: resource.identifier
-        })
-      : undefined
+    return routes.toGovernancePolicySetDetail({
+      orgIdentifier,
+      accountId: accountIdentifier,
+      projectIdentifier,
+      module: (auditEventData as any)?.eventModule,
+      policySetIdentifier: resource.identifier
+    })
   }
 })
 

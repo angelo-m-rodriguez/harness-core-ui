@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test cloudformation remote wizard should click each repo option 1`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should click each repo option 2`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should click each repo option 3`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should click each repo option 4`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should render click new connector modal 1`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should render parameter details 1`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should render submit step one 1`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should render with initial data 1`] = `<div />`;
+
+exports[`Test cloudformation remote wizard should render with no initial data 1`] = `<div />`;

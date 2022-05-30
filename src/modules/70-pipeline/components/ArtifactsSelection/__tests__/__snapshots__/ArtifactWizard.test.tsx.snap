@@ -981,7 +981,7 @@ exports[`Artifact WizardStep tests new connector view works correctly in select 
                     >
                       <span
                         class="Tooltip--acenter bp3-label"
-                        data-tooltip-id="artifactConnForm_connectorId"
+                        data-tooltip-id="connectorId_DockerRegistry"
                       >
                         Docker Registry connector
                       </span>

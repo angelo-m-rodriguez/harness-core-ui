@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RepositorySelect test default rendering RepositorySelect 1`] = `
+<div>
+  <div
+    class="Layout--horizontal StyledProps--main"
+  >
+    <div
+      class="bp3-form-group"
+    >
+      <label
+        class="bp3-label"
+        for="repo"
+      >
+        repository
+         
+        <span
+          class="bp3-text-muted"
+        />
+      </label>
+      <div
+        class="bp3-form-content"
+      >
+        <div
+          class="bp3-popover-wrapper Select--main bp3-fill"
+        >
+          <div
+            class="bp3-popover-target"
+          >
+            <div
+              class="bp3-input-group"
+            >
+              <input
+                autocomplete="off"
+                class="bp3-input"
+                name="repo"
+                placeholder="- select -"
+                style="padding-right: 0px;"
+                type="text"
+                value=""
+              />
+              <span
+                class="bp3-input-action"
+              >
+                <span
+                  class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                  icon="chevron-down"
+                >
+                  <svg
+                    data-icon="chevron-down"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    width="14"
+                  >
+                    <desc>
+                      chevron-down
+                    </desc>
+                    <path
+                      d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

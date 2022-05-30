@@ -1909,3 +1909,22 @@ export const getModifiedTemplateValues = (
   }
   return returnInitialValuesForEdit
 }
+
+export const DEFAULT_TRIGGER_BRANCH = '<+trigger.branch>'
+
+/**
+ * Get proper branch to fetch Trigger InputSets
+ * If gitAwareForTriggerEnabled is true, pipelineBranchName is used only if it's not DEFAULT_TRIGGER_BRANCH
+ * Otherwise, return branch which is the active pipeline branch
+ */
+export function getTriggerInputSetsBranchQueryParameter({
+  gitAwareForTriggerEnabled,
+  pipelineBranchName = DEFAULT_TRIGGER_BRANCH,
+  branch = ''
+}: {
+  gitAwareForTriggerEnabled?: boolean
+  pipelineBranchName?: string
+  branch?: string
+}): string {
+  return gitAwareForTriggerEnabled ? (pipelineBranchName === DEFAULT_TRIGGER_BRANCH ? '' : pipelineBranchName) : branch
+}

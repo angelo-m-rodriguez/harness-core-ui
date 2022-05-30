@@ -22,11 +22,14 @@ import { TemplateListType } from '@templates-library/pages/TemplatesPage/Templat
 import {
   EntityGitDetails,
   EntityValidityDetails,
+  ErrorNodeSummary,
   getTemplateListPromise,
   GetTemplateListQueryParams,
   GetTemplateQueryParams,
   NGTemplateInfoConfig,
-  TemplateSummaryResponse
+  TemplateSummaryResponse,
+  validateTemplateInputsPromise,
+  ValidateTemplateInputsQueryParams
 } from 'services/template-ng'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -36,7 +39,7 @@ import { DefaultNewTemplateId, DefaultNewVersionLabel, DefaultTemplate } from 'f
 import { ActionReturnType, TemplateContextActions } from './TemplateActions'
 import { initialState, TemplateReducer, TemplateReducerState, TemplateViewData } from './TemplateReducer'
 
-const logger = loggerFor(ModuleName.CD)
+const logger = loggerFor(ModuleName.TEMPLATES)
 
 const DBInitializationFailed = 'DB Creation retry exceeded.'
 
@@ -56,6 +59,7 @@ interface TemplatePayload {
   entityValidityDetails?: EntityValidityDetails
   templateYaml?: string
   lastPublishedVersion?: string
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 const getId = (
@@ -114,6 +118,23 @@ const getTemplatesByIdentifier = (
     })
 }
 
+const getTemplateErrorNodeSummary = (
+  queryParams: ValidateTemplateInputsQueryParams
+): Promise<ErrorNodeSummary | undefined> => {
+  return validateTemplateInputsPromise({ queryParams })
+    .then(response => {
+      if (response && response.status === 'SUCCESS') {
+        if (response.data?.validYaml === false && response.data.errorNodeSummary) {
+          return response.data.errorNodeSummary
+        }
+      }
+      throw response
+    })
+    .catch(_error => {
+      return undefined
+    })
+}
+
 interface DispatchTemplateSuccessArgs {
   dispatch: React.Dispatch<ActionReturnType>
   data: TemplatePayload
@@ -125,6 +146,7 @@ interface DispatchTemplateSuccessArgs {
   id: string
   stableVersion: string | undefined
   lastPublishedVersion: string | undefined
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promise<void> => {
   const {
@@ -137,7 +159,8 @@ const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promi
     templateWithGitDetails,
     id,
     stableVersion,
-    lastPublishedVersion
+    lastPublishedVersion,
+    templateInputsErrorNodeSummary
   } = args
   if (data && !forceUpdate) {
     dispatch(
@@ -157,7 +180,8 @@ const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promi
           templateWithGitDetails?.entityValidityDetails,
           defaultTo(data?.entityValidityDetails, {})
         ),
-        templateYaml: data?.templateYaml
+        templateYaml: data?.templateYaml,
+        templateInputsErrorNodeSummary
       })
     )
     dispatch(TemplateContextActions.initialized())
@@ -177,7 +201,8 @@ const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promi
         templateWithGitDetails?.entityValidityDetails,
         defaultTo(data?.entityValidityDetails, {})
       ),
-      templateYaml: templateYamlStr
+      templateYaml: templateYamlStr,
+      templateInputsErrorNodeSummary
     }
     await IdbTemplate.put(IdbTemplateStoreName, payload)
     dispatch(
@@ -192,7 +217,8 @@ const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promi
         stableVersion: stableVersion,
         gitDetails: payload.gitDetails,
         entityValidityDetails: payload.entityValidityDetails,
-        templateYaml: payload.templateYaml
+        templateYaml: payload.templateYaml,
+        templateInputsErrorNodeSummary
       })
     )
     dispatch(TemplateContextActions.initialized())
@@ -209,7 +235,8 @@ const dispatchTemplateSuccess = async (args: DispatchTemplateSuccessArgs): Promi
         stableVersion: stableVersion,
         gitDetails: templateWithGitDetails?.gitDetails?.objectId ? templateWithGitDetails.gitDetails : {},
         entityValidityDetails: defaultTo(templateWithGitDetails?.entityValidityDetails, {}),
-        templateYaml: templateYamlStr
+        templateYaml: templateYamlStr,
+        templateInputsErrorNodeSummary
       })
     )
     dispatch(TemplateContextActions.initialized())
@@ -233,6 +260,15 @@ const _fetchTemplate = async (props: FetchTemplateBoundProps, params: FetchTempl
     let data: TemplatePayload = await IdbTemplate.get(IdbTemplateStoreName, id)
     if ((!data || forceFetch) && templateIdentifier !== DefaultNewTemplateId) {
       try {
+        const templateInputsErrorNodeSummary = await getTemplateErrorNodeSummary({
+          ...queryParams,
+          templateIdentifier,
+          versionLabel,
+          repoIdentifier,
+          branch,
+          getDefaultFromOtherRepo: true
+        })
+
         const templatesList: TemplateSummaryResponse[] = await getTemplatesByIdentifier(
           {
             ...queryParams,
@@ -284,7 +320,8 @@ const _fetchTemplate = async (props: FetchTemplateBoundProps, params: FetchTempl
           template,
           templateWithGitDetails,
           templateYamlStr,
-          versions
+          versions,
+          templateInputsErrorNodeSummary
         })
       } catch (_) {
         logger.info('Failed to fetch template list')

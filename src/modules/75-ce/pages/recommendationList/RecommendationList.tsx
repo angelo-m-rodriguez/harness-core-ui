@@ -211,48 +211,43 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     }
 
     return (
-      <Layout.Horizontal>
+      <Layout.Horizontal style={{ alignItems: 'center' }}>
         <Icon name={iconName} size={28} padding={{ right: 'medium' }} />
-        <Layout.Vertical>
-          <Container>
-            <Text inline color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+        <Layout.Vertical style={{ flex: 1 }}>
+          <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+            <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
               {`${getString('common.cluster')}: `}
             </Text>
             <Link to={clusterLink} onClick={e => e.stopPropagation()}>
-              <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }}>
+              <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                 {clusterName}
               </Text>
             </Link>
-          </Container>
+          </Layout.Horizontal>
           {namespace ? (
-            <Container>
-              <Text inline color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+            <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+              <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
                 {`${getString('ce.recommendation.listPage.filters.namespace')}: `}
               </Text>
               <Link to={namespaceLink} onClick={e => e.stopPropagation()}>
-                <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }}>
+                <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                   {namespace}
                 </Text>
               </Link>
-            </Container>
+            </Layout.Horizontal>
           ) : null}
-          <Layout.Horizontal className={css.resourceNameContainer}>
-            <Text
-              inline
-              color={Color.GREY_500}
-              font={{ variation: FontVariation.SMALL_BOLD }}
-              margin={{ right: 'xsmall' }}
-            >
+          <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+            <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL_BOLD }}>
               {`${getString(resourceTypeStringKey[resourceType])}: `}
             </Text>
             {resourceType === ResourceType.Workload ? (
               <Link to={resourceDetailsLink} onClick={e => e.stopPropagation()}>
-                <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
+                <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                   {cell.value}
                 </Text>
               </Link>
             ) : (
-              <Text inline color={Color.GREY_700} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
+              <Text color={Color.GREY_700} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                 {cell.value}
               </Text>
             )}
@@ -266,7 +261,7 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     const rowData = row.original
     const { resourceType } = rowData
     return (
-      <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }}>
+      <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }} lineClamp={1}>
         {resourceTypeMap[resourceType]}
       </Text>
     )

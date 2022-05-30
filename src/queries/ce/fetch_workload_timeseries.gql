@@ -16,7 +16,7 @@ query FetchWorkloadTimeSeries(
     groupBy: $groupBy
     limit: 100
     offset: 0
-    includeOthers: false
+    preferences: { includeOthers: false, includeUnallocatedCost: false }
   ) {
     cpuLimit {
       time

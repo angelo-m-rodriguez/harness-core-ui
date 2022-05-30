@@ -17,6 +17,7 @@ import { useStrings } from 'framework/strings'
 import type { GitQueryParams, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useQueryParams } from '@common/hooks'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
+import { GitSyncStoreProvider } from 'framework/GitRepoStore/GitSyncStoreContext'
 import css from './TriggerDetails.module.scss'
 
 export const TriggerBreadcrumbs = ({
@@ -172,7 +173,7 @@ export default function TriggerDetails({
   ])
 
   return (
-    <>
+    <GitSyncStoreProvider>
       <Page.Header
         className={cx(wizard && css.wizard)}
         toolbar={GetTriggerRightNav(pipeline)}
@@ -183,6 +184,6 @@ export default function TriggerDetails({
         }
       />
       <Page.Body className={cx(wizard && css.wizardBody)}>{children}</Page.Body>
-    </>
+    </GitSyncStoreProvider>
   )
 }

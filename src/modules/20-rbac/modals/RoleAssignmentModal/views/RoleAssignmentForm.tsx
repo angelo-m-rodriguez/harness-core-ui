@@ -22,6 +22,7 @@ import NewUserRoleDropdown from '@rbac/components/NewUserRoleDropdown/NewUserRol
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import type { Assignment, RoleOption, UserRoleAssignmentValues } from './UserRoleAssigment'
 import type { RoleAssignmentValues } from './RoleAssignment'
+import type { UserGroupRoleAssignmentValues } from './AssignRoles'
 import css from './RoleAssignmentForm.module.scss'
 
 export enum InviteType {
@@ -31,7 +32,7 @@ export enum InviteType {
 
 interface RoleAssignmentFormProps {
   noRoleAssignmentsText: string
-  formik: FormikProps<UserRoleAssignmentValues | RoleAssignmentValues>
+  formik: FormikProps<UserRoleAssignmentValues | RoleAssignmentValues | UserGroupRoleAssignmentValues>
   onSuccess?: () => void
 }
 

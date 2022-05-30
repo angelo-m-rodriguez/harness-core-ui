@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom'
 import type { ExecutionPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useGetInputsetYamlV2 } from 'services/pipeline-ng'
 import { PageSpinner } from '@common/components'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import { RunPipelineForm } from '@pipeline/components/RunPipelineModal/RunPipelineForm'
 import type { ResponseJsonNode } from 'services/cd-ng'
 
@@ -72,6 +73,9 @@ export default function ExecutionInputsView(props: ExecutionInputsViewInterface)
         repoIdentifier={pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier}
         mockData={props.mockData}
         executionInputSetTemplateYaml={inputSetTemplateYaml}
+        storeType={
+          pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
+        }
       />
     </div>
   )

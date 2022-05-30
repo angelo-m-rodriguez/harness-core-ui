@@ -7,28 +7,46 @@
 
 import { cloneDeep, omit, pick } from 'lodash-es'
 import { PERCENTAGE_ROLLOUT_VALUE } from '@cf/constants'
+import type { TargetManagementFlagConfigurationPanelFormRow } from '@cf/components/TargetManagementFlagConfigurationPanel/types'
 import {
   getAddFlagsInstruction,
   getFlagSettingsInstructions,
   getRemovedFlagIdentifiers,
   getRemoveFlagsInstruction,
+  getRuleId,
   getUpdatedFlags,
   getUpdateFlagsInstruction,
   getVariationOrServe
 } from '../flagSettingsInstructions'
-import { mockFlagSettingsFormDataValues, mockSegmentFlags, mockTargetGroupFlagsMap } from '../../../__tests__/mocks'
-import type { FlagSettingsFormRow } from '../../../TargetGroupDetailPage.types'
+import {
+  mockFeatures,
+  mockFlagSettingsFormDataValues,
+  mockSegmentFlags,
+  mockTargetGroup
+} from '../../../__tests__/mocks'
 
 describe('flagSettingsInstructions', () => {
   describe('getFlagSettingsInstructions', () => {
     test('it should return no instructions when nothing changed', async () => {
-      expect(getFlagSettingsInstructions(mockFlagSettingsFormDataValues.flags, mockTargetGroupFlagsMap)).toEqual([])
+      expect(
+        getFlagSettingsInstructions(
+          mockTargetGroup.identifier,
+          mockFlagSettingsFormDataValues,
+          mockFlagSettingsFormDataValues,
+          mockFeatures
+        )
+      ).toEqual([])
     })
 
     test('it should return only a removeRule instruction when a flag is removed', async () => {
       const flags = omit(mockFlagSettingsFormDataValues.flags, 'f1')
 
-      const response = getFlagSettingsInstructions(flags, mockTargetGroupFlagsMap)
+      const response = getFlagSettingsInstructions(
+        mockTargetGroup.identifier,
+        { flags },
+        mockFlagSettingsFormDataValues,
+        mockFeatures
+      )
 
       expect(response).not.toEqual(expect.arrayContaining([expect.objectContaining({ kind: 'addRule' })]))
       expect(response).toEqual(expect.arrayContaining([expect.objectContaining({ kind: 'removeRule' })]))
@@ -38,7 +56,12 @@ describe('flagSettingsInstructions', () => {
       const flags = cloneDeep(mockFlagSettingsFormDataValues.flags)
       flags.f1.variation = 'v2'
 
-      const response = getFlagSettingsInstructions(flags, mockTargetGroupFlagsMap)
+      const response = getFlagSettingsInstructions(
+        mockTargetGroup.identifier,
+        { flags },
+        mockFlagSettingsFormDataValues,
+        mockFeatures
+      )
 
       expect(response).toEqual(expect.arrayContaining([expect.objectContaining({ kind: 'addRule' })]))
       expect(response).not.toEqual(expect.arrayContaining([expect.objectContaining({ kind: 'removeRule' })]))
@@ -48,7 +71,12 @@ describe('flagSettingsInstructions', () => {
       const flags = omit(cloneDeep(mockFlagSettingsFormDataValues.flags), 'f1')
       flags.f2.variation = 'v1'
 
-      const response = getFlagSettingsInstructions(flags, mockTargetGroupFlagsMap)
+      const response = getFlagSettingsInstructions(
+        mockTargetGroup.identifier,
+        { flags },
+        mockFlagSettingsFormDataValues,
+        mockFeatures
+      )
 
       expect(response).toEqual(
         expect.arrayContaining([
@@ -64,57 +92,61 @@ describe('flagSettingsInstructions', () => {
       const removedFlags = ['f2', 'f4']
       const flags = omit(mockFlagSettingsFormDataValues.flags, ...removedFlags)
 
-      expect(getRemovedFlagIdentifiers(flags, mockTargetGroupFlagsMap)).toEqual(removedFlags)
+      expect(getRemovedFlagIdentifiers(flags, mockFlagSettingsFormDataValues.flags)).toEqual(removedFlags)
     })
 
     test('it should return an empty array when no flags have been removed', async () => {
-      expect(getRemovedFlagIdentifiers(mockFlagSettingsFormDataValues.flags, mockTargetGroupFlagsMap)).toEqual([])
+      expect(
+        getRemovedFlagIdentifiers(mockFlagSettingsFormDataValues.flags, mockFlagSettingsFormDataValues.flags)
+      ).toEqual([])
     })
   })
 
   describe('getUpdatedFlags', () => {
-    test('it should return an array with the rows of changed flags', async () => {
-      const editedRows = [
-        cloneDeep(mockFlagSettingsFormDataValues.flags.f2),
-        cloneDeep(mockFlagSettingsFormDataValues.flags.f4)
-      ]
-
-      editedRows[0].variation = 'v1'
-      editedRows[1].variation = 'v1'
-
+    test('it should return an object with the rows of changed flags', async () => {
       const flags = cloneDeep(mockFlagSettingsFormDataValues.flags)
-      flags.f2 = editedRows[0]
-      flags.f4 = editedRows[1]
+      flags.f2.variation = 'v1'
+      flags.f4.variation = 'v1'
 
-      expect(getUpdatedFlags(flags, mockTargetGroupFlagsMap)).toEqual(editedRows)
+      expect(getUpdatedFlags(flags, mockFlagSettingsFormDataValues.flags)).toEqual({
+        f2: { variation: 'v1' },
+        f4: { variation: 'v1' }
+      })
     })
 
-    test('it should return an empty array when no flags have been changed', async () => {
-      expect(getUpdatedFlags(mockFlagSettingsFormDataValues.flags, mockTargetGroupFlagsMap)).toEqual([])
+    test('it should return an empty object when no flags have been changed', async () => {
+      expect(getUpdatedFlags(mockFlagSettingsFormDataValues.flags, mockFlagSettingsFormDataValues.flags)).toEqual({})
     })
   })
 
   describe('getRemoveFlagsInstruction', () => {
     test('it should return the appropriate instruction to remove a single flag', async () => {
-      const flagToRemove = mockTargetGroupFlagsMap.f1
+      const flagToRemove = mockFeatures[0]
 
-      expect(getRemoveFlagsInstruction([flagToRemove.identifier], mockTargetGroupFlagsMap)).toEqual({
+      expect(getRemoveFlagsInstruction([flagToRemove.identifier], mockFeatures, mockTargetGroup.identifier)).toEqual({
         kind: 'removeRule',
         parameters: {
-          features: [{ ruleID: flagToRemove.ruleId }]
+          features: [{ ruleID: flagToRemove.envProperties?.rules?.[0].ruleId }]
         }
       })
     })
 
     test('it should return the appropriate instruction to remove multiple flags', async () => {
-      const flagsToRemove = [mockTargetGroupFlagsMap.f1, mockTargetGroupFlagsMap.f2]
+      const flagsToRemove = [mockFeatures[0], mockFeatures[1]]
 
       expect(
-        getRemoveFlagsInstruction([flagsToRemove[0].identifier, flagsToRemove[1].identifier], mockTargetGroupFlagsMap)
+        getRemoveFlagsInstruction(
+          [flagsToRemove[0].identifier, flagsToRemove[1].identifier],
+          mockFeatures,
+          mockTargetGroup.identifier
+        )
       ).toEqual({
         kind: 'removeRule',
         parameters: {
-          features: [{ ruleID: flagsToRemove[0].ruleId }, { ruleID: flagsToRemove[1].ruleId }]
+          features: [
+            { ruleID: flagsToRemove[0].envProperties?.rules?.[0].ruleId },
+            { ruleID: flagsToRemove[1].envProperties?.rules?.[0].ruleId }
+          ]
         }
       })
     })
@@ -125,14 +157,14 @@ describe('flagSettingsInstructions', () => {
       const flagToUpdate = cloneDeep(mockFlagSettingsFormDataValues.flags.f1)
       flagToUpdate.variation = 'v2'
 
-      expect(getUpdateFlagsInstruction([flagToUpdate], mockTargetGroupFlagsMap)).toEqual({
+      expect(getUpdateFlagsInstruction({ f1: flagToUpdate }, mockFeatures, mockTargetGroup.identifier)).toEqual({
         kind: 'addRule',
         parameters: {
           features: [
             {
-              identifier: flagToUpdate.identifier,
+              identifier: 'f1',
               variation: flagToUpdate.variation,
-              ruleID: mockTargetGroupFlagsMap[flagToUpdate.identifier].ruleId
+              ruleID: mockFeatures[0].envProperties?.rules?.[0].ruleId
             }
           ]
         }
@@ -140,26 +172,26 @@ describe('flagSettingsInstructions', () => {
     })
 
     test('it should return the appropriate instruction to update multiple flags', async () => {
-      const flagsToUpdate = [
-        cloneDeep(mockFlagSettingsFormDataValues.flags.f1),
-        cloneDeep(mockFlagSettingsFormDataValues.flags.f2)
-      ]
-      flagsToUpdate[0].variation = 'v2'
-      flagsToUpdate[1].variation = 'v1'
+      const flagsToUpdate = {
+        f1: cloneDeep(mockFlagSettingsFormDataValues.flags.f1),
+        f2: cloneDeep(mockFlagSettingsFormDataValues.flags.f2)
+      }
+      flagsToUpdate.f1.variation = 'v2'
+      flagsToUpdate.f2.variation = 'v1'
 
-      expect(getUpdateFlagsInstruction(flagsToUpdate, mockTargetGroupFlagsMap)).toEqual({
+      expect(getUpdateFlagsInstruction(flagsToUpdate, mockFeatures, mockTargetGroup.identifier)).toEqual({
         kind: 'addRule',
         parameters: {
           features: [
             {
-              identifier: flagsToUpdate[0].identifier,
-              variation: flagsToUpdate[0].variation,
-              ruleID: mockTargetGroupFlagsMap[flagsToUpdate[0].identifier].ruleId
+              identifier: 'f1',
+              variation: flagsToUpdate.f1.variation,
+              ruleID: mockFeatures[0].envProperties?.rules?.[0].ruleId
             },
             {
-              identifier: flagsToUpdate[1].identifier,
-              variation: flagsToUpdate[1].variation,
-              ruleID: mockTargetGroupFlagsMap[flagsToUpdate[1].identifier].ruleId
+              identifier: 'f2',
+              variation: flagsToUpdate.f2.variation,
+              ruleID: mockFeatures[1].envProperties?.rules?.[0].ruleId
             }
           ]
         }
@@ -213,8 +245,7 @@ describe('flagSettingsInstructions', () => {
 
   describe('getVariationOrServe', () => {
     test('it should return a serve object if the variation is Percentage Rollout', async () => {
-      const rowValues: FlagSettingsFormRow = {
-        identifier: 'abc',
+      const rowValues: TargetManagementFlagConfigurationPanelFormRow = {
         variation: PERCENTAGE_ROLLOUT_VALUE,
         percentageRollout: {
           variations: [
@@ -238,12 +269,21 @@ describe('flagSettingsInstructions', () => {
     })
 
     test('it should return variation object if the variation is not Percentage Rollout', async () => {
-      const rowValues: FlagSettingsFormRow = {
-        identifier: 'abc',
+      const rowValues: TargetManagementFlagConfigurationPanelFormRow = {
         variation: 'var1'
       }
 
       expect(getVariationOrServe(rowValues)).toEqual({ variation: 'var1' })
+    })
+  })
+
+  describe('getRuleId', () => {
+    test('it should retrieve the first rule ID that matches the target group id', async () => {
+      expect(getRuleId(mockTargetGroup.identifier, mockFeatures[0])).toEqual('ruleId1')
+    })
+
+    test('it should return undefined if no rule matches', async () => {
+      expect(getRuleId('unknown', mockFeatures[0])).toBeUndefined()
     })
   })
 })

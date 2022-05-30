@@ -7,7 +7,7 @@
 
 import React, { FC } from 'react'
 import { useParams } from 'react-router-dom'
-import { Page, Tab, Tabs } from '@harness/uicore'
+import { Page, Tabs } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import { Feature, Segment, useGetSegment } from 'services/cf'
 import { useGetEnvironment } from 'services/cd-ng'
@@ -88,25 +88,28 @@ const TargetGroupDetailPage: FC = () => {
       leftBar={<TargetGroupCriteria targetGroup={targetGroup as Segment} reloadTargetGroup={refetchTargetGroup} />}
     >
       <div className={css.tabs}>
-        <Tabs id="TargetGroupDetailPageTabs">
-          <Tab
-            id="FlagSettingsTab"
-            title={
-              <StringWithTooltip
-                stringId="cf.targetDetail.flagSetting"
-                tooltipId="ff_targetGroupDetail_flagSettings_heading"
-              />
+        <Tabs
+          id="TargetGroupDetailPageTabs"
+          tabList={[
+            {
+              id: 'FlagSettingsTab',
+              title: (
+                <StringWithTooltip
+                  stringId="cf.targetDetail.flagSetting"
+                  tooltipId="ff_targetGroupDetail_flagSettings_heading"
+                />
+              ),
+              panel: <FlagSettingsPanel targetGroup={targetGroup as Segment} />,
+              panelClassName: css.panel
+            },
+            {
+              id: 'AuditLogsTab',
+              title: getString('activityLog'),
+              panel: <AuditLogs flagData={targetGroup as Feature} objectType={AuditLogObjectType.Segment} />,
+              panelClassName: css.panel
             }
-            panel={<FlagSettingsPanel targetGroup={targetGroup as Segment} />}
-            panelClassName={css.panel}
-          />
-          <Tab
-            id="AuditLogsTab"
-            title={getString('activityLog')}
-            panel={<AuditLogs flagData={targetGroup as Feature} objectType={AuditLogObjectType.Segment} />}
-            panelClassName={css.panel}
-          />
-        </Tabs>
+          ]}
+        />
       </div>
     </TargetManagementDetailPageTemplate>
   )

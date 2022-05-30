@@ -31,9 +31,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px 0px 0px;
-  flex: 1 0 60%;
+  padding: 0 12px 0 0;
 }
+
+.gitRemoteDetailsWrapper {
+  flex: 1;
+  padding-left: 12px;
+}
+
 .pipelineStudioTitleContainer {
   text-align: center;
 

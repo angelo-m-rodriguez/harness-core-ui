@@ -1854,6 +1854,20 @@ export interface CreatePRDTO {
   prNumber?: number
 }
 
+export interface CreatePRRequest {
+  connectorRef?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  repoName?: string
+  sourceBranchName?: string
+  targetBranchName?: string
+  title?: string
+}
+
+export interface CreatePRResponse {
+  prNumber?: number
+}
+
 export interface CriteriaSpec {
   [key: string]: any
 }
@@ -2506,6 +2520,7 @@ export interface EntityDetail {
 
 export interface EntityGitDetails {
   branch?: string
+  commitId?: string
   filePath?: string
   objectId?: string
   repoIdentifier?: string
@@ -3890,6 +3905,12 @@ export type GenericEntityFilter = Filter & {
   filterType?: string
 }
 
+export interface GetFileResponseDTO {
+  blobId?: string
+  commitId?: string
+  fileContent?: string
+}
+
 export interface GitAuthenticationDTO {
   [key: string]: any
 }
@@ -3926,6 +3947,7 @@ export type GitConfigDTO = ConnectorConfigDTO & {
 
 export interface GitEnabledDTO {
   connectivityMode?: 'MANAGER' | 'DELEGATE'
+  gitSimplificationEnabled?: boolean
   gitSyncEnabled?: boolean
 }
 
@@ -4697,6 +4719,7 @@ export interface GitSyncRepoFilesList {
 export interface GitSyncSettingsDTO {
   accountIdentifier?: string
   executeOnDelegate: boolean
+  gitSimplificationEnabled?: boolean
   orgIdentifier: string
   projectIdentifier: string
 }
@@ -7249,6 +7272,13 @@ export interface ResponseCreatePRDTO {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseCreatePRResponse {
+  correlationId?: string
+  data?: CreatePRResponse
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseDashboardExecutionStatusInfo {
   correlationId?: string
   data?: DashboardExecutionStatusInfo
@@ -7434,6 +7464,13 @@ export interface ResponseGcrBuildDetailsDTO {
 export interface ResponseGcrResponseDTO {
   correlationId?: string
   data?: GcrResponseDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseGetFileResponseDTO {
+  correlationId?: string
+  data?: GetFileResponseDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -8659,6 +8696,13 @@ export interface ResponseSaasGitDTO {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseScmCommitFileResponseDTO {
+  correlationId?: string
+  data?: ScmCommitFileResponseDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseScmConnectorResponse {
   correlationId?: string
   data?: ScmConnectorResponse
@@ -9408,6 +9452,11 @@ export interface ScimUser {
   roles?: JsonNode
   schemas?: string[]
   userName?: string
+}
+
+export interface ScmCommitFileResponseDTO {
+  blobId?: string
+  commitId?: string
 }
 
 export interface ScmConnectorDTO {
@@ -10384,6 +10433,7 @@ export interface TerraformPlanExecutionData {
   command: 'Apply' | 'Destroy'
   configFiles: TerraformConfigFilesWrapper
   environmentVariables?: NGVariable[]
+  exportTerraformPlanJson?: boolean
   secretManagerRef: string
   targets?: string[]
   varFiles?: TerraformVarFileWrapper[]
@@ -16532,6 +16582,7 @@ export interface CreateConnectorQueryParams {
   baseBranch?: string
   connectorRef?: string
   storeType?: 'INLINE' | 'REMOTE'
+  repoName?: string
 }
 
 export type CreateConnectorProps = Omit<
@@ -25475,6 +25526,7 @@ export interface CreateGitOpsProviderQueryParams {
   baseBranch?: string
   connectorRef?: string
   storeType?: 'INLINE' | 'REMOTE'
+  repoName?: string
 }
 
 export type CreateGitOpsProviderProps = Omit<
@@ -25563,6 +25615,7 @@ export interface UpdateGitOpsProviderQueryParams {
   baseBranch?: string
   connectorRef?: string
   storeType?: 'INLINE' | 'REMOTE'
+  repoName?: string
 }
 
 export type UpdateGitOpsProviderProps = Omit<
@@ -31023,6 +31076,116 @@ export const updateScimUserPromise = (
     signal
   )
 
+export interface CreateFileQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  RepoName: string
+  branch?: string
+  filePath: string
+  ConnectorRef?: string
+  fileContent?: string
+  createPr?: boolean
+  isCommitToNewBranch?: boolean
+  newBranch?: string
+  commitMessage?: string
+}
+
+export type CreateFileProps = Omit<
+  GetProps<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file
+ */
+export const CreateFile = (props: CreateFileProps) => (
+  <Get<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>
+    path={`/scm/create-file`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCreateFileProps = Omit<
+  UseGetProps<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file
+ */
+export const useCreateFile = (props: UseCreateFileProps) =>
+  useGet<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>(`/scm/create-file`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * get file
+ */
+export const createFilePromise = (
+  props: GetUsingFetchProps<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseScmCommitFileResponseDTO, Failure | Error, CreateFileQueryParams, void>(
+    getConfig('ng/api'),
+    `/scm/create-file`,
+    props,
+    signal
+  )
+
+export interface CreatePRV2QueryParams {
+  accountIdentifier: string
+}
+
+export type CreatePRV2Props = Omit<
+  MutateProps<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>,
+  'path' | 'verb'
+>
+
+/**
+ * creates a pull request
+ */
+export const CreatePRV2 = (props: CreatePRV2Props) => (
+  <Mutate<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>
+    verb="POST"
+    path={`/scm/create-pull-request`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCreatePRV2Props = Omit<
+  UseMutateProps<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>,
+  'path' | 'verb'
+>
+
+/**
+ * creates a pull request
+ */
+export const useCreatePRV2 = (props: UseCreatePRV2Props) =>
+  useMutate<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>(
+    'POST',
+    `/scm/create-pull-request`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * creates a pull request
+ */
+export const createPRV2Promise = (
+  props: MutateUsingFetchProps<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<ResponseCreatePRResponse, Failure | Error, CreatePRV2QueryParams, CreatePRRequest, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/scm/create-pull-request`,
+    props,
+    signal
+  )
+
 export type CreatePRProps = Omit<
   MutateProps<ResponseCreatePRDTO, Failure | Error, void, GitPRCreateRequest, void>,
   'path' | 'verb'
@@ -31119,6 +31282,114 @@ export const getFileContentPromise = (
   getUsingFetch<ResponseGitFileContent, Failure | Error, GetFileContentQueryParams, void>(
     getConfig('ng/api'),
     `/scm/fileContent`,
+    props,
+    signal
+  )
+
+export interface GetFileByBranchQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  RepoName: string
+  filePath: string
+  branch?: string
+  ConnectorRef?: string
+}
+
+export type GetFileByBranchProps = Omit<
+  GetProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file by branch
+ */
+export const GetFileByBranch = (props: GetFileByBranchProps) => (
+  <Get<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>
+    path={`/scm/get-file-by-branch`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetFileByBranchProps = Omit<
+  UseGetProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file by branch
+ */
+export const useGetFileByBranch = (props: UseGetFileByBranchProps) =>
+  useGet<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>(`/scm/get-file-by-branch`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * get file by branch
+ */
+export const getFileByBranchPromise = (
+  props: GetUsingFetchProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseGetFileResponseDTO, Failure | Error, GetFileByBranchQueryParams, void>(
+    getConfig('ng/api'),
+    `/scm/get-file-by-branch`,
+    props,
+    signal
+  )
+
+export interface GetFileByCommitIdQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  RepoName: string
+  filePath: string
+  commitId?: string
+  ConnectorRef?: string
+}
+
+export type GetFileByCommitIdProps = Omit<
+  GetProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file by commit id
+ */
+export const GetFileByCommitId = (props: GetFileByCommitIdProps) => (
+  <Get<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>
+    path={`/scm/get-file-by-commit-id`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetFileByCommitIdProps = Omit<
+  UseGetProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file by commit id
+ */
+export const useGetFileByCommitId = (props: UseGetFileByCommitIdProps) =>
+  useGet<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>(
+    `/scm/get-file-by-commit-id`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * get file by commit id
+ */
+export const getFileByCommitIdPromise = (
+  props: GetUsingFetchProps<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseGetFileResponseDTO, Failure | Error, GetFileByCommitIdQueryParams, void>(
+    getConfig('ng/api'),
+    `/scm/get-file-by-commit-id`,
     props,
     signal
   )
@@ -31397,6 +31668,67 @@ export const getListOfBranchesByConnectorPromise = (
   getUsingFetch<ResponseListString, Failure | Error, GetListOfBranchesByConnectorQueryParams, void>(
     getConfig('ng/api'),
     `/scm/listRepoBranches`,
+    props,
+    signal
+  )
+
+export interface UpdateFileQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  RepoName: string
+  branch?: string
+  filePath: string
+  ConnectorRef?: string
+  fileContent?: string
+  createPr?: boolean
+  isCommitToNewBranch?: boolean
+  baseBranch?: string
+  commitMessage?: string
+  oldFileSha?: string
+  oldCommitId?: string
+}
+
+export type UpdateFileProps = Omit<
+  GetProps<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file
+ */
+export const UpdateFile = (props: UpdateFileProps) => (
+  <Get<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>
+    path={`/scm/update-file`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateFileProps = Omit<
+  UseGetProps<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>,
+  'path'
+>
+
+/**
+ * get file
+ */
+export const useUpdateFile = (props: UseUpdateFileProps) =>
+  useGet<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>(`/scm/update-file`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * get file
+ */
+export const updateFilePromise = (
+  props: GetUsingFetchProps<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseScmCommitFileResponseDTO, Failure | Error, UpdateFileQueryParams, void>(
+    getConfig('ng/api'),
+    `/scm/update-file`,
     props,
     signal
   )
@@ -34501,6 +34833,27 @@ export const getAllUserReposPromise = (
     `/trial-signup/fetch-repo-list`,
     props,
     signal
+  )
+
+export interface GetListOfAllReposByRefConnectorQueryParams {
+  accountIdentifier?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  connectorRef?: string
+}
+
+export type UseGetListOfAllReposByRefConnectorProps = Omit<
+  UseGetProps<ResponseListUserRepoResponse, Failure | Error, GetListOfAllReposByRefConnectorQueryParams, void>,
+  'path'
+>
+
+/**
+ * Lists All Git Repos corresponding to given reference connector
+ */
+export const useGetListOfAllReposByRefConnector = (props: UseGetListOfAllReposByRefConnectorProps) =>
+  useGet<ResponseListUserRepoResponse, Failure | Error, GetListOfAllReposByRefConnectorQueryParams, void>(
+    `/scm/list-all-repos-by-connector`,
+    { base: getConfig('ng/api'), ...props }
   )
 
 export interface ProvisionResourcesForCIQueryParams {

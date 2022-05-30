@@ -22,7 +22,7 @@ import {
   FormError,
   Icon
 } from '@harness/uicore'
-import { useGetAllUserRepos, UserRepoResponse } from 'services/cd-ng'
+import { useGetListOfAllReposByRefConnector, UserRepoResponse } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { ACCOUNT_SCOPE_PREFIX, getFullRepoName } from './Constants'
@@ -60,7 +60,7 @@ const SelectRepositoryRef = (
     data: repoData,
     loading: fetchingRepositories,
     refetch: fetchRepositories
-  } = useGetAllUserRepos({
+  } = useGetListOfAllReposByRefConnector({
     queryParams: {
       accountIdentifier: accountId,
       projectIdentifier,

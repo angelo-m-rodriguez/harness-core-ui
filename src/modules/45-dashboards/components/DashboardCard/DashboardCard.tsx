@@ -14,7 +14,8 @@ import { FontVariation } from '@harness/design-system'
 import { Classes, Menu } from '@blueprintjs/core'
 import { Link, useParams } from 'react-router-dom'
 import routes from '@common/RouteDefinitions'
-import { DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardType } from '@dashboards/types/DashboardTypes'
 import DashboardTags from '@dashboards/components/DashboardTags/DashboardTags'
 import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -25,10 +26,10 @@ import { useStrings } from 'framework/strings'
 import moduleTagCss from '@dashboards/common/ModuleTags.module.scss'
 
 export interface DashboardCardProps {
-  dashboard: IDashboard
-  cloneDashboard: (dashboard: IDashboard) => void
+  dashboard: DashboardModel
+  cloneDashboard: (dashboard: DashboardModel) => void
   deleteDashboard: (dashboardId: string) => void
-  editDashboard: (dashboard: IDashboard) => void
+  editDashboard: (dashboard: DashboardModel) => void
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({

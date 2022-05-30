@@ -35,10 +35,9 @@ export interface JiraCreateData extends StepElementConfig {
     connectorRef: string | SelectOption
     projectKey: string | JiraProjectSelectOption
     issueType: string | JiraProjectSelectOption
-    summary?: string
-    description?: string
     fields: JiraCreateFieldType[]
-    selectedFields?: JiraFieldNGWithValue[]
+    selectedRequiredFields?: JiraFieldNGWithValue[]
+    selectedOptionalFields?: JiraFieldNGWithValue[]
     delegateSelectors?: string[]
   }
 }

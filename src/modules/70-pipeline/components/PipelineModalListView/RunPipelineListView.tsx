@@ -17,6 +17,7 @@ import { String, useStrings } from 'framework/strings'
 import routes from '@common/RouteDefinitions'
 import type { PipelineType } from '@common/interfaces/RouteInterfaces'
 import GitDetailsColumn from '@common/components/Table/GitDetailsColumn/GitDetailsColumn'
+import type { StoreType } from '@common/constants/GitSyncTypes'
 import RbacButton from '@rbac/components/Button/Button'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
@@ -62,6 +63,9 @@ export default function RunPipelineListView({ data, refetch, gotoPage }: Pipelin
         module,
         branch: pipeline.gitDetails?.branch,
         repoIdentifier: pipeline.gitDetails?.repoIdentifier,
+        connectorRef: pipeline.connectorRef,
+        repoName: pipeline.gitDetails?.repoName,
+        storeType: pipeline.storeType as StoreType,
         runPipeline: true
       })
     )

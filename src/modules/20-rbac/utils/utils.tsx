@@ -15,9 +15,12 @@ import type {
   UserMetadataDTO,
   Scope as CDScope,
   UserGroupDTO,
-  Failure
+  Failure,
+  GetUserGroupAggregateQueryParams
 } from 'services/cd-ng'
-import { Scope } from '@common/interfaces/SecretsInterface'
+import { Scope, PrincipalScope } from '@common/interfaces/SecretsInterface'
+import { String } from 'framework/strings'
+import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import type {
   Assignment,
   RoleOption,
@@ -29,7 +32,7 @@ import type { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier
 import type { FeatureRequest } from 'framework/featureStore/featureStoreUtil'
 import type { PermissionsRequest } from '@rbac/hooks/usePermission'
 import { FeatureWarningTooltip } from '@common/components/FeatureWarning/FeatureWarningWithTooltip'
-import type { StringKeys, UseStringsReturn } from 'framework/strings'
+import type { UseStringsReturn } from 'framework/strings'
 import type { ProjectSelectOption } from '@audit-trail/components/FilterDrawer/FilterDrawer'
 import type { RbacMenuItemProps } from '@rbac/components/MenuItem/MenuItem'
 
@@ -341,14 +344,123 @@ export const generateScopeList = (org: string, projects: ProjectSelectOption[], 
   ]
 }
 
-export const getUserGroupActionTooltipText = (userGroup: UserGroupDTO): StringKeys | undefined => {
+export const getUserGroupActionTooltipText = (
+  accountId: string,
+  orgIdentifier: string,
+  projectIdentifier: string,
+  userGroup: UserGroupDTO,
+  userGroupInherited?: boolean
+): React.ReactElement | undefined => {
   const { ssoLinked, externallyManaged } = userGroup
+  const scope = getScopeFromDTO({
+    accountId,
+    orgIdentifier,
+    projectIdentifier
+  })
+  if (userGroupInherited) {
+    const vars = {
+      parentScope: mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup)),
+      childScope: mapfromScopetoPrincipalScope(scope)
+    }
+    return <String stringID="rbac.unableToEditInheritedMembershipDetailed" vars={vars} />
+  }
 
   if (ssoLinked) {
-    return 'rbac.userDetails.linkToSSOProviderModal.btnDisabledTooltipText'
+    return <String stringID="rbac.userDetails.linkToSSOProviderModal.btnDisabledTooltipText" />
   }
 
   if (externallyManaged) {
-    return 'rbac.unableToEditSCIMMembership'
+    return <String stringID="rbac.unableToEditSCIMMembership" />
+  }
+}
+
+export const getUserGroupMenuOptionText = (
+  action: string,
+  target: string,
+  userGroup: UserGroupDTO,
+  userGroupInherited?: boolean
+): React.ReactElement | undefined => {
+  const { externallyManaged } = userGroup
+  if (userGroupInherited) {
+    const vars = {
+      action: action.toLowerCase(),
+      parentScope: mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup))
+    }
+    return <String stringID="rbac.manageInheritedGroupText" vars={vars} />
+  }
+  if (externallyManaged) {
+    const vars = {
+      action: action.toLowerCase(),
+      target: target.toLowerCase()
+    }
+    return <String stringID="rbac.manageSCIMText" vars={vars} />
+  }
+}
+
+export const getScopeFromUserGroupDTO = (userGroupDTO?: UserGroupDTO): Scope => {
+  return getScopeFromDTO({
+    accountIdentifier: userGroupDTO?.accountIdentifier,
+    orgIdentifier: userGroupDTO?.orgIdentifier,
+    projectIdentifier: userGroupDTO?.projectIdentifier
+  })
+}
+
+export const mapfromScopetoPrincipalScope = (scope?: Scope): PrincipalScope | undefined => {
+  switch (scope) {
+    case Scope.ACCOUNT:
+      return PrincipalScope.ACCOUNT
+    case Scope.ORG:
+      return PrincipalScope.ORG
+    case Scope.PROJECT:
+      return PrincipalScope.PROJECT
+    default:
+      return undefined
+  }
+}
+
+export const isUserGroupInherited = (
+  accountId: string,
+  orgIdentifier: string,
+  projectIdentifier: string,
+  userGroupDTO?: UserGroupDTO
+): boolean => {
+  const scope = getScopeFromDTO({
+    accountId,
+    orgIdentifier,
+    projectIdentifier
+  })
+  if (userGroupDTO === undefined) {
+    return false
+  }
+  const userGroupScope = getScopeFromUserGroupDTO(userGroupDTO)
+  if (userGroupScope !== scope) {
+    return true
+  }
+  return false
+}
+
+export const getUserGroupQueryParams = (
+  accountIdentifier: string,
+  orgIdentifier: string,
+  projectIdentifier: string,
+  parentScope?: PrincipalScope
+): Pick<GetUserGroupAggregateQueryParams, 'accountIdentifier' | 'orgIdentifier' | 'projectIdentifier'> => {
+  const params = {
+    accountIdentifier
+  }
+  switch (parentScope) {
+    case PrincipalScope.ORG:
+      return {
+        ...params,
+        orgIdentifier
+      }
+    case PrincipalScope.PROJECT:
+      return {
+        ...params,
+        orgIdentifier,
+        projectIdentifier
+      }
+    default:
+      return params
   }
 }

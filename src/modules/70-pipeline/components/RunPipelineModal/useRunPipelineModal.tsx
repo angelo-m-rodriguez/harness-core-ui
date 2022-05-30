@@ -33,7 +33,7 @@ export interface UseRunPipelineModalReturn {
 export const useRunPipelineModal = (
   runPipelineModaParams: RunPipelineModalParams & GitQueryParams
 ): UseRunPipelineModalReturn => {
-  const { inputSetSelected, pipelineIdentifier, branch, repoIdentifier, executionId, stagesExecuted } =
+  const { inputSetSelected, pipelineIdentifier, branch, repoIdentifier, executionId, stagesExecuted, storeType } =
     runPipelineModaParams
   const { projectIdentifier, orgIdentifier, accountId, module, executionIdentifier } =
     useParams<PipelineType<ExecutionPathProps>>()
@@ -119,6 +119,7 @@ export const useRunPipelineModal = (
               }}
               stagesExecuted={stagesExecuted}
               executionIdentifier={planExecutionId}
+              storeType={storeType}
             />
             <Button
               aria-label="close modal"

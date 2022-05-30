@@ -10,7 +10,8 @@ import type {
   ApprovalStageConfig,
   DeploymentStageConfig,
   FeatureFlagStageConfig,
-  StageElementWrapperConfig
+  StageElementWrapperConfig,
+  CustomStageConfig
 } from 'services/cd-ng'
 import type { IntegrationStageConfig, K8sDirectInfraYaml, UseFromStageInfraYaml, VmPoolYaml } from 'services/ci'
 
@@ -22,6 +23,10 @@ export type AllStageConfig =
 
 export interface ApprovalStageElementConfig extends StageElementConfig {
   spec?: ApprovalStageConfig
+}
+
+export interface CustomStageElementConfig extends StageElementConfig {
+  spec?: CustomStageConfig
 }
 
 export interface DeploymentStageElementConfig extends StageElementConfig {

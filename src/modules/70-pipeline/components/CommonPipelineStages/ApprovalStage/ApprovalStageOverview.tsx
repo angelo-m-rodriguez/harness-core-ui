@@ -82,7 +82,8 @@ export function ApprovalStageOverview(props: ApprovalStageOverviewProps): React.
                   ...(cloneOriginalData.stage as ApprovalStageElementConfig),
                   name: values?.name || '',
                   identifier: values?.identifier || '',
-                  description: values?.description || ''
+                  description: values?.description || '',
+                  tags: values.tags || {}
                 })
               }
               return errors

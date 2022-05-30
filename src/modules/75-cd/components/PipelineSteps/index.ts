@@ -31,6 +31,7 @@ import { TerraformPlan } from './TerraformPlan/TerraformPlan'
 import { TerraformApply } from './TerraformApply/TerraformApply'
 import { InfraProvisioning } from './InfraProvisioning/InfraProvisioning'
 import { GcpInfrastructureSpec } from './GcpInfrastructureSpec/GcpInfrastructureSpec'
+import { PDCInfrastructureSpec } from './PDCInfrastructureSpec/PDCInfrastructureSpec'
 import { PolicyStep } from './PolicyStep/PolicyStep'
 import { ServerlessLambdaDeployStep } from './ServerlessLambdaDeploy/ServerlessLambdaDeploy'
 import { ServerlessLambdaRollbackStep } from './ServerlessLambdaRollback/ServerlessLambdaRollback'
@@ -40,6 +41,7 @@ import { ServerlessGCPSpec } from './ServerlessGCP/ServerlessGCPSpec'
 import { ServerlessAwsLambdaServiceSpec } from './ServerlessAwsLambdaServiceSpec/ServerlessAwsLambdaServiceSpec'
 import { CFRollbackStack } from './CloudFormation/RollbackStack/RollbackStack'
 import { CFDeleteStack } from './CloudFormation/DeleteStack/DeleteStack'
+import { CFCreateStack } from './CloudFormation/CreateStack/CreateStack'
 
 factory.registerStep(new HttpStep())
 factory.registerStep(new K8RolloutDeployStep())
@@ -54,6 +56,7 @@ factory.registerStep(new K8sDeleteStep())
 factory.registerStep(new ShellScriptStep())
 factory.registerStep(new KubernetesInfraSpec())
 factory.registerStep(new GcpInfrastructureSpec())
+factory.registerStep(new PDCInfrastructureSpec())
 factory.registerStep(new ServerlessAwsLambdaSpec())
 factory.registerStep(new ServerlessAzureSpec())
 factory.registerStep(new ServerlessGCPSpec())
@@ -74,3 +77,4 @@ factory.registerStep(new ServerlessLambdaRollbackStep())
 factory.registerStep(new AzureInfrastructureSpec())
 factory.registerStep(new CFRollbackStack())
 factory.registerStep(new CFDeleteStack())
+factory.registerStep(new CFCreateStack())

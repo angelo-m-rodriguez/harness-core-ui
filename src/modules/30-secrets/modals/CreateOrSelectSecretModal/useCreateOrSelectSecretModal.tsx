@@ -70,7 +70,7 @@ const useCreateOrSelectSecretModal = (
       }
       /* istanbul ignore next */
       props.onSuccess?.({
-        ...pick(secret, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier']),
+        ...pick(secret, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier', 'type']),
         referenceString: getReference(secret.scope, secret.identifier) as string
       })
       hideModal()
@@ -113,7 +113,7 @@ const useCreateOrSelectSecretModal = (
           onCancel={hideModal}
           onSuccess={data => {
             const secret = {
-              ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier']),
+              ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier', 'type']),
               referenceString: getReference(getScopeFromDTO(data), data.identifier) as string
             }
             /* istanbul ignore next */

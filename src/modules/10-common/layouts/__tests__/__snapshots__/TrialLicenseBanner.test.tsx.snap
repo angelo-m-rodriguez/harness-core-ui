@@ -6,6 +6,7 @@ exports[`TrialLicenseBanner should render banner and provide feedback button if 
 <div>
   <div
     class="trialLicenseBanner notExpired"
+    data-trial-banner-is-visible="true"
   >
     <div
       class="Layout--horizontal StyledProps--main StyledProps--padding-left-large"
@@ -93,6 +94,7 @@ exports[`TrialLicenseBanner should render expired banner BUT NO extend trial but
 <div>
   <div
     class="trialLicenseBanner expired"
+    data-trial-banner-is-visible="true"
   >
     <div
       class="Layout--horizontal StyledProps--main StyledProps--padding-left-large"
@@ -166,6 +168,7 @@ exports[`TrialLicenseBanner should render expired banner and extend trial button
 <div>
   <div
     class="trialLicenseBanner expired"
+    data-trial-banner-is-visible="true"
   >
     <div
       class="Layout--horizontal StyledProps--main StyledProps--padding-left-large"

@@ -31,7 +31,8 @@ exports[`FlagActivation it should render correctly 1`] = `
             </div>
           </div>
           <div
-            class="StyledProps--font StyledProps--main tabContainer tabContainerHeight"
+            class="StyledProps--font StyledProps--main tabContainer"
+            data-tab-container="true"
           >
             <div
               class="bp3-tabs Tabs--main Tabs--horizontal"

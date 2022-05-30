@@ -25,7 +25,6 @@ import { Select } from '@blueprintjs/select'
 
 import { Menu } from '@blueprintjs/core'
 import { useParams } from 'react-router-dom'
-import { useGet } from 'restful-react'
 
 import { Page } from '@common/exports'
 import RbacButton from '@rbac/components/Button/Button'
@@ -33,11 +32,11 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import ModuleTagsFilter from '@dashboards/components/ModuleTagsFilter/ModuleTagsFilter'
 
+import { ErrorResponse, useDeleteDashboard, useGetFolderDetail, useSearch } from 'services/custom-dashboards'
 import routes from '@common/RouteDefinitions'
 
 import { DashboardLayoutViews } from '@dashboards/types/DashboardTypes'
 import { useStrings } from 'framework/strings'
-import { useDeleteDashboard } from '@dashboards/services/CustomDashboardsService'
 import Dashboards from './Dashboards'
 import { useDashboardsContext } from '../DashboardsContext'
 import FilterTagsSideBar from './FilterTagsSideBar'
@@ -67,7 +66,7 @@ const DEFAULT_FILTER: { [key: string]: boolean } = {
 const CustomSelect = Select.ofType<SelectOption>()
 
 const getBreadcrumbLinks = (
-  folderDetail: { resource: string },
+  folderDetail: { resource?: string },
   accountId: string,
   folderId: string,
   folderString: string
@@ -150,9 +149,7 @@ const HomePage: React.FC = () => {
     loading,
     refetch: refetchDashboards,
     error
-  } = useGet({
-    // Inferred from RestfulProvider in index.js
-    path: 'gateway/dashboard/v1/search',
+  } = useSearch({
     debounce: true,
     queryParams: {
       accountId: accountId,
@@ -161,19 +158,25 @@ const HomePage: React.FC = () => {
       page: page + 1,
       pageSize: PAGE_SIZE,
       tags: serialize(selectedFilter),
-      sortBy: sortby?.value,
+      sortBy: sortby?.value.toString(),
       customTag: filteredTags.join('%')
     }
   })
 
-  const dashboardList = React.useMemo(() => data?.resource, [data])
+  const dashboardList = React.useMemo(() => data?.resource || [], [data])
 
-  const { data: folderDetail } = useGet({
-    path: 'gateway/dashboard/folderDetail',
-    queryParams: { accountId: accountId, folderId: folderIdOrBlank() }
+  const { data: folderDetail, refetch: fetchFolderDetail } = useGetFolderDetail({
+    lazy: true,
+    queryParams: { accountId, folderId }
   })
 
-  const { mutate: deleteDashboard, loading: deleting } = useDeleteDashboard(accountId)
+  const { mutate: deleteDashboard, loading: deleting } = useDeleteDashboard({ queryParams: { accountId } })
+
+  React.useEffect(() => {
+    if (folderId !== 'shared') {
+      fetchFolderDetail()
+    }
+  }, [accountId, folderId])
 
   React.useEffect(() => {
     if (searchTerm || selectedFilter || sortby?.value || filteredTags?.length > 0) setPage(0)
@@ -206,7 +209,9 @@ const HomePage: React.FC = () => {
   }
 
   React.useEffect(() => {
-    includeBreadcrumbs(getBreadcrumbLinks(folderDetail, accountId, folderId, getString('dashboards.homePage.folders')))
+    includeBreadcrumbs(
+      getBreadcrumbLinks(folderDetail || {}, accountId, folderId, getString('dashboards.homePage.folders'))
+    )
   }, [folderDetail, accountId, folderId])
 
   const onDeleteDashboard = (dashboardId: string): void => {
@@ -216,7 +221,7 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <Page.Body loading={loading || deleting} error={error?.data?.message}>
+    <Page.Body loading={loading || deleting} error={(error?.data as ErrorResponse)?.responseMessages}>
       <Layout.Horizontal>
         <Layout.Horizontal
           padding="large"
@@ -241,7 +246,13 @@ const HomePage: React.FC = () => {
             <CustomSelect
               items={sortingOptions}
               filterable={false}
-              itemRenderer={(item, { handleClick }) => <Menu.Item text={item.label} onClick={handleClick} />}
+              itemRenderer={(item, { handleClick, index }) => (
+                <Menu.Item
+                  key={`sort-menu-${item.label.toLowerCase()}-${index}`}
+                  text={item.label}
+                  onClick={handleClick}
+                />
+              )}
               onItemSelect={item => {
                 setSortingFilter(item)
               }}

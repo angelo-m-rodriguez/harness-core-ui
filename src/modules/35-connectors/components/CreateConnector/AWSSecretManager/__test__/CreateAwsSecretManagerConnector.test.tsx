@@ -33,7 +33,8 @@ jest.mock('services/cd-ng', () => ({
   getSecretV2Promise: jest.fn().mockImplementation(() => Promise.resolve(mockSecret)),
   validateTheIdentifierIsUniquePromise: jest.fn().mockImplementation(() => Promise.resolve(mockResponse)),
   useGetFileContent: jest.fn().mockImplementation(() => ({ refetch: jest.fn() })),
-  useCreatePR: jest.fn().mockImplementation(() => ({ mutate: jest.fn() }))
+  useCreatePR: jest.fn().mockImplementation(() => ({ mutate: jest.fn() })),
+  useCreatePRV2: jest.fn().mockImplementation(() => ({ mutate: jest.fn() }))
 }))
 
 jest.mock('services/portal', () => ({

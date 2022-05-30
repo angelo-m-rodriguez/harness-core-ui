@@ -24,13 +24,13 @@ interface ProjectSetupMenuProps {
 const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<PipelineType<ProjectPathProps>>()
-  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES } = useFeatureFlags()
+  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, GIT_SIMPLIFICATION } = useFeatureFlags()
   const { showGetStartedTabInMainMenu } = useSideNavContext()
   const { enabledHostedBuildsForFreeUsers } = useHostedBuilds()
   const params = { accountId, orgIdentifier, projectIdentifier, module }
   const isCIorCD = module === 'ci' || module === 'cd'
   // const isCV = module === 'cv'
-  const getGitSyncEnabled = isCIorCD || !module
+  const getGitSyncEnabled = (isCIorCD || !module) && !GIT_SIMPLIFICATION
 
   return (
     <NavExpandable title={getString('common.projectSetup')} route={routes.toSetup(params)}>

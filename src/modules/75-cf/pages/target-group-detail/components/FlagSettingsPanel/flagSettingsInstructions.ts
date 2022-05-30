@@ -5,70 +5,93 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { Distribution } from 'services/cf'
+import { isEqual } from 'lodash-es'
+import type { Distribution, Feature } from 'services/cf'
 import { PERCENTAGE_ROLLOUT_VALUE } from '@cf/constants'
 import type { Instruction } from '@cf/utils/instructions'
-import type { FlagSettingsFormData, FlagSettingsFormRow, TargetGroupFlagsMap } from '../../TargetGroupDetailPage.types'
+import type {
+  TargetManagementFlagConfigurationPanelFormRow,
+  TargetManagementFlagConfigurationPanelFormValues as FormValues
+} from '@cf/components/TargetManagementFlagConfigurationPanel/types'
+import type { FlagSettingsFormRow } from '../../TargetGroupDetailPage.types'
 
 export function getFlagSettingsInstructions(
-  flags: FlagSettingsFormData['flags'],
-  targetGroupFlagsMap: TargetGroupFlagsMap
+  targetGroupIdentifier: string,
+  values: FormValues,
+  initialValues: FormValues,
+  flags: Feature[]
 ): Instruction[] {
   const instructions = []
-  const removedFlagIdentifiers = getRemovedFlagIdentifiers(flags, targetGroupFlagsMap)
-  const updatedFlags = getUpdatedFlags(flags, targetGroupFlagsMap)
+
+  const removedFlagIdentifiers = getRemovedFlagIdentifiers(values.flags, initialValues.flags)
+  const updatedFlags = getUpdatedFlags(values.flags, initialValues.flags)
 
   if (removedFlagIdentifiers.length) {
-    instructions.push(getRemoveFlagsInstruction(removedFlagIdentifiers, targetGroupFlagsMap))
+    instructions.push(getRemoveFlagsInstruction(removedFlagIdentifiers, flags, targetGroupIdentifier))
   }
 
-  if (updatedFlags.length) {
-    instructions.push(getUpdateFlagsInstruction(updatedFlags, targetGroupFlagsMap))
+  if (Object.keys(updatedFlags).length) {
+    instructions.push(getUpdateFlagsInstruction(updatedFlags, flags, targetGroupIdentifier))
   }
 
   return instructions
 }
 
 export function getRemovedFlagIdentifiers(
-  flags: FlagSettingsFormData['flags'],
-  targetGroupFlagsMap: TargetGroupFlagsMap
+  valueFlags: FormValues['flags'],
+  initialValueFlags: FormValues['flags']
 ): string[] {
-  const newKeys = Object.keys(flags)
-  return Object.keys(targetGroupFlagsMap).filter(oldKey => !newKeys.includes(oldKey))
+  const newKeys = Object.keys(valueFlags)
+  return Object.keys(initialValueFlags).filter(oldKey => !newKeys.includes(oldKey))
 }
 
 export function getUpdatedFlags(
-  flags: FlagSettingsFormData['flags'],
-  targetGroupFlagsMap: TargetGroupFlagsMap
-): FlagSettingsFormRow[] {
-  return Object.values(flags).filter(
-    ({ identifier, variation }) => targetGroupFlagsMap[identifier]?.variation !== variation
+  valueFlags: FormValues['flags'],
+  initialValueFlags: FormValues['flags']
+): FormValues['flags'] {
+  return Object.fromEntries(
+    Object.entries(valueFlags).filter(
+      ([identifier, { variation, percentageRollout }]) =>
+        initialValueFlags[identifier]?.variation !== variation ||
+        (variation === PERCENTAGE_ROLLOUT_VALUE &&
+          !isEqual(percentageRollout, initialValueFlags[identifier].percentageRollout))
+    )
   )
 }
 
 export function getRemoveFlagsInstruction(
   identifiers: string[],
-  targetGroupFlagsMap: TargetGroupFlagsMap
+  flags: Feature[],
+  targetGroupIdentifier: string
 ): Instruction {
   return {
     kind: 'removeRule',
     parameters: {
-      features: identifiers.map(identifier => ({ ruleID: targetGroupFlagsMap[identifier].ruleId }))
+      features: identifiers.map(identifier => ({
+        ruleID: getRuleId(
+          targetGroupIdentifier,
+          flags.find(({ identifier: flagIdentifier }) => identifier === flagIdentifier) as Feature
+        )
+      }))
     }
   } as any as Instruction
 }
 
 export function getUpdateFlagsInstruction(
-  flags: FlagSettingsFormRow[],
-  targetGroupFlagsMap: TargetGroupFlagsMap
+  updatedValues: FormValues['flags'],
+  flags: Feature[],
+  targetGroupIdentifier: string
 ): Instruction {
   return {
     kind: 'addRule',
     parameters: {
-      features: flags.map(row => ({
-        identifier: row.identifier,
-        ...getVariationOrServe(row),
-        ruleID: targetGroupFlagsMap[row.identifier].ruleId as string
+      features: Object.entries(updatedValues).map(([identifier, value]) => ({
+        identifier: identifier,
+        ...getVariationOrServe(value),
+        ruleID: getRuleId(
+          targetGroupIdentifier,
+          flags.find(({ identifier: flagIdentifier }) => identifier === flagIdentifier) as Feature
+        )
       }))
     }
   } as any as Instruction
@@ -87,7 +110,7 @@ export function getAddFlagsInstruction(flags: FlagSettingsFormRow[]): Instructio
 }
 
 export function getVariationOrServe(
-  row: FlagSettingsFormRow
+  row: TargetManagementFlagConfigurationPanelFormRow
 ): { variation: string } | { serve: { distribution: Distribution } } {
   if (row.variation === PERCENTAGE_ROLLOUT_VALUE) {
     return {
@@ -101,4 +124,10 @@ export function getVariationOrServe(
   }
 
   return { variation: row.variation }
+}
+
+export function getRuleId(targetGroupIdentifier: string, flag: Feature): string | undefined {
+  return flag.envProperties?.rules?.find(({ clauses }) =>
+    clauses.some(({ op, values: segmentIds }) => op === 'segmentMatch' && segmentIds.includes(targetGroupIdentifier))
+  )?.ruleId
 }

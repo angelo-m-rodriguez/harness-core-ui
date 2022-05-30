@@ -69,6 +69,7 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
   const isCFEnabled = useFeatureFlag(FeatureFlag.CFNG_ENABLED)
   const isCIEnabled = useFeatureFlag(FeatureFlag.CING_ENABLED)
   const isSTOEnabled = useFeatureFlag(FeatureFlag.SECURITY_STAGE)
+  const isCustomStageEnabled = useFeatureFlag(FeatureFlag.NG_CUSTOM_STAGE)
   const { licenseInformation } = useLicenseStore()
   return (
     <PipelineProvider
@@ -83,7 +84,8 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
           licenseInformation['CD'] && isCDEnabled,
           licenseInformation['CF'] && isCFEnabled,
           isSTOEnabled,
-          true
+          true,
+          isCustomStageEnabled
         )
       }
       stepsFactory={factory}

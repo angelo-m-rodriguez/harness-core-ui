@@ -230,6 +230,7 @@ const pipelineContextMock: PipelineContextInterface = {
   view: 'VISUAL',
   scope: Scope.PROJECT,
   updateGitDetails: () => new Promise<void>(() => undefined),
+  updatePipelineStoreMetadata: () => new Promise<void>(() => undefined),
   updateEntityValidityDetails: () => new Promise<void>(() => undefined),
   setView: () => void 0,
   runPipeline: () => undefined,

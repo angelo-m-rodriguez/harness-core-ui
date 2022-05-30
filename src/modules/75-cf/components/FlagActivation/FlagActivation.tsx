@@ -24,7 +24,6 @@ import {
   Text
 } from '@wings-software/uicore'
 import * as yup from 'yup'
-import cx from 'classnames'
 import {
   Clause,
   Feature,
@@ -496,7 +495,7 @@ const FlagActivation: React.FC<FlagActivationProps> = props => {
                 <CFEnvironmentSelect component={<EnvironmentSelect />} />
               </Layout.Horizontal>
 
-              <Container className={FFM_1513 ? css.tabContainer : cx(css.tabContainer, css.tabContainerHeight)}>
+              <Container data-tab-container className={css.tabContainer}>
                 {flagData && (
                   <>
                     <Tabs

@@ -1,0 +1,11 @@
+.dragging {
+  background-color: var(--yellow-450) !important;
+}
+
+.dragOver {
+  border-top: 2px solid var(--primary-7);
+}
+
+.drag {
+  cursor: move;
+}

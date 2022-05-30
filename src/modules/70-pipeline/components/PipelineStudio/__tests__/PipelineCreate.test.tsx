@@ -131,10 +131,10 @@ describe('PipelineCreate test', () => {
         <PipelineCreate {...getEditProps()} />
       </TestWrapper>
     )
-    await waitFor(() => getByText('save'))
+    await waitFor(() => getByText('continue'))
     expect(container).toMatchSnapshot()
-    const saveBtn = getByText('save')
-    fireEvent.click(saveBtn)
+    const continueBtn = getByText('continue')
+    fireEvent.click(continueBtn)
     await waitFor(() => expect(afterSave).toBeCalledTimes(1))
     expect(afterSave).toBeCalledWith(
       {
@@ -143,6 +143,7 @@ describe('PipelineCreate test', () => {
         name: 'pipeline',
         stages: []
       },
+      { connectorRef: undefined, storeType: undefined },
       undefined,
       undefined
     )
@@ -192,14 +193,14 @@ describe('PipelineCreate test', () => {
       </TestWrapper>
     )
 
-    await waitFor(() => getByText('save'))
+    await waitFor(() => getByText('continue'))
     expect(getByText('COMMON.GITSYNC.GITREPOSITORYDETAILS')).not.toBeNull()
     expect(getByText('common.git.selectRepoLabel')).not.toBeNull()
     expect(getByText('common.gitSync.selectBranchLabel')).not.toBeNull()
 
-    const startBtn = getByText('save').parentElement
+    const continueBtn = getByText('continue').parentElement
     act(() => {
-      fireEvent.click(startBtn!)
+      fireEvent.click(continueBtn!)
     })
 
     await waitFor(() => expect(afterSave).toHaveBeenCalledTimes(1))
@@ -209,6 +210,10 @@ describe('PipelineCreate test', () => {
         name: 'Pipeline 1',
         description: 'abc',
         stages: []
+      },
+      {
+        connectorRef: undefined,
+        storeType: undefined
       },
       {
         repoIdentifier: 'identifier',

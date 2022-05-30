@@ -12,12 +12,18 @@ import mockImport from 'framework/utils/mockImport'
 import ExecutionSecurityView from '../ExecutionSecurityView'
 
 describe('<ExecutionSecurityView /> tests', () => {
-  test('Should render empty when governanceMetadata is null', () => {
+  test('Should render', () => {
     mockImport('@pipeline/context/ExecutionContext', {
-      useExecutionContext: jest.fn()
+      useExecutionContext: () => {
+        return {
+          pipelineExecutionDetail: {
+            pipelineExecutionSummary: {}
+          }
+        }
+      }
     })
-    mockImport('@sto/PipelineSecurityView', {
-      ExecutionSecurityView: () => <div /> // eslint-disable-line react/display-name
+    mockImport('@sto/STOApp', {
+      RemotePipelineSecurityView: () => <div /> // eslint-disable-line react/display-name
     })
 
     const { container } = render(
@@ -28,18 +34,12 @@ describe('<ExecutionSecurityView /> tests', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('Should render empty when governanceMetadata is not null', () => {
+  test('Should render null when pipeline execution context is null', () => {
     mockImport('@pipeline/context/ExecutionContext', {
-      useExecutionContext: () => {
-        return {
-          pipelineExecutionDetail: {
-            pipelineExecutionSummary: {}
-          }
-        }
-      }
+      useExecutionContext: jest.fn()
     })
-    mockImport('@sto/PipelineSecurityView', {
-      PipelineSecurityView: () => <div /> // eslint-disable-line react/display-name
+    mockImport('@sto/STOApp', {
+      RemotePipelineSecurityView: () => <div /> // eslint-disable-line react/display-name
     })
 
     const { container } = render(

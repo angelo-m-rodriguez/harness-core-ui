@@ -22,6 +22,7 @@ import type { ExtendedMonacoEditorProps } from '@common/components/MonacoEditor/
 import type { ExtendedMonacoDiffEditorProps } from '@common/components/MonacoDiffEditor/MonacoDiffEditor'
 import type { YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
 import type { GitOpsCustomMicroFrontendProps } from '@cd/interfaces/GitOps.types'
+import type { STOAppCustomProps } from '@pipeline/interfaces/STOApp'
 
 export interface Scope {
   accountId?: string
@@ -61,6 +62,7 @@ export interface ChildAppProps {
   components: CommonComponents
   hooks: Hooks
   on401: () => void
+  children?: React.ReactNode
 }
 
 /**
@@ -74,5 +76,6 @@ export {
   PermissionsContextProps,
   ResourceType,
   PermissionIdentifier,
-  GitOpsCustomMicroFrontendProps
+  GitOpsCustomMicroFrontendProps,
+  STOAppCustomProps
 }

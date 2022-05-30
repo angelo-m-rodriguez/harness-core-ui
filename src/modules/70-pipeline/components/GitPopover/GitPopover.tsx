@@ -6,6 +6,7 @@
  */
 
 import React from 'react'
+import { defaultTo } from 'lodash-es'
 import { IPopoverProps, PopoverInteractionKind } from '@blueprintjs/core'
 import { Icon, Layout, Popover, Text } from '@wings-software/uicore'
 import type { IconProps } from '@harness/icons'
@@ -36,7 +37,10 @@ export function RenderGitPopover(props: GitPopoverProps): React.ReactElement | n
   const popoverContent: GitPopoverInfoProps[] = [
     {
       heading: getString('repository'),
-      content: (!loadingRepos && getRepoDetailsByIndentifier(data?.repoIdentifier, gitSyncRepos)?.name) || '',
+      content:
+        (!loadingRepos &&
+          defaultTo(getRepoDetailsByIndentifier(data?.repoIdentifier, gitSyncRepos)?.name, data?.repoIdentifier)) ||
+        '',
       iconName: 'repository'
     },
 

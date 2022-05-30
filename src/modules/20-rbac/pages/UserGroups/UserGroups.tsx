@@ -18,8 +18,11 @@ import { useRoleAssignmentModal } from '@rbac/modals/RoleAssignmentModal/useRole
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
+import { PrincipalType } from '@rbac/utils/utils'
 import ManagePrincipalButton from '@rbac/components/ManagePrincipalButton/ManagePrincipalButton'
 import { setPageNumber } from '@common/utils/utils'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { getPrincipalScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import UserGroupEmptyState from './user-group-empty-state.png'
 import css from './UserGroups.module.scss'
 
@@ -29,8 +32,14 @@ interface UserGroupBtnProp {
 
 const UserGroupsPage: React.FC = () => {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
+  const scope = getPrincipalScopeFromDTO({
+    accountIdentifier: accountId,
+    orgIdentifier,
+    projectIdentifier
+  })
   const { getString } = useStrings()
   useDocumentTitle(getString('common.userGroups'))
+  const { INHERITED_USER_GROUP } = useFeatureFlags()
   const [page, setPage] = useState(0)
   const [searchTerm, setsearchTerm] = useState<string>('')
   const { data, loading, error, refetch } = useGetUserGroupAggregateList({
@@ -40,7 +49,8 @@ const UserGroupsPage: React.FC = () => {
       projectIdentifier,
       pageIndex: page,
       pageSize: 10,
-      searchTerm: searchTerm
+      searchTerm: searchTerm,
+      filterType: 'INCLUDE_INHERITED_GROUPS'
     },
     debounce: 300
   })
@@ -68,13 +78,32 @@ const UserGroupsPage: React.FC = () => {
     />
   )
 
+  const AssignRolesBtn: React.FC<UserGroupBtnProp> = ({ size }): JSX.Element => (
+    <ManagePrincipalButton
+      text={getString('rbac.userGroupPage.assignRoles')}
+      variation={ButtonVariation.SECONDARY}
+      onClick={() => openRoleAssignmentModal(PrincipalType.USER_GROUP)}
+      resourceType={ResourceType.USERGROUP}
+      size={size}
+      className={css.assignRolesButton}
+    />
+  )
+
+  const CombinedBtnLarge: React.FC<UserGroupBtnProp> = () => (
+    <Layout.Horizontal spacing="small">
+      <UserGroupBtn size={ButtonSize.LARGE} />
+      {INHERITED_USER_GROUP && <AssignRolesBtn size={ButtonSize.LARGE} />}
+    </Layout.Horizontal>
+  )
+
   return (
     <>
       {data?.data?.content?.length || searchTerm || loading || error ? (
         <PageHeader
           title={
-            <Layout.Horizontal>
+            <Layout.Horizontal spacing="small" flex={{ justifyContent: 'start' }}>
               <UserGroupBtn />
+              {INHERITED_USER_GROUP && <AssignRolesBtn />}
             </Layout.Horizontal>
           }
           toolbar={
@@ -101,8 +130,10 @@ const UserGroupsPage: React.FC = () => {
           when: () => !data?.data?.content?.length,
           message: searchTerm
             ? getString('rbac.userGroupPage.noUserGroups')
-            : getString('rbac.userGroupPage.userGroupEmptyState'),
-          button: !searchTerm ? <UserGroupBtn size={ButtonSize.LARGE} /> : undefined,
+            : getString('rbac.userGroupPage.userGroupEmptyState', {
+                scope: scope
+              }),
+          button: !searchTerm ? <CombinedBtnLarge /> : undefined,
           image: UserGroupEmptyState,
           imageClassName: css.userGroupsEmptyState
         }}

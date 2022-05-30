@@ -219,7 +219,7 @@ function Service(
                 <MonitoredServiceNotificationsContainer
                   setFieldValue={formik?.setFieldValue}
                   notificationRuleRefs={formik?.values?.notificationRuleRefs}
-                  identifier={formik?.values?.identifier}
+                  identifier={identifier}
                 />
               </>
             )}

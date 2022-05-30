@@ -7,10 +7,12 @@
 
 import React, { Dispatch, SetStateAction } from 'react'
 import { Tooltip } from '@blueprintjs/core'
+
 import { Checkbox, Layout, Color } from '@harness/uicore'
-
 import { useStrings } from 'framework/strings'
+import { StoreType } from '@common/constants/GitSyncTypes'
 
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import css from './RunPipelineForm.module.scss'
 
 export interface CheckBoxActionsProps {
@@ -19,11 +21,13 @@ export interface CheckBoxActionsProps {
   setSkipPreFlightCheck: Dispatch<SetStateAction<boolean>>
   notifyOnlyMe: boolean
   setNotifyOnlyMe: Dispatch<SetStateAction<boolean>>
+  storeType: StoreType
 }
 
 export default function CheckBoxActions(props: CheckBoxActionsProps): React.ReactElement | null {
-  const { executionView, skipPreFlightCheck, setSkipPreFlightCheck, notifyOnlyMe, setNotifyOnlyMe } = props
+  const { executionView, skipPreFlightCheck, setSkipPreFlightCheck, notifyOnlyMe, setNotifyOnlyMe, storeType } = props
   const { getString } = useStrings()
+  const { isGitSimplificationEnabled } = useAppStore()
 
   if (executionView) {
     return null
@@ -39,6 +43,7 @@ export default function CheckBoxActions(props: CheckBoxActionsProps): React.Reac
         padding={{ top: 'small', bottom: 'small', left: 'xxlarge', right: 'medium' }}
         checked={skipPreFlightCheck}
         onChange={e => setSkipPreFlightCheck(e.currentTarget.checked)}
+        disabled={isGitSimplificationEnabled && storeType === StoreType.REMOTE}
       />
       <Tooltip position="top" content={getString('featureNA')}>
         <Checkbox

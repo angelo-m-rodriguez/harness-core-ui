@@ -12,6 +12,10 @@
   grid-template-rows: auto 1fr;
 }
 
+.gitSyncEnabled {
+  --git-sync-toolbar-height: 69px;
+}
+
 .contentLayout {
   display: grid;
   grid-template-columns: 470px 1fr;

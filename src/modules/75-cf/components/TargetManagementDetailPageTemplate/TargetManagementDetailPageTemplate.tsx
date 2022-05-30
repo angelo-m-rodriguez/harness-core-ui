@@ -7,6 +7,7 @@
 
 import React, { FC, ReactNode, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import cx from 'classnames'
 import type { Breadcrumb } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import type { Segment, Target } from 'services/cf'
@@ -87,6 +88,11 @@ const TargetManagementDetailPageTemplate: FC<TargetManagementDetailPageTemplateP
     ]
   }, [accountIdentifier, isTarget, orgIdentifier, projectIdentifier])
 
+  const modifiers = []
+  if (isGitSyncActionsEnabled) {
+    modifiers.push(css.gitSyncEnabled)
+  }
+
   return (
     <DetailPageTemplate
       title={item.name}
@@ -106,7 +112,7 @@ const TargetManagementDetailPageTemplate: FC<TargetManagementDetailPageTemplateP
       ]}
       {...detailPageTemplateProps}
     >
-      <div className={css.layout}>
+      <div className={cx(css.layout, ...modifiers)}>
         {isGitSyncActionsEnabled ? <TargetManagementToolbar /> : <div />}
 
         <div className={css.contentLayout}>

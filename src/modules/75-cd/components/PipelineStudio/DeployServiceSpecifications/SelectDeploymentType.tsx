@@ -154,6 +154,11 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
         icon: 'service-helm',
         value: ServiceDeploymentType.NativeHelm
       },
+      {
+        label: getString('pipeline.serviceDeploymentTypes.ssh'),
+        icon: 'secret-ssh',
+        value: ServiceDeploymentType.ssh
+      },
       ...getServerlessDeploymentTypes(getString, SERVERLESS_SUPPORT)
     ],
     [getString, SERVERLESS_SUPPORT]
@@ -191,11 +196,6 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
         label: getString('pipeline.serviceDeploymentTypes.pcf'),
         icon: 'service-pivotal',
         value: ServiceDeploymentType.pcf
-      },
-      {
-        label: getString('pipeline.serviceDeploymentTypes.ssh'),
-        icon: 'secret-ssh',
-        value: ServiceDeploymentType.ssh
       }
     ],
     [getString]

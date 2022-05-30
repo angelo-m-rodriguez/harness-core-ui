@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test cloudformation create stack template input set should render with no data 1`] = `
+<div>
+  <div
+    class="OverlaySpinner--overlaySpinner"
+  >
+    <form
+      action="#"
+      class="FormikForm--main"
+    >
+      <div>
+        <form
+          action="#"
+          class="FormikForm--main"
+        >
+          <div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--padding-bottom-small"
+              style="width: 120px;"
+            >
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-weight-bold"
+              >
+                cd.cloudFormation.templateFile
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>
+`;

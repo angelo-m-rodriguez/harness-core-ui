@@ -29,8 +29,8 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ loading, createdAt, lastM
   }
 
   const DATE_FORMAT = 'D MMM YYYY h:mm:ss A'
-  const lastModifiedOn = `${getString('cv.lastModifiedOn')} ${moment(new Date(createdAt)).format(DATE_FORMAT)}`
-  const createdOn = `${getString('cv.createdOn')} ${moment(new Date(lastModifiedAt)).format(DATE_FORMAT)}`
+  const lastModifiedOn = `${getString('cv.lastModifiedOn')} ${moment(new Date(lastModifiedAt)).format(DATE_FORMAT)}`
+  const createdOn = `${getString('cv.createdOn')} ${moment(new Date(createdAt)).format(DATE_FORMAT)}`
 
   return (
     <Layout.Vertical height="100%" flex={{ justifyContent: 'flex-end', alignItems: 'end' }}>

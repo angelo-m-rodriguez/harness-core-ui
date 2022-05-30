@@ -25,6 +25,7 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import RbacButton from '@rbac/components/Button/Button'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import css from './ExecutionStageDetailsHeader.module.scss'
 
 export function ExecutionStageDetailsHeader(): React.ReactElement {
@@ -78,9 +79,15 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
 
   const { openRunPipelineModal } = useRunPipelineModal({
     pipelineIdentifier,
-    repoIdentifier: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+    repoIdentifier: defaultTo(
+      pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+      pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName
+    ),
     branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch,
-    stagesExecuted: [stage?.nodeIdentifier || '']
+    stagesExecuted: [stage?.nodeIdentifier || ''],
+    storeType: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName
+      ? StoreType.REMOTE
+      : StoreType.INLINE
   })
 
   return (
@@ -116,8 +123,14 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
                 accountId,
                 executionIdentifier,
                 module,
-                repoIdentifier: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
-                branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch
+                repoIdentifier: defaultTo(
+                  pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+                  pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName
+                ),
+                branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch,
+                storeType: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName
+                  ? StoreType.REMOTE
+                  : StoreType.INLINE
               }}
               noMenu
               stageName={stageNode?.name}

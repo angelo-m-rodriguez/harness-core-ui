@@ -8,8 +8,13 @@
   overflow: auto;
 }
 
+.nameTextbox {
+  margin: 0;
+}
+
 .card-select {
   margin-top: var(--spacing-medium);
+  margin-right: var(--spacing-xlarge);
 
   :global {
     .bp3-card {
@@ -23,4 +28,13 @@
   word-wrap: break-word;
   height: 48px;
   width: 48px;
+}
+
+.buttonContainer {
+  margin: 0;
+}
+
+.languageIcon {
+  width: 22px;
+  height: 22px;
 }

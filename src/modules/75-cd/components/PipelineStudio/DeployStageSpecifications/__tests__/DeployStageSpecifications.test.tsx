@@ -74,6 +74,7 @@ const getPipelineContext = (): PipelineContextInterface => ({
   allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION],
   setSchemaErrorView: jest.fn(),
   stagesMap: {},
+  updatePipelineStoreMetadata: jest.fn(),
   updateGitDetails: jest.fn(),
   updateEntityValidityDetails: jest.fn(),
   isReadonly: false,

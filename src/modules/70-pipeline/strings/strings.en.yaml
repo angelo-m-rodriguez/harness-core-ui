@@ -1,11 +1,13 @@
 verificationResult: 'Verification result:'
 estimatedTimeRemaining: 'Estimated time remaining:'
 progressPercentage: 'Progress percentage:'
+clone: Clone Pipeline
 discard: '{{ $.common.discard }}'
 serviceDependencyText: Service Dependency
 serviceDependenciesText: Service Dependencies
 stepLabel: '{{name}} (Id: {{identifier}})'
 enableVerificationOptions: Enable verification options
+openInPipelineStudio: Open in Pipeline Studio
 closeStepConfig: Step Config
 stepConfigHasChanges: Form has some unsaved changed, Do you want to apply the changes?
 clickHere: Click here
@@ -137,9 +139,10 @@ jiraApprovalStep:
       not_in: '{{ key }} is not in'
   validations:
     connectorRef: Jira Connector is required
-    project: Project is required
+    project: '{{$.common.validation.projectIsRequired}}'
     issueKey: Issue Key is required
     issueType: Issue Type is required
+    requiredField: This is a required field.
 jiraCreateStep:
   fields: Jira Fields
   summaryPlaceholder: Enter a Title or Summary
@@ -365,6 +368,7 @@ createPipeline:
   setupSubtitle: Let’s get you started on your pipeline.
   setupLater: Setup Later
   learnMore: Learn More
+  choosePipelineSetupHeader: How do you want to setup your pipeline?
 selectOrCreateForm:
   description: '{{$.common.selectAVersion.description}}'
 execution:
@@ -530,7 +534,7 @@ savingInProgress: Saving in progress...
 gitExperience:
   skipNow: SKIP NOW
   selectRepoBranch: Please select Repository and Branch from the pipeline edit modal
-  noPipelineFound: The {{entityType}} does not exist in the selected Branch.
+  noEntityFound: The {{entityType}} does not exist in the selected Branch.
   selectDiffBranch: Please select a different Branch.
 testsReports:
   callgraphTitle: Call Graph
@@ -634,7 +638,7 @@ pipelineSteps:
   customStage: Custom Stage
   chainedPipeline: Chained Pipeline
   templateStageDescription: Use stage template.
-  customStageDescription: A blank canvas for custom processes.
+  customStageDescription: Use this to set up a stage configurable to your needs.
   chainedPipelineDescription: Run a Pipeline as a stage in another Pipeline.
   deployStageDescription: Deploy services, Serverless functions, or other workloads.
   featureStageDescription: Enable or disable functionality remotely without redeploying code.
@@ -932,9 +936,6 @@ approvalTypeRequired: Approval type is required
 executionList:
   servicesDeployedText: 'Services deployed ({{size}})'
   EnvironmentsText: 'Environments ({{size}})'
-commentModal:
-  heading: 'Save {{ name }} ({{ version }})'
-  info: 'By saving, all pipelines referencing the stable version will receive your changes.'
 replacedExpressions: Replaced Expressions
 expressionRequired: Expression value is required.
 nativeHelm: Native Helm
@@ -1028,6 +1029,19 @@ cannotRunInvalidPipeline: Cannot run the pipeline because it's invalid, please r
 cannotAddTriggerInvalidPipeline: Cannot add a trigger because pipeline is invalid, please review the configuration.
 cannotAddInputSetInvalidPipeline: Cannot add an input set because pipeline is invalid, please review the configuration.
 cannotEditTriggerInvalidPipeline: Cannot edit the trigger because pipeline is invalid, please review the configuration.
+outOfSyncErrorStrip:
+  reconcile: Reconcile
+  unsyncedTemplateInfo: Some template(s) referenced in this {{entity}} have gone out of sync.
+  updatedTemplateInfo: Some template(s) referenced in this {{entity}} have been updated.
+reconcileDialog:
+  title: Template Error Inspection
+  subtitle: Error Trace
+  unsyncedTemplateInfo: The error detected in <b>{{name}}</b> is parsed from unsynced templates.
+  updatedTemplateInfo: The error detected in <b>{{name}}</b> is parsed from updated templates.
+  originalYamlLabel: Original
+  refreshedYamlLabel: Refreshed
+  updateAllLabel: Update all unsynced entities
+  updateEntityLabel: 'Update {{entity}}'
 ACR:
   name: ACR
   subscription: '{{ $.common.subscriptionId }}'

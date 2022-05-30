@@ -8,11 +8,12 @@
 import React from 'react'
 import { render, RenderResult, screen } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { DashboardTag, DashboardType, IDashboard } from '@dashboards/types/DashboardTypes'
+import type { DashboardModel } from 'services/custom-dashboards'
+import { DashboardType } from '@dashboards/types/DashboardTypes'
 import type { StringKeys } from 'framework/strings'
 import DashboardTags, { DashboardTagProps } from '../DashboardTags'
 
-const defaultTestDashboard: IDashboard = {
+const defaultTestDashboard: DashboardModel = {
   id: '1',
   type: DashboardType.SHARED,
   description: 'testTag',
@@ -22,7 +23,12 @@ const defaultTestDashboard: IDashboard = {
   created_at: '',
   data_source: [],
   last_accessed_at: '',
-  resourceIdentifier: '1'
+  resourceIdentifier: '1',
+  folder: {
+    id: '',
+    title: '',
+    created_at: ''
+  }
 }
 
 const renderComponent = (props: DashboardTagProps): RenderResult => {
@@ -47,7 +53,7 @@ describe('DashboardTags', () => {
 
   test('it should display a custom tag when account Dashboard displayed', async () => {
     const customTag = 'testTag'
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
       type: DashboardType.ACCOUNT,
       description: customTag
@@ -57,9 +63,9 @@ describe('DashboardTags', () => {
   })
 
   test('it should display a Cloud Cost tag when Dashboard Tag is CE', async () => {
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
-      data_source: [DashboardTag.CE]
+      data_source: ['CE']
     }
     renderComponent({ dashboard: mockDashboard })
 
@@ -68,9 +74,9 @@ describe('DashboardTags', () => {
   })
 
   test('it should display a Cloud Cost tag when Dashboard Tag is CI', async () => {
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
-      data_source: [DashboardTag.CI]
+      data_source: ['CI']
     }
     renderComponent({ dashboard: mockDashboard })
 
@@ -79,9 +85,9 @@ describe('DashboardTags', () => {
   })
 
   test('it should display a Cloud Cost tag when Dashboard Tag is CD', async () => {
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
-      data_source: [DashboardTag.CD]
+      data_source: ['CD']
     }
     renderComponent({ dashboard: mockDashboard })
 
@@ -90,9 +96,9 @@ describe('DashboardTags', () => {
   })
 
   test('it should display a Cloud Cost tag when Dashboard Tag is CF', async () => {
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
-      data_source: [DashboardTag.CF]
+      data_source: ['CF']
     }
     renderComponent({ dashboard: mockDashboard })
 
@@ -100,9 +106,9 @@ describe('DashboardTags', () => {
     expect(screen.getByText(expectedText)).toBeInTheDocument()
   })
   test('it should display a Cloud Cost tag when Dashboard Tag is CG', async () => {
-    const mockDashboard: IDashboard = {
+    const mockDashboard: DashboardModel = {
       ...defaultTestDashboard,
-      data_source: [DashboardTag.CG_CD]
+      data_source: ['CG_CD']
     }
     renderComponent({ dashboard: mockDashboard })
 

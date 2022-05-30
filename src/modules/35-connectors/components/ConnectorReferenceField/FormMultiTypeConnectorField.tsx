@@ -75,6 +75,7 @@ export interface MultiTypeConnectorFieldProps extends Omit<ConnectorReferenceFie
   tooltipProps?: DataTooltipInterface
   multitypeInputValue?: MultiTypeInputType
   connectorLabelClass?: string
+  onLoadingFinish?: () => void
 }
 export interface ConnectorReferenceDTO extends ConnectorInfoDTO {
   status: ConnectorResponse['status']
@@ -227,12 +228,17 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
           formik?.setFieldValue(name, value)
         }
         setSelectedValue(value)
+        props?.onLoadingFinish?.()
       } else if (error) {
         if (!setRefValue) {
           formik?.setFieldValue(name, '')
         }
         setSelectedValue('')
+        props?.onLoadingFinish?.()
       }
+    } else {
+      // enabling for expressions/runtime
+      !loading && props?.onLoadingFinish?.()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
@@ -399,6 +405,7 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
             formik?.setFieldValue(name, val || '')
             setSelectedValue(val || '')
           }
+          props?.onLoadingFinish?.()
           setMultiType(type1)
           onChange?.(val, valueType, type1)
         }}

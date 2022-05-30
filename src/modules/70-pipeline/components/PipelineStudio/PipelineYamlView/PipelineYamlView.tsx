@@ -16,6 +16,7 @@ import { useStrings } from 'framework/strings'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import RbacButton from '@rbac/components/Button/Button'
 import type { PipelineType } from '@common/interfaces/RouteInterfaces'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import type { EntityValidityDetails } from 'services/pipeline-ng'
@@ -46,7 +47,8 @@ function PipelineYamlView(): React.ReactElement {
       pipelineView: { isDrawerOpened, isYamlEditable },
       pipelineView,
       gitDetails,
-      entityValidityDetails
+      entityValidityDetails,
+      storeMetadata
     },
     updatePipelineView,
     stepsFactory,
@@ -63,7 +65,7 @@ function PipelineYamlView(): React.ReactElement {
     }>
   >()
   const { pipelineSchema } = usePipelineSchema()
-  const { isGitSyncEnabled } = useAppStore()
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const [yamlHandler, setYamlHandler] = React.useState<YamlBuilderHandlerBinding | undefined>()
   const [yamlFileName, setYamlFileName] = React.useState<string>(defaultFileName)
   const { getString } = useStrings()
@@ -111,7 +113,7 @@ function PipelineYamlView(): React.ReactElement {
   }, [yamlHandler, setYamlHandlerContext])
 
   React.useEffect(() => {
-    if (isGitSyncEnabled) {
+    if (isGitSyncEnabled || (isGitSimplificationEnabled && storeMetadata?.storeType === StoreType.REMOTE)) {
       if (gitDetails?.objectId) {
         const filePathArr = gitDetails.filePath?.split('/')
         const fileName = filePathArr?.length ? filePathArr[filePathArr?.length - 1] : 'Pipeline.yaml'

@@ -31,6 +31,7 @@ export enum StepType {
   Plugin = 'Plugin',
   Run = 'Run',
   GCR = 'BuildAndPushGCR',
+  PDC = 'Pdc',
   ECR = 'BuildAndPushECR',
   SaveCacheGCS = 'SaveCacheGCS',
   RestoreCacheGCS = 'RestoreCacheGCS',
@@ -67,5 +68,6 @@ export enum StepType {
   ServerlessAwsLambdaRollback = 'ServerlessAwsLambdaRollback',
   ServerlessAwsInfra = 'ServerlessAwsInfra',
   CloudFormationRollbackStack = 'RollbackStack',
-  CloudFormationDeleteStack = 'DeleteStack'
+  CloudFormationDeleteStack = 'DeleteStack',
+  CloudFormationCreateStack = 'CreateStack'
 }

@@ -632,7 +632,7 @@ exports[`TriggersWizardPage Triggers tests Payload/Values Comparison Existing Tr
                                     data-tooltip-id="ciCodebaseBuildType"
                                   >
                                     <p
-                                      class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-size-small StyledProps--font-weight-semi-bold"
+                                      class="StyledProps--font StyledProps--main StyledProps--font-variation-form-sub-section"
                                     >
                                       filters.executions.buildType
                                     </p>

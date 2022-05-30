@@ -12,11 +12,12 @@ import { defaultTo, isUndefined, memoize } from 'lodash-es'
 
 import { useMutateAsGet } from '@common/hooks/useMutateAsGet'
 import {
+  Failure,
   useGetTemplateFromPipeline,
   useGetMergeInputSetFromPipelineTemplateWithListInput,
   ResponseInputSetTemplateWithReplacedExpressionsResponse
 } from 'services/pipeline-ng'
-import type { Failure, PipelineInfoConfig } from 'services/cd-ng'
+import type { PipelineInfoConfig } from 'services/cd-ng'
 import {
   getStageIdentifierFromStageData,
   mergeTemplateWithInputSetData,

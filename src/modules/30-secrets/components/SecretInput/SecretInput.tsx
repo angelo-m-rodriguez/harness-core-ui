@@ -49,6 +49,8 @@ export interface SecretInputProps {
   allowSelection?: boolean
   privateSecret?: boolean
   tooltipProps?: DataTooltipInterface
+  // To enable File and Text Secret Selection both.
+  isMultiTypeSelect?: boolean
 }
 
 interface FormikSecretInput extends SecretInputProps {
@@ -68,13 +70,14 @@ const SecretInput: React.FC<FormikSecretInput> = props => {
     placeholder,
     connectorTypeContext,
     allowSelection = true,
-    privateSecret
+    privateSecret,
+    isMultiTypeSelect = false
   } = props
   const secretReference = get(formik.values, name)
 
   const { openCreateOrSelectSecretModal } = useCreateOrSelectSecretModal(
     {
-      type,
+      type: isMultiTypeSelect ? undefined : type,
       onSuccess: secret => {
         formik.setFieldValue(name, secret)
         /* istanbul ignore next */
@@ -88,7 +91,7 @@ const SecretInput: React.FC<FormikSecretInput> = props => {
   const { openCreateSecretModal } = useCreateUpdateSecretModal({
     onSuccess: formData => {
       const secret: SecretReference = {
-        ...pick(formData, 'identifier', 'name', 'orgIdentifier', 'projectIdentifier'),
+        ...pick(formData, 'identifier', 'name', 'orgIdentifier', 'projectIdentifier', 'type'),
         referenceString: getReference(getScopeFromDTO(formData), formData.identifier) as string
       }
       formik.setFieldValue(name, secret)
@@ -155,7 +158,7 @@ const SecretInput: React.FC<FormikSecretInput> = props => {
               className={css.containerEditBtn}
               data-testid={`${name}-edit`}
               onClick={() =>
-                openCreateSecretModal(type, {
+                openCreateSecretModal(secretReference.type || type, {
                   identifier: secretReference?.['identifier'],
                   projectIdentifier: secretReference?.['projectIdentifier'],
                   orgIdentifier: secretReference?.['orgIdentifier']
