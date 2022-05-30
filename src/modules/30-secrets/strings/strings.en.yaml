@@ -24,7 +24,7 @@ sshAuthFormFields:
   labelPassphrase: 'Passphrase (optional)'
   labelKeyFilePath: 'SSH Key File Path'
   labelSSHPort: 'SSH Port'
-  labelFile: 'Select or create a SSH Key File'
+  labelFile: 'Select or create a SSH Key'
   labelPrincipal: 'Principal'
   labelRealm: 'Realm'
   labelTGT: 'TGT Generation'

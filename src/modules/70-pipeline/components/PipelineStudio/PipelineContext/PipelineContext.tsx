@@ -23,6 +23,7 @@ import {
   CreatePipelineQueryParams,
   createPipelineV2Promise,
   EntityGitDetails,
+  ErrorNodeSummary,
   EntityValidityDetails,
   Failure,
   getPipelinePromise,
@@ -30,7 +31,9 @@ import {
   putPipelinePromise,
   PutPipelineQueryParams,
   putPipelineV2Promise,
-  ResponsePMSPipelineResponseDTO
+  ResponsePMSPipelineResponseDTO,
+  validateTemplateInputsPromise,
+  ValidateTemplateInputsQueryParams
 } from 'services/pipeline-ng'
 import { useGlobalEventListener, useLocalStorage, useQueryParams } from '@common/hooks'
 import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
@@ -127,6 +130,23 @@ export const getPipelineByIdentifier = (
       }
     }
   })
+}
+
+const getTemplateErrorNodeSummary = (
+  queryParams: ValidateTemplateInputsQueryParams
+): Promise<ErrorNodeSummary | undefined> => {
+  return validateTemplateInputsPromise({ queryParams })
+    .then(response => {
+      if (response && response.status === 'SUCCESS') {
+        if (response.data?.validYaml === false && response.data.errorNodeSummary) {
+          return response.data.errorNodeSummary
+        }
+      }
+      throw response
+    })
+    .catch(_error => {
+      return undefined
+    })
 }
 
 export const savePipeline = (
@@ -252,6 +272,7 @@ interface PipelinePayload {
   storeMetadata?: StoreMetadata
   gitDetails: EntityGitDetails
   entityValidityDetails?: EntityValidityDetails
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 const getId = (
@@ -334,6 +355,14 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
   }
 
   if ((!data || forceFetch) && pipelineId !== DefaultNewPipelineId) {
+    const templateInputsErrorNodeSummary = await getTemplateErrorNodeSummary({
+      ...queryParams,
+      identifier: pipelineId,
+      repoIdentifier,
+      branch,
+      getDefaultFromOtherRepo: true
+    })
+
     const pipelineWithGitDetails: PipelineInfoConfigWithGitDetails = await getPipelineByIdentifier(
       { ...queryParams, ...(repoIdentifier ? { repoIdentifier } : {}), ...(branch ? { branch } : {}) },
       pipelineId,
@@ -378,7 +407,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
       entityValidityDetails: defaultTo(
         pipelineWithGitDetails?.entityValidityDetails,
         defaultTo(data?.entityValidityDetails, {})
-      )
+      ),
+      templateInputsErrorNodeSummary
     }
     const templateQueryParams = {
       ...queryParams,
@@ -404,7 +434,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
           entityValidityDetails: defaultTo(
             pipelineWithGitDetails?.entityValidityDetails,
             defaultTo(data?.entityValidityDetails, {})
-          )
+          ),
+          templateInputsErrorNodeSummary
         })
       )
     } else {
@@ -423,7 +454,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
           isUpdated: false,
           gitDetails: payload.gitDetails,
           entityValidityDetails: payload.entityValidityDetails,
-          templateTypes
+          templateTypes,
+          templateInputsErrorNodeSummary
         })
       )
     }

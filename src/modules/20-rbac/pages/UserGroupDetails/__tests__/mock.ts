@@ -30,7 +30,8 @@ export const userGroupInfo = {
         roleName: 'Account Viewer',
         resourceGroupIdentifier: '_all_account_level_resources',
         resourceGroupName: 'All Resources',
-        managedRole: true
+        managedRole: true,
+        roleAssignmentsMetadataDTO: false
       }
     ],
     lastModifiedAt: 1618931089212
@@ -68,7 +69,8 @@ export const userGroupInfoSSOLinked = {
         roleName: 'Account Viewer',
         resourceGroupIdentifier: '_all_account_level_resources',
         resourceGroupName: 'All Resources',
-        managedRole: true
+        managedRole: true,
+        managedRoleAssignment: false
       }
     ],
     lastModifiedAt: 1618931089212
@@ -129,4 +131,42 @@ export const mockSSOSettings = {
   } as RestResponseAuthenticationSettingsResponse,
   error: null,
   loading: false
+}
+
+export const userGroupCheckingInfo = {
+  status: undefined,
+  data: {
+    userGroupDTO: {
+      accountIdentifier: 'kmpySmUISimoRrJL6NL73w',
+      orgIdentifier: 'default',
+      projectIdentifier: 'testing',
+      identifier: 'user_g_name',
+      name: 'user_g_name',
+      users: ['lv0euRhKRCyiXWzS7pOg6g'],
+      notificationConfigs: [],
+      externallyManaged: true,
+      description: 'description',
+      tags: {
+        firsttg: '',
+        secondtg: ''
+      },
+      ssoLinked: false
+      // ssoGroupName: 'mock_group_sso_name',
+      // linkedSsoDisplayName: 'mock_sso_display_name'
+    },
+    users: [
+      {
+        name: 'Admin',
+        email: 'admin@harness.io',
+        uuid: 'lv0euRhKRCyiXWzS7pOg6g',
+        locked: false,
+        disabled: false,
+        externallyManaged: false
+      }
+    ],
+    roleAssignmentsMetadataDTO: undefined,
+    lastModifiedAt: 1651685800532
+  },
+  metaData: {},
+  correlationId: ''
 }

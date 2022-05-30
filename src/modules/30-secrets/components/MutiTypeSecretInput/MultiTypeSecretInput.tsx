@@ -87,7 +87,7 @@ export function MultiTypeSecretInput(props: ConnectedMultiTypeSecretInputProps):
   const { openCreateSSHCredModal } = useCreateSSHCredModal({
     onSuccess: data => {
       const secret = {
-        ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier']),
+        ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier', 'type']),
         referenceString: getReference(getScopeFromDTO(data), data.identifier) as string
       }
       formik.setFieldValue(name, secret.referenceString)

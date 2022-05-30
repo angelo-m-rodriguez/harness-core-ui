@@ -11,7 +11,8 @@ import moment from 'moment'
 import type { GetDataError } from 'restful-react'
 import useRBACError, { RBACError } from '@rbac/utils/useRBACError/useRBACError'
 import type { ExecutionStatus } from '@pipeline/utils/statusHelpers'
-import type { Failure, Error } from 'services/cd-ng'
+import type { Failure as FailureCDNG, Error as ErrorCDNG } from 'services/cd-ng'
+import type { Failure as FailurePipeline, Error as ErrorPipeline } from 'services/pipeline-ng'
 
 export function roundNumber(value?: number, precision = 2) {
   if (typeof value !== 'number') {
@@ -95,7 +96,11 @@ export function diffStartAndEndTime(startTime?: number, endTime?: number): strin
   }
 }
 
-export function useErrorHandler(error: GetDataError<Failure | Error> | null, timeout?: number, key?: string) {
+export function useErrorHandler(
+  error: GetDataError<FailureCDNG | FailurePipeline | ErrorCDNG | ErrorPipeline> | null,
+  timeout?: number,
+  key?: string
+): void {
   const toaster = useToaster()
   const { getRBACErrorMessage } = useRBACError()
   useEffect(() => {

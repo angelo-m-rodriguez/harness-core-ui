@@ -647,6 +647,16 @@ perspectives:
   perspectiveDeletedTxt: 'Perspective {{ name }} deleted'
   perspectiveReportsTxt: 'Reports {{ reportInfo }}'
   perspectiveReportsMoreTxt: ' +{{ count }} more'
+  exportCSV: Export CSV
+  filename: File Name
+  enterAmount: Enter amount
+  exportRowsUpto: Export rows upto
+  largeNoOfRowsWarning: Note that rows >500 may take longer to download.
+  cost: '{{ $.connectors.ceAws.crossAccountRoleStep1.cost }}'
+  costTrend: Cost Trend
+  noOfRowsLessThan: 'Number of rows should be less than {{ number }}'
+  noOfRowsGreaterThan: 'Number of rows should be greater than or equal to 1'
+  excludeRowswithCost: Exclude rows with cost below
   workloadDetails:
     aggregation:
       text: 'Aggregation:'

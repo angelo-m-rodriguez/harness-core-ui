@@ -24,9 +24,9 @@ export function ServicePopoverCard(props: ServicePopoveCardProps): React.ReactEl
       <String tagName="div" className={css.title} stringID="primaryArtifactText" />
       {service?.artifacts?.primary ? (
         <>
-          {!!(service.artifacts.primary as unknown as any).image && (
+          {!!(service.artifacts.primary as unknown as any).imagePath && (
             <Text color="grey800" font={'small'}>
-              {getString('imageLabel')}: {(service.artifacts.primary as unknown as any).image}
+              {getString('imageLabel')}: {(service.artifacts.primary as unknown as any).imagePath}
             </Text>
           )}
           {!!(service.artifacts.primary as unknown as any).tag && (
@@ -65,9 +65,9 @@ export function ServicePopoverCard(props: ServicePopoveCardProps): React.ReactEl
           <String tagName="div" className={css.title} stringID="sidecarsText" />
           {service.artifacts.sidecars.map((artifact, index) => (
             <div key={index}>
-              {!!(artifact as unknown as any).image && (
+              {!!(artifact as unknown as any).imagePath && (
                 <Text color="grey800" font={'small'}>
-                  {getString('imageLabel')}: {(artifact as unknown as any).image}
+                  {getString('imageLabel')}: {(artifact as unknown as any).imagePath}
                 </Text>
               )}
               {!!(artifact as unknown as any).tag && (

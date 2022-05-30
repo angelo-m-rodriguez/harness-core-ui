@@ -102,3 +102,6 @@ export const getVersionLabelText = (template: TemplateSummaryResponse, getString
     ? getString('templatesLibrary.stableVersion', { entity: template.versionLabel })
     : template.versionLabel
 }
+
+export const getTemplateRuntimeInputsCount = (templateInfo: { [key: string]: any }): number =>
+  (JSON.stringify(templateInfo).match(/<\+input>/g) || []).length

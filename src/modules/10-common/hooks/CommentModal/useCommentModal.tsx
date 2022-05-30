@@ -6,18 +6,19 @@
  */
 
 import React from 'react'
-import { Button, ButtonVariation, Container, FormikForm, FormInput, Layout, Text } from '@wings-software/uicore'
+import { Button, ButtonVariation, Container, FormikForm, FormInput, Icon, Layout, Text } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import { useModalHook } from '@harness/use-modal'
 import { Formik } from 'formik'
 import { Dialog } from '@blueprintjs/core'
+import { FontVariation } from '@wings-software/design-system'
+import { isEmpty } from 'lodash-es'
 import { useStrings } from 'framework/strings'
-import { WarningInfo } from '@common/components/FeatureWarning/featureWarningUtil'
 import css from './useCommentModal.module.scss'
 
 export interface CommentModalProps {
   title?: string
-  infoText?: string
+  infoText?: string | React.ReactElement
   onResolve?: (comment: string) => void
   onReject?: () => void
 }
@@ -56,7 +57,16 @@ export const CommentModal = (props: CommentModalProps) => {
               </Container>
               <Container>
                 <Layout.Vertical spacing="xxlarge">
-                  {infoText && <WarningInfo message={infoText} />}
+                  {!isEmpty(infoText) && (
+                    <Container>
+                      <Layout.Vertical spacing={'small'}>
+                        <Icon name={'info-message'} size={24} className={css.infoIcon} />
+                        <Container className={css.infoTextContainer}>
+                          <Text font={{ variation: FontVariation.SMALL }}>{infoText}</Text>
+                        </Container>
+                      </Layout.Vertical>
+                    </Container>
+                  )}
                   <Container>
                     <Layout.Horizontal spacing="small" flex={{ alignItems: 'flex-end', justifyContent: 'flex-start' }}>
                       <Button text={getString('save')} type="submit" variation={ButtonVariation.PRIMARY} />
@@ -74,11 +84,11 @@ export const CommentModal = (props: CommentModalProps) => {
 }
 
 export default function useCommentModal(): {
-  getComments: (dialogTitle?: string, dialogInfo?: string) => Promise<string>
+  getComments: (dialogTitle?: string, dialogInfo?: string | React.ReactElement) => Promise<string>
 } {
   const [modalProps, setModalProps] = React.useState<{
     title?: string
-    infoText?: string
+    infoText?: string | React.ReactElement
     resolve: (comment: string) => void
     reject: () => void
   }>()
@@ -95,9 +105,9 @@ export default function useCommentModal(): {
     )
   }, [modalProps])
 
-  const getComments: (dialogTitle?: string, dialogInfo?: string) => Promise<string> = (
+  const getComments: (dialogTitle?: string, dialogInfo?: string | React.ReactElement) => Promise<string> = (
     dialogTitle?: string,
-    dialogInfo?: string
+    dialogInfo?: string | React.ReactElement
   ) => {
     return new Promise((resolve, reject) => {
       setModalProps({

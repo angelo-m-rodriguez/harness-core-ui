@@ -563,8 +563,11 @@ exports[`test cases for Node details Page should be able to render the details p
         >
           <div
             class="Layout--horizontal StyledProps--main"
-            style="justify-content: flex-end;"
+            style="align-items: flex-end;"
           >
+            <span
+              style="flex-grow: 1;"
+            />
             <span
               class="bp3-popover-wrapper"
             >

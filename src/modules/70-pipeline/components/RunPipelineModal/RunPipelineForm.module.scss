@@ -270,3 +270,15 @@
 .gitRemoteDetailsWrapper {
   padding: 0 var(--spacing-large) var(--spacing-medium);
 }
+
+.templateErrorModalHeader {
+  margin: var(--spacing-7) !important;
+  border-bottom: 1px solid var(--grey-200);
+  padding-bottom: var(--spacing-7) !important;
+}
+
+.templateErrorView {
+  background: var(--red-50) !important;
+  height: 480px;
+  margin: var(--spacing-7) !important;
+}

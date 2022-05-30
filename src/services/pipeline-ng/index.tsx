@@ -206,6 +206,19 @@ export interface CcmConnectorFilter {
   k8sConnectorRef?: string
 }
 
+export interface CloneConfig {
+  connectors?: boolean
+  inputSets?: boolean
+  templates?: boolean
+  triggers?: boolean
+}
+
+export interface ClonePipelineProperties {
+  cloneConfig?: CloneConfig
+  destinationConfig?: DestinationPipelineConfig
+  sourceConfig?: SourceIdentifierConfig
+}
+
 export interface ConditionDTO {
   key: string
   operator: 'equals' | 'not equals' | 'in' | 'not in'
@@ -319,6 +332,17 @@ export interface DelegateInfo {
   name?: string
   taskId?: string
   taskName?: string
+}
+
+export interface DestinationPipelineConfig {
+  description?: string
+  orgIdentifier?: string
+  pipelineIdentifier?: string
+  pipelineName?: string
+  projectIdentifier?: string
+  tags?: {
+    [key: string]: string
+  }
 }
 
 export type DockerRegistrySpec = ArtifactTypeSpec & {
@@ -656,7 +680,6 @@ export interface Error {
     | 'SCM_UNAUTHORIZED'
     | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
-    | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'DATA'
     | 'CONTEXT'
     | 'PR_CREATION_ERROR'
@@ -687,6 +710,8 @@ export interface Error {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   correlationId?: string
   detailedMessage?: string
   message?: string
@@ -1129,7 +1154,6 @@ export interface Failure {
     | 'SCM_UNAUTHORIZED'
     | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
-    | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'DATA'
     | 'CONTEXT'
     | 'PR_CREATION_ERROR'
@@ -1160,6 +1184,8 @@ export interface Failure {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   correlationId?: string
   errors?: ValidationError[]
   message?: string
@@ -2235,6 +2261,7 @@ export interface ResourceDTO {
     | 'GOVERNANCE_POLICY_SET'
     | 'VARIABLE'
     | 'CHAOS_HUB'
+    | 'CHAOS_AGENT'
 }
 
 export interface ResourceScopeDTO {
@@ -2789,7 +2816,6 @@ export interface ResponseMessage {
     | 'SCM_UNAUTHORIZED'
     | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
-    | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'DATA'
     | 'CONTEXT'
     | 'PR_CREATION_ERROR'
@@ -2820,6 +2846,8 @@ export interface ResponseMessage {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   exception?: Throwable
   failureTypes?: (
     | 'EXPIRED'
@@ -3225,6 +3253,12 @@ export interface Sort {
   empty?: boolean
   sorted?: boolean
   unsorted?: boolean
+}
+
+export interface SourceIdentifierConfig {
+  orgIdentifier?: string
+  pipelineIdentifier?: string
+  projectIdentifier?: string
 }
 
 export interface StackTraceElement {
@@ -7753,6 +7787,79 @@ export const createPipelinePromise = (
     UpdateInputSetForPipelineBodyRequestBody,
     void
   >('POST', getConfig('pipeline/api'), `/pipelines`, props, signal)
+
+export interface ClonePipelineQueryParams {
+  accountIdentifier: string
+  branch?: string
+  repoIdentifier?: string
+  rootFolder?: string
+  filePath?: string
+  commitMsg?: string
+  isNewBranch?: boolean
+  baseBranch?: string
+  connectorRef?: string
+  storeType?: 'INLINE' | 'REMOTE'
+  repoName?: string
+}
+
+export type ClonePipelineProps = Omit<
+  MutateProps<ResponsePipelineSaveResponse, Failure | Error, ClonePipelineQueryParams, ClonePipelineProperties, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Clone a Pipeline
+ */
+export const ClonePipeline = (props: ClonePipelineProps) => (
+  <Mutate<ResponsePipelineSaveResponse, Failure | Error, ClonePipelineQueryParams, ClonePipelineProperties, void>
+    verb="POST"
+    path={`/pipelines/clone`}
+    base={getConfig('pipeline/api')}
+    {...props}
+  />
+)
+
+export type UseClonePipelineProps = Omit<
+  UseMutateProps<
+    ResponsePipelineSaveResponse,
+    Failure | Error,
+    ClonePipelineQueryParams,
+    ClonePipelineProperties,
+    void
+  >,
+  'path' | 'verb'
+>
+
+/**
+ * Clone a Pipeline
+ */
+export const useClonePipeline = (props: UseClonePipelineProps) =>
+  useMutate<ResponsePipelineSaveResponse, Failure | Error, ClonePipelineQueryParams, ClonePipelineProperties, void>(
+    'POST',
+    `/pipelines/clone`,
+    { base: getConfig('pipeline/api'), ...props }
+  )
+
+/**
+ * Clone a Pipeline
+ */
+export const clonePipelinePromise = (
+  props: MutateUsingFetchProps<
+    ResponsePipelineSaveResponse,
+    Failure | Error,
+    ClonePipelineQueryParams,
+    ClonePipelineProperties,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<
+    ResponsePipelineSaveResponse,
+    Failure | Error,
+    ClonePipelineQueryParams,
+    ClonePipelineProperties,
+    void
+  >('POST', getConfig('pipeline/api'), `/pipelines/clone`, props, signal)
 
 export type DummyPmsStepsApiProps = Omit<GetProps<ResponsePmsAbstractStepNode, Failure | Error, void, void>, 'path'>
 

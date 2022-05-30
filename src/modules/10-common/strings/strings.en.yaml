@@ -176,6 +176,7 @@ validation:
   environmentIsRequired: 'Environment is required'
   subscription: 'Subscription is required'
   repository: 'Repository is required'
+  projectIsRequired: Project is required
 specify: Specify
 role: Role
 projectViewer: Project Viewer
@@ -874,6 +875,7 @@ selectName: Select {{name}}
 override: Override
 plusNewName: + New {{name}}
 fetchingBranches: Fetching branches
+download: Download
 getStarted:
   firstPipeline: 'Let’s get you started with your first Pipeline!'
   buildPipeline: Build Pipeline
@@ -881,3 +883,4 @@ getStarted:
   selectWorkload: Select Workload
   selectArtifact: Select Artifact
   selectInfra: Select Infrastructure
+

@@ -19,7 +19,8 @@ import {
   projectPathProps,
   secretPathProps,
   segmentPathProps,
-  targetPathProps
+  targetPathProps,
+  templatePathProps
 } from '@common/utils/routeUtils'
 import type { AccountPathProps, ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { MinimalLayout } from '@common/layouts'
@@ -60,6 +61,8 @@ import GitSyncErrors from '@gitsync/pages/errors/GitSyncErrors'
 import GitSyncConfigTab from '@gitsync/pages/config/GitSyncConfigTab'
 import VariablesPage from '@variables/pages/variables/VariablesPage'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import TemplatesPage from '@templates-library/pages/TemplatesPage/TemplatesPage'
+import { TemplateStudioWrapper } from '@templates-library/components/TemplateStudio/TemplateStudioWrapper'
 import { registerFeatureFlagPipelineStage } from './pages/pipeline-studio/views/FeatureFlagStage'
 import { registerFlagConfigurationPipelineStep } from './components/PipelineSteps'
 import { TargetsPage } from './pages/target-management/targets/TargetsPage'
@@ -152,6 +155,10 @@ RbacFactory.registerResourceTypeHandler(ResourceType.TARGETGROUP, {
 
 registerFeatureFlagPipelineStage()
 registerFlagConfigurationPipelineStep()
+
+const templateModuleParams: ModulePathParams = {
+  module: ':module(cf)'
+}
 
 const CFRoutes: FC = () => {
   const { FF_PIPELINE, FFM_1512, FFM_1827 } = useFeatureFlags()
@@ -322,6 +329,29 @@ const CFRoutes: FC = () => {
         pageName={PAGE_NAME.OnboardingDetailPage}
       >
         <OnboardingDetailPage />
+      </RouteWithLayout>
+
+      <RouteWithLayout
+        licenseRedirectData={licenseRedirectData}
+        sidebarProps={CFSideNavProps}
+        exact
+        path={routes.toTemplateStudio({
+          ...accountPathProps,
+          ...templatePathProps,
+          ...templateModuleParams
+        })}
+        pageName={PAGE_NAME.TemplateStudioWrapper}
+      >
+        <TemplateStudioWrapper />
+      </RouteWithLayout>
+      <RouteWithLayout
+        exact
+        licenseRedirectData={licenseRedirectData}
+        sidebarProps={CFSideNavProps}
+        path={routes.toTemplates({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
+        pageName={PAGE_NAME.TemplatesPage}
+      >
+        <TemplatesPage />
       </RouteWithLayout>
 
       <RouteWithLayout

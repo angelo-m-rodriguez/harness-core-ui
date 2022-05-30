@@ -7,8 +7,35 @@ exports[`test cases for Perspective Grid should be able to render Perspective Gr
   >
     <div
       class="Layout--horizontal StyledProps--main"
-      style="justify-content: flex-end;"
+      style="align-items: flex-end;"
     >
+      <p
+        class="StyledProps--font StyledProps--main exportCsvBtn StyledProps--font-variation-small-bold StyledProps--color StyledProps--color-primary7"
+        style="display: flex; align-items: center;"
+      >
+        ce.perspectives.exportCSV
+        <span
+          class="bp3-icon StyledProps--main Text--icon StyledProps--padding-left-xsmall StyledProps--color StyledProps--color-primary7"
+          data-icon="launch"
+        >
+          <svg
+            height="12"
+            viewBox="0 0 12 12"
+            width="12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M9.692 11.333H1.487a.82.82 0 01-.82-.82V2.306a.82.82 0 01.82-.82H5.18v.82H1.487v8.205h8.205V6.82h.82v3.692a.82.82 0 01-.82.82zM7.641.666v.82h2.293L6.41 5.012l.579.578 3.524-3.524v2.293h.82V.666H7.641z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </p>
+      <span
+        style="flex-grow: 1;"
+      />
       <span
         class="bp3-popover-wrapper"
       >

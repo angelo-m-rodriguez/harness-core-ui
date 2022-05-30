@@ -61,7 +61,8 @@ jest.mock('services/pipeline-ng', () => ({
   useCreateInputSetForPipeline: jest.fn(() => getMockFor_Generic_useMutate()),
   useGetInputsetYamlV2: jest.fn(() => ({ data: null })),
   useRunStagesWithRuntimeInputYaml: jest.fn(() => getMockFor_Generic_useMutate()),
-  getInputSetForPipelinePromise: jest.fn().mockImplementation(() => Promise.resolve(GetInputSetsResponse.data))
+  getInputSetForPipelinePromise: jest.fn().mockImplementation(() => Promise.resolve(GetInputSetsResponse.data)),
+  useValidateTemplateInputs: jest.fn(() => getMockFor_Generic_useMutate())
 }))
 
 function Wrapped(): React.ReactElement {

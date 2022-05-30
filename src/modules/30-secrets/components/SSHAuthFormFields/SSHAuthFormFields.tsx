@@ -91,7 +91,11 @@ const SSHAuthFormFields: React.FC<SSHAuthFormFieldsProps> = props => {
           <FormInput.Text name="userName" label={getString('username')} />
           {formik.values.credentialType === 'KeyReference' ? (
             <>
-              <SecretInput name="key" label={getString('secrets.sshAuthFormFields.labelFile')} type="SecretFile" />
+              <SecretInput
+                name="key"
+                label={getString('secrets.sshAuthFormFields.labelFile')}
+                isMultiTypeSelect={true}
+              />
               <SecretInput
                 name={'encryptedPassphrase'}
                 label={getString('secrets.sshAuthFormFields.labelPassphrase')}

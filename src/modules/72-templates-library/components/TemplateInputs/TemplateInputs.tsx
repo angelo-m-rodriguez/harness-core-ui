@@ -42,7 +42,7 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import MultiTypeDelegateSelector from '@common/components/MultiTypeDelegateSelector/MultiTypeDelegateSelector'
 import { useStrings } from 'framework/strings'
 import { PipelineInputSetFormInternal, StageForm } from '@pipeline/components/PipelineInputSetForm/PipelineInputSetForm'
-import { TemplateType } from '@templates-library/utils/templatesUtils'
+import { getTemplateRuntimeInputsCount, TemplateType } from '@templates-library/utils/templatesUtils'
 import NoResultsView from '@templates-library/pages/TemplatesPage/views/NoResultsView/NoResultsView'
 import { getTemplateNameWithLabel } from '@pipeline/utils/templateUtils'
 import { useMutateAsGet } from '@common/hooks'
@@ -92,7 +92,7 @@ export const TemplateInputs: React.FC<TemplateInputsProps> = props => {
   React.useEffect(() => {
     try {
       const templateInput = parse(templateInputYaml?.data || '')
-      setCount((JSON.stringify(templateInput).match(/<\+input>/g) || []).length)
+      setCount(getTemplateRuntimeInputsCount(templateInput))
       setInputSetTemplate(templateInput)
     } catch (error) {
       showError(getRBACErrorMessage(error), undefined, 'template.parse.inputSet.error')

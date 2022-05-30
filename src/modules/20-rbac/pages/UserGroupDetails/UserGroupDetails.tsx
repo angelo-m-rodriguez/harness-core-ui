@@ -6,9 +6,9 @@
  */
 
 import React from 'react'
-import { Text, Layout, Card, Container, ButtonVariation, PageError } from '@wings-software/uicore'
+import { Text, Layout, Button, Card, Container, ButtonVariation, PageError, Icon } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import ReactTimeago from 'react-timeago'
 import cx from 'classnames'
 import { useStrings } from 'framework/strings'
@@ -21,7 +21,16 @@ import { PageSpinner } from '@common/components'
 import RoleBindingsList from '@rbac/components/RoleBindingsList/RoleBindingsList'
 import type { PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useRoleAssignmentModal } from '@rbac/modals/RoleAssignmentModal/useRoleAssignmentModal'
-import { getUserGroupActionTooltipText, PrincipalType } from '@rbac/utils/utils'
+import { useQueryParams } from '@common/hooks'
+import type { PrincipalScope } from '@common/interfaces/SecretsInterface'
+import { getPrincipalScopeFromDTO } from '@common/components/EntityReference/EntityReference'
+import {
+  getUserGroupActionTooltipText,
+  PrincipalType,
+  isUserGroupInherited,
+  getUserGroupMenuOptionText,
+  getUserGroupQueryParams
+} from '@rbac/utils/utils'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useUserGroupModal } from '@rbac/modals/UserGroupModal/useUserGroupModal'
 import { useLinkToSSOProviderModal } from '@rbac/modals/LinkToSSOProviderModal/useLinkToSSOProviderModal'
@@ -36,14 +45,16 @@ const UserGroupDetails: React.FC = () => {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier, module, userGroupIdentifier } =
     useParams<PipelineType<ProjectPathProps & { userGroupIdentifier: string }>>()
+  const { parentScope } = useQueryParams<{ parentScope: PrincipalScope }>()
   const isCommunity = isCommunityPlan()
+  const history = useHistory()
 
   const { data, loading, error, refetch } = useGetUserGroupAggregate({
     identifier: userGroupIdentifier,
     queryParams: {
-      accountIdentifier: accountId,
-      orgIdentifier,
-      projectIdentifier
+      ...getUserGroupQueryParams(accountId, orgIdentifier, projectIdentifier, parentScope),
+      roleAssignmentScopeOrgIdentifier: orgIdentifier,
+      roleAssignmentScopeProjectIdentifier: projectIdentifier
     }
   })
 
@@ -64,12 +75,28 @@ const UserGroupDetails: React.FC = () => {
 
   useDocumentTitle([userGroup?.name || '', getString('common.userGroups')])
 
-  const membersBtnTooltipTextId = userGroup ? getUserGroupActionTooltipText(userGroup) : undefined
-  const membersBtnTooltipText = membersBtnTooltipTextId ? getString(membersBtnTooltipTextId) : undefined
+  const userGroupInherited = isUserGroupInherited(accountId, orgIdentifier, projectIdentifier, userGroup)
 
   if (loading) return <PageSpinner />
   if (error) return <PageError message={(error.data as Error)?.message || error.message} onClick={() => refetch()} />
   if (!userGroup) return <></>
+  const membersBtnTooltipText = getUserGroupActionTooltipText(
+    accountId,
+    orgIdentifier,
+    projectIdentifier,
+    userGroup,
+    userGroupInherited
+  )
+  const membersBtnTooltipTextFormatted = membersBtnTooltipText ? (
+    <Text padding="medium">{membersBtnTooltipText}</Text>
+  ) : undefined
+  const ssoBtnTooltip = getUserGroupMenuOptionText(
+    getString('edit'),
+    getString('rbac.group'),
+    userGroup,
+    userGroupInherited
+  )
+  const ssoBtnTooltipText = ssoBtnTooltip ? <Text padding="medium">{ssoBtnTooltip}</Text> : undefined
   return (
     <>
       <Page.Header
@@ -108,6 +135,39 @@ const UserGroupDetails: React.FC = () => {
           </Layout.Horizontal>
         }
       />
+      {userGroupInherited ? (
+        <Card className={cx(css.banner)}>
+          <Layout.Horizontal flex>
+            <Layout.Horizontal flex={{ alignItems: 'baseline' }} spacing="medium">
+              <Text color={Color.BLACK}>
+                <Icon size={20} name={'info-messaging'} />
+                &nbsp;&nbsp;
+                {membersBtnTooltipText}
+              </Text>
+            </Layout.Horizontal>
+            <Layout.Horizontal>
+              <Button
+                text={getString('rbac.linkToOriginalUserGroup')}
+                iconProps={{ color: Color.BLUE_500, size: 20 }}
+                icon="link"
+                variation={ButtonVariation.LINK}
+                onClick={() => {
+                  history.push({
+                    pathname: routes.toUserGroupDetails({
+                      accountId,
+                      orgIdentifier: userGroup.orgIdentifier,
+                      projectIdentifier: userGroup.projectIdentifier,
+                      userGroupIdentifier: userGroup.identifier
+                    }),
+                    search: `?parentScope=${getPrincipalScopeFromDTO(userGroup)}`
+                  })
+                }}
+              />
+            </Layout.Horizontal>
+          </Layout.Horizontal>
+        </Card>
+      ) : null}
+
       <Page.Body className={css.body}>
         <Container width="50%" padding={{ bottom: 'large' }} className={css.membersContainer}>
           <Layout.Horizontal flex>
@@ -132,7 +192,7 @@ const UserGroupDetails: React.FC = () => {
             </Layout.Horizontal>
             <Layout.Horizontal className={cx({ [css.buttonPadding]: userGroup.ssoLinked })}>
               <ManagePrincipalButton
-                disabled={userGroup.externallyManaged}
+                disabled={userGroup.externallyManaged || userGroupInherited}
                 text={
                   userGroup.ssoLinked
                     ? getString('rbac.userDetails.linkToSSOProviderModal.delinkLabel')
@@ -143,13 +203,13 @@ const UserGroupDetails: React.FC = () => {
                 onClick={() => {
                   openLinkToSSOProviderModal(userGroup)
                 }}
-                tooltip={userGroup.externallyManaged ? getString('rbac.unableToEditSCIMMembership') : undefined}
+                tooltip={ssoBtnTooltipText}
                 resourceType={ResourceType.USERGROUP}
                 resourceIdentifier={userGroupIdentifier}
               />
               <ManagePrincipalButton
-                disabled={userGroup.ssoLinked || userGroup.externallyManaged}
-                tooltip={membersBtnTooltipText}
+                disabled={userGroup.ssoLinked || userGroup.externallyManaged || userGroupInherited}
+                tooltip={membersBtnTooltipTextFormatted}
                 text={getString('common.plusNumber', { number: getString('members') })}
                 variation={ButtonVariation.LINK}
                 onClick={() => {
@@ -160,7 +220,7 @@ const UserGroupDetails: React.FC = () => {
               />
             </Layout.Horizontal>
           </Layout.Horizontal>
-          <MemberList ssoLinked={userGroup.ssoLinked} />
+          <MemberList ssoLinked={userGroup.ssoLinked} userGroupInherited={userGroupInherited} />
         </Container>
         <Container width="50%" className={css.detailsContainer}>
           {!isCommunity && (
@@ -185,6 +245,7 @@ const UserGroupDetails: React.FC = () => {
                   }}
                   resourceType={ResourceType.USERGROUP}
                   resourceIdentifier={userGroupIdentifier}
+                  resourceScope={{ accountIdentifier: accountId, orgIdentifier, projectIdentifier }}
                 />
               </Layout.Horizontal>
             </Layout.Vertical>
@@ -193,7 +254,12 @@ const UserGroupDetails: React.FC = () => {
             <Text color={Color.BLACK} font={{ size: 'medium', weight: 'bold' }}>
               {getString('common.notificationPreferences')}
             </Text>
-            <NotificationList userGroup={userGroup} onSubmit={refetch} />
+            <NotificationList
+              userGroup={userGroup}
+              inherited={userGroupInherited}
+              inheritedCreateDisabledText={membersBtnTooltipTextFormatted}
+              onSubmit={refetch}
+            />
           </Layout.Vertical>
         </Container>
       </Page.Body>

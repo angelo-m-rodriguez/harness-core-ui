@@ -17,8 +17,9 @@ import {
   Button,
   ButtonVariation,
   ButtonSize,
-  IconName
-} from '@wings-software/uicore'
+  IconName,
+  useToggleOpen
+} from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { Classes, Intent, Menu, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core'
 import { useParams, useHistory } from 'react-router-dom'
@@ -44,6 +45,7 @@ import { formatCount } from '@common/utils/utils'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
 import { getFeaturePropsForRunPipelineButton } from '@pipeline/utils/runPipelineUtils'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
+import { ClonePipelineForm } from '../ClonePipelineForm/ClonePipelineForm'
 import { getIconsForPipeline } from '../../PipelineListUtils'
 
 import css from './PipelineCard.module.scss'
@@ -69,6 +71,7 @@ interface ContextMenuProps {
   orgIdentifier: string
   accountIdentifier: string
   isGitSyncEnabled: boolean
+  openClonePipelineModal(): void
   onDeletePipeline: (commitMsg: string) => Promise<void>
   onDelete: (pipeline: PMSPipelineSummaryResponse) => void
 }
@@ -79,9 +82,11 @@ function ContextMenu({
   goToPipelineDetail,
   projectIdentifier,
   orgIdentifier,
+  openClonePipelineModal,
   accountIdentifier,
   onDeletePipeline,
-  onDelete
+  onDelete,
+  isGitSyncEnabled
 }: ContextMenuProps): React.ReactElement {
   const { getString } = useStrings()
   const { confirmDelete } = useDeleteConfirmationDialog(pipeline, 'pipeline', onDeletePipeline)
@@ -126,7 +131,6 @@ function ContextMenu({
           runPipeline()
         }}
       />
-      {/* </RunPipelineModal> */}
       <Menu.Item
         icon="cog"
         text={getString('launchStudio')}
@@ -143,15 +147,15 @@ function ContextMenu({
         }}
       />
       <Menu.Divider />
-      {/* <Menu.Item
+      <Menu.Item
         icon="duplicate"
         text={getString('projectCard.clone')}
-        disabled
+        disabled={isGitSyncEnabled}
         onClick={(e: React.MouseEvent) => {
           e.stopPropagation()
-          return false
+          openClonePipelineModal()
         }}
-      /> */}
+      />
       <Menu.Item
         icon="trash"
         text={getString('delete')}
@@ -168,7 +172,7 @@ function ContextMenu({
 
 const LEFT_COLUMN_WIDTH = 80
 
-function AdditionalEntitiesCountPopUp(props: { entityList: string[]; iconName?: IconName }) {
+function AdditionalEntitiesCountPopUp(props: { entityList: string[]; iconName?: IconName }): React.ReactElement {
   const { entityList, iconName } = props
   return (
     <Layout.Vertical style={{ padding: 'var(--spacing-4)' }}>
@@ -184,7 +188,7 @@ function AdditionalEntitiesCountPopUp(props: { entityList: string[]; iconName?: 
   )
 }
 
-const renderEntityWithAdditionalCountInfo = (entityList: string[], iconName?: IconName) => {
+const renderEntityWithAdditionalCountInfo = (entityList: string[], iconName?: IconName): React.ReactElement | null => {
   if (!entityList?.length) {
     return null
   }
@@ -243,10 +247,9 @@ export function PipelineCard({
       accountId: string
     }>
   >()
-  const { isGitSyncEnabled } = { isGitSyncEnabled: true }
   const { gitSyncRepos, loadingRepos } = useGitSyncStore()
   const { storeType, gitDetails: { repoName } = {} } = pipeline
-  const { isGitSimplificationEnabled } = useAppStore()
+  const { isGitSimplificationEnabled, isGitSyncEnabled } = useAppStore()
   const isPipelineRemote = isGitSimplificationEnabled && storeType === StoreType.REMOTE
   const history = useHistory()
   const goToExecutionPipelineView = (executionId: string | undefined): void => {
@@ -277,10 +280,20 @@ export function PipelineCard({
     branch: pipeline?.gitDetails?.branch,
     storeType: pipeline.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
   })
+  const {
+    open: openClonePipelineModal,
+    isOpen: isClonePipelineModalOpen,
+    close: closeClonePipelineModal
+  } = useToggleOpen()
 
   const pipelineIcons = getIconsForPipeline(pipeline)
   const status = pipeline.executionSummaryInfo?.lastExecutionStatus
   const isPipelineInvalid = pipeline?.entityValidityDetails?.valid === false
+
+  function handleCloseClonePipelineModal(e?: React.SyntheticEvent): void {
+    e?.stopPropagation()
+    closeClonePipelineModal()
+  }
 
   return (
     <Card className={css.pipelineCard} interactive onClick={() => goToPipelineStudio(pipeline)}>
@@ -295,9 +308,10 @@ export function PipelineCard({
               projectIdentifier={projectIdentifier}
               accountIdentifier={accountId}
               orgIdentifier={orgIdentifier}
-              isGitSyncEnabled
+              isGitSyncEnabled={!!(isGitSyncEnabled || isGitSimplificationEnabled)}
               onDeletePipeline={onDeletePipeline}
               onDelete={onDelete}
+              openClonePipelineModal={openClonePipelineModal}
             />
           }
           menuPopoverProps={{
@@ -582,6 +596,11 @@ export function PipelineCard({
           </Layout.Horizontal>
         </Container>
       </Container>
+      <ClonePipelineForm
+        isOpen={isClonePipelineModalOpen}
+        onClose={handleCloseClonePipelineModal}
+        originalPipeline={pipeline}
+      />
     </Card>
   )
 }

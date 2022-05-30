@@ -41,6 +41,7 @@ import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import NoEntityFound from '@pipeline/pages/utils/NoEntityFound/NoEntityFound'
 import { TemplateVariablesContextProvider } from '@pipeline/components/TemplateVariablesContext/TemplateVariablesContext'
 import { RightBar } from '@templates-library/components/TemplateStudio/RightBar/RightBar'
+import { OutOfSyncErrorStrip } from '@pipeline/components/TemplateLibraryErrorHandling/OutOfSyncErrorStrip/OutOfSyncErrorStrip'
 import { TemplateContext } from './TemplateContext/TemplateContext'
 import { getContentAndTitleStringKeys, isValidYaml } from './TemplateStudioUtils'
 import css from './TemplateStudio.module.scss'
@@ -72,7 +73,8 @@ export function TemplateStudio(): React.ReactElement {
     isBETemplateUpdated,
     isInitialized,
     gitDetails,
-    entityValidityDetails
+    entityValidityDetails,
+    templateInputsErrorNodeSummary
   } = state
   const { isYamlEditable } = templateView
   const { getString } = useStrings()
@@ -296,6 +298,16 @@ export function TemplateStudio(): React.ReactElement {
                 getErrors={getErrors}
                 onGitBranchChange={onGitBranchChange}
               />
+              {templateInputsErrorNodeSummary && (
+                <OutOfSyncErrorStrip
+                  templateInputsErrorNodeSummary={templateInputsErrorNodeSummary}
+                  entity={'Template'}
+                  isReadOnly={isReadonly}
+                  onRefreshEntity={() => {
+                    fetchTemplate({ forceFetch: true, forceUpdate: true })
+                  }}
+                />
+              )}
               <Container className={css.canvasContainer}>
                 {view === SelectedView.VISUAL ? (
                   /* istanbul ignore next */

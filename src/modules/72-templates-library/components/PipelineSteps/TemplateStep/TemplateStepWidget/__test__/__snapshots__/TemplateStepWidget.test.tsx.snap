@@ -126,12 +126,21 @@ exports[`<TemplateStepWidgetWithRef /> tests snapshot test 1`] = `
             <div
               class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-top-large StyledProps--padding-bottom-large"
             >
-              <h5
-                class="StyledProps--font StyledProps--font-h5 StyledProps--main StyledProps--color StyledProps--color-black"
-                level="5"
+              <div
+                class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between"
               >
-                pipeline.templateInputs
-              </h5>
+                <h5
+                  class="StyledProps--font StyledProps--font-h5 StyledProps--main StyledProps--color StyledProps--color-black"
+                  level="5"
+                >
+                  pipeline.templateInputs
+                </h5>
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--font-size-normal"
+                >
+                  templatesLibrary.inputsCount
+                </p>
+              </div>
               <div
                 class="Layout--vertical Layout--layout-spacing-medium StyledProps--main StyledProps--padding-top-medium"
               >

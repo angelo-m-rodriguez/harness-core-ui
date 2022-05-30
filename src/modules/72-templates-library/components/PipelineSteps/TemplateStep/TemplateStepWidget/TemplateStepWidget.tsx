@@ -14,7 +14,8 @@ import {
   Layout,
   MultiTypeInputType,
   Heading,
-  PageError
+  PageError,
+  Text
 } from '@wings-software/uicore'
 import * as Yup from 'yup'
 import { Color } from '@harness/design-system'
@@ -39,7 +40,7 @@ import type { TemplateStepNode } from 'services/pipeline-ng'
 import { validateStep } from '@pipeline/components/PipelineStudio/StepUtil'
 import { StepForm } from '@pipeline/components/PipelineInputSetForm/StageInputSetForm'
 import { setTemplateInputs, TEMPLATE_INPUT_PATH } from '@pipeline/utils/templateUtils'
-import { getScopeBasedQueryParams } from '@templates-library/utils/templatesUtils'
+import { getScopeBasedQueryParams, getTemplateRuntimeInputsCount } from '@templates-library/utils/templatesUtils'
 import { useQueryParams } from '@common/hooks'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './TemplateStepWidget.module.scss'
@@ -73,6 +74,7 @@ function TemplateStepWidget(
   const { getRBACErrorMessage } = useRBACError()
   const stepTemplateRef = getIdentifierFromValue(initialValues.template.templateRef)
   const scope = getScopeFromValue(initialValues.template.templateRef)
+  const [templateInputsCount, setTemplateInputsCount] = React.useState<number>(0)
 
   const {
     data: stepTemplateResponse,
@@ -118,6 +120,7 @@ function TemplateStepWidget(
             draft.allValues = parse(defaultTo(stepTemplateResponse?.data?.yaml, '')).template.spec
           })
         )
+        setTemplateInputsCount(getTemplateRuntimeInputsCount(mergedTemplateInputs))
         setTemplateInputs(initialValues, mergedTemplateInputs)
         onUpdate?.(initialValues)
       } catch (error) {
@@ -197,9 +200,14 @@ function TemplateStepWidget(
                   formik.values.inputsTemplate &&
                   formik.values.allValues && (
                     <Layout.Vertical padding={{ top: 'large', bottom: 'large' }} spacing={'large'}>
-                      <Heading level={5} color={Color.BLACK}>
-                        {getString('pipeline.templateInputs')}
-                      </Heading>
+                      <Layout.Horizontal flex={{ distribution: 'space-between' }}>
+                        <Heading level={5} color={Color.BLACK}>
+                          {getString('pipeline.templateInputs')}
+                        </Heading>
+                        <Text font={{ size: 'normal' }}>
+                          {getString('templatesLibrary.inputsCount', { count: templateInputsCount })}
+                        </Text>
+                      </Layout.Horizontal>
                       <StepForm
                         key={`${formik.values.template.templateRef}-${defaultTo(
                           formik.values.template.versionLabel,

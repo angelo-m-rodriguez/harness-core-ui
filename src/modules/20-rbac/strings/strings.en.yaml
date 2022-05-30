@@ -70,6 +70,7 @@ allResourcesIncludingChildScopes: All Resources Including Child Scopes
 userGroupPage:
   newUserGroup: New {{ $.common.userGroup}}
   editUserGroup: Edit {{ $.common.userGroup}}
+  assignRoles: Assign Roles
   addMembers: Add Members
   addUsers: Add Users
   noRoleAssignmentsText: There are no roles assigned to this User Group, Click on Add to start assigning roles
@@ -78,13 +79,16 @@ userGroupPage:
   confirmDeleteTitle: Delete User Group
   successMessage: User Group '{{name}}' deleted successfully
   noUserGroups: No User Groups
-  userGroupEmptyState: There are no user groups in your project
+  userGroupEmptyState: There are no User Groups in this {{scope}}. Create a new User Group or assign role to an existing User Group in this {{scope}}.
   noDataText: You have no User Groups. Click on the button below to create a new one.
+  roleAssignSuccess: Role Assignments created successfully
   userList:
     deleteConfirmation: Are you sure you want to remove the member '{{name}}'?
     deleteTitle: Remove Member
     deleteSuccessMessage: Member '{{name}}' successfully removed
     deleteFailureMessage: Member '{{name}}' could not be removed
+UserGroupRoleAssignmentForm:
+  assignmentValidation: Role Assignment is required
 userGroupForm:
   createSuccess: User Group '{{name}}' created successfully
   editSuccess: User Group '{{name}}' edited successfully
@@ -197,6 +201,7 @@ resourceGroup:
 updateNotificationSuccess: Notification preferences updated successfully
 userRequired: User is required
 userUpperLimit: Addition of more than 15 users is not allowed
+userGroupRequired: At least one user group is required
 resourceSelectorErrorMessage: Add atleast one specific resource for the following types [{{resources}}]
 accessControlTitle:
   users: 'Access Control: Users'
@@ -218,6 +223,10 @@ communityErrorMessages:
 group: Group
 manageSCIMText: 'Unable to {{action}} this {{target}} because it is managed using SCIM by your identity provider.'
 unableToEditSCIMMembership: Unable to edit membership to this group because it is managed using SCIM by your identity provider.
+unableToEditInheritedMembership: 'Members managed in {{parentScope}} scope'
+manageInheritedGroupText: 'Unable to {{action}} this usergroup because it is managed at {{parentScope}} level'
+unableToEditInheritedMembershipDetailed: 'This group is managed at {{parentScope}} level. Its user membership and notification settings can not be modified at {{childScope}} level'
+linkToOriginalUserGroup: Click here to modify settings
 copyGroup:
   title: 'Copy group: {{name}}'
   success: User group copied successfully

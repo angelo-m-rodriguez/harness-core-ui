@@ -20,8 +20,9 @@ import {
   TagsPopover,
   TableV2,
   Container,
-  ButtonSize
-} from '@wings-software/uicore'
+  ButtonSize,
+  useToggleOpen
+} from '@harness/uicore'
 import { Classes, Menu, Position } from '@blueprintjs/core'
 import { FontVariation, Color } from '@harness/design-system'
 import { useParams } from 'react-router-dom'
@@ -41,6 +42,7 @@ import { StoreType } from '@common/constants/GitSyncTypes'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
 import { Badge } from '@pipeline/pages/utils/Badge/Badge'
 import { getFeaturePropsForRunPipelineButton } from '@pipeline/utils/runPipelineUtils'
+import { ClonePipelineForm } from './ClonePipelineForm/ClonePipelineForm'
 import { getIconsForPipeline, getStatusColor } from '../PipelineListUtils'
 import css from '../PipelinesPage.module.scss'
 
@@ -79,6 +81,7 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
   }>()
 
   const { confirmDelete } = useDeleteConfirmationDialog(data, 'pipeline', (column as any).onDeletePipeline)
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const [canDelete, canRun] = usePermission(
     {
       resourceScope: {
@@ -105,6 +108,17 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
     branch: data.gitDetails?.branch,
     storeType: data.gitDetails?.repoName ? StoreType.REMOTE : StoreType.INLINE
   })
+
+  const {
+    open: openClonePipelineModal,
+    isOpen: isClonePipelineModalOpen,
+    close: closeClonePipelineModal
+  } = useToggleOpen()
+
+  function handleCloseClonePipelineModal(e?: React.SyntheticEvent): void {
+    e?.stopPropagation()
+    closeClonePipelineModal()
+  }
 
   return (
     <Layout.Horizontal style={{ justifyContent: 'flex-end' }}>
@@ -156,14 +170,15 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
             }}
           />
           <Menu.Divider />
-          {/* <Menu.Item
+          <Menu.Item
             icon="duplicate"
             text={getString('projectCard.clone')}
-            disabled
+            disabled={isGitSyncEnabled || isGitSimplificationEnabled}
             onClick={(e: React.MouseEvent) => {
               e.stopPropagation()
+              openClonePipelineModal()
             }}
-          /> */}
+          />
           <Menu.Item
             icon="trash"
             text={getString('delete')}
@@ -177,6 +192,11 @@ const RenderColumnMenu: Renderer<CellProps<PipelineDTO>> = ({ row, column }) => 
           />
         </Menu>
       </Popover>
+      <ClonePipelineForm
+        isOpen={isClonePipelineModalOpen}
+        onClose={handleCloseClonePipelineModal}
+        originalPipeline={data}
+      />
     </Layout.Horizontal>
   )
 }

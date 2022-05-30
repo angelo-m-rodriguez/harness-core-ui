@@ -7,7 +7,7 @@
 
 import React, { useContext } from 'react'
 import { debounce, defaultTo, isEqual, merge, noop, omit, set } from 'lodash-es'
-import { Card, Container, Formik, FormikForm, Heading, Layout, PageError } from '@wings-software/uicore'
+import { Card, Container, Formik, FormikForm, Heading, Layout, PageError, Text } from '@wings-software/uicore'
 import * as Yup from 'yup'
 import { Color } from '@harness/design-system'
 import { useParams } from 'react-router-dom'
@@ -35,7 +35,7 @@ import ErrorsStripBinded from '@pipeline/components/ErrorsStrip/ErrorsStripBinde
 import { useStageTemplateActions } from '@pipeline/utils/useStageTemplateActions'
 import { TemplateBar } from '@pipeline/components/PipelineStudio/TemplateBar/TemplateBar'
 import { setTemplateInputs, TEMPLATE_INPUT_PATH } from '@pipeline/utils/templateUtils'
-import { getScopeBasedQueryParams } from '@templates-library/utils/templatesUtils'
+import { getScopeBasedQueryParams, getTemplateRuntimeInputsCount } from '@templates-library/utils/templatesUtils'
 import css from './TemplateStageSpecifications.module.scss'
 
 declare global {
@@ -71,6 +71,7 @@ export const TemplateStageSpecifications = (): JSX.Element => {
   const { showError } = useToaster()
   const { getRBACErrorMessage } = useRBACError()
   const { getString } = useStrings()
+  const [templateInputsCount, setTemplateInputsCount] = React.useState<number>(0)
 
   const onChange = React.useCallback(
     debounce(async (values: StageElementConfig): Promise<void> => {
@@ -126,6 +127,7 @@ export const TemplateStageSpecifications = (): JSX.Element => {
             }
           })
         )
+        setTemplateInputsCount(getTemplateRuntimeInputsCount(mergedTemplateInputs))
         setTemplateInputs(stage.stage, mergedTemplateInputs)
         updateStage(stage.stage)
       } catch (error) {
@@ -241,9 +243,14 @@ export const TemplateStageSpecifications = (): JSX.Element => {
                         padding={{ top: 'large', bottom: 'large' }}
                         spacing={'large'}
                       >
-                        <Heading level={5} color={Color.BLACK}>
-                          {getString('pipeline.templateInputs')}
-                        </Heading>
+                        <Layout.Horizontal flex={{ distribution: 'space-between' }}>
+                          <Heading level={5} color={Color.BLACK}>
+                            {getString('pipeline.templateInputs')}
+                          </Heading>
+                          <Text font={{ size: 'normal' }}>
+                            {getString('templatesLibrary.inputsCount', { count: templateInputsCount })}
+                          </Text>
+                        </Layout.Horizontal>
                         <StageForm
                           key={`${formik.values.template?.templateRef}-${defaultTo(
                             formik.values.template?.versionLabel,

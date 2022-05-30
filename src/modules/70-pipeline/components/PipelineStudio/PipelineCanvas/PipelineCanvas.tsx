@@ -69,6 +69,7 @@ import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { useSaveTemplateListener } from '@pipeline/components/PipelineStudio/hooks/useSaveTemplateListener'
 import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetails'
+import { OutOfSyncErrorStrip } from '@pipeline/components/TemplateLibraryErrorHandling/OutOfSyncErrorStrip/OutOfSyncErrorStrip'
 import { usePipelineContext } from '../PipelineContext/PipelineContext'
 import CreatePipelines from '../CreateModal/PipelineCreate'
 import { DefaultNewPipelineId, DrawerTypes } from '../PipelineContext/PipelineActions'
@@ -168,7 +169,8 @@ export function PipelineCanvas({
     isBEPipelineUpdated,
     gitDetails,
     entityValidityDetails,
-    templateError
+    templateError,
+    templateInputsErrorNodeSummary
   } = state
 
   const { getString } = useStrings()
@@ -849,7 +851,9 @@ export function PipelineCanvas({
                   variation={ButtonVariation.PRIMARY}
                   icon="run-pipeline"
                   intent="success"
-                  disabled={isUpdated || entityValidityDetails?.valid === false}
+                  disabled={
+                    isUpdated || entityValidityDetails?.valid === false || !isEmpty(templateInputsErrorNodeSummary)
+                  }
                   className={css.runPipelineBtn}
                   text={getString('runPipelineText')}
                   tooltip={
@@ -881,6 +885,16 @@ export function PipelineCanvas({
             </div>
           </div>
         </div>
+        {templateInputsErrorNodeSummary && (
+          <OutOfSyncErrorStrip
+            templateInputsErrorNodeSummary={templateInputsErrorNodeSummary}
+            entity={'Pipeline'}
+            isReadOnly={isReadonly}
+            onRefreshEntity={() => {
+              fetchPipeline({ forceFetch: true, forceUpdate: true })
+            }}
+          />
+        )}
         {isYaml ? <PipelineYamlView /> : pipeline.template ? <TemplatePipelineBuilder /> : <StageBuilder />}
       </div>
       <RightBar />

@@ -12,6 +12,7 @@ import { stagesCollection } from '@pipeline/components/PipelineStudio/Stages/Sta
 import type { StageAttributes } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { FeatureFlagStage } from './FeatureFlagStage'
 
+/* istanbul ignore next */
 const getStageAttributes = (getString: UseStringsReturn['getString']): StageAttributes => ({
   name: getString('pipelineSteps.feature.create.featureStageName'),
   type: StageType.FEATURE,
@@ -20,7 +21,7 @@ const getStageAttributes = (getString: UseStringsReturn['getString']): StageAttr
   isApproval: false,
   openExecutionStrategy: false
 })
-
+/* istanbul ignore next */
 const getStageEditorImplementation = (isEnabled: boolean, getString: UseStringsReturn['getString']): ReactElement => (
   <FeatureFlagStage
     icon={'cf-main'}
@@ -33,6 +34,7 @@ const getStageEditorImplementation = (isEnabled: boolean, getString: UseStringsR
     isDisabled={false}
     isHidden={!isEnabled}
     isApproval={false}
+    isTemplateSupported={true}
   />
 )
 

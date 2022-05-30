@@ -34,6 +34,8 @@ export interface PerspectiveGridProps {
   pageSize?: number
   gridPageIndex?: number
   goToNodeDetails?: (clusterName: string, nodeId: string) => void
+  allowExportAsCSV?: boolean
+  openDownloadCSVModal?: () => void
 }
 
 const PerspectiveGrid: React.FC<PerspectiveGridProps> = props => {
@@ -52,7 +54,9 @@ const PerspectiveGrid: React.FC<PerspectiveGridProps> = props => {
     pageSize,
     gridPageIndex,
     fetchData,
-    goToNodeDetails
+    goToNodeDetails,
+    allowExportAsCSV = false,
+    openDownloadCSVModal
   } = props
 
   const gridColumns = getGridColumnsByGroupBy(groupBy, isClusterOnly)
@@ -107,6 +111,8 @@ const PerspectiveGrid: React.FC<PerspectiveGridProps> = props => {
     <Container background="white">
       {showColumnSelector && (
         <ColumnSelector
+          allowExportAsCSV={allowExportAsCSV}
+          openDownloadCSVModal={openDownloadCSVModal}
           columns={gridColumns}
           selectedColumns={selectedColumns}
           onChange={columns => setSelectedColumns(columns)}

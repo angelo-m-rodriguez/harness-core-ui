@@ -20,6 +20,7 @@ import formatCost from '../formatCost'
 import { clusterInfoUtil, DEFAULT_GROUP_BY } from '../perspectiveUtils'
 import { generateGroupBy, getCloudProviderFromFields, getFiltersFromEnityMap } from '../anomaliesUtils'
 import { addBufferToValue, calculateNodes, isResourceConsistent } from '../recommendationUtils'
+import { flattenPerspectiveGridData } from '../downloadPerspectiveGridAsCsv'
 
 describe('test cases for recommendation utils', () => {
   test('test cases for CPU value formatter', () => {
@@ -289,5 +290,14 @@ describe('test cases for anomalyUtils', () => {
         values: ['Usage Type', 'Usage Type1']
       }
     ])
+  })
+})
+
+describe('Test Cases for flattenPerspectiveGridData Utils', () => {
+  test('Test flattenObject', () => {
+    expect(flattenPerspectiveGridData({ key1: 'val1', key2: { nestedKey3: 'val3', nestedKey4: null } })).toMatchObject({
+      key1: 'val1',
+      nestedKey3: 'val3'
+    })
   })
 })

@@ -19,6 +19,9 @@ templatesPage:
   noTemplates: There are no templates in your {{scope}}.
 editModal:
   heading: 'Edit {{ entity }} Template'
+commentModal:
+  heading: 'Save {{ name }}'
+  info: 'If template inputs have been changed, then entities referencing <b>{{ name }}</b> will need to be updated to receive these changes.'
 createNewModal:
   heading: 'Create New {{ entity }} Template'
   editHeading: 'Edit {{ entity }} Template'

@@ -33,6 +33,7 @@ import TimeRangeSelect from '@projects-orgs/components/TimeRangeSelect/TimeRange
 import useLandingPageDefaultView, { View } from '@projects-orgs/hooks/useLandingPageDefaultView'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import LandingDashboardWelcomeView from './LandingDashboardWelcomeView'
 import css from './LandingDashboardPage.module.scss'
 
@@ -42,6 +43,7 @@ const LandingDashboardPage: React.FC = () => {
   const { accountId } = useParams<AccountPathProps>()
   const { currentUserInfo } = useAppStore()
   const { getString } = useStrings()
+  useDocumentTitle(getString('dashboardLabel'))
   const defaultView = useLandingPageDefaultView()
   const [view, setView] = useState<View>(defaultView)
   const name = currentUserInfo.name || currentUserInfo.email

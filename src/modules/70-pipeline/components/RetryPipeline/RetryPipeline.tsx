@@ -42,7 +42,8 @@ import {
   useGetMergeInputSetFromPipelineTemplateWithListInput,
   useGetPipeline,
   useGetRetryStages,
-  useRetryPipeline
+  useRetryPipeline,
+  useValidateTemplateInputs
 } from 'services/pipeline-ng'
 
 import type {
@@ -65,6 +66,7 @@ import routes from '@common/RouteDefinitions'
 import { useQueryParams } from '@common/hooks'
 import { getFeaturePropsForRunPipelineButton, mergeTemplateWithInputSetData } from '@pipeline/utils/runPipelineUtils'
 import type { InputSetDTO, Pipeline } from '@pipeline/utils/types'
+import { PipelineErrorView } from '@pipeline/components/RunPipelineModal/PipelineErrorView'
 import { ErrorsStrip } from '../ErrorsStrip/ErrorsStrip'
 import GitPopover from '../GitPopover/GitPopover'
 import SelectStagetoRetry from './SelectStagetoRetry'
@@ -170,6 +172,18 @@ function RetryPipeline({
       repoIdentifier,
       branch,
       getTemplatesResolvedPipeline: true
+    }
+  })
+
+  const { data: validateTemplateInputsResponse, loading: loadingValidateTemplateInputs } = useValidateTemplateInputs({
+    queryParams: {
+      accountIdentifier: accountId,
+      orgIdentifier,
+      projectIdentifier,
+      identifier: pipelineId,
+      repoIdentifier,
+      branch,
+      getDefaultFromOtherRepo: true
     }
   })
 
@@ -588,9 +602,21 @@ function RetryPipeline({
 
   const formRefDom = React.useRef<HTMLElement | undefined>()
 
-  if (loadingPipeline || loadingTemplate || inputSetLoading || loadingRetry) {
+  if (loadingPipeline || loadingTemplate || inputSetLoading || loadingRetry || loadingValidateTemplateInputs) {
     return <PageSpinner />
   }
+
+  if (validateTemplateInputsResponse?.data?.validYaml === false) {
+    return (
+      <PipelineErrorView
+        errorNodeSummary={validateTemplateInputsResponse.data.errorNodeSummary}
+        pipelineIdentifier={pipelineId}
+        repoIdentifier={repoIdentifier}
+        branch={branch}
+      />
+    )
+  }
+
   return (
     <Formik<PipelineInfoConfig>
       initialValues={

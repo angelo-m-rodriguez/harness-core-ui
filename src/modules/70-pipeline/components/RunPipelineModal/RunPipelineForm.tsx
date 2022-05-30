@@ -32,7 +32,8 @@ import {
   StageExecutionResponse,
   useRunStagesWithRuntimeInputYaml,
   useRerunStagesWithRuntimeInputYaml,
-  useGetStagesExecutionList
+  useGetStagesExecutionList,
+  useValidateTemplateInputs
 } from 'services/pipeline-ng'
 import { useToaster } from '@common/exports'
 import routes from '@common/RouteDefinitions'
@@ -69,6 +70,7 @@ import {
 } from '@pipeline/utils/CIUtils'
 import { useDeepCompareEffect } from '@common/hooks/useDeepCompareEffect'
 import { StoreType } from '@common/constants/GitSyncTypes'
+import { PipelineErrorView } from '@pipeline/components/RunPipelineModal/PipelineErrorView'
 import { clearRuntimeInput, validatePipeline, getErrorsList } from '../PipelineStudio/StepUtil'
 import { PreFlightCheckModal } from '../PreFlightCheckModal/PreFlightCheckModal'
 import { YamlBuilderMemo } from '../PipelineStudio/PipelineYamlView/PipelineYamlView'
@@ -191,6 +193,18 @@ function RunPipelineFormBasic({
       repoIdentifier,
       branch,
       getTemplatesResolvedPipeline: true
+    }
+  })
+
+  const { data: validateTemplateInputsResponse, loading: loadingValidateTemplateInputs } = useValidateTemplateInputs({
+    queryParams: {
+      accountIdentifier: accountId,
+      orgIdentifier,
+      projectIdentifier,
+      identifier: pipelineIdentifier,
+      repoIdentifier,
+      branch,
+      getDefaultFromOtherRepo: true
     }
   })
 
@@ -622,7 +636,15 @@ function RunPipelineFormBasic({
   }
 
   const shouldShowPageSpinner = (): boolean => {
-    return loadingPipeline || runLoading || runStageLoading || reRunLoading || reRunStagesLoading || loadingInputSets
+    return (
+      loadingPipeline ||
+      runLoading ||
+      runStageLoading ||
+      reRunLoading ||
+      reRunStagesLoading ||
+      loadingInputSets ||
+      loadingValidateTemplateInputs
+    )
   }
 
   const formRefDom = React.useRef<HTMLElement | undefined>()
@@ -650,7 +672,16 @@ function RunPipelineFormBasic({
 
   let runPipelineFormContent: React.ReactElement | null = null
 
-  if (inputSetsError?.message) {
+  if (validateTemplateInputsResponse?.data?.validYaml === false) {
+    runPipelineFormContent = (
+      <PipelineErrorView
+        errorNodeSummary={validateTemplateInputsResponse.data.errorNodeSummary}
+        pipelineIdentifier={pipelineIdentifier}
+        repoIdentifier={repoIdentifier}
+        branch={branch}
+      />
+    )
+  } else if (inputSetsError?.message) {
     runPipelineFormContent = <PipelineInvalidRequestContent onClose={onClose} getTemplateError={inputSetsError} />
   } else {
     runPipelineFormContent = (

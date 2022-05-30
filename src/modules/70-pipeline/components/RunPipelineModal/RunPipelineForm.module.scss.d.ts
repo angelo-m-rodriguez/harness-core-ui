@@ -55,6 +55,8 @@ declare const styles: {
   readonly stageSelectionItem: string
   readonly stageWarning: string
   readonly stagesDropdown: string
+  readonly templateErrorModalHeader: string
+  readonly templateErrorView: string
   readonly underlineText: string
   readonly valueProviderRadio: string
 }

@@ -11,7 +11,8 @@ import { stageTemplateMock } from '@templates-library/components/TemplateStudio/
 import {
   getAllowedTemplateTypes,
   getScopeBasedQueryParams,
-  getVersionLabelText
+  getVersionLabelText,
+  getTemplateRuntimeInputsCount
 } from '@templates-library/utils/templatesUtils'
 import { Scope } from '@common/interfaces/SecretsInterface'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -69,5 +70,32 @@ describe('templatesUtils tests', () => {
     expect(getScopeBasedQueryParams(queryParams, Scope.ACCOUNT)).toEqual({
       accountIdentifier: 'accountId'
     })
+  })
+
+  test('Test getTemplateRuntimeInputsCount method', () => {
+    expect(
+      getTemplateRuntimeInputsCount({
+        type: 'Http',
+        spec: {
+          url: '<+input>',
+          requestBody: '<+input>'
+        }
+      })
+    ).toEqual(2)
+
+    expect(
+      getTemplateRuntimeInputsCount({
+        type: 'Http',
+        spec: {
+          url: '<+input>'
+        }
+      })
+    ).toEqual(1)
+
+    expect(
+      getTemplateRuntimeInputsCount({
+        type: 'Http'
+      })
+    ).toEqual(0)
   })
 })

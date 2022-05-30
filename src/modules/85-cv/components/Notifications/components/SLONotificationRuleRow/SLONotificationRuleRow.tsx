@@ -6,7 +6,7 @@
  */
 
 import { Button, Container, Layout, Select, Text, TextInput } from '@harness/uicore'
-import React from 'react'
+import React, { useCallback } from 'react'
 import HorizontalLineWithText from '@cv/components/HorizontalLineWithText/HorizontalLineWithText'
 import { useStrings } from 'framework/strings'
 import type { NotificationRuleRowProps } from './SLONotificationRuleRow.types'
@@ -23,6 +23,70 @@ export default function SLONotificationRuleRow({
   const { getString } = useStrings()
   const { threshold, lookBackDuration, id, condition } = notificationRule || {}
 
+  const handleThresholdChange = useCallback(
+    e => {
+      handleChangeField(notificationRule, getValueFromEvent(e), 'threshold', 'lookBackDuration', lookBackDuration)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lookBackDuration, notificationRule]
+  )
+
+  const renderThresholdField = (): JSX.Element => {
+    switch (condition?.value) {
+      case SLOCondition.ERROR_BUDGET_REMAINING_MINUTES:
+        return (
+          <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
+            <Text>{'Value'}</Text>
+            <TextInput
+              required
+              type="number"
+              placeholder={'min'}
+              min={0}
+              value={threshold as string}
+              name={`${id}.threshold`}
+              className={css.numberField}
+              onChange={handleThresholdChange}
+            />
+          </Layout.Vertical>
+        )
+      case SLOCondition.ERROR_BUDGET_BURN_RATE_IS_ABOVE:
+        return (
+          <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
+            <Text>{'Value'}</Text>
+            <TextInput
+              required
+              type="number"
+              placeholder={'%'}
+              min={0}
+              value={threshold as string}
+              name={`${id}.threshold`}
+              className={css.numberField}
+              onChange={handleThresholdChange}
+            />
+          </Layout.Vertical>
+        )
+      case SLOCondition.ERROR_BUDGET_REMAINING_PERCENTAGE:
+        return (
+          <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
+            <Text>{'Value'}</Text>
+            <TextInput
+              required
+              type="number"
+              placeholder={'%'}
+              min={0}
+              max={100}
+              value={threshold as string}
+              name={`${id}.threshold`}
+              className={css.numberField}
+              onChange={handleThresholdChange}
+            />
+          </Layout.Vertical>
+        )
+      default:
+        return <></>
+    }
+  }
+
   return (
     <>
       <Layout.Horizontal padding={{ top: 'large' }} key={id} spacing="medium">
@@ -38,29 +102,7 @@ export default function SLONotificationRuleRow({
             }}
           />
         </Layout.Vertical>
-        {threshold ? (
-          <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
-            <Text>{'Value'}</Text>
-            <TextInput
-              required
-              type="number"
-              placeholder={condition?.value === SLOCondition.ERROR_BUDGET_REMAINING_MINUTES ? 'min' : '%'}
-              min={0}
-              value={threshold as string}
-              name={`${id}.threshold`}
-              className={css.numberField}
-              onChange={e => {
-                handleChangeField(
-                  notificationRule,
-                  getValueFromEvent(e),
-                  'threshold',
-                  'lookBackDuration',
-                  lookBackDuration
-                )
-              }}
-            />
-          </Layout.Vertical>
-        ) : null}
+        {threshold ? renderThresholdField() : null}
         {lookBackDuration && condition?.value === SLOCondition.ERROR_BUDGET_BURN_RATE_IS_ABOVE ? (
           <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
             <Text>{'Lookback Duration'}</Text>

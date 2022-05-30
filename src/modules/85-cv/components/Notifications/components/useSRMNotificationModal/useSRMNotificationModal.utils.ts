@@ -1,3 +1,10 @@
+/*
+ * Copyright 2022 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
 import type { CVNGNotificationChannel, NotificationRuleCondition, NotificationRuleDTORequestBody } from 'services/cv'
 import { defaultOption } from '../../NotificationsContainer.constants'
 import type { NotificationConditionRow, SRMNotification } from '../../NotificationsContainer.types'
@@ -8,13 +15,12 @@ export const createNotificationsPayload = (
   projectIdentifier: string,
   wizardData: SRMNotification
 ): NotificationRuleDTORequestBody => {
-  const { conditions, name, notificationMethod, type } = wizardData || {}
+  const { conditions, name, notificationMethod, type, identifier } = wizardData || {}
   const updatedConditions = getNotificationConditions(conditions)
 
   return {
     conditions: updatedConditions,
-    //TODO identifier should not required in post call
-    identifier: name as string,
+    identifier: identifier as string,
     name: name as string,
     notificationMethod: notificationMethod as CVNGNotificationChannel,
     orgIdentifier,

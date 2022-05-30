@@ -30,7 +30,7 @@ import { v4 as uuid } from 'uuid'
 import { useParams } from 'react-router-dom'
 import cx from 'classnames'
 
-import { cloneDeep, isEmpty, set, unset, isString } from 'lodash-es'
+import { cloneDeep, isEmpty, set, unset, isString, get } from 'lodash-es'
 import { FormikErrors, FormikProps, yupToFormErrors } from 'formik'
 import { PipelineStep, StepProps } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
@@ -59,6 +59,7 @@ import MultiTypeList from '@common/components/MultiTypeList/MultiTypeList'
 import MultiTypeMap from '@common/components/MultiTypeMap/MultiTypeMap'
 import MultiTypeFieldSelector from '@common/components/MultiTypeFieldSelector/MultiTypeFieldSelector'
 
+import { FormMultiTypeCheckboxField } from '@common/components'
 import { useQueryParams } from '@common/hooks'
 import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
 import type { StringNGVariable } from 'services/cd-ng'
@@ -114,7 +115,7 @@ function TerraformPlanWidget(
 ): React.ReactElement {
   const { initialValues, onUpdate, onChange, allowableTypes, isNewStep, readonly = false, stepViewType } = props
   const { getString } = useStrings()
-  const { TF_MODULE_SOURCE_INHERIT_SSH } = useFeatureFlags()
+  const { TF_MODULE_SOURCE_INHERIT_SSH, EXPORT_TF_PLAN_JSON_NG } = useFeatureFlags()
   const { expressions } = useVariablesExpression()
   const [connectorView, setConnectorView] = useState(false)
   const [selectedConnector, setSelectedConnector] = useState<ConnectorTypes | ''>('')
@@ -153,6 +154,7 @@ function TerraformPlanWidget(
     setIsEditMode(false)
   }
 
+  /* istanbul ignore next */
   const getNewConnectorSteps = () => {
     const connectorType = ConnectorMap[selectedConnector]
     const buildPayload = getBuildPayload(connectorType)
@@ -259,6 +261,7 @@ function TerraformPlanWidget(
     )
   }
 
+  /* istanbul ignore next */
   const onStepChange = (arg: StepChangeData<any>): void => {
     if (arg?.prevStep && arg?.nextStep && arg.prevStep > arg.nextStep && arg.nextStep <= 2) {
       setConnectorView(false)
@@ -368,9 +371,11 @@ function TerraformPlanWidget(
                     showRequiredField={false}
                     showDefaultField={false}
                     showAdvanced={true}
-                    onChange={value => {
-                      setFieldValue('spec.provisionerIdentifier', value)
-                    }}
+                    onChange={
+                      /* istanbul ignore next */ value => {
+                        setFieldValue('spec.provisionerIdentifier', value)
+                      }
+                    }
                     isReadonly={readonly}
                   />
                 )}
@@ -410,17 +415,17 @@ function TerraformPlanWidget(
                         {getString('cd.configFilePlaceHolder')}
                       </a>
                     )}
-                    {(configFile?.store?.spec?.folderPath || configFile?.store?.spec?.artifactPaths) && (
+                    {(get(configFile, 'store.spec.folderPath') || get(configFile, 'store.spec.artifactPaths')) && (
                       <Text font="normal" lineClamp={1} width={200} data-testid={configFile?.store?.spec?.folderPath}>
                         /
-                        {configFile?.store?.spec?.folderPath
-                          ? configFile?.store?.spec?.folderPath
-                          : isString(configFile?.store.spec.artifactPaths)
-                          ? configFile?.store.spec.artifactPaths
+                        {get(configFile, 'store.spec.folderPath')
+                          ? get(configFile, 'store.spec.folderPath')
+                          : isString(get(configFile, 'store.spec.artifactPaths'))
+                          ? get(configFile, 'store.spec.artifactPaths')
                           : configFile?.store.spec.artifactPaths[0]}
                       </Text>
                     )}
-                    {configFile?.store?.spec?.folderPath || configFile?.store?.spec?.artifactPaths ? (
+                    {get(configFile, 'store.spec.folderPath') || get(configFile, 'store.spec.artifactPaths') ? (
                       <Button
                         minimal
                         icon="Edit"
@@ -562,6 +567,34 @@ function TerraformPlanWidget(
                           disabled={readonly}
                         />
                       </div>
+                      {EXPORT_TF_PLAN_JSON_NG && (
+                        <div className={cx(stepCss.formGroup, css.addMarginTop, css.addMarginBottom)}>
+                          <FormMultiTypeCheckboxField
+                            formik={formik as FormikProps<unknown>}
+                            name={'spec.configuration.exportTerraformPlanJson'}
+                            label={getString('cd.exportTerraformPlanJson')}
+                            multiTypeTextbox={{ expressions, allowableTypes }}
+                            disabled={readonly}
+                          />
+                          {getMultiTypeFromValue(formik.values?.spec?.configuration?.exportTerraformPlanJson) ===
+                            MultiTypeInputType.RUNTIME && (
+                            <ConfigureOptions
+                              value={(formik.values?.spec?.configuration?.exportTerraformPlanJson || '') as string}
+                              type="String"
+                              variableName="spec?.configuration?.exportTerraformPlanJson"
+                              showRequiredField={false}
+                              showDefaultField={false}
+                              showAdvanced={true}
+                              onChange={
+                                /* istanbul ignore next */ value =>
+                                  formik.setFieldValue('spec?.configuration?.exportTerraformPlanJson', value)
+                              }
+                              style={{ alignSelf: 'center' }}
+                              isReadonly={readonly}
+                            />
+                          )}
+                        </div>
+                      )}
                     </>
                   }
                 />
@@ -592,59 +625,61 @@ function TerraformPlanWidget(
                       setSelectedConnector={setSelectedConnector}
                     />
                     {connectorView ? getNewConnectorSteps() : null}
-                    {selectedConnector === Connectors.ARTIFACTORY ? (
-                      <TFArtifactoryForm
-                        isConfig
-                        isTerraformPlan
-                        allowableTypes={allowableTypes}
-                        name={getString('cd.configFileDetails')}
-                        onSubmitCallBack={(data: any, prevStepData: any) => {
-                          const configObject = {
-                            ...prevStepData?.formValues?.spec?.configuration?.configFiles
-                          }
-                          const valObj = formatArtifactoryData(prevStepData, data, configObject, formik)
-                          set(valObj, 'spec.configuration.configFiles', { ...configObject })
-                          formik.setValues(valObj)
-                          setConnectorView(false)
-                          setShowRemoteWizard(false)
-                        }}
-                      />
-                    ) : (
-                      <TerraformConfigStepTwo
-                        name={getString('cd.configFileDetails')}
-                        isTerraformPlan
-                        isReadonly={readonly}
-                        allowableTypes={allowableTypes}
-                        onSubmitCallBack={(data: any, prevStepData: any) => {
-                          const configObject = {
-                            ...data.spec?.configuration?.configFiles
-                          }
+                    {
+                      /* istanbul ignore next */ selectedConnector === Connectors.ARTIFACTORY ? (
+                        <TFArtifactoryForm
+                          isConfig
+                          isTerraformPlan
+                          allowableTypes={allowableTypes}
+                          name={getString('cd.configFileDetails')}
+                          onSubmitCallBack={(data: any, prevStepData: any) => {
+                            const configObject = {
+                              ...prevStepData?.formValues?.spec?.configuration?.configFiles
+                            }
+                            const valObj = formatArtifactoryData(prevStepData, data, configObject, formik)
+                            set(valObj, 'spec.configuration.configFiles', { ...configObject })
+                            formik.setValues(valObj)
+                            setConnectorView(false)
+                            setShowRemoteWizard(false)
+                          }}
+                        />
+                      ) : (
+                        <TerraformConfigStepTwo
+                          name={getString('cd.configFileDetails')}
+                          isTerraformPlan
+                          isReadonly={readonly}
+                          allowableTypes={allowableTypes}
+                          onSubmitCallBack={(data: any, prevStepData: any) => {
+                            const configObject = {
+                              ...data.spec?.configuration?.configFiles
+                            }
 
-                          if (TF_MODULE_SOURCE_INHERIT_SSH) {
-                            configObject.moduleSource = data.spec?.configuration?.configFiles?.moduleSource
-                          }
+                            if (TF_MODULE_SOURCE_INHERIT_SSH) {
+                              configObject.moduleSource = data.spec?.configuration?.configFiles?.moduleSource
+                            }
 
-                          if (prevStepData.identifier && prevStepData.identifier !== data?.identifier) {
-                            configObject.store.spec.connectorRef = prevStepData?.identifier
-                          }
-                          if (configObject?.store.spec.gitFetchType === 'Branch') {
-                            unset(configObject.store.spec, 'commitId')
-                          } else if (configObject?.store.spec.gitFetchType === 'Commit') {
-                            unset(configObject.store.spec, 'branch')
-                          }
-                          if (configObject?.store?.spec?.artifactPaths) {
-                            unset(configObject?.store.spec, 'artifactPaths')
-                            unset(configObject?.store.spec, 'repositoryName')
-                          }
-                          const valObj = cloneDeep(formik.values)
-                          configObject.store.type = prevStepData?.selectedType
-                          set(valObj, 'spec.configuration.configFiles', { ...configObject })
-                          formik.setValues(valObj)
-                          setConnectorView(false)
-                          setShowRemoteWizard(false)
-                        }}
-                      />
-                    )}
+                            if (prevStepData.identifier && prevStepData.identifier !== data?.identifier) {
+                              configObject.store.spec.connectorRef = prevStepData?.identifier
+                            }
+                            if (configObject?.store.spec.gitFetchType === 'Branch') {
+                              unset(configObject.store.spec, 'commitId')
+                            } else if (configObject?.store.spec.gitFetchType === 'Commit') {
+                              unset(configObject.store.spec, 'branch')
+                            }
+                            if (configObject?.store?.spec?.artifactPaths) {
+                              unset(configObject?.store.spec, 'artifactPaths')
+                              unset(configObject?.store.spec, 'repositoryName')
+                            }
+                            const valObj = cloneDeep(formik.values)
+                            configObject.store.type = prevStepData?.selectedType
+                            set(valObj, 'spec.configuration.configFiles', { ...configObject })
+                            formik.setValues(valObj)
+                            setConnectorView(false)
+                            setShowRemoteWizard(false)
+                          }}
+                        />
+                      )
+                    }
                   </StepWizard>
                 </div>
                 <Button
@@ -687,7 +722,8 @@ export class TerraformPlan extends PipelineStep<TFPlanFormData> {
             }
           }
         },
-        secretManagerRef: ''
+        secretManagerRef: '',
+        exportTerraformPlanJson: false
       },
       provisionerIdentifier: ''
     }
@@ -766,7 +802,8 @@ export class TerraformPlan extends PipelineStep<TFPlanFormData> {
                   id: uuid()
                 }))
               : [{ key: '', value: '', id: uuid() }]
-            : data?.spec?.configuration?.environmentVariables
+            : data?.spec?.configuration?.environmentVariables,
+          exportTerraformPlanJson: data?.spec?.configuration?.exportTerraformPlanJson
         }
       }
     }

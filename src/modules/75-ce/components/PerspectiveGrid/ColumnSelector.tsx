@@ -7,7 +7,8 @@
 
 import React from 'react'
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core'
-import { Container, Icon, Checkbox, Layout } from '@wings-software/uicore'
+import { Container, Icon, Checkbox, Layout, Text, FlexExpander } from '@wings-software/uicore'
+import { FontVariation, Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
 import type { Column } from './Columns'
 import css from './ColumnSelector.module.scss'
@@ -16,11 +17,13 @@ interface ColumnSelectorProps {
   columns: Column[]
   selectedColumns: Column[]
   onChange: (cols: Column[]) => void
+  openDownloadCSVModal?: () => void
+  allowExportAsCSV?: boolean
 }
 
 const ColumSelector = (props: ColumnSelectorProps): JSX.Element => {
   const { getString } = useStrings()
-  const { columns, selectedColumns, onChange } = props
+  const { columns, selectedColumns, onChange, openDownloadCSVModal, allowExportAsCSV = false } = props
 
   const handleSelectOne = (column: Column): void => {
     const originalPosition = columns.indexOf(column)
@@ -34,7 +37,20 @@ const ColumSelector = (props: ColumnSelectorProps): JSX.Element => {
   }
 
   return (
-    <Layout.Horizontal style={{ justifyContent: 'flex-end' }}>
+    <Layout.Horizontal style={{ alignItems: 'flex-end' }}>
+      {allowExportAsCSV ? (
+        <Text
+          onClick={openDownloadCSVModal}
+          font={{ variation: FontVariation.SMALL_BOLD }}
+          rightIcon="launch"
+          color={Color.PRIMARY_7}
+          rightIconProps={{ size: 12, color: Color.PRIMARY_7 }}
+          className={css.exportCsvBtn}
+        >
+          {getString('ce.perspectives.exportCSV')}
+        </Text>
+      ) : null}
+      <FlexExpander />
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
         position={Position.BOTTOM_LEFT}

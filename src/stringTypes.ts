@@ -189,6 +189,7 @@ export interface StringsMap {
   'common.descriptionPlaceholder': string
   'common.disable': string
   'common.discard': string
+  'common.download': string
   'common.duplicateId': string
   'common.duration.3months': string
   'common.duration.6months': string
@@ -772,6 +773,7 @@ export interface StringsMap {
   'common.validation.keyIsRequired': string
   'common.validation.nameIsRequired': string
   'common.validation.namePatternIsNotValid': string
+  'common.validation.projectIsRequired': string
   'common.validation.provisionerIdentifierIsRequired': string
   'common.validation.provisionerIdentifierPatternIsNotValid': string
   'common.validation.repository': string
@@ -878,6 +880,7 @@ export interface StringsMap {
   'auditTrail.resourceNameLabel': string
   'auditTrail.supplementaryDetails': string
   'auditTrail.yamlDifference': string
+  'rbac.UserGroupRoleAssignmentForm.assignmentValidation': string
   'rbac.accessControlTitle.resourceGroups': string
   'rbac.accessControlTitle.roles': string
   'rbac.accessControlTitle.serviceAccounts': string
@@ -913,6 +916,8 @@ export interface StringsMap {
   'rbac.generateToken': string
   'rbac.group': string
   'rbac.in': string
+  'rbac.linkToOriginalUserGroup': string
+  'rbac.manageInheritedGroupText': string
   'rbac.manageSCIMText': string
   'rbac.myApiKeys': string
   'rbac.noRoleBinding': string
@@ -1012,6 +1017,8 @@ export interface StringsMap {
   'rbac.token.rotateLabel': string
   'rbac.token.scheduledToExpire': string
   'rbac.token.successMessage': string
+  'rbac.unableToEditInheritedMembership': string
+  'rbac.unableToEditInheritedMembershipDetailed': string
   'rbac.unableToEditSCIMMembership': string
   'rbac.updateNotificationSuccess': string
   'rbac.userDetails.linkToSSOProviderModal.btnDisabledTooltipText': string
@@ -1037,6 +1044,7 @@ export interface StringsMap {
   'rbac.userGroupForm.editSuccess': string
   'rbac.userGroupPage.addMembers': string
   'rbac.userGroupPage.addUsers': string
+  'rbac.userGroupPage.assignRoles': string
   'rbac.userGroupPage.confirmDelete': string
   'rbac.userGroupPage.confirmDeleteTitle': string
   'rbac.userGroupPage.editUserGroup': string
@@ -1044,6 +1052,7 @@ export interface StringsMap {
   'rbac.userGroupPage.noDataText': string
   'rbac.userGroupPage.noRoleAssignmentsText': string
   'rbac.userGroupPage.noUserGroups': string
+  'rbac.userGroupPage.roleAssignSuccess': string
   'rbac.userGroupPage.search': string
   'rbac.userGroupPage.successMessage': string
   'rbac.userGroupPage.userGroupEmptyState': string
@@ -1051,6 +1060,7 @@ export interface StringsMap {
   'rbac.userGroupPage.userList.deleteFailureMessage': string
   'rbac.userGroupPage.userList.deleteSuccessMessage': string
   'rbac.userGroupPage.userList.deleteTitle': string
+  'rbac.userGroupRequired': string
   'rbac.userRequired': string
   'rbac.userUpperLimit': string
   'rbac.usersPage.assignRoleBindings': string
@@ -2590,10 +2600,9 @@ export interface StringsMap {
   'pipeline.ciCodebase.validation.optionalSslVerify': string
   'pipeline.clickHere': string
   'pipeline.clickToExpandErrorDetails': string
+  'pipeline.clone': string
   'pipeline.closeStepConfig': string
   'pipeline.collapseIsDisabledWhileStageIsRunning': string
-  'pipeline.commentModal.heading': string
-  'pipeline.commentModal.info': string
   'pipeline.conditionalExecution.belowExpression': string
   'pipeline.conditionalExecution.condition': string
   'pipeline.conditionalExecution.conditionLabel': string
@@ -3004,9 +3013,13 @@ export interface StringsMap {
   'pipeline.nodesLabel': string
   'pipeline.onlyPositiveInteger': string
   'pipeline.openInNewTab': string
+  'pipeline.openInPipelineStudio': string
   'pipeline.openTemplateInNewTabLabel': string
   'pipeline.operatorPlaceholder': string
   'pipeline.outOf': string
+  'pipeline.outOfSyncErrorStrip.reconcile': string
+  'pipeline.outOfSyncErrorStrip.unsyncedTemplateInfo': string
+  'pipeline.outOfSyncErrorStrip.updatedTemplateInfo': string
   'pipeline.overrideSets.configure': string
   'pipeline.overrideSets.createOverrideSet': string
   'pipeline.overrideSets.createOverrideSetPlus': string
@@ -3045,6 +3058,14 @@ export interface StringsMap {
   'pipeline.progressPercentage': string
   'pipeline.provisionerSteps': string
   'pipeline.recentExecutionText': string
+  'pipeline.reconcileDialog.originalYamlLabel': string
+  'pipeline.reconcileDialog.refreshedYamlLabel': string
+  'pipeline.reconcileDialog.subtitle': string
+  'pipeline.reconcileDialog.title': string
+  'pipeline.reconcileDialog.unsyncedTemplateInfo': string
+  'pipeline.reconcileDialog.updateAllLabel': string
+  'pipeline.reconcileDialog.updateEntityLabel': string
+  'pipeline.reconcileDialog.updatedTemplateInfo': string
   'pipeline.regionPlaceholder': string
   'pipeline.removeTemplate': string
   'pipeline.removeTemplateLabel': string
@@ -3339,6 +3360,8 @@ export interface StringsMap {
   'pipeline.viewLatestExecution': string
   'templatesLibrary.addNewTemplate': string
   'templatesLibrary.alwaysUseStableVersion': string
+  'templatesLibrary.commentModal.heading': string
+  'templatesLibrary.commentModal.info': string
   'templatesLibrary.copyToNewPipeline': string
   'templatesLibrary.copyToPipeline': string
   'templatesLibrary.createNewModal.editHeading': string
@@ -3609,6 +3632,7 @@ export interface StringsMap {
   'cd.environmentDelete': string
   'cd.environmentDeleteMessage': string
   'cd.environmentUpdated': string
+  'cd.exportTerraformPlanJson': string
   'cd.featureRestriction.banners.deploymentsPerMonthLevelUp': string
   'cd.featureRestriction.banners.dpmWarningActive': string
   'cd.featureRestriction.banners.initialDeploymentsWarningActive': string
@@ -4436,6 +4460,8 @@ export interface StringsMap {
   'ce.perspectives.budgets.wizardTitleEdit': string
   'ce.perspectives.confirmDeletePerspectiveMsg': string
   'ce.perspectives.confirmDeletePerspectiveTitle': string
+  'ce.perspectives.cost': string
+  'ce.perspectives.costTrend': string
   'ce.perspectives.createPerspective.createCustomField': string
   'ce.perspectives.createPerspective.filters.addRuleText': string
   'ce.perspectives.createPerspective.filters.chooseOperand': string
@@ -4466,8 +4492,16 @@ export interface StringsMap {
   'ce.perspectives.createPerspective.validationErrors.nameError': string
   'ce.perspectives.createPerspective.validationErrors.nameLengthError': string
   'ce.perspectives.createPerspective.validationErrors.ruleError': string
+  'ce.perspectives.enterAmount': string
+  'ce.perspectives.excludeRowswithCost': string
+  'ce.perspectives.exportCSV': string
+  'ce.perspectives.exportRowsUpto': string
+  'ce.perspectives.filename': string
+  'ce.perspectives.largeNoOfRowsWarning': string
   'ce.perspectives.newPerspective': string
   'ce.perspectives.newPerspectiveLimitWarning': string
+  'ce.perspectives.noOfRowsGreaterThan': string
+  'ce.perspectives.noOfRowsLessThan': string
   'ce.perspectives.nodeDetails.aggregation.average': string
   'ce.perspectives.nodeDetails.aggregation.maximum': string
   'ce.perspectives.nodeDetails.nodeDetailsText': string
@@ -5855,16 +5889,19 @@ export interface StringsMap {
   'cv.noPreviousErrorBudgetResetHistoryAvailable': string
   'cv.noSLOHasBeenCreated': string
   'cv.nonAnomalous': string
+  'cv.notifications.changeType': string
   'cv.notifications.condition': string
   'cv.notifications.configureAlertConditions': string
   'cv.notifications.deleteNotification': string
   'cv.notifications.deleteNotificationWarning': string
   'cv.notifications.errorBudgetPolicies': string
+  'cv.notifications.healthScoreBelow': string
   'cv.notifications.newNotificationRule': string
   'cv.notifications.notificationName': string
   'cv.notifications.serviceHealth': string
   'cv.notifications.serviceHealthDescription': string
   'cv.notifications.sloDescription': string
+  'cv.notifications.thresholdBelow': string
   'cv.objectiveValue': string
   'cv.onboarding.activitySources.addMoreSources': string
   'cv.onboarding.activitySources.addedStatus': string
