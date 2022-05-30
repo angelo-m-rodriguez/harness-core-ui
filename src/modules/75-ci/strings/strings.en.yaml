@@ -109,13 +109,10 @@ hostPort: Host Port
 containerPort: Container Port
 baseConnectorImage: Base Image Connector
 getStartedWithCI:
-  firstPipeline: 'Let’s get you started with your first Pipeline!'
   buildyourOwnPipeline: Build your own Pipeline
-  quicklyCreate: Quickly create a Pipeline using your own codebase and our intuitive visual editor.
   configInfra: Configure Infrastructure
   connectRepo: Connect your Code Repository
   selectRepo: Select Repository
-  buildPipeline: Build Pipeline
   hostedByHarness: Hosted by Harness
   takeToTheNextLevel: Take your software build process to the next level using our Harness Continuous Integration
   ti: Test Intelligence

@@ -874,3 +874,10 @@ selectName: Select {{name}}
 override: Override
 plusNewName: + New {{name}}
 fetchingBranches: Fetching branches
+getStarted:
+  firstPipeline: 'Let’s get you started with your first Pipeline!'
+  buildPipeline: Build Pipeline
+  quicklyCreate: Quickly create a Pipeline using your own codebase and our intuitive visual editor.
+  selectWorkload: Select Workload
+  selectArtifact: Select Artifact
+  selectInfra: Select Infrastructure

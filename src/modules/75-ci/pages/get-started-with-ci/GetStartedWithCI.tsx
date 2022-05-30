@@ -132,7 +132,7 @@ export default function GetStartedWithCI(): React.ReactElement {
       <Layout.Vertical flex>
         <Layout.Vertical flex margin={{ bottom: 'huge' }}>
           <Icon name="ci-main" size={50} className={css.ciIcon} />
-          <Text font={{ variation: FontVariation.H1_SEMI }}>{getString('ci.getStartedWithCI.firstPipeline')}</Text>
+          <Text font={{ variation: FontVariation.H1_SEMI }}>{getString('common.getStarted.firstPipeline')}</Text>
         </Layout.Vertical>
         <Layout.Horizontal flex={{ alignItems: 'flex-start' }} className={css.buildYourOwnPipeline}>
           <Layout.Horizontal>
@@ -142,7 +142,7 @@ export default function GetStartedWithCI(): React.ReactElement {
                 {getString('ci.getStartedWithCI.buildyourOwnPipeline')}
               </Text>
               <Text font={{ variation: FontVariation.SMALL }} padding={{ top: 'xsmall' }}>
-                {getString('ci.getStartedWithCI.quicklyCreate')}
+                {getString('common.getStarted.quicklyCreate')}
               </Text>
               <Container padding={{ top: 'small', bottom: 'small' }}>
                 <Container className={cx(css.separator, css.horizontal)} />
@@ -174,7 +174,7 @@ export default function GetStartedWithCI(): React.ReactElement {
                     size: 20,
                     className: cx(css.icon, css.iconPaddingSmall)
                   },
-                  label: 'ci.getStartedWithCI.buildPipeline',
+                  label: 'common.getStarted.buildPipeline',
                   isLastStep: true
                 })}
               </Layout.Horizontal>
