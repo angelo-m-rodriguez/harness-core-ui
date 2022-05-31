@@ -7,7 +7,6 @@
 
 import React, { useCallback, useContext } from 'react'
 
-import { Icon } from '@harness/uicore'
 import { Text, useConfirmationDialog, useToaster } from '@wings-software/uicore'
 import { Intent } from '@blueprintjs/core'
 import { useParams } from 'react-router-dom'
@@ -19,7 +18,6 @@ import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FILE_VIEW_TAB, FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
-import { ComponentRenderer } from '../ModalComponents/ModalComponents'
 
 const useDelete = (identifier: string, name: string, type: string): FileStorePopoverItem => {
   const { getString } = useStrings()
@@ -118,13 +116,11 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
     openDialog()
   }, [openDialog])
 
-  const icon = <Icon name="main-trash" />
-
   return {
-    ComponentRenderer: <ComponentRenderer icon={icon} title={getString('delete')} />,
     onClick: handleClick,
     label: getString('delete'),
-    actionType: FileStoreActionTypes.DELETE_NODE
+    actionType: FileStoreActionTypes.DELETE_NODE,
+    identifier
   }
 }
 

@@ -15,6 +15,7 @@ import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import AuthSettingsRoutes from '@auth-settings/RouteDestinations'
 import secretsRoutes from '@secrets/RouteDestinations'
 import variableRoutes from '@variables/RouteDestinations'
+import fileStoreRoutes from '@filestore/RouteDestinations'
 import rbacRoutes from '@rbac/RouteDestinations'
 import projectsOrgsRoutes from '@projects-orgs/RouteDestinations'
 import connectorRoutes from '@connectors/RouteDestinations'
@@ -84,6 +85,7 @@ export default function RouteDestinations(): React.ReactElement {
       {auditTrailRoutes.props.children}
       {rbacRoutes.props.children}
       {delegatesRoutes.props.children}
+      {fileStoreRoutes.props.children}
       {projectsOrgsRoutes.props.children}
       {DASHBOARDRoutes.props.children}
       {GovernanceRoutes.props.children}

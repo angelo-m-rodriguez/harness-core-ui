@@ -61,7 +61,7 @@ import { createRequestBodyPayload, FileStoreFilterFormType } from '@filestore/ut
 import { Filter, FilterRef } from '@common/components/Filter/Filter'
 import type { CrudOperation } from '@common/components/Filter/FilterCRUD/FilterCRUD'
 import type { FilterDataInterface, FilterInterface } from '@common/components/Filter/Constants'
-import { getFileUsageNameByType } from '@filestore/utils/textUtils'
+import { getFileUsageNameByType } from '@filestore/utils/FileStoreUtils'
 
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import css from './FileStorePage.module.scss'

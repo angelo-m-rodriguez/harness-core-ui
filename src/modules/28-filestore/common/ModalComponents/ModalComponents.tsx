@@ -7,7 +7,7 @@
 
 import React from 'react'
 
-import { Text, Layout, Button, ButtonVariation } from '@harness/uicore'
+import { Layout, Button, ButtonVariation } from '@harness/uicore'
 
 interface FooterRendererProps {
   onSubmit?: () => void
@@ -34,17 +34,3 @@ export const FooterRenderer = (props: FooterRendererProps): React.ReactElement =
     </Layout.Horizontal>
   )
 }
-
-interface ComponentRendererProps {
-  title: string
-  iconSrc?: string
-  icon?: React.ReactNode
-}
-
-export const ComponentRenderer = ({ iconSrc, icon, title }: ComponentRendererProps): React.ReactElement => (
-  <Layout.Horizontal spacing="small">
-    {icon && icon}
-    {iconSrc && <img src={iconSrc} alt={title} />}
-    <Text lineClamp={1}>{title}</Text>
-  </Layout.Horizontal>
-)

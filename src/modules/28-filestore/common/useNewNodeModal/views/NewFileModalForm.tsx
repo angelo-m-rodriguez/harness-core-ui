@@ -27,7 +27,7 @@ import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import { useCreate, useUpdate } from 'services/cd-ng'
-import { getFileUsageNameByType, getMimeTypeByName } from '@filestore/utils/textUtils'
+import { getFileUsageNameByType, getMimeTypeByName } from '@filestore/utils/FileStoreUtils'
 import { FileStoreNodeTypes, FileUsage, NewFileDTO, NewFileFormDTO } from '@filestore/interfaces/FileStore'
 import type { FileStoreContextState, FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
@@ -39,12 +39,13 @@ interface NewFileModalData {
   close: () => void
   parentIdentifier: string
   tempNode?: FileStoreNodeDTO | undefined
+  currentNode: FileStoreNodeDTO
   fileStoreContext: FileStoreContextState
 }
 
 const NewFileForm: React.FC<NewFileModalData> = props => {
-  const { close, editMode = false, tempNode, fileStoreContext } = props
-  const { currentNode, updateCurrentNode, removeFromTempNodes, getNode } = fileStoreContext
+  const { close, editMode = false, tempNode, fileStoreContext, currentNode } = props
+  const { updateCurrentNode, removeFromTempNodes, getNode } = fileStoreContext
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const [initialValues, setInitialValues] = useState<Omit<NewFileDTO, 'type'>>({
     name: '',

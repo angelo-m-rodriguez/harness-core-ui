@@ -9,10 +9,16 @@ import React, { ReactElement, Fragment, useState } from 'react'
 import { Classes, IMenuItemProps, Menu, PopoverPosition } from '@blueprintjs/core'
 import { Button, ButtonProps, Popover } from '@harness/uicore'
 
+import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
+import { getIconByActionType, getPermissionsByActionType } from '@filestore/utils/FileStoreUtils'
+import type { FileStoreActionTypes } from '@filestore/utils/constants'
 import css from './NodeMenuButton.module.scss'
 
 interface NodeMenuItem extends Omit<IMenuItemProps, 'icon'> {
   node?: ReactElement
+  ComponentRenderer?: React.ReactElement
+  actionType: FileStoreActionTypes
+  identifier?: string
 }
 
 export type Item = NodeMenuItem | '-'
@@ -44,16 +50,21 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
                   <Menu.Divider />
                 )
               ) : (
-                <Menu.Item
-                  text={item.text}
-                  onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                    e.stopPropagation()
-                    if (item?.onClick) {
-                      item.onClick(e)
-                      setMenuOpen(false)
-                    }
-                  }}
-                />
+                <>
+                  <RbacMenuItem
+                    icon={getIconByActionType(item.actionType)}
+                    text={item.text}
+                    permission={getPermissionsByActionType(item.actionType, item.identifier)}
+                    onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                      e.stopPropagation()
+                      if (item?.onClick) {
+                        item.onClick(e)
+                        setMenuOpen(false)
+                      }
+                    }}
+                  />
+                  {item.ComponentRenderer}
+                </>
               )}
             </Fragment>
           ))}

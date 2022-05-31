@@ -7,20 +7,29 @@
 
 import React from 'react'
 import cx from 'classnames'
-import { useToggleOpen, Popover, ButtonVariation, Button, IconName } from '@harness/uicore'
+import { useToggleOpen, Popover, ButtonVariation, IconName } from '@harness/uicore'
 import { Menu, Position } from '@blueprintjs/core'
 import type { FileStoreActionTypes } from '@filestore/utils/constants'
 
-import { firstLetterToUpperCase } from '@filestore/utils/textUtils'
+import {
+  firstLetterToUpperCase,
+  getIconByActionType,
+  getPermissionsByActionType
+} from '@filestore/utils/FileStoreUtils'
 
+import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
+import RbacButton from '@rbac/components/Button/Button'
+import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
 import css from './FileStorePopover.module.scss'
 
 export interface FileStorePopoverItem {
-  ComponentRenderer: React.ReactElement
+  ComponentRenderer?: React.ReactElement
   onClick: () => void
   label: string
   disabled?: boolean
   actionType: FileStoreActionTypes
+  identifier?: string
 }
 
 export interface FileStoreActionPopoverProps {
@@ -44,31 +53,40 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
       minimal={true}
       usePortal={false}
     >
-      <Button
+      <RbacButton
         variation={ButtonVariation.PRIMARY}
-        icon={icon}
-        rightIcon="chevron-down"
         text={firstLetterToUpperCase(btnText)}
+        permission={{
+          permission: PermissionIdentifier.EDIT_FILE,
+          resource: {
+            resourceType: ResourceType.FILE
+          }
+        }}
         onClick={toggle}
+        rightIcon="chevron-down"
         disabled={false}
-        onBlur={toggle}
+        icon={icon}
+        id="newFileBtn"
+        data-test="newFileButton"
       />
       <Menu>
         {items.length &&
           items.map((item: FileStorePopoverItem) => {
-            const { ComponentRenderer, label, onClick } = item
+            const { ComponentRenderer, label, onClick, actionType, identifier } = item
             return (
-              <li
-                key={label}
-                className={cx(css.menuItem, { [css.disabled]: item.disabled })}
-                onClick={e => {
-                  e.stopPropagation()
-                  onClick()
-                  // close()
-                }}
-              >
+              <>
+                <RbacMenuItem
+                  icon={getIconByActionType(actionType)}
+                  text={label}
+                  permission={getPermissionsByActionType(actionType, identifier)}
+                  onClick={e => {
+                    e.stopPropagation()
+                    onClick()
+                    // close()
+                  }}
+                />
                 {ComponentRenderer}
-              </li>
+              </>
             )
           })}
       </Menu>

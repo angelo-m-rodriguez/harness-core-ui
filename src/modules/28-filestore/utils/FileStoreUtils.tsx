@@ -5,11 +5,17 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import { Color } from '@harness/design-system'
+import type { IconName, MaybeElement } from '@blueprintjs/core'
+import { Icon } from '@wings-software/uicore'
+import React from 'react'
+import { defaultTo } from 'lodash-es'
 import type { FileStoreNodeDTO } from 'services/cd-ng'
 import type { Item as NodeMenuOptionItem } from '@filestore/common/NodeMenu/NodeMenuButton'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
-
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
+import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { ExtensionType, LanguageType, FSErrosType, FileStoreActionTypes } from './constants'
 
 export const firstLetterToUpperCase = (value: string): string => `${value.charAt(0).toUpperCase()}${value.slice(1)}`
@@ -76,6 +82,47 @@ export const existCachedNode = (
 
 type FileStorePopoverOptionItem = FileStorePopoverItem | '-'
 
+export const getIconByActionType = (actionType: FileStoreActionTypes): IconName | MaybeElement => {
+  const iconDefaults = {
+    size: 16,
+    padding: { right: 'small' },
+    color: Color.GREY_700
+  }
+
+  switch (actionType) {
+    case FileStoreActionTypes.UPDATE_NODE:
+      return <Icon name="edit" {...iconDefaults} />
+    case FileStoreActionTypes.UPLOAD_NODE:
+      return 'upload'
+    case FileStoreActionTypes.CREATE_NODE:
+      return 'folder-new'
+    case FileStoreActionTypes.DELETE_NODE:
+      return <Icon name="main-trash" {...iconDefaults} />
+    default:
+      return null
+  }
+}
+
+export const getPermissionsByActionType = (actionType: FileStoreActionTypes, identifier?: string) => {
+  if (actionType === FileStoreActionTypes.DELETE_NODE) {
+    return {
+      permission: PermissionIdentifier.DELETE_FILE,
+      resource: {
+        resourceType: ResourceType.FILE,
+        resourceIdentifier: defaultTo(identifier, '')
+      }
+    }
+  } else {
+    return {
+      permission: PermissionIdentifier.EDIT_FILE,
+      resource: {
+        resourceType: ResourceType.FILE,
+        resourceIdentifier: defaultTo(identifier, '')
+      }
+    }
+  }
+}
+
 export const getMenuOptionItems = (
   optionItems: FileStorePopoverOptionItem[],
   type?: FileStoreNodeTypes
@@ -97,8 +144,11 @@ export const getMenuOptionItems = (
       return optionItem
     }
     return {
-      text: optionItem.ComponentRenderer,
-      onClick: optionItem.onClick
+      actionType: optionItem.actionType,
+      ComponentRenderer: optionItem.ComponentRenderer,
+      text: optionItem.label,
+      onClick: optionItem.onClick,
+      identifier: optionItem.identifier
     }
   })
 }

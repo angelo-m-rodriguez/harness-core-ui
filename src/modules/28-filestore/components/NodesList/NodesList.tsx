@@ -21,12 +21,9 @@ import FileIcon from '@filestore/images/file-.svg'
 
 import { FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import type { StoreNodeType } from '@filestore/interfaces/FileStore'
-import { getFileUsageNameByType, getMenuOptionItems } from '@filestore/utils/textUtils'
+import { getFileUsageNameByType, getMenuOptionItems } from '@filestore/utils/FileStoreUtils'
 import useDelete from '@filestore/common/useDelete/useDelete'
-
-export interface StoreViewProps {
-  title?: string
-}
+import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 
 interface FileStoreNodeRenderDTO extends FileStoreNodeDTO {
   fileUsage: FileUsage
@@ -93,11 +90,22 @@ const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = 
 }
 
 const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
+  const context = useContext(FileStoreContext)
   const { original } = row
 
+  const editMenuItem = useNewNodeModal({
+    parentIdentifier: original.identifier || '',
+    currentNode: {
+      name: original.name,
+      identifier: original.identifier,
+      type: original.type
+    },
+    fileStoreContext: context,
+    type: original.type as FileStoreNodeTypes,
+    editMode: true
+  })
   const deleteMenuItem = useDelete(original.identifier, original.name, original.type)
-
-  const optionsMenuItems = getMenuOptionItems([deleteMenuItem])
+  const optionsMenuItems = getMenuOptionItems([editMenuItem, deleteMenuItem])
 
   return <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />
 }

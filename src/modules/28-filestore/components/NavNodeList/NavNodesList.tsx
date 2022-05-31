@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState, useContext, PropsWithChildren, ReactElement, useEffect, useMemo } from 'react'
+import React, { PropsWithChildren, ReactElement, useContext, useEffect, useMemo, useState } from 'react'
 
 import { Container, Layout, Text } from '@harness/uicore'
 import { Color } from '@harness/design-system'
@@ -15,14 +15,14 @@ import RootFolderIcon from '@filestore/images/root-folder.svg'
 import ClosedFolderIcon from '@filestore/images/closed-folder.svg'
 import OpenFolderIcon from '@filestore/images/open-folder.svg'
 import FileIcon from '@filestore/images/file-.svg'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreNodeTypes, StoreNodeType } from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
-import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import useUploadFile, { UPLOAD_EVENTS } from '@filestore/common/useUpload/useUpload'
-import { getMenuOptionItems } from '@filestore/utils/textUtils'
+import { getMenuOptionItems } from '@filestore/utils/FileStoreUtils'
 
 import useDelete from '@filestore/common/useDelete/useDelete'
 import css from './NavNodeList.module.scss'
@@ -141,7 +141,8 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
   }, [identifier, context])
 
   const newFileMenuItem = useNewNodeModal({
-    ...configNewNode
+    ...configNewNode,
+    type: FileStoreNodeTypes.FILE
   })
   const newFolderMenuItem = useNewNodeModal({
     ...configNewNode

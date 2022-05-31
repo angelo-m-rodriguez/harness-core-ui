@@ -10,14 +10,13 @@ import React, { useRef, useEffect, useCallback, useContext } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useToaster } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
-import UploadAddIcon from '@filestore/images/upload.svg'
-import { ComponentRenderer } from '@filestore/common/ModalComponents/ModalComponents'
+
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
 import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
-import { checkSupportedMime } from '@filestore/utils/textUtils'
+import { checkSupportedMime } from '@filestore/utils/FileStoreUtils'
 
 interface UploadFile {
   isBtn?: boolean
@@ -30,7 +29,7 @@ export const UPLOAD_EVENTS = {
 }
 
 const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
-  const { isBtn = false, eventMethod = UPLOAD_EVENTS.UPLOAD } = config
+  const { eventMethod = UPLOAD_EVENTS.UPLOAD } = config
   const { showError } = useToaster()
   const { getString } = useStrings()
   const {
@@ -147,33 +146,11 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
   }, [inputRef])
 
   const RenderUploadBtn = (): React.ReactElement => {
-    return (
-      <>
-        <input id="file-upload" name="file" type="file" onChange={handleChange} ref={inputRef} hidden />
-      </>
-    )
-  }
-
-  const RenderUpload = (): React.ReactElement => {
-    return (
-      <>
-        <ComponentRenderer iconSrc={UploadAddIcon} title={getString('filestore.uploadFileFolder')} />
-        <input id="file-upload" name="file" type="file" onChange={handleChange} ref={inputRef} hidden />
-      </>
-    )
-  }
-
-  if (isBtn) {
-    return {
-      ComponentRenderer: <RenderUploadBtn />,
-      onClick: handleClick,
-      label: getString('filestore.view.replaceFile'),
-      actionType: FileStoreActionTypes.UPLOAD_NODE
-    }
+    return <input id="file-upload" name="file" type="file" onChange={handleChange} ref={inputRef} hidden />
   }
 
   return {
-    ComponentRenderer: <RenderUpload />,
+    ComponentRenderer: <RenderUploadBtn />,
     onClick: handleClick,
     label: getString('filestore.uploadFileFolder'),
     actionType: FileStoreActionTypes.UPLOAD_NODE

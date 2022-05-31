@@ -7,13 +7,12 @@
 
 import React from 'react'
 
-import { Dialog, Icon } from '@harness/uicore'
+import { Dialog } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 
 import { useStrings } from 'framework/strings'
 import FolderAddIcon from '@filestore/images/folder-add.svg'
 import FileAddIcon from '@filestore/images/file-add.svg'
-import { ComponentRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
 import { FileStoreActionTypes } from '@filestore/utils/constants'
 
@@ -38,6 +37,7 @@ const useNewNodeModal = ({
       case FileStoreNodeTypes.FILE:
         return {
           NewNodeForm: NewFileModalForm,
+          label: getString('edit'),
           title: editMode ? getString('filestore.editFileDetails') : getString('filestore.newFile'),
           icon: FileAddIcon,
           height: 460
@@ -45,6 +45,7 @@ const useNewNodeModal = ({
       case FileStoreNodeTypes.FOLDER:
         return {
           NewNodeForm: NewFolderModalForm,
+          label: getString('edit'),
           title: editMode ? getString('filestore.editFolderDetails') : getString('filestore.newFolder'),
           icon: FolderAddIcon,
           height: 302
@@ -52,7 +53,7 @@ const useNewNodeModal = ({
     }
   }
 
-  const { NewNodeForm, title, icon, height } = getNodeConfigs(type as FileStoreNodeTypes)
+  const { NewNodeForm, title, height, label } = getNodeConfigs(type as FileStoreNodeTypes)
   const [showModal, hideModal] = useModalHook(
     () => (
       <Dialog
@@ -78,12 +79,10 @@ const useNewNodeModal = ({
   )
 
   return {
-    ComponentRenderer: (
-      <ComponentRenderer iconSrc={!editMode && icon} title={title} icon={editMode && <Icon name="Edit" />} />
-    ),
     onClick: showModal,
-    label: title,
-    actionType: editMode ? FileStoreActionTypes.UPDATE_NODE : FileStoreActionTypes.CREATE_NODE
+    label: !editMode ? title : label,
+    actionType: editMode ? FileStoreActionTypes.UPDATE_NODE : FileStoreActionTypes.CREATE_NODE,
+    identifier: parentIdentifier
   }
 }
 

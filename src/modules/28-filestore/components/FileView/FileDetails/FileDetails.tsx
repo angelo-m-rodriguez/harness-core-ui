@@ -24,12 +24,16 @@ import {
   getLanguageType,
   getFSErrorByType,
   checkSupportedMime
-} from '@filestore/utils/textUtils'
+} from '@filestore/utils/FileStoreUtils'
 import MonacoEditor from '@common/components/MonacoEditor/MonacoEditor'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import { ExtensionType, FSErrosType, LanguageType } from '@filestore/utils/constants'
-import WrongFormatView from './WrongFormatView'
 
+import RbacButton from '@rbac/components/Button/Button'
+import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
+import { usePermission } from '@rbac/hooks/usePermission'
+import WrongFormatView from './WrongFormatView'
 import css from '../FileView.module.scss'
 
 function FileDetails(): React.ReactElement {
@@ -103,6 +107,14 @@ function FileDetails(): React.ReactElement {
   const { mutate: updateNode, loading: saveLoading } = useUpdate({
     identifier: currentNode.identifier,
     queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+  })
+
+  const [canEdit] = usePermission({
+    resource: {
+      resourceType: ResourceType.FILE,
+      resourceIdentifier: currentNode.identifier
+    },
+    permissions: [PermissionIdentifier.EDIT_FILE]
   })
 
   const handleSubmit = async (values: any): Promise<void> => {
@@ -204,7 +216,7 @@ function FileDetails(): React.ReactElement {
                           {currentNode?.fileUsage ? getFileUsageNameByType(currentNode.fileUsage) : 'Undefined'}
                         </Text>
                       </Container>
-                      {!isUnsupported && (
+                      {!isUnsupported && canEdit && (
                         <Icon
                           style={{ cursor: 'pointer' }}
                           name="Edit"
@@ -225,17 +237,29 @@ function FileDetails(): React.ReactElement {
                     )}
                     {!isUnsupported && (
                       <>
-                        <Button
+                        <RbacButton
                           type="submit"
                           variation={ButtonVariation.PRIMARY}
                           text={getString('save')}
+                          permission={{
+                            permission: PermissionIdentifier.EDIT_FILE,
+                            resource: {
+                              resourceType: ResourceType.FILE
+                            }
+                          }}
                           disabled={!get(formikProps.values, 'fileEditor') || saveLoading}
                           loading={saveLoading}
                         />
-                        <Button
+                        <RbacButton
                           margin={{ left: 'small', right: 'small' }}
                           variation={ButtonVariation.TERTIARY}
                           text={getString('cancel')}
+                          permission={{
+                            permission: PermissionIdentifier.EDIT_FILE,
+                            resource: {
+                              resourceType: ResourceType.FILE
+                            }
+                          }}
                           onClick={() => updateCurrentNode({ ...currentNode, content: '' })}
                           disabled={saveLoading}
                         />
