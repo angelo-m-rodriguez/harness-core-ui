@@ -7,7 +7,7 @@
 
 import { formatCount } from '@common/utils/utils'
 
-describe('Test common/FileStoreUtils.tsx', () => {
+describe('Test common/utils.ts', () => {
   test('Test formatCount method', () => {
     expect(formatCount(0)).toBe('0')
     expect(formatCount(1)).toBe('1')

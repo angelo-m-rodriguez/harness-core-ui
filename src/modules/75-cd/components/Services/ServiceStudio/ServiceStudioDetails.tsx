@@ -142,7 +142,7 @@ function ServiceStudioDetails(props: ServiceStudioDetailsProps): React.ReactElem
             panel={<ServiceConfiguration serviceData={props.serviceData} />}
           />
 
-          <Tab id={ServiceTabs.REFERENCED_BY} title={getString('refrencedBy')} panel={props.refercedByPanel} />
+          <Tab id={ServiceTabs.REFERENCED_BY} title={getString('referencedBy')} panel={props.refercedByPanel} />
           {/* <Tab id={ServiceTabs.ActivityLog} title={getString('activityLog')} panel={<></>} /> */}
         </Tabs>
         {selectedTabId === ServiceTabs.Configuration && (
@@ -175,7 +175,7 @@ function ServiceStudioDetails(props: ServiceStudioDetailsProps): React.ReactElem
     <Container padding={{ left: 'xlarge', right: 'xlarge' }} className={css.tabsContainer}>
       <Tabs id="serviceDetailsTab" selectedTabId={selectedTabId} onChange={handleTabChange}>
         <Tab id={ServiceTabs.SUMMARY} title={getString('summary')} panel={props.summaryPanel} />
-        <Tab id={ServiceTabs.REFERENCED_BY} title={getString('refrencedBy')} panel={props.refercedByPanel} />
+        <Tab id={ServiceTabs.REFERENCED_BY} title={getString('referencedBy')} panel={props.refercedByPanel} />
       </Tabs>
     </Container>
   )
