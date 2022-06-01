@@ -97,6 +97,7 @@ $header-height: 80px;
       flex-direction: row;
       max-width: 125px;
       justify-content: space-between;
+      margin-right: var(--spacing-3);
     }
     .layoutParent {
       display: flex;
@@ -128,6 +129,8 @@ $header-height: 80px;
       .chartWrap {
         display: flex;
         flex-direction: column !important;
+        margin-right: 0;
+        padding-top: var(--spacing-1);
       }
       .layoutParent {
         display: flex;

@@ -34,6 +34,7 @@ export interface HealthCardProps {
   layout: 'vertical' | 'horizontal'
   children?: any
   isParent?: boolean
+  emptyState?: boolean
   isLoading?: boolean
   pieChartProps?: any
   showPieChart?: boolean
@@ -43,6 +44,7 @@ export interface HealthCardProps {
 // sonar recommedation
 const green = 'var(--green-600)'
 const red = 'var(--ci-color-red-500)'
+const grey = 'var(--grey-500)'
 
 export default function DeploymentsHealthCards(props: any) {
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps>()
@@ -136,9 +138,28 @@ export default function DeploymentsHealthCards(props: any) {
           ]
         })
       }
+      if (data?.data?.healthDeploymentInfo?.active?.countList?.length) {
+        ret.activeChartOptions = merge({}, defaultChartOptions, primaryChartOptions, {
+          xAxis: {
+            categories: data.data.healthDeploymentInfo.active.countList.map(mapTime)
+          },
+          series: [
+            {
+              name: 'Deployments',
+              type: 'line',
+              color: 'var(--ci-color-blue-500)',
+              data: data.data.healthDeploymentInfo.active.countList.map(val => val?.deployments?.count)
+            }
+          ]
+        })
+      }
       return ret
     }
   }, [data])
+  const dataInfo = data?.data?.healthDeploymentInfo
+
+  const noDataState = dataInfo?.total?.nonProduction === 0 && dataInfo?.total?.production === 0
+  const emptyState = dataInfo?.total?.count === 0
 
   const pieChartProps: PieChartProps = {
     items: [
@@ -146,13 +167,13 @@ export default function DeploymentsHealthCards(props: any) {
         label: getString('cd.serviceDashboard.nonProd'),
         value: defaultTo(data?.data?.healthDeploymentInfo?.total?.nonProduction, 0),
         formattedValue: numberFormatter(data?.data?.healthDeploymentInfo?.total?.nonProduction),
-        color: 'var(--primary-2)'
+        color: noDataState ? grey : 'var(--primary-2)'
       },
       {
         label: getString('cd.serviceDashboard.prod'),
         value: defaultTo(data?.data?.healthDeploymentInfo?.total?.production, 0),
         formattedValue: numberFormatter(data?.data?.healthDeploymentInfo?.total?.production),
-        color: 'var(--primary-7)'
+        color: noDataState ? grey : 'var(--primary-7)'
       }
     ],
     size: 60,
@@ -187,7 +208,7 @@ export default function DeploymentsHealthCards(props: any) {
   )
 
   pieChartProps['labelsContent'] = labelsHtml
-  const dataInfo = data?.data?.healthDeploymentInfo
+
   return (
     <Container>
       <Text className={styles.healthCardTitle}>{title}</Text>
@@ -200,6 +221,7 @@ export default function DeploymentsHealthCards(props: any) {
           rate={defaultTo(dataInfo?.total?.rate, 0)}
           primaryChartOptions={chartsData?.totalChartOptions}
           isParent={true}
+          emptyState={emptyState}
           showLineChart={dataInfo?.total?.count ? true : false}
         >
           <HealthCard
@@ -209,6 +231,7 @@ export default function DeploymentsHealthCards(props: any) {
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.successChartOptions}
+            emptyState={emptyState}
           />
           <HealthCard
             title="Failed"
@@ -217,6 +240,7 @@ export default function DeploymentsHealthCards(props: any) {
             isLoading={loading}
             layout="vertical"
             primaryChartOptions={chartsData?.failureChartOptions}
+            emptyState={emptyState}
           />
           <HealthCard
             title="Active"
@@ -224,7 +248,8 @@ export default function DeploymentsHealthCards(props: any) {
             rate={defaultTo(dataInfo?.active?.rate, 0)}
             isLoading={loading}
             layout="vertical"
-            primaryChartOptions={chartsData?.failureChartOptions}
+            primaryChartOptions={chartsData?.activeChartOptions}
+            emptyState={emptyState}
           />
         </HealthCard>
 
@@ -232,14 +257,14 @@ export default function DeploymentsHealthCards(props: any) {
           title={'Environment Changes'}
           layout={'horizontal'}
           pieChartProps={pieChartProps}
-          showPieChart={dataInfo?.total?.nonProduction !== 0 || dataInfo?.total?.production !== 0}
+          showPieChart={true}
         />
       </Container>
     </Container>
   )
 }
 
-function TotalDepHealthCard({ title, layout, pieChartProps = {}, showPieChart = false }: HealthCardProps) {
+export function TotalDepHealthCard({ title, layout, pieChartProps = {}, showPieChart = false }: HealthCardProps) {
   return (
     <Container font={{ variation: FontVariation.SMALL_SEMI }} color={Color.GREY_600}>
       {showPieChart ? (
@@ -258,6 +283,40 @@ function TotalDepHealthCard({ title, layout, pieChartProps = {}, showPieChart = 
   )
 }
 
+const rateStyle = (rate: number, isParent: boolean): JSX.Element => {
+  return rate ? (
+    <>
+      <Text
+        margin={{ left: isParent ? 'small' : 'xsmall' }}
+        style={{
+          color: rate > 0 ? green : red
+        }}
+      >
+        {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
+      </Text>
+      <Icon
+        size={14}
+        name={rate > 0 ? 'caret-up' : 'caret-down'}
+        style={{
+          color: rate > 0 ? green : red
+        }}
+      />
+    </>
+  ) : (
+    <>
+      <Icon
+        size={14}
+        name="caret-right"
+        style={{
+          color: grey
+        }}
+        margin={{ left: isParent ? 'small' : 0 }}
+      />
+      <Text style={{ color: grey }}>0%</Text>
+    </>
+  )
+}
+
 export function HealthCard({
   title,
   value,
@@ -267,6 +326,7 @@ export function HealthCard({
   layout,
   children,
   isLoading,
+  emptyState,
   isParent = false
 }: HealthCardProps) {
   return (
@@ -287,49 +347,19 @@ export function HealthCard({
                 >
                   {numberFormatter(value)}
                 </Text>
-                {typeof rate === 'number' && rate && !isLoading && isParent ? (
-                  <Container flex>
-                    <Text
-                      margin={{ left: 'small' }}
-                      style={{
-                        color: rate >= 0 ? green : red
-                      }}
-                    >
-                      {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
-                    </Text>
-                    <Icon
-                      size={14}
-                      name={rate >= 0 ? 'caret-up' : 'caret-down'}
-                      style={{
-                        color: rate >= 0 ? green : red
-                      }}
-                    />
-                  </Container>
+                {typeof rate === 'number' && !isLoading && isParent && !emptyState ? (
+                  <Container flex>{rateStyle(rate, isParent)}</Container>
                 ) : null}
               </>
             )}
           </Container>
 
-          {primaryChartOptions && !isLoading && rate ? (
+          {primaryChartOptions && !isLoading && !emptyState ? (
             <Container className={styles.chartWrap}>
               <HighchartsReact highcharts={Highcharts} options={primaryChartOptions} />
-              {typeof rate === 'number' && rate && !isLoading && !isParent ? (
+              {typeof rate === 'number' && !isLoading && !isParent && !emptyState ? (
                 <Container flex={{ alignItems: 'center', justifyContent: 'flex-start' }}>
-                  <Text
-                    margin={{ left: 'xsmall' }}
-                    style={{
-                      color: rate >= 0 ? green : red
-                    }}
-                  >
-                    {numberFormatter(Math.abs(defaultTo(roundNumber(rate), 0)))}%
-                  </Text>
-                  <Icon
-                    size={14}
-                    name={rate >= 0 ? 'caret-up' : 'caret-down'}
-                    style={{
-                      color: rate >= 0 ? green : red
-                    }}
-                  />
+                  {rateStyle(rate, isParent)}
                 </Container>
               ) : null}
             </Container>
