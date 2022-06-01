@@ -72,7 +72,8 @@ export default function DeploymentsHealthCards(props: any) {
         if (countList?.length) {
           ret.totalChartOptions = merge({}, defaultChartOptions, primaryChartOptions, {
             chart: {
-              height: 40
+              height: 40,
+              width: 125
             },
             xAxis: {
               categories: countList?.map(mapTime)
