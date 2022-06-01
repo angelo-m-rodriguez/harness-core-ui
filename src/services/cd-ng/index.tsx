@@ -10869,6 +10869,26 @@ export interface StackTraceElement {
   nativeMethod?: boolean
 }
 
+export interface HarnessForConfig {
+  iteration?: number
+}
+
+export interface ExcludeConfig {
+  exclude?: {
+    [key: string]: string
+  }
+}
+
+export interface MatrixConfig {
+  exclude?: ExcludeConfig[]
+}
+
+export interface StrategyConfig {
+  batchSize?: number
+  for?: HarnessForConfig
+  matrix?: MatrixConfig
+}
+
 export interface StageElementConfig {
   delegateSelectors?: string[]
   description?: string
@@ -10880,6 +10900,7 @@ export interface StageElementConfig {
   tags?: {
     [key: string]: string
   }
+  strategy?: StrategyConfig
   template?: TemplateLinkConfig
   type?: string
   variables?: NGVariable[]

@@ -370,6 +370,13 @@ failureStrategies:
     gitBranchRequired: Git Branch is required
     gitTagRequired: Git Tag is required
     gitPRRequired: Git Pull Request is required
+loopingStrategy:
+  title: Looping Strategy
+  subTitle: 'Select 1 of the {{maxCount}} looping execution strategy below.'
+  learnMore: Learn more about Looping strategies
+  helperText:
+    matrix: Matrix gives the ability to execute the same set of tasks multiple times for a bunch of different configurations.
+    for: For loop gives the ability to execute the same set of tasks multiple times.
 selectOrCreatePipeline:
   pipelineNameRequired: Please select a pipeline
   setupHeader: Create or Select a Pipeline

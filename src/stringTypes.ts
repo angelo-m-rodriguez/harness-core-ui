@@ -3032,6 +3032,11 @@ export interface StringsMap {
   'pipeline.logs.errorText': string
   'pipeline.logs.retry': string
   'pipeline.logs.sectionName': string
+  'pipeline.loopingStrategy.helperText.for': string
+  'pipeline.loopingStrategy.helperText.matrix': string
+  'pipeline.loopingStrategy.learnMore': string
+  'pipeline.loopingStrategy.subTitle': string
+  'pipeline.loopingStrategy.title': string
   'pipeline.manifestToConnectorLabelMap.AWSLabel': string
   'pipeline.manifestType.InheritFromManifest': string
   'pipeline.manifestType.attachPath': string

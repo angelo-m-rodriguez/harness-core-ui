@@ -10,6 +10,7 @@ import { Card, Container, HarnessDocTooltip, Layout } from '@wings-software/uico
 import { produce } from 'immer'
 import { set, isEmpty, unset } from 'lodash-es'
 import cx from 'classnames'
+import { LoopingStrategy } from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategy'
 import { StepActions } from '@common/constants/TrackingConstants'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
@@ -32,13 +33,13 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
 
   const {
     state: {
-      selectionState: { selectedStageId }
+      selectionState: { selectedStageId = '' }
     },
     isReadonly,
     getStageFromPipeline,
     updateStage
   } = usePipelineContext()
-  const { stage } = getStageFromPipeline(selectedStageId || /* istanbul ignore next */ '')
+  const { stage } = getStageFromPipeline(selectedStageId)
 
   const formikRef = React.useRef<StepFormikRef | null>(null)
   const scrollRef = React.useRef<HTMLDivElement | null>(null)
@@ -70,9 +71,7 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
                 ref={formikRef}
                 onUpdate={delegateSelectors => {
                   const valuePassed = delegateSelectors.delegateSelectors
-                  const { stage: pipelineStage } = getStageFromPipeline(
-                    selectedStageId || /* istanbul ignore next */ ''
-                  )
+                  const { stage: pipelineStage } = getStageFromPipeline(selectedStageId)
                   /* istanbul ignore else */
                   if (pipelineStage && pipelineStage.stage) {
                     const stageData = produce(pipelineStage, draft => {
@@ -107,9 +106,7 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
                 isReadonly={isReadonly}
                 selectedStage={stage}
                 onUpdate={when => {
-                  const { stage: pipelineStage } = getStageFromPipeline(
-                    selectedStageId || /* istanbul ignore next */ ''
-                  )
+                  const { stage: pipelineStage } = getStageFromPipeline(selectedStageId)
                   /* istanbul ignore else */
                   if (pipelineStage && pipelineStage.stage) {
                     const stageData = produce(pipelineStage, draft => {
@@ -123,6 +120,31 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
             </Layout.Horizontal>
           </Card>
         )}
+
+        <div className={stageCss.tabHeading}>
+          <span data-tooltip-id="failureStrategyDeployStage">
+            {getString('pipeline.loopingStrategy.title')}
+            <HarnessDocTooltip tooltipId="loopingStrategyDeployStage" useStandAlone={true} />
+          </span>
+        </div>
+        <Card className={stageCss.sectionCard} id="executionStrategy">
+          <Layout.Horizontal>
+            <LoopingStrategy
+              strategy={stage?.stage?.strategy}
+              isReadonly={isReadonly}
+              onUpdateStrategy={strategy => {
+                const { stage: pipelineStage } = getStageFromPipeline(selectedStageId)
+                if (pipelineStage && pipelineStage.stage) {
+                  const stageData = produce(pipelineStage, draft => {
+                    set(draft, 'stage.strategy', strategy)
+                  })
+                  if (stageData.stage) updateStage(stageData.stage)
+                }
+              }}
+            />
+          </Layout.Horizontal>
+        </Card>
+
         <div className={stageCss.tabHeading}>
           <span data-tooltip-id="failureStrategyDeployStage">
             {getString('pipeline.failureStrategies.title')}
@@ -137,9 +159,7 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
                 isReadonly={isReadonly}
                 ref={formikRef}
                 onUpdate={({ failureStrategies }) => {
-                  const { stage: pipelineStage } = getStageFromPipeline(
-                    selectedStageId || /* istanbul ignore next */ ''
-                  )
+                  const { stage: pipelineStage } = getStageFromPipeline(selectedStageId)
                   /* istanbul ignore else */
                   if (pipelineStage && pipelineStage.stage) {
                     const stageData = produce(pipelineStage, draft => {
