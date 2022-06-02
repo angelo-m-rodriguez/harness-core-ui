@@ -51,19 +51,16 @@ export const NewFileButton: React.FC<NewFileButtonProps> = (props: NewFileButton
 
   const menuItems: FileStorePopoverItem[] = [
     {
-      ComponentRenderer: newFileModal.ComponentRenderer,
       label: newFileModal.label,
       onClick: newFileModal.onClick,
       actionType: FileStoreActionTypes.CREATE_NODE
     },
     {
-      ComponentRenderer: newFolderModal.ComponentRenderer,
       label: newFolderModal.label,
       onClick: newFolderModal.onClick,
       actionType: FileStoreActionTypes.CREATE_NODE
     },
     {
-      ComponentRenderer: newUploadFile.ComponentRenderer,
       label: newUploadFile.label,
       onClick: newUploadFile.onClick,
       actionType: FileStoreActionTypes.UPLOAD_NODE

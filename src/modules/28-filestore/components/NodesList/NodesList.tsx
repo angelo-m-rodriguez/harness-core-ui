@@ -12,7 +12,7 @@ import ReactTimeago from 'react-timeago'
 
 import { Layout, TableV2, Text, Container } from '@harness/uicore'
 import { Color } from '@harness/design-system'
-import type { FileStoreNodeDTO } from 'services/cd-ng'
+import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
 import { useStrings } from 'framework/strings'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
@@ -98,7 +98,8 @@ const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
     currentNode: {
       name: original.name,
       identifier: original.identifier,
-      type: original.type
+      type: original.type,
+      fileUsage: original.fileUsage
     },
     fileStoreContext: context,
     type: original.type as FileStoreNodeTypes,

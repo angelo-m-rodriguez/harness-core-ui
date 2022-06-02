@@ -145,7 +145,6 @@ export const getMenuOptionItems = (
     }
     return {
       actionType: optionItem.actionType,
-      ComponentRenderer: optionItem.ComponentRenderer,
       text: optionItem.label,
       onClick: optionItem.onClick,
       identifier: optionItem.identifier

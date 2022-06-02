@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useRef, useEffect, useCallback, useContext } from 'react'
+import { useCallback, useContext } from 'react'
 
 import { v4 as uuid } from 'uuid'
 import { useToaster } from '@harness/uicore'
@@ -14,7 +14,7 @@ import { useStrings } from 'framework/strings'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
-import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { FileStoreActionTypes, FILE_STORE_ROOT, ExtensionType } from '@filestore/utils/constants'
 import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { checkSupportedMime } from '@filestore/utils/FileStoreUtils'
 
@@ -29,7 +29,7 @@ export const UPLOAD_EVENTS = {
 }
 
 const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
-  const { eventMethod = UPLOAD_EVENTS.UPLOAD } = config
+  const { isBtn = false, eventMethod = UPLOAD_EVENTS.UPLOAD } = config
   const { showError } = useToaster()
   const { getString } = useStrings()
   const {
@@ -42,16 +42,8 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
     setTempNodes,
     updateTempNodes
   } = useContext(FileStoreContext)
-  const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.setAttribute('directory', '')
-      inputRef.current.setAttribute('webkitdirectory', '')
-    }
-  }, [inputRef])
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | any>): void => {
+  const handleChange = (event: Event): void => {
     if (currentNode.type !== FileStoreNodeTypes.FOLDER && eventMethod === UPLOAD_EVENTS.UPLOAD) {
       showError('Folder should be selected')
       return
@@ -62,19 +54,22 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
         content: ''
       })
     }
-    if (!event.target.files?.length) {
+
+    const target = event.target as HTMLInputElement
+
+    if (!target.files?.length) {
       return
     } else {
-      if (event.target.files[0]) {
-        const { name } = event.target.files[0]
+      if (target.files[0]) {
+        const { name } = target.files[0]
         const mimeType = name.split('.')[name.split('.').length - 1]
-        const isSupportedMime = checkSupportedMime(mimeType)
+        const isSupportedMime = checkSupportedMime(mimeType as ExtensionType)
 
         const reader = new FileReader()
         if (!isSupportedMime) {
-          reader.readAsDataURL(event.target.files[0])
+          reader.readAsDataURL(target.files[0])
         } else {
-          reader.readAsText(event.target.files[0])
+          reader.readAsText(target.files[0])
         }
 
         reader.onload = function () {
@@ -140,19 +135,23 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
   }
 
   const handleClick = useCallback(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.click()
-    }
-  }, [inputRef])
+    const node = document.getElementById('file-upload')
+    node?.addEventListener('change', handleChange, false)
 
-  const RenderUploadBtn = (): React.ReactElement => {
-    return <input id="file-upload" name="file" type="file" onChange={handleChange} ref={inputRef} hidden />
-  }
+    const clickEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true
+    })
+    node?.dispatchEvent(clickEvent)
+
+    return () => {
+      node?.removeEventListener('change', handleChange)
+    }
+  }, [])
 
   return {
-    ComponentRenderer: <RenderUploadBtn />,
     onClick: handleClick,
-    label: getString('filestore.uploadFileFolder'),
+    label: isBtn ? getString('filestore.view.replaceFile') : getString('filestore.uploadFileFolder'),
     actionType: FileStoreActionTypes.UPLOAD_NODE
   }
 }

@@ -159,7 +159,7 @@ function FileDetails(): React.ReactElement {
   }, [data, isCachedNode, currentNode.identifier])
 
   return (
-    <Container style={{ width: '100%', height: 'calc(100% - 76px)' }} className={css.fileDetails}>
+    <Container style={{ width: '100%', height: '100%' }} className={css.fileDetails}>
       {downloadLoading && !isCachedNode(currentNode.identifier) ? (
         <Container flex={{ justifyContent: 'center', alignItems: 'center' }} style={{ width: '100%', height: '100%' }}>
           <Spinner />
@@ -273,9 +273,7 @@ function FileDetails(): React.ReactElement {
                         title={uploadNewFile.label}
                         text={uploadNewFile.label}
                         margin={{ left: 'small' }}
-                      >
-                        {uploadNewFile.ComponentRenderer}
-                      </Button>
+                      />
                     )}
                   </Container>
                 </Layout.Horizontal>

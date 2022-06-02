@@ -10,7 +10,7 @@
     .bp3-tabs {
       height: 100%;
       .bp3-tab-panel {
-        height: 100%;
+        height: calc(100% - 150px);
       }
     }
     .bp3-tab-panel {

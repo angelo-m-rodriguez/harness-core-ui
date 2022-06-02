@@ -584,6 +584,7 @@ const FileStore: React.FC = () => {
             )}
           </>
         )}
+        <input id="file-upload" name="file" type="file" hidden />
       </Page.Body>
     </>
   )

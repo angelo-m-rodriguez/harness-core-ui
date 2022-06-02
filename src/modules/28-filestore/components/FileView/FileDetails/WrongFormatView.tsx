@@ -24,7 +24,7 @@ export default function WrongFormatView(): React.ReactElement {
   return (
     <Container width={'100%'} style={{ height: 'calc(100% - 69px)' }} background={Color.GREY_100}>
       <Layout.Vertical spacing={'xxlarge'} height={'100%'} flex={{ align: 'center-center' }}>
-        <Container style={{ width: '220px', position: 'relative', minHeight: 190 }}>
+        <Container style={{ width: '220px', position: 'relative', minHeight: 300 }}>
           <img
             style={{ position: 'absolute', width: '220px', top: 0, left: 0 }}
             src={currentNode?.content ? currentNode.content : ''}
@@ -48,9 +48,7 @@ export default function WrongFormatView(): React.ReactElement {
           onClick={uploadNewFile.onClick}
           title={uploadNewFile.label}
           text={uploadNewFile.label}
-        >
-          {uploadNewFile.ComponentRenderer}
-        </Button>
+        />
       </Layout.Vertical>
     </Container>
   )

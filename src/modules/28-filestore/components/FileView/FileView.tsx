@@ -21,7 +21,7 @@ export default function FileView(): React.ReactElement {
   return (
     <Container
       background={Color.WHITE}
-      style={{ width: '100%', height: 'calc(100vh - 200px)' }}
+      style={{ width: '100%', height: 'calc(100% - 15px)' }}
       className={css.mainFileView}
     >
       <Tabs

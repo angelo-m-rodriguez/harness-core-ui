@@ -16,7 +16,6 @@ import css from './NodeMenuButton.module.scss'
 
 interface NodeMenuItem extends Omit<IMenuItemProps, 'icon'> {
   node?: ReactElement
-  ComponentRenderer?: React.ReactElement
   actionType: FileStoreActionTypes
   identifier?: string
 }
@@ -46,25 +45,20 @@ const NodeMenuButton = ({ items, position }: NodeMenuButtonProps): ReactElement 
           {items.map((item: Item, key: number) => (
             <Fragment key={key}>
               {item === '-' ? (
-                key === 0 ? null : (
-                  <Menu.Divider />
-                )
+                key !== 0 && <Menu.Divider />
               ) : (
-                <>
-                  <RbacMenuItem
-                    icon={getIconByActionType(item.actionType)}
-                    text={item.text}
-                    permission={getPermissionsByActionType(item.actionType, item.identifier)}
-                    onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                      e.stopPropagation()
-                      if (item?.onClick) {
-                        item.onClick(e)
-                        setMenuOpen(false)
-                      }
-                    }}
-                  />
-                  {item.ComponentRenderer}
-                </>
+                <RbacMenuItem
+                  icon={getIconByActionType(item.actionType)}
+                  text={item.text}
+                  permission={getPermissionsByActionType(item.actionType, item.identifier)}
+                  onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                    e.stopPropagation()
+                    if (item?.onClick) {
+                      item.onClick(e)
+                      setMenuOpen(false)
+                    }
+                  }}
+                />
               )}
             </Fragment>
           ))}

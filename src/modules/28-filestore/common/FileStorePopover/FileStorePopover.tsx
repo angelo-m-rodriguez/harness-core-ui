@@ -24,7 +24,6 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import css from './FileStorePopover.module.scss'
 
 export interface FileStorePopoverItem {
-  ComponentRenderer?: React.ReactElement
   onClick: () => void
   label: string
   disabled?: boolean
@@ -67,26 +66,23 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
         disabled={false}
         icon={icon}
         id="newFileBtn"
-        data-test="newFileButton"
+        data-testid="newFileButton"
       />
       <Menu>
         {items.length &&
           items.map((item: FileStorePopoverItem) => {
-            const { ComponentRenderer, label, onClick, actionType, identifier } = item
+            const { label, onClick, actionType, identifier } = item
             return (
-              <>
-                <RbacMenuItem
-                  icon={getIconByActionType(actionType)}
-                  text={label}
-                  permission={getPermissionsByActionType(actionType, identifier)}
-                  onClick={e => {
-                    e.stopPropagation()
-                    onClick()
-                    // close()
-                  }}
-                />
-                {ComponentRenderer}
-              </>
+              <RbacMenuItem
+                icon={getIconByActionType(actionType)}
+                text={label}
+                permission={getPermissionsByActionType(actionType, identifier)}
+                onClick={e => {
+                  e.stopPropagation()
+                  onClick()
+                  close()
+                }}
+              />
             )
           })}
       </Menu>
