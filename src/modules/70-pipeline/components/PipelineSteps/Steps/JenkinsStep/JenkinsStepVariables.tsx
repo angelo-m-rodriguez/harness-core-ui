@@ -9,7 +9,7 @@ import React from 'react'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import { VariablesListTable } from '@pipeline/components/VariablesListTable/VariablesListTable'
 import type { JenkinsStepData } from './JenkinsStep'
-import { flatObject } from '../StepsFlatObject'
+import { flatObject } from '../Common/ApprovalCommons'
 
 export interface JenkinsStepVariablesProps {
   initialValues: JenkinsStepData

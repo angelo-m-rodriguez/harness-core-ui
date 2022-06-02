@@ -32,33 +32,12 @@ import { JenkinsStepBaseWithRef } from './JenkinsStepBase'
 import { JenkinsStepInputSet } from './JenkinsStepInputSet'
 import { JenkinsStepVariables, JenkinsStepVariablesProps } from './JenkinsStepVariables'
 import { getInputSetViewValidateFieldsConfig, transformValuesFieldsConfig } from './JenkinsStepFunctionConfigs'
-import { getConnectorSuggestions } from '../EditorSuggestionUtils'
+// import { getConnectorSuggestions } from '../EditorSuggestionUtils'
 import type { AllFailureStrategyConfig } from '@pipeline/components/PipelineSteps/AdvancedSteps/FailureStrategyPanel/utils'
+import { getConnectorSuggestions } from './EditorSuggestionUtils'
+import type { JenkinsStepSpec, JenkinsStepData } from './types'
 
 const logger = loggerFor(ModuleName.CI)
-
-interface jobParameterInterface {
-  name: string
-  value: string
-}
-
-export interface JenkinsStepSpec {
-  connectorRef: string
-  jobName: string
-  jobParameter: jobParameterInterface[]
-  delegateSelectors: string[]
-  unstableStatusAsSuccess?: boolean
-  captureEnvironmentVariable?: boolean
-}
-
-export interface JenkinsStepData {
-  identifier: string
-  name?: string
-  type: string
-  timeout?: string
-  failureStrategies?: AllFailureStrategyConfig[]
-  spec: JenkinsStepSpec
-}
 
 export interface JenkinsStepSpecUI
   extends Omit<JenkinsStepSpec, 'connectorRef' | 'tags' | 'labels' | 'buildArgs' | 'pull' | 'resources'> {
@@ -86,7 +65,7 @@ export interface JenkinsStepProps {
   formik?: any
 }
 
-export class DockerHubStep extends PipelineStep<JenkinsStepData> {
+export class JenkinsStep extends PipelineStep<JenkinsStepData> {
   constructor() {
     super()
     this._hasStepVariables = true
@@ -95,7 +74,7 @@ export class DockerHubStep extends PipelineStep<JenkinsStepData> {
   }
 
   protected type = StepType.JenkinsBuild
-  protected stepName = 'Build and Push an image to Jenkins'
+  protected stepName = 'Jenkins'
   protected stepIcon: IconName = 'service-jenkins'
   // to be edited in strings.en.yaml file in future
   protected stepDescription: keyof StringsMap = 'pipeline.stepDescription.Jenkins'

@@ -18,6 +18,7 @@ import { JiraCreate } from './Steps/JiraCreate/JiraCreate'
 import { JiraUpdate } from './Steps/JiraUpdate/JiraUpdate'
 import { ServiceNowCreate } from './Steps/ServiceNowCreate/ServiceNowCreate'
 import { ServiceNowUpdate } from './Steps/ServiceNowUpdate/ServiceNowUpdate'
+import { JenkinsStep } from './Steps/JenkinsStep/JenkinsStep'
 
 class PipelineStepFactory extends AbstractStepFactory {
   protected type = 'pipeline-factory'
@@ -37,6 +38,7 @@ factory.registerStep(new JiraUpdate())
 factory.registerStep(new ServiceNowApproval())
 factory.registerStep(new ServiceNowCreate())
 factory.registerStep(new ServiceNowUpdate())
+factory.registerStep(new JenkinsStep())
 
 // build steps
 export default factory

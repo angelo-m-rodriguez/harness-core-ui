@@ -29,10 +29,12 @@ const getDefaultOptions = (data: DataType): Highcharts.Options => ({
     enabled: false
   },
   xAxis: {
+    events: {},
     labels: {
       formatter: function () {
         return `${this.pos + 1}`
       },
+
       style: {
         fontSize: 'var(--font-size-xsmall)',
         color: 'var(--grey-400)'

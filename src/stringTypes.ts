@@ -2972,6 +2972,12 @@ export interface StringsMap {
   'pipeline.inputSets.removeInvalidFields': string
   'pipeline.inputSets.selectPlaceholder': string
   'pipeline.invalidRequest': string
+  'pipeline.jenkinsStep.captureEnvironmentVariable': string
+  'pipeline.jenkinsStep.connectorRef': string
+  'pipeline.jenkinsStep.jobName': string
+  'pipeline.jenkinsStep.jobNamePlaceholder': string
+  'pipeline.jenkinsStep.jobParameter': string
+  'pipeline.jenkinsStep.unstableStatusAsSuccess': string
   'pipeline.jiraApprovalStep.connectToJira': string
   'pipeline.jiraApprovalStep.connectorRef': string
   'pipeline.jiraApprovalStep.execution.allConditionsMsg': string
