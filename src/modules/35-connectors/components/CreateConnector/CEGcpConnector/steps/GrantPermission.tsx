@@ -104,8 +104,40 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
     previousStep?.({ ...(prevStepData as CEGcpConnectorDTO), serviceAccount })
   }
 
-  const renderOptimizationSteps = () => {
-    return CE_AS_GCP_VM_SUPPORT && props.prevStepData?.spec.featuresEnabled?.includes('OPTIMIZATION') ? (
+  const renderAdditionalSteps = () => {
+    const optimizationEnabled =
+      CE_AS_GCP_VM_SUPPORT && props.prevStepData?.spec.featuresEnabled?.includes('OPTIMIZATION')
+    const inventoryEnabled = props.prevStepData?.spec.featuresEnabled?.includes('VISIBILITY')
+    return optimizationEnabled && inventoryEnabled ? (
+      <>
+        <li>
+          <div>
+            {getString('enable')}{' '}
+            <a
+              href="https://console.cloud.google.com/apis/library/compute.googleapis.com"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {getString('connectors.ceGcp.grantPermission.inventory.computeEngine')}
+            </a>{' '}
+            {getString('connectors.ceGcp.grantPermission.inventory.step1')}
+          </div>
+        </li>
+        <li>
+          <div>{getString('connectors.ceGcp.grantPermission.optimization.step1')}</div>
+        </li>
+        <li>
+          <div>{getString('connectors.ceGcp.grantPermission.optimization.step2', { serviceAccount })}</div>
+        </li>
+        <li>
+          <div>
+            {getString('connectors.ceGcp.grantPermission.optimization.step3', {
+              otherRole: inventoryEnabled ? getString('connectors.ceGcp.grantPermission.inventory.step2') : ''
+            })}
+          </div>
+        </li>
+      </>
+    ) : optimizationEnabled && !inventoryEnabled ? (
       <>
         <li>
           <div>{getString('connectors.ceGcp.grantPermission.optimization.step1')}</div>
@@ -115,6 +147,25 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
         </li>
         <li>
           <div>{getString('connectors.ceGcp.grantPermission.optimization.step3')}</div>
+        </li>
+      </>
+    ) : !optimizationEnabled && inventoryEnabled ? (
+      <>
+        <li>
+          <div>
+            {getString('enable')}{' '}
+            <a
+              href="https://console.cloud.google.com/apis/library/compute.googleapis.com"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {getString('connectors.ceGcp.grantPermission.inventory.computeEngine')}
+            </a>{' '}
+            {getString('connectors.ceGcp.grantPermission.inventory.step1')}
+          </div>
+        </li>
+        <li>
+          <div>{getString('connectors.ceGcp.grantPermission.inventory.completePermissionStep')}</div>
         </li>
       </>
     ) : null
@@ -163,7 +214,7 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
         <li>
           <div>{getString('connectors.ceGcp.grantPermission.step6')}</div>
         </li>
-        {renderOptimizationSteps()}
+        {renderAdditionalSteps()}
         <li>
           <div>{getString('connectors.ceGcp.grantPermission.step7')}</div>
         </li>

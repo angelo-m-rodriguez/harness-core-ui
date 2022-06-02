@@ -223,25 +223,25 @@ const OverviewStep: React.FC<OverviewProps> = props => {
                       <div style={{ color: 'red' }}>
                         <Icon name="circle-cross" color="red700" style={{ paddingRight: 5 }}></Icon>
                         <span style={{ fontSize: 'var(--font-size-normal)' }}>
-                          {getString('connectors.ceAws.overview.alreadyExist')}
+                          {getString('connectors.ceGcp.overview.alreadyExist')}
                         </span>
                       </div>
                       <div>
                         <Icon name="info" style={{ paddingRight: 5 }}></Icon>
-                        {getString('connectors.ceAws.overview.alreadyExistInfo', {
+                        {getString('connectors.ceGcp.overview.alreadyExistInfo', {
                           projectId,
                           existingConnectorName,
                           featureText
                         })}
                       </div>
-                      <div>
+                      {/* <div>
                         <Icon name="lightbulb" style={{ paddingRight: 5 }}></Icon>
                         {getString('connectors.ceAws.overview.trySuggestion')}
                         <div>
                           {getString('connectors.ceAws.overview.editConnector')} <a>{existingConnectorName}</a>{' '}
                           {getString('connectors.ceAws.overview.ifReq')}
                         </div>
-                      </div>
+                      </div> */}
                     </Layout.Vertical>
                   </div>
                 )}

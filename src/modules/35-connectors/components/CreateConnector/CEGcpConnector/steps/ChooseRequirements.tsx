@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useRef } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { defaultTo, times } from 'lodash-es'
 import { Button, CardSelect, Heading, Layout, StepProps, Text } from '@harness/uicore'
 import { StringKeys, useStrings } from 'framework/strings'
@@ -34,7 +34,7 @@ const ChooseRequirements: React.FC<StepProps<CEGcpConnectorDTO>> = ({ prevStepDa
       features: times(5, i =>
         getString(`connectors.ceGcp.chooseRequirements.cardDetails.billing.feat${i + 1}` as StringKeys)
       ),
-      footer: getString('connectors.ceAws.crossAccountRoleStep1.default.footer')
+      footer: getString('connectors.ceGcp.chooseRequirements.cardDetails.billing.footer')
     },
     {
       icon: 'ce-visibility',
@@ -90,10 +90,17 @@ const ChooseRequirements: React.FC<StepProps<CEGcpConnectorDTO>> = ({ prevStepDa
 
   const { selectedCards, setSelectedCards } = useSelectCards({ featuresEnabled, featureCards })
 
+  useLayoutEffect(() => {
+    const defaultSelectedCard = document.querySelector('.bp3-card.Card--selected')
+    if (defaultSelectedCard) {
+      defaultSelectedCard.classList.add(css.defaultCard)
+    }
+  }, [])
+
   const handleSubmit = () => {
-    const features: FeaturesString[] = selectedCards.map(card => card.value)
-    if (prevStepData?.includeBilling) {
-      features.push('BILLING')
+    let features: FeaturesString[] = selectedCards.map(card => card.value)
+    if (!prevStepData?.includeBilling) {
+      features = features.filter(item => item !== 'BILLING')
     }
     const newspec: GcpCloudCostConnector = {
       projectId: '',

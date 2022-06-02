@@ -226,3 +226,18 @@
   justify-content: center;
   align-items: center;
 }
+
+.defaultCard {
+  box-shadow: none;
+  background-color: var(--grey-50);
+  opacity: 80%;
+  cursor: not-allowed !important;
+  &:hover {
+    box-shadow: none !important;
+  }
+  :global {
+    .Card--badge {
+      opacity: 50%;
+    }
+  }
+}

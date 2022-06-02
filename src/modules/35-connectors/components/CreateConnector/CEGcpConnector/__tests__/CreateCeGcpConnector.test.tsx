@@ -278,7 +278,7 @@ describe('Create Secret Manager Wizard', () => {
       clickSubmit(container)
     })
 
-    expect(getByText('connectors.ceAws.overview.alreadyExist')).toBeDefined()
+    expect(getByText('connectors.ceGcp.overview.alreadyExist')).toBeDefined()
     expect(container).toMatchSnapshot()
   })
 })

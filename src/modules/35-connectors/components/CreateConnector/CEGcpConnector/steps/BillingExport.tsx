@@ -52,7 +52,7 @@ const CostUsageReportExisting: React.FC<CostUsageReportExistingProps> = props =>
     <div>
       <Layout.Vertical>
         <Text color={Color.GREY_800} font={{ variation: FontVariation.BODY }}>
-          {getString('connectors.ceAws.curExising.subHeading', { reportCount: props.existingCurReports.length })}
+          {getString('connectors.ceGcp.billingExport.subHeading', { reportCount: props.existingCurReports.length })}
         </Text>
         <div className={css.existingCurTable}>
           <ExpandingSearchInput
@@ -98,13 +98,12 @@ const BillingExport: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
   const { triggerExtension, closeExtension } = useContext(DialogExtensionContext)
   const existingCurReports = prevStepData?.existingCurReports || []
   const [isExistingCostUsageReport, setIsExistingCostUsageReport] = useState<boolean>(
-    (!prevStepData?.includeBilling || false) && (existingCurReports.length > 0 || false)
+    existingCurReports.length > 0 || false
   )
 
   const handleSubmit = (formData: GcpBillingExportSpec) => {
     const newSpec: GcpCloudCostConnector = {
       projectId: '',
-      featuresEnabled: ['BILLING'],
       ...prevStepData?.spec,
       billingExportSpec: {
         datasetId: formData.datasetId,
@@ -115,6 +114,7 @@ const BillingExport: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
     const payload = prevStepData
     if (payload) {
       payload.spec = newSpec
+      payload.includeBilling = !isExistingCostUsageReport
     }
 
     closeExtension()
@@ -184,7 +184,7 @@ const BillingExport: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
                           {getString('connectors.ceGcp.existingCurTable.nextStepHint2')}
                           <Button
                             rightIcon="chevron-right"
-                            text={getString('connectors.ceAws.cur.createNew')}
+                            text={getString('connectors.ceGcp.billingExport.setupNew')}
                             onClick={() => {
                               setIsExistingCostUsageReport(false)
                               triggerExtension(BillingExportExtention)
