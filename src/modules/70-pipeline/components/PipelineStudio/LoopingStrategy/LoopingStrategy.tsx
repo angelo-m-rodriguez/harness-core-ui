@@ -25,6 +25,8 @@ import type { StrategyConfig } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import type { StringsMap } from 'stringTypes'
 import { AvailableStrategies } from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategyUtils'
+import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
+import { MonacoTextField } from '@common/components/MonacoTextField/MonacoTextField'
 import css from './LoopingStrategy.module.scss'
 
 export interface LoopingStrategyProps {
@@ -35,9 +37,14 @@ export interface LoopingStrategyProps {
 
 const DOCUMENT_URL = 'https://ngdocs.harness.io/article/i36ibenkq2-step-skip-condition-settings'
 
-export function LoopingStrategy({ strategy = {}, onUpdateStrategy }: LoopingStrategyProps): React.ReactElement {
+export function LoopingStrategy({
+  strategy = {},
+  isReadonly,
+  onUpdateStrategy
+}: LoopingStrategyProps): React.ReactElement {
   const { getString } = useStrings()
   const [isEdit, setIsEdit] = React.useState<boolean>(isEmpty(strategy))
+  const { expressions } = useVariablesExpression()
 
   const getAllStrategies = (
     selectedStrategy: StrategyConfig
@@ -53,7 +60,7 @@ export function LoopingStrategy({ strategy = {}, onUpdateStrategy }: LoopingStra
         value: item.value,
         selected:
           (item.value === 'matrix' && !!selectedStrategy?.matrix) || (item.value === 'for' && !!selectedStrategy?.for),
-        disabled: !isEmpty(selectedStrategy) && !isEdit
+        disabled: !isEmpty(selectedStrategy) && !isEdit && !isReadonly
       }
     })
   }
@@ -68,6 +75,7 @@ export function LoopingStrategy({ strategy = {}, onUpdateStrategy }: LoopingStra
   }
 
   const changeStrategy = (newStrategy: string, formikProps: FormikProps<StrategyConfig>) => {
+    setIsEdit(true)
     const newValues: StrategyConfig =
       newStrategy === 'matrix'
         ? { matrix: {}, for: undefined, batchSize: undefined }
@@ -150,7 +158,7 @@ export function LoopingStrategy({ strategy = {}, onUpdateStrategy }: LoopingStra
                 </Container>
                 {selectedStrategyMetaData && (
                   <Container border={{ radius: 4 }} padding={'medium'}>
-                    <Layout.Vertical>
+                    <Layout.Vertical spacing={'medium'}>
                       <Container>
                         <Layout.Horizontal flex={{ alignItems: 'center' }}>
                           <Container style={{ flexGrow: 1 }}>
@@ -172,21 +180,23 @@ export function LoopingStrategy({ strategy = {}, onUpdateStrategy }: LoopingStra
                               </Text>
                             </Layout.Vertical>
                           </Container>
-                          {!isEdit && (
-                            <Container>
-                              <Layout.Horizontal>
+                          <Container>
+                            <Layout.Horizontal>
+                              {!isEdit && (
                                 <Button variation={ButtonVariation.ICON} icon={'edit'} onClick={enableEditing} />
-                                <Button
-                                  variation={ButtonVariation.ICON}
-                                  icon={'main-trash'}
-                                  onClick={() => onDelete(formikProps)}
-                                />
-                              </Layout.Horizontal>
-                            </Container>
-                          )}
+                              )}
+                              <Button
+                                variation={ButtonVariation.ICON}
+                                icon={'main-trash'}
+                                onClick={() => onDelete(formikProps)}
+                              />
+                            </Layout.Horizontal>
+                          </Container>
                         </Layout.Horizontal>
                       </Container>
-                      <Container></Container>
+                      <Container>
+                        <MonacoTextField name={'matrix'} expressions={expressions} disabled={isReadonly} />
+                      </Container>
                     </Layout.Vertical>
                   </Container>
                 )}
