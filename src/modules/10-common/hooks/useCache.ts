@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useGlobalEventListener } from './useGlobalEventListener'
 
 const CACHE: Map<string, any> = new Map()
 
@@ -26,10 +27,14 @@ export function useCache(): UseCacheReturn {
     CACHE.set(key, value)
 
     if (oldValue !== value && !options.skipUpdate) {
-      forceUpdate(c => c + 1)
+      window.dispatchEvent(new CustomEvent('USE_CACHE_UPDATED'))
     }
   }, [])
   const get = useCallback(<T = unknown>(key: string) => CACHE.get(key) as T | undefined, [])
+
+  useGlobalEventListener('USE_CACHE_UPDATED', () => {
+    forceUpdate(c => c + 1)
+  })
 
   return { set, get }
 }
