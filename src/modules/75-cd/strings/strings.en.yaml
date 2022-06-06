@@ -289,3 +289,6 @@ cloudFormation:
     templateRequired: Template file required
   deploymentTypes:
     pdc: PDC
+getStartedWithCD:
+  workloadDeploy: What workload would you like to deploy?
+  serverless: Serverless Function
