@@ -9,6 +9,7 @@ import {
   Container,
   ExpandingSearchInput,
   Icon,
+  IconName,
   Layout,
   PageError,
   PageSpinner,
@@ -24,8 +25,21 @@ import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/Rout
 
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { useStrings } from 'framework/strings'
-import { EntitySetupUsageDTO, Error, useGetReferencedBy } from 'services/cd-ng'
+import { EntityDetail, EntitySetupUsageDTO, Error, useGetReferencedBy } from 'services/cd-ng'
 import css from './ReferencedBy.module.scss'
+
+export const getIconByType = (type: EntityDetail['type'] | undefined): IconName => {
+  switch (type) {
+    case 'Pipelines':
+      return 'pipeline-ng'
+    case 'Connectors':
+      return 'connectors-blue'
+    case 'Template':
+      return 'templates-blue'
+    default:
+      return 'cog'
+  }
+}
 
 export default function ReferencedBy(): React.ReactElement {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps & ModulePathParams>()
@@ -62,11 +76,13 @@ export default function ReferencedBy(): React.ReactElement {
 
     return (
       <Layout.Horizontal>
-        {entity?.type && <Icon name="pipeline-ng" size={28} margin={{ top: 'xsmall', right: 'small' }} />}
+        {entity?.type && (
+          <Icon name={getIconByType(entity?.type)} size={28} margin={{ top: 'xsmall', right: 'small' }} />
+        )}
         <Layout.Vertical>
           <Layout.Horizontal spacing="small" width={230}>
             <Text color={Color.BLACK} lineClamp={1}>
-              {entity?.name}
+              {entity?.name || ''}
             </Text>
           </Layout.Horizontal>
           <Text color={Color.GREY_600} font={{ size: 'small' }} width={230} lineClamp={2}>

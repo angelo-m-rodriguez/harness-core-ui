@@ -12,6 +12,7 @@ import { StringUtils } from '@common/exports'
 export type FileStoreFilterFormType = Omit<FilesFilterProperties, 'createdBy' | 'referencedBy'> & {
   createdBy?: string
   referencedBy?: string
+  referenceName?: string
 }
 
 export const createRequestBodyPayload = ({
@@ -19,16 +20,12 @@ export const createRequestBodyPayload = ({
   data,
   projectIdentifier,
   orgIdentifier,
-  accountIdentifier,
-  referenceIdentifier,
   createdByList
 }: {
   isUpdate: boolean
   data: FilterDataInterface<FileStoreFilterFormType, FilterInterface>
   projectIdentifier: string
   orgIdentifier: string
-  accountIdentifier: string
-  referenceIdentifier?: string
   createdByList: EmbeddedUserDetailsDTO[]
 }): FilterDTO => {
   const {
@@ -46,16 +43,11 @@ export const createRequestBodyPayload = ({
     filterVisibility: filterVisibility,
     filterProperties: {
       createdBy: createdBy,
-      ...(formValues.referencedBy && referenceIdentifier
+      ...(formValues.referencedBy && formValues.referenceName
         ? {
             referencedBy: {
               type: formValues.referencedBy,
-              entityRef: {
-                identifier: referenceIdentifier,
-                orgIdentifier,
-                projectIdentifier,
-                accountIdentifier
-              }
+              name: formValues.referenceName
             }
           }
         : {}),

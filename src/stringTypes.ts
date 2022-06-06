@@ -1124,11 +1124,7 @@ export interface StringsMap {
   'filestore.fileReferenceText': string
   'filestore.fileSuccessCreated': string
   'filestore.fileSuccessSaved': string
-  'filestore.filter.createdBy': string
-  'filestore.filter.fileUsage': string
   'filestore.filter.fileUsagePlaceholder': string
-  'filestore.filter.referenceName': string
-  'filestore.filter.referencedBy': string
   'filestore.folderSuccessCreated': string
   'filestore.folderSuccessSaved': string
   'filestore.newFile': string

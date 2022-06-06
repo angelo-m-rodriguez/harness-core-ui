@@ -37,14 +37,12 @@ import {
   FilesFilterProperties,
   FileStoreNodeDTO,
   FilterDTO,
-  GetReferencedByInScopeQueryParams,
   ListFilesWithFilterQueryParams,
   useDeleteFilter,
   useGetCreatedByList,
   useGetEntityTypes,
   useGetFilterList,
   useGetFolderNodes,
-  useGetReferencedByInScope,
   useListFilesWithFilter,
   usePostFilter,
   useUpdateFilter
@@ -95,7 +93,6 @@ const FileStore: React.FC = () => {
   const { getRBACErrorMessage } = useRBACError()
   const [filesFetchError, setFilesFetchError] = useState<GetDataError<Failure | Error>>()
   const [referencedByEntitySelected, setReferencedByEntitySelected] = useState<string>()
-  const [referenceIdentifier, setReferenceIdentifier] = useState<string>()
   const [appliedFilter, setAppliedFilter] = useState<FilterDTO | null>()
   const { accountId, orgIdentifier, projectIdentifier } = params
   const { getString } = useStrings()
@@ -116,15 +113,6 @@ const FileStore: React.FC = () => {
       projectIdentifier,
       orgIdentifier,
       accountIdentifier: accountId
-    }
-  })
-
-  const { data: referencedByListForScopeResponse } = useGetReferencedByInScope({
-    queryParams: {
-      projectIdentifier,
-      orgIdentifier,
-      accountIdentifier: accountId,
-      entityType: referencedByEntitySelected as GetReferencedByInScopeQueryParams['entityType']
     }
   })
 
@@ -187,11 +175,6 @@ const FileStore: React.FC = () => {
     setAppliedFilter(undefined)
   }
 
-  const referenceNameOptions: SelectOption[] = (referencedByListForScopeResponse?.data?.content || []).map(entity => ({
-    label: entity.referredEntity?.name || '',
-    value: entity.referredEntity?.entityRef?.identifier || ''
-  }))
-
   const createdByOptions: SelectOption[] = (createdByListResponse?.data || []).map(user => ({
     label: user.name || '',
     value: user.email || ''
@@ -215,7 +198,7 @@ const FileStore: React.FC = () => {
           }}
           items={fileUsageOptions}
           name="fileUsage"
-          label={getString('filestore.filter.fileUsage')}
+          label={getString('filestore.view.fileUsage')}
           key="fileUsage"
           value={fileUsage ? fileUsageOptions.find((option: SelectOption) => option.value === fileUsage) : NO_SELECTION}
           placeholder={getString('filestore.filter.fileUsagePlaceholder')}
@@ -228,7 +211,7 @@ const FileStore: React.FC = () => {
           items={createdByOptions}
           value={createdBy ? createdByOptions.find((option: SelectOption) => option.value === createdBy) : NO_SELECTION}
           name="createdBy"
-          label={getString('filestore.filter.createdBy')}
+          label={getString('createdBy')}
           key="createdBy"
         />
         <FormInput.Select
@@ -243,23 +226,14 @@ const FileStore: React.FC = () => {
               ? referencedByOptions.find((option: SelectOption) => option.value === referencedBy)
               : NO_SELECTION
           }
-          label={getString('filestore.filter.referencedBy')}
+          label={getString('referencedBy')}
           key="referencedBy"
         />
         {referencedByEntitySelected && (
-          <FormInput.Select
+          <FormInput.Text
             style={{ marginLeft: 20, paddingLeft: 20, borderLeft: '1px solid #CBCBCB' }}
-            items={referenceNameOptions}
-            value={
-              referenceIdentifier
-                ? referenceNameOptions.find((option: SelectOption) => option.value === referenceIdentifier)
-                : NO_SELECTION
-            }
-            onChange={option => {
-              setReferenceIdentifier(option.value as string)
-            }}
             name="referenceName"
-            label={getString('filestore.filter.referenceName')}
+            label={getString('name')}
             key="referenceName"
           />
         )}
@@ -268,8 +242,11 @@ const FileStore: React.FC = () => {
   }
 
   const refetchFileStoreList = React.useCallback(
-    async (queryParams?: ListFilesWithFilterQueryParams, filter?: FilesFilterProperties): Promise<void> => {
-      const { tags, fileUsage, createdBy, referencedBy } = filter || {}
+    async (
+      queryParams?: ListFilesWithFilterQueryParams,
+      filter?: FilesFilterProperties & { referenceName?: string }
+    ): Promise<void> => {
+      const { tags, fileUsage, createdBy, referencedBy, referenceName } = filter || {}
 
       const requestBodyPayload = Object.assign(
         filter
@@ -278,13 +255,10 @@ const FileStore: React.FC = () => {
               fileUsage,
               createdBy: (createdByListResponse?.data || []).find(user => user.email === createdBy),
               referencedBy:
-                referencedBy && referenceIdentifier
+                referencedBy && referenceName
                   ? {
                       type: referencedBy,
-                      entityRef: {
-                        identifier: referenceIdentifier,
-                        ...queryParams
-                      }
+                      name: referenceName
                     }
                   : null
             }
@@ -298,7 +272,7 @@ const FileStore: React.FC = () => {
       setLoading(true)
 
       try {
-        const { status, data } = await getFilesWithFilter(sanitizedFilterRequest, { queryParams: params })
+        const { status, data } = await getFilesWithFilter(sanitizedFilterRequest, { queryParams })
         /* istanbul ignore else */
         if (status === 'SUCCESS') {
           const filteredFiles: FileStoreNodeDTO[] =
@@ -328,7 +302,7 @@ const FileStore: React.FC = () => {
 
       setLoading(false)
     },
-    [createdByListResponse, referenceIdentifier]
+    [createdByListResponse]
   )
 
   useEffect(() => {
@@ -350,10 +324,8 @@ const FileStore: React.FC = () => {
     const requestBodyPayload = createRequestBodyPayload({
       projectIdentifier,
       orgIdentifier,
-      accountIdentifier: accountId,
       isUpdate,
       data,
-      referenceIdentifier,
       createdByList: createdByListResponse?.data || []
     })
     const saveOrUpdateHandler = filterRef.current?.saveOrUpdateFilterHandler
@@ -388,7 +360,6 @@ const FileStore: React.FC = () => {
       const filter = getFilterByIdentifier(filters || [], identifier)
       const { referencedBy } = (filter?.filterProperties as FilesFilterProperties) || {}
       setReferencedByEntitySelected(referencedBy?.type)
-      setReferenceIdentifier(referencedBy?.entityRef?.identifier)
       setAppliedFilter(filter)
     }
   }
@@ -427,7 +398,8 @@ const FileStore: React.FC = () => {
           createdBy: formData.createdBy,
           referencedBy: formData.referencedBy,
           fileUsage: formData.fileUsage,
-          tags: formData.tags
+          tags: formData.tags,
+          referenceName: formData.referenceName
         }
         refetchFileStoreList(
           {
@@ -442,15 +414,16 @@ const FileStore: React.FC = () => {
       }
     }
 
-    const { tags, fileUsage, createdBy, referencedBy } =
-      (appliedFilter?.filterProperties as FilesFilterProperties) || {}
+    const { tags, fileUsage, createdBy, referencedBy, referenceName } =
+      (appliedFilter?.filterProperties as FilesFilterProperties & { referenceName: string }) || {}
     const { name = '', filterVisibility } = appliedFilter || {}
 
     const initialFilterValues = {
       tags,
       fileUsage,
       createdBy: typeof createdBy === 'string' ? createdBy : createdBy?.email,
-      referencedBy: typeof referencedBy === 'string' ? referencedBy : referencedBy?.type
+      referencedBy: typeof referencedBy === 'string' ? referencedBy : referencedBy?.type,
+      referenceName: referenceName || referencedBy?.name
     }
 
     return (
@@ -487,21 +460,13 @@ const FileStore: React.FC = () => {
         onClear={reset}
       />
     )
-  }, [
-    isRefreshingFilters,
-    filters,
-    appliedFilter,
-    searchTerm,
-    createdByOptions,
-    referenceNameOptions,
-    referencedByEntitySelected
-  ])
+  }, [isRefreshingFilters, filters, appliedFilter, searchTerm, createdByOptions, referencedByEntitySelected])
 
   const fieldToLabelMapping = new Map<string, string>()
-  fieldToLabelMapping.set('fileUsage', getString('filestore.filter.fileUsage'))
+  fieldToLabelMapping.set('fileUsage', getString('filestore.view.fileUsage'))
   fieldToLabelMapping.set('tags', getString('tagsLabel'))
-  fieldToLabelMapping.set('createdBy', getString('filestore.filter.createdBy'))
-  fieldToLabelMapping.set('referencedBy', getString('filestore.filter.referencedBy'))
+  fieldToLabelMapping.set('createdBy', getString('createdBy'))
+  fieldToLabelMapping.set('referencedBy', getString('referencedBy'))
 
   /* Through expandable filter text search */
   const debouncedFilesSearch = useCallback(

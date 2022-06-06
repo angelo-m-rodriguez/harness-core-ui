@@ -70,17 +70,18 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
       />
       <Menu>
         {items.length &&
-          items.map((item: FileStorePopoverItem) => {
+          items.map((item: FileStorePopoverItem, index: number) => {
             const { label, onClick, actionType, identifier } = item
             return (
               <RbacMenuItem
+                key={index}
                 icon={getIconByActionType(actionType)}
                 text={label}
                 permission={getPermissionsByActionType(actionType, identifier)}
                 onClick={e => {
                   e.stopPropagation()
                   onClick()
-                  close()
+                  toggle()
                 }}
               />
             )
