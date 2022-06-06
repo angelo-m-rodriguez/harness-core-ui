@@ -17,14 +17,17 @@ import {
   Link,
   Text
 } from '@wings-software/uicore'
-import { isEmpty, noop } from 'lodash-es'
+import { get, isEmpty, noop, set } from 'lodash-es'
 import type { FormikProps } from 'formik'
 import { Color, FontVariation } from '@wings-software/design-system'
 import cx from 'classnames'
 import type { StrategyConfig } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
-import type { StringsMap } from 'stringTypes'
-import { AvailableStrategies } from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategyUtils'
+import {
+  AvailableStrategies,
+  LoopingStrategyEnum,
+  Strategy
+} from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategyUtils'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { MonacoTextField } from '@common/components/MonacoTextField/MonacoTextField'
 import css from './LoopingStrategy.module.scss'
@@ -50,36 +53,23 @@ export function LoopingStrategy({
     selectedStrategy: StrategyConfig
   ): {
     label: string
-    value: string
+    value: LoopingStrategyEnum
     selected: boolean
     disabled: boolean
-  }[] => {
-    return AvailableStrategies.map(item => {
-      return {
-        label: item.label,
-        value: item.value,
-        selected:
-          (item.value === 'matrix' && !!selectedStrategy?.matrix) || (item.value === 'for' && !!selectedStrategy?.for),
-        disabled: !isEmpty(selectedStrategy) && !isEdit && !isReadonly
-      }
-    })
-  }
+  }[] =>
+    AvailableStrategies.map(item => ({
+      label: item.label,
+      value: item.value,
+      selected: !!get(selectedStrategy, item.value),
+      disabled: !isEmpty(selectedStrategy) && !isEdit && !isReadonly
+    }))
 
-  const getSelectedStrategyMetaData = (
-    selectedStrategy: StrategyConfig
-  ): { label: string; value: string; helperText: keyof StringsMap; helperLink: string } | undefined => {
-    return AvailableStrategies.find(
-      item =>
-        (item.value === 'matrix' && !!selectedStrategy?.matrix) || (item.value === 'for' && !!selectedStrategy?.for)
-    )
-  }
+  const getSelectedStrategyMetaData = (selectedStrategy: StrategyConfig): Strategy | undefined =>
+    AvailableStrategies.find(item => !!get(selectedStrategy, item.value))
 
-  const changeStrategy = (newStrategy: string, formikProps: FormikProps<StrategyConfig>) => {
+  const changeStrategy = (newStrategy: LoopingStrategyEnum, formikProps: FormikProps<StrategyConfig>) => {
     setIsEdit(true)
-    const newValues: StrategyConfig =
-      newStrategy === 'matrix'
-        ? { matrix: {}, for: undefined, batchSize: undefined }
-        : { matrix: undefined, for: {}, batchSize: undefined }
+    const newValues: StrategyConfig = set({}, newStrategy, {})
     formikProps.setValues(newValues)
   }
 
@@ -195,7 +185,7 @@ export function LoopingStrategy({
                         </Layout.Horizontal>
                       </Container>
                       <Container>
-                        <MonacoTextField name={'matrix'} expressions={expressions} disabled={isReadonly} />
+                        <MonacoTextField name={'random'} expressions={expressions} disabled={isReadonly} />
                       </Container>
                     </Layout.Vertical>
                   </Container>

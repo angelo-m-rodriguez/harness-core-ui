@@ -7,18 +7,36 @@
 
 import type { StringsMap } from 'stringTypes'
 
-export const AvailableStrategies: { label: string; value: string; helperText: keyof StringsMap; helperLink: string }[] =
-  [
-    {
-      label: 'Matrix',
-      value: 'matrix',
-      helperText: 'pipeline.loopingStrategy.helperText.matrix',
-      helperLink: 'https://www.google.com'
-    },
-    {
-      label: 'For Loop',
-      value: 'for',
-      helperText: 'pipeline.loopingStrategy.helperText.for',
-      helperLink: 'https://www.google.com'
-    }
-  ]
+export enum LoopingStrategyEnum {
+  Matrix = 'matrix',
+  For = 'for',
+  Parallelism = 'parallelism'
+}
+
+export interface Strategy {
+  label: string
+  value: LoopingStrategyEnum
+  helperText: keyof StringsMap
+  helperLink: string
+}
+
+export const AvailableStrategies: Strategy[] = [
+  {
+    label: 'Matrix',
+    value: LoopingStrategyEnum.Matrix,
+    helperText: 'pipeline.loopingStrategy.helperText.matrix',
+    helperLink: 'https://www.google.com'
+  },
+  {
+    label: 'For Loop',
+    value: LoopingStrategyEnum.For,
+    helperText: 'pipeline.loopingStrategy.helperText.for',
+    helperLink: 'https://www.google.com'
+  },
+  {
+    label: 'Parallelism',
+    value: LoopingStrategyEnum.Parallelism,
+    helperText: 'pipeline.loopingStrategy.helperText.parallelism',
+    helperLink: 'https://www.google.com'
+  }
+]

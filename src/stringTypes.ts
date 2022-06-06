@@ -3034,6 +3034,7 @@ export interface StringsMap {
   'pipeline.logs.sectionName': string
   'pipeline.loopingStrategy.helperText.for': string
   'pipeline.loopingStrategy.helperText.matrix': string
+  'pipeline.loopingStrategy.helperText.parallelism': string
   'pipeline.loopingStrategy.learnMore': string
   'pipeline.loopingStrategy.subTitle': string
   'pipeline.loopingStrategy.title': string

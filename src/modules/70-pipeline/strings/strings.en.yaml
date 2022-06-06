@@ -376,7 +376,8 @@ loopingStrategy:
   learnMore: Learn more about Looping strategies
   helperText:
     matrix: Matrix gives the ability to execute the same set of tasks multiple times for a bunch of different configurations.
-    for: For loop gives the ability to execute the same set of tasks multiple times.
+    for: Placeholder for helper text of for loop.
+    parallelism: Placeholder for helper text of parallelism
 selectOrCreatePipeline:
   pipelineNameRequired: Please select a pipeline
   setupHeader: Create or Select a Pipeline
