@@ -71,6 +71,20 @@ const CORoutingTable: React.FC<CORoutingTableProps> = props => {
     />
   )
 
+  const NumericInput: Field['renderer'] = (value, _rowIndex, handleChange) => {
+    return (
+      <TextInput
+        defaultValue={value}
+        value={value}
+        style={{ border: 'none', marginBottom: 0 }}
+        onChange={e => {
+          const text = Number((e.currentTarget as HTMLInputElement).value)
+          handleChange(text && !isNaN(text) ? text : 0)
+        }}
+      />
+    )
+  }
+
   const getProtocolSelect: Field['renderer'] = (value, _rowIndex, handleChange) => (
     <Select
       className={css.selectCell}
@@ -89,7 +103,7 @@ const CORoutingTable: React.FC<CORoutingTableProps> = props => {
     {
       name: 'port',
       label: 'PORT',
-      renderer: getTextInput
+      renderer: NumericInput
     },
     {
       name: 'action',
@@ -118,7 +132,7 @@ const CORoutingTable: React.FC<CORoutingTableProps> = props => {
     {
       name: 'target_port',
       label: 'TARGET PORT',
-      renderer: getTextInput
+      renderer: NumericInput
     },
     {
       name: 'redirect_url',
