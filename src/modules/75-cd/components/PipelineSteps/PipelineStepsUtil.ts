@@ -30,14 +30,8 @@ export enum InfraDeploymentType {
   ServerlessGoogleFunctions = 'ServerlessGoogleFunctions',
   ServerlessAzureFunctions = 'ServerlessAzureFunctions',
   AmazonSAM = 'AwsSAM',
-  AzureFunctions = 'AzureFunctions'
-}
-
-export const deploymentTypeToInfraTypeMap = {
-  [ServiceDeploymentType.ServerlessAwsLambda]: InfraDeploymentType.ServerlessAwsLambda,
-  [ServiceDeploymentType.ServerlessAzureFunctions]: InfraDeploymentType.ServerlessAzureFunctions,
-  [ServiceDeploymentType.ServerlessGoogleFunctions]: InfraDeploymentType.ServerlessGoogleFunctions,
-  [ServiceDeploymentType.ssh]: InfraDeploymentType.PDC
+  AzureFunctions = 'AzureFunctions',
+  SshWinRmAzure = 'SshWinRmAzure'
 }
 
 export function getNameSpaceSchema(
@@ -138,9 +132,11 @@ const getInfrastructureDefinitionValidationSchema = (
       return Yup.object().shape({
         credentialsRef: getSshKeyRefSchema(getString)
       })
-    } else {
-      return getValidationSchema(getString)
     }
+    if (deploymentType === ServiceDeploymentType.winrm) {
+      return Yup.object().shape({})
+    }
+    return getValidationSchema(getString)
   } else {
     return Yup.object().shape({
       connectorRef: getConnectorSchema(getString),

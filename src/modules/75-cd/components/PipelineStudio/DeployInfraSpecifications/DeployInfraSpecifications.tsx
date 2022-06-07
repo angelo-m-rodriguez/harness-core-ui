@@ -30,6 +30,7 @@ import type {
 } from '@cd/components/PipelineSteps/InfraProvisioning/InfraProvisioning'
 import type { GcpInfrastructureSpec } from '@cd/components/PipelineSteps/GcpInfrastructureSpec/GcpInfrastructureSpec'
 import type { PDCInfrastructureSpec } from '@cd/components/PipelineSteps/PDCInfrastructureSpec/PDCInfrastructureSpec'
+import type { SshWinRmAzureInfrastructureSpec } from '@cd/components/PipelineSteps/SshWinRmAzureInfrastructureSpec/SshWinRmAzureInfrastructureSpec'
 import { useStrings } from 'framework/strings'
 import {
   PipelineContextType,
@@ -92,7 +93,7 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
   const { getString } = useStrings()
   const { submitFormsForTab } = React.useContext(StageErrorContext)
   const { errorMap } = useValidationErrors()
-  const { NG_AZURE, SSH_NG } = useFeatureFlags()
+  const { NG_AZURE } = useFeatureFlags()
   React.useEffect(() => {
     if (errorMap.size > 0) {
       submitFormsForTab(DeployTabs.INFRASTRUCTURE)
@@ -194,8 +195,7 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
   const infraGroups = React.useMemo(
     () =>
       getInfraGroups(selectedDeploymentType, getString, {
-        NG_AZURE: defaultTo(NG_AZURE, false),
-        SSH_NG: defaultTo(SSH_NG, false)
+        NG_AZURE: defaultTo(NG_AZURE, false)
       }),
     [selectedDeploymentType, NG_AZURE]
   )
@@ -478,6 +478,34 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
                   delegateSelectors: value.delegateSelectors
                 },
                 InfraDeploymentType.PDC
+              )
+            }}
+          />
+        )
+      }
+      case InfraDeploymentType.SshWinRmAzure: {
+        return (
+          <StepWidget<SshWinRmAzureInfrastructureSpec>
+            factory={factory}
+            key={stage?.stage?.identifier}
+            readonly={isReadonly}
+            initialValues={initialInfrastructureDefinitionValues as SshWinRmAzureInfrastructureSpec}
+            type={StepType.SshWinRmAzure}
+            stepViewType={StepViewType.Edit}
+            allowableTypes={allowableTypes}
+            onUpdate={value => {
+              onUpdateInfrastructureDefinition(
+                {
+                  connectorRef: value.connectorRef,
+                  credentialsRef: value.credentialsRef,
+                  resourceGroup: value.resourceGroup,
+                  cloudProvider: value.cloudProvider,
+                  subscriptionId: value.subscriptionId,
+                  delegateSelectors: value.delegateSelectors,
+                  tags: value.tags,
+                  usePublicDNS: value.usePublicDNS
+                },
+                InfraDeploymentType.SshWinRmAzure
               )
             }}
           />

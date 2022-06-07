@@ -159,6 +159,11 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
         icon: 'secret-ssh',
         value: ServiceDeploymentType.ssh
       },
+      {
+        label: getString('pipeline.serviceDeploymentTypes.winrm'),
+        icon: 'command-winrm',
+        value: ServiceDeploymentType.winrm
+      },
       ...getServerlessDeploymentTypes(getString, SERVERLESS_SUPPORT)
     ],
     [getString, SERVERLESS_SUPPORT]
@@ -181,11 +186,6 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
         label: getString('pipeline.serviceDeploymentTypes.awsCodeDeploy'),
         icon: 'app-aws-code-deploy',
         value: ServiceDeploymentType.awsCodeDeploy
-      },
-      {
-        label: getString('pipeline.serviceDeploymentTypes.winrm'),
-        icon: 'command-winrm',
-        value: ServiceDeploymentType.winrm
       },
       {
         label: getString('pipeline.serviceDeploymentTypes.awsLambda'),

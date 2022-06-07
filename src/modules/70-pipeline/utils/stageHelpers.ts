@@ -44,7 +44,7 @@ export enum ServiceDeploymentType {
   amazonEcs = 'amazonEcs',
   amazonAmi = 'amazonAmi',
   awsCodeDeploy = 'awsCodeDeploy',
-  winrm = 'winrm',
+  winrm = 'WinRm',
   awsLambda = 'awsLambda',
   pcf = 'pcf',
   ssh = 'Ssh',
@@ -214,16 +214,20 @@ export const isServerlessDeploymentType = (deploymentType: string): boolean => {
     deploymentType === ServiceDeploymentType.ServerlessAzureFunctions ||
     deploymentType === ServiceDeploymentType.ServerlessGoogleFunctions ||
     deploymentType === ServiceDeploymentType.AmazonSAM ||
-    deploymentType === ServiceDeploymentType.AzureFunctions ||
-    deploymentType === ServiceDeploymentType.ssh
+    deploymentType === ServiceDeploymentType.AzureFunctions
   )
+}
+
+export const isSSHWinRMDeploymentType = (deploymentType: string): boolean => {
+  return deploymentType === ServiceDeploymentType.winrm || deploymentType === ServiceDeploymentType.ssh
 }
 
 export const detailsHeaderName: Record<string, string> = {
   [ServiceDeploymentType.ServerlessAwsLambda]: 'Amazon Web Services Details',
   [ServiceDeploymentType.ServerlessAzureFunctions]: 'Azure Details',
   [ServiceDeploymentType.ServerlessGoogleFunctions]: 'GCP Details',
-  [ServiceDeploymentType.Pdc]: 'Infrastructure definition'
+  [ServiceDeploymentType.Pdc]: 'Infrastructure definition',
+  [ServiceDeploymentType.winrm]: 'WinRM'
 }
 
 export const isServerlessManifestType = (selectedManifest: ManifestTypes | null): boolean => {
