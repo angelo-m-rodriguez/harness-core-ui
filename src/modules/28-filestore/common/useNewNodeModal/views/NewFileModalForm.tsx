@@ -26,7 +26,7 @@ import { useToaster } from '@common/components'
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
-import { useCreate, useUpdate } from 'services/cd-ng'
+import { NGTag, useCreate, useUpdate } from 'services/cd-ng'
 import { getFileUsageNameByType, getMimeTypeByName } from '@filestore/utils/FileStoreUtils'
 import { FileStoreNodeTypes, FileUsage, NewFileDTO, NewFileFormDTO } from '@filestore/interfaces/FileStore'
 import type { FileStoreContextState, FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
@@ -41,6 +41,20 @@ interface NewFileModalData {
   tempNode?: FileStoreNodeDTO | undefined
   currentNode: FileStoreNodeDTO
   fileStoreContext: FileStoreContextState
+}
+
+export const getTags = (tags?: NGTag[]) => {
+  const result = {} as any
+
+  tags?.forEach(tag => {
+    if (!tag.key) {
+      return
+    } else {
+      result[tag.key] = tag.value
+    }
+  })
+
+  return result
 }
 
 const NewFileForm: React.FC<NewFileModalData> = props => {
@@ -63,10 +77,10 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
         identifier: currentNode.identifier,
         fileUsage: currentNode.fileUsage as string,
         content: currentNode.content,
-        tags: currentNode.tags
+        tags: getTags(currentNode.tags)
       })
     }
-  }, [currentNode, editMode])
+  }, [])
 
   const { mutate: createFile, loading: createLoading } = useCreate({
     queryParams
@@ -84,6 +98,15 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
     const data = new FormData()
     Object.keys(values).forEach(prop => {
       if (prop === 'tags') {
+        data.append(
+          prop,
+          JSON.stringify(
+            Object.keys(values[prop]).map(key => ({
+              key,
+              value: values[prop][key]
+            }))
+          )
+        )
         return
       }
       data.append(prop, values[prop])
@@ -169,7 +192,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
       formName="newFile"
       validationSchema={Yup.object().shape({
         identifier: IdentifierSchema(),
-        fileUsage: NameSchema({ requiredErrorMsg: 'File Usage is require' })
+        fileUsage: NameSchema({ requiredErrorMsg: 'File Usage is required' })
       })}
       onSubmit={values => {
         modalErrorHandler?.hide()

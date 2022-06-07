@@ -118,7 +118,6 @@ function FileDetails(): React.ReactElement {
     const defaultMimeType = currentNode?.mimeType ? currentNode.mimeType : ExtensionType.TEXT
 
     formData.append('type', FileStoreNodeTypes.FILE)
-
     formData.append('content', values.fileEditor)
     formData.append('mimeType', defaultMimeType)
     formData.append('name', currentNode.name)
