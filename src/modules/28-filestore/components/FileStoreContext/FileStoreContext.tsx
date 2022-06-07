@@ -8,7 +8,6 @@
 import React, { createContext, useState, useCallback } from 'react'
 import type { FileStoreNodeDTO as NodeDTO, FileDTO, NGTag } from 'services/cd-ng'
 import { useGetFolderNodes } from 'services/cd-ng'
-import { Scope } from '@common/interfaces/SecretsInterface'
 import { FILE_VIEW_TAB, FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import { ScopedObjectDTO, useFileStoreScope } from '../../common/useFileStoreScope/useFileStoreScope'
@@ -67,7 +66,7 @@ interface FileStoreContextProps {
 }
 
 export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props: FileStoreContextProps) => {
-  const { scope = Scope.ACCOUNT, isModalView = false } = props
+  const { scope = '', isModalView = false } = props
   const queryParams = useFileStoreScope({
     scope,
     isModalView
