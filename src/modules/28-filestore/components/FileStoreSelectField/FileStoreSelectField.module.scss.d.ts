@@ -7,9 +7,6 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly descriptions: string
-  readonly noFilesTitle: string
-  readonly noViewContainer: string
-  readonly noViewContainerModal: string
+  readonly container: string
 }
 export default styles

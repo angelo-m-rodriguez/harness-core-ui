@@ -7,7 +7,7 @@
 
 import React from 'react'
 
-import { Dialog } from '@harness/uicore'
+import { Dialog, useToaster } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 
 import { useStrings } from 'framework/strings'
@@ -31,6 +31,7 @@ const useNewNodeModal = ({
   fileStoreContext
 }: NewNodeModal): FileStorePopoverItem => {
   const { getString } = useStrings()
+  const { showError } = useToaster()
 
   const getNodeConfigs = (typeNode: FileStoreNodeTypes): any => {
     switch (typeNode) {
@@ -78,8 +79,16 @@ const useNewNodeModal = ({
     [parentIdentifier, editMode, tempNode, currentNode, fileStoreContext]
   )
 
+  const handleClick = (): void => {
+    if (fileStoreContext?.currentNode.type === FileStoreNodeTypes.FILE && !editMode) {
+      showError('Folder should be selected')
+      return
+    }
+    showModal()
+  }
+
   return {
-    onClick: showModal,
+    onClick: handleClick,
     label: !editMode ? title : label,
     actionType: editMode ? FileStoreActionTypes.UPDATE_NODE : FileStoreActionTypes.CREATE_NODE,
     identifier: parentIdentifier

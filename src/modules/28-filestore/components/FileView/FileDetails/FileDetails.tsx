@@ -6,12 +6,10 @@
  */
 import React, { useContext, useEffect, useState } from 'react'
 import { Button, Container, Formik, FormikForm, Layout, Text, Icon, ButtonVariation, useToaster } from '@harness/uicore'
-import { useParams } from 'react-router-dom'
 import { Spinner } from '@blueprintjs/core'
 import { Color } from '@harness/design-system'
 
 import { get } from 'lodash-es'
-import type { ProjectPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import type { StringsMap } from 'stringTypes'
 
 import { useStrings } from 'framework/strings'
@@ -38,10 +36,9 @@ import css from '../FileView.module.scss'
 
 function FileDetails(): React.ReactElement {
   const fileStoreContext = useContext(FileStoreContext)
-  const { currentNode, updateCurrentNode, isCachedNode } = fileStoreContext
+  const { currentNode, updateCurrentNode, isCachedNode, queryParams, isModalView } = fileStoreContext
 
   const [errorMessage, setErrorMessage] = useState('')
-  const params = useParams<PipelineType<ProjectPathProps>>()
   const [value, setValue] = useState('')
   const [language, setLanguage] = useState<string>(LanguageType.TEXT)
   const [isUnsupported, setIsUnsupported] = useState<boolean>(false)
@@ -61,8 +58,6 @@ function FileDetails(): React.ReactElement {
     isBtn: true,
     eventMethod: UPLOAD_EVENTS.REPLACE
   })
-
-  const { accountId, orgIdentifier, projectIdentifier } = params
 
   useEffect(() => {
     if (isCachedNode(currentNode.identifier) && errorMessage === FSErrosType.UNSUPPORTED_FORMAT) {
@@ -92,21 +87,17 @@ function FileDetails(): React.ReactElement {
   }, [currentNode, setErrorMessage, isCachedNode])
 
   const { mutate: createNode } = useCreate({
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
 
   const { data, loading: downloadLoading } = useDownloadFile({
     identifier: currentNode.identifier,
-    queryParams: {
-      accountIdentifier: accountId,
-      projectIdentifier,
-      orgIdentifier
-    }
+    queryParams
   })
 
   const { mutate: updateNode, loading: saveLoading } = useUpdate({
     identifier: currentNode.identifier,
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
 
   const [canEdit] = usePermission({
@@ -154,7 +145,10 @@ function FileDetails(): React.ReactElement {
 
   useEffect(() => {
     if (data && !isCachedNode(currentNode.identifier)) {
-      ;(data as unknown as Response).text().then((content: string) => setValue(content))
+      ;(data as unknown as Response)
+        .clone()
+        .text()
+        .then((content: string) => setValue(content))
     }
   }, [data, isCachedNode, currentNode.identifier])
 
@@ -279,7 +273,7 @@ function FileDetails(): React.ReactElement {
                 </Layout.Horizontal>
                 {!isUnsupported && (
                   <MonacoEditor
-                    height={window.innerHeight - 218}
+                    height={!isModalView ? window.innerHeight - 218 : 400}
                     value={get(formikProps.values, 'fileEditor')}
                     language={language}
                     options={{

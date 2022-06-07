@@ -24,8 +24,8 @@ export const createRequestBodyPayload = ({
 }: {
   isUpdate: boolean
   data: FilterDataInterface<FileStoreFilterFormType, FilterInterface>
-  projectIdentifier: string
-  orgIdentifier: string
+  projectIdentifier?: string | undefined
+  orgIdentifier?: string | undefined
   createdByList: EmbeddedUserDetailsDTO[]
 }): FilterDTO => {
   const {

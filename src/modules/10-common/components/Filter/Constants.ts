@@ -13,8 +13,8 @@ export interface FilterInterface {
   filterVisibility?: FilterDTO['filterVisibility']
   identifier: string
   filterProperties?: any
-  orgIdentifier?: string
-  projectIdentifier?: string
+  orgIdentifier?: string | undefined
+  projectIdentifier?: string | undefined
 }
 
 export interface FilterDataInterface<T, U> {

@@ -16,12 +16,12 @@ import css from '@filestore/components/FileView/FileView.module.scss'
 
 export default function FileView(): React.ReactElement {
   const { getString } = useStrings()
-  const { activeTab, setActiveTab } = useContext(FileStoreContext)
+  const { activeTab, setActiveTab, isModalView } = useContext(FileStoreContext)
 
   return (
     <Container
       background={Color.WHITE}
-      style={{ width: '100%', height: 'calc(100% - 15px)' }}
+      style={{ width: '100%', height: isModalView ? 530 : 'calc(100vh - 200px)' }}
       className={css.mainFileView}
     >
       <Tabs

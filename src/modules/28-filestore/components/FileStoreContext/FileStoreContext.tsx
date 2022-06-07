@@ -6,12 +6,12 @@
  */
 
 import React, { createContext, useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
 import type { FileStoreNodeDTO as NodeDTO, FileDTO, NGTag } from 'services/cd-ng'
-import type { ProjectPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useGetFolderNodes } from 'services/cd-ng'
+import { Scope } from '@common/interfaces/SecretsInterface'
 import { FILE_VIEW_TAB, FileStoreNodeTypes, FileUsage } from '@filestore/interfaces/FileStore'
 import { FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { ScopedObjectDTO, useFileStoreScope } from '../../common/useFileStoreScope/useFileStoreScope'
 
 export interface FileContentDTO extends FileDTO {
   content: string
@@ -46,6 +46,9 @@ export interface FileStoreContextState {
   updateTempNodes: (node: FileStoreNodeDTO) => void
   removeFromTempNodes: (nodeId: string) => void
   isCachedNode: (nodeId: string) => FileStoreNodeDTO | undefined
+  isModalView: boolean
+  scope: string
+  queryParams: ScopedObjectDTO
 }
 
 export interface GetNodeConfig {
@@ -57,7 +60,18 @@ export interface GetNodeConfig {
 
 export const FileStoreContext = createContext({} as FileStoreContextState)
 
-export const FileStoreContextProvider: React.FC = props => {
+interface FileStoreContextProps {
+  scope?: string
+  isModalView?: boolean
+  children?: any
+}
+
+export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props: FileStoreContextProps) => {
+  const { scope = Scope.ACCOUNT, isModalView = false } = props
+  const queryParams = useFileStoreScope({
+    scope,
+    isModalView
+  })
   const [tempNodes, setTempNodes] = useState<FileStoreNodeDTO[]>([])
   const [activeTab, setActiveTab] = useState<FILE_VIEW_TAB>(FILE_VIEW_TAB.DETAILS)
   const [loading, setLoading] = useState<boolean>(false)
@@ -68,15 +82,9 @@ export const FileStoreContextProvider: React.FC = props => {
     children: []
   } as FileStoreNodeDTO)
   const [fileStore, setFileStore] = useState<FileStoreNodeDTO[] | undefined>()
-  const params = useParams<PipelineType<ProjectPathProps>>()
-  const { accountId, orgIdentifier, projectIdentifier } = params
 
   const { mutate: getFolderNodes, loading: isGettingFolderNodes } = useGetFolderNodes({
-    queryParams: {
-      accountIdentifier: accountId,
-      projectIdentifier,
-      orgIdentifier
-    }
+    queryParams
   })
 
   const setCurrentNode = (node: FileStoreNodeDTO): void => {
@@ -160,7 +168,10 @@ export const FileStoreContextProvider: React.FC = props => {
         removeFromTempNodes,
         isCachedNode,
         activeTab,
-        setActiveTab
+        setActiveTab,
+        isModalView,
+        scope,
+        queryParams
       }}
     >
       {props.children}

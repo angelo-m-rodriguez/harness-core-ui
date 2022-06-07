@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 
 import { v4 as uuid } from 'uuid'
 import { useToaster } from '@harness/uicore'
@@ -134,12 +134,15 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
     }
   }
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     const node = document.getElementById('file-upload')
-    node?.addEventListener('change', handleChange, false)
+    node?.addEventListener('change', handleChange, {
+      capture: false,
+      once: true
+    })
 
     const clickEvent = new MouseEvent('click', {
-      bubbles: true,
+      bubbles: false,
       cancelable: true
     })
     node?.dispatchEvent(clickEvent)
@@ -147,7 +150,7 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
     return () => {
       node?.removeEventListener('change', handleChange)
     }
-  }, [])
+  }
 
   return {
     onClick: handleClick,

@@ -5,18 +5,13 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-.noFilesTitle {
-  margin-top: 8px !important;
-}
-
-.descriptions {
-  font-weight: 400;
-  margin-top: var(--spacing-medium) !important;
-}
-
-.noViewContainer {
-  height: 100%;
-}
-.noViewContainerModal {
-  height: 600px;
+.container {
+  min-height: 32px;
+  border: 1px solid var(--bp3-intent-color);
+  background-color: var(--white) !important;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  padding-left: var(--spacing-xsmall);
+  cursor: pointer;
 }

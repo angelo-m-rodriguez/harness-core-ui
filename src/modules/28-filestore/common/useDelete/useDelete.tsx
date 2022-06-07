@@ -9,12 +9,10 @@ import React, { useCallback, useContext } from 'react'
 
 import { Text, useConfirmationDialog, useToaster } from '@wings-software/uicore'
 import { Intent } from '@blueprintjs/core'
-import { useParams } from 'react-router-dom'
 import { capitalize as _capitalize, defaultTo as _defaultTo, lowerCase as _lowerCase } from 'lodash-es'
 import { String, useStrings } from 'framework/strings'
 import { FileStoreNodeDTO, useDeleteFile } from 'services/cd-ng'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FILE_VIEW_TAB, FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
@@ -22,8 +20,7 @@ import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constant
 const useDelete = (identifier: string, name: string, type: string): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
-  const { setActiveTab, setCurrentNode, getNode } = useContext(FileStoreContext)
-  const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
+  const { setActiveTab, setCurrentNode, getNode, queryParams } = useContext(FileStoreContext)
 
   const getConfirmationDialogContent = (): JSX.Element => {
     return (
@@ -41,11 +38,7 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
   }
 
   const { mutate: deleteFile } = useDeleteFile({
-    queryParams: {
-      accountIdentifier: accountId,
-      projectIdentifier,
-      orgIdentifier
-    }
+    queryParams
   })
 
   const { openDialog: openReferenceErrorDialog } = useConfirmationDialog({

@@ -24,13 +24,13 @@ export interface EmptyNodeViewProps {
 
 export default function EmptyNodeView({ title, description = '' }: EmptyNodeViewProps): React.ReactElement {
   const { getString } = useStrings()
-  const { currentNode } = useContext(FileStoreContext)
+  const { currentNode, isModalView } = useContext(FileStoreContext)
 
   const NewButton = React.useMemo(() => {
     return <NewFileButton parentIdentifier={currentNode.identifier} />
   }, [currentNode])
   return (
-    <Container height={'100%'}>
+    <Container className={isModalView ? css.noViewContainerModal : css.noViewContainer}>
       <Layout.Vertical spacing={'xxlarge'} height={'100%'} flex={{ align: 'center-center' }}>
         <img src={filestoreIllustration} width={'220px'} />
         <Container>

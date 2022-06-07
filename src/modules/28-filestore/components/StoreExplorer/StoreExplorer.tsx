@@ -21,14 +21,14 @@ export interface StoreExplorerProps {
 }
 
 export default function StoreExplorer({ fileStore }: StoreExplorerProps): React.ReactElement {
-  const { currentNode } = useContext(FileStoreContext)
+  const { currentNode, isModalView } = useContext(FileStoreContext)
 
   const NewButton = React.useMemo(() => {
     return <NewFileButton parentIdentifier={currentNode.identifier} />
   }, [currentNode])
 
   return (
-    <Layout.Vertical height="100%">
+    <Layout.Vertical style={{ height: isModalView ? 530 : '100%' }}>
       <Container background={Color.GREY_0} padding={{ top: 'medium', left: 'medium' }} className={css.explorer}>
         {NewButton}
         <RootNodesList rootStore={fileStore} />

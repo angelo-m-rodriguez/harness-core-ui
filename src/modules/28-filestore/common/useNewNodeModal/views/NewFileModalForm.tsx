@@ -16,12 +16,12 @@ import {
   FormInput
 } from '@harness/uicore'
 import * as Yup from 'yup'
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
 
 import { NameIdDescriptionTags } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 
 import { useToaster } from '@common/components'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+// import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
@@ -45,8 +45,7 @@ interface NewFileModalData {
 
 const NewFileForm: React.FC<NewFileModalData> = props => {
   const { close, editMode = false, tempNode, fileStoreContext, currentNode } = props
-  const { updateCurrentNode, removeFromTempNodes, getNode } = fileStoreContext
-  const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
+  const { updateCurrentNode, removeFromTempNodes, getNode, queryParams } = fileStoreContext
   const [initialValues, setInitialValues] = useState<Omit<NewFileDTO, 'type'>>({
     name: '',
     description: '',
@@ -70,11 +69,11 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
   }, [currentNode, editMode])
 
   const { mutate: createFile, loading: createLoading } = useCreate({
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
   const { mutate: updateNode, loading: updateLoading } = useUpdate({
     identifier: currentNode.identifier,
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
 
   const { getString } = useStrings()

@@ -7,9 +7,18 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly descriptions: string
-  readonly noFilesTitle: string
-  readonly noViewContainer: string
-  readonly noViewContainerModal: string
+  readonly container: string
+  readonly crossIcon: string
+  readonly dialog: string
+  readonly fileStoreField: string
+  readonly noDataCardImg: string
+  readonly noDataContainer: string
+  readonly search: string
+  readonly searchBox: string
+  readonly tabClass: string
+  readonly tabIcon: string
+  readonly tabTitleContainer: string
+  readonly tabValue: string
+  readonly tabsContainer: string
 }
 export default styles

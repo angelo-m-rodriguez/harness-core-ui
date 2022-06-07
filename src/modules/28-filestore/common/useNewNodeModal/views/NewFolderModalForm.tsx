@@ -15,12 +15,10 @@ import {
   Layout
 } from '@harness/uicore'
 import * as Yup from 'yup'
-import { useParams } from 'react-router-dom'
 
 import { NameId } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 
 import { useToaster } from '@common/components'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
@@ -40,8 +38,7 @@ interface NewFolderModalData {
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
   const { close, fileStoreContext, editMode } = props
-  const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
-  const { currentNode, getNode } = fileStoreContext
+  const { currentNode, getNode, queryParams } = fileStoreContext
   const [initialValues, setInitialValues] = useState<NewFolderDTO>({
     name: '',
     identifier: '',
@@ -59,12 +56,12 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
   }, [currentNode, editMode])
 
   const { mutate: createFolder, loading: createLoading } = useCreate({
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
 
   const { mutate: updateFolder, loading: updateLoading } = useUpdate({
     identifier: currentNode.identifier,
-    queryParams: { accountIdentifier: accountId, projectIdentifier, orgIdentifier }
+    queryParams
   })
 
   useEffect(() => {
