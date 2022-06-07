@@ -126,15 +126,7 @@ export const GovernanceRouteDestinations: React.FC<{
       <RouteWithLayout path={routes.toGovernance(pathProps)} sidebarProps={sidebarProps}>
         <GovernanceRemoteComponentMounter
           spinner={
-            <Container
-              style={{
-                position: 'fixed',
-                top: '50%',
-                left: '290px',
-                width: 'calc(100% - 290px)',
-                height: `100%`
-              }}
-            >
+            <Container height="100%" flex={{ align: 'center-center' }}>
               <ContainerSpinner />
             </Container>
           }
