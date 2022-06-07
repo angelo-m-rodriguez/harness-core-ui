@@ -88,7 +88,8 @@ export enum NodeType {
   GroupNode = 'group-node',
   IconNode = 'icon-node',
   EndNode = 'end-node',
-  StepGroupNode = 'StepGroup'
+  StepGroupNode = 'StepGroup',
+  MatrixNode = 'MATRIX'
 }
 
 export interface NodeProps<T> {
@@ -168,4 +169,5 @@ export interface BaseReactComponentProps {
   width?: number
   height?: number
   data?: any
+  showMarkers?: boolean
 }

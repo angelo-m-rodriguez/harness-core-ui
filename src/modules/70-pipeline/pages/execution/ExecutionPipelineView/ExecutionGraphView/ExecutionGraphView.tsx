@@ -87,7 +87,7 @@ export default function ExecutionGraphView(): React.ReactElement {
     }
   }
 
-  function handleStageSelection(stage: string): void {
+  function handleStageSelection(stage: string, stageId?: string): void {
     const selectedStage = pipelineStagesMap.get(stage)
 
     if (isExecutionNotStarted(selectedStage?.status) || isExecutionSkipped(selectedStage?.status)) {
@@ -96,7 +96,8 @@ export default function ExecutionGraphView(): React.ReactElement {
 
     const params = {
       ...queryParams,
-      stage
+      stage,
+      stageId
     }
 
     delete params.step

@@ -106,7 +106,6 @@ export function PipelineGraphRecursive({
       {EndNode && showEndNode && startEndNodeNeeded && (
         <EndNode id={uniqueNodeIds?.endNode as string} className={classNames(css.graphNode)} />
       )}
-      <div></div>
     </div>
   )
 }

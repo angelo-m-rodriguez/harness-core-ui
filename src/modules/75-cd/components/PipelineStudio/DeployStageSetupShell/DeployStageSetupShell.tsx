@@ -109,7 +109,7 @@ export default function DeployStageSetupShell(): JSX.Element {
     } else {
       setSelectedSectionId(DeployTabs.SERVICE)
     }
-  }, [selectedSectionId])
+  }, [])
 
   React.useEffect(() => {
     if (selectedStepId) {

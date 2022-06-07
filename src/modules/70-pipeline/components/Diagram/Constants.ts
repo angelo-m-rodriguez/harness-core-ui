@@ -44,7 +44,8 @@ export const DiagramType: { [key: string]: string } = {
   GroupNode: 'group-node',
   StepGroupNode: 'step-group-node',
   IconNode: 'icon-node',
-  Link: 'link'
+  Link: 'link',
+  MatrixNode: 'MATRIX'
 }
 
 export enum StepsType {

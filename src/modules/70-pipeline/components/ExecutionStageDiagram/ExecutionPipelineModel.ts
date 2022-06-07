@@ -14,7 +14,8 @@ import type { NodeRunInfo } from 'services/pipeline-ng'
 export enum ExecutionPipelineNodeType {
   DIAMOND = 'DIAMOND',
   NORMAL = 'NORMAL',
-  ICON = 'ICON'
+  ICON = 'ICON',
+  MATRIX = 'MATRIX'
 }
 
 export interface StageOptions extends SelectOption {

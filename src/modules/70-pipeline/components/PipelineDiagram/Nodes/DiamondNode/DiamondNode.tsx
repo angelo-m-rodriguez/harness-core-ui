@@ -36,6 +36,7 @@ export function DiamondNodeWidget(props: any): JSX.Element {
     ExecutionPipelineNodeType.DIAMOND
   )
   const isTemplateNode = props?.data?.isTemplateNode
+  const showMarkers = defaultTo(props?.showMarkers, true)
   return (
     <div
       className={cssDefault.defaultNode}
@@ -49,8 +50,10 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           type: Event.ClickNode,
           target: event.target,
           data: {
-            entityType: DiagramType.Default,
-            ...props
+            ...props,
+            entityType: DiagramType.DiamondNode,
+            identifier: props?.identifier,
+            id: props.id
           }
         })
       }}
@@ -62,7 +65,7 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           cssDefault.defaultCard,
           css.diamond,
           { [cssDefault.selected]: isSelected },
-          { [css.top]: props.data.graphType === PipelineGraphType.STAGE_GRAPH }
+          { [css.top]: props?.data?.graphType === PipelineGraphType.STAGE_GRAPH }
         )}
         draggable={true}
         onDragStart={event => {
@@ -83,7 +86,7 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           id={props.id}
           data-nodeid={props.id}
           className={css.horizontalBar}
-          style={{ height: props.data.graphType === PipelineGraphType.STAGE_GRAPH ? 40 : 64 }}
+          style={{ height: props.data?.graphType === PipelineGraphType.STAGE_GRAPH ? 40 : 64 }}
           onMouseEnter={event => {
             event.stopPropagation()
 
@@ -102,20 +105,24 @@ export function DiamondNodeWidget(props: any): JSX.Element {
             })
           }}
         >
-          <div
-            className={cx(cssDefault.markerStart, cssDefault.diamondStageLeft, {
-              [cssDefault.diamondStep]: props.data.graphType === PipelineGraphType.STEP_GRAPH
-            })}
-          >
-            <SVGMarker />
-          </div>
-          <div
-            className={cx(cssDefault.markerEnd, cssDefault.diamondStageRight, {
-              [cssDefault.diamondStep]: props.data.graphType === PipelineGraphType.STEP_GRAPH
-            })}
-          >
-            <SVGMarker />
-          </div>
+          {showMarkers && (
+            <>
+              <div
+                className={cx(cssDefault.markerStart, cssDefault.diamondStageLeft, {
+                  [cssDefault.diamondStep]: props.data?.graphType === PipelineGraphType.STEP_GRAPH
+                })}
+              >
+                <SVGMarker />
+              </div>
+              <div
+                className={cx(cssDefault.markerEnd, cssDefault.diamondStageRight, {
+                  [cssDefault.diamondStep]: props.data?.graphType === PipelineGraphType.STEP_GRAPH
+                })}
+              >
+                <SVGMarker />
+              </div>
+            </>
+          )}
         </div>
         <div className="execution-running-animation" />
         {props?.data?.isInComplete && (
@@ -229,10 +236,10 @@ export function DiamondNodeWidget(props: any): JSX.Element {
               [cssDefault.show]: showAddLink
             },
             {
-              [cssDefault.stepAddIcon]: props.data.graphType === PipelineGraphType.STEP_GRAPH
+              [cssDefault.stepAddIcon]: props.data?.graphType === PipelineGraphType.STEP_GRAPH
             },
             {
-              [cssDefault.stageAddIcon]: props.data.graphType === PipelineGraphType.STAGE_GRAPH
+              [cssDefault.stageAddIcon]: props.data?.graphType === PipelineGraphType.STAGE_GRAPH
             }
           )}
           setShowAddLink={setShowAddLink}
@@ -254,10 +261,10 @@ export function DiamondNodeWidget(props: any): JSX.Element {
             className={cx(
               cssDefault.addNodeIcon,
               {
-                [cssDefault.stepAddIcon]: props.data.graphType === PipelineGraphType.STEP_GRAPH
+                [cssDefault.stepAddIcon]: props.data?.graphType === PipelineGraphType.STEP_GRAPH
               },
               {
-                [cssDefault.stageAddIcon]: props.data.graphType === PipelineGraphType.STAGE_GRAPH
+                [cssDefault.stageAddIcon]: props.data?.graphType === PipelineGraphType.STAGE_GRAPH
               }
             )}
             setShowAddLink={setShowAddLink}

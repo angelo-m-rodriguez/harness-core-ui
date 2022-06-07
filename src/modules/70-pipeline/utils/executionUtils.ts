@@ -190,7 +190,8 @@ export function getPipelineStagesMap(
 
 enum NodeTypes {
   Parallel = 'parallel',
-  Stage = 'stage'
+  Stage = 'stage',
+  Matrix = 'MATRIX'
 }
 export interface ProcessLayoutNodeMapResponse {
   stage?: GraphLayoutNode
@@ -824,6 +825,40 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
 
         response.push(parentNode)
         nodeDetails = layoutNodeMap[nodeDetails.edgeLayoutList?.nextIds?.[0] || '']
+      } else if (nodeDetails?.nodeType === NodeTypes.Matrix && currentNodeChildren && currentNodeChildren.length > 1) {
+        const childData = []
+        currentNodeChildren.forEach(item => {
+          const nodeDataItem = layoutNodeMap[item]
+          childData.push({
+            id: nodeDataItem?.nodeUuid,
+            stageNodeId: nodeDataItem?.nodeExecutionId as string,
+            identifier: nodeDataItem.nodeIdentifier as string,
+            type: nodeDataItem.nodeType as string,
+            name: nodeDataItem.name as string,
+            icon: 'cross',
+            data: { ...(nodeDataItem as any), graphType: PipelineGraphType.STAGE_GRAPH },
+            children: []
+          })
+        })
+        response.push({
+          id: nodeDetails?.nodeUuid as string,
+          identifier: nodeDetails?.nodeIdentifier as string,
+          type: nodeDetails?.nodeType as string,
+          name: nodeDetails?.name as string,
+          icon: 'cross',
+          data: {
+            ...(nodeDetails as any),
+            children: childData,
+            graphType: PipelineGraphType.STAGE_GRAPH,
+            id: nodeDetails?.nodeUuid
+          }
+        })
+
+        if (nextIds && nextIds.length === 1) {
+          nodeDetails = layoutNodeMap[nextIds[0]]
+        } else {
+          nodeDetails = undefined
+        }
       } else if (
         nodeDetails?.nodeType === NodeTypes.Parallel &&
         currentNodeChildren &&
@@ -881,6 +916,8 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             currentStageData?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
+              : currentStageData?.nodeType === StageType.MATRIX
+              ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: currentStageData?.skipInfo?.evaluatedCondition
             ? currentStageData.skipInfo.skipCondition
@@ -934,6 +971,8 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             stage?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
+              : stage?.nodeType === StageType.MATRIX
+              ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: stage?.skipInfo?.evaluatedCondition ? stage.skipInfo.skipCondition : undefined,
           disableClick: isExecutionNotStarted(stage?.status) || isExecutionSkipped(stage?.status),

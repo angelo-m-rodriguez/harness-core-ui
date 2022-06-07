@@ -553,6 +553,7 @@ function ExecutionGraphRef<T extends StageElementConfig>(
     eventTemp.stopPropagation?.()
   }
 
+  //oldListeners
   const nodeListeners: NodeModelListener = {
     [Event.ClickNode]: (event: any) => {
       const eventTemp = event as DefaultNodeEvent
@@ -620,16 +621,16 @@ function ExecutionGraphRef<T extends StageElementConfig>(
     [Event.AddParallelNode]: (event: any) => {
       const eventTemp = event as DefaultNodeEvent
       eventTemp.stopPropagation()
-      const layer = eventTemp.entity.getParent()
-      if (layer instanceof StepGroupNodeLayerModel) {
-        const node = getStepFromNode(state.stepsData, eventTemp.entity).node
-        if (node) {
-          handleAdd(true, eventTemp.target, false, event, eventTemp.callback)
-        }
-      } else {
-        /* istanbul ignore else */ if (eventTemp.target) {
-          handleAdd(true, eventTemp.target, true, event, eventTemp.callback)
-        }
+      // const layer = eventTemp.entity.getParent()
+      // if (layer instanceof StepGroupNodeLayerModel) {
+      //   const node = getStepFromNode(state.stepsData, eventTemp.entity).node
+      //   if (node) {
+      //     handleAdd(true, eventTemp.target, false, event, eventTemp.callback)
+      //   }
+      // } else {
+      /* istanbul ignore else */ if (eventTemp.target) {
+        handleAdd(true, eventTemp.target, true, event, eventTemp.callback)
+        // }
       }
     },
     [Event.DropLinkEvent]: dropNodeListener,
@@ -654,7 +655,8 @@ function ExecutionGraphRef<T extends StageElementConfig>(
             parentIdentifier: event?.parentIdentifier // (event.entity.getParent().getOptions() as StepGroupNodeLayerOptions).identifier
           })
         } else {
-          handleAdd(false, nodeRender, !event?.parentIdentifier, { entity: { ...event } })
+          // handleAdd(false, nodeRender, !event?.parentIdentifier, { entity: { ...event } })
+          handleAdd(false, nodeRender, true, { entity: { ...event } })
         }
       } else if (stepState && stepState.isStepGroupCollapsed) {
         const stepStates = state.states.set(event?.identifier, {
@@ -720,7 +722,7 @@ function ExecutionGraphRef<T extends StageElementConfig>(
           event?.parentIdentifier
         ).node
         if (node) {
-          handleAdd(true, event.target, false, { entity: { ...event } }, event.callback)
+          handleAdd(true, event.target, true, { entity: { ...event } }, event.callback)
         }
       } else {
         /* istanbul ignore else */ if (event.target) {
@@ -733,6 +735,7 @@ function ExecutionGraphRef<T extends StageElementConfig>(
     [Event.MouseLeaveNode]: mouseLeaveNodeListener
   }
 
+  // oldListeners
   const linkListeners: LinkModelListener = {
     [Event.AddLinkClicked]: (event: any) => {
       const eventTemp = event as DefaultLinkEvent
@@ -788,11 +791,11 @@ function ExecutionGraphRef<T extends StageElementConfig>(
       const targetEl = event?.target
       const linkRender = targetEl || document.querySelector(`[data-linkid="${event.identifier}"]`)
       // check if the link is under step group then directly show add Step
-      if (event?.node?.parentIdentifier && linkRender) {
-        handleAdd(false, linkRender, false, { entity: { ...event } })
-      } else if (linkRender) {
-        handleAdd(false, linkRender, true, { entity: { ...event } })
-      }
+      // if (event?.node?.parentIdentifier && linkRender) {
+      //   handleAdd(false, linkRender, false, { entity: { ...event } })
+      // } else if (linkRender) {
+      handleAdd(false, linkRender, true, { entity: { ...event } })
+      // }
     },
     [Event.DropLinkEvent]: (event: any) => {
       event = { ...event, ...event?.data }
@@ -800,30 +803,31 @@ function ExecutionGraphRef<T extends StageElementConfig>(
         return
       }
       // event.stopPropagation()
-      if (event.node?.identifier && event?.node?.data) {
-        if (event?.node?.data?.stepGroup && event?.destination?.parentIdentifier) {
-          showError(getString('stepGroupInAnotherStepGroup'), undefined, 'pipeline.setgroup.error')
-        } else {
-          const stepDetails = omit(event.node.data, [
-            'conditionalExecutionEnabled',
-            'graphType',
-            'isInComplete',
-            'isTemplateNode'
-          ])
-          const isRemove = removeStepOrGroup(state, event, undefined, newPipelineStudioEnabled)
-          if (isRemove) {
-            addStepOrGroup(
-              { ...event, node: { ...event?.destination } },
-              state.stepsData,
-              stepDetails,
-              false,
-              state.isRollback,
-              newPipelineStudioEnabled
-            )
-            updateStageWithNewData(state)
-          }
-        }
+      // if (event.node?.identifier && event?.node?.data) {
+      //   if (event?.node?.data?.stepGroup && event?.destination?.parentIdentifier) {
+      //     showError(getString('stepGroupInAnotherStepGroup'), undefined, 'pipeline.setgroup.error')
+      //   } else {
+      const stepDetails = omit(event.node.data, [
+        'conditionalExecutionEnabled',
+        'graphType',
+        'isInComplete',
+        'isTemplateNode'
+      ])
+      const isRemove = removeStepOrGroup(state, event, undefined, newPipelineStudioEnabled)
+      if (isRemove) {
+        addStepOrGroup(
+          { ...event, node: { ...event?.destination } },
+          state.stepsData,
+          stepDetails,
+          false,
+          state.isRollback,
+          newPipelineStudioEnabled
+        )
+        updateStageWithNewData(state)
       }
+      // }
+      // }
+      // }
     }
   }
 

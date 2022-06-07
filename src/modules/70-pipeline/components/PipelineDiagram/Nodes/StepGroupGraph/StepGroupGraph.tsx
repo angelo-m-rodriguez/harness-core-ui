@@ -66,7 +66,7 @@ const getCalculatedStyles = (data: PipelineGraphState[]): LayoutStyles => {
     if (node.type === 'STEP_GROUP') {
       hasStepGroupNode = true
     }
-    const childSteps = get(node, 'data.step.data.stepGroup.steps')
+    const childSteps = get(node, 'data.step.data.stepGroup.steps') || get(node, 'data.stepGroup.steps')
     if (childSteps) {
       const count = getNestedStepGroupHeight(childSteps)
       maxChildLength = Math.max(maxChildLength, count)

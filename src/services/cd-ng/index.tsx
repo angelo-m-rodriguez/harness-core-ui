@@ -3306,6 +3306,7 @@ export interface ExecutionWrapperConfig {
   parallel?: ParallelStepElementConfig
   step?: StepElementConfig
   stepGroup?: StepGroupElementConfig
+  graphDataType?: string
 }
 
 export interface Failure {
@@ -10888,6 +10889,7 @@ export interface StageElementConfig {
 export interface StageElementWrapperConfig {
   parallel?: ParallelStageElementConfig
   stage?: StageElementConfig
+  graphDataType?: string
 }
 
 export interface StageInfoConfig {

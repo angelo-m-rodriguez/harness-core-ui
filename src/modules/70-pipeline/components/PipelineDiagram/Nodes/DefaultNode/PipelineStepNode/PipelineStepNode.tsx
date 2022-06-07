@@ -41,6 +41,7 @@ function PipelineStepNode(props: PipelineStepNodeProps): JSX.Element {
     stepIconColor = Utils.getRealCSSColor(stepIconColor)
   }
   const CreateNode: React.FC<any> | undefined = props?.getNode?.(NodeType.CreateNode)?.component
+  const showMarkers = defaultTo(props?.showMarkers, true)
 
   const stepStatus = defaultTo(props?.status, props?.data?.step?.status as ExecutionStatus)
   const { secondaryIconProps, secondaryIcon, secondaryIconStyle } = getStatusProps(
@@ -118,7 +119,7 @@ function PipelineStepNode(props: PipelineStepNodeProps): JSX.Element {
       }}
       onDrop={onDropEvent}
     >
-      {!isServiceStep && (
+      {!isServiceStep && showMarkers && (
         <div className={cx(defaultCss.markerStart, defaultCss.stepMarker, defaultCss.stepMarkerLeft)}>
           <SVGMarker />
         </div>
@@ -256,7 +257,7 @@ function PipelineStepNode(props: PipelineStepNodeProps): JSX.Element {
           withoutCurrentColor={true}
         />
       </div>
-      {!isServiceStep && (
+      {!isServiceStep && showMarkers && (
         <div className={cx(defaultCss.markerEnd, defaultCss.stepMarker, defaultCss.stepMarkerRight)}>
           <SVGMarker />
         </div>

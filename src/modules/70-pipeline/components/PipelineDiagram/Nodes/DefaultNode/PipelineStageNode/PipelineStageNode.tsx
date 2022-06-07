@@ -42,6 +42,7 @@ interface PipelineStageNodeProps {
   nextNode: any
   allowAdd?: boolean
   selectedNodeId?: string
+  showMarkers?: boolean
 }
 function PipelineStageNode(props: PipelineStageNodeProps): JSX.Element {
   const { getString } = useStrings()
@@ -49,6 +50,7 @@ function PipelineStageNode(props: PipelineStageNodeProps): JSX.Element {
   const [showAddNode, setVisibilityOfAdd] = React.useState(false)
   const CreateNode: React.FC<any> | undefined = props?.getNode?.(NodeType.CreateNode)?.component
 
+  const showMarkers = defaultTo(props?.showMarkers, true)
   const stageStatus = defaultTo(props?.status, props?.data?.stage?.status as ExecutionStatus)
   const { secondaryIconProps, secondaryIcon, secondaryIconStyle } = getStatusProps(
     stageStatus as ExecutionStatus,
@@ -117,9 +119,11 @@ function PipelineStageNode(props: PipelineStageNodeProps): JSX.Element {
         })
       }}
     >
-      <div className={cx(defaultCss.markerStart, defaultCss.stageMarkerLeft)}>
-        <SVGMarker />
-      </div>
+      {showMarkers && (
+        <div className={cx(defaultCss.markerStart, defaultCss.stageMarkerLeft)}>
+          <SVGMarker />
+        </div>
+      )}
       <div
         id={props.id}
         data-nodeid={props.id}
@@ -241,9 +245,11 @@ function PipelineStageNode(props: PipelineStageNodeProps): JSX.Element {
           withoutCurrentColor={true}
         />
       </div>
-      <div className={cx(defaultCss.markerEnd, defaultCss.stageMarkerRight)}>
-        <SVGMarker />
-      </div>
+      {showMarkers && (
+        <div className={cx(defaultCss.markerEnd, defaultCss.stageMarkerRight)}>
+          <SVGMarker />
+        </div>
+      )}
       {props.name && (
         <div className={cx(defaultCss.nodeNameText, defaultCss.stageName)}>
           <Text

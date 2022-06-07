@@ -35,7 +35,8 @@ export enum StageType {
   APPROVAL = 'Approval',
   CUSTOM = 'Custom',
   Template = 'Template',
-  SECURITY = 'SecurityTests'
+  SECURITY = 'SecurityTests',
+  MATRIX = 'MATRIX'
 }
 
 export enum ServiceDeploymentType {

@@ -328,16 +328,20 @@ interface GetPipelineGraphDataParams {
   serviceDependencies?: DependencyElement[] | undefined
   errorMap?: Map<string, string[]>
   parentPath?: string
+  graphDataType?: PipelineGraphType
 }
 const getPipelineGraphData = ({
   data = [],
   templateTypes,
   serviceDependencies,
   errorMap,
-  parentPath
+  parentPath,
+  graphDataType
 }: GetPipelineGraphDataParams): PipelineGraphState[] => {
   let graphState: PipelineGraphState[] = []
-  const pipGraphDataType = getPipelineGraphDataType(data)
+  const pipGraphDataType = graphDataType ? graphDataType : getPipelineGraphDataType(data)
+
+  // defaultTo(graphDataType, getPipelineGraphDataType(data))
   if (pipGraphDataType === PipelineGraphType.STAGE_GRAPH) {
     graphState = transformStageData(data, pipGraphDataType, templateTypes, errorMap, parentPath)
   } else {
@@ -417,6 +421,31 @@ const transformStageData = (
           isTemplateNode: Boolean(templateRef)
         },
         children: transformStageData(rest, graphType, templateTypes, errorMap, updatedStagetPath, 1)
+      })
+    } else {
+      const updatedStagetPath = `${parentPath}.${index + offsetIndex}`
+      const hasErrors =
+        errorMap && [...errorMap.keys()].some(key => updatedStagetPath && key.startsWith(updatedStagetPath))
+      const templateRef = stage.stage?.template?.templateRef
+
+      const type = (templateRef ? get(templateTypes, templateRef) : stage?.type) as string
+      const { nodeType, iconName } = getNodeInfo(defaultTo(type, ''), graphType)
+      finalData.push({
+        id: stage.id, //uuid() as string
+        identifier: stage.identifier as string,
+        name: stage.name as string,
+        type: type,
+        nodeType: nodeType as string,
+        icon: iconName,
+        data: {
+          graphType,
+          ...stage,
+          isInComplete: isCustomGeneratedString(stage.identifier) || hasErrors,
+          conditionalExecutionEnabled: stage.when
+            ? stage.when?.pipelineStatus !== 'Success' || !!stage.when?.condition?.trim()
+            : false,
+          isTemplateNode: Boolean(templateRef)
+        }
       })
     }
   })
@@ -539,6 +568,9 @@ const transformStepsData = (
         icon: iconName,
         data: {
           ...step,
+          type: 'StepGroup',
+          nodeType: 'StepGroup',
+          icon: iconName,
           conditionalExecutionEnabled: isExecutionView
             ? getConditionalExecutionFlag(step.stepGroup?.when)
             : step.stepGroup?.when
