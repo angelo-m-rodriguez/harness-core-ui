@@ -270,7 +270,10 @@ const ChannelRow: React.FC<ChannelRow> = ({
                     ) : null}
                     {formikProps.values.type == 'MSTEAMS' ? (
                       <TestMSTeamsNotifications
-                        data={formikProps.values as any}
+                        data={{
+                          ...(formikProps.values as any),
+                          msTeamKeys: formikProps.values.msTeamKeys ? [formikProps.values.msTeamKeys] : undefined
+                        }}
                         buttonProps={{
                           minimal: true
                         }}
