@@ -106,7 +106,7 @@ module.exports = {
   },
   '/chaos': {
     pathRewrite: { '^/chaos': '' },
-    target: 'http://localhost:8184'
+    target: process.env.CHAOS_UI_URL || 'https://localhost:8184'
   },
   '/et': {
     pathRewrite: { '^/et': '' },
