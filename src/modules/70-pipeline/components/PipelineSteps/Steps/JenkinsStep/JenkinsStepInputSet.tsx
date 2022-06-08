@@ -5,30 +5,28 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
-import { connect } from 'formik'
+import React, { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getMultiTypeFromValue, MultiTypeInputType, FormikForm, Text } from '@wings-software/uicore'
-import { Connectors } from '@connectors/constants'
-import { Color } from '@harness/design-system'
-import type { StringsMap } from 'stringTypes'
-import StepCommonFieldsInputSet from '@ci/components/PipelineSteps/StepCommonFields/StepCommonFieldsInputSet'
-import type { JenkinsStepProps } from './JenkinsStep'
+import cx from 'classnames'
+import { getMultiTypeFromValue, MultiTypeInputType, FormikForm, FormInput, SelectOption } from '@wings-software/uicore'
+import { get, isEmpty } from 'lodash-es'
 import { useStrings } from 'framework/strings'
-import css from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import { PopoverInteractionKind } from '@blueprintjs/core'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
-import { isEmpty } from 'lodash-es'
 import { useQueryParams } from '@common/hooks'
 import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
+import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
+import { JobDetails, useGetJobDetailsForJenkins } from 'services/cd-ng'
+import type { SubmenuSelectOption } from './types'
+import { getGenuineValue } from '../JiraApproval/helper'
+import css from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
-export const JenkinsStepInputSetBasic: React.FC<JenkinsStepProps> = (formContentProps: any) => {
-  const { inputSetData, initialValues, allowableTypes } = formContentProps
-  const template = inputSetData?.template
-  const path = inputSetData?.path
+export const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
+  const { initialValues, allowableTypes, template, path, readonly, formik } = formContentProps
   const prefix = isEmpty(path) ? '' : `${path}.`
-  const readonly = inputSetData?.readonly
   const { getString } = useStrings()
+  const lastOpenedJob = useRef<any>(null)
   const { expressions } = useVariablesExpression()
   const { accountId, projectIdentifier, orgIdentifier } = useParams<{
     projectIdentifier: string
@@ -36,8 +34,87 @@ export const JenkinsStepInputSetBasic: React.FC<JenkinsStepProps> = (formContent
     accountId: string
   }>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+  const commonParams = {
+    accountIdentifier: accountId,
+    projectIdentifier,
+    orgIdentifier,
+    repoIdentifier,
+    branch
+  }
+
+  const [jobDetails, setJobDetails] = useState<SubmenuSelectOption[]>([])
+  const connectorRefFixedValue = getGenuineValue(get(formik, `values.${prefix}spec?.connectorRef`))
+  const getJobItems = (jobs: JobDetails[]): SubmenuSelectOption[] => {
+    return jobs?.map(job => {
+      return {
+        label: job.jobName || '',
+        value: job.url || '',
+        submenuItems: [],
+        hasSubItems: job.folder
+      }
+    })
+  }
+  const {
+    refetch: refetchJobs,
+    data: jobsResponse,
+    error: projectsFetchError,
+    loading: fetchingProjects
+  } = useGetJobDetailsForJenkins({
+    lazy: true,
+    queryParams: {
+      ...commonParams,
+      connectorRef: ''
+    }
+  })
+
+  useEffect(() => {
+    if (lastOpenedJob.current) {
+      setJobDetails((prevState: SubmenuSelectOption[]) => {
+        const parentJob = prevState.find(obj => obj.value === lastOpenedJob.current)
+        if (parentJob) {
+          parentJob.submenuItems = [...getJobItems(jobsResponse?.data?.jobDetails || [])]
+        }
+        return prevState
+      })
+    } else {
+      const jobs = jobsResponse?.data?.jobDetails?.map(job => {
+        return {
+          label: job.jobName || '',
+          value: job.url || '',
+          submenuItems: [],
+          hasSubItems: job.folder
+        }
+      })
+      setJobDetails(jobs || ([] as any))
+    }
+  }, [jobsResponse])
+
+  useEffect(() => {
+    refetchJobs({
+      queryParams: {
+        ...commonParams,
+        connectorRef: connectorRefFixedValue?.toString()
+      }
+    })
+  }, [get(formik.values, `${prefix}spec?.connectorRef`)])
+
   return (
     <FormikForm className={css.removeBpPopoverWrapperTopMargin}>
+      {getMultiTypeFromValue(template?.timeout) === MultiTypeInputType.RUNTIME && (
+        <div className={cx(css.formGroup, css.sm)}>
+          <FormMultiTypeDurationField
+            multiTypeDurationProps={{
+              enableConfigureOptions: false,
+              allowableTypes,
+              expressions,
+              disabled: readonly
+            }}
+            label={getString('pipelineSteps.timeoutLabel')}
+            name={`${prefix}timeout`}
+            disabled={readonly}
+          />
+        </div>
+      )}
       {getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME ? (
         <FormMultiTypeConnectorField
           name={`${prefix}spec.connectorRef`}
@@ -54,41 +131,43 @@ export const JenkinsStepInputSetBasic: React.FC<JenkinsStepProps> = (formContent
             allowableTypes,
             expressions
           }}
-          type={'Jira'}
+          type={'Jenkins'}
           gitScope={{ repo: repoIdentifier || '', branch, getDefaultFromOtherRepo: true }}
         />
       ) : null}
-      {/* <CIStep
-        readonly={readonly}
-        stepViewType={stepViewType}
-        enableFields={{
-          ...(getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME && {
-            'spec.connectorRef': {
-              label: { labelKey: 'pipelineSteps.JenkinsConnectorLabel', tooltipId: 'JenkinsConnector' },
-              type: Connectors.DOCKER
-            }
-          })
-          // ...(getMultiTypeFromValue(template?.spec?.repo) === MultiTypeInputType.RUNTIME && {
-          //   'spec.repo': {}
-          // })
-        }}
-        path={path || ''}
-        isInputSetView={true}
-        template={template}
-      /> */}
-      {/* <ArtifactStepCommon
-        path={path}
-        readonly={readonly}
-        template={template}
-        allowableTypes={allowableTypes}
-        stepViewType={stepViewType}
-        formik={formik}
-        artifactConnectorType={Connectors.DOCKER}
-      />
-      <StepCommonFieldsInputSet path={path} readonly={readonly} template={template} stepViewType={stepViewType} /> */}
+
+      {getMultiTypeFromValue(template?.spec?.jobName) === MultiTypeInputType.RUNTIME ? (
+        <div className={cx(css.formGroup, css.lg)}>
+          <FormInput.SelectWithSubmenuTypeInput
+            label={'Job Name'}
+            name={`${prefix}spec.jobName`}
+            selectWithSubmenuTypeInputProps={{
+              items: jobDetails,
+              interactionKind: PopoverInteractionKind.CLICK,
+              onChange: (primaryValue, secondaryValue) => {
+                console.log('check', primaryValue, secondaryValue)
+                const newJobName = secondaryValue ? secondaryValue : primaryValue
+                formik.setValues({
+                  ...formik.values,
+                  spec: { ...formik.values.spec, jobName: newJobName.value as any }
+                })
+              },
+              onOpening: (item: SelectOption) => {
+                lastOpenedJob.current = item.value
+                refetchJobs({
+                  queryParams: {
+                    ...commonParams,
+                    connectorRef: connectorRefFixedValue?.toString(),
+                    parentJobName: item.label
+                  }
+                })
+              }
+            }}
+          />
+        </div>
+      ) : null}
     </FormikForm>
   )
 }
 
-const JenkinsStepInputSet = connect(JenkinsStepInputSetBasic)
-export { JenkinsStepInputSet }
+export default JenkinsStepInputSet

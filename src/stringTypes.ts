@@ -1609,7 +1609,6 @@ export interface StringsMap {
   'connectors.cdng.error': string
   'connectors.cdng.healthSources.label': string
   'connectors.cdng.healthSources.noHealthSourcesDefined': string
-  'connectors.cdng.jobName': string
   'connectors.cdng.jobTypes.blueGreen': string
   'connectors.cdng.jobTypes.canary': string
   'connectors.cdng.jobTypes.health': string
@@ -2973,8 +2972,6 @@ export interface StringsMap {
   'pipeline.inputSets.selectPlaceholder': string
   'pipeline.invalidRequest': string
   'pipeline.jenkinsStep.captureEnvironmentVariable': string
-  'pipeline.jenkinsStep.connectorRef': string
-  'pipeline.jenkinsStep.jobName': string
   'pipeline.jenkinsStep.jobNamePlaceholder': string
   'pipeline.jenkinsStep.jobParameter': string
   'pipeline.jenkinsStep.unstableStatusAsSuccess': string

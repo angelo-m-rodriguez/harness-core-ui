@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   Button,
   ButtonVariation,
@@ -13,34 +13,22 @@ import {
   FormikForm,
   FormInput,
   Accordion,
-  Container,
   getMultiTypeFromValue,
-  MultiTypeInputType
+  MultiTypeInputType,
+  SelectOption
 } from '@wings-software/uicore'
-import { SelectWithSubmenu } from '@harness/uicore'
 import type { FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
 import { FieldArray } from 'formik'
-import get from 'lodash/get'
 import cx from 'classnames'
-import type { K8sDirectInfraYaml } from 'services/ci'
-import { Connectors } from '@connectors/constants'
 import MultiTypeFieldSelector from '@common/components/MultiTypeFieldSelector/MultiTypeFieldSelector'
 import { StepFormikFowardRef, StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { setFormikRef } from '@pipeline/components/AbstractSteps/Step'
-import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { useStrings } from 'framework/strings'
 
-import StepCommonFields /*,{ /*usePullOptions }*/ from '@ci/components/PipelineSteps/StepCommonFields/StepCommonFields'
-import {
-  getInitialValuesInCorrectFormat,
-  getFormValuesInCorrectFormat
-} from '@pipeline/components/PipelineSteps/Steps/StepsTransformValuesUtils'
-import { validate } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
-import { transformValuesFieldsConfig, editViewValidateFieldsConfig } from './JenkinsStepFunctionConfigs'
-import type { JenkinsStepProps, JenkinsStepDataUI } from './JenkinsStep'
-import type { JenkinsFormContentInterface, JenkinsStepData, jobParameterInterface } from './types'
-import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import type { JenkinsStepProps } from './JenkinsStep'
+import { JobDetails, useGetJobDetailsForJenkins } from 'services/cd-ng'
+import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { useParams } from 'react-router'
 import { useQueryParams } from '@common/hooks'
@@ -50,48 +38,32 @@ import type {
   PipelinePathProps,
   PipelineType
 } from '@common/interfaces/RouteInterfaces'
-import { getGenuineValue } from '../JiraApproval/helper'
 import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
+import { getGenuineValue } from '../JiraApproval/helper'
+import type { JenkinsFormContentInterface, JenkinsStepData, jobParameterInterface, SubmenuSelectOption } from './types'
+import { resetForm, scriptInputType } from './helper'
+import OptionalConfiguration from './OptionalConfiguration'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './JenkinsStep.module.scss'
-import { resetForm, scriptInputType } from './helper'
-import {
-  GetJobDetailsForJenkins,
-  ResponseJenkinsJobDetailsDTO,
-  useGetJiraProjects,
-  useGetJobDetailsForJenkins
-} from 'services/cd-ng'
-import OptionalConfiguration from './OptionalConfiguration'
 
 function FormContent({
   formik,
-  // refetchProjectMetadata,
-  // projectsResponse,
-  // projectsFetchError,
-  // projectMetadataFetchError,
-  // projectMetaResponse,
-  // fetchingProjects,
-  // fetchingProjectMetadata,
   isNewStep,
   readonly,
   allowableTypes,
   stepViewType
 }: JenkinsFormContentInterface): JSX.Element {
   const { getString } = useStrings()
-  const { getRBACErrorMessage } = useRBACError()
+  const lastOpenedJob = useRef<any>(null)
   const { expressions } = useVariablesExpression()
-  const { values: formValues, setFieldValue } = formik
+  const { values: formValues } = formik
   const { accountId, projectIdentifier, orgIdentifier } =
     useParams<PipelineType<PipelinePathProps & AccountPathProps>>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
-  // const [statusList, setStatusList] = useState<JiraStatusNG[]>([])
-  // const [fieldList, setFieldList] = useState<JiraFieldNG[]>([])
-  // const [projectOptions, setProjectOptions] = useState<JiraProjectSelectOption[]>([])
-  // const [projectMetadata, setProjectMetadata] = useState<JiraProjectNG>()
   const [connectorValueType, setConnectorValueType] = useState<MultiTypeInputType>(MultiTypeInputType.FIXED)
-  const [jobDetails, setJobDetails] = useState<ResponseJenkinsJobDetailsDTO[]>([])
+  const [jobDetails, setJobDetails] = useState<SubmenuSelectOption[]>([])
   const commonParams = {
     accountIdentifier: accountId,
     projectIdentifier,
@@ -102,9 +74,9 @@ function FormContent({
 
   const {
     refetch: refetchJobs,
-    data: jobsResponse,
-    error: projectsFetchError,
-    loading: fetchingProjects
+    data: jobsResponse
+    // error: jobDetailsFetchError,
+    // loading: fetchingJobDetails
   } = useGetJobDetailsForJenkins({
     lazy: true,
     queryParams: {
@@ -113,8 +85,48 @@ function FormContent({
     }
   })
 
+  useEffect(() => {
+    if (typeof formik.values.spec.jobName === 'string' && jobsResponse?.data?.jobDetails?.length) {
+      const job = jobsResponse?.data?.jobDetails?.find(job => job.url === formik.values?.spec?.jobName)
+      if (job) {
+        const jobObj = {
+          label: job?.jobName || '',
+          value: job?.url || '',
+          submenuItems: [],
+          hasSubItems: job?.folder
+        }
+        formik.setValues({
+          ...formik.values,
+          spec: {
+            ...formik.values.spec,
+            jobName: jobObj as any
+          }
+        })
+      }
+    }
+    if (lastOpenedJob.current) {
+      setJobDetails((prevState: SubmenuSelectOption[]) => {
+        const parentJob = prevState.find(obj => obj.value === lastOpenedJob.current)
+        if (parentJob) {
+          parentJob.submenuItems = [...getJobItems(jobsResponse?.data?.jobDetails || [])]
+        }
+        return prevState
+      })
+    } else {
+      const jobs = jobsResponse?.data?.jobDetails?.map(job => {
+        return {
+          label: job.jobName || '',
+          value: job.url || '',
+          submenuItems: [],
+          hasSubItems: job.folder
+        }
+      })
+      setJobDetails(jobs || ([] as any))
+    }
+  }, [jobsResponse])
+
   const connectorRefFixedValue = getGenuineValue(formik.values.spec.connectorRef)
-  console.log('check', jobsResponse)
+
   useEffect(() => {
     refetchJobs({
       queryParams: {
@@ -122,94 +134,19 @@ function FormContent({
         connectorRef: connectorRefFixedValue?.toString()
       }
     })
-  }, [formik.values])
+  }, [formik.values.spec.connectorRef])
 
-  // const projectKeyFixedValue =
-  //   typeof formik.values.spec.projectKey === 'object'
-  //     ? (formik.values.spec.projectKey as JiraProjectSelectOption).key
-  //     : undefined
-  // const issueTypeFixedValue =
-  //   typeof formik.values.spec.issueType === 'object'
-  //     ? (formik.values.spec.issueType as JiraProjectSelectOption).key
-  //     : undefined
+  const getJobItems = (jobs: JobDetails[]): SubmenuSelectOption[] => {
+    return jobs?.map(job => {
+      return {
+        label: job.jobName || '',
+        value: job.url || '',
+        submenuItems: [],
+        hasSubItems: job.folder
+      }
+    })
+  }
 
-  useEffect(() => {
-    // If connector value changes in form, fetch projects
-    // second block is needed so that we don't fetch projects if type is expression
-    // CDC-15633
-    if (connectorRefFixedValue && connectorValueType === MultiTypeInputType.FIXED) {
-      // refetchProjects({
-      //   queryParams: {
-      //     ...commonParams,
-      //     connectorRef: connectorRefFixedValue.toString()
-      //   }
-      // })
-    }
-  }, [connectorRefFixedValue])
-
-  // useEffect(() => {
-  //   // If project value changes in form, fetch metadata
-  //   if (connectorRefFixedValue && projectKeyFixedValue) {
-  //     refetchProjectMetadata({
-  //       queryParams: {
-  //         ...commonParams,
-  //         connectorRef: connectorRefFixedValue.toString(),
-  //         projectKey: projectKeyFixedValue.toString(),
-  //         fetchStatus: true
-  //       }
-  //     })
-  //   }
-  // }, [projectKeyFixedValue])
-
-  // useEffect(() => {
-  //   // If issuetype changes in form, set status and field list
-  //   if (issueTypeFixedValue && projectMetadata) {
-  //     const issueTypeData = projectMetadata?.issuetypes[issueTypeFixedValue]
-  //     const statusListFromType = issueTypeData?.statuses || []
-  //     setStatusList(statusListFromType)
-  //     const fieldListToSet: JiraFieldNG[] = []
-  //     const fieldKeys = Object.keys(issueTypeData?.fields || {})
-  //     fieldKeys.forEach(keyy => {
-  //       if (issueTypeData?.fields[keyy]) {
-  //         fieldListToSet.push(issueTypeData?.fields[keyy])
-  //       }
-  //     })
-  //     setFieldList(fieldListToSet)
-  //     const approvalCriteria = getApprovalRejectionCriteriaForInitialValues(
-  //       formik.values.spec.approvalCriteria,
-  //       statusListFromType,
-  //       fieldListToSet
-  //     )
-  //     formik.setFieldValue('spec.approvalCriteria', approvalCriteria)
-  //     const rejectionCriteria = getApprovalRejectionCriteriaForInitialValues(
-  //       formik.values.spec.rejectionCriteria,
-  //       statusListFromType,
-  //       fieldListToSet
-  //     )
-  //     formik.setFieldValue('spec.rejectionCriteria', rejectionCriteria)
-  //   }
-  // }, [issueTypeFixedValue, projectMetadata])
-
-  // useEffect(() => {
-  //   let options: JiraProjectSelectOption[] = []
-  //   const projectResponseList: JiraProjectBasicNG[] = projectsResponse?.data || []
-  //   options =
-  //     projectResponseList.map((project: JiraProjectBasicNG) => ({
-  //       label: project.name || '',
-  //       value: project.id || '',
-  //       key: project.key || ''
-  //     })) || []
-
-  //   setProjectOptions(options)
-  // }, [projectsResponse?.data])
-
-  // useEffect(() => {
-  //   if (projectKeyFixedValue && projectMetaResponse?.data?.projects) {
-  //     const projectMD: JiraProjectNG = projectMetaResponse?.data?.projects[projectKeyFixedValue]
-  //     setProjectMetadata(projectMD)
-  //   }
-  // }, [projectMetaResponse?.data])
-  console.log('formValues', formValues)
   return (
     <React.Fragment>
       {stepViewType !== StepViewType.Template && (
@@ -253,7 +190,7 @@ function FormContent({
       <div className={cx(stepCss.formGroup, stepCss.lg)}>
         <FormMultiTypeConnectorField
           name="spec.connectorRef"
-          label={getString('pipeline.jenkinsStep.connectorRef')}
+          label={getString('connectors.jenkins.jenkinsConnectorLabel')}
           width={390}
           className={css.connector}
           connectorLabelClass={css.connectorLabel}
@@ -266,11 +203,18 @@ function FormContent({
           enableConfigureOptions={false}
           selected={formik?.values?.spec.connectorRef as string}
           onChange={(value: any, _unused, multiType) => {
+            if (multiType === MultiTypeInputType.RUNTIME) {
+              formik.setValues({
+                ...formik.values,
+                spec: { ...formik.values.spec, jobName: value as any, connectorRef: value }
+              })
+            }
             // Clear dependent fields
             setConnectorValueType(multiType)
             if (value?.record?.identifier !== connectorRefFixedValue) {
               resetForm(formik, 'connectorRef')
             }
+            lastOpenedJob.current = null
           }}
           disabled={readonly}
           gitScope={{ repo: repoIdentifier || '', branch, getDefaultFromOtherRepo: true }}
@@ -290,8 +234,42 @@ function FormContent({
         )}
       </div>
 
-      <div className={cx(stepCss.formGroup, stepCss.lg)}>
-        {/* <SelectWithSubmenu items={} /> */}
+      <div className={cx(stepCss.formGroup, stepCss.lg, css.jobDetails)}>
+        <FormInput.SelectWithSubmenuTypeInput
+          label={'Job Name'}
+          name={'spec.jobName'}
+          // disabled={!jobDetails.length}
+          placeholder={formik.values.spec.jobName || 'Select a job'}
+          selectWithSubmenuTypeInputProps={{
+            value:
+              formik.values.spec.connectorRef === MultiTypeInputType.RUNTIME
+                ? (MultiTypeInputType.RUNTIME as any)
+                : jobDetails.find(job => job.value === formik.values.spec.jobName),
+            items: jobDetails,
+            interactionKind: PopoverInteractionKind.CLICK,
+            onChange: (primaryValue, secondaryValue, type) => {
+              console.log('check', primaryValue, secondaryValue, type)
+              const newJobName = secondaryValue ? secondaryValue : primaryValue
+              formik.setValues({
+                ...formik.values,
+                spec: {
+                  ...formik.values.spec,
+                  jobName: type === MultiTypeInputType.RUNTIME ? primaryValue : (newJobName as any)
+                }
+              })
+            },
+            onOpening: (item: SelectOption) => {
+              lastOpenedJob.current = item.value
+              refetchJobs({
+                queryParams: {
+                  ...commonParams,
+                  connectorRef: connectorRefFixedValue?.toString(),
+                  parentJobName: item.label
+                }
+              })
+            }
+          }}
+        />
 
         {getMultiTypeFromValue(formik.values.spec.connectorRef) === MultiTypeInputType.RUNTIME && (
           <ConfigureOptions
@@ -330,18 +308,18 @@ function FormContent({
                     return (
                       <div className={css.environmentVarHeader} key={id}>
                         <FormInput.Text
-                          name={`spec.jobParameter[${i}].name`}
+                          name={`spec.jobParameter.[${i}].name`}
                           placeholder={getString('name')}
                           disabled={readonly}
                         />
                         <FormInput.Select
                           items={scriptInputType}
-                          name={`spec.jobParameter[${i}].type`}
+                          name={`spec.jobParameter.[${i}].type`}
                           placeholder={getString('typeLabel')}
                           disabled={readonly}
                         />
                         <FormInput.MultiTextInput
-                          name={`spec.jobParameter[${i}].value`}
+                          name={`spec.jobParameter.[${i}].value`}
                           placeholder={getString('valueLabel')}
                           multiTextInputProps={{
                             allowableTypes,
@@ -395,44 +373,15 @@ export const JenkinsStepBase = (
   { initialValues, onUpdate, isNewStep = true, readonly, allowableTypes, stepViewType, onChange }: JenkinsStepProps,
   formikRef: StepFormikFowardRef<JenkinsStepData>
 ): JSX.Element => {
-  const {
-    state: {
-      selectionState: { selectedStageId }
-    }
-  } = usePipelineContext()
-
-  const { getString } = useStrings()
   return (
     <Formik
-      initialValues={getInitialValuesInCorrectFormat<JenkinsStepData, JenkinsStepDataUI>(
-        initialValues,
-        transformValuesFieldsConfig
-      )}
+      initialValues={initialValues}
       formName="JenkinsStep"
       validate={valuesToValidate => {
-        const schemaValues = getFormValuesInCorrectFormat<JenkinsStepDataUI, JenkinsStepData>(
-          valuesToValidate,
-          transformValuesFieldsConfig
-        )
-        onChange?.(schemaValues)
-        // return validate(
-        //   valuesToValidate,
-        //   editViewValidateFieldsConfig,
-        //   {
-        //     initialValues,
-        //     steps: currentStage?.stage?.spec?.execution?.steps || {},
-        //     serviceDependencies: currentStage?.stage?.spec?.serviceDependencies || {},
-        //     getString
-        //   },
-        //   stepViewType
-        // )
+        onChange?.(valuesToValidate)
       }}
-      onSubmit={(_values: JenkinsStepDataUI) => {
-        const schemaValues = getFormValuesInCorrectFormat<JenkinsStepDataUI, JenkinsStepData>(
-          _values,
-          transformValuesFieldsConfig
-        )
-        onUpdate?.(schemaValues)
+      onSubmit={(_values: JenkinsStepData) => {
+        onUpdate?.(_values)
       }}
     >
       {(formik: FormikProps<JenkinsStepData>) => {
@@ -445,14 +394,6 @@ export const JenkinsStepBase = (
               formik={formik}
               allowableTypes={allowableTypes}
               stepViewType={stepViewType}
-              // refetchProjects={refetchProjects}
-              // refetchProjectMetadata={refetchProjectMetadata}
-              // fetchingProjects={fetchingProjects}
-              // fetchingProjectMetadata={fetchingProjectMetadata}
-              // projectMetaResponse={projectMetaResponse}
-              // projectsResponse={projectsResponse}
-              // projectsFetchError={projectsFetchError}
-              // projectMetadataFetchError={projectMetadataFetchError}
               readonly={readonly}
               isNewStep={isNewStep}
             />

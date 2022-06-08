@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom'
 import cx from 'classnames'
 import type { FormikProps } from 'formik'
 import { FormInput, Text, Container, MultiTypeInputType } from '@wings-software/uicore'
-import { SelectWithSubmenu, SelectOption } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { MultiTypeTextField, MultiTypeTextProps } from '@common/components/MultiTypeText/MultiTypeText'
 import MultiTypeList from '@common/components/MultiTypeList/MultiTypeList'
@@ -465,22 +464,6 @@ export const CIStep: React.FC<CIStepProps> = props => {
                 allowedTypesForEntries: SupportedInputTypesForListItems
               })
             : null}
-        </Container>
-      ) : null}
-      {Object.prototype.hasOwnProperty.call(enableFields, 'spec.jobName') ? (
-        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
-          <SelectWithSubmenu
-            items={[{ label: 'xyz', value: 'xyz', submenuItems: [] }]}
-            itemSelect={(item: any) => console.log(item)}
-          />
-        </Container>
-      ) : null}
-      {Object.prototype.hasOwnProperty.call(enableFields, 'spec.jobName') ? (
-        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
-          <SelectWithSubmenu
-            items={[{ label: 'xyz', value: 'xyz', submenuItems: [] }]}
-            itemSelect={(item: any) => console.log(item)}
-          />
         </Container>
       ) : null}
     </>

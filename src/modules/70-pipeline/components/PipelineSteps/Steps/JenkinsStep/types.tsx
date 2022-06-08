@@ -9,18 +9,13 @@ import type { FormikProps } from 'formik'
 import type { GetDataError } from 'restful-react'
 import type { MultiTypeInputType, SelectOption } from '@wings-software/uicore'
 import type { InputSetData, StepViewType } from '@pipeline/components/AbstractSteps/Step'
-import type {
-  Failure,
-  ResponseJiraIssueCreateMetadataNG,
-  ResponseListJiraProjectBasicNG,
-  StepElementConfig,
-  UseGetJiraIssueCreateMetadataProps,
-  UseGetJiraProjectsProps
-} from 'services/cd-ng'
+import type { Failure } from 'services/cd-ng'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
-import type { ApprovalRejectionCriteria } from '@pipeline/components/PipelineSteps/Steps/Common/types'
 import type { AllFailureStrategyConfig } from '../../AdvancedSteps/FailureStrategyPanel/utils'
 
+export interface SubmenuSelectOption extends SelectOption {
+  submenuItems: SelectOption[]
+}
 export interface jobParameterInterface {
   value: number | string
   id: string
@@ -44,6 +39,19 @@ export interface JenkinsStepData {
   timeout?: string
   failureStrategies?: AllFailureStrategyConfig[]
   spec: JenkinsStepSpec
+}
+
+export interface JenkinsStepFormSpec extends Omit<JenkinsStepSpec, 'jobName'> {
+  jobName: SelectOption
+}
+
+export interface JenkinsStepFormData {
+  identifier: string
+  name?: string
+  type: string
+  timeout?: string
+  failureStrategies?: AllFailureStrategyConfig[]
+  spec: JenkinsStepFormSpec
 }
 
 export interface JenkinsStepVariableListModeProps {

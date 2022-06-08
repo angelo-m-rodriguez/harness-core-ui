@@ -15,10 +15,8 @@ import type { ECRStepProps } from '../ECRStep/ECRStep'
 import type { GCRStepProps } from '../GCRStep/GCRStep'
 import type { DockerHubStepProps } from '../DockerHubStep/DockerHubStep'
 import { CIStepOptionalConfig } from './CIStepOptionalConfig'
-import type { JenkinsStepProps } from '../JenkinsStep/JenkinsStep'
 
-interface ArtifactStepCommonProps
-  extends Omit<ECRStepProps | GCRStepProps | DockerHubStepProps | JenkinsStepProps, 'initialValues'> {
+interface ArtifactStepCommonProps extends Omit<ECRStepProps | GCRStepProps | DockerHubStepProps, 'initialValues'> {
   artifactConnectorType: ConnectorInfoDTO['type']
 }
 

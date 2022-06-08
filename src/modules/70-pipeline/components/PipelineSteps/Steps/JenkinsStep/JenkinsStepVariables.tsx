@@ -8,8 +8,8 @@
 import React from 'react'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import { VariablesListTable } from '@pipeline/components/VariablesListTable/VariablesListTable'
-import type { JenkinsStepData } from './JenkinsStep'
 import { flatObject } from '../Common/ApprovalCommons'
+import type { JenkinsStepData } from './types'
 
 export interface JenkinsStepVariablesProps {
   initialValues: JenkinsStepData
@@ -19,8 +19,14 @@ export interface JenkinsStepVariablesProps {
   variablesData: JenkinsStepData
 }
 
-export const JenkinsStepVariables: React.FC<JenkinsStepVariablesProps> = ({
+export const JenkinsStepVariables = ({
   variablesData,
   metadataMap,
   initialValues
-}) => <VariablesListTable data={flatObject(variablesData)} originalData={initialValues} metadataMap={metadataMap} />
+}: JenkinsStepVariablesProps): JSX.Element => (
+  <VariablesListTable<JenkinsStepData>
+    data={flatObject(variablesData) as unknown as JenkinsStepData}
+    originalData={initialValues}
+    metadataMap={metadataMap}
+  />
+)

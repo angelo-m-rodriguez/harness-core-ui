@@ -6,39 +6,33 @@
  */
 
 import React from 'react'
-import type { IconName, MultiTypeInputType } from '@wings-software/uicore'
+import { IconName, SelectOption, getMultiTypeFromValue, MultiTypeInputType } from '@wings-software/uicore'
 import { parse } from 'yaml'
 import get from 'lodash-es/get'
-import type { FormikErrors } from 'formik'
+import { connect, FormikErrors } from 'formik'
 import type { StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { validateInputSet } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
-import { getFormValuesInCorrectFormat } from '@pipeline/components/PipelineSteps/Steps/StepsTransformValuesUtils'
 import type {
-  MultiTypeMapType,
   MultiTypeMapUIType,
-  MultiTypeListType,
   MultiTypeListUIType,
-  MultiTypeConnectorRef,
-  Resources
+  MultiTypeConnectorRef
 } from '@pipeline/components/PipelineSteps/Steps/StepsTypes'
 import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProps'
 import { loggerFor } from 'framework/logging/logging'
 import { ModuleName } from 'framework/types/ModuleName'
 import type { StringsMap } from 'stringTypes'
 import { JenkinsStepBaseWithRef } from './JenkinsStepBase'
-import { JenkinsStepInputSet } from './JenkinsStepInputSet'
+import JenkinsStepInputSetBasic from './JenkinsStepInputSet'
 import { JenkinsStepVariables, JenkinsStepVariablesProps } from './JenkinsStepVariables'
-import { getInputSetViewValidateFieldsConfig, transformValuesFieldsConfig } from './JenkinsStepFunctionConfigs'
-// import { getConnectorSuggestions } from '../EditorSuggestionUtils'
-import type { AllFailureStrategyConfig } from '@pipeline/components/PipelineSteps/AdvancedSteps/FailureStrategyPanel/utils'
+import { getInputSetViewValidateFieldsConfig } from './JenkinsStepFunctionConfigs'
 import { getConnectorSuggestions } from './EditorSuggestionUtils'
 import type { JenkinsStepSpec, JenkinsStepData } from './types'
 
 const logger = loggerFor(ModuleName.CI)
-
+const JenkinsStepInputSet = connect(JenkinsStepInputSetBasic)
 export interface JenkinsStepSpecUI
   extends Omit<JenkinsStepSpec, 'connectorRef' | 'tags' | 'labels' | 'buildArgs' | 'pull' | 'resources'> {
   connectorRef: MultiTypeConnectorRef
@@ -115,8 +109,20 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
   }
 
   /* istanbul ignore next */
-  processFormData<T>(data: T): JenkinsStepData {
-    return getFormValuesInCorrectFormat<T, JenkinsStepData>(data, transformValuesFieldsConfig)
+  processFormData(data: any): JenkinsStepData {
+    const res = {
+      ...data,
+      spec: {
+        ...data.spec,
+        connectorRef:
+          typeof data?.spec?.connectorRef === 'string'
+            ? data?.spec?.connectorRef
+            : (data?.spec?.connectorRef as any)?.value,
+        jobName:
+          ((data.spec.jobName as unknown as SelectOption).value as string) || (data.spec.jobName as unknown as string)
+      }
+    }
+    return res
   }
 
   validateInputSet({
@@ -133,6 +139,19 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
     return {}
   }
 
+  private getInitialValues(initialValues: JenkinsStepData): JenkinsStepData {
+    return {
+      ...initialValues,
+      spec: {
+        ...initialValues.spec,
+        connectorRef:
+          typeof initialValues?.spec?.connectorRef === 'string'
+            ? initialValues?.spec?.connectorRef
+            : (initialValues?.spec?.connectorRef as any)?.value
+      }
+    }
+  }
+
   renderStep(props: StepProps<JenkinsStepData>): JSX.Element {
     const {
       initialValues,
@@ -147,17 +166,19 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
       allowableTypes
     } = props
 
+    const connectorRef = this.getInitialValues(initialValues)?.spec?.connectorRef
     if (stepViewType === StepViewType.InputSet || stepViewType === StepViewType.DeploymentForm) {
       return (
         <JenkinsStepInputSet
-          initialValues={initialValues}
+          initialValues={this.getInitialValues(initialValues)}
           template={inputSetData?.template}
           path={inputSetData?.path || ''}
           readonly={!!inputSetData?.readonly}
           stepViewType={stepViewType}
-          onUpdate={onUpdate}
-          onChange={onChange}
+          onUpdate={(values: any) => onUpdate?.(this.processFormData(values))}
+          onChange={(values: any) => onChange?.(this.processFormData(values))}
           allowableTypes={allowableTypes}
+          connectorRef={getMultiTypeFromValue(connectorRef) !== MultiTypeInputType.RUNTIME ? connectorRef : ''}
         />
       )
     } else if (stepViewType === StepViewType.InputVariable) {
@@ -165,18 +186,18 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
         <JenkinsStepVariables
           {...(customStepProps as JenkinsStepVariablesProps)}
           initialValues={initialValues}
-          onUpdate={onUpdate}
+          onUpdate={(values: any) => onUpdate?.(this.processFormData(values))}
         />
       )
     }
 
     return (
       <JenkinsStepBaseWithRef
-        initialValues={initialValues}
+        initialValues={this.getInitialValues(initialValues)}
         allowableTypes={allowableTypes}
-        onChange={onChange}
+        onChange={(values: any) => onChange?.(this.processFormData(values))}
         stepViewType={stepViewType || StepViewType.Edit}
-        onUpdate={onUpdate}
+        onUpdate={(values: any) => onUpdate?.(this.processFormData(values))}
         ref={formikRef}
         isNewStep={isNewStep}
         readonly={readonly}

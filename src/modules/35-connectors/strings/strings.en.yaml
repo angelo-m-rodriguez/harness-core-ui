@@ -367,7 +367,6 @@ customHealth:
   valueRequired: Value is required.
   keyRequired: Key is required.
 cdng:
-  jobName: Job Name
   continousVerificationType: Continous Verification Type
   monitoredServiceType: Monitored Service Type
   artifactTag: Artifact Tag

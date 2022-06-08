@@ -113,10 +113,8 @@ lockStep:
   scopePlaceholder: Select Scope
   scope: Scope (to release constraint)
 jenkinsStep:
-  jobName: Job Name
-  connectorRef: Jenkins Connector
   jobNamePlaceholder: Select Job Name
-  jobParameter: Job Parameters (Optional)
+  jobParameter: Job Parameters
   unstableStatusAsSuccess: Treat unstable Jenkins status as success
   captureEnvironmentVariable: Capture environment variables from Jenkins build
 jiraApprovalStep:

@@ -10,44 +10,8 @@ import { Types as ValidationFieldTypes } from '@pipeline/components/PipelineStep
 
 export const transformValuesFieldsConfig = [
   {
-    name: 'identifier',
-    type: TransformValuesTypes.Text
-  },
-  {
-    name: 'name',
-    type: TransformValuesTypes.Text
-  },
-  {
     name: 'spec.connectorRef',
     type: TransformValuesTypes.ConnectorRef
-  },
-  {
-    name: 'spec.jobName',
-    type: TransformValuesTypes.Text
-  },
-  {
-    name: 'spec.jobParameter',
-    type: TransformValuesTypes.List
-  },
-  {
-    name: 'spec.failureStrategies',
-    type: TransformValuesTypes.List
-  },
-  {
-    name: 'spec.delegateSelectors',
-    type: TransformValuesTypes.List
-  },
-  {
-    name: 'spec.unstableStatusAsSuccess',
-    type: TransformValuesTypes.Boolean
-  },
-  {
-    name: 'spec.captureEnvironmentVariable',
-    type: TransformValuesTypes.Boolean
-  },
-  {
-    name: 'timeout',
-    type: TransformValuesTypes.Text
   }
 ]
 
