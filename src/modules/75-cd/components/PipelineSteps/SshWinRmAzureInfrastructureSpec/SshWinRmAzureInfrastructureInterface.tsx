@@ -12,7 +12,7 @@ import type { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import type { SshWinRmAzureInfrastructure } from 'services/cd-ng'
 import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import type { UseStringsReturn } from 'framework/strings'
-import { getConnectorSchema, getNameSpaceSchema, getReleaseNameSchema } from '../PipelineStepsUtil'
+import { getConnectorSchema } from '../PipelineStepsUtil'
 
 export const subscriptionLabel = 'cd.steps.azureInfraStep.subscription'
 export const resourceGroupLabel = 'common.resourceGroupLabel'
@@ -75,9 +75,7 @@ export function getValidationSchema(getString: UseStringsReturn['getString']): Y
           return true
         }
       })
-    }),
-    namespace: getNameSpaceSchema(getString),
-    releaseName: getReleaseNameSchema(getString)
+    })
   })
 }
 export interface AzureInfrastructureSpecEditableProps {

@@ -5,23 +5,15 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect } from 'react'
-import {
-  Layout,
-  FormInput,
-  SelectOption,
-  Formik,
-  FormikForm,
-  IconName,
-  getMultiTypeFromValue,
-  MultiTypeInputType
-} from '@wings-software/uicore'
+import React, { useEffect, useState, useRef, useContext } from 'react'
+import { Layout, FormInput, SelectOption, Formik, FormikForm, IconName, Text } from '@wings-software/uicore'
+import { Color } from '@harness/design-system'
 import type { FormikProps, FormikErrors } from 'formik'
 import { useParams } from 'react-router-dom'
 import { debounce, noop, get, defaultTo, isEmpty } from 'lodash-es'
 import { parse } from 'yaml'
 import { CompletionItemKind } from 'vscode-languageserver-types'
-import { StepViewType, StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
+import type { StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import {
   getAzureClustersPromise,
@@ -29,9 +21,7 @@ import {
   getAzureSubscriptionsPromise,
   getConnectorListV2Promise,
   SshWinRmAzureInfrastructure,
-  useGetAzureClusters,
-  useGetAzureResourceGroupsBySubscription,
-  useGetAzureSubscriptions
+  getSubscriptionTagsPromise
 } from 'services/cd-ng'
 import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProps'
 import { loggerFor } from 'framework/logging/logging'
@@ -79,124 +69,123 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
     accountId: string
   }>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
-  const [subscriptions, setSubscriptions] = React.useState<SelectOption[]>([])
-  const [clusters, setClusters] = React.useState<SelectOption[]>([])
-  const [resourceGroups, setResourceGroups] = React.useState<SelectOption[]>([])
-  const delayedOnUpdate = React.useRef(debounce(onUpdate || noop, 300)).current
+
+  const [subscriptions, setSubscriptions] = useState<SelectOption[]>([])
+  const [isSubsLoading, setIsSubsLoading] = useState(false)
+  const [subsErrorMessage, setSubsErrorMessage] = useState('')
+
+  const [resourceGroups, setResourceGroups] = useState<SelectOption[]>([])
+  const [isResGroupLoading, setIsResGroupLoading] = useState(false)
+  const [resGroupErrorMessage, setResGroupErrorMessage] = useState('')
+
+  const [clusters, setClusters] = useState<SelectOption[]>([])
+  const [isClustersLoading, setIsClustersLoading] = useState(false)
+  const [clustersErrorMessage, setClustersErrorMessage] = useState('')
+
+  const [azureTags, setAzureTags] = useState([])
+
+  const delayedOnUpdate = useRef(debounce(onUpdate || noop, 300)).current
   const { getString } = useStrings()
 
-  const formikRef = React.useRef<FormikProps<AzureInfrastructureUI> | null>(null)
-
-  const {
-    data: subscriptionsData,
-    loading: loadingSubscriptions,
-    refetch: refetchSubscriptions
-  } = useGetAzureSubscriptions({
-    queryParams: {
-      connectorRef: initialValues?.connectorRef,
-      accountIdentifier: accountId,
-      orgIdentifier,
-      projectIdentifier
-    },
-    lazy: true,
-    debounce: 300
-  })
-
-  useEffect(() => {
-    const subscriptionValues = [] as SelectOption[]
-    defaultTo(subscriptionsData?.data?.subscriptions, []).map(sub =>
-      subscriptionValues.push({ label: `${sub.subscriptionName}: ${sub.subscriptionId}`, value: sub.subscriptionId })
-    )
-    setSubscriptions(subscriptionValues as SelectOption[])
-  }, [subscriptionsData])
+  const formikRef = useRef<FormikProps<AzureInfrastructureUI> | null>(null)
 
   useEffect(() => {
     formikRef?.current?.setFieldValue('subscriptionId', getSubscription(initialValues))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subscriptions])
 
-  const {
-    data: resourceGroupData,
-    refetch: refetchResourceGroups,
-    loading: loadingResourceGroups
-  } = useGetAzureResourceGroupsBySubscription({
-    queryParams: {
-      connectorRef: initialValues?.connectorRef,
-      accountIdentifier: accountId,
-      orgIdentifier,
-      projectIdentifier
-    },
-    subscriptionId: initialValues?.subscriptionId,
-    lazy: true,
-    debounce: 300
-  })
+  const fetchSubscriptions = async (connectorRef: string) => {
+    setIsSubsLoading(true)
+    try {
+      const response = await getAzureSubscriptionsPromise({
+        queryParams: {
+          connectorRef: connectorRef,
+          accountIdentifier: accountId,
+          orgIdentifier,
+          projectIdentifier
+        }
+      })
+      const subs = get(response, 'data.subscriptions', []).map(sub => ({
+        label: `${sub.subscriptionName}: ${sub.subscriptionId}`,
+        value: sub.subscriptionId
+      }))
+      setSubscriptions(subs)
+    } catch (e) {
+      setSubsErrorMessage(e.message || e.responseMessage[0])
+    } finally {
+      setIsSubsLoading(false)
+    }
+  }
 
-  React.useEffect(() => {
-    const options =
-      resourceGroupData?.data?.resourceGroups?.map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup })) ||
-      /* istanbul ignore next */ []
-    setResourceGroups(options)
-  }, [resourceGroupData])
+  const fetchSubscriptionTags = async (connectorRef: string, subscriptionId: string) => {
+    const response = await getSubscriptionTagsPromise({
+      subscriptionId,
+      queryParams: {
+        connectorRef,
+        accountIdentifier: accountId,
+        orgIdentifier,
+        projectIdentifier
+      }
+    })
+    console.log('getSubscriptionTagsPromise response: ', response)
+    setAzureTags(response.data?.tags || [])
+  }
 
-  const {
-    data: clustersData,
-    refetch: refetchClusters,
-    loading: loadingClusters
-  } = useGetAzureClusters({
-    queryParams: {
-      connectorRef: initialValues?.connectorRef,
-      accountIdentifier: accountId,
-      orgIdentifier,
-      projectIdentifier
-    },
-    subscriptionId: initialValues?.subscriptionId,
-    resourceGroup: initialValues?.resourceGroup,
-    lazy: true,
-    debounce: 300
-  })
+  const fetchResourceGroups = async (connectorRef: string, subscriptionId: string) => {
+    setIsResGroupLoading(true)
+    try {
+      const response = await getAzureResourceGroupsBySubscriptionPromise({
+        queryParams: {
+          connectorRef: connectorRef,
+          accountIdentifier: accountId,
+          orgIdentifier,
+          projectIdentifier
+        },
+        subscriptionId: subscriptionId
+      })
+      setResourceGroups(
+        (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
+      )
+    } catch (e) {
+      setResGroupErrorMessage(e.message || e.responseMessage[0])
+    } finally {
+      setIsResGroupLoading(false)
+    }
+  }
 
-  React.useEffect(() => {
-    const options =
-      clustersData?.data?.clusters?.map(cl => ({ label: cl.cluster, value: cl.cluster })) ||
-      /* istanbul ignore next */ []
-    setClusters(options)
-  }, [clustersData])
+  const fetchAzureClusters = async (connectorRef: string, subscriptionId: string, resourceGroup: string) => {
+    setIsClustersLoading(true)
+    try {
+      const response = await getAzureClustersPromise({
+        queryParams: {
+          connectorRef: connectorRef,
+          accountIdentifier: accountId,
+          orgIdentifier,
+          projectIdentifier
+        },
+        subscriptionId: subscriptionId,
+        resourceGroup: resourceGroup
+      })
+      const clusterOptions = get(response, 'data.clusters', []).map(cl => ({ label: cl.cluster, value: cl.cluster }))
+      setClusters(clusterOptions)
+    } catch (e) {
+      setClustersErrorMessage(e.message || e.responseMessage[0])
+    } finally {
+      setIsClustersLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (initialValues.connectorRef) {
-      refetchSubscriptions({
-        queryParams: {
-          accountIdentifier: accountId,
-          projectIdentifier,
-          orgIdentifier,
-          connectorRef: initialValues.connectorRef
-        }
-      })
+      const { connectorRef } = initialValues
+      fetchSubscriptions(connectorRef)
       if (initialValues.subscriptionId) {
-        refetchResourceGroups({
-          queryParams: {
-            accountIdentifier: accountId,
-            projectIdentifier,
-            orgIdentifier,
-            connectorRef: initialValues.connectorRef
-          },
-          pathParams: {
-            subscriptionId: initialValues.subscriptionId
-          }
-        })
+        const { subscriptionId } = initialValues
+        fetchResourceGroups(connectorRef, subscriptionId)
+        fetchSubscriptionTags(connectorRef, subscriptionId)
         if (initialValues.resourceGroup) {
-          refetchClusters({
-            queryParams: {
-              connectorRef: initialValues?.connectorRef,
-              accountIdentifier: accountId,
-              orgIdentifier,
-              projectIdentifier
-            },
-            pathParams: {
-              subscriptionId: initialValues?.subscriptionId,
-              resourceGroup: initialValues?.resourceGroup
-            }
-          })
+          const { resourceGroup } = initialValues
+          fetchAzureClusters(connectorRef, subscriptionId, resourceGroup)
         }
       }
     }
@@ -214,7 +203,8 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
 
   const getInitialValues = (): AzureInfrastructureUI => {
     const currentValues: AzureInfrastructureUI = {
-      ...initialValues
+      ...initialValues,
+      tags: Object(initialValues.tags || {}).values
     }
     /* istanbul ignore else */
     if (initialValues) {
@@ -225,9 +215,9 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
     return currentValues
   }
 
-  const { subscribeForm, unSubscribeForm } = React.useContext(StageErrorContext)
+  const { subscribeForm, unSubscribeForm } = useContext(StageErrorContext)
 
-  React.useEffect(() => {
+  useEffect(() => {
     subscribeForm({
       tab: DeployTabs.INFRASTRUCTURE,
       form: formikRef as React.MutableRefObject<FormikProps<unknown> | null>
@@ -286,64 +276,42 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   style={{ marginBottom: 'var(--spacing-large)' }}
                   type={Connectors.AZURE}
                   selected={formik.values.connectorRef}
-                  onChange={
-                    /* istanbul ignore next */ async (value: any, scope = Scope.PROJECT) => {
-                      /* istanbul ignore next */
-                      if (value?.identifier) {
-                        const connectorValue = `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`
-                        formik.setFieldValue('connectorRef', {
-                          label: value.name || '',
-                          value: connectorValue,
-                          scope: scope,
-                          live: value?.status?.status === 'SUCCESS',
-                          connector: value
-                        })
-                        setSubscriptions([])
-                        setResourceGroups([])
-                        setClusters([])
-                        formik.setFieldValue('subscriptionId', '')
-                        formik.setFieldValue('resourceGroup', '')
-                        formik.setFieldValue('cluster', '')
-                        await refetchSubscriptions({
-                          queryParams: {
-                            accountIdentifier: accountId,
-                            projectIdentifier,
-                            orgIdentifier,
-                            connectorRef: connectorValue
-                          }
-                        })
-                      }
+                  onChange={(value, scope) => {
+                    if (value?.identifier) {
+                      const connectorValue = `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`
+                      formik.setFieldValue('connectorRef', {
+                        label: value.name || '',
+                        value: connectorValue,
+                        scope: scope,
+                        live: value?.status?.status === 'SUCCESS',
+                        connector: value
+                      })
+                      formik.setFieldValue('subscriptionId', '')
+                      formik.setFieldValue('resourceGroup', '')
+                      formik.setFieldValue('cluster', '')
+                      setSubscriptions([])
+                      setResourceGroups([])
+                      setClusters([])
+                      fetchSubscriptions(connectorValue)
                     }
-                  }
+                  }}
                   gitScope={{ repo: repoIdentifier || '', branch, getDefaultFromOtherRepo: true }}
                 />
               </Layout.Horizontal>
-              <Layout.Horizontal className={css.formRow} spacing="medium">
+              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="subscriptionId"
                   className={css.inputWidth}
                   items={subscriptions}
-                  disabled={loadingSubscriptions || readonly}
+                  disabled={isSubsLoading || readonly}
                   placeholder={
-                    loadingSubscriptions
-                      ? /* istanbul ignore next */ getString('loading')
-                      : getString('cd.steps.azureInfraStep.subscriptionPlaceholder')
+                    isSubsLoading ? getString('loading') : getString('cd.steps.azureInfraStep.subscriptionPlaceholder')
                   }
                   label={getString(subscriptionLabel)}
                   onChange={
                     /* istanbul ignore next */ value => {
                       if (value) {
-                        refetchResourceGroups({
-                          queryParams: {
-                            accountIdentifier: accountId,
-                            projectIdentifier,
-                            orgIdentifier,
-                            connectorRef: getValue(formik.values?.connectorRef)
-                          },
-                          pathParams: {
-                            subscriptionId: getValue(value)
-                          }
-                        })
+                        fetchResourceGroups(formik.values?.connectorRef?.value, getValue(value))
                         formik.setFieldValue('resourceGroup', '')
                         formik.setFieldValue('cluster', '')
                         setResourceGroups([])
@@ -352,68 +320,59 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     }
                   }
                 />
-              </Layout.Horizontal>
-              <Layout.Horizontal className={css.formRow} spacing="medium">
+                {subsErrorMessage && <Text color={Color.RED_400}>{subsErrorMessage}</Text>}
+              </Layout.Vertical>
+              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="resourceGroup"
                   className={css.inputWidth}
                   items={resourceGroups}
-                  disabled={loadingResourceGroups || readonly}
-                  placeholder={
-                    loadingResourceGroups
-                      ? /* istanbul ignore next */ getString('loading')
-                      : getString('cd.steps.azureInfraStep.resourceGroupPlaceholder')
-                  }
-                  onChange={
-                    /* istanbul ignore next */ value => {
-                      if (value) {
-                        formik.setFieldValue('cluster', '')
-                        setClusters([])
-                        console.log('onChange refetchClusters')
-                        refetchClusters({
-                          queryParams: {
-                            accountIdentifier: accountId,
-                            projectIdentifier,
-                            orgIdentifier,
-                            connectorRef: getValue(formik.values?.connectorRef)
-                          },
-                          pathParams: {
-                            subscriptionId: getValue(formik.values?.subscriptionId),
-                            resourceGroup: getValue(value)
-                          }
-                        })
-                      }
+                  disabled={isResGroupLoading || !formik.values.resourceGroup || readonly}
+                  placeholder={getString('cd.steps.azureInfraStep.resourceGroupPlaceholder')}
+                  onChange={value => {
+                    if (value) {
+                      formik.setFieldValue('cluster', '')
+                      setClusters([])
+                      fetchAzureClusters(
+                        getValue(formik.values?.connectorRef),
+                        getValue(formik.values?.subscriptionId),
+                        getValue(value)
+                      )
                     }
-                  }
+                  }}
                   label={getString(resourceGroupLabel)}
                 />
-              </Layout.Horizontal>
-              <Layout.Horizontal className={css.formRow} spacing="medium">
+                {resGroupErrorMessage && <Text color={Color.RED_400}>{resGroupErrorMessage}</Text>}
+              </Layout.Vertical>
+              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="cluster"
                   className={css.inputWidth}
                   items={clusters}
-                  disabled={loadingClusters || readonly}
+                  disabled={isClustersLoading || !formik.values.resourceGroup || readonly}
                   label={getString(clusterLabel)}
                   placeholder={
-                    loadingClusters
-                      ? /* istanbul ignore next */ getString('loading')
+                    isClustersLoading
+                      ? getString('loading')
                       : getString('cd.steps.common.selectOrEnterClusterPlaceholder')
                   }
                   onChange={value => {
-                    /* istanbul ignore next */
                     formik.setFieldValue('cluster', value)
                   }}
                 />
+                {clustersErrorMessage && <Text color={Color.RED_400}>{clustersErrorMessage}</Text>}
+              </Layout.Vertical>
+              <Layout.Horizontal className={css.formRow} spacing="medium">
+                <FormInput.MultiSelect name="tags" label={getString('tagLabel')} items={azureTags} />
               </Layout.Horizontal>
               <Layout.Horizontal spacing="medium" style={{ alignItems: 'center' }} className={css.lastRow}>
                 <FormInput.CheckBox
                   className={css.simultaneousDeployment}
                   tooltipProps={{
-                    dataTooltipId: 'azureAllowSimultaneousDeployments'
+                    dataTooltipId: 'sshWinrmAzureUsePublicDns'
                   }}
-                  name={'allowSimultaneousDeployments'}
-                  label={getString('cd.allowSimultaneousDeployments')}
+                  name={'usePublicDns'}
+                  label={getString('cd.infrastructure.sshWinRmAzure.usePublicDns')}
                   disabled={readonly}
                 />
               </Layout.Horizontal>
@@ -528,11 +487,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     /* istanbul ignore else */
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.subscriptionId', ''))
-      if (
-        obj?.type === SshWinRmAzureType &&
-        obj?.spec?.connectorRef &&
-        getMultiTypeFromValue(obj.spec?.connectorRef) === MultiTypeInputType.FIXED
-      ) {
+      if (obj?.type === SshWinRmAzureType && obj?.spec?.connectorRef) {
         return getAzureSubscriptionsPromise({
           queryParams: {
             accountIdentifier: accountId,
@@ -572,13 +527,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     // /* istanbul ignore else */
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.resourceGroup', ''))
-      if (
-        obj?.type === SshWinRmAzureType &&
-        obj?.spec?.connectorRef &&
-        getMultiTypeFromValue(obj.spec?.connectorRef) === MultiTypeInputType.FIXED &&
-        obj?.spec?.subscriptionId &&
-        getMultiTypeFromValue(obj.spec?.subscriptionId) === MultiTypeInputType.FIXED
-      ) {
+      if (obj?.type === SshWinRmAzureType && obj?.spec?.connectorRef && obj?.spec?.subscriptionId) {
         return getAzureResourceGroupsBySubscriptionPromise({
           queryParams: {
             accountIdentifier: accountId,
@@ -623,11 +572,8 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
       if (
         obj?.type === SshWinRmAzureType &&
         obj?.spec?.connectorRef &&
-        getMultiTypeFromValue(obj.spec?.connectorRef) === MultiTypeInputType.FIXED &&
         obj?.spec?.subscriptionId &&
-        getMultiTypeFromValue(obj.spec?.subscriptionId) === MultiTypeInputType.FIXED &&
-        obj?.spec?.resourceGroup &&
-        getMultiTypeFromValue(obj.spec?.resourceGroup) === MultiTypeInputType.FIXED
+        obj?.spec?.resourceGroup
       ) {
         return getAzureClustersPromise({
           queryParams: {
@@ -654,38 +600,19 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
 
   validateInputSet({
     data,
-    template,
-    getString,
-    viewType
+    getString
   }: ValidateInputSetProps<SshWinRmAzureInfrastructure>): FormikErrors<SshWinRmAzureInfrastructure> {
     const errors: Partial<SshWinRmAzureInfrastructureTemplate> = {}
-    const isRequired = viewType === StepViewType.DeploymentForm || viewType === StepViewType.TriggerForm
-    if (
-      isEmpty(data.connectorRef) &&
-      isRequired &&
-      getMultiTypeFromValue(template?.connectorRef) === MultiTypeInputType.RUNTIME
-    ) {
+    if (isEmpty(data.connectorRef)) {
       errors.connectorRef = getString?.('common.validation.fieldIsRequired', { name: getString('connector') })
     }
-    if (
-      isEmpty(data.subscriptionId) &&
-      isRequired &&
-      getMultiTypeFromValue(template?.subscriptionId) === MultiTypeInputType.RUNTIME
-    ) {
+    if (isEmpty(data.subscriptionId)) {
       errors.subscriptionId = getString?.('common.validation.fieldIsRequired', { name: getString(subscriptionLabel) })
     }
-    if (
-      isEmpty(data.resourceGroup) &&
-      isRequired &&
-      getMultiTypeFromValue(template?.resourceGroup) === MultiTypeInputType.RUNTIME
-    ) {
+    if (isEmpty(data.resourceGroup)) {
       errors.resourceGroup = getString?.('common.validation.fieldIsRequired', { name: getString(resourceGroupLabel) })
     }
-    if (
-      isEmpty(data.cluster) &&
-      isRequired &&
-      getMultiTypeFromValue(template?.cluster) === MultiTypeInputType.RUNTIME
-    ) {
+    if (isEmpty(data.cluster)) {
       errors.cluster = getString?.('common.validation.fieldIsRequired', { name: getString(clusterLabel) })
     }
     return errors
