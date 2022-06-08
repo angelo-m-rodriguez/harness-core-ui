@@ -2142,6 +2142,7 @@ export type DelegateFilterProperties = FilterProperties & {
   delegateType?: string
   description?: string
   hostName?: string
+  delegateTags?: string[]
   status?: 'ENABLED' | 'WAITING_FOR_APPROVAL' | 'DISABLED' | 'DELETED'
 }
 

@@ -147,7 +147,8 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
 
   const refetchDelegates = useCallback(
     async (params: GetDelegateGroupsNGV2WithFilterQueryParams, filter?): Promise<void> => {
-      const { delegateGroupIdentifier, delegateName, delegateType, description, hostName, status, tags } = filter || {}
+      const { delegateGroupIdentifier, delegateName, delegateType, description, hostName, status, delegateTags } =
+        filter || {}
       if (params.searchTerm === '') {
         delete params.searchTerm
       }
@@ -160,7 +161,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
               description,
               hostName,
               status,
-              tags
+              delegateTags
             }
           : {},
         {
@@ -213,7 +214,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
   const formatPayload = (data: FilterDataInterface<DelegateFilterProperties, FilterInterface>, isUpdate: boolean) => {
     const {
       metadata: { name: _name, filterVisibility, identifier },
-      formValues: { delegateGroupIdentifier, delegateName, delegateType, description, hostName, status, tags }
+      formValues: { delegateGroupIdentifier, delegateName, delegateType, description, hostName, status, delegateTags }
     } = data
     return {
       name: _name,
@@ -229,7 +230,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
         description,
         hostName,
         status,
-        tags
+        delegateTags
       } as DelegateFilterProperties
     }
   }
@@ -291,7 +292,12 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
           label={getString('delegates.delegateIdentifier')}
           key={'delegateGroupIdentifier'}
         />
-        <FormInput.KVTagInput name="tags" label={getString('tagsLabel')} key="tags" />
+        <FormInput.KVTagInput
+          isArray={true}
+          name="delegateTags"
+          label={getString('delegate.delegateTags')}
+          key="delegateTags"
+        />
       </>
     )
   }
@@ -337,7 +343,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
       }
     }
 
-    const { delegateName, delegateGroupIdentifier, delegateType, description, hostName, status, tags } =
+    const { delegateName, delegateGroupIdentifier, delegateType, description, hostName, status, delegateTags } =
       (appliedFilter?.filterProperties as any) || {}
     const { name = '', filterVisibility } = appliedFilter || {}
     return isFetchingFilters ? (
@@ -359,7 +365,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
             description,
             hostName,
             status,
-            tags
+            delegateTags
           },
           metadata: {
             name,
@@ -448,7 +454,7 @@ export const DelegateListing: React.FC<DelegatesListProps> = ({ filtersMockData 
   fieldToLabelMapping.set('description', getString('description'))
   fieldToLabelMapping.set('hostName', getString('delegate.hostName'))
   fieldToLabelMapping.set('status', getString('status'))
-  fieldToLabelMapping.set('tags', getString('delegate.delegateTags'))
+  fieldToLabelMapping.set('delegateTags', getString('delegate.delegateTags'))
 
   const permissionRequestNewDelegate = {
     resourceScope: {
