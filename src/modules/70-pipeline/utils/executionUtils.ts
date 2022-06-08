@@ -830,11 +830,11 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         response.push(parentNode)
         nodeDetails = layoutNodeMap[nodeDetails.edgeLayoutList?.nextIds?.[0] || '']
       } else if (nodeDetails?.nodeType === NodeTypes.Matrix && currentNodeChildren && currentNodeChildren.length > 1) {
-        const childData = []
+        const childData: PipelineGraphState[] = []
         currentNodeChildren.forEach(item => {
           const nodeDataItem = layoutNodeMap[item]
           childData.push({
-            id: nodeDataItem?.nodeExecutionId,
+            id: nodeDataItem.nodeExecutionId as string,
             stageNodeId: nodeDataItem?.nodeUuid as string,
             identifier: nodeDataItem.nodeIdentifier as string,
             type: nodeDataItem.nodeType as string,

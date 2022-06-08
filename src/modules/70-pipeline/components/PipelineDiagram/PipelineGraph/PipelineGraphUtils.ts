@@ -366,7 +366,7 @@ const transformStageData = (
   offsetIndex = 0
 ): PipelineGraphState[] => {
   const finalData: PipelineGraphState[] = []
-  stages.forEach((stage: StageElementWrapperConfig, index: number) => {
+  stages.forEach((stage: any, index: number) => {
     if (stage?.stage) {
       const updatedStagetPath = `${parentPath}.${index + offsetIndex}`
       const hasErrors =

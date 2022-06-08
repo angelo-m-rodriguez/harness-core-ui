@@ -2552,12 +2552,12 @@ export interface StringsMap {
   'pipeline.ACR.subscriptionError': string
   'pipeline.ACR.subscriptionPlaceholder': string
   'pipeline.ACR.tagError': string
+  'pipeline.Jenkins.name': string
+  'pipeline.MatrixNode.maxParallelism': string
   'pipeline.OverviewEmptyStates.createPipelineHeaderMsg': string
   'pipeline.OverviewEmptyStates.createPipelineInfo': string
   'pipeline.OverviewEmptyStates.runPipelineHeaderMsg': string
   'pipeline.OverviewEmptyStates.runPipelineInfo': string
-  'pipeline.Jenkins.name': string
-  'pipeline.MatrixNode.maxParallelism': string
   'pipeline.aboutYourStage.stageNamePlaceholder': string
   'pipeline.addStage.description': string
   'pipeline.addStage.title': string
