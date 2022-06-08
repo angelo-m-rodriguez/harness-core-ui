@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { isEmpty as _isEmpty, defaultTo as _defaultTo } from 'lodash-es'
 import { Switch, Tab } from '@blueprintjs/core'
 import copy from 'copy-to-clipboard'
@@ -208,7 +208,7 @@ const COGatewayAnalytics: React.FC<COGatewayAnalyticsProps> = props => {
   }
 
   const renderCustomDomainLink = (link: string, index = 0) => {
-    const hrefLink = `http://${link}`
+    const hrefLink = `${domainProtocol}://${link}`
     return (
       <Layout.Horizontal spacing="small" key={`custom_domain${index}`}>
         <Link key={`custom_domain${index}`} href={hrefLink} target="_blank">
@@ -218,6 +218,13 @@ const COGatewayAnalytics: React.FC<COGatewayAnalyticsProps> = props => {
       </Layout.Horizontal>
     )
   }
+
+  const domainProtocol = useMemo(() => {
+    const hasHttpsConfig = !_isEmpty(
+      props.service?.data.routing?.ports?.find(portConfig => portConfig.protocol === 'https')
+    )
+    return Utils.getConditionalResult(hasHttpsConfig, 'https', 'http')
+  }, [props.service?.data.routing?.ports])
 
   return (
     <Container>
@@ -323,14 +330,14 @@ const COGatewayAnalytics: React.FC<COGatewayAnalyticsProps> = props => {
                   <Text style={{ maxWidth: 350, textAlign: 'left' }}>{props.service?.data.host_name}</Text>
                 ) : (
                   <Link
-                    href={`http://${props.service?.data.host_name}`}
+                    href={`${domainProtocol}://${props.service?.data.host_name}`}
                     target="_blank"
                     style={{ maxWidth: 350, textAlign: 'left' }}
                   >
                     {props.service?.data.host_name}
                   </Link>
                 )}
-                <CopyURL textToCopy={`http://${props.service?.data.host_name}`} />
+                <CopyURL textToCopy={`${domainProtocol}://${props.service?.data.host_name}`} />
               </Layout.Horizontal>
             </Container>
             <ConnectorDetails service={props.service?.data} />

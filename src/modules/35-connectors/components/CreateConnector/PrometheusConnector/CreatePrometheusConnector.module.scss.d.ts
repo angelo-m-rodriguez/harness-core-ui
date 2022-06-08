@@ -9,5 +9,6 @@
 declare const styles: {
   readonly credentials: string
   readonly form: string
+  readonly keyValue: string
 }
 export default styles

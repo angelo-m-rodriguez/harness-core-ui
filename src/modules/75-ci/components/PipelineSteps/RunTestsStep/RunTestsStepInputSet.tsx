@@ -17,10 +17,12 @@ import { ShellScriptMonacoField } from '@common/components/ShellScriptMonaco/She
 import MultiTypeFieldSelector from '@common/components/MultiTypeFieldSelector/MultiTypeFieldSelector'
 import { FormMultiTypeCheckboxField } from '@common/components'
 import { MultiTypeTextField } from '@common/components/MultiTypeText/MultiTypeText'
+import { MultiTypeSelectField } from '@common/components/MultiTypeSelect/MultiTypeSelect'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { shouldRenderRunTimeInputViewWithAllowedValues } from '@pipeline/utils/CIUtils'
 import type { RunTestsStepProps } from './RunTestsStep'
+import { getBuildEnvironmentOptions, getCSharpBuildToolOptions, getFrameworkVersionOptions } from './RunTestsStepBase'
 import { CIStep } from '../CIStep/CIStep'
 import { ConnectorRefWithImage } from '../CIStep/ConnectorRefWithImage'
 import { getOptionalSubLabel, renderMultiTypeInputWithAllowedValues } from '../CIStep/CIStepOptionalConfig'
@@ -95,6 +97,96 @@ export const RunTestsStepInputSetBasic: React.FC<RunTestsStepProps> = props => {
         }}
         path={path || ''}
       />
+      <ConnectorRefWithImage
+        readonly={readonly}
+        showConnectorRef={getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME}
+        showImage={getMultiTypeFromValue(template?.spec?.image) === MultiTypeInputType.RUNTIME}
+        stepViewType={stepViewType}
+        path={path || ''}
+        template={template}
+        isInputSetView={true}
+      />
+      {getMultiTypeFromValue(template?.spec?.buildEnvironment) === MultiTypeInputType.RUNTIME && (
+        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
+          <MultiTypeSelectField
+            label={
+              <Text
+                className={css.inpLabel}
+                color={Color.GREY_600}
+                font={{ size: 'small', weight: 'semi-bold' }}
+                tooltipProps={{ dataTooltipId: 'buildEnvironment' }}
+              >
+                {getString('ci.runTestsStep.buildEnvironment')}
+              </Text>
+            }
+            name={`${prefix}spec.buildEnvironment`}
+            useValue
+            multiTypeInputProps={{
+              selectItems: getBuildEnvironmentOptions(getString),
+              placeholder: getString('select'),
+              multiTypeInputProps: {
+                expressions,
+                allowableTypes: [MultiTypeInputType.FIXED]
+              }
+            }}
+            disabled={readonly}
+          />
+        </Container>
+      )}
+      {getMultiTypeFromValue(template?.spec?.frameworkVersion) === MultiTypeInputType.RUNTIME && (
+        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
+          <MultiTypeSelectField
+            label={
+              <Text
+                className={css.inpLabel}
+                color={Color.GREY_600}
+                font={{ size: 'small', weight: 'semi-bold' }}
+                tooltipProps={{ dataTooltipId: 'frameworkVersion' }}
+              >
+                {getString('ci.runTestsStep.frameworkVersion')}
+              </Text>
+            }
+            name={`${prefix}spec.frameworkVersion`}
+            useValue
+            multiTypeInputProps={{
+              selectItems: getFrameworkVersionOptions(getString),
+              placeholder: getString('select'),
+              multiTypeInputProps: {
+                expressions,
+                allowableTypes: [MultiTypeInputType.FIXED]
+              }
+            }}
+            disabled={readonly}
+          />
+        </Container>
+      )}
+      {getMultiTypeFromValue(template?.spec?.buildTool) === MultiTypeInputType.RUNTIME && (
+        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
+          <MultiTypeSelectField
+            label={
+              <Text
+                className={css.inpLabel}
+                color={Color.GREY_600}
+                font={{ size: 'small', weight: 'semi-bold' }}
+                tooltipProps={{ dataTooltipId: 'runTestsBuildTool' }}
+              >
+                {getString('buildToolLabel')}
+              </Text>
+            }
+            name={`${prefix}spec.buildTool`}
+            useValue
+            multiTypeInputProps={{
+              selectItems: getCSharpBuildToolOptions(getString),
+              placeholder: getString('select'),
+              multiTypeInputProps: {
+                expressions,
+                allowableTypes: [MultiTypeInputType.FIXED]
+              }
+            }}
+            disabled={readonly}
+          />
+        </Container>
+      )}
       {getMultiTypeFromValue(template?.spec?.args) === MultiTypeInputType.RUNTIME && (
         <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
           <MultiTypeTextField
@@ -120,28 +212,43 @@ export const RunTestsStepInputSetBasic: React.FC<RunTestsStepProps> = props => {
           />
         </Container>
       )}
-      <ConnectorRefWithImage
-        readonly={readonly}
-        showConnectorRef={getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME}
-        showImage={getMultiTypeFromValue(template?.spec?.image) === MultiTypeInputType.RUNTIME}
-        stepViewType={stepViewType}
-        path={path || ''}
-        template={template}
-        isInputSetView={true}
-      />
       {getMultiTypeFromValue(template?.spec?.packages) === MultiTypeInputType.RUNTIME && (
         <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
           <MultiTypeTextField
             className={css.removeBpLabelMargin}
             name={`${prefix}spec.packages`}
             label={
+              <Layout.Horizontal flex={{ justifyContent: 'flex-start', alignItems: 'baseline' }}>
+                <Text className={css.inpLabel} color={Color.GREY_600} font={{ size: 'small', weight: 'semi-bold' }}>
+                  {getString('packagesLabel')}
+                </Text>
+                &nbsp;
+                {getOptionalSubLabel(getString, 'runTestsPackages')}
+              </Layout.Horizontal>
+            }
+            multiTextInputProps={{
+              multiTextInputProps: {
+                expressions,
+                allowableTypes
+              },
+              disabled: readonly
+            }}
+          />
+        </Container>
+      )}
+      {getMultiTypeFromValue(template?.spec?.namespaces) === MultiTypeInputType.RUNTIME && (
+        <Container className={cx(css.formGroup, stepCss, css.bottomMargin5)}>
+          <MultiTypeTextField
+            className={css.removeBpLabelMargin}
+            name={`${prefix}spec.namespaces`}
+            label={
               <Text
                 className={css.inpLabel}
                 color={Color.GREY_600}
                 font={{ size: 'small', weight: 'semi-bold' }}
-                tooltipProps={{ dataTooltipId: 'runTestsPackages' }}
+                tooltipProps={{ dataTooltipId: 'runTestsNamespaces' }}
               >
-                {getString('packagesLabel')}
+                {getString('ci.runTestsStep.namespaces')}
               </Text>
             }
             multiTextInputProps={{

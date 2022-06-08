@@ -13,6 +13,7 @@ declare const styles: {
   readonly costText: string
   readonly filterPillContainer: string
   readonly filterValue: string
+  readonly label: string
   readonly menuItem: string
   readonly popoverContainer: string
   readonly visible: string

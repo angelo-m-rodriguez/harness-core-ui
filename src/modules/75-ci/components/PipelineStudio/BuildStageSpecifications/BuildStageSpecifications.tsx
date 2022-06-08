@@ -87,7 +87,7 @@ export default function BuildStageSpecifications({ children }: React.PropsWithCh
     const sharedPaths =
       typeof spec?.sharedPaths === 'string'
         ? spec?.sharedPaths
-        : spec?.sharedPaths
+        : (spec?.sharedPaths as any)
             ?.filter((path: string) => !!path)
             ?.map((_value: string) => ({
               id: uuid('', nameSpace()),

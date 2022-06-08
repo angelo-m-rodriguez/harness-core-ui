@@ -154,7 +154,8 @@ const GCPAccessPointForm: React.FC<GCPAccessPointFormProps> = ({
     queryParams: {
       cloud_account_id: cloudAccountId,
       region: _defaultTo(selectedRegion, ''),
-      accountIdentifier: accountId
+      accountIdentifier: accountId,
+      vpc: _defaultTo(selectedVpc, '')
     },
     lazy: true
   })
@@ -174,12 +175,12 @@ const GCPAccessPointForm: React.FC<GCPAccessPointFormProps> = ({
     if (selectedRegion) {
       vpcsReload()
       fetchZones()
-      subnetsReload()
     }
   }, [selectedRegion])
 
   useEffect(() => {
     if (selectedVpc) {
+      subnetsReload()
       sgsReload()
     }
   }, [selectedVpc])

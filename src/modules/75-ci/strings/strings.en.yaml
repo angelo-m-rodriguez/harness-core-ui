@@ -41,6 +41,22 @@ remoteCacheImage:
   dockerInfo: The remote cache repository needs to be created in the same account and organization as the build image. The repository must already exist for caching to work
 remoteCacheRepository:
   label: Remote Cache Repository
+runTestsStep:
+  buildEnvironment: Build Environment
+  frameworkVersion: Framework Version
+  csharp: C#
+  java: Java
+  dotNetCore: .NET Core
+  bazel: Bazel
+  maven: Maven
+  gradle: Gradle
+  dotnet: Dotnet
+  nUnitConsole: Nunit Console
+  fivePointZero: '5.0'
+  sixPointZero: '6.0'
+  namespaces: Namespaces
+  validation:
+    namespacesRequiredWhenCsharp: 'Namespaces is required in case Language is C#'
 runTestsMavenSetupTitle: Maven setup
 runTestsMavenSetupText1: Does your pom.xml contain <argLine>? Or do you attach Jacoco or any agent while running unit tests?
 runTestsMavenSetupText2: Update pom.xml by adding the following plugin with <harnessArgLine>
@@ -81,7 +97,7 @@ gradleNote1: |
               }
           }
   }
-gradleNote2: Test intelligence assumes ./gradlew is present in the root of the project. If not, it falls back to the gradle tool to run the tests. As long as the gradle version has test filtering support, it will be able to run test intelligence
+gradleNote2: Test intelligence assumes ./gradlew is present in the root of the project. If not, it falls back to the gradle tool to run the tests. As long as the gradle version has test filtering support, it will be able to run test intelligence.
 testSummary: Test Summary
 successful: Successful
 commitsTab:
@@ -90,7 +106,7 @@ commitsTab:
 artifactoryConnectorLabel: Artifactory Connector
 buildInfra:
   label: Build Infrastructure is required
-  awsVMs: AWS VMs
+  vMs: VMs
   selectInfra: Select the infrastructure where you want your builds to run
   infrastructureTypesLabel: Infrastructure Types
   kubernetesHelpText: Use to run your builds on a Kubernetes Cluster, where each CI stage runs on an ephemeral Kubernetes pod.

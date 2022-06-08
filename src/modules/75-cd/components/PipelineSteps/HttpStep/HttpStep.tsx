@@ -193,15 +193,19 @@ export class HttpStep extends PipelineStep<HttpStepData> {
   protected isHarnessSpecific = true
 
   private processInitialValues(initialValues: HttpStepData, forInpuSet?: boolean): HttpStepFormData {
+    const type = getMultiTypeFromValue(initialValues.spec?.method as string)
+    const methodValue = initialValues.spec?.method
     return {
       ...initialValues,
       spec: {
         ...(initialValues.spec as HttpStepFormData),
         method:
-          getMultiTypeFromValue(initialValues.spec?.method as string) === MultiTypeInputType.RUNTIME
-            ? (initialValues.spec?.method as string)
+          type === MultiTypeInputType.RUNTIME
+            ? (methodValue as string)
+            : type === MultiTypeInputType.EXPRESSION
+            ? methodValue
             : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              httpStepType.find(step => step.value === (initialValues.spec?.method || 'GET'))!,
+              httpStepType.find(step => step.value === (methodValue || 'GET'))!,
         headers:
           getMultiTypeFromValue(initialValues.spec?.headers as string) === MultiTypeInputType.RUNTIME
             ? (initialValues.spec?.headers as string)

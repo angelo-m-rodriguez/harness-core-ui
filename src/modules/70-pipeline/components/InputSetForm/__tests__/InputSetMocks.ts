@@ -161,6 +161,7 @@ export const GetInputSetEdit: UseGetReturnData<ResponseInputSetResponse> = {
         branch: 'feature',
         filePath: 'asd.yaml',
         objectId: '4471ec3aa40c26377353974c29a6670d998db06g',
+        commitId: '4471ec3aa40c26377353974c29a6670d998db0commitid',
         repoIdentifier: 'gitSyncRepo',
         rootFolder: '/rootFolderTest/.harness/'
       }
@@ -265,6 +266,7 @@ export const updateInputSetCallSecondArg = {
     filePath: 'asd.yaml',
     isNewBranch: false,
     lastObjectId: '4471ec3aa40c26377353974c29a6670d998db06g',
+    lastCommitId: '4471ec3aa40c26377353974c29a6670d998db0commitid',
     orgIdentifier: 'testOrg',
     pipelineBranch: 'feature',
     pipelineIdentifier: 'pipeline',
@@ -288,6 +290,7 @@ export const updateInputSetCallSecondArgNewBranch = {
     filePath: 'asd.yaml',
     isNewBranch: true,
     lastObjectId: '4471ec3aa40c26377353974c29a6670d998db06g',
+    lastCommitId: '4471ec3aa40c26377353974c29a6670d998db0commitid',
     orgIdentifier: 'testOrg',
     pipelineBranch: 'feature',
     pipelineIdentifier: 'pipeline',

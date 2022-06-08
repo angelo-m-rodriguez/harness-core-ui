@@ -54,9 +54,16 @@ describe('Validate Utils', () => {
   })
 
   test('should createChangeDetailsData', () => {
-    expect(createChangeTitleData(payload.resource as CustomChangeEventDTO | undefined)).toEqual({
-      executionId: 'rZc13AsoT1CZigLguBXZaw',
-      name: 'A little bump in the road',
+    expect(
+      createChangeTitleData(
+        payload.resource as CustomChangeEventDTO | undefined,
+        'PIPELINE_IDENTIFIER',
+        1000,
+        'triggered'
+      )
+    ).toEqual({
+      executionId: 1000,
+      name: 'PIPELINE_IDENTIFIER',
       type: 'PagerDuty',
       //type: 'HarnessCDNextGen',
       serviceIdentifier: 'service1',

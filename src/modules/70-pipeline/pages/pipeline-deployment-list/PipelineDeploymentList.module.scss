@@ -62,3 +62,24 @@
   margin: auto;
   height: 100vh;
 }
+
+.createModalCss {
+  :global {
+    .bp3-overlay-backdrop,
+    .bp3-overlay {
+      left: 270px;
+    }
+  }
+  z-index: 2 !important;
+
+  div[data-testid='modaldialog-body'] {
+    padding-right: var(--spacing);
+    padding-top: var(--spacing-8);
+    overflow: hidden;
+  }
+
+  .noPipelineText {
+    line-height: 28px !important;
+    padding-bottom: var(--spacing-4);
+  }
+}

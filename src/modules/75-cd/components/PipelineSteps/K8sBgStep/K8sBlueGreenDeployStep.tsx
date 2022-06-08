@@ -29,6 +29,7 @@ import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import type { StringsMap } from 'stringTypes'
 import { getNameAndIdentifierSchema } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 export interface K8sBGDeployData extends StepElementConfig {
   spec: Omit<K8sRollingStepInfo, 'skipDryRun'> & {
@@ -184,7 +185,14 @@ export interface K8BGVariableStepProps {
 }
 
 const K8BGVariableStep: React.FC<K8BGVariableStepProps> = ({ variablesData, metadataMap, initialValues }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8BGDeployWidgetWidgetWithRef = React.forwardRef(K8BGDeployWidget)

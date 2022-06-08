@@ -21,6 +21,7 @@ import NavExpandable from '@common/navigation/NavExpandable/NavExpandable'
 import { useFeatureFlagTelemetry } from '@cf/hooks/useFeatureFlagTelemetry'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import type { ModuleLicenseType } from '@common/constants/SubscriptionTypes'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 
 export default function CFSideNav(): React.ReactElement {
   const { getString } = useStrings()
@@ -31,8 +32,9 @@ export default function CFSideNav(): React.ReactElement {
   const { withActiveEnvironment } = useActiveEnvironment()
   const { experience } = useQueryParams<{ experience?: ModuleLicenseType }>()
   const events = useFeatureFlagTelemetry()
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
 
-  const { FF_GITSYNC, FF_PIPELINE, OPA_FF_GOVERNANCE } = useFeatureFlags()
+  const { FF_GITSYNC, FF_PIPELINE, OPA_FF_GOVERNANCE, NG_TEMPLATES } = useFeatureFlags()
 
   /* istanbul ignore next */
   const projectSelectHandler: ProjectSelectorProps['onSelect'] = data => {
@@ -80,7 +82,6 @@ export default function CFSideNav(): React.ReactElement {
               to={withActiveEnvironment(routes.toPipelines({ ...params, module: 'cf' }))}
             />
           )}
-
           <SidebarLink
             label={getString('cf.shared.getStarted')}
             to={withActiveEnvironment(routes.toCFOnboarding(params))}
@@ -104,7 +105,13 @@ export default function CFSideNav(): React.ReactElement {
                   />
                 </>
               )}
-              {OPA_FF_GOVERNANCE && (
+              {NG_TEMPLATES && (
+                <SidebarLink
+                  label={getString('common.templates')}
+                  to={routes.toTemplates({ ...params, module: 'cf' })}
+                />
+              )}
+              {canUsePolicyEngine && OPA_FF_GOVERNANCE && (
                 <SidebarLink
                   label={getString('common.governance')}
                   to={routes.toGovernance({ accountId, orgIdentifier, projectIdentifier, module: 'cf' })}

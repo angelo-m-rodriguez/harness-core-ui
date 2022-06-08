@@ -36,6 +36,9 @@ import { GitSyncStoreProvider } from 'framework/GitRepoStore/GitSyncStoreContext
 import GitContextForm, { GitContextProps, IGitContextFormProps } from '@common/components/GitContextForm/GitContextForm'
 import { saveCurrentStepData } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { getHeadingIdByType } from '../../../pages/connectors/utils/ConnectorHelper'
 import css from './ConnectorDetailsStep.module.scss'
 
@@ -51,6 +54,7 @@ interface ConnectorDetailsStepProps extends StepProps<ConnectorInfoDTO> {
   gitDetails?: IGitContextFormProps
   mock?: ResponseBoolean
   disableGitSync?: boolean
+  helpPanelReferenceId?: string
 }
 
 type Params = {
@@ -77,6 +81,9 @@ const ConnectorDetailsStep: React.FC<StepProps<ConnectorConfigDTO> & ConnectorDe
   const [loading, setLoading] = useState(false)
   const isEdit = props.isEditMode || prevStepData?.isEdit
   const { getString } = useStrings()
+  useConnectorWizard({
+    helpPanel: props.helpPanelReferenceId ? { referenceId: props.helpPanelReferenceId, contentWidth: 900 } : undefined
+  })
 
   const handleSubmit = async (formData: ConnectorConfigDTO): Promise<void> => {
     mounted.current = true
@@ -134,6 +141,11 @@ const ConnectorDetailsStep: React.FC<StepProps<ConnectorConfigDTO> & ConnectorDe
       }
     }
   }
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ConnectorDetailsStepLoad, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <Layout.Vertical spacing="xxlarge" className={css.firstep}>
@@ -143,6 +155,9 @@ const ConnectorDetailsStep: React.FC<StepProps<ConnectorConfigDTO> & ConnectorDe
       <Container className={css.connectorForm}>
         <Formik<DetailsForm>
           onSubmit={formData => {
+            trackEvent(ConnectorActions.ConnectorDetailsStepSubmit, {
+              category: Category.CONNECTOR
+            })
             handleSubmit(formData)
           }}
           formName={`connectorDetailsStepForm${props.type}`}

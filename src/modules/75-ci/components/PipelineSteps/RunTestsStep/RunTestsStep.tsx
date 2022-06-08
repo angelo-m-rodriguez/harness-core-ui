@@ -36,9 +36,12 @@ export interface RunTestsStepSpec {
   language: MultiTypePullOption
   buildTool: MultiTypePullOption
   args: string
-  packages: string
+  packages?: string // only for Java
+  namespaces?: string // only for C#
+  buildEnvironment?: string // only for C#
+  frameworkVersion?: string // only for C#
   runOnlySelectedTests?: boolean
-  testAnnotations?: string
+  testAnnotations?: string // only for Java
   preCommand?: string
   postCommand?: string
   reports?: {

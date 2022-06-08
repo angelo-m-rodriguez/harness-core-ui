@@ -179,7 +179,7 @@ exports[`CreateTargetModal CreateTargetModal should render initial state correct
             style="height: 34px;"
           >
             <button
-              class="bp3-button bp3-disabled Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color"
+              class="bp3-button bp3-disabled Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color Button--variation Button--variation-primary"
               disabled=""
               tabindex="-1"
               type="button"
@@ -191,7 +191,7 @@ exports[`CreateTargetModal CreateTargetModal should render initial state correct
               </span>
             </button>
             <button
-              class="bp3-button bp3-disabled bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--without-shadow"
+              class="bp3-button bp3-disabled bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--without-shadow Button--variation Button--variation-tertiary"
               disabled=""
               tabindex="-1"
               type="button"

@@ -39,4 +39,4 @@ export interface MarkerOption {
   clusterId?: string
 }
 
-export type CommonChartProperties = 'chart' | 'title' | 'legend' | 'pane' | 'xAxis' | 'boost'
+export type CommonChartProperties = 'chart' | 'title' | 'legend' | 'pane' | 'xAxis' | 'boost' | 'credits'

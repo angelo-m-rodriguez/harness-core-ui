@@ -5,9 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/05/PolyForm-Free-Trial-1.0.0.txt.
  */
 
-import { processFormData } from '../helper'
-import type { ServiceNowCreateData } from '../types'
-import { FieldType } from '../types'
+import type { MultiSelectOption } from '@wings-software/uicore'
+import type { ServiceNowFieldAllowedValueNG, ServiceNowFieldValueNG } from 'services/cd-ng'
+import { setAllowedValuesOptions } from '@pipeline/components/PipelineSteps/Steps/JiraApproval/helper'
+import { convertTemplateFieldsForDisplay, omitDescNShortDesc, processFormData } from '../helper'
+import type { ServiceNowCreateData, ServiceNowCreateFieldType } from '../types'
+import { FieldType, ServiceNowStaticFields } from '../types'
 
 describe('ServiceNow Create process form data tests', () => {
   test('if duplicate fields are not sent', () => {
@@ -198,5 +201,34 @@ describe('ServiceNow Create process form data tests', () => {
         templateName: 'snowCreateTemplate'
       }
     })
+  })
+
+  test('omitShortDescNDesc function', () => {
+    const fields: ServiceNowCreateFieldType[] = [
+      { name: ServiceNowStaticFields.description, value: 'desc' },
+      { name: ServiceNowStaticFields.short_description, value: 'short desc' },
+      { name: 'test1', value: '1' },
+      { name: 'test2', value: '2' }
+    ]
+    const returned: ServiceNowCreateFieldType[] = omitDescNShortDesc(fields)
+    expect(returned.length).toEqual(2)
+  })
+  test('setServiceNowAllowedValuesOption', () => {
+    const fields: ServiceNowFieldAllowedValueNG[] = [
+      { id: 'id1', value: 'value' },
+      { id: 'id2', name: 'name' }
+    ]
+    const returned: MultiSelectOption[] = setAllowedValuesOptions(fields)
+    expect(returned).toEqual([
+      { label: 'value', value: 'value' },
+      { label: 'name', value: 'name' }
+    ])
+  })
+  test('convertTemplateFieldsForDisplay', () => {
+    const fields: {
+      [key: string]: ServiceNowFieldValueNG
+    } = { field1: { displayValue: 'field1', value: 'field1' } }
+    const returned: ServiceNowFieldValueNG[] = convertTemplateFieldsForDisplay(fields)
+    expect(returned).toEqual([{ displayValue: 'field1', value: 'field1' }])
   })
 })

@@ -4,7 +4,7 @@
  * that can be found in the licenses directory at the root of this repository, also available at
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
-import React, { useEffect } from 'react'
+import React from 'react'
 import qs from 'qs'
 import { compile } from 'path-to-regexp'
 import { Router } from 'react-router-dom'
@@ -18,30 +18,14 @@ const ENTITY_TO_SAVE = 'MySavedValue'
 
 const defaultUuid = '1234'
 
-const MyComponent: React.FC<{ children?: React.ReactNode; scope?: PreferenceScope; shouldUpdateUser?: boolean }> = ({
-  scope = PreferenceScope.MACHINE,
-  shouldUpdateUser = true
+const MyComponent: React.FC<{ children?: React.ReactNode; scope?: PreferenceScope }> = ({
+  scope = PreferenceScope.MACHINE
 }) => {
   const {
     preference: savedVal,
     setPreference: setSavedVal,
-    clearPreference,
-    updatePreferenceStore
+    clearPreference
   } = usePreferenceStore<string>(defaultTo(scope, PreferenceScope.MACHINE), ENTITY_TO_SAVE)
-
-  useEffect(() => {
-    if (shouldUpdateUser) {
-      updatePreferenceStore({ currentUserInfo: { email: 'abc@email.com', uuid: '123' } })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldUpdateUser])
-
-  useEffect(() => {
-    if (shouldUpdateUser) {
-      updatePreferenceStore({ currentUserInfo: undefined })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldUpdateUser])
 
   return (
     <div>

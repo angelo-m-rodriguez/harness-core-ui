@@ -1,22 +1,48 @@
 {
   "data": {
-    "recommendationFilterStatsV2": [
+    "totalPages": 1,
+    "totalItems": 4,
+    "pageItemCount": 4,
+    "pageSize": 100,
+    "content": [
       {
-        "key": "name",
-        "values": ["name1", "name2", "name3", "name4"],
-        "__typename": "FilterStatsDTO"
+        "name": "4",
+        "identifier": "Test_1",
+        "orgIdentifier": null,
+        "projectIdentifier": null,
+        "filterProperties": {
+          "k8sRecommendationFilterPropertiesDTO": {},
+          "perspectiveFilters": null,
+          "minSaving": 0,
+          "minCost": 0,
+          "offset": null,
+          "limit": null,
+          "tags": {},
+          "filterType": "CCMRecommendation"
+        },
+        "filterVisibility": "EveryOne"
       },
-      { "key": "resourceType", "values": ["NODE_POOL", "WORKLOAD"], "__typename": "FilterStatsDTO" },
       {
-        "key": "namespace",
-        "values": ["namespace 1", "namespace 2", "namespace 3", "namespace 4"],
-        "__typename": "FilterStatsDTO"
-      },
-      {
-        "key": "clusterName",
-        "values": ["cluster 1", "cluster 2"],
-        "__typename": "FilterStatsDTO"
+        "name": "Test 2",
+        "identifier": "Test_2",
+        "orgIdentifier": null,
+        "projectIdentifier": null,
+        "filterProperties": {
+          "k8sRecommendationFilterPropertiesDTO": {
+            "names": ["general-preemptible"]
+          },
+          "perspectiveFilters": null,
+          "minSaving": 0,
+          "minCost": 0,
+          "offset": null,
+          "limit": null,
+          "tags": {},
+          "filterType": "CCMRecommendation"
+        },
+        "filterVisibility": "EveryOne"
       }
-    ]
+    ],
+    "pageIndex": 0,
+    "empty": false
   }
 }

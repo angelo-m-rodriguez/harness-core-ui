@@ -47,6 +47,7 @@ export default function ChangeEventServiceHealth(props: ChangeEventServiceHealth
           }
           setTimestamps([newStartTime, newEndTime])
         }}
+        isChangeEventView
       />
       <TimelineBar startDate={timeStamps[0]} endDate={timeStamps[1]} columnWidth={50} className={css.timestamps} />
       <ServiceDependenciesLegend hideServiceTypeLegend margin={{ top: 'small' }} />

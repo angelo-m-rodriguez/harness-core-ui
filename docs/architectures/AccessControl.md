@@ -23,7 +23,7 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 
 
 RbacFactory.registerResourceTypeHandler(ResourceType.ORGANIZATION, {
-  icon: 'nav-org',
+  icon: 'nav-organization',
   label: 'organizations',
   permissionLabels: {
     [PermissionIdentifier.UPDATE_ORG]: 'Create / Edit'

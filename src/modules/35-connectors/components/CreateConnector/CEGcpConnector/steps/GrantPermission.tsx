@@ -27,6 +27,9 @@ import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useSte
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
 import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import type { CEGcpConnectorDTO } from './OverviewStep'
 import css from '../CreateCeGcpConnector.module.scss'
 
@@ -71,6 +74,10 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
   }, [])
 
   const handleSubmit = async () => {
+    trackEvent(ConnectorActions.ProvidePermissionsSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.CEGcp
+    })
     setIsSubmitLoading(true)
 
     try {
@@ -119,6 +126,13 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
       </>
     ) : null
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ProvidePermissionsLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CEGcp
+  })
 
   return (
     <Layout.Vertical className={css.stepContainer}>

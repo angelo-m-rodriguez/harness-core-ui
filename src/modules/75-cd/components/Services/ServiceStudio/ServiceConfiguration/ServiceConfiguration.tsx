@@ -18,6 +18,7 @@ import { NGServiceConfig, useGetEntityYamlSchema } from 'services/cd-ng'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import DeployServiceDefinition from '@cd/components/PipelineStudio/DeployServiceSpecifications/DeployServiceDefinition/DeployServiceDefinition'
 import { DefaultNewPipelineId } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
+import { useServiceContext } from '@cd/context/ServiceContext'
 import { setNameIDDescription } from '../../utils/ServiceUtils'
 import ServiceStepBasicInfo from './ServiceStepBasicInfo'
 import css from './ServiceConfiguration.module.scss'
@@ -46,6 +47,7 @@ function ServiceConfiguration({ serviceData }: ServiceConfigurationProps): React
     updatePipeline,
     isReadonly
   } = usePipelineContext()
+  const { isServiceCreateModalView } = useServiceContext()
 
   const [selectedView, setSelectedView] = useState<SelectedView>(SelectedView.VISUAL)
   const [yamlHandler, setYamlHandler] = useState<YamlBuilderHandlerBinding | undefined>()
@@ -83,7 +85,7 @@ function ServiceConfiguration({ serviceData }: ServiceConfigurationProps): React
     [yamlHandler?.getLatestYaml, serviceSchema]
   )
 
-  if (service.identifier === DefaultNewPipelineId) {
+  if (service.identifier === DefaultNewPipelineId && !isServiceCreateModalView) {
     return null
   }
   return (

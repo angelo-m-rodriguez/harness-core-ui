@@ -14,7 +14,7 @@ exports[`WebhookPipelineInputPanel Triggers tests Renders/snapshots Initial Rend
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main webhookPipelineInputContainer StyledProps--padding-none"
         >
           <div
-            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--margin-large"
+            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--margin-large"
           >
             <div
               class="Text--withDocsTooltip"
@@ -57,7 +57,7 @@ exports[`WebhookPipelineInputPanel Triggers tests Renders/snapshots Initial Rend
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main webhookPipelineInputContainer StyledProps--padding-none"
         >
           <div
-            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--margin-large"
+            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--margin-large"
           >
             <div
               class="Text--withDocsTooltip"
@@ -100,7 +100,7 @@ exports[`WebhookPipelineInputPanel Triggers tests Renders/snapshots Initial Rend
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main webhookPipelineInputContainer StyledProps--padding-none"
         >
           <div
-            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--margin-large"
+            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--margin-large"
           >
             <div
               class="Text--withDocsTooltip"
@@ -143,7 +143,7 @@ exports[`WebhookPipelineInputPanel Triggers tests Renders/snapshots Initial Rend
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main webhookPipelineInputContainer StyledProps--padding-none"
         >
           <div
-            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--margin-large"
+            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--margin-large"
           >
             <div
               class="Text--withDocsTooltip"
@@ -186,7 +186,7 @@ exports[`WebhookPipelineInputPanel Triggers tests Renders/snapshots Initial Rend
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main webhookPipelineInputContainer StyledProps--padding-none"
         >
           <div
-            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--margin-large"
+            class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--margin-large"
           >
             <div
               class="Text--withDocsTooltip"

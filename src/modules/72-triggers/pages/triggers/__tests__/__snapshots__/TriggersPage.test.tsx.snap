@@ -79,7 +79,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             class="TableV2--cell"
             colspan="1"
             role="columnheader"
-            style="width: 20%;"
+            style="width: 15%;"
           >
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
@@ -91,7 +91,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             class="TableV2--cell"
             colspan="1"
             role="columnheader"
-            style="width: 18%;"
+            style="width: 20%;"
           >
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
@@ -103,7 +103,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             class="TableV2--cell"
             colspan="1"
             role="columnheader"
-            style="width: 14%;"
+            style="width: 15%;"
           >
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
@@ -147,7 +147,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             class="TableV2--cell"
             colspan="1"
             role="columnheader"
-            style="width: 3%;"
+            style="width: 5%;"
           >
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
@@ -214,7 +214,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -224,7 +224,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -352,7 +352,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -404,7 +404,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -534,7 +534,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -544,7 +544,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -571,7 +571,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -674,7 +674,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -770,7 +770,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -780,7 +780,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -807,7 +807,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -874,7 +874,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -973,7 +973,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -983,7 +983,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -1010,7 +1010,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1085,7 +1085,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -1181,7 +1181,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1191,7 +1191,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -1218,7 +1218,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1269,7 +1269,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -1365,7 +1365,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1410,7 +1410,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -1437,7 +1437,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1488,7 +1488,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"
@@ -1584,7 +1584,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 20%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1629,7 +1629,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 18%;"
+              style="width: 20%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
@@ -1656,7 +1656,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 14%;"
+              style="width: 15%;"
             >
               <div
                 class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
@@ -1708,7 +1708,7 @@ exports[`TriggersPage Triggers tests Renders/snapshots Initial Render - Shows Tr
             <div
               class="TableV2--cell"
               role="cell"
-              style="width: 3%;"
+              style="width: 5%;"
             >
               <div
                 class="Layout--horizontal StyledProps--main"

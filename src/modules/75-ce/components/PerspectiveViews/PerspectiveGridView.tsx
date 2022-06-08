@@ -24,6 +24,7 @@ import { QlceView, ViewType, ViewState } from 'services/ce/services'
 import { perspectiveDateLabelToDisplayText, SOURCE_ICON_MAPPING } from '@ce/utils/perspectiveUtils'
 import formatCost from '@ce/utils/formatCost'
 import { useStrings } from 'framework/strings'
+import useMoveFolderModal from '../PerspectiveFolders/MoveFolderModal'
 import css from './PerspectiveGridView.module.scss'
 
 interface PerspectiveGridCardProps {
@@ -36,21 +37,33 @@ interface PerspectiveGridCardProps {
   ) => void
   deletePerpsective: (perspectiveId: string, perspectiveName: string) => void
   clonePerspective: (perspectiveId: string, perspectiveName: string) => void
+  setRefetchFolders: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedFolder: (newState: string) => void
+  setRefetchPerspectives: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PerpsectiveGridCard: (props: PerspectiveGridCardProps) => JSX.Element | null = ({
   data,
   navigateToPerspectiveDetailsPage,
   deletePerpsective,
-  clonePerspective
+  clonePerspective,
+  setRefetchFolders,
+  setSelectedFolder,
+  setRefetchPerspectives
 }) => {
   const history = useHistory()
   const { accountId } = useParams<{
     accountId: string
   }>()
   const { getString } = useStrings()
+  const { openMoveFoldersModal } = useMoveFolderModal({
+    perspectiveId: data.id || '',
+    setRefetchFolders,
+    setSelectedFolder,
+    setRefetchPerspectives
+  })
 
-  const { openDialog } = useConfirmationDialog({
+  const { openDialog: openDeleteDialog } = useConfirmationDialog({
     contentText: (
       <Text>
         {getString('ce.perspectives.confirmDeletePerspectiveMsg', {
@@ -86,7 +99,7 @@ const PerpsectiveGridCard: (props: PerspectiveGridCardProps) => JSX.Element | nu
   }
 
   const onDeleteClick: () => void = () => {
-    openDialog()
+    openDeleteDialog()
   }
 
   const onCloneClick: () => void = () => {
@@ -138,6 +151,13 @@ const PerpsectiveGridCard: (props: PerspectiveGridCardProps) => JSX.Element | nu
                 onClick={onDeleteClick}
                 icon="trash"
                 text="Delete"
+              />
+              <Menu.Item
+                disabled={isDefaultPerspective}
+                className={Classes.POPOVER_DISMISS}
+                onClick={openMoveFoldersModal}
+                icon="add-to-folder"
+                text={getString('ce.perspectives.folders.moveToLabel')}
               />
             </Menu>
           </Container>
@@ -202,13 +222,19 @@ interface PerspectiveListViewProps {
   ) => void
   deletePerpsective: (perspectiveId: string, perspectiveName: string) => void
   clonePerspective: (perspectiveId: string, perspectiveName: string) => void
+  setRefetchFolders: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedFolder: (newState: string) => void
+  setRefetchPerspectives: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
   pespectiveData,
   navigateToPerspectiveDetailsPage,
   deletePerpsective,
-  clonePerspective
+  clonePerspective,
+  setRefetchFolders,
+  setSelectedFolder,
+  setRefetchPerspectives
 }) => {
   return (
     <Container className={css.mainGridContainer}>
@@ -220,6 +246,9 @@ const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
             deletePerpsective={deletePerpsective}
             key={data.id}
             data={data}
+            setRefetchFolders={setRefetchFolders}
+            setSelectedFolder={setSelectedFolder}
+            setRefetchPerspectives={setRefetchPerspectives}
           />
         )
       })}

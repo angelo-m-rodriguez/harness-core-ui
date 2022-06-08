@@ -18,6 +18,9 @@ import { PageSpinner } from '@common/components'
 import { useStrings } from 'framework/strings'
 import { setupGcpKmsFormData } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import { Connectors } from '@connectors/constants'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import css from '../CreateGcpKmsConnector.module.scss'
 
 const defaultInitialFormData: GcpKmsConfigFormData = {
@@ -39,6 +42,7 @@ const GcpKmsConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps
   const { getString } = useStrings()
   const [loadingFormData, setLoadingFormData] = useState(isEditMode)
   const [initialValues, setInitialValues] = useState(defaultInitialFormData)
+  useConnectorWizard({ helpPanel: { referenceId: 'GCPKeyManagementServiceDetails', contentWidth: 900 } })
 
   useEffect(() => {
     if (isEditMode && connectorInfo && accountId) {
@@ -49,10 +53,17 @@ const GcpKmsConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps
     }
   }, [isEditMode, connectorInfo, accountId])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ConfigLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.GcpKms
+  })
+
   return loadingFormData ? (
     <PageSpinner />
   ) : (
-    <Container padding={{ top: 'medium' }} width="64%">
+    <Container padding={{ top: 'medium' }}>
       <Text font={{ size: 'medium' }} padding={{ bottom: 'xlarge' }}>
         {getString('details')}
       </Text>
@@ -68,6 +79,10 @@ const GcpKmsConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps
           credentials: Yup.object().required(getString('connectors.gcpKms.credentialsFileRequired'))
         })}
         onSubmit={formData => {
+          trackEvent(ConnectorActions.ConfigSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.GcpKms
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData } as StepDetailsProps)
         }}
       >

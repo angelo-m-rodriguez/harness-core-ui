@@ -1567,7 +1567,7 @@ exports[`Test K8sDeleteStep should render null for StepviewType.template 1`] = `
 exports[`Test K8sDeleteStep should render variable view 1`] = `
 <div>
   <div
-    class="variablesListTable"
+    class="variablesListTable variablePaddingL3"
   />
 </div>
 `;

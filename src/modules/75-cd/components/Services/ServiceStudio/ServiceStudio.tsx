@@ -39,7 +39,9 @@ function ServiceStudio(): React.ReactElement | null {
         serviceResponse={serviceResponse?.data?.service as ServiceResponseDTO}
         isServiceEntityModalView={false}
         onCloseModal={noop}
+        onServiceCreate={noop}
         isServiceEntityPage={true}
+        isServiceCreateModalView={false}
       >
         <ServiceConfigurationWrapper
           summaryPanel={<ServiceDetailsSummary />}

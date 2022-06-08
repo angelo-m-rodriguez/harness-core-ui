@@ -33,7 +33,9 @@ export enum Types {
   Provisioner,
   Boolean,
   ImagePullPolicy,
-  Shell
+  Shell,
+  BuildEnvironment,
+  FrameworkVersion
 }
 
 interface Field {
@@ -72,7 +74,9 @@ export function getInitialValuesInCorrectFormat<T, U>(
     buildToolOptions,
     languageOptions,
     imagePullPolicyOptions,
-    shellOptions
+    shellOptions,
+    buildEnvironmentOptions,
+    frameworkVersionOptions
   }: Dependencies = {}
 ): U {
   const values = {}
@@ -175,6 +179,24 @@ export function getInitialValuesInCorrectFormat<T, U>(
       set(values, name, language)
     }
 
+    if (type === Types.BuildEnvironment) {
+      const buildEnvironment =
+        getMultiTypeFromValue(value) === MultiTypeInputType.FIXED
+          ? buildEnvironmentOptions?.find((option: SelectOption) => option.value === value)
+          : value
+
+      set(values, name, buildEnvironment)
+    }
+
+    if (type === Types.FrameworkVersion) {
+      const frameworkVersion =
+        getMultiTypeFromValue(value) === MultiTypeInputType.FIXED
+          ? frameworkVersionOptions?.find((option: SelectOption) => option.value === value)
+          : value
+
+      set(values, name, frameworkVersion)
+    }
+
     if (type === Types.LimitMemory) {
       const _value = get(initialValues, 'spec.resources.limits.memory')
       set(values, 'spec.limitMemory', _value)
@@ -269,7 +291,9 @@ export function getFormValuesInCorrectFormat<T, U>(formValues: T, fields: Field[
       type === Types.BuildTool ||
       type === Types.Language ||
       type === Types.Shell ||
-      type === Types.ImagePullPolicy
+      type === Types.ImagePullPolicy ||
+      type === Types.BuildEnvironment ||
+      type === Types.FrameworkVersion
     ) {
       const value = get(formValues, name) as MultiTypeSelectOption
 

@@ -7,6 +7,7 @@
 
 import { cloneDeep, isEmpty } from 'lodash-es'
 import type { FormikProps } from 'formik'
+import { getMultiTypeFromValue, MultiTypeInputType } from '@harness/uicore'
 import type { StringKeys } from 'framework/strings'
 import type { StringsMap } from 'framework/strings/StringsContext'
 import type {
@@ -23,6 +24,7 @@ import type {
   AppDynamicsData,
   AppDynamicsFomikFormInterface,
   MapAppDynamicsMetric,
+  NonCustomFeildsInterface,
   ValidateMappingInterface
 } from './AppDHealthSource.types'
 import type { BasePathData } from './Components/BasePath/BasePath.types'
@@ -364,8 +366,8 @@ export const convertFullPathToBaseAndMetric = (
 
 export const createAppDynamicsPayload = (formData: any): UpdatedHealthSource | null => {
   const specPayload = {
-    applicationName: formData.appdApplication as string,
-    tierName: formData.appDTier as string,
+    applicationName: (formData?.appdApplication?.label as string) || (formData.appdApplication as string),
+    tierName: (formData?.appDTier?.label as string) || (formData.appDTier as string),
     metricData: formData.metricData,
     metricDefinitions: [] as AppDMetricDefinitions[]
   }
@@ -436,7 +438,7 @@ export const createAppDynamicsPayload = (formData: any): UpdatedHealthSource | n
     spec: {
       ...specPayload,
       feature: 'Application Monitoring' as string,
-      connectorRef: (formData?.connectorRef?.connector?.identifier as string) || (formData.connectorRef as string),
+      connectorRef: (formData?.connectorRef?.value as string) || (formData.connectorRef as string),
       metricPacks: Object.entries(formData?.metricData)
         .map(item => {
           return item[1]
@@ -536,8 +538,11 @@ export const createAppDFormData = (
     pathType: isTemplate ? PATHTYPE.FullPath : PATHTYPE.DropdownPath,
     fullPath,
     mappedServicesAndEnvs: appDynamicsData.mappedServicesAndEnvs,
-    ...nonCustomFeilds,
     ...(mappedMetrics.get(selectedMetric) as MapAppDynamicsMetric),
+    appdApplication: nonCustomFeilds.appdApplication,
+    appDTier: nonCustomFeilds.appDTier,
+    metricPacks: nonCustomFeilds.metricPacks,
+    metricData: nonCustomFeilds.metricData,
     metricName: selectedMetric,
     showCustomMetric,
     metricIdentifier
@@ -555,22 +560,35 @@ export const initializeNonCustomFields = (appDynamicsData: AppDynamicsData) => {
 
 export const setAppDynamicsApplication = (
   appdApplication: string,
-  applicationOptions: SelectOption[]
-): SelectOption | undefined =>
-  !appdApplication
-    ? { label: '', value: '' }
-    : applicationOptions.find((item: SelectOption) => item.label === appdApplication) || {
-        label: appdApplication,
-        value: appdApplication
-      }
+  tierOptions: SelectOption[],
+  multiType?: MultiTypeInputType
+): SelectOption | string | undefined => {
+  const value = !appdApplication ? undefined : tierOptions.find((item: SelectOption) => item.label === appdApplication)
 
-export const setAppDynamicsTier = (tierLoading: boolean, appDTier: string, tierOptions: SelectOption[]) =>
-  tierLoading || !appDTier
-    ? { label: '', value: '' }
-    : tierOptions.find((item: SelectOption) => item.label === appDTier) || {
-        label: appDTier,
-        value: appDTier
-      }
+  if (multiType === MultiTypeInputType.RUNTIME) {
+    return appdApplication
+  }
+  if (multiType === MultiTypeInputType.EXPRESSION) {
+    return appdApplication
+  }
+  return value
+}
+
+export const setAppDynamicsTier = (
+  tierLoading: boolean,
+  appDTier: string,
+  tierOptions: SelectOption[],
+  multiType?: MultiTypeInputType
+) => {
+  const value = tierLoading || !appDTier ? undefined : tierOptions.find((item: SelectOption) => item.label === appDTier)
+  if (multiType === MultiTypeInputType.RUNTIME) {
+    return appDTier
+  }
+  if (multiType === MultiTypeInputType.EXPRESSION) {
+    return appDTier
+  }
+  return value
+}
 
 export const initAppDCustomFormValue = () => {
   return {
@@ -588,6 +606,17 @@ export const getPlaceholder = (
 export const showValidation = (appdApplication?: string, appDTier?: string): boolean =>
   Boolean(appDTier) && Boolean(appdApplication) && !(appdApplication === '<+input>' || appDTier === '<+input>')
 
+export const getTypeOfInput = (value: SelectOption | string) => {
+  const selectedItem = typeof value === 'string' ? value : value?.label
+  if (getMultiTypeFromValue(selectedItem) === MultiTypeInputType.RUNTIME) {
+    return MultiTypeInputType.RUNTIME
+  }
+  if (/^</.test(selectedItem)) {
+    return MultiTypeInputType.EXPRESSION
+  }
+  return MultiTypeInputType.FIXED
+}
+
 export const setCustomFieldAndValidation = (
   value: string,
   setNonCustomFeilds: React.Dispatch<
@@ -600,14 +629,7 @@ export const setCustomFieldAndValidation = (
       }
     }>
   >,
-  nonCustomFeilds: {
-    appdApplication: string
-    appDTier: string
-    metricPacks: MetricPackDTO[] | undefined
-    metricData: {
-      [key: string]: boolean
-    }
-  },
+  nonCustomFeilds: NonCustomFeildsInterface,
   setAppDValidation: React.Dispatch<
     React.SetStateAction<{
       status: string
@@ -616,12 +638,53 @@ export const setCustomFieldAndValidation = (
   >,
   validate = false
 ): void => {
-  setNonCustomFeilds({
+  const updatedNonCustomValue = {
     ...nonCustomFeilds,
     appdApplication: value,
-    appDTier: value === '<+input>' ? value : ''
-  })
+    appDTier: getTypeOfInput(value) !== MultiTypeInputType.FIXED ? '<+input>' : ''
+  }
+  setNonCustomFeilds(updatedNonCustomValue)
   if (validate) {
     setAppDValidation({ status: '', result: [] })
+  }
+}
+
+export const checkAppAndTierAreNotFixed = (appName: string, tierName: string) =>
+  getMultiTypeFromValue(appName) === MultiTypeInputType.RUNTIME ||
+  getMultiTypeFromValue(appName) === MultiTypeInputType.EXPRESSION ||
+  getMultiTypeFromValue(tierName) === MultiTypeInputType.RUNTIME ||
+  getMultiTypeFromValue(tierName) === MultiTypeInputType.EXPRESSION
+
+export const shouldMakeTierCall = (applicationName: string) =>
+  applicationName &&
+  getMultiTypeFromValue(applicationName) !== MultiTypeInputType.RUNTIME &&
+  (getMultiTypeFromValue(applicationName) !== MultiTypeInputType.EXPRESSION || /^<+>/.test(applicationName))
+
+export const getAllowedTypes = (isConnectorRuntimeOrExpression: boolean) =>
+  isConnectorRuntimeOrExpression
+    ? [MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
+    : [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
+
+export const setAppAndTierAsInputIfConnectorIsInput = (
+  isConnectorRuntimeOrExpression: boolean,
+  nonCustomFeilds: NonCustomFeildsInterface,
+  setNonCustomFeilds: (data: NonCustomFeildsInterface) => void
+) => {
+  if (isConnectorRuntimeOrExpression) {
+    setNonCustomFeilds({
+      ...nonCustomFeilds,
+      appDTier: '<+input>',
+      appdApplication: '<+input>'
+    })
+  }
+}
+
+export const resetShowCustomMetric = (
+  selectedMetric: string,
+  mappedMetrics: Map<string, CustomMappedMetric>,
+  setShowCustomMetric: (value: React.SetStateAction<boolean>) => void
+) => {
+  if (!selectedMetric && !mappedMetrics.size) {
+    setShowCustomMetric(false)
   }
 }

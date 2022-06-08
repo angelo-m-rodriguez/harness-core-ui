@@ -34,7 +34,6 @@ import css from '../../../ChangeEventCard.module.scss'
 export default function HarnessNextGenEventCard({ data }: { data: ChangeEventDTO }): JSX.Element {
   const { getString } = useStrings()
   const [timeStamps, setTimestamps] = useState<[number, number]>([0, 0])
-  const changeTitleData: ChangeTitleData = useMemo(() => createChangeTitleData(data), [])
   const changeDetailsData: ChangeDetailsDataInterface = useMemo(() => createChangeDetailsData(data), [])
   const metadata: HarnessCDEventMetadata = defaultTo(data.metadata, {})
   const { artifactType = '', artifactTag = '', verifyStepSummaries } = metadata
@@ -52,6 +51,13 @@ export default function HarnessNextGenEventCard({ data }: { data: ChangeEventDTO
   })
 
   const { pipelineExecutionSummary } = defaultTo(executionDetails?.data, {})
+  const { pipelineIdentifier, runSequence, status } = defaultTo(pipelineExecutionSummary, {})
+
+  const changeTitleData: ChangeTitleData = useMemo(
+    () => createChangeTitleData(data, pipelineIdentifier, runSequence, status),
+    [pipelineExecutionSummary]
+  )
+
   const timePassed = useMemo(() => {
     /* istanbul ignore else */ if (metadata.deploymentStartTime && metadata.deploymentEndTime) {
       return durationAsString(metadata.deploymentEndTime, moment().valueOf())
@@ -71,32 +77,35 @@ export default function HarnessNextGenEventCard({ data }: { data: ChangeEventDTO
         ChangeDetailsData={{
           ...changeDetailsData,
           details: changeInfoData,
-          executedBy: (
-            <>
-              <Layout.Vertical width="max-content">
-                <Layout.Horizontal flex margin={{ bottom: 'medium' }}>
-                  <UserLabel name={identifier || extraInfo?.emai} email={extraInfo?.email} iconProps={{ size: 16 }} />
-                  <Text
-                    font={{ size: 'small' }}
-                    margin={{ left: 'small', right: 'small' }}
-                    flex={{ align: 'center-center' }}
-                  >
-                    {triggerType}
-                  </Text>
+          executedBy: {
+            shouldVisible: true,
+            component: (
+              <>
+                <Layout.Vertical width="max-content">
+                  <Layout.Horizontal flex margin={{ bottom: 'medium' }}>
+                    <UserLabel name={identifier || extraInfo?.emai} email={extraInfo?.email} iconProps={{ size: 16 }} />
+                    <Text
+                      font={{ size: 'small' }}
+                      margin={{ left: 'small', right: 'small' }}
+                      flex={{ align: 'center-center' }}
+                    >
+                      {triggerType}
+                    </Text>
 
-                  <Text icon={'calendar'} iconProps={{ size: 12 }} font={{ size: 'small' }}>
-                    {timePassed}
-                    {getString('cv.changeSource.changeSourceCard.ago')}
-                  </Text>
-                </Layout.Horizontal>
-                <DeploymentTimeDuration
-                  startTime={data.metadata.deploymentStartTime}
-                  endTime={data.metadata.deploymentEndTime}
-                  type={data.type}
-                />
-              </Layout.Vertical>
-            </>
-          )
+                    <Text icon={'calendar'} iconProps={{ size: 12 }} font={{ size: 'small' }}>
+                      {timePassed}
+                      {getString('cv.changeSource.changeSourceCard.ago')}
+                    </Text>
+                  </Layout.Horizontal>
+                  <DeploymentTimeDuration
+                    startTime={data.metadata.deploymentStartTime}
+                    endTime={data.metadata.deploymentEndTime}
+                    type={data.type}
+                  />
+                </Layout.Vertical>
+              </>
+            )
+          }
         }}
       />
 

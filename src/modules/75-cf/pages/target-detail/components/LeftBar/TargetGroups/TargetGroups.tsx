@@ -52,17 +52,14 @@ const TargetGroups: React.FC<TargetGroupsProps> = ({ target }) => {
 
   if (loading) {
     return (
-      <Container height="100%" width="100%" flex={{ align: 'center-center' }}>
+      <Container height="100%" flex={{ align: 'center-center' }}>
         <ContainerSpinner />
       </Container>
     )
   }
 
   return (
-    <Layout.Vertical
-      style={{ gap: 'var(--spacing-xlarge)' }}
-      padding={{ top: 'xsmall', right: 'xlarge', left: 'xlarge', bottom: 'xlarge' }}
-    >
+    <Layout.Vertical style={{ gap: 'var(--spacing-xlarge)' }}>
       <InclusionSubSection
         target={target as Target}
         targetGroups={data?.includedSegments || []}

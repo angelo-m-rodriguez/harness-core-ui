@@ -25,9 +25,11 @@ import { useStrings } from 'framework/strings'
 import SecretInput from '@secrets/components/SecretInput/SecretInput'
 
 import TextReference, { TextReferenceInterface, ValueType } from '@secrets/components/TextReference/TextReference'
-
-import { setupServiceNowFormData } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { setupServiceNowFormData, useGetHelpPanel } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { Connectors } from '@connectors/constants'
 import type { SecretReferenceInterface } from '@secrets/utils/SecretField'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 
 import css from './ServiceNowConnector.module.scss'
 
@@ -83,6 +85,14 @@ const ServiceNowDetailsForm: React.FC<StepProps<ServiceNowFormProps> & Authentic
       }
     }
   }, [loadingConnectorSecrets])
+  useGetHelpPanel('ServiceNowConnectorDetails', 900)
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.DetailsStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.ServiceNow
+  })
 
   return loadingConnectorSecrets ? (
     <PageSpinner />
@@ -103,6 +113,10 @@ const ServiceNowDetailsForm: React.FC<StepProps<ServiceNowFormProps> & Authentic
           passwordRef: Yup.object().required(getString('validation.password'))
         })}
         onSubmit={stepData => {
+          trackEvent(ConnectorActions.DetailsStepSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.ServiceNow
+          })
           nextStep?.({ ...props.connectorInfo, ...prevStepData, ...stepData } as ServiceNowFormProps)
         }}
       >

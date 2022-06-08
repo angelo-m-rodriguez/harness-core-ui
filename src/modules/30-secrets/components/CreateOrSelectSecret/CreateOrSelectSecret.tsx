@@ -11,13 +11,19 @@ import { pick } from 'lodash-es'
 import type { SelectOption } from '@wings-software/uicore'
 import SecretReference from '@secrets/components/SecretReference/SecretReference'
 import { getReference } from '@common/utils/utils'
-import type { SecretResponseWrapper, ResponsePageSecretResponseWrapper, ConnectorInfoDTO } from 'services/cd-ng'
+import type {
+  SecretResponseWrapper,
+  ResponsePageSecretResponseWrapper,
+  ConnectorInfoDTO,
+  SecretDTOV2
+} from 'services/cd-ng'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import css from './CreateOrSelectSecret.module.scss'
 
 export interface SecretReference {
   name: string
   identifier: string
+  type?: SecretDTOV2['type']
   orgIdentifier?: string
   projectIdentifier?: string
   referenceString: string
@@ -52,7 +58,7 @@ const CreateOrSelectSecret: React.FC<CreateOrSelectSecretProps> = ({
         onCancel={onCancel}
         onSelect={data => {
           onSuccess({
-            ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier']),
+            ...pick(data, ['name', 'identifier', 'orgIdentifier', 'projectIdentifier', 'type']),
             referenceString: getReference(data.scope, data.identifier) as string
           })
         }}

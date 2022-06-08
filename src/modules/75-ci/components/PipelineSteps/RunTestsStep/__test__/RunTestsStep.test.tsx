@@ -9,6 +9,7 @@ import React from 'react'
 import { render, act, waitFor, fireEvent } from '@testing-library/react'
 import { RUNTIME_INPUT_VALUE } from '@wings-software/uicore'
 import { StepViewType, StepFormikRef } from '@pipeline/components/AbstractSteps/Step'
+import * as FeatureFlag from '@common/hooks/useFeatureFlag'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { findPopoverContainer, UseGetReturnData } from '@common/utils/testUtils'
 import type { ResponseConnectorResponse } from 'services/cd-ng'
@@ -59,6 +60,9 @@ describe('RunTests Step', () => {
 
   describe('Edit View', () => {
     test('should render properly', async () => {
+      jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
+        TI_DOTNET: true
+      })
       const { container, getByText } = render(
         <TestStepWidget initialValues={{}} type={StepType.RunTests} stepViewType={StepViewType.Edit} />
       )
@@ -75,9 +79,9 @@ describe('RunTests Step', () => {
       await waitFor(() => {
         fireEvent.click(dropdownSelects[1])
         const menuItemLabels = findPopoverContainer()?.querySelectorAll('[class*="menuItemLabel"]')
-        expect(menuItemLabels?.length).toEqual(1)
-        // Only Java option should be visible
-        expect(menuItemLabels?.[0].innerHTML).toEqual('Java')
+        expect(menuItemLabels?.length).toEqual(2)
+        expect(menuItemLabels?.[0].innerHTML).toEqual('ci.runTestsStep.csharp')
+        expect(menuItemLabels?.[1].innerHTML).toEqual('ci.runTestsStep.java')
       })
 
       try {

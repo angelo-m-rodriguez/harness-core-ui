@@ -55,7 +55,6 @@ const pipelineContext: any = {
   updateGitDetails: jest.fn(),
   updateEntityValidityDetails: jest.fn(),
   updatePipelineView: jest.fn(),
-  updateTemplateView: jest.fn(),
   fetchPipeline: jest.fn(),
   deletePipelineCache: jest.fn(),
   getStageFromPipeline: jest.fn((_stageId, pipeline) => ({ stage: pipeline?.stages?.[0], parent: undefined })),

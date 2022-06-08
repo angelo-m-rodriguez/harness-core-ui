@@ -57,6 +57,7 @@ export interface PipelineInputSetFormProps {
   isRetryFormStageSelected?: boolean
   allowableTypes?: MultiTypeInputType[]
   viewTypeMetadata?: Record<string, boolean>
+  gitAwareForTriggerEnabled?: boolean
 }
 
 export const stageTypeToIconMap: Record<string, IconName> = {
@@ -325,46 +326,48 @@ export function PipelineInputSetFormInternal(props: PipelineInputSetFormProps): 
             </div>
           </>
         )}
-      <>
-        {finalTemplate?.stages?.map((stageObj, index) => {
-          const pathPrefix = !isEmpty(finalPath) ? `${finalPath}.` : ''
-          if (stageObj.stage) {
-            const allValues = getStageFromPipeline(stageObj?.stage?.identifier || '', originalPipeline)
+      {
+        <>
+          {finalTemplate?.stages?.map((stageObj, index) => {
+            const pathPrefix = !isEmpty(finalPath) ? `${finalPath}.` : ''
+            if (stageObj.stage) {
+              const allValues = getStageFromPipeline(stageObj?.stage?.identifier || '', originalPipeline)
 
-            return (
-              <Layout.Vertical key={stageObj?.stage?.identifier || index}>
-                <StageForm
-                  template={stageObj}
-                  allValues={allValues}
-                  path={`${pathPrefix}stages[${index}].stage`}
-                  readonly={isInputStageDisabled(stageObj?.stage?.identifier)}
-                  viewType={viewType}
-                  allowableTypes={allowableTypes}
-                  executionIdentifier={executionIdentifier}
-                />
-              </Layout.Vertical>
-            )
-          } else if (stageObj.parallel) {
-            return stageObj.parallel.map((stageP, indexp) => {
-              const allValues = getStageFromPipeline(stageP?.stage?.identifier || '', originalPipeline)
               return (
-                <Layout.Vertical key={`${stageObj?.stage?.identifier}-${stageP.stage?.identifier}-${indexp}`}>
+                <Layout.Vertical key={stageObj?.stage?.identifier || index}>
                   <StageForm
-                    template={stageP}
+                    template={stageObj}
                     allValues={allValues}
-                    path={`${pathPrefix}stages[${index}].parallel[${indexp}].stage`}
-                    readonly={isInputStageDisabled(stageP?.stage?.identifier as string)}
+                    path={`${pathPrefix}stages[${index}].stage`}
+                    readonly={isInputStageDisabled(stageObj?.stage?.identifier)}
                     viewType={viewType}
                     allowableTypes={allowableTypes}
+                    executionIdentifier={executionIdentifier}
                   />
                 </Layout.Vertical>
               )
-            })
-          } else {
-            return null
-          }
-        })}
-      </>
+            } else if (stageObj.parallel) {
+              return stageObj.parallel.map((stageP, indexp) => {
+                const allValues = getStageFromPipeline(stageP?.stage?.identifier || '', originalPipeline)
+                return (
+                  <Layout.Vertical key={`${stageObj?.stage?.identifier}-${stageP.stage?.identifier}-${indexp}`}>
+                    <StageForm
+                      template={stageP}
+                      allValues={allValues}
+                      path={`${pathPrefix}stages[${index}].parallel[${indexp}].stage`}
+                      readonly={isInputStageDisabled(stageP?.stage?.identifier as string)}
+                      viewType={viewType}
+                      allowableTypes={allowableTypes}
+                    />
+                  </Layout.Vertical>
+                )
+              })
+            } else {
+              return null
+            }
+          })}
+        </>
+      }
     </Layout.Vertical>
   )
 }

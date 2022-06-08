@@ -16,11 +16,20 @@ import { FetchViewFieldsDocument } from 'services/ce/services'
 import CreatePerspectivePage from '../CreatePerspectivePage'
 import PerspectiveResponseData from '../../perspective-details/__test__/PerspectiveData.json'
 import ViewFieldResponseData from '../../perspective-details/__test__/ViewFieldResponse.json'
+import FoldersData from './FoldersData.json'
 
 jest.mock('services/ce', () => ({
   ...(jest.requireActual('services/ce') as any),
   useGetPerspective: jest.fn().mockImplementation(() => {
     return { data: PerspectiveResponseData, refetch: jest.fn(), error: null, loading: false }
+  }),
+  useGetFolders: jest.fn().mockImplementation(() => {
+    return {
+      data: FoldersData,
+      refetch: jest.fn(),
+      error: null,
+      loading: false
+    }
   })
 }))
 

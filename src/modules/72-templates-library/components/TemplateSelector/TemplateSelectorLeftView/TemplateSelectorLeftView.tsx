@@ -33,13 +33,13 @@ import { Scope } from '@common/interfaces/SecretsInterface'
 import routes from '@common/RouteDefinitions'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import NoResultsView from '@templates-library/pages/TemplatesPage/views/NoResultsView/NoResultsView'
-import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { TemplateType } from '@templates-library/utils/templatesUtils'
 import factory from '@pipeline/components/PipelineSteps/PipelineStepFactory'
 import { stagesCollection } from '@pipeline/components/PipelineStudio/Stages/StagesCollection'
 import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import { getScopeOptions } from '@templates-library/components/TemplateSelector/TemplateSelectorLeftView/TemplateSelectorLeftViewUtils'
 import { areTemplatesSame } from '@pipeline/utils/templateUtils'
+import { useTemplateSelectorContext } from '@templates-library/components/TemplateSelectorContext/TemplateSelectorContext'
 import css from './TemplateSelectorLeftView.module.scss'
 
 export interface TemplateSelectorLeftViewProps {
@@ -48,18 +48,9 @@ export interface TemplateSelectorLeftViewProps {
 
 export const TemplateSelectorLeftView: React.FC<TemplateSelectorLeftViewProps> = ({ setTemplate }): JSX.Element => {
   const {
-    state: {
-      templateView: {
-        templateDrawerData: { data }
-      }
-    }
-  } = usePipelineContext()
-  const {
-    templateType,
-    selectedChildType,
-    allChildTypes = [],
-    selectedTemplate: defaultTemplate
-  } = data?.selectorData || {}
+    state: { selectorData }
+  } = useTemplateSelectorContext()
+  const { templateType, selectedChildType, allChildTypes = [], selectedTemplate: defaultTemplate } = selectorData || {}
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateSummaryResponse | undefined>()
   const { getString } = useStrings()
   const [page, setPage] = useState(0)

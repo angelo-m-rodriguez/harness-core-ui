@@ -24,6 +24,9 @@ import { useStrings } from 'framework/strings'
 import type { CEAzureConnector } from 'services/cd-ng'
 import { CE_AZURE_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import type { CEAzureDTO } from '../Overview/AzureConnectorOverview'
 import css from '../../CreateCeAzureConnector_new.module.scss'
 
@@ -111,6 +114,11 @@ const ChooseRequirements: React.FC<StepProps<CEAzureDTO>> = props => {
   useStepLoadTelemetry(CE_AZURE_CONNECTOR_CREATION_EVENTS.LOAD_CHOOSE_REQUIREMENT)
 
   const handleSubmit = () => {
+    trackEvent(ConnectorActions.ChooseRequirementsSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.CEAzure
+    })
+
     const features = selectedCards.map(c => c.value)
     if (includesBilling) {
       features.push('BILLING')
@@ -141,6 +149,12 @@ const ChooseRequirements: React.FC<StepProps<CEAzureDTO>> = props => {
 
     setSelectedCards(sc)
   }
+
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.ChooseRequirementsLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CEAzure
+  })
 
   return (
     <Layout.Vertical className={css.stepContainer}>

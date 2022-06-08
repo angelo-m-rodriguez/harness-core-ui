@@ -5,29 +5,26 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-export const dashboardWidgetsResponse = {
-  data: {
-    totalItems: 4,
-    totalPages: 1,
-    pageIndex: 0,
-    pageItemCount: 4,
-    content: [
-      {
-        title: 'SLO 1',
-        sloIdentifier: 'SLO_1'
-      },
-      {
-        title: 'SLO 2',
-        sloIdentifier: 'SLO_2'
-      },
-      {
-        title: 'SLO 3',
-        sloIdentifier: 'SLO_3'
-      },
-      {
-        title: 'SLO 4',
-        sloIdentifier: 'SLO_4'
-      }
-    ]
-  }
+import type { RestResponseListMonitoredServiceChangeDetailSLO } from 'services/cv'
+
+export const monitoredServiceChangeDetailSLOResponse: RestResponseListMonitoredServiceChangeDetailSLO = {
+  resource: [
+    {
+      name: 'SLO 1',
+      identifier: 'SLO_1'
+    },
+    {
+      name: 'SLO 2',
+      identifier: 'SLO_2'
+    },
+    {
+      name: 'SLO 3',
+      identifier: 'SLO_3'
+    },
+    {
+      name: 'SLO 4',
+      identifier: 'SLO_4',
+      outOfRange: true
+    }
+  ]
 }

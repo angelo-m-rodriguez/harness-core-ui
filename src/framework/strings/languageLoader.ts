@@ -31,9 +31,11 @@ import triggers from '@triggers/strings/strings.en.yaml'
 import cd from '@cd/strings/strings.en.yaml'
 import ce from '@ce/strings/strings.en.yaml'
 import cf from '@cf/strings/strings.en.yaml'
+import chaos from '@chaos/strings/strings.en.yaml'
 import ci from '@ci/strings/strings.en.yaml'
 import cv from '@cv/strings/strings.en.yaml'
 import stoSteps from '@sto-steps/strings/strings.en.yaml'
+import gitops from '@gitops/strings/strings.en.yaml'
 
 export default function languageLoader() {
   return {
@@ -58,8 +60,10 @@ export default function languageLoader() {
     cd,
     ce,
     cf,
+    chaos,
     ci,
     cv,
-    stoSteps
+    stoSteps,
+    gitops
   }
 }

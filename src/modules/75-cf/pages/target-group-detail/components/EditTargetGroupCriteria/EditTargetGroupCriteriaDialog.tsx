@@ -8,16 +8,7 @@
 import React, { FC, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Spinner } from '@blueprintjs/core'
-import {
-  Button,
-  ButtonVariation,
-  Dialog,
-  Formik,
-  FormikForm,
-  Layout,
-  SelectOption,
-  useToaster
-} from '@wings-software/uicore'
+import { Button, ButtonVariation, Dialog, Formik, FormikForm, Layout, SelectOption, useToaster } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import { Clause, Segment, usePatchSegment } from 'services/cf'
 import targetToSelectOption from '@cf/utils/targetToSelectOption'
@@ -130,7 +121,7 @@ const EditTargetGroupCriteriaDialog: FC<EditTargetGroupCriteriaDialogProps> = ({
               <Button variation={ButtonVariation.PRIMARY} type="submit" intent="primary" onClick={submitForm}>
                 {getString('save')}
               </Button>
-              <Button variation={ButtonVariation.SECONDARY} onClick={hideModal}>
+              <Button variation={ButtonVariation.TERTIARY} onClick={hideModal}>
                 {getString('cancel')}
               </Button>
               {loading && (

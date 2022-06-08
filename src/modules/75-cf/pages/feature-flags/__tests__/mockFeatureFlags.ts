@@ -32,7 +32,7 @@ export default {
       modifiedAt: 1619223188494,
       name: 'hello-world',
       owner: ['current auth user?'],
-      permanent: false,
+      permanent: true,
       prerequisites: [],
       project: 'tnhucf1',
       results: [],

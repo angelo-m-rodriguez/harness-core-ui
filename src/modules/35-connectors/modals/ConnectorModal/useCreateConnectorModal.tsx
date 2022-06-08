@@ -12,6 +12,8 @@ import { Dialog, IDialogProps } from '@blueprintjs/core'
 import { useParams } from 'react-router-dom'
 import { CreateConnectorWizard } from '@connectors/components/CreateConnectorWizard/CreateConnectorWizard'
 import { Connectors, CONNECTOR_MODAL_MIN_WIDTH } from '@connectors/constants'
+import { useTelemetry } from '@common/hooks/useTelemetry'
+import { ExitModalActions, Category } from '@common/constants/TrackingConstants'
 import type { ConnectorInfoDTO, ConnectorRequestBody } from 'services/cd-ng'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import type { IGitContextFormProps } from '@common/components/GitContextForm/GitContextForm'
@@ -65,6 +67,7 @@ const useCreateConnectorModal = (props: UseCreateConnectorModalProps): UseCreate
   const handleSuccess = (data?: ConnectorRequestBody): void => {
     props.onSuccess?.(data)
   }
+  const { trackEvent } = useTelemetry()
 
   const [showModal, hideModal] = useModalHook(
     () => (
@@ -94,6 +97,7 @@ const useCreateConnectorModal = (props: UseCreateConnectorModalProps): UseCreate
           iconProps={{ size: 18 }}
           onClick={() => {
             props.onClose?.()
+            trackEvent(ExitModalActions.ExitByClose, { category: Category.CONNECTOR })
             hideModal()
           }}
           className={css.crossIcon}

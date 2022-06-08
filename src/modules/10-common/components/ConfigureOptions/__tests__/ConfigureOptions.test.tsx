@@ -6,7 +6,13 @@
  */
 
 import React from 'react'
-import { render, fireEvent, waitFor, getByText as getByTextBody } from '@testing-library/react'
+import {
+  render,
+  fireEvent,
+  waitFor,
+  getByText as getByTextBody,
+  getAllByText as getAllByTextBody
+} from '@testing-library/react'
 import { RUNTIME_INPUT_VALUE } from '@wings-software/uicore'
 import { findDialogContainer, TestWrapper } from '@common/utils/testUtils'
 import { ConfigureOptions, ConfigureOptionsProps } from '../ConfigureOptions'
@@ -59,8 +65,8 @@ describe('Test ConfigureOptions', () => {
     )
     const btn = container.querySelector('#configureOptions_var-test')
     fireEvent.click(btn as Element)
-    await waitFor(() => getByTextBody(document.body, 'common.configureOptions.notValidExpression'))
-    expect(getByTextBody(document.body, 'common.configureOptions.notValidExpression')).toBeTruthy()
+    await waitFor(() => getAllByTextBody(document.body, 'common.configureOptions.notValidExpression'))
+    expect(getAllByTextBody(document.body, 'common.configureOptions.notValidExpression').length).toBe(2)
   })
 
   test('test invalid default for regular expression error', async () => {
@@ -249,7 +255,7 @@ describe('Test ConfigureOptions', () => {
     fireEvent.click(btn as Element)
     const dialog = findDialogContainer() as HTMLElement
     await waitFor(() => getByTextBody(dialog, 'var-test'))
-    const closeBtn = dialog.querySelector('[icon="small-cross"]')
+    const closeBtn = dialog.querySelector('[data-icon="Stroke"]')
     fireEvent.click(closeBtn!)
     await waitFor(() => expect(onChange).toBeCalledTimes(1))
     expect(onChange).toBeCalled()
@@ -271,5 +277,23 @@ describe('Test ConfigureOptions', () => {
     fireEvent.click(cancelBtn)
     await waitFor(() => expect(onChange).toBeCalledTimes(1))
     expect(onChange).toBeCalled()
+  })
+
+  test('runtime execution input', async () => {
+    onChange.mockReset()
+    const { container } = render(
+      <TestWrapper defaultFeatureFlagValues={{ NG_EXECUTION_INPUT: true }}>
+        <ConfigureOptions {...getProps(`${RUNTIME_INPUT_VALUE}.executionInput()`, 'Number', 'var-test')} />
+      </TestWrapper>
+    )
+    const btn = container.querySelector('#configureOptions_var-test')
+    fireEvent.click(btn as Element)
+    const dialog = findDialogContainer() as HTMLElement
+    await waitFor(() => getByTextBody(dialog, 'var-test'))
+    expect(dialog).toMatchSnapshot()
+    const submitBtn = getByTextBody(dialog, 'submit')
+    fireEvent.click(submitBtn)
+    await waitFor(() => expect(onChange).toBeCalledTimes(1))
+    expect(onChange).toBeCalledWith(`${RUNTIME_INPUT_VALUE}.executionInput()`, '', true)
   })
 })

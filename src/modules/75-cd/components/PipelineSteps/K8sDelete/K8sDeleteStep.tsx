@@ -54,6 +54,7 @@ import List from '@common/components/List/List'
 import type { StringsMap } from 'stringTypes'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './K8sDelete.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 const DeleteSpecConstant = {
   ResourceName: 'ResourceName',
@@ -525,7 +526,14 @@ const K8sDeleteInputStep: React.FC<K8sDeleteProps> = ({ inputSetData, readonly, 
 }
 
 const K8sDeleteVariableStep: React.FC<K8sDeleteVariableStepProps> = ({ variablesData, metadataMap, initialValues }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8sDeleteDeployWidgetWithRef = React.forwardRef(K8sDeleteDeployWidget)

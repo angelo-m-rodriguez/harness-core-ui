@@ -18,7 +18,7 @@ import {
   Utils,
   TableV2,
   Popover
-} from '@wings-software/uicore'
+} from '@harness/uicore'
 import { noop } from 'lodash-es'
 import { Classes, Position, Switch, PopoverInteractionKind } from '@blueprintjs/core'
 import { Color } from '@harness/design-system'
@@ -70,11 +70,15 @@ import usePlanEnforcement from '@cf/hooks/usePlanEnforcement'
 import FlagOptionsMenuButton from '@cf/components/FlagOptionsMenuButton/FlagOptionsMenuButton'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import { useFeature } from '@common/hooks/useFeatures'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureWarningTooltip } from '@common/components/FeatureWarning/FeatureWarningWithTooltip'
+import { FeatureFlag } from '@common/featureFlags'
 import imageURL from '@cf/images/Feature_Flags_Teepee.svg'
 import { useFFGitSyncContext } from '@cf/contexts/ff-git-sync-context/FFGitSyncContext'
+import type { FilterProps } from '@cf/components/TableFilters/TableFilters'
 import { FeatureFlagStatus, FlagStatus } from './FlagStatus'
 import { FlagResult } from './FlagResult'
+import { FlagTableFilters } from './components/FlagTableFilters'
 import css from './FeatureFlagsPage.module.scss'
 
 export interface RenderColumnFlagProps {
@@ -416,8 +420,9 @@ const FeatureFlagsPage: React.FC = () => {
   const { activeEnvironment: environmentIdentifier, withActiveEnvironment } = useActiveEnvironment()
   const [pageNumber, setPageNumber] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
-  const queryParams = useMemo(
-    () => ({
+  const [flagFilter, setFlagFilter] = useState<Record<string, any> | FilterProps>({})
+  const queryParams = useMemo(() => {
+    return {
       projectIdentifier,
       environmentIdentifier,
       accountIdentifier,
@@ -425,10 +430,11 @@ const FeatureFlagsPage: React.FC = () => {
       pageSize: CF_DEFAULT_PAGE_SIZE,
       pageNumber,
       metrics: true,
-      name: searchTerm
-    }),
-    [projectIdentifier, environmentIdentifier, accountIdentifier, orgIdentifier, pageNumber, searchTerm] // eslint-disable-line react-hooks/exhaustive-deps
-  )
+      name: searchTerm,
+      [flagFilter?.queryProps?.key]: flagFilter?.queryProps?.value
+    }
+  }, [projectIdentifier, environmentIdentifier, accountIdentifier, orgIdentifier, pageNumber, searchTerm, flagFilter])
+
   const {
     data,
     loading: flagsLoading,
@@ -465,6 +471,7 @@ const FeatureFlagsPage: React.FC = () => {
   const deleteFlag = useDeleteFeatureFlag({ queryParams })
 
   const [features, setFeatures] = useState<Features | null>()
+
   const { getString } = useStrings()
   const [loading, setLoading] = useState(true)
 
@@ -564,6 +571,7 @@ const FeatureFlagsPage: React.FC = () => {
     ],
     [gitSync.isAutoCommitEnabled, gitSync.isGitSyncEnabled, features]
   )
+
   const onSearchInputChanged = useCallback(
     name => {
       setSearchTerm(name)
@@ -572,10 +580,18 @@ const FeatureFlagsPage: React.FC = () => {
     [setSearchTerm, refetch, queryParams]
   )
 
+  const onUpdateFilter = (filter: FilterProps): void => {
+    setFlagFilter(filter)
+    refetch({
+      queryParams: { ...queryParams, ...(filter && { [`${filter?.queryProps?.key}`]: filter?.queryProps?.value }) }
+    })
+  }
+
   const hasFeatureFlags = features?.features && features?.features?.length > 0
   const emptyFeatureFlags = !loading && features?.features?.length === 0
   const title = getString('featureFlagsText')
   const displayToolbar = hasFeatureFlags || searchTerm
+  const FILTER_FEATURE_FLAGS = useFeatureFlag(FeatureFlag.STALE_FLAGS_FFM_1510)
 
   return (
     <ListingPageTemplate
@@ -621,6 +637,9 @@ const FeatureFlagsPage: React.FC = () => {
     >
       {hasFeatureFlags && (
         <Container padding={{ top: 'medium', right: 'xlarge', left: 'xlarge' }}>
+          {FILTER_FEATURE_FLAGS && (
+            <FlagTableFilters features={features} currentFilter={flagFilter} updateTableFilter={onUpdateFilter} />
+          )}
           <TableV2<Feature>
             columns={columns}
             data={features?.features || []}

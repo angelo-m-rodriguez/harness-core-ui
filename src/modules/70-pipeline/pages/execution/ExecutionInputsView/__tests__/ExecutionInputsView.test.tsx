@@ -39,7 +39,8 @@ jest.mock('services/pipeline-ng', () => ({
   useGetYamlSchema: jest.fn(() => ({ data: null })),
   useCreateInputSetForPipeline: jest.fn(() => ({ data: null })),
   useGetInputsetYamlV2: jest.fn(() => ({ data: null })),
-  useRunStagesWithRuntimeInputYaml: jest.fn(() => ({ data: null }))
+  useRunStagesWithRuntimeInputYaml: jest.fn(() => ({ data: null })),
+  useValidateTemplateInputs: jest.fn(() => ({ data: null }))
 }))
 
 const TEST_PATH = routes.toExecutionInputsView({

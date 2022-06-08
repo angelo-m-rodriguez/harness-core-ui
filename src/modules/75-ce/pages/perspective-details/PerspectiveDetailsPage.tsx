@@ -52,7 +52,7 @@ import {
   clusterInfoUtil,
   getQueryFiltersFromPerspectiveResponse
 } from '@ce/utils/perspectiveUtils'
-import { AGGREGATE_FUNCTION } from '@ce/components/PerspectiveGrid/Columns'
+import { AGGREGATE_FUNCTION, getGridColumnsByGroupBy } from '@ce/components/PerspectiveGrid/Columns'
 import { getGMTStartDateTime, getGMTEndDateTime, DEFAULT_TIME_RANGE } from '@ce/utils/momentUtils'
 import { useLicenseStore } from 'framework/LicenseStore/LicenseStoreContext'
 import { ModuleLicenseType } from '@common/constants/SubscriptionTypes'
@@ -61,6 +61,7 @@ import { CCM_CHART_TYPES } from '@ce/constants'
 import { DAYS_FOR_TICK_INTERVAL } from '@ce/components/CloudCostInsightChart/Chart'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { PAGE_NAMES } from '@ce/TrackingEventsConstants'
+import { useDownloadPerspectiveGridAsCsv } from '@ce/components/PerspectiveGrid/useDownloadPerspectiveGridAsCsv'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
@@ -344,10 +345,25 @@ const PerspectiveDetailsPage: React.FC = () => {
 
   const { data: chartData, fetching: chartFetching } = chartResult
   const { data: gridData, fetching: gridFetching } = gridResults
+
   const { data: summaryData, fetching: summaryFetching } = summaryResult
   const { data: { perspectiveTotalCount } = {} } = perspectiveTotalCountResult
 
   const persName = perspectiveData?.name || perspectiveName
+
+  const [openDownloadCSVModal] = useDownloadPerspectiveGridAsCsv({
+    perspectiveName: persName,
+    selectedColumnsToDownload: getGridColumnsByGroupBy(groupBy, isClusterOnly),
+    perspectiveTotalCount: perspectiveTotalCount || 0,
+    variables: {
+      aggregateFunction: getAggregationFunc(),
+      filters: queryFilters,
+      isClusterOnly: isClusterOnly,
+      limit: PAGE_SIZE,
+      offset: gridPageOffset,
+      groupBy: [getGroupByFilter(groupBy)]
+    }
+  })
 
   const goToWorkloadDetails = (clusterName: string, namespace: string, workloadName: string) => {
     history.push({
@@ -484,6 +500,8 @@ const PerspectiveDetailsPage: React.FC = () => {
               setPageIndex(pageIndex)
               setGridPageOffset(pageIndex * pageSize)
             }}
+            allowExportAsCSV={true}
+            openDownloadCSVModal={openDownloadCSVModal}
           />
         </Container>
       </PageBody>

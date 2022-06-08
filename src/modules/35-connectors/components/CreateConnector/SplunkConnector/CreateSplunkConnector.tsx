@@ -12,6 +12,9 @@ import * as Yup from 'yup'
 import { useStrings } from 'framework/strings'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
 import { buildSplunkPayload } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { ConnectorSecretField } from '../CommonCVConnector/components/ConnectorSecretField/ConnectorSecretField'
@@ -25,9 +28,20 @@ function SplunkConfigStep(props: ConnectionConfigProps): JSX.Element {
   const initialValues = initializeSplunkConnector({ prevStepData, accountId, projectIdentifier, orgIdentifier })
 
   const handleSubmit = (formData: ConnectorConfigDTO) => {
+    trackEvent(ConnectorActions.CreateConnectorSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.Splunk
+    })
     nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })
   }
   const secretValue = prevStepData?.passwordRef?.referenceString || prevStepData?.spec?.passwordRef
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Splunk
+  })
 
   return (
     <Formik

@@ -24,7 +24,7 @@ import {
   MultiTypeInputType
 } from '@harness/uicore'
 
-import { NGServiceConfig, NGServiceOverrides, useGetServiceList } from 'services/cd-ng'
+import { NGServiceConfig, useGetServiceList } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -35,7 +35,7 @@ import MultiTypeSecretInput from '@secrets/components/MutiTypeSecretInput/MultiT
 import type { AllNGVariables } from '@pipeline/utils/types'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 
-import { getVariableTypeOptions, VariableType } from './ServiceOverrideUtils'
+import { getVariableTypeOptions, VariableType, NGServiceOverrides } from './ServiceOverrideUtils'
 
 export interface VariableState {
   variable: AllNGVariables

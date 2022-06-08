@@ -112,6 +112,22 @@ exports[`ExternalAPICallContent should render ExternalAPICallContent 1`] = `
                     03/11/2022, 4:15 PM
                   </p>
                 </div>
+                <div
+                  class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
+                >
+                  <p
+                    class="StyledProps--font StyledProps--main StyledProps--font-variation-body StyledProps--color StyledProps--color-grey400"
+                  >
+                    Tags
+                    :
+                  </p>
+                  <p
+                    class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--font-variation-body StyledProps--color StyledProps--color-grey900"
+                    style="--text-line-clamp: 1;"
+                  >
+                    {"dataSourceType":"NEW_RELIC"}
+                  </p>
+                </div>
               </div>
               <div
                 class="StyledProps--font StyledProps--main StyledProps--padding-top-medium StyledProps--padding-right-large StyledProps--padding-bottom-medium StyledProps--padding-left-large"

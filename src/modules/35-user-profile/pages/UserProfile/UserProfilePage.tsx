@@ -32,12 +32,7 @@ const UserProfilePage: React.FC = () => {
   const { currentUserInfo: user } = useAppStore()
   const isCommunity = isCommunityPlan()
 
-  const {
-    data: loginSettingsData,
-    loading: fetchingAuthSettings,
-    error: errorWhileFetchingAuthSettings,
-    refetch: refetchLoginSettings
-  } = useGetAuthenticationSettings({
+  const { data: loginSettingsData, loading: fetchingAuthSettings } = useGetAuthenticationSettings({
     queryParams: {
       accountIdentifier: accountId
     }
@@ -53,12 +48,7 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <>
-      <Page.Body
-        error={errorWhileFetchingAuthSettings?.message}
-        retryOnError={() => refetchLoginSettings()}
-        filled
-        className={css.userProfilePage}
-      >
+      <Page.Body filled className={css.userProfilePage}>
         <Layout.Vertical className={css.details}>
           <Layout.Vertical margin={{ top: 'large' }}>
             <Avatar

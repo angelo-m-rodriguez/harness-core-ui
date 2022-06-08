@@ -27,7 +27,6 @@ import ConditionalExecutionTooltip from '@pipeline/components/ConditionalExecuti
 import { useGlobalEventListener } from '@common/hooks'
 import type { StageElementWrapper } from '@pipeline/utils/pipelineTypes'
 import { StageType } from '@pipeline/utils/stageHelpers'
-import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { getPipelineGraphData } from '@pipeline/components/PipelineDiagram/PipelineGraph/PipelineGraphUtils'
 import PipelineStageNode from '@pipeline/components/PipelineDiagram/Nodes/DefaultNode/PipelineStageNode/PipelineStageNode'
 import { DiamondNodeWidget } from '@pipeline/components/PipelineDiagram/Nodes/DiamondNode/DiamondNode'
@@ -229,7 +228,8 @@ function StageBuilder(): JSX.Element {
     updatePipelineView,
     renderPipelineStage,
     getStageFromPipeline,
-    setSelection
+    setSelection,
+    getTemplate
   } = usePipelineContext()
 
   // NOTE: we are using ref as setSelection is getting cached somewhere
@@ -237,7 +237,6 @@ function StageBuilder(): JSX.Element {
   setSelectionRef.current = setSelection
 
   const newPipelineStudioEnabled: boolean = useFeatureFlag(FeatureFlag.NEW_PIPELINE_STUDIO)
-  const { getTemplate } = useTemplateSelector()
 
   const { trackEvent } = useTelemetry()
 

@@ -26,7 +26,11 @@ import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import TextReference, { TextReferenceInterface, ValueType } from '@secrets/components/TextReference/TextReference'
 import { useStrings } from 'framework/strings'
 import { PageSpinner } from '@common/components'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import { AuthTypes } from '@connectors/pages/connectors/utils/ConnectorHelper'
+import { useConnectorWizard } from '../../../CreateConnectorWizard/ConnectorWizardContext'
 import commonStyles from '@connectors/components/CreateConnector/commonSteps/ConnectorCommonStyles.module.scss'
 import css from './StepNexusConnector.module.scss'
 
@@ -100,8 +104,20 @@ const StepNexusAuthentication: React.FC<StepProps<StepNexusAuthenticationProps> 
   }, [loadingConnectorSecrets])
 
   const handleSubmit = (formData: ConnectorConfigDTO) => {
+    trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.Nexus
+    })
     nextStep?.({ ...props.connectorInfo, ...prevStepData, ...formData } as StepNexusAuthenticationProps)
   }
+  useConnectorWizard({ helpPanel: { referenceId: 'NexusDetails', contentWidth: 900 } })
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Nexus
+  })
 
   return loadingConnectorSecrets ? (
     <PageSpinner />

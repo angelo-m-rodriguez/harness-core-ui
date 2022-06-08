@@ -53,7 +53,7 @@
         .summaryCard {
           min-width: 142px;
           min-height: 76px;
-          background-color: #fafbfc !important;
+          background-color: var(--grey-50) !important;
           margin-right: var(--spacing-4) !important;
           border-radius: 4px;
           padding-left: var(--spacing-4) !important;
@@ -77,7 +77,7 @@
               line-height: 32px;
               display: flex;
               align-items: center;
-              color: black;
+              color: var(--grey-1000);
             }
             .groupByValue {
               padding-top: var(--spacing-small);
@@ -108,7 +108,7 @@
       .mostActiveServicesHeaderContainer {
         position: sticky;
         top: 0;
-        background: white;
+        background: var(--grey-0);
         z-index: 10;
         padding-left: var(--spacing-xlarge);
         padding-right: var(--spacing-xlarge);
@@ -130,6 +130,11 @@
         padding: var(--spacing-small);
         height: 271px; // 325 container height - 54 header height
         overflow-y: auto;
+        div[class*='TableV2--header'] {
+          div[class*='TableV2--cell']:nth-child(2) p {
+            padding-left: var(--spacing-5);
+          }
+        }
       }
     }
   }

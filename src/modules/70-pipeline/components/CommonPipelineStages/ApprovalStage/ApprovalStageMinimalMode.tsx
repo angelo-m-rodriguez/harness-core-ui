@@ -86,8 +86,8 @@ export function ApprovalStageMinimalMode(props: ApprovalStageMinimalModeProps): 
         {formikProps => (
           <FormikForm>
             <Text
-              icon="pipeline-approval"
-              iconProps={{ size: 16, intent: Intent.SUCCESS }}
+              icon="approval-stage-icon"
+              iconProps={{ size: 16, intent: Intent.PRIMARY }}
               margin={{ bottom: 'medium' }}
               className={css.addStageHeading}
             >

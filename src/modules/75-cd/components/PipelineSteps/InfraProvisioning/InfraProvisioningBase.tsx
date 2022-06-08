@@ -31,7 +31,6 @@ import { createStepNodeFromTemplate } from '@pipeline/utils/templateUtils'
 import { useMutateAsGet } from '@common/hooks'
 import { getStepPaletteModuleInfosFromStage } from '@pipeline/utils/stepUtils'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { getFlattenedStages } from '@pipeline/components/PipelineStudio/StageBuilder/StageBuilderUtil'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
@@ -56,7 +55,8 @@ export const InfraProvisioningBase = (
     updatePipelineView,
     isReadonly,
     getStageFromPipeline,
-    getStagePathFromPipeline
+    getStagePathFromPipeline,
+    getTemplate
   } = usePipelineContext()
 
   const { getString } = useStrings()
@@ -64,7 +64,6 @@ export const InfraProvisioningBase = (
   const stagePath = getStagePathFromPipeline(selectedStageId || '', 'pipeline.stages')
   const [allChildTypes, setAllChildTypes] = React.useState<string[]>([])
   const executionRef = React.useRef<ExecutionGraphRefObj | null>(null)
-  const { getTemplate } = useTemplateSelector()
   const { accountId } = useParams<ProjectPathProps>()
   const formikRef = useRef<FormikContextType<InfraProvisioningDataUI>>()
 

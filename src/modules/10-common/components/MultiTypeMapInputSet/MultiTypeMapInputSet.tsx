@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { v4 as nameSpace, v5 as uuid } from 'uuid'
 import cx from 'classnames'
 import {
@@ -20,7 +20,7 @@ import {
 } from '@wings-software/uicore'
 import { Intent, FontVariation } from '@harness/design-system'
 import { connect, FormikContextType } from 'formik'
-import { get, isEmpty } from 'lodash-es'
+import { get, isEmpty, isEqual } from 'lodash-es'
 import { ConfigureOptions, ConfigureOptionsProps } from '@common/components/ConfigureOptions/ConfigureOptions'
 import { useStrings } from 'framework/strings'
 import MultiTypeFieldSelector, {
@@ -74,8 +74,12 @@ export const MultiTypeMapInputSet = (props: MultiTypeMapProps): React.ReactEleme
     ...restProps
   } = props
 
+  const formikFieldValues = useMemo(() => {
+    return get(formik?.values, name, '')
+  }, [formik?.values, name])
+
   const [value, setValue] = React.useState<MapUIType>(() => {
-    let initialValue = get(formik?.values, name, '')
+    let initialValue = formikFieldValues
     if (initialValue === RUNTIME_INPUT_VALUE) {
       initialValue = []
     }
@@ -121,7 +125,7 @@ export const MultiTypeMapInputSet = (props: MultiTypeMapProps): React.ReactEleme
   }
 
   React.useEffect(() => {
-    let initialValue = get(formik?.values, name, '')
+    let initialValue = formikFieldValues
     if (initialValue === RUNTIME_INPUT_VALUE) {
       initialValue = []
     }
@@ -153,13 +157,13 @@ export const MultiTypeMapInputSet = (props: MultiTypeMapProps): React.ReactEleme
       })
     }
 
-    if (get(formik?.values, name, '') !== RUNTIME_INPUT_VALUE) {
+    if (formikFieldValues !== RUNTIME_INPUT_VALUE) {
       if (isEmpty(valueInCorrectFormat)) {
         formik?.setFieldValue(name, undefined)
-      } else {
+      } else if (!isEqual(formikFieldValues, valueInCorrectFormat)) {
         formik?.setFieldValue(name, valueInCorrectFormat)
       }
-    } else if (!isEmpty(valueInCorrectFormat)) {
+    } else if (!isEmpty(valueInCorrectFormat) && !isEqual(formikFieldValues, valueInCorrectFormat)) {
       formik?.setFieldValue(name, valueInCorrectFormat)
     }
   }, [name, value, formik?.setFieldValue])

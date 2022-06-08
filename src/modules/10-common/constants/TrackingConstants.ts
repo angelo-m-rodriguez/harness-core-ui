@@ -46,8 +46,60 @@ export enum SecretActions {
 }
 
 export enum ConnectorActions {
-  StartCreateConnector = 'Start Create Connector',
-  SaveCreateConnector = 'Save Create Connector'
+  StartCreateConnector = 'Create Connector Started',
+  SaveCreateConnector = 'Create Connector Saved',
+  ConnectorDetailsStepLoad = 'Connector Details Step Loaded',
+  ConnectorDetailsStepSubmit = 'Connector Details Step Submitted',
+  AuthenticationStepLoad = 'Connector Authentication Step Loaded',
+  AuthenticationStepSubmit = 'Connector Authentication Step Submitted',
+  DetailsStepLoad = 'Details Step Loaded',
+  DetailsStepSubmit = 'Details Step Submitted',
+  ConfigLoad = 'Connector Config Loaded',
+  ConfigSubmit = 'Connector Config Submitted',
+  CreateConnectorLoad = 'Connector Loaded',
+  CreateConnectorSubmit = 'Connector Submitted',
+  DelegateSelectorStepLoad = 'Delegate Selector Step Loaded',
+  DelegateSelectorStepSubmit = 'Delegate Selector Step Submitted',
+  ConnectivityModeStepLoad = 'Connectivity Mode Step Loaded',
+  ConnectivityModeStepSubmit = 'Connectivity Mode Step Submitted',
+  SetupEngineLoad = 'Setup Engine Loaded',
+  SetupEngineSubmit = 'Setup Engine Submitted',
+  AzureKeyValueFormLoad = 'Azure Key Value Form Loaded',
+  AzureKeyValueFormSubmit = 'Azure Key Value Form Submitted',
+  SetupVaultLoad = 'Setup Vault Loaded',
+  SetupVaultSubmit = 'Setup Vault Submitted',
+  OverviewLoad = 'Connector Overview Loaded',
+  OverviewSubmit = 'Connector Overview Submitted',
+  AzureConnectorBillingLoad = 'Azure Connector Billing Loaded',
+  AzureConnectorBillingSubmit = 'Azure Connector Billing Submitted',
+  CEGcpConnectorBillingExportLoad = 'CCM Gcp Connector Billing Export Loaded',
+  CEGcpConnectorBillingExportSubmit = 'CCM Gcp Connector Billing Export Submitted',
+  ChooseRequirementsLoad = 'Choose Requirements Loaded',
+  ChooseRequirementsSubmit = 'Choose Requirements Submitted',
+  ProvidePermissionsLoad = 'Provide Permissions Loaded',
+  ProvidePermissionsSubmit = 'Provide Permissions Submitted',
+  CustomHealthHeadersAndParamsLoad = 'Custom Health Headers And Param Loaded',
+  CustomHealthHeadersAndParamsSubmit = 'Custom Health Headers And Param Submitted',
+  CustomHealthValidationPathLoad = 'Custom Health Validation Path Loaded',
+  CustomHealthValidationPathSubmit = 'Custom Health Validation Path Submitted',
+  CreateServicePrincipalLoad = 'Create Service Principal Loaded',
+  CreateServicePrincipalSubmit = 'Create Service Principal Submitted',
+  FeatureSelectionStepLoad = 'Feature Selection Step Loaded',
+  FeatureSelectionStepSubmit = 'Feature Selection Step Submitted',
+  SecretCreationStepLoad = 'Secret Creation Step Loaded',
+  SecretCreationStepSubmit = 'Secret Creation Step Submitted',
+  CENGAwsConnectorCostUsageReportLoad = 'CCM NG AWS Connector Cost Usage Report Loaded',
+  CENGAwsConnectorCostUsageReportSubmit = 'CCM NG AWS Connector Cost Usage Report Submitted',
+  CENGAwsConnectorCrossAccountRoleStep1Load = 'CCM NG AWS Connector Cross Account Role Step1 Loaded',
+  CENGAwsConnectorCrossAccountRoleStep1Submit = 'CCM NG AWS Connector Cross Account Role Step1 Submitted',
+  CENGAwsConnectorCrossAccountRoleStep2Load = 'CCM NG AWS Connector Cross Account Role Step2 Loaded',
+  CENGAwsConnectorCrossAccountRoleStep2Submit = 'CCM NG AWS Connector Cross Account Role Step2 Submitted'
+}
+
+export enum ConnectorTypes {
+  Helm = 'Helm',
+  Docker = 'Docker',
+  CEGcp = 'CEGcp'
 }
 
 export enum DelegateActions {
@@ -189,4 +241,9 @@ export enum FeatureActions {
   CreateSDKKeyClick = 'Create SDK Key Clicked',
   CreateSDKKeySubmit = 'Create SDK Key Submitted',
   CreateSDKKeyCancel = 'Create SDK Key Cancel Clicked'
+}
+
+export enum CCMActions {
+  CCMStartPlanModal = 'CCM Start Plan Modal Loaded',
+  CCMStartPlanContinue = 'CCM Start Plan Modal Continue Clicked'
 }

@@ -20,6 +20,7 @@ export interface ServiceNowFieldsRendererProps {
   selectedFields?: ServiceNowFieldNGWithValue[]
   readonly?: boolean
   onDelete?: (index: number, selectedField: ServiceNowFieldNG) => void
+  allowableTypes: MultiTypeInputType[]
 }
 
 interface MappedComponentInterface {
@@ -46,10 +47,6 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
     return false
   }, [selectedField])
 
-  // const showMultiSelectField = useCallback(() => {
-  //   return selectedField.allowedValues && selectedField.schema.type === 'option' && selectedField.schema.array
-  // }, [selectedField])
-
   const showMultiTypeField = useCallback(() => {
     return selectedField.allowedValues && selectedField.schema?.type === 'option'
   }, [selectedField])
@@ -63,7 +60,7 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
         placeholder={selectedField.name}
         disabled={isApprovalStepFieldDisabled(props.readonly)}
         className={cx(css.multiSelect, css.md)}
-        multiTypeInputProps={{ allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION], expressions }}
+        multiTypeInputProps={{ allowableTypes: props.allowableTypes, expressions }}
       />
     )
   } else if (showTextField()) {
@@ -75,7 +72,7 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
         placeholder={selectedField.name}
         className={css.deploymentViewMedium}
         multiTextInputProps={{
-          allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION],
+          allowableTypes: props.allowableTypes,
           expressions
         }}
       />

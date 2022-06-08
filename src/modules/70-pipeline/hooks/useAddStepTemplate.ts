@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { cloneDeep, defaultTo, isNil, set } from 'lodash-es'
+import { cloneDeep, isNil, set } from 'lodash-es'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import type {
@@ -21,7 +21,6 @@ import { usePipelineContext } from '@pipeline/components/PipelineStudio/Pipeline
 import { useMutateAsGet } from '@common/hooks'
 import { getStepPaletteModuleInfosFromStage } from '@pipeline/utils/stepUtils'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 
@@ -41,15 +40,15 @@ export function useAddStepTemplate(props: AddStepTemplate): AddStepTemplateRetur
   const {
     state: {
       pipelineView,
-      selectionState: { selectedStageId }
+      selectionState: { selectedStageId = '' }
     },
     updateStage,
     getStageFromPipeline,
-    updatePipelineView
+    updatePipelineView,
+    getTemplate
   } = pipelineContext
-  const { stage: selectedStage } = getStageFromPipeline(defaultTo(selectedStageId, ''))
+  const { stage: selectedStage } = getStageFromPipeline(selectedStageId)
   const [allChildTypes, setAllChildTypes] = React.useState<string[]>([])
-  const { getTemplate } = useTemplateSelector()
 
   const { data: stepsData } = useMutateAsGet(useGetStepsV2, {
     queryParams: { accountId },
@@ -84,7 +83,7 @@ export function useAddStepTemplate(props: AddStepTemplate): AddStepTemplateRetur
     try {
       const { template, isCopied } = await getTemplate({ templateType: 'Step', allChildTypes })
       const newStepData = { step: createStepNodeFromTemplate(template, isCopied) }
-      const { stage: pipelineStage } = cloneDeep(getStageFromPipeline(selectedStageId || ''))
+      const { stage: pipelineStage } = cloneDeep(getStageFromPipeline(selectedStageId))
       if (pipelineStage && !pipelineStage.stage?.spec) {
         set(pipelineStage, 'stage.spec', {})
       }

@@ -11,7 +11,6 @@ import produce from 'immer'
 import { useCallback } from 'react'
 import type { PipelineInfoConfig } from 'services/cd-ng'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { createTemplate } from '@pipeline/utils/templateUtils'
 import type { TemplateSummaryResponse } from 'services/template-ng'
 
@@ -23,9 +22,9 @@ interface TemplateActionsReturnType {
 export function usePipelineTemplateActions(): TemplateActionsReturnType {
   const {
     state: { pipeline },
-    updatePipeline
+    updatePipeline,
+    getTemplate
   } = usePipelineContext()
-  const { getTemplate } = useTemplateSelector()
 
   const addOrUpdateTemplate = useCallback(
     async (selectedTemplate?: TemplateSummaryResponse) => {

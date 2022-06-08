@@ -86,3 +86,33 @@ export const deploymentStatsSummaryResponse: {
     executionMessage: 'Successfully fetched data'
   }
 }
+
+export const noDeploymentData: {
+  data: ExecutionResponseDeploymentsStatsOverview
+  error: Error | Failure | undefined
+  loading: boolean
+} = {
+  error: undefined,
+  loading: false,
+  data: {
+    response: {
+      deploymentsOverview: {
+        runningExecutions: [],
+        pendingApprovalExecutions: [],
+        pendingManualInterventionExecutions: [],
+        failed24HrsExecutions: []
+      },
+      deploymentsStatsSummary: {
+        countAndChangeRate: { count: 0, countChangeAndCountChangeRateInfo: { countChange: 0, countChangeRate: 0.0 } },
+        failureRateAndChangeRate: { rate: 0, rateChangeRate: 0.0 },
+        deploymentRateAndChangeRate: { rate: 0, rateChangeRate: 0.0 },
+        deploymentStats: []
+      },
+      mostActiveServicesList: {
+        activeServices: []
+      }
+    },
+    executionStatus: 'SUCCESS',
+    executionMessage: 'Successfully fetched data'
+  }
+}

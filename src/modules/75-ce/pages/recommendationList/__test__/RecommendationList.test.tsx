@@ -6,84 +6,91 @@
  */
 
 import React from 'react'
-import { queryByText, render, waitFor, fireEvent, getByText } from '@testing-library/react'
+import { queryByText, render } from '@testing-library/react'
 import { Provider } from 'urql'
 import { fromValue } from 'wonka'
 import type { DocumentNode } from 'graphql'
 
 import { TestWrapper } from '@common/utils/testUtils'
-import { RecommendationFiltersDocument, RecommendationsDocument, FetchCcmMetaDataDocument } from 'services/ce/services'
+import { FetchCcmMetaDataDocument } from 'services/ce/services'
 
 import RecommendationList from '../RecommendationList'
 import ResponseData from './ListData.json'
-import FilterResponseData from './FiltersData.json'
+import SavedFilterData from './FiltersData.json'
+
+const CCMMetaDataResponse = {
+  k8sClusterConnectorPresent: true,
+  cloudDataPresent: true,
+  awsConnectorsPresent: true,
+  gcpConnectorsPresent: true,
+  azureConnectorsPresent: true,
+  applicationDataPresent: true,
+  inventoryDataPresent: false,
+  clusterDataPresent: true,
+  isSampleClusterPresent: false,
+  defaultAzurePerspectiveId: 'azureId',
+  defaultAwsPerspectiveId: 'awsId',
+  defaultGcpPerspectiveId: 'gcpId',
+  defaultClusterPerspectiveId: 'clusterId',
+  __typename: 'CCMMetaData'
+}
+
+jest.mock('services/ce', () => ({
+  useListRecommendations: jest.fn().mockImplementation(() => ({
+    mutate: jest
+      .fn()
+      .mockReturnValueOnce(() => ({
+        status: 'SUCCESS',
+        data: { items: [] }
+      }))
+      .mockImplementation(() => ({
+        status: 'SUCCESS',
+        data: { items: ResponseData.data.recommendationsV2.items }
+      }))
+  })),
+  useRecommendationStats: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: { ...ResponseData.data.recommendationStatsV2 }
+      }
+    }
+  })),
+  useRecommendationsCount: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: 42
+      }
+    }
+  })),
+  useRecommendationFilterValues: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: []
+      }
+    }
+  })),
+  useGetFilterList: jest.fn().mockImplementation(() => {
+    return {
+      data: SavedFilterData,
+      refetch: jest.fn(),
+      loading: false
+    }
+  })
+}))
 
 const params = { accountId: 'TEST_ACC', orgIdentifier: 'TEST_ORG', projectIdentifier: 'TEST_PROJECT' }
 
 describe('test cases for Recommendation List Page', () => {
-  test('should be able to render the list page', async () => {
-    const responseState = {
-      executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === RecommendationFiltersDocument) {
-          return fromValue(FilterResponseData)
-        }
-        if (query === RecommendationsDocument) {
-          return fromValue(ResponseData)
-        }
-      }
-    }
-
-    const { container } = render(
-      <TestWrapper pathParams={params}>
-        <Provider value={responseState as any}>
-          <RecommendationList />
-        </Provider>
-      </TestWrapper>
-    )
-    expect(container).toMatchSnapshot()
-
-    const filterHereText = queryByText(container, 'ce.recommendation.listPage.filterHereText')
-    fireEvent.click(filterHereText!)
-    await waitFor(() => {
-      expect(getByText(container, 'ce.recommendation.listPage.filters.namespace')).toBeInTheDocument()
-    })
-  })
-
   test('should be able to render empty page', async () => {
     const responseState = {
       executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === RecommendationFiltersDocument) {
-          return fromValue(FilterResponseData)
-        }
-        if (query === RecommendationsDocument) {
-          return fromValue({
-            data: {
-              recommendationStatsV2: { totalMonthlyCost: 0, totalMonthlySaving: 0 },
-              recommendationsV2: {
-                items: []
-              }
-            }
-          })
-        }
         if (query === FetchCcmMetaDataDocument) {
           return fromValue({
             data: {
-              ccmMetaData: {
-                k8sClusterConnectorPresent: true,
-                cloudDataPresent: true,
-                awsConnectorsPresent: true,
-                gcpConnectorsPresent: true,
-                azureConnectorsPresent: true,
-                applicationDataPresent: true,
-                inventoryDataPresent: false,
-                clusterDataPresent: true,
-                isSampleClusterPresent: false,
-                defaultAzurePerspectiveId: 'azureId',
-                defaultAwsPerspectiveId: 'awsId',
-                defaultGcpPerspectiveId: 'gcpId',
-                defaultClusterPerspectiveId: 'clusterId',
-                __typename: 'CCMMetaData'
-              }
+              ccmMetaData: CCMMetaDataResponse
             }
           })
         }
@@ -98,42 +105,42 @@ describe('test cases for Recommendation List Page', () => {
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
+  })
+
+  test('should be able to render the list page', async () => {
+    const responseState = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === FetchCcmMetaDataDocument) {
+          return fromValue({
+            data: {
+              ccmMetaData: CCMMetaDataResponse
+            }
+          })
+        }
+      }
+    }
+
+    const { container } = render(
+      <TestWrapper pathParams={params}>
+        <Provider value={responseState as any}>
+          <RecommendationList />
+        </Provider>
+      </TestWrapper>
+    )
+    expect(container).toMatchSnapshot()
+
+    expect(queryByText(container, 'filters.selectFilter')).toBeDefined()
   })
 
   test('should be able to render page when thr are no k8s connector', async () => {
     const responseState = {
       executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === RecommendationFiltersDocument) {
-          return fromValue(FilterResponseData)
-        }
-        if (query === RecommendationsDocument) {
-          return fromValue({
-            data: {
-              recommendationStatsV2: { totalMonthlyCost: 0, totalMonthlySaving: 0 },
-              recommendationsV2: {
-                items: []
-              }
-            }
-          })
-        }
         if (query === FetchCcmMetaDataDocument) {
           return fromValue({
             data: {
               ccmMetaData: {
-                k8sClusterConnectorPresent: false,
-                cloudDataPresent: true,
-                awsConnectorsPresent: true,
-                gcpConnectorsPresent: true,
-                azureConnectorsPresent: true,
-                applicationDataPresent: true,
-                inventoryDataPresent: false,
-                clusterDataPresent: true,
-                isSampleClusterPresent: false,
-                defaultAzurePerspectiveId: 'azureId',
-                defaultAwsPerspectiveId: 'awsId',
-                defaultGcpPerspectiveId: 'gcpId',
-                defaultClusterPerspectiveId: 'clusterId',
-                __typename: 'CCMMetaData'
+                ...CCMMetaDataResponse,
+                k8sClusterConnectorPresent: false
               }
             }
           })
@@ -154,37 +161,12 @@ describe('test cases for Recommendation List Page', () => {
   test('should be able to render page when thr are k8s connector but no cluster data', async () => {
     const responseState = {
       executeQuery: ({ query }: { query: DocumentNode }) => {
-        if (query === RecommendationFiltersDocument) {
-          return fromValue(FilterResponseData)
-        }
-        if (query === RecommendationsDocument) {
-          return fromValue({
-            data: {
-              recommendationStatsV2: { totalMonthlyCost: 0, totalMonthlySaving: 0 },
-              recommendationsV2: {
-                items: []
-              }
-            }
-          })
-        }
         if (query === FetchCcmMetaDataDocument) {
           return fromValue({
             data: {
               ccmMetaData: {
-                k8sClusterConnectorPresent: true,
-                cloudDataPresent: true,
-                awsConnectorsPresent: true,
-                gcpConnectorsPresent: true,
-                azureConnectorsPresent: true,
-                applicationDataPresent: true,
-                inventoryDataPresent: false,
-                clusterDataPresent: false,
-                isSampleClusterPresent: false,
-                defaultAzurePerspectiveId: 'azureId',
-                defaultAwsPerspectiveId: 'awsId',
-                defaultGcpPerspectiveId: 'gcpId',
-                defaultClusterPerspectiveId: 'clusterId',
-                __typename: 'CCMMetaData'
+                ...CCMMetaDataResponse,
+                clusterDataPresent: false
               }
             }
           })

@@ -64,14 +64,33 @@ export const executionLogs: ExecutionLogDTO[] = [
     traceableType: 'VERIFICATION_TASK',
     log: TEXT_LEARNING_ENGINE,
     logLevel: 'INFO',
-    type: LogTypes.ExecutionLog
+    type: LogTypes.ExecutionLog,
+    tags: [{ key: 'dataSourceType', value: 'NEW_RELIC', type: 'STRING' }]
   }
 ]
 
 export const executionLogState = {
   data: [
     {
-      text: { logLevel: 'INFO', createdAt: '1647418990020', log: TEXT_LEARNING_ENGINE }
+      text: {
+        logLevel: 'INFO',
+        createdAt: '1647418990020',
+        log: TEXT_LEARNING_ENGINE
+      }
+    }
+  ],
+  searchData: { currentIndex: 0, linesWithResults: [], text: '' }
+}
+
+export const executionLogStateWithTAGS = {
+  data: [
+    {
+      text: {
+        logLevel: 'INFO',
+        createdAt: '1647418990020',
+        log: TEXT_LEARNING_ENGINE,
+        tags: '{"dataSourceType":"NEW_RELIC"}'
+      }
     }
   ],
   searchData: { currentIndex: 0, linesWithResults: [], text: '' }
@@ -147,6 +166,7 @@ export const externalAPICallLogsResponse: RestResponsePageCVNGLogDTO = {
             type: 'JSON'
           }
         ],
+        tags: [{ key: 'dataSourceType', value: 'NEW_RELIC', type: 'STRING' }],
         requestTime: 1647015341267,
         responseTime: 1647015341484,
         type: 'ApiCallLog'

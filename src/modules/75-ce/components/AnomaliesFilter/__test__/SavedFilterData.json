@@ -1,0 +1,68 @@
+{
+  "data": {
+    "totalPages": 1,
+    "totalItems": 2,
+    "pageItemCount": 2,
+    "pageSize": 100,
+    "content": [
+      {
+        "name": "Test Filter",
+        "identifier": "Test_Filter",
+        "orgIdentifier": null,
+        "projectIdentifier": null,
+        "filterProperties": {
+          "k8sClusterNames": null,
+          "k8sNamespaces": null,
+          "k8sWorkloadNames": null,
+          "gcpProjects": null,
+          "gcpProducts": null,
+          "gcpSKUDescriptions": ["Network Internet Egress from Americas to Americas"],
+          "awsAccounts": ["448640225317"],
+          "awsServices": null,
+          "awsUsageTypes": null,
+          "azureSubscriptions": null,
+          "azureServiceNames": null,
+          "azureResources": null,
+          "minActualAmount": null,
+          "minAnomalousSpend": null,
+          "timeFilters": null,
+          "offset": null,
+          "limit": null,
+          "tags": {},
+          "filterType": "Anomaly"
+        },
+        "filterVisibility": "EveryOne"
+      },
+      {
+        "name": "Filter2",
+        "identifier": "Filter2",
+        "orgIdentifier": null,
+        "projectIdentifier": null,
+        "filterProperties": {
+          "k8sClusterNames": null,
+          "k8sNamespaces": null,
+          "k8sWorkloadNames": null,
+          "gcpProjects": ["traceable-prod-setup"],
+          "gcpProducts": null,
+          "gcpSKUDescriptions": null,
+          "awsAccounts": null,
+          "awsServices": null,
+          "awsUsageTypes": null,
+          "azureSubscriptions": null,
+          "azureServiceNames": null,
+          "azureResources": null,
+          "minActualAmount": null,
+          "minAnomalousSpend": null,
+          "timeFilters": null,
+          "offset": null,
+          "limit": null,
+          "tags": {},
+          "filterType": "Anomaly"
+        },
+        "filterVisibility": "OnlyCreator"
+      }
+    ],
+    "pageIndex": 0,
+    "empty": false
+  }
+}

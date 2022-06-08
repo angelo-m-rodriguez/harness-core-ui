@@ -24,6 +24,8 @@ import { useStrings } from 'framework/strings'
 import { Connectors } from '@connectors/constants'
 import { useToaster } from '@common/exports'
 import { useGetSumoLogicEndPoints } from 'services/cv'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { initializeSumoLogicConnectorWithStepData } from './utils'
@@ -76,9 +78,17 @@ export function SumoLogicConfigStep(props: ConnectionConfigProps): JSX.Element {
     return filteredPoints
   }, [endPoints, endPointError, loadingEndpoints])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.SumoLogic
+  })
+
   if (initialValues?.loading) {
     return <PageSpinner />
   }
+
   return (
     <Container className={css.credentials}>
       <StepDetailsHeader connectorTypeLabel={getString('connectors.title.sumologic')} />
@@ -92,6 +102,10 @@ export function SumoLogicConfigStep(props: ConnectionConfigProps): JSX.Element {
           accessKeyRef: Yup.string().trim().required(getString('connectors.sumologic.encryptedAccessKeyValidation'))
         })}
         onSubmit={(formData: ConnectorConfigDTO) => {
+          trackEvent(ConnectorActions.CreateConnectorSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.SumoLogic
+          })
           nextStep?.(isEditMode ? { ...connectorInfo, ...prevStepData, ...formData } : { ...prevStepData, ...formData })
         }}
       >

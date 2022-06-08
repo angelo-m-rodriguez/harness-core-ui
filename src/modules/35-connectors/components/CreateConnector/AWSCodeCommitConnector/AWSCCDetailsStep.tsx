@@ -22,7 +22,9 @@ import * as Yup from 'yup'
 import { FontVariation } from '@harness/design-system'
 import type { ConnectorConfigDTO, ConnectorInfoDTO } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
-
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import css from '../commonSteps/ConnectorCommonStyles.module.scss'
 
 export interface AWSCCDetailsStepProps extends StepProps<ConnectorConfigDTO> {
@@ -38,6 +40,10 @@ export default function AWSCCDetailsStep(props: AWSCCDetailsStepProps) {
   })
 
   const handleSubmit = (formData: ConnectorConfigDTO) => {
+    trackEvent(ConnectorActions.DetailsStepSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.AWSCC
+    })
     props.nextStep?.({ ...props.prevStepData, ...formData })
   }
 
@@ -49,6 +55,13 @@ export default function AWSCCDetailsStep(props: AWSCCDetailsStepProps) {
       })
     }
   }, [])
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.DetailsStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.AWSCC
+  })
 
   return (
     <Layout.Vertical width="60%" style={{ minHeight: 460 }} className={css.stepContainer}>

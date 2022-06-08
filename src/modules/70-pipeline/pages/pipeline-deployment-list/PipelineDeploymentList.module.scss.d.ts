@@ -9,6 +9,7 @@
 declare const styles: {
   readonly aboutDeployment: string
   readonly clearFilterText: string
+  readonly createModalCss: string
   readonly healthAndExecutions: string
   readonly image: string
   readonly loading: string
@@ -16,5 +17,6 @@ declare const styles: {
   readonly noData: string
   readonly noDeploymentSection: string
   readonly noDeploymentText: string
+  readonly noPipelineText: string
 }
 export default styles

@@ -62,4 +62,20 @@ describe('GitSync Page', () => {
     })
     expect(enableBtn).toBeDefined()
   })
+
+  test('test when git simplification is enabled', () => {
+    const { container } = render(
+      <TestWrapper
+        path="/account/:accountId/ci/orgs/:orgIdentifier/projects/:projectIdentifier/admin/git-sync"
+        pathParams={{ accountId: 'dummyAccount', orgIdentifier: 'default', projectIdentifier: 'dummyProject' }}
+        defaultAppStoreValues={{
+          isGitSimplificationEnabled: true
+        }}
+      >
+        <NewUserView />
+      </TestWrapper>
+    )
+
+    expect(container.querySelector('bp3-callout')).toBeDefined()
+  })
 })

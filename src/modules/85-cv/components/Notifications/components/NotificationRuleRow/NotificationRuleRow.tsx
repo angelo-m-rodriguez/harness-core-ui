@@ -18,13 +18,12 @@ import {
 } from '@harness/uicore'
 import React from 'react'
 import HorizontalLineWithText from '@cv/components/HorizontalLineWithText/HorizontalLineWithText'
-import { useStrings } from 'framework/strings'
+import { StringKeys, useStrings } from 'framework/strings'
 import {
   conditionOptions,
   changeTypeOptions,
   Condition
 } from '../ConfigureMonitoredServiceAlertConditions/ConfigureMonitoredServiceAlertConditions.constants'
-
 import type { NotificationRuleRowProps } from './NotificationRuleRow.types'
 import { getValueFromEvent } from './NotificationRuleRow.utils'
 import type { NotificationRule } from '../../NotificationsContainer.types'
@@ -38,17 +37,17 @@ const renderConnectedFields = (
     currentField: string,
     nextField?: string,
     nextFieldValue?: SelectOption | MultiSelectOption[] | string
-  ) => void
+  ) => void,
+  getString: (key: StringKeys) => string
 ): JSX.Element => {
   const { changeType, duration, id, condition, threshold } = notificationRule
-
   switch (condition?.value) {
     case Condition.CHANGE_IMPACT:
       return (
         <>
           {changeType ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small', right: 'small' }}>
-              <Text>{'Change Type'}</Text>
+              <Text>{getString('cv.notifications.changeType')}</Text>
               <MultiSelectDropDown
                 value={Array.isArray(changeType) ? changeType : []}
                 items={changeTypeOptions}
@@ -61,8 +60,8 @@ const renderConnectedFields = (
           ) : null}
           {threshold ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
-              <Text lineClamp={1} width={100}>
-                {'Health score is below'}
+              <Text lineClamp={1} width={150}>
+                {getString('cv.notifications.healthScoreBelow')}
               </Text>
               <TextInput
                 min={0}
@@ -80,7 +79,7 @@ const renderConnectedFields = (
           ) : null}
           {duration ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
-              <Text>{'Duration'}</Text>
+              <Text>{getString('pipeline.duration')}</Text>
               <TextInput
                 type="number"
                 required
@@ -102,11 +101,12 @@ const renderConnectedFields = (
         <>
           {threshold ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
-              <Text>{'Threshold is below'}</Text>
+              <Text>{getString('cv.notifications.thresholdBelow')}</Text>
               <TextInput
                 type="number"
                 required
                 min={0}
+                max={100}
                 value={threshold as string}
                 name={`${id}.threshold`}
                 className={css.numberField}
@@ -118,7 +118,7 @@ const renderConnectedFields = (
           ) : null}
           {duration ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small' }}>
-              <Text>{'Duration'}</Text>
+              <Text>{getString('pipeline.duration')}</Text>
               <TextInput
                 type="number"
                 required
@@ -140,7 +140,7 @@ const renderConnectedFields = (
         <>
           {changeType ? (
             <Layout.Vertical spacing="xsmall" padding={{ left: 'small', right: 'small' }}>
-              <Text>{'Change Type'}</Text>
+              <Text>{getString('cv.notifications.changeType')}</Text>
               <MultiSelectDropDown
                 value={Array.isArray(changeType) ? changeType : []}
                 items={changeTypeOptions}
@@ -186,7 +186,7 @@ export default function NotificationRuleRow({
             }}
           />
         </Layout.Vertical>
-        {renderConnectedFields(notificationRule, handleChangeField)}
+        {renderConnectedFields(notificationRule, handleChangeField, getString)}
         {showDeleteNotificationsIcon ? (
           <Container padding={{ top: 'large' }}>
             <Button

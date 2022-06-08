@@ -6,16 +6,17 @@
  */
 
 import React from 'react'
-import { Layout, Text } from '@wings-software/uicore'
+import { Layout, Text } from '@harness/uicore'
 import { TimeAgo } from '@common/exports'
 import { useStrings } from 'framework/strings'
 
 export enum FeatureFlagStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
-  NEVER_REQUESTED = 'never-requested'
+  NEVER_REQUESTED = 'never-requested',
+  POTENTIALLY_STALE = 'potentially-stale',
+  RECENTLY_ACCESSED = 'recently-accessed'
 }
-
 export interface FlagStatusProps {
   status?: FeatureFlagStatus
   lastAccess?: number

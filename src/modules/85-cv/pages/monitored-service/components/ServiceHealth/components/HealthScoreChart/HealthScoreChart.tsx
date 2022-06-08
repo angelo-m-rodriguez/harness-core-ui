@@ -8,6 +8,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { isEmpty } from 'lodash-es'
+import cx from 'classnames'
 import { Container, Text } from '@wings-software/uicore'
 import ColumnChart from '@cv/components/ColumnChart/ColumnChart'
 import { useGetMonitoredServiceOverAllHealthScore, ResponseHistoricalTrend } from 'services/cv'
@@ -20,8 +21,15 @@ import type { TimePeriodEnum } from '../../ServiceHealth.constants'
 import css from './HealthScoreChart.module.scss'
 
 export default function HealthScoreChart(props: HealthScoreChartProps): JSX.Element {
-  const { monitoredServiceIdentifier, duration, setHealthScoreData, endTime, columChartProps, hasTimelineIntegration } =
-    props
+  const {
+    monitoredServiceIdentifier,
+    duration,
+    setHealthScoreData,
+    endTime,
+    columChartProps,
+    hasTimelineIntegration,
+    isChangeEventView
+  } = props
   const { getString } = useStrings()
   const { orgIdentifier, projectIdentifier, accountId } = useParams<ProjectPathProps>()
   const [seriesData, setSeriesData] = useState<ColumnData[]>([])
@@ -60,11 +68,17 @@ export default function HealthScoreChart(props: HealthScoreChartProps): JSX.Elem
   }
 
   return (
-    <Container className={css.main}>
+    <Container
+      className={cx(css.main, {
+        [css.extraMarginForChart]: isChangeEventView
+      })}
+    >
       <Container className={css.timelineRow}>
-        <Text width={90} className={css.rowLabel}>
-          {getString('cv.monitoredServices.serviceHealth.overallHealthScore')}
-        </Text>
+        {!isChangeEventView && (
+          <Text width={90} className={css.rowLabel}>
+            {getString('cv.monitoredServices.serviceHealth.overallHealthScore')}
+          </Text>
+        )}
         <ColumnChart
           hasTimelineIntegration={hasTimelineIntegration}
           data={seriesData}

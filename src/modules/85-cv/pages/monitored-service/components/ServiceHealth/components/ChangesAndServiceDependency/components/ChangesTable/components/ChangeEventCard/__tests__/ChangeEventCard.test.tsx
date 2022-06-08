@@ -97,9 +97,15 @@ describe('Validate ChangeCard', () => {
       </TestWrapper>
     )
     // Card Title is rendered Correctly
-    await waitFor(() => expect(getByText(HarnessNextGenMockData.resource.id)).toBeInTheDocument())
-    await waitFor(() => expect(getByText(HarnessNextGenMockData.resource.name)).toBeTruthy())
-    await waitFor(() => expect(getByText(HarnessNextGenMockData.resource.metadata.status)).toBeTruthy())
+    await waitFor(() =>
+      expect(getByText(mockedExecutionSummary.data.pipelineExecutionSummary.runSequence.toString())).toBeInTheDocument()
+    )
+    await waitFor(() =>
+      expect(getByText(mockedExecutionSummary.data.pipelineExecutionSummary.pipelineIdentifier)).toBeInTheDocument()
+    )
+    await waitFor(() =>
+      expect(getByText(mockedExecutionSummary.data.pipelineExecutionSummary.status)).toBeInTheDocument()
+    )
     // const elem = cv.changeSource.changeSourceCard.viewDeployment
 
     const btn = getByText('cv.changeSource.changeSourceCard.viewDeployment')
@@ -135,11 +141,15 @@ describe('Validate ChangeCard', () => {
       </TestWrapper>
     )
     // Card Title is rendered Correctly
-    await waitFor(() => expect(getByText(HarnessNextGenMockData.resource.id)).toBeInTheDocument())
-    await waitFor(() => expect(getByText(HarnessNextGenMockData.resource.name)).toBeTruthy())
+    await waitFor(() =>
+      expect(getByText(mockedExecutionSummary.data.pipelineExecutionSummary.runSequence.toString())).toBeInTheDocument()
+    )
+    await waitFor(() =>
+      expect(getByText(mockedExecutionSummary.data.pipelineExecutionSummary.pipelineIdentifier)).toBeInTheDocument()
+    )
 
     // Card details title
-    await waitFor(() => expect(getByText(`HarnessCDNextGen Deployment details`)).toBeTruthy())
+    await waitFor(() => expect(getByText(`HarnessCDNextGen Deployment details`)).toBeInTheDocument())
   })
 
   test('should render Deployment HarnessCD card', async () => {

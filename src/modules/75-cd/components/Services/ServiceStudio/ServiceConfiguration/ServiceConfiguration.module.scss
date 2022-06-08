@@ -28,11 +28,11 @@
         width: 324px;
       }
     }
-    .serviceModal {
-      margin-bottom: var(--spacing-small);
-    }
-    .nonModalView {
-      margin: var(--spacing-xxlarge) var(--spacing-huge) 0 var(--spacing-huge);
-    }
   }
+}
+.serviceModal {
+  margin-bottom: var(--spacing-small);
+}
+.nonModalView {
+  margin: var(--spacing-large) 0 var(--spacing-medium) var(--spacing-large);
 }

@@ -390,7 +390,7 @@ function LandingDashboardDeploymentsWidget(): React.ReactElement {
   const summaryCardsData: SummaryCardData[] = useMemo(() => {
     return [
       {
-        title: getString('deploymentsText'),
+        title: getString('pipeline.dashboards.pipelineExecution'),
         count: getFormattedNumber(response?.deploymentsStatsSummary?.countAndChangeRate?.count),
         trend:
           getFormattedNumber(
@@ -520,7 +520,7 @@ function LandingDashboardDeploymentsWidget(): React.ReactElement {
               },
               xAxis: {
                 title: {
-                  text: 'Date'
+                  text: getString('dateLabel')
                 },
                 labels: {
                   formatter: function (this) {
@@ -535,7 +535,7 @@ function LandingDashboardDeploymentsWidget(): React.ReactElement {
               },
               yAxis: {
                 title: {
-                  text: '# of Deployments'
+                  text: getString('pipeline.dashboards.executionsLabel')
                 }
               }
             }}

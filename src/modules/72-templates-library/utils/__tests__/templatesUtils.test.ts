@@ -8,13 +8,7 @@
 import { unset } from 'lodash-es'
 import type { StringKeys } from 'framework/strings'
 import { stageTemplateMock } from '@templates-library/components/TemplateStudio/__tests__/stateMock'
-import {
-  getAllowedTemplateTypes,
-  getScopeBasedQueryParams,
-  getVersionLabelText
-} from '@templates-library/utils/templatesUtils'
-import { Scope } from '@common/interfaces/SecretsInterface'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import { getAllowedTemplateTypes, getVersionLabelText } from '@templates-library/utils/templatesUtils'
 
 function getString(key: StringKeys): StringKeys {
   return key
@@ -49,25 +43,5 @@ describe('templatesUtils tests', () => {
         }
       ])
     )
-  })
-
-  test('Test getScopeBasedQueryParams method', () => {
-    const queryParams: ProjectPathProps = {
-      accountId: 'accountId',
-      projectIdentifier: 'projectIdentifier',
-      orgIdentifier: 'orgIdentifier'
-    }
-    expect(getScopeBasedQueryParams(queryParams, Scope.PROJECT)).toEqual({
-      accountIdentifier: 'accountId',
-      projectIdentifier: 'projectIdentifier',
-      orgIdentifier: 'orgIdentifier'
-    })
-    expect(getScopeBasedQueryParams(queryParams, Scope.ORG)).toEqual({
-      accountIdentifier: 'accountId',
-      orgIdentifier: 'orgIdentifier'
-    })
-    expect(getScopeBasedQueryParams(queryParams, Scope.ACCOUNT)).toEqual({
-      accountIdentifier: 'accountId'
-    })
   })
 })

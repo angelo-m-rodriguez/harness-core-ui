@@ -36,6 +36,8 @@ jest.mock('@common/components/YAMLBuilder/YamlBuilder')
 jest.mock('@common/utils/YamlUtils', () => ({}))
 
 jest.mock('services/cd-ng', () => ({
+  useGetOrganizationList: jest.fn().mockReturnValue({ data: null, loading: false }),
+  useGetProjectAggregateDTOList: jest.fn().mockReturnValue({ data: null, loading: false }),
   useGetServiceDefinitionTypes: jest
     .fn()
     .mockImplementation(() => ({ loading: false, data: deploymentTypes, refetch: jest.fn() })),
@@ -105,7 +107,8 @@ jest.mock('services/pipeline-ng', () => ({
     cancel: jest.fn()
   })),
   useDeleteInputSetForPipeline: jest.fn(() => ({ mutate: jest.fn() })),
-  useGetInputsetYaml: jest.fn(() => ({ data: null, loading: false }))
+  useGetInputsetYaml: jest.fn(() => ({ data: null, loading: false })),
+  useClonePipeline: jest.fn().mockReturnValue({ mutate: jest.fn(), loading: false })
 }))
 
 jest.mock('@pipeline/components/RunPipelineModal/useRunPipelineModal', () => ({

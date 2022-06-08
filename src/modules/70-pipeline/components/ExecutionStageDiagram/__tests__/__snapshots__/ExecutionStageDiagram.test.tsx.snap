@@ -265,9 +265,9 @@ exports[`Test Execution StageDiagram for Grouped Steps snapshot test 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 14 11"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -406,9 +406,9 @@ exports[`Test Execution StageDiagram for Grouped Steps snapshot test 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 14 11"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -635,9 +635,9 @@ exports[`Test Execution StageDiagram for Grouped Steps snapshot test 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 16 16"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -778,9 +778,9 @@ exports[`Test Execution StageDiagram for Grouped Steps snapshot test 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 16 16"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1066,9 +1066,9 @@ exports[`Test Execution StageDiagram for Grouped Steps snapshot test 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 14 11"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1624,9 +1624,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1785,9 +1785,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -1946,9 +1946,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2107,9 +2107,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2268,9 +2268,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2429,9 +2429,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2590,9 +2590,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -2839,9 +2839,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3088,9 +3088,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3249,9 +3249,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3410,9 +3410,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3571,9 +3571,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3732,9 +3732,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -3893,9 +3893,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -4054,9 +4054,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -4303,9 +4303,9 @@ exports[`Test Execution StageDiagram should render the default snapshot 1`] = `
                 style="pointer-events: none;"
               >
                 <svg
-                  height="28"
+                  height="20"
                   viewBox="0 0 32 32"
-                  width="28"
+                  width="20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path

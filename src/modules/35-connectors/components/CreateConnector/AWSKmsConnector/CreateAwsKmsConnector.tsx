@@ -47,6 +47,7 @@ const CreateAwsKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         connectorInfo={props.connectorInfo}
         mock={props.mock}
         gitDetails={props.gitDetails}
+        helpPanelReferenceId="AWSKMSOverview"
         disableGitSync={true}
       />
       <AwsKmsConfig
@@ -65,6 +66,7 @@ const CreateAwsKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         disableGitSync={true}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -74,6 +76,7 @@ const CreateAwsKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         isLastStep={true}
         type={Connectors.AWS_KMS}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

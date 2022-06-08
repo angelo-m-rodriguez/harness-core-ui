@@ -19,3 +19,4 @@ src/microfrontends/types
 src/microfrontends/declarations
 certificates
 .npmrc
+.vscode/launch.json

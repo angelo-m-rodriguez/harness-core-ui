@@ -16,7 +16,7 @@ export enum ActionType {
   GoToPrevSearchResult = 'GoToPrevSearchResult'
 }
 
-export type TextKeys = 'logLevel' | 'createdAt' | 'log'
+export type TextKeys = 'logLevel' | 'createdAt' | 'tags' | 'log'
 
 export interface SearchData {
   text: string

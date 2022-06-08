@@ -51,6 +51,7 @@ const JiraConnector: React.FC<CreateJiraConnectorProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         mock={props.mock}
+        helpPanelReferenceId="JiraConnectorOverview"
       />
       <JiraDetailsForm
         name={getString('details')}
@@ -70,6 +71,7 @@ const JiraConnector: React.FC<CreateJiraConnectorProps> = props => {
         onConnectorCreated={props.onConnectorCreated}
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -79,6 +81,7 @@ const JiraConnector: React.FC<CreateJiraConnectorProps> = props => {
         type={Connectors.Jira}
         onClose={props.onClose}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

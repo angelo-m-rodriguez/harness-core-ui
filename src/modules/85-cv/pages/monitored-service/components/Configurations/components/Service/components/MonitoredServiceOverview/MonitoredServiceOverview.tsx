@@ -21,16 +21,19 @@ import {
 import { ChangeSourceCategoryName } from '@cv/pages/ChangeSource/ChangeSourceDrawer/ChangeSourceDrawer.constants'
 import type { EnvironmentSelectOrCreateProps } from '@cv/components/HarnessServiceAndEnvironment/components/EnvironmentSelectOrCreate/EnvironmentSelectOrCreate'
 import type { EnvironmentMultiSelectOrCreateProps } from '@cv/components/HarnessServiceAndEnvironment/components/EnvironmentMultiSelectAndEnv/EnvironmentMultiSelectAndEnv'
+import { useMonitoredServiceContext } from '@cv/pages/monitored-service/MonitoredServiceContext'
 import { MonitoredServiceTypeOptions } from './MonitoredServiceOverview.constants'
 import {
   updateMonitoredServiceNameForService,
-  updatedMonitoredServiceNameForEnv
+  updatedMonitoredServiceNameForEnv,
+  serviceOnSelect
 } from './MonitoredServiceOverview.utils'
 import type { MonitoredServiceOverviewProps } from './MonitoredSourceOverview.types'
 import css from './MonitoredServiceOverview.module.scss'
 
 export default function MonitoredServiceOverview(props: MonitoredServiceOverviewProps): JSX.Element {
-  const { formikProps, isEdit, onChangeMonitoredServiceType, isTemplate = false } = props
+  const { formikProps, isEdit, onChangeMonitoredServiceType } = props
+  const { isTemplate } = useMonitoredServiceContext()
   const { getString } = useStrings()
   const [tempServiceType, setTempServiceType] = useState<MonitoredServiceDTO['type']>()
   const { serviceOptions, setServiceOptions } = useGetHarnessServices()
@@ -89,7 +92,7 @@ export default function MonitoredServiceOverview(props: MonitoredServiceOverview
                 isMultiType: isTemplate,
                 item: serviceOptions.find(item => item?.value === values.serviceRef) || values.serviceRef,
                 options: serviceOptions,
-                onSelect: selectedService => updateMonitoredServiceNameForService(formikProps, selectedService),
+                onSelect: selectedService => serviceOnSelect(isTemplate, selectedService, formikProps),
                 onNewCreated: newOption => {
                   if (newOption?.identifier && newOption.name) {
                     const newServiceOption = { label: newOption.name, value: newOption.identifier }
@@ -132,18 +135,20 @@ export default function MonitoredServiceOverview(props: MonitoredServiceOverview
           <hr className={css.divider} />
         </>
       ) : null}
-      <NameIdDescriptionTags
-        formikProps={formikProps}
-        inputGroupProps={{
-          disabled: formikProps.values?.type === ChangeSourceCategoryName.INFRASTRUCTURE ? false : true
-        }}
-        className={css.nameTagsDescription}
-        identifierProps={{
-          isIdentifierEditable: formikProps.values?.type === ChangeSourceCategoryName.INFRASTRUCTURE ? true : false,
-          inputLabel: getString('cv.monitoredServices.monitoredServiceName')
-        }}
-        tooltipProps={{ dataTooltipId: 'NameIdDescriptionTagsHealthSource' }}
-      />
+      {!isTemplate && (
+        <NameIdDescriptionTags
+          formikProps={formikProps}
+          inputGroupProps={{
+            disabled: formikProps.values?.type === ChangeSourceCategoryName.INFRASTRUCTURE ? false : true
+          }}
+          className={css.nameTagsDescription}
+          identifierProps={{
+            isIdentifierEditable: formikProps.values?.type === ChangeSourceCategoryName.INFRASTRUCTURE ? true : false,
+            inputLabel: getString('cv.monitoredServices.monitoredServiceName')
+          }}
+          tooltipProps={{ dataTooltipId: 'NameIdDescriptionTagsHealthSource' }}
+        />
+      )}
     </CardWithOuterTitle>
   )
 }

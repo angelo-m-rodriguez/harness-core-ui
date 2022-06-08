@@ -19,8 +19,8 @@ import {
   mockApiErrorResponse,
   mockApiFetchingResponse
 } from '@templates-library/components/TemplateActivityLog/__tests__/TemplateActivityLogTestHelper'
-import { PipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import pipelineContextMock from '@pipeline/components/PipelineStudio/RightDrawer/__tests__/stateMock'
+import { TemplateSelectorContext } from '@templates-library/components/TemplateSelectorContext/TemplateSelectorContext'
+import { templateSelectorContextMock } from '@templates-library/components/TemplateSelectorContext/stateMocks'
 import { TemplateSelectorLeftView, TemplateSelectorLeftViewProps } from '../TemplateSelectorLeftView'
 
 const TEST_PATH = routes.toPipelineStudio({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })
@@ -45,12 +45,9 @@ jest.mock('@templates-library/pages/TemplatesPage/views/TemplatesView/TemplatesV
   default: () => <div className={'templates-view-mock'}></div>
 }))
 
-const contextMock = produce(pipelineContextMock, draft => {
-  set(draft, 'state.templateView.templateDrawerData.data.selectorData.templateType', 'Step')
-  set(draft, 'state.templateView.templateDrawerData.data.selectorData.allChildTypes', [
-    'HarnessApproval',
-    'ShellScript'
-  ])
+const contextMock = produce(templateSelectorContextMock, draft => {
+  set(draft, 'state.selectorData.templateType', 'Step')
+  set(draft, 'state.selectorData.allChildTypes', ['HarnessApproval', 'ShellScript'])
 })
 
 const defaultQueryParams = {
@@ -83,9 +80,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
   test('should match snapshot', () => {
     const { container } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
@@ -100,9 +97,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
   test('should make list call when scope filter is changed', async () => {
     const { getAllByTestId } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 
@@ -138,9 +135,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
   test('should make list call when type filter is changed', async () => {
     const { getAllByTestId } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 
@@ -179,9 +176,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
 
     const { container } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 
@@ -201,9 +198,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
 
     const { container } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 
@@ -215,9 +212,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
 
     const { container, getAllByTestId } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 
@@ -260,9 +257,9 @@ describe('<TemplateSelectorLeftView> tests', () => {
 
     const { container } = render(
       <TestWrapper path={TEST_PATH} pathParams={PATH_PARAMS}>
-        <PipelineContext.Provider value={contextMock}>
+        <TemplateSelectorContext.Provider value={contextMock}>
           <TemplateSelectorLeftView {...baseProps} />
-        </PipelineContext.Provider>
+        </TemplateSelectorContext.Provider>
       </TestWrapper>
     )
 

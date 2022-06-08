@@ -37,6 +37,8 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import { useStrings } from 'framework/strings'
 import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import commonStyles from '@connectors/components/CreateConnector/commonSteps/ConnectorCommonStyles.module.scss'
 import css from '../CreateAzureConnector.module.scss'
 
@@ -229,6 +231,10 @@ function AzureAuthentication(
   }, [loadingConnectorSecrets])
 
   const handleSubmit = (formData: ConnectorConfigDTO): void => {
+    trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.Azure
+    })
     nextStep?.({ ...props.connectorInfo, ...prevStepData, ...formData } as StepConfigureProps)
   }
 
@@ -251,6 +257,12 @@ function AzureAuthentication(
       formik.setFieldValue('clientId', '')
     }
   }
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Azure
+  })
 
   return loadingConnectorSecrets ? (
     <PageSpinner />

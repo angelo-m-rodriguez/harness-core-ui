@@ -123,10 +123,15 @@ const RepoBranchSelect: React.FC<RepoBranchSelectProps> = props => {
       {loading ? (
         <Layout.Horizontal spacing="small" flex padding={{ top: 'xsmall', left: 'xsmall' }}>
           <Icon name="steps-spinner" size={18} color={Color.PRIMARY_7} />
-          <Text>{getString('gitsync.fetchingBranches').concat('...')}</Text>
+          <Text>{getString('common.fetchingBranches').concat('...')}</Text>
         </Layout.Horizontal>
       ) : null}
-      <Dialog isOpen={isOpen} enforceFocus={false} title={getString('gitsync.branchFetchFailed')} onClose={close}>
+      <Dialog
+        isOpen={isOpen}
+        enforceFocus={false}
+        title={getString('common.gitSync.branchFetchFailed')}
+        onClose={close}
+      >
         {responseMessages ? <ErrorHandler responseMessages={responseMessages} /> : undefined}
       </Dialog>
     </Layout.Horizontal>

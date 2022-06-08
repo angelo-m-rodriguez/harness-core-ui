@@ -5,7 +5,9 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import { getMultiTypeFromValue, MultiTypeInputType } from '@harness/uicore'
 import { AppDynamicsMonitoringSourceFieldNames } from '../../AppDHealthSource.constants'
+import type { AppDynamicsFomikFormInterface } from '../../AppDHealthSource.types'
 import type { BasePathData } from '../BasePath/BasePath.types'
 import type { MetricPathData } from '../MetricPath/MetricPath.types'
 import type { SetServiceInstanceInterface } from './AppDCustomMetricForm.types'
@@ -33,3 +35,8 @@ export const setServiceIntance = ({
     formikSetField(AppDynamicsMonitoringSourceFieldNames.SERVICE_INSTANCE_METRIC_PATH, '')
   }
 }
+
+export const checkRuntimeFields = (formikValues: AppDynamicsFomikFormInterface) =>
+  getMultiTypeFromValue(formikValues?.continuousVerification) !== MultiTypeInputType.FIXED ||
+  getMultiTypeFromValue(formikValues.appdApplication) !== MultiTypeInputType.FIXED ||
+  getMultiTypeFromValue(formikValues.fullPath) !== MultiTypeInputType.FIXED

@@ -117,9 +117,9 @@ import ExecutionSecurityView from '@pipeline/pages/execution/ExecutionSecurityVi
 import FullPageLogView from '@pipeline/pages/full-page-log-view/FullPageLogView'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import VariablesPage from '@variables/pages/variables/VariablesPage'
+import CIPipelineStudioWrapper from '@ci/pages/pipeline-studio/CIPipelineStudioWrapper'
 import CIHomePage from './pages/home/CIHomePage'
 import CIDashboardPage from './pages/dashboard/CIDashboardPage'
-import CIPipelineStudio from './pages/pipeline-studio/CIPipelineStudio'
 import CISideNav from './components/CISideNav/CISideNav'
 import BuildCommits from './pages/build/sections/commits/BuildCommits'
 import CITrialHomePage from './pages/home/CITrialHomePage'
@@ -689,7 +689,7 @@ export default (
       pageName={PAGE_NAME.CIPipelineStudio}
     >
       <PipelineDetails>
-        <CIPipelineStudio />
+        <CIPipelineStudioWrapper />
       </PipelineDetails>
     </RouteWithLayout>
     <RouteWithLayout

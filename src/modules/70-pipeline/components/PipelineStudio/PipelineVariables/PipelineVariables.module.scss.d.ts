@@ -52,6 +52,7 @@ declare const styles: {
   readonly variablePaddingL1: string
   readonly variablePaddingL2: string
   readonly variablePaddingL3: string
+  readonly variablePaddingL4: string
   readonly variablePaddingTagL0: string
   readonly variablePaddingTagL1: string
   readonly variablePaddingTagL2: string

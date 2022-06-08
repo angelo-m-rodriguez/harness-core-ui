@@ -12,6 +12,7 @@ declare const styles: {
   readonly errorHeader: string
   readonly formContent: string
   readonly formContentTitle: string
+  readonly halfWidth: string
   readonly heading: string
   readonly inputSetContent: string
   readonly inputSetSelectedValue: string
@@ -19,6 +20,7 @@ declare const styles: {
   readonly inputsetGrid: string
   readonly pipelineInputRow: string
   readonly pipelineInputSetForm: string
+  readonly refBranchOuter: string
   readonly webhookPipelineInputContainer: string
 }
 export default styles

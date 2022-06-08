@@ -88,7 +88,7 @@ describe('Environment for Pipeline', () => {
     cy.wait(1000)
     cy.fillName('New testEnv')
     cy.get('button[data-testid="thumbnail-select-change"]').click()
-    cy.contains('p', 'Pre Production').click()
+    cy.contains('p', 'Pre-Production').click()
 
     // YAML assertion
     cy.get('[data-name="toggle-option-two"]').click()

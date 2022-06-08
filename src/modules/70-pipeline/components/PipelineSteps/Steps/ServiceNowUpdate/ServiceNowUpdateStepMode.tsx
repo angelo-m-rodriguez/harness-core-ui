@@ -540,6 +540,7 @@ function FormContent({
                     const customFields = formik.values.spec.fields?.filter(field => field.name !== selectedField.name)
                     formik.setFieldValue('spec.fields', customFields)
                   }}
+                  allowableTypes={allowableTypes}
                 />
 
                 {!isEmpty(formik.values.spec.fields) ? (

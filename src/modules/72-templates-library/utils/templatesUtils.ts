@@ -7,8 +7,6 @@
 
 import { isEmpty } from 'lodash-es'
 import type { UseStringsReturn } from 'framework/strings'
-import { Scope } from '@common/interfaces/SecretsInterface'
-import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import type { TemplateSummaryResponse } from 'services/template-ng'
 
 export enum TemplateType {
@@ -22,30 +20,11 @@ export enum TemplateType {
   MonitoredService = 'MonitoredService'
 }
 
-export const AllTemplatesTypes = 'All'
-
-export interface TemplateTypeOption {
-  label: string
-  value: string
-  disabled?: boolean
-}
-
-export const getScopeBasedQueryParams = (
-  { accountId, projectIdentifier, orgIdentifier }: ProjectPathProps,
-  scope: Scope
-) => {
-  return {
-    accountIdentifier: accountId,
-    projectIdentifier: scope === Scope.PROJECT ? projectIdentifier : undefined,
-    orgIdentifier: scope === Scope.PROJECT || scope === Scope.ORG ? orgIdentifier : undefined
-  }
-}
-
 export const getAllowedTemplateTypes = (
   getString: UseStringsReturn['getString'],
   module?: string,
   isPipelineTemplateEnabled?: boolean
-): TemplateTypeOption[] => {
+): { label: string; value: string; disabled?: boolean }[] => {
   const AllowedTemplateTypes = [
     {
       label: getString('step'),
@@ -102,3 +81,6 @@ export const getVersionLabelText = (template: TemplateSummaryResponse, getString
     ? getString('templatesLibrary.stableVersion', { entity: template.versionLabel })
     : template.versionLabel
 }
+
+export const getTemplateRuntimeInputsCount = (templateInfo: { [key: string]: any }): number =>
+  (JSON.stringify(templateInfo).match(/<\+input>/g) || []).length

@@ -6,7 +6,9 @@ rules:
         - microfrontends/*
         - '!microfrontends/ChildAppMounter'
         - modules/85-sto-steps/*
+        - modules/90-gitops/*
         - '@sto-steps/*'
+        - '@gitops/*'
       paths:
         - lodash
         - name: yaml

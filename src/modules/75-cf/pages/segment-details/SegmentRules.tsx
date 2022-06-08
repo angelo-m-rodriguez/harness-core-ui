@@ -11,6 +11,7 @@ import {
   Avatar,
   AvatarGroup,
   Button,
+  ButtonVariation,
   Card,
   Container,
   Icon,
@@ -22,7 +23,7 @@ import {
   SimpleTagInput,
   Text,
   TextInput
-} from '@wings-software/uicore'
+} from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 import { Color } from '@harness/design-system'
 import { isEqual, omit } from 'lodash-es'
@@ -428,6 +429,7 @@ const RulesTab: React.FC<RulesTabProps> = ({
           <Button
             text="Save"
             intent="primary"
+            variation={ButtonVariation.PRIMARY}
             onClick={() => {
               onSave()
             }}
@@ -435,6 +437,7 @@ const RulesTab: React.FC<RulesTabProps> = ({
           <Button
             minimal
             text="Cancel"
+            variation={ButtonVariation.TERTIARY}
             onClick={() => {
               onCancel()
             }}

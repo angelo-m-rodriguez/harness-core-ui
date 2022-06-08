@@ -5,7 +5,6 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-// eslint-disable-next-line import/order
 import type React from 'react'
 import type ReactMonacoEditor from 'react-monaco-editor'
 import type { MonacoDiffEditor } from 'react-monaco-editor'
@@ -22,6 +21,7 @@ import type { ExtendedMonacoEditorProps } from '@common/components/MonacoEditor/
 import type { ExtendedMonacoDiffEditorProps } from '@common/components/MonacoDiffEditor/MonacoDiffEditor'
 import type { YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
 import type { GitOpsCustomMicroFrontendProps } from '@cd/interfaces/GitOps.types'
+import type { STOAppCustomProps } from '@pipeline/interfaces/STOApp'
 
 export interface Scope {
   accountId?: string
@@ -61,6 +61,7 @@ export interface ChildAppProps {
   components: CommonComponents
   hooks: Hooks
   on401: () => void
+  children?: React.ReactNode
 }
 
 /**
@@ -74,5 +75,6 @@ export {
   PermissionsContextProps,
   ResourceType,
   PermissionIdentifier,
-  GitOpsCustomMicroFrontendProps
+  GitOpsCustomMicroFrontendProps,
+  STOAppCustomProps
 }

@@ -6,7 +6,17 @@
  */
 
 import React, { useState, useMemo, useEffect, useContext } from 'react'
-import { Container, Accordion, SelectOption, FormInput, Text, Radio, useToaster } from '@wings-software/uicore'
+import {
+  Container,
+  Accordion,
+  SelectOption,
+  FormInput,
+  Text,
+  Radio,
+  useToaster,
+  MultiTypeInputType,
+  getMultiTypeFromValue
+} from '@wings-software/uicore'
 import { FontVariation, Color } from '@harness/design-system'
 import cx from 'classnames'
 import { useParams } from 'react-router-dom'
@@ -22,7 +32,12 @@ import { useStrings } from 'framework/strings'
 import { useGetMetricPacks, useGetServiceInstanceMetricPath, AppDMetricDefinitions } from 'services/cv'
 import { AppDynamicsMonitoringSourceFieldNames } from '../../AppDHealthSource.constants'
 import { PATHTYPE } from './AppDCustomMetricForm.constants'
-import { getBasePathValue, getMetricPathValue, setServiceIntance } from './AppDCustomMetricForm.utils'
+import {
+  checkRuntimeFields,
+  getBasePathValue,
+  getMetricPathValue,
+  setServiceIntance
+} from './AppDCustomMetricForm.utils'
 import BasePath from '../BasePath/BasePath'
 import { BasePathInitValue } from '../BasePath/BasePath.constants'
 import MetricChart from '../MetricChart/MetricChart'
@@ -54,7 +69,8 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
   }, [serviceInstanceError])
 
   useEffect(() => {
-    if (formikValues?.continuousVerification) {
+    const hasRuntimeField = checkRuntimeFields(formikValues)
+    if (formikValues?.continuousVerification && !hasRuntimeField) {
       refetchServiceInsance({
         queryParams: {
           accountId,
@@ -207,14 +223,24 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
             summary={getString('cv.monitoringSources.prometheus.chartAndRecords')}
             details={
               <>
-                <MetricChart
-                  connectorIdentifier={connectorIdentifier}
-                  appName={formikValues.appdApplication}
-                  tier={formikValues.appDTier}
-                  baseFolder={getBasePathValue(formikValues?.basePath)}
-                  metricPath={getMetricPathValue(formikValues?.metricPath)}
-                  fullPath={formikValues?.pathType === PATHTYPE.FullPath ? formikValues.fullPath : undefined}
-                />
+                {getMultiTypeFromValue(formikValues.appdApplication) !== MultiTypeInputType.FIXED ||
+                getMultiTypeFromValue(formikValues.appDTier) !== MultiTypeInputType.FIXED ||
+                getMultiTypeFromValue(connectorIdentifier) !== MultiTypeInputType.FIXED ? (
+                  <>
+                    <Text className={basePathStyle.basePathValue} font={{ variation: FontVariation.SMALL_SEMI }}>
+                      {getString('cv.customHealthSource.chartRuntimeWarning')}
+                    </Text>
+                  </>
+                ) : (
+                  <MetricChart
+                    connectorIdentifier={connectorIdentifier}
+                    appName={formikValues.appdApplication}
+                    tier={formikValues.appDTier}
+                    baseFolder={getBasePathValue(formikValues?.basePath)}
+                    metricPath={getMetricPathValue(formikValues?.metricPath)}
+                    fullPath={formikValues?.pathType === PATHTYPE.FullPath ? formikValues.fullPath : undefined}
+                  />
+                )}
               </>
             }
           />
@@ -230,6 +256,7 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
                     continuousVerification: !!formikValues?.continuousVerification,
                     riskCategory: formikValues?.riskCategory
                   }}
+                  isTemplate={isTemplate}
                   metricPackResponse={metricPackResponse}
                   hideServiceIdentifier
                 />

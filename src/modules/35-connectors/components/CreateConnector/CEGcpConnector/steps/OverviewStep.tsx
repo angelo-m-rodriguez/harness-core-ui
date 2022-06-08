@@ -33,6 +33,9 @@ import {
 import { Description, Tags } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 import { CE_GCP_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import css from '../CreateCeGcpConnector.module.scss'
 
 interface OverviewDetails {
@@ -146,6 +149,13 @@ const OverviewStep: React.FC<OverviewProps> = props => {
     }
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.OverviewLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CEGcp
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Heading level={2} className={css.header}>
@@ -155,6 +165,10 @@ const OverviewStep: React.FC<OverviewProps> = props => {
         <Formik<OverviewDetails>
           initialValues={getInitialValues() as OverviewDetails}
           onSubmit={formData => {
+            trackEvent(ConnectorActions.OverviewSubmit, {
+              category: Category.CONNECTOR,
+              connector_type: Connectors.CEGcp
+            })
             handleSubmit(formData)
           }}
           formName="ceGcpOverview"

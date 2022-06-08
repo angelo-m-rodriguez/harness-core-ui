@@ -128,6 +128,8 @@ export const getConnectorDisplaySummary = (connector: ConnectorInfoDTO): JSX.Ele
       return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.url))
     case Connectors.DOCKER:
       return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.dockerRegistryUrl))
+    case Connectors.JENKINS:
+      return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.jenkinsUrl))
     case Connectors.NEXUS:
       return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.nexusServerUrl))
     case Connectors.ARTIFACTORY:

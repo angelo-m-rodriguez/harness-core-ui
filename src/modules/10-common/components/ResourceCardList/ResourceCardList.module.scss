@@ -5,14 +5,10 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-.card {
-  width: 160px;
-  height: 180px;
-  box-shadow: var(--card-shadow);
-  align-items: center;
-  display: flex !important;
-  justify-content: center;
-  cursor: pointer;
+.cardsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .connectors {
@@ -35,4 +31,39 @@
 
 .variables {
   background-color: var(--lime-50);
+}
+
+.gitOpsEntities {
+  margin: var(--spacing-xlarge) 0;
+  padding-top: var(--spacing-xlarge);
+  padding-bottom: var(--spacing-xlarge);
+  border-top: solid 1px var(--grey-200);
+  border-bottom: solid 1px var(--grey-200);
+}
+
+.card {
+  width: 160px;
+  height: 180px;
+  box-shadow: var(--card-shadow);
+  align-items: center;
+  display: flex !important;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: var(--spacing-xlarge);
+
+  &:not(:last-of-type) {
+    margin-right: var(--spacing-xlarge);
+  }
+}
+
+.arrowDown {
+  position: absolute;
+  top: calc(100% + var(--spacing-small));
+
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-top: 15px solid var(--primary-7);
 }

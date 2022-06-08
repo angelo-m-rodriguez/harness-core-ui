@@ -1748,18 +1748,18 @@
   resolved "https://npm.pkg.github.com/download/@harness/design-system/1.0.0/4961fc151ffa0dd1f3d86b37572f9a5cd575d592c646cd5e68d508e1045c9d96#e463410da2c7ad9bff84eaa43fbe4ba9ba347da1"
   integrity sha512-sMsLP5Rxg08t87dJamTgpzEfRAef06C14bZO92SGqiXYtXsK01evjnXaOAiUS4gO36gMGi5cYJAqkJ0XBkERIg==
 
-"@harness/help-panel@1.5.0":
-  version "1.5.0"
-  resolved "https://npm.pkg.github.com/download/@harness/help-panel/1.5.0/2b497728eba9bbd3caba92e9efc457b5d95687cd4f554033ea4dcf7c834712c0#90d51018500a12ff8765f7c2d5cdb7e4a495fce8"
-  integrity sha512-zkQ8xW9lF3k66lb3oaW3Pp32/ctQ+rTw6vHAjloHJfPNUEBLeq97qWlEL02qW7PUuqNB3ZkSAQ5AvOMFAw1dMQ==
+"@harness/help-panel@1.6.0":
+  version "1.6.0"
+  resolved "https://npm.pkg.github.com/download/@harness/help-panel/1.6.0/793ed130f5f73ad066c7fd3f5f47b550f6d6480cbc5a61b8012ccb36bd4f8b8a#2b9f4d0c3f26a41077729093089032e0be84bfd8"
+  integrity sha512-NqVIxr+Ry6dqLWWhOWQK6BCltlHxf6Vr5kd27//EaXX1UUAIwIdfUzrskTnpcYyaaPOiyOYbRCsA369SKYsM1Q==
   dependencies:
     "@contentful/rich-text-react-renderer" "^15.12.0"
     contentful "^9.1.20"
 
-"@harness/icons@1.6.0":
-  version "1.6.0"
-  resolved "https://npm.pkg.github.com/download/@harness/icons/1.6.0/e22d9ecba8d575eac0972e087a053f5d2150c9f8178d097bb9f81a7409f351a9#ead8f6ecacb1f60f56152339784adabe98d97183"
-  integrity sha512-q46Dp8nUWPS/WuPfpK3asd+psK1WOXRQkKEhmeNJ4xyO1rcwg0/jETSCqqPSA+J/1TY9+u5aukZIhwcOLF/1EQ==
+"@harness/icons@1.14.0":
+  version "1.14.0"
+  resolved "https://npm.pkg.github.com/download/@harness/icons/1.14.0/d96b7f2b7de41180e80f6c2253089576a961d5d702bb444d95d9ada5264f6e5e#040a4e418305aa756fb2e7d2149157c99fa82832"
+  integrity sha512-pOPP5dzmZdo/4VX2AToEcl7G6mTXFajZCJWOpP8Ty1lOpqKmma5hwvoKSXwhnBMJNJjj1QJeLwQSrD6MstgCgA==
 
 "@harness/jarvis@0.16.0":
   version "0.16.0"
@@ -1791,20 +1791,20 @@
     vscode-languageserver "^5.2.1"
     vscode-uri "^2.1.1"
 
-"@harness/ng-tooltip@^1.30.75":
-  version "1.30.98"
-  resolved "https://npm.pkg.github.com/download/@harness/ng-tooltip/1.30.98/f43af84141f912541db4e0c30e6c33c4fa4c516fef4897a305ff7632a96437c8#f29ac62f6982a5dc23b0ef4a0d208a13336bc098"
-  integrity sha512-f1x8gESjZlw3Bb4EkLQzOMzXVRn+ik6mIyvXncnORbmW+hl97v5+c7VDJW48RKOd7mt8dtMxpH2i1KLsYW/1WA==
+"@harness/ng-tooltip@^1.31.2":
+  version "1.31.2"
+  resolved "https://npm.pkg.github.com/download/@harness/ng-tooltip/1.31.2/236d041ed0432d2008d87bfaee644d00f2556ae2d97a4736da7916d5ea5b30fd#5b9849240ad4e13b645fbab58272440575facc2d"
+  integrity sha512-1mUFogTaJvGfIODg24IEfJRvh2a7XVfRhj2LABjhxsq/bGVGAExPrsyyg5IFtZcPjv9UAevp+PKvm4L+wVtNFA==
 
 "@harness/telemetry@^1.0.42":
   version "1.0.42"
   resolved "https://npm.pkg.github.com/download/@harness/telemetry/1.0.42/60bc34c133bb40f0e0aa08f80620a1b23f3f089070e8550767e9d3fce8ca6e25#4d3f71026a03c898992d902f13a6c6d9cb0edac6"
   integrity sha512-pwjPYnQ8du1UswlX7A/apewGVDmbmaKKWTQSXtSHhKf9ekZ8WCwVvFcrM8ZIq/QbTn7Z8BXFYtMJdSG25oNtOg==
 
-"@harness/uicore@3.0.0":
-  version "3.0.0"
-  resolved "https://npm.pkg.github.com/download/@harness/uicore/3.0.0/204c3e693511d93293bde42338eea8bcf656e6b79adc012e2109c10ed740a523#73bfda7492a9e97de44e211670c51fc5ffd86f4f"
-  integrity sha512-WI5PbCD0KF2CFC/kjx78uTw8FhX62kQ64GbN6pLF3h+G7Nbht8nejoKtiPvaSbKMGnuypqmov40stcRLgJZMxQ==
+"@harness/uicore@3.11.0":
+  version "3.11.0"
+  resolved "https://npm.pkg.github.com/download/@harness/uicore/3.11.0/ad0ea049d89fefae5966048de219edf03bce2a489fa830aa13cf607b328b1b1d#4f5fa31c3733b3f04e39e029d8790f3e5de29fb8"
+  integrity sha512-7zFSvNwJUpqp+n69UcsZO2th6/T/rpf+VacXNxvUEfHJK+/w1rtUZjxW9w8tPffbVYF2HsvHkshKCIVPJMAKzw==
 
 "@harness/use-modal@1.1.0":
   version "1.1.0"

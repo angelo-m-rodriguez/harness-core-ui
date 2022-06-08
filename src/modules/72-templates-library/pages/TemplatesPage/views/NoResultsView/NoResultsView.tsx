@@ -7,9 +7,10 @@
 
 import React from 'react'
 import { defaultTo } from 'lodash-es'
-import { Button, ButtonSize, ButtonVariation, Container, Icon, Layout, Text } from '@wings-software/uicore'
+import { Button, ButtonSize, ButtonVariation, Container, Layout, Text } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import templateIllustration from '@templates-library/pages/TemplatesPage/images/templates-illustration.svg'
+import noTemplatesFoundIllustration from '@templates-library/pages/TemplatesPage/images/no-templates-found.svg'
 import { useStrings } from 'framework/strings'
 import { NewTemplatePopover } from '../NewTemplatePopover/NewTemplatePopover'
 
@@ -33,10 +34,10 @@ export default function NoResultsView({
   return (
     <Container height={'100%'}>
       {hasSearchParam ? (
-        <Layout.Vertical height={'100%'} spacing={'xlarge'} flex={{ align: 'center-center' }}>
-          <Icon color={Color.GREY_400} name="template-library" size={50} />
-          <Text font={{ weight: 'bold', size: 'medium' }} color={Color.GREY_400}>
-            {getString('common.filters.noMatchingFilterData')}
+        <Layout.Vertical height={'100%'} spacing={'large'} flex={{ align: 'center-center' }}>
+          <img src={noTemplatesFoundIllustration} width={'275px'} />
+          <Text font={{ size: 'normal' }} color={Color.GREY_400}>
+            {getString('common.filters.noResultsFound')}
           </Text>
           <Button
             variation={ButtonVariation.LINK}

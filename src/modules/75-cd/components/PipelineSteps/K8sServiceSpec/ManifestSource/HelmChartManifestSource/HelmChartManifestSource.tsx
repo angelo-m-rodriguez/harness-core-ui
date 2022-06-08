@@ -18,6 +18,7 @@ import { ManifestSourceBase, ManifestSourceRenderProps } from '@cd/factory/Manif
 import { useStrings } from 'framework/strings'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { FormMultiTypeCheckboxField } from '@common/components'
+import List from '@common/components/List/List'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import { useListAwsRegions } from 'services/portal'
 import { GitConfigDTO, useGetBucketListForS3, useGetGCSBucketList } from 'services/cd-ng'
@@ -388,6 +389,21 @@ const Content = ({
               allowableTypes
             }}
             label={getString('pipeline.manifestType.http.chartVersion')}
+          />
+        </div>
+      )}
+
+      {isFieldRuntime(`${manifestPath}.spec.valuesPaths`, template) && (
+        <div className={css.verticalSpacingInput}>
+          <List
+            labelClassName={css.listLabel}
+            label={getString('pipeline.manifestType.valuesYamlPath')}
+            name={`${path}.${manifestPath}.spec.valuesPaths`}
+            placeholder={getString('pipeline.manifestType.manifestPathPlaceholder')}
+            disabled={isFieldDisabled(`${manifestPath}.spec.valuesPaths`)}
+            style={{ marginBottom: 'var(--spacing-small)' }}
+            expressions={expressions}
+            isNameOfArrayType
           />
         </div>
       )}

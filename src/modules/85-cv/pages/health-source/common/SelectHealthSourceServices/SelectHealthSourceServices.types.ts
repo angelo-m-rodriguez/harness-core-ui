@@ -20,4 +20,5 @@ export type SelectHealthSourceServicesProps = {
   hideServiceIdentifier?: boolean
   hideCV?: boolean
   hideSLIAndHealthScore?: boolean
+  isTemplate?: boolean
 }

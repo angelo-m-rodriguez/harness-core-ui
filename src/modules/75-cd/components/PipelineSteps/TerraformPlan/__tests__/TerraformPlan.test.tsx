@@ -11,6 +11,7 @@ import { RUNTIME_INPUT_VALUE } from '@wings-software/uicore'
 import { StepFormikRef, StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { factory, TestStepWidget } from '@pipeline/components/PipelineSteps/Steps/__tests__/StepTestUtil'
+import { TestWrapper } from '@common/utils/testUtils'
 import { TerraformPlan } from '../TerraformPlan'
 
 const mockGetCallFunction = jest.fn()
@@ -192,6 +193,126 @@ describe('Test TerraformPlan', () => {
         type={StepType.TerraformPlan}
         stepViewType={StepViewType.InputSet}
       />
+    )
+    expect(container).toMatchSnapshot()
+  })
+
+  test('should render edit view for FF EXPORT_TF_PLAN_JSON_NG enabled', () => {
+    const { container } = render(
+      <TestWrapper
+        defaultAppStoreValues={{
+          featureFlags: { EXPORT_TF_PLAN_JSON_NG: true }
+        }}
+      >
+        <TestStepWidget
+          initialValues={{
+            type: 'TerraformPlan',
+            name: 'Test A',
+            identifier: 'Test_A',
+            timeout: '10m',
+
+            delegateSelectors: ['test-1', 'test-2'],
+            spec: {
+              provisionerIdentifier: RUNTIME_INPUT_VALUE,
+              configuration: {
+                command: 'Apply',
+                spec: {
+                  targets: RUNTIME_INPUT_VALUE,
+                  environmentVariables: RUNTIME_INPUT_VALUE,
+                  configFiles: {
+                    store: {
+                      spec: {
+                        connectorRef: RUNTIME_INPUT_VALUE
+                      }
+                    }
+                  }
+                },
+                exportTerraformPlanJson: true
+              }
+            }
+          }}
+          template={{
+            type: 'TerraformPlan',
+            name: 'Test A',
+            identifier: 'Test_A',
+            timeout: RUNTIME_INPUT_VALUE,
+            delegateSelectors: ['test-1', 'test-2'],
+            spec: {
+              provisionerIdentifier: RUNTIME_INPUT_VALUE,
+              configuration: {
+                command: 'Apply',
+                spec: {
+                  targets: RUNTIME_INPUT_VALUE,
+                  environmentVariables: RUNTIME_INPUT_VALUE,
+                  configFiles: {
+                    store: {
+                      spec: {
+                        connectorRef: RUNTIME_INPUT_VALUE
+                      }
+                    }
+                  }
+                },
+                exportTerraformPlanJson: true
+              }
+            }
+          }}
+          allValues={{
+            type: 'TerraformPlan',
+            name: 'Test A',
+            identifier: 'Test_A',
+            timeout: '10m',
+            delegateSelectors: ['test-1', 'test-2'],
+            spec: {
+              provisionerIdentifier: RUNTIME_INPUT_VALUE,
+              configuration: {
+                command: 'Apply',
+                spec: {
+                  targets: RUNTIME_INPUT_VALUE,
+                  environmentVariables: RUNTIME_INPUT_VALUE,
+                  configFiles: {
+                    store: {
+                      spec: {
+                        connectorRef: RUNTIME_INPUT_VALUE
+                      }
+                    }
+                  }
+                },
+                exportTerraformPlanJson: true
+              }
+            }
+          }}
+          inputSetData={{
+            template: {
+              type: 'TerraformPlan',
+              name: 'Test A',
+              identifier: 'Test_A',
+              timeout: RUNTIME_INPUT_VALUE,
+              delegateSelectors: ['test-1', 'test-2'],
+              spec: {
+                provisionerIdentifier: RUNTIME_INPUT_VALUE,
+                configuration: {
+                  command: 'Apply',
+                  spec: {
+                    targets: RUNTIME_INPUT_VALUE,
+                    environmentVariables: RUNTIME_INPUT_VALUE,
+                    configFiles: {
+                      store: {
+                        spec: {
+                          connectorRef: RUNTIME_INPUT_VALUE
+                        }
+                      }
+                    }
+                  }
+                },
+                exportTerraformPlanJson: true
+              }
+            },
+            path: 'test'
+          }}
+          type={StepType.TerraformPlan}
+          stepViewType={StepViewType.InputSet}
+        />
+      </TestWrapper>
     )
     expect(container).toMatchSnapshot()
   })
@@ -611,6 +732,11 @@ describe('Test TerraformPlan', () => {
                     }
                   }
                 }
+              },
+              backendConfig: {
+                spec: {
+                  content: RUNTIME_INPUT_VALUE
+                }
               }
             },
             targets: RUNTIME_INPUT_VALUE,
@@ -635,6 +761,11 @@ describe('Test TerraformPlan', () => {
                     folderPath: RUNTIME_INPUT_VALUE,
                     connectorRef: RUNTIME_INPUT_VALUE
                   }
+                }
+              },
+              backendConfig: {
+                spec: {
+                  content: RUNTIME_INPUT_VALUE
                 }
               }
             },

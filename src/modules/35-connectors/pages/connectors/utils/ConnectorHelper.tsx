@@ -16,7 +16,8 @@ export const AuthTypes = {
   USER_PASSWORD: 'UsernamePassword',
   SERVICE_ACCOUNT: 'ServiceAccount',
   OIDC: 'OpenIdConnect',
-  ANNONYMOUS: 'Anonymous'
+  ANNONYMOUS: 'Anonymous',
+  BEARER_TOKEN: 'Bearer Token(HTTP Header)'
 }
 
 export const GitAuthTypes = {
@@ -101,6 +102,8 @@ export const getConnectorTitleIdByType = (type: string): StringKeys => {
       return 'connectors.title.splunk'
     case Connectors.DOCKER:
       return 'dockerRegistry'
+    case Connectors.JENKINS:
+      return 'connectors.jenkins.jenkins'
     case Connectors.CEAWS:
       return 'connectors.title.ceAws'
     case Connectors.AWS:
@@ -173,6 +176,8 @@ export const getConnectorIconByType = (type: string): IconName => {
       return 'service-prometheus'
     case Connectors.DYNATRACE:
       return 'service-dynatrace'
+    case Connectors.JENKINS:
+      return 'service-jenkins-inverse'
     case Connectors.DOCKER:
     case 'Dockerhub':
       return 'service-dockerhub'

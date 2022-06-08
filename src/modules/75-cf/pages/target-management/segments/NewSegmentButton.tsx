@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { Button, Container, Layout, FormInput, Formik, Collapse, IconName } from '@wings-software/uicore'
+import { Button, ButtonVariation, Container, Layout, FormInput, Formik, Collapse, IconName } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 import * as yup from 'yup'
 import { Dialog } from '@blueprintjs/core'
@@ -127,8 +127,18 @@ export const NewSegmentButton: React.FC<NewSegmentButtonProps> = ({
                   </div> */}
                   <div style={{ paddingTop: 'var(--spacing-xxxlarge)' }}>
                     <Layout.Horizontal spacing="small" style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Button text={getString('create')} onClick={handleSubmit} intent="primary" />
-                      <Button text={getString('cancel')} onClick={formikProps.handleReset} minimal />
+                      <Button
+                        variation={ButtonVariation.PRIMARY}
+                        text={getString('create')}
+                        onClick={handleSubmit}
+                        intent="primary"
+                      />
+                      <Button
+                        variation={ButtonVariation.TERTIARY}
+                        text={getString('cancel')}
+                        onClick={formikProps.handleReset}
+                        minimal
+                      />
                     </Layout.Horizontal>
                   </div>
                 </Layout.Vertical>
@@ -143,6 +153,7 @@ export const NewSegmentButton: React.FC<NewSegmentButtonProps> = ({
   return (
     <RbacButton
       intent="primary"
+      variation={ButtonVariation.PRIMARY}
       text={getString('cf.segments.create')}
       onClick={openModal}
       permission={{

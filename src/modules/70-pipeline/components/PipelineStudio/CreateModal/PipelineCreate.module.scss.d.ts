@@ -7,6 +7,9 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly pipelineCreateNameIdDescriptionTags: string
+  readonly choosePipelineSetupHeader: string
+  readonly gitSimplificationDivider: string
+  readonly pipelineCardWrapper: string
+  readonly pipelineCreateForm: string
 }
 export default styles

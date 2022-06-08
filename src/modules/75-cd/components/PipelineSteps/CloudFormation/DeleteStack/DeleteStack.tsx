@@ -13,6 +13,7 @@ import { yupToFormErrors, FormikErrors } from 'formik'
 import { StepViewType, StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
+import type { StringsMap } from 'stringTypes'
 import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import {
   DeleteStackData,
@@ -35,7 +36,9 @@ export class CFDeleteStack extends PipelineStep<CFDeleteStackStepInfo> {
 
   protected type = StepType.CloudFormationDeleteStack
   protected stepIcon: IconName = 'cloud-formation-delete'
-  protected stepName = 'Cloud Formation Delete Stack'
+  protected stepName = 'CloudFormation Delete Stack'
+  protected stepDescription: keyof StringsMap = 'cd.cloudFormation.deleteDescription'
+  protected stepIconSize = 32
 
   protected defaultValues = {
     type: StepType.CloudFormationDeleteStack,

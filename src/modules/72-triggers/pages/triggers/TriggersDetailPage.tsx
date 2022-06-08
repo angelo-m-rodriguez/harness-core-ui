@@ -19,9 +19,9 @@ import {
   HarnessDocTooltip
 } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { isEmpty } from 'lodash-es'
+import { isEmpty, get, pickBy } from 'lodash-es'
 import { parse } from 'yaml'
 import type { MutateMethod } from 'restful-react'
 import { Page, useToaster } from '@common/exports'
@@ -37,6 +37,7 @@ import {
   useGetPipelineSummary
 } from 'services/pipeline-ng'
 import { useStrings, UseStringsReturn } from 'framework/strings'
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { TagsPopover, PageSpinner } from '@common/components'
 import { usePermission } from '@rbac/hooks/usePermission'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -234,7 +235,8 @@ const renderSwitch = ({
 )
 
 export default function TriggersDetailPage(): JSX.Element {
-  const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+  const { isGitSimplificationEnabled } = useAppStore()
+  const { repoIdentifier, branch, connectorRef, repoName, storeType } = useQueryParams<GitQueryParams>()
 
   const [selectedView, setSelectedView] = React.useState<SelectedView>(SelectedView.VISUAL)
 
@@ -305,7 +307,10 @@ export default function TriggersDetailPage(): JSX.Element {
         triggerType: triggerResponse?.data?.type,
         module,
         repoIdentifier,
-        branch
+        branch,
+        connectorRef,
+        repoName,
+        storeType
       })
     )
   }
@@ -338,7 +343,6 @@ export default function TriggersDetailPage(): JSX.Element {
   const { showSuccess, showError } = useToaster()
   const { getString } = useStrings()
   const triggerObj = parse(triggerResponseYaml)?.trigger as NGTriggerConfigV2
-  const pipelineInputSet = triggerObj?.inputYaml
   let conditionsArr: string[] = []
   const headerConditionsArr: string[] = triggerObj?.source?.spec?.spec?.headerConditions?.length
     ? getTriggerConditionsStr(triggerObj.source.spec.spec.headerConditions)
@@ -373,6 +377,28 @@ export default function TriggersDetailPage(): JSX.Element {
   const isPipelineInvalid = pipeline?.data?.entityValidityDetails?.valid === false
 
   const isTriggerRbacDisabled = !isExecutable || isPipelineInvalid
+
+  const isGitSyncEnabled = useMemo(() => !!pipeline?.data?.gitDetails?.branch, [pipeline])
+
+  const gitAwareForTriggerEnabled = useMemo(
+    () => isGitSyncEnabled && isGitSimplificationEnabled,
+    [isGitSyncEnabled, isGitSimplificationEnabled]
+  )
+
+  let pipelineInputSet
+  if (gitAwareForTriggerEnabled) {
+    pipelineInputSet = yamlStringify(
+      pickBy(
+        {
+          pipelineBranchName: get(triggerObj, 'pipelineBranchName'),
+          inputSetRefs: get(triggerObj, 'inputSetRefs')
+        },
+        key => key !== undefined
+      )
+    )
+  } else {
+    pipelineInputSet = triggerObj?.inputYaml || ''
+  }
 
   return (
     <>
@@ -455,18 +481,22 @@ export default function TriggersDetailPage(): JSX.Element {
                     tags: triggerResponse?.data?.tags
                   })}
                 />
-                <DetailPageCard
-                  classname={css.inputSet}
-                  title={getString('details')}
-                  content={getDetailsContent({
-                    getString,
-                    conditionsExist,
-                    conditionsArr,
-                    jexlCondition,
-                    cronExpression,
-                    pipelineInputSet
-                  })}
-                />
+                {loadingTrigger ? (
+                  <PageSpinner />
+                ) : (
+                  <DetailPageCard
+                    classname={css.inputSet}
+                    title={getString('details')}
+                    content={getDetailsContent({
+                      getString,
+                      conditionsExist,
+                      conditionsArr,
+                      jexlCondition,
+                      cronExpression,
+                      pipelineInputSet
+                    })}
+                  />
+                )}
               </Layout.Horizontal>
             ) : (
               <div className={css.editor}>
@@ -528,9 +558,7 @@ export default function TriggersDetailPage(): JSX.Element {
                       triggerResponse.data.lastTriggerExecutionDetails.lastExecutionTime
                     ).toLocaleTimeString()}`}
                   </Text>
-                ) : (
-                  <Text>{`${getString('triggers.lastActivationAt')}: -`}</Text>
-                )}
+                ) : null}
               </div>
               <hr />
             </Layout.Vertical>

@@ -13,6 +13,8 @@ import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { initializeDatadogConnectorWithStepData } from './utils'
@@ -40,6 +42,13 @@ export function DatadogConfigStep(props: ConnectionConfigProps): JSX.Element {
     updateStepData()
   }, [prevStepData, accountId])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.DataDog
+  })
+
   if (initialValues?.loading) {
     return <PageSpinner />
   }
@@ -56,7 +65,13 @@ export function DatadogConfigStep(props: ConnectionConfigProps): JSX.Element {
           applicationKeyRef: Yup.string().trim().required(getString('connectors.datadog.encryptedAPPKeyValidation')),
           apiKeyRef: Yup.string().trim().required(getString('connectors.encryptedAPIKeyValidation'))
         })}
-        onSubmit={(formData: ConnectorConfigDTO) => nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })}
+        onSubmit={(formData: ConnectorConfigDTO) => {
+          trackEvent(ConnectorActions.CreateConnectorSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.DataDog
+          })
+          nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })
+        }}
       >
         <FormikForm className={css.form}>
           <Layout.Vertical spacing="large" height={450}>

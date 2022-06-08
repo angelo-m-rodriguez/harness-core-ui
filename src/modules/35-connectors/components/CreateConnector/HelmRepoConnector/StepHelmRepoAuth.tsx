@@ -22,7 +22,7 @@ import {
 } from '@wings-software/uicore'
 import * as Yup from 'yup'
 import { FontVariation } from '@harness/design-system'
-import { setupHelmFormData } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { setupHelmFormData, useGetHelpPanel } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import type { SecretReferenceInterface } from '@secrets/utils/SecretField'
 import type { ConnectorRequestBody, ConnectorInfoDTO } from 'services/cd-ng'
 
@@ -30,6 +30,8 @@ import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import TextReference, { TextReferenceInterface, ValueType } from '@secrets/components/TextReference/TextReference'
 import { useStrings } from 'framework/strings'
 import { AuthTypes } from '@connectors/pages/connectors/utils/ConnectorHelper'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions, ConnectorTypes } from '@common/constants/TrackingConstants'
 import commonStyles from '@connectors/components/CreateConnector/commonSteps/ConnectorCommonStyles.module.scss'
 import css from './HelmRepoConnector.module.scss'
 
@@ -98,6 +100,13 @@ const StepHelmAuthentication: React.FC<StepProps<StepHelmRepoAuthenticationProps
       }
     }
   }, [loadingConnectorSecrets])
+  useGetHelpPanel('HTTPHelmServerDetails', 900)
+
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: ConnectorTypes.Helm
+  })
 
   return loadingConnectorSecrets ? (
     <PageSpinner />
@@ -127,6 +136,10 @@ const StepHelmAuthentication: React.FC<StepProps<StepHelmRepoAuthenticationProps
           })
         })}
         onSubmit={stepData => {
+          trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: ConnectorTypes.Helm
+          })
           nextStep?.({ ...props.connectorInfo, ...prevStepData, ...stepData } as StepHelmRepoAuthenticationProps)
           // const connectorData = {
           //   ...prevStepData,

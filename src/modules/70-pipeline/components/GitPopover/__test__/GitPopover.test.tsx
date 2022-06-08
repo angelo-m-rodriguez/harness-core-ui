@@ -37,7 +37,7 @@ describe('GitPopover', () => {
   test('should return popover icon and content', () => {
     const props = getProps()
     const { container } = render(
-      <TestWrapper>
+      <TestWrapper defaultAppStoreValues={{ isGitSyncEnabled: true }}>
         <GitSyncStoreProvider>
           <GitPopover {...props} />
         </GitSyncStoreProvider>
@@ -47,7 +47,7 @@ describe('GitPopover', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('should return null when repoIdentifier is not passed in props', () => {
+  test('should return null when repoIdentifier and repoName both are not passed in props', () => {
     const { container } = render(
       <TestWrapper>
         <GitPopover data={{ branch: 'master' }} />
@@ -60,7 +60,7 @@ describe('GitPopover', () => {
   test('should render gitpopover info when giticon is hovered', async () => {
     const props = getProps()
     const { getByTestId, getByText } = render(
-      <TestWrapper>
+      <TestWrapper defaultAppStoreValues={{ isGitSyncEnabled: true }}>
         <GitSyncStoreProvider>
           <GitPopover {...props} />
         </GitSyncStoreProvider>

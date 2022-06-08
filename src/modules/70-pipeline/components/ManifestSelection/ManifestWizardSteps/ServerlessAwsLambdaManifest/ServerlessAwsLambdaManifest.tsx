@@ -153,11 +153,7 @@ function ServerlessAwsLambdaManifest({
         initialValues={getInitialValues()}
         formName="serverlessAwsLambda"
         validationSchema={Yup.object().shape({
-          ...ManifestIdentifierValidation(
-            manifestIdsList,
-            initialValues?.identifier,
-            getString('pipeline.uniqueIdentifier')
-          ),
+          ...ManifestIdentifierValidation(manifestIdsList, initialValues?.identifier, getString('pipeline.uniqueName')),
           branch: Yup.string().when('gitFetchType', {
             is: 'Branch',
             then: Yup.string().trim().required(getString('validation.branchName'))

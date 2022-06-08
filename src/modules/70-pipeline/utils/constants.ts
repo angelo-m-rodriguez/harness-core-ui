@@ -68,3 +68,9 @@ export const sslVerifyOptions = [
     value: false
   }
 ]
+
+export enum OsTypes {
+  Linux = 'Linux',
+  Windows = 'Windows',
+  MacOS = 'MacOS'
+}

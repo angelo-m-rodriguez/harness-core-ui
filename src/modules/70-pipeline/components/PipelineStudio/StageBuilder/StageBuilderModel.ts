@@ -146,8 +146,8 @@ export class StageBuilderModel extends DiagramModel {
               ? node.stage.when?.pipelineStatus !== 'Success' || !!node.stage.when?.condition?.trim()
               : false,
             isTemplate: isTemplateStage,
-            iconStyle: { color: isSelected ? Utils.getRealCSSColor(Color.WHITE) : type.iconColor },
-            icon: type.icon
+            iconStyle: { color: isSelected ? Utils.getRealCSSColor(Color.WHITE) : type?.iconColor },
+            icon: type?.icon
           })
         : new DefaultNodeModel({
             identifier: node.stage.identifier,
@@ -192,11 +192,11 @@ export class StageBuilderModel extends DiagramModel {
             const type = stagesMap[getStageType(nodeP?.stage, templateTypes)]
             if (nodeP.stage?.identifier === selectedStageId) {
               parallelStageNames.unshift(nodeP.stage?.name ?? '')
-              icons.unshift(type.icon)
+              icons.unshift(type?.icon)
               isSelected = true
             } else {
               parallelStageNames.push(nodeP.stage?.name || '')
-              icons.push(type.icon)
+              icons.push(type?.icon)
             }
           })
           const groupedNode = new GroupNodeModel({
@@ -280,11 +280,11 @@ export class StageBuilderModel extends DiagramModel {
                 const type = stagesMap[getStageType(nodePP?.stage, templateTypes)]
                 if (nodePP.stage?.identifier === selectedStageId) {
                   parallelStageNames.unshift(nodePP.stage?.name ?? '')
-                  icons.unshift(type.icon)
+                  icons.unshift(type?.icon)
                   isSelected = true
                 } else {
                   parallelStageNames.push(nodePP.stage?.name || '')
-                  icons.push(type.icon)
+                  icons.push(type?.icon)
                 }
               })
               const groupedNode = new GroupNodeModel({

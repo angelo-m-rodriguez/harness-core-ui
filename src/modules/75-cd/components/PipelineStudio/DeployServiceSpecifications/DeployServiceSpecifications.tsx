@@ -68,10 +68,13 @@ import {
   StageType
 } from '@pipeline/utils/stageHelpers'
 import { Scope } from '@common/interfaces/SecretsInterface'
-import { getIdentifierFromValue, getScopeFromValue } from '@common/components/EntityReference/EntityReference'
+import {
+  getIdentifierFromValue,
+  getScopeBasedProjectPathParams,
+  getScopeFromValue
+} from '@common/components/EntityReference/EntityReference'
 import { useGetTemplate } from 'services/template-ng'
 import { Page } from '@common/exports'
-import { getScopeBasedQueryParams } from '@templates-library/utils/templatesUtils'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { yamlParse } from '@common/utils/YamlHelperMethods'
 import stageCss from '../DeployStageSetupShell/DeployStage.module.scss'
@@ -144,6 +147,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   })
 
   useEffect(() => {
+    //When service.serviceRef is present refetch serviceAPI to populate deployment type and service definition
     if (getServiceEntityServiceRef(stage?.stage)) {
       const stageServiceRef = (stage?.stage?.spec as any)?.service?.serviceRef
       refetchServiceData({
@@ -200,6 +204,9 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
         setSelectedDeploymentType(serviceInfo.type as ServiceDeploymentType)
         setIsReadOnlyView(true)
       }
+    } else {
+      //If old service entity is selected back, the readonly view should be false and deployment type should be unselected
+      setIsReadOnlyView(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedServiceResponse])
@@ -234,8 +241,19 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       const currentStageType = stage?.stage?.type
       stages.forEach((item, index) => {
         if (index < stageIndex) {
+          //If the new stage or stage template has new service entity(stage.spec.service.serviceRef), propogate from stage is not allowed.
+          if (NG_SVC_ENV_REDESIGN) {
+            /* istanbul ignore else */
+            if (
+              (item.stage?.spec as any)?.service?.serviceRef ||
+              (item.stage?.template && !stage?.stage?.spec?.serviceConfig?.useFromStage?.stage)
+            ) {
+              return
+            }
+          }
+
           if (item.stage?.template) {
-            const stageType = get(templateTypes, getIdentifierFromValue(item.stage.template.templateRef))
+            const stageType = get(templateTypes, item.stage.template.templateRef)
             if (currentStageType === stageType) {
               newPreviousStageList.push({
                 label: `Stage [${item.stage?.name}] - [Template]`,
@@ -356,7 +374,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
           }
         })
       }
-      if (draft?.stage?.spec?.serviceConfig.serviceDefinition) {
+      if (draft?.stage?.spec?.serviceConfig?.serviceDefinition) {
         delete draft.stage.spec.serviceConfig.serviceDefinition
       }
     })
@@ -397,7 +415,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       })
       await debounceUpdateStage(stageData?.stage)
 
-      if (value.serviceRef) {
+      if (NG_SVC_ENV_REDESIGN && value.serviceRef) {
         refetchServiceData({
           pathParams: {
             serviceIdentifier: value.serviceRef
@@ -444,7 +462,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
 
       fetchTemplate({
         queryParams: {
-          ...getScopeBasedQueryParams(queryParams, templateScope),
+          ...getScopeBasedProjectPathParams(queryParams, templateScope),
           repoIdentifier,
           branch,
           getDefaultFromOtherRepo: true,
@@ -496,7 +514,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       if (isConfirmed) {
         deleteStageData(currStageData)
         await debounceUpdateStage(currStageData)
-        setSelectedDeploymentType(currStageData?.spec?.serviceConfig.serviceDefinition?.type as ServiceDeploymentType)
+        setSelectedDeploymentType(currStageData?.spec?.serviceConfig?.serviceDefinition?.type as ServiceDeploymentType)
       }
     }
   })
@@ -531,13 +549,10 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   }
 
   const shouldRenderDeployServiceStep = (): boolean => {
-    if (isNewServiceEntity()) {
-      if ((stage?.stage?.spec as any)?.service?.serviceConfigRef) {
-        return true
-      }
-      return false
+    if (!isNewServiceEntity()) {
+      return true
     }
-    return true
+    return false
   }
   /*************************************Service Entity Related code********************************************************/
 

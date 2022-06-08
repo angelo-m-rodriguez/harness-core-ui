@@ -43,6 +43,9 @@ import {
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { FeatureFlag } from '@common/featureFlags'
 import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 
 export interface SetupVaultFormData {
   vaultName?: string
@@ -90,6 +93,7 @@ const SetupVault: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> 
       })
     }
   }, [isEditMode, connectorInfo])
+  useConnectorWizard({ helpPanel: { referenceId: 'AzureKeyVaultSetupVault', contentWidth: 900 } })
 
   const handleFetchEngines = async (formData: ConnectorConfigDTO): Promise<void> => {
     modalErrorHandler?.hide()
@@ -157,10 +161,16 @@ const SetupVault: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> 
     }
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.SetupVaultLoad, {
+    category: Category.CONNECTOR
+  })
+
   return loadingFormData ? (
     <PageSpinner />
   ) : (
-    <Container padding={{ top: 'medium' }} width="64%">
+    <Container padding={{ top: 'medium' }}>
       <Text font={{ variation: FontVariation.H3 }}>{getString('connectors.azureKeyVault.labels.setupVault')}</Text>
       <Container margin={{ bottom: 'xlarge' }}>
         <ModalErrorHandler bind={setModalErrorHandler} />
@@ -173,6 +183,9 @@ const SetupVault: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> 
           vaultName: Yup.string().required(getString('connectors.azureKeyVault.validation.vaultName'))
         })}
         onSubmit={formData => {
+          trackEvent(ConnectorActions.SetupVaultSubmit, {
+            category: Category.CONNECTOR
+          })
           handleCreateOrEdit(formData)
         }}
       >

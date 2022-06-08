@@ -21,6 +21,128 @@
   ],
   "schemes": ["https", "http"],
   "paths": {
+    "/ci/buildHealth": {
+      "get": {
+        "tags": ["ci"],
+        "summary": "Get build health",
+        "description": "",
+        "operationId": "getBuildHealth",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orgIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "projectIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseDashboardBuildsHealthInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/ci/getBuilds": {
+      "get": {
+        "tags": ["ci"],
+        "summary": "Get builds",
+        "description": "",
+        "operationId": "getBuilds",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "orgIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "projectIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 20,
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseDashboardBuildsActiveAndFailedInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/ci/buildExecution": {
       "get": {
         "tags": ["ci"],
@@ -149,64 +271,6 @@
         }
       }
     },
-    "/ci/getBuilds": {
-      "get": {
-        "tags": ["ci"],
-        "summary": "Get builds",
-        "description": "",
-        "operationId": "getBuilds",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "accountIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "projectIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "top",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "default": 20,
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ResponseDashboardBuildsActiveAndFailedInfo"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Failure"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/ci/usage/ci": {
       "get": {
         "tags": ["ci"],
@@ -235,70 +299,6 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ResponseCIUsageResult"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Failure"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/ci/buildHealth": {
-      "get": {
-        "tags": ["ci"],
-        "summary": "Get build health",
-        "description": "",
-        "operationId": "getBuildHealth",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "accountIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "orgIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "projectIdentifier",
-            "in": "query",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "startTime",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "endTime",
-            "in": "query",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ResponseDashboardBuildsHealthInfo"
             }
           },
           "400": {
@@ -381,6 +381,204 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ResponseBoolean"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["execution-config"],
+        "summary": "Delete execution config",
+        "description": "",
+        "operationId": "deleteExecutionConfig",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseBoolean"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/execution-config/get-default-config": {
+      "get": {
+        "tags": ["execution-config"],
+        "summary": "Get default execution config",
+        "description": "",
+        "operationId": "getDefaultConfig",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseCIExecutionImages"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/execution-config/get-current-config": {
+      "get": {
+        "tags": ["execution-config"],
+        "summary": "Get account's execution config",
+        "description": "",
+        "operationId": "getCurrentConfig",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "accountIdentifier",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseCIExecutionImages"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/partial-yaml-schema/dummyApiForSwaggerCIPipelineModuleInfoSchemaCheck": {
+      "get": {
+        "tags": ["partial-yaml-schema"],
+        "summary": "dummy api for checking CIPipelineModuleInfo",
+        "description": "",
+        "operationId": "dummyApiForSwaggerCIPipelineModuleInfoSchemaCheck",
+        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseCIPipelineModuleInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/partial-yaml-schema/dummyApiForSwaggerStageSchemaCheck": {
+      "get": {
+        "tags": ["partial-yaml-schema"],
+        "summary": "dummy api for checking integration stage",
+        "description": "",
+        "operationId": "dummyApiForSwaggerStageSchemaCheck",
+        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseStageElementConfig"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Failure"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/partial-yaml-schema/dummyApiForSwaggerStepSchemaCheck": {
+      "get": {
+        "tags": ["partial-yaml-schema"],
+        "summary": "dummy api for checking integration stage",
+        "description": "",
+        "operationId": "dummyApiForSwaggerStepSchemaCheck",
+        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseStepElementConfig"
             }
           },
           "400": {
@@ -505,10 +703,26 @@
               "FlagConfiguration",
               "ShellScript",
               "K8sCanaryDeploy",
+              "K8sApply",
+              "K8sBlueGreenDeploy",
+              "K8sRollingDeploy",
+              "K8sRollingRollback",
+              "K8sScale",
+              "K8sDelete",
+              "K8sBGSwapServices",
+              "K8sCanaryDelete",
+              "TerraformApply",
+              "TerraformPlan",
+              "TerraformDestroy",
+              "TerraformRollback",
+              "HelmDeploy",
+              "HelmRollback",
               "Connectors",
               "Secrets",
+              "Files",
               "Service",
               "Environment",
+              "EnvironmentGroup",
               "InputSets",
               "CvConfig",
               "Verify",
@@ -517,6 +731,8 @@
               "CvVerificationJob",
               "IntegrationStage",
               "IntegrationSteps",
+              "SecurityStage",
+              "SecuritySteps",
               "CvKubernetesActivitySource",
               "DeploymentSteps",
               "DeploymentStage",
@@ -528,8 +744,10 @@
               "GitRepositories",
               "FeatureFlags",
               "ServiceNowApproval",
+              "ServiceNowCreate",
+              "ServiceNowUpdate",
               "GovernancePolicies",
-              "POLICY_STEP",
+              "Policy",
               "Run",
               "RunTests",
               "Plugin",
@@ -543,7 +761,14 @@
               "S3Upload",
               "BuildAndPushGCR",
               "BuildAndPushECR",
-              "BuildAndPushDockerRegistry"
+              "BuildAndPushDockerRegistry",
+              "CreateStack",
+              "DeleteStack",
+              "ServerlessAwsLambdaDeploy",
+              "ServerlessAwsLambdaRollback",
+              "CustomStage",
+              "RollbackStack",
+              "Infrastructure"
             ]
           },
           {
@@ -566,99 +791,6 @@
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/ResponseJsonNode"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Failure"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/partial-yaml-schema/dummyApiForSwaggerStageSchemaCheck": {
-      "get": {
-        "tags": ["partial-yaml-schema"],
-        "summary": "dummy api for checking integration stage",
-        "description": "",
-        "operationId": "dummyApiForSwaggerStageSchemaCheck",
-        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ResponseStageElementConfig"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Failure"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/partial-yaml-schema/dummyApiForSwaggerStepSchemaCheck": {
-      "get": {
-        "tags": ["partial-yaml-schema"],
-        "summary": "dummy api for checking integration stage",
-        "description": "",
-        "operationId": "dummyApiForSwaggerStepSchemaCheck",
-        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ResponseStepElementConfig"
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/Failure"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/partial-yaml-schema/dummyApiForSwaggerCIPipelineModuleInfoSchemaCheck": {
-      "get": {
-        "tags": ["partial-yaml-schema"],
-        "summary": "dummy api for checking CIPipelineModuleInfo",
-        "description": "",
-        "operationId": "dummyApiForSwaggerCIPipelineModuleInfoSchemaCheck",
-        "consumes": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "produces": ["application/json", "text/yaml", "text/html", "text/plain"],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ResponseCIPipelineModuleInfo"
             }
           },
           "400": {
@@ -819,51 +951,38 @@
     }
   },
   "definitions": {
-    "BuildCount": {
+    "BuildHealth": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "rate": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "BuildInfo": {
       "type": "object",
       "properties": {
         "total": {
-          "type": "integer",
-          "format": "int64"
+          "$ref": "#/definitions/BuildHealth"
         },
         "success": {
-          "type": "integer",
-          "format": "int64"
+          "$ref": "#/definitions/BuildHealth"
         },
         "failed": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "aborted": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "expired": {
-          "type": "integer",
-          "format": "int64"
+          "$ref": "#/definitions/BuildHealth"
         }
       }
     },
-    "BuildExecutionInfo": {
+    "DashboardBuildsHealthInfo": {
       "type": "object",
       "properties": {
-        "time": {
-          "type": "integer",
-          "format": "int64"
-        },
         "builds": {
-          "$ref": "#/definitions/BuildCount"
-        }
-      }
-    },
-    "DashboardBuildExecutionInfo": {
-      "type": "object",
-      "properties": {
-        "buildExecutionInfoList": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BuildExecutionInfo"
-          }
+          "$ref": "#/definitions/BuildInfo"
         }
       }
     },
@@ -885,7 +1004,7 @@
         }
       }
     },
-    "ResponseDashboardBuildExecutionInfo": {
+    "ResponseDashboardBuildsHealthInfo": {
       "type": "object",
       "properties": {
         "status": {
@@ -893,7 +1012,7 @@
           "enum": ["SUCCESS", "FAILURE", "ERROR"]
         },
         "data": {
-          "$ref": "#/definitions/DashboardBuildExecutionInfo"
+          "$ref": "#/definitions/DashboardBuildsHealthInfo"
         },
         "metaData": {
           "type": "object"
@@ -1193,9 +1312,12 @@
             "HTTP_RESPONSE_EXCEPTION",
             "SCM_NOT_FOUND_ERROR",
             "SCM_CONFLICT_ERROR",
+            "SCM_CONFLICT_ERROR_V2",
             "SCM_UNPROCESSABLE_ENTITY",
             "PROCESS_EXECUTION_EXCEPTION",
             "SCM_UNAUTHORIZED",
+            "SCM_BAD_REQUEST",
+            "SCM_INTERNAL_SERVER_ERROR",
             "DATA",
             "CONTEXT",
             "PR_CREATION_ERROR",
@@ -1214,7 +1336,20 @@
             "INVALID_OVERLAY_INPUT_SET",
             "RESOURCE_ALREADY_EXISTS",
             "INVALID_JSON_PAYLOAD",
-            "POLICY_EVALUATION_FAILURE"
+            "POLICY_EVALUATION_FAILURE",
+            "POLICY_SET_ERROR",
+            "INVALID_ARTIFACTORY_REGISTRY_REQUEST",
+            "INVALID_NEXUS_REGISTRY_REQUEST",
+            "ENTITY_NOT_FOUND",
+            "INVALID_AZURE_CONTAINER_REGISTRY_REQUEST",
+            "AZURE_AUTHENTICATION_ERROR",
+            "AZURE_CONFIG_ERROR",
+            "DATA_PROCESSING_ERROR",
+            "INVALID_AZURE_AKS_REQUEST",
+            "AWS_IAM_ERROR",
+            "AWS_CF_ERROR",
+            "SCM_INTERNAL_SERVER_ERROR_V2",
+            "SCM_UNAUTHORIZED_ERROR_V2"
           ]
         },
         "message": {
@@ -1532,9 +1667,12 @@
             "HTTP_RESPONSE_EXCEPTION",
             "SCM_NOT_FOUND_ERROR",
             "SCM_CONFLICT_ERROR",
+            "SCM_CONFLICT_ERROR_V2",
             "SCM_UNPROCESSABLE_ENTITY",
             "PROCESS_EXECUTION_EXCEPTION",
             "SCM_UNAUTHORIZED",
+            "SCM_BAD_REQUEST",
+            "SCM_INTERNAL_SERVER_ERROR",
             "DATA",
             "CONTEXT",
             "PR_CREATION_ERROR",
@@ -1553,7 +1691,20 @@
             "INVALID_OVERLAY_INPUT_SET",
             "RESOURCE_ALREADY_EXISTS",
             "INVALID_JSON_PAYLOAD",
-            "POLICY_EVALUATION_FAILURE"
+            "POLICY_EVALUATION_FAILURE",
+            "POLICY_SET_ERROR",
+            "INVALID_ARTIFACTORY_REGISTRY_REQUEST",
+            "INVALID_NEXUS_REGISTRY_REQUEST",
+            "ENTITY_NOT_FOUND",
+            "INVALID_AZURE_CONTAINER_REGISTRY_REQUEST",
+            "AZURE_AUTHENTICATION_ERROR",
+            "AZURE_CONFIG_ERROR",
+            "DATA_PROCESSING_ERROR",
+            "INVALID_AZURE_AKS_REQUEST",
+            "AWS_IAM_ERROR",
+            "AWS_CF_ERROR",
+            "SCM_INTERNAL_SERVER_ERROR_V2",
+            "SCM_UNAUTHORIZED_ERROR_V2"
           ]
         },
         "message": {
@@ -1581,6 +1732,23 @@
       "discriminator": "type",
       "properties": {
         "type": {
+          "type": "string"
+        }
+      }
+    },
+    "NodeErrorInfo": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "fqn": {
           "type": "string"
         }
       }
@@ -1871,9 +2039,12 @@
             "HTTP_RESPONSE_EXCEPTION",
             "SCM_NOT_FOUND_ERROR",
             "SCM_CONFLICT_ERROR",
+            "SCM_CONFLICT_ERROR_V2",
             "SCM_UNPROCESSABLE_ENTITY",
             "PROCESS_EXECUTION_EXCEPTION",
             "SCM_UNAUTHORIZED",
+            "SCM_BAD_REQUEST",
+            "SCM_INTERNAL_SERVER_ERROR",
             "DATA",
             "CONTEXT",
             "PR_CREATION_ERROR",
@@ -1892,7 +2063,20 @@
             "INVALID_OVERLAY_INPUT_SET",
             "RESOURCE_ALREADY_EXISTS",
             "INVALID_JSON_PAYLOAD",
-            "POLICY_EVALUATION_FAILURE"
+            "POLICY_EVALUATION_FAILURE",
+            "POLICY_SET_ERROR",
+            "INVALID_ARTIFACTORY_REGISTRY_REQUEST",
+            "INVALID_NEXUS_REGISTRY_REQUEST",
+            "ENTITY_NOT_FOUND",
+            "INVALID_AZURE_CONTAINER_REGISTRY_REQUEST",
+            "AZURE_AUTHENTICATION_ERROR",
+            "AZURE_CONFIG_ERROR",
+            "DATA_PROCESSING_ERROR",
+            "INVALID_AZURE_AKS_REQUEST",
+            "AWS_IAM_ERROR",
+            "AWS_CF_ERROR",
+            "SCM_INTERNAL_SERVER_ERROR_V2",
+            "SCM_UNAUTHORIZED_ERROR_V2"
           ]
         },
         "level": {
@@ -1942,9 +2126,33 @@
         }
       ]
     },
+    "ScmErrorMetadataDTO": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ErrorMetadataDTO"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "conflictCommitId": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "StackTraceElement": {
       "type": "object",
       "properties": {
+        "classLoaderName": {
+          "type": "string"
+        },
+        "moduleName": {
+          "type": "string"
+        },
+        "moduleVersion": {
+          "type": "string"
+        },
         "methodName": {
           "type": "string"
         },
@@ -2013,16 +2221,54 @@
         "message": {
           "type": "string"
         },
-        "localizedMessage": {
-          "type": "string"
-        },
         "suppressed": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Throwable"
           }
+        },
+        "localizedMessage": {
+          "type": "string"
         }
       }
+    },
+    "YamlSchemaErrorDTO": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "stageInfo": {
+          "$ref": "#/definitions/NodeErrorInfo"
+        },
+        "stepInfo": {
+          "$ref": "#/definitions/NodeErrorInfo"
+        },
+        "fqn": {
+          "type": "string"
+        },
+        "hintMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "YamlSchemaErrorWrapperDTO": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ErrorMetadataDTO"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaErrors": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/YamlSchemaErrorDTO"
+              }
+            }
+          }
+        }
+      ]
     },
     "AuthorInfo": {
       "type": "object",
@@ -2031,107 +2277,6 @@
           "type": "string"
         },
         "url": {
-          "type": "string"
-        }
-      }
-    },
-    "BuildRepositoryCount": {
-      "type": "object",
-      "properties": {
-        "count": {
-          "type": "integer",
-          "format": "int64"
-        }
-      }
-    },
-    "DashboardBuildRepositoryInfo": {
-      "type": "object",
-      "properties": {
-        "repositoryInfo": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RepositoryInfo"
-          }
-        }
-      }
-    },
-    "LastRepositoryInfo": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "author": {
-          "$ref": "#/definitions/AuthorInfo"
-        },
-        "commit": {
-          "type": "string"
-        },
-        "startTime": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "endTime": {
-          "type": "integer",
-          "format": "int64"
-        }
-      }
-    },
-    "RepositoryBuildInfo": {
-      "type": "object",
-      "properties": {
-        "time": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "builds": {
-          "$ref": "#/definitions/BuildRepositoryCount"
-        }
-      }
-    },
-    "RepositoryInfo": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "buildCount": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "percentSuccess": {
-          "type": "number",
-          "format": "double"
-        },
-        "successRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "lastRepository": {
-          "$ref": "#/definitions/LastRepositoryInfo"
-        },
-        "countList": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RepositoryBuildInfo"
-          }
-        }
-      }
-    },
-    "ResponseDashboardBuildRepositoryInfo": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": ["SUCCESS", "FAILURE", "ERROR"]
-        },
-        "data": {
-          "$ref": "#/definitions/DashboardBuildRepositoryInfo"
-        },
-        "metaData": {
-          "type": "object"
-        },
-        "correlationId": {
           "type": "string"
         }
       }
@@ -2303,6 +2448,173 @@
         }
       }
     },
+    "BuildCount": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "success": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "failed": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "aborted": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "expired": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "BuildExecutionInfo": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "builds": {
+          "$ref": "#/definitions/BuildCount"
+        }
+      }
+    },
+    "DashboardBuildExecutionInfo": {
+      "type": "object",
+      "properties": {
+        "buildExecutionInfoList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BuildExecutionInfo"
+          }
+        }
+      }
+    },
+    "ResponseDashboardBuildExecutionInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILURE", "ERROR"]
+        },
+        "data": {
+          "$ref": "#/definitions/DashboardBuildExecutionInfo"
+        },
+        "metaData": {
+          "type": "object"
+        },
+        "correlationId": {
+          "type": "string"
+        }
+      }
+    },
+    "BuildRepositoryCount": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "DashboardBuildRepositoryInfo": {
+      "type": "object",
+      "properties": {
+        "repositoryInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepositoryInfo"
+          }
+        }
+      }
+    },
+    "LastRepositoryInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "#/definitions/AuthorInfo"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "RepositoryBuildInfo": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "builds": {
+          "$ref": "#/definitions/BuildRepositoryCount"
+        }
+      }
+    },
+    "RepositoryInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "buildCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "percentSuccess": {
+          "type": "number",
+          "format": "double"
+        },
+        "successRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "lastRepository": {
+          "$ref": "#/definitions/LastRepositoryInfo"
+        },
+        "countList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepositoryBuildInfo"
+          }
+        }
+      }
+    },
+    "ResponseDashboardBuildRepositoryInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILURE", "ERROR"]
+        },
+        "data": {
+          "$ref": "#/definitions/DashboardBuildRepositoryInfo"
+        },
+        "metaData": {
+          "type": "object"
+        },
+        "correlationId": {
+          "type": "string"
+        }
+      }
+    },
     "CIUsageResult": {
       "type": "object",
       "properties": {
@@ -2338,6 +2650,10 @@
         },
         "accountIdentifier": {
           "type": "string"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     },
@@ -2374,59 +2690,6 @@
           "items": {
             "$ref": "#/definitions/ReferenceDTO"
           }
-        }
-      }
-    },
-    "BuildHealth": {
-      "type": "object",
-      "properties": {
-        "count": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "rate": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "BuildInfo": {
-      "type": "object",
-      "properties": {
-        "total": {
-          "$ref": "#/definitions/BuildHealth"
-        },
-        "success": {
-          "$ref": "#/definitions/BuildHealth"
-        },
-        "failed": {
-          "$ref": "#/definitions/BuildHealth"
-        }
-      }
-    },
-    "DashboardBuildsHealthInfo": {
-      "type": "object",
-      "properties": {
-        "builds": {
-          "$ref": "#/definitions/BuildInfo"
-        }
-      }
-    },
-    "ResponseDashboardBuildsHealthInfo": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "enum": ["SUCCESS", "FAILURE", "ERROR"]
-        },
-        "data": {
-          "$ref": "#/definitions/DashboardBuildsHealthInfo"
-        },
-        "metaData": {
-          "type": "object"
-        },
-        "correlationId": {
-          "type": "string"
         }
       }
     },
@@ -2521,100 +2784,7 @@
         }
       }
     },
-    "JsonNode": {
-      "type": "object",
-      "properties": {
-        "float": {
-          "type": "boolean"
-        },
-        "nodeType": {
-          "type": "string",
-          "enum": ["ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING"]
-        },
-        "number": {
-          "type": "boolean"
-        },
-        "binary": {
-          "type": "boolean"
-        },
-        "pojo": {
-          "type": "boolean"
-        },
-        "integralNumber": {
-          "type": "boolean"
-        },
-        "floatingPointNumber": {
-          "type": "boolean"
-        },
-        "short": {
-          "type": "boolean"
-        },
-        "int": {
-          "type": "boolean"
-        },
-        "long": {
-          "type": "boolean"
-        },
-        "double": {
-          "type": "boolean"
-        },
-        "bigDecimal": {
-          "type": "boolean"
-        },
-        "bigInteger": {
-          "type": "boolean"
-        },
-        "textual": {
-          "type": "boolean"
-        },
-        "boolean": {
-          "type": "boolean"
-        },
-        "valueNode": {
-          "type": "boolean"
-        },
-        "containerNode": {
-          "type": "boolean"
-        },
-        "missingNode": {
-          "type": "boolean"
-        },
-        "object": {
-          "type": "boolean"
-        },
-        "array": {
-          "type": "boolean"
-        },
-        "null": {
-          "type": "boolean"
-        }
-      }
-    },
-    "PartialSchemaDTO": {
-      "type": "object",
-      "properties": {
-        "schema": {
-          "$ref": "#/definitions/JsonNode"
-        },
-        "nodeType": {
-          "type": "string"
-        },
-        "nodeName": {
-          "type": "string"
-        },
-        "namespace": {
-          "type": "string"
-        },
-        "skipStageSchema": {
-          "type": "boolean"
-        },
-        "moduleType": {
-          "type": "string",
-          "enum": ["CD", "CI", "CV", "CF", "CE", "CORE", "PMS", "TEMPLATESERVICE"]
-        }
-      }
-    },
-    "ResponseListPartialSchemaDTO": {
+    "ResponseCIExecutionImages": {
       "type": "object",
       "properties": {
         "status": {
@@ -2622,10 +2792,183 @@
           "enum": ["SUCCESS", "FAILURE", "ERROR"]
         },
         "data": {
+          "$ref": "#/definitions/CIExecutionImages"
+        },
+        "metaData": {
+          "type": "object"
+        },
+        "correlationId": {
+          "type": "string"
+        }
+      }
+    },
+    "CIBuildAuthor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      }
+    },
+    "CIBuildBranchHook": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "commits": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PartialSchemaDTO"
+            "$ref": "#/definitions/CIBuildCommit"
           }
+        },
+        "triggerCommits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CIBuildCommit"
+          }
+        }
+      }
+    },
+    "CIBuildCommit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "ownerName": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "ownerEmail": {
+          "type": "string"
+        },
+        "timeStamp": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "CIBuildPRHook": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "link": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "sourceRepo": {
+          "type": "string"
+        },
+        "sourceBranch": {
+          "type": "string"
+        },
+        "targetBranch": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "commits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CIBuildCommit"
+          }
+        },
+        "triggerCommits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CIBuildCommit"
+          }
+        }
+      }
+    },
+    "CIPipelineModuleInfo": {
+      "type": "object",
+      "properties": {
+        "ciExecutionInfoDTO": {
+          "$ref": "#/definitions/CIWebhookInfoDTO"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "repoName": {
+          "type": "string"
+        },
+        "triggerRepoName": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "prNumber": {
+          "type": "string"
+        },
+        "buildType": {
+          "type": "string"
+        },
+        "isPrivateRepo": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CIWebhookInfoDTO": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "#/definitions/CIBuildAuthor"
+        },
+        "branch": {
+          "$ref": "#/definitions/CIBuildBranchHook"
+        },
+        "pullRequest": {
+          "$ref": "#/definitions/CIBuildPRHook"
+        }
+      }
+    },
+    "ResponseCIPipelineModuleInfo": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILURE", "ERROR"]
+        },
+        "data": {
+          "$ref": "#/definitions/CIPipelineModuleInfo"
         },
         "metaData": {
           "type": "object"
@@ -2801,13 +3144,15 @@
     },
     "Approvers": {
       "type": "object",
-      "required": ["disallowPipelineExecutor", "minimumCount", "userGroups"],
+      "required": ["disallowPipelineExecutor", "minimumCount"],
       "properties": {
         "userGroups": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "maxItems": 2147483647,
+          "minItems": 1
         },
         "minimumCount": {
           "type": "integer",
@@ -2903,36 +3248,17 @@
         }
       }
     },
-    "BuildNumberDetails": {
-      "type": "object",
-      "required": ["uuid"],
-      "properties": {
-        "buildNumber": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "uuid": {
-          "type": "string"
-        }
-      }
-    },
     "BuildSpec": {
       "type": "object"
     },
     "CIExecutionArgs": {
       "type": "object",
       "properties": {
-        "inputSet": {
-          "$ref": "#/definitions/InputSet"
-        },
-        "branch": {
-          "type": "string"
-        },
         "executionSource": {
           "$ref": "#/definitions/ExecutionSource"
         },
-        "buildNumberDetails": {
-          "$ref": "#/definitions/BuildNumberDetails"
+        "runSequence": {
+          "type": "string"
         }
       }
     },
@@ -2993,6 +3319,33 @@
         }
       ]
     },
+    "CIVolume": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["EmptyDir", "PersistentVolumeClaim", "HostPath"]
+        }
+      }
+    },
+    "Capabilities": {
+      "type": "object",
+      "properties": {
+        "add": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "drop": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "Clause": {
       "type": "object",
       "required": ["attribute", "id", "negate", "op", "values"],
@@ -3049,9 +3402,6 @@
             },
             "podName": {
               "type": "string"
-            },
-            "runAsUser": {
-              "$ref": "#/definitions/ParameterFieldInteger"
             }
           }
         }
@@ -3115,7 +3465,7 @@
     },
     "Condition": {
       "type": "object",
-      "required": ["key", "operator", "value"],
+      "required": ["key", "operator"],
       "properties": {
         "key": {
           "type": "string"
@@ -3212,10 +3562,10 @@
         "imagePullPolicy": {
           "type": "string"
         },
-        "harnessManagedImage": {
+        "mainLiteEngine": {
           "type": "boolean"
         },
-        "mainLiteEngine": {
+        "harnessManagedImage": {
           "type": "boolean"
         }
       }
@@ -3303,9 +3653,26 @@
         },
         {
           "type": "object",
+          "required": ["payload"],
           "properties": {
             "payload": {
               "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "CustomStageConfig": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/StageInfoConfig"
+        },
+        {
+          "type": "object",
+          "required": ["execution"],
+          "properties": {
+            "execution": {
+              "$ref": "#/definitions/ExecutionElementConfig"
             }
           }
         }
@@ -3427,6 +3794,9 @@
             },
             "remoteCacheRepo": {
               "type": "string"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -3492,10 +3862,77 @@
             },
             "remoteCacheImage": {
               "type": "string"
+            },
+            "baseImageConnectorRefs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           }
         }
       ]
+    },
+    "EmptyDirVolume": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PodVolume"
+        },
+        {
+          "type": "object",
+          "required": ["mountPath", "name"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "medium": {
+              "type": "string"
+            },
+            "sizeMib": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      ]
+    },
+    "EmptyDirYaml": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CIVolume"
+        },
+        {
+          "type": "object",
+          "required": ["mountPath", "spec", "type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["EmptyDir", "PersistentVolumeClaim", "HostPath"]
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "spec": {
+              "$ref": "#/definitions/EmptyDirYamlSpec"
+            }
+          }
+        }
+      ]
+    },
+    "EmptyDirYamlSpec": {
+      "type": "object",
+      "properties": {
+        "medium": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string",
+          "pattern": "^(([0-9]*[.])?[0-9]+)([GM]i?)|<\\+input>$"
+        }
+      }
     },
     "ExecutionElementConfig": {
       "type": "object",
@@ -3679,6 +4116,9 @@
             },
             "remoteCacheImage": {
               "type": "string"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -3712,14 +4152,62 @@
         }
       ]
     },
-    "HoldingScope": {
+    "HostPathVolume": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PodVolume"
+        },
+        {
+          "type": "object",
+          "required": ["mountPath", "name", "path"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "hostPathType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "HostPathYaml": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CIVolume"
+        },
+        {
+          "type": "object",
+          "required": ["mountPath", "spec", "type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["EmptyDir", "PersistentVolumeClaim", "HostPath"]
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "spec": {
+              "$ref": "#/definitions/HostPathYamlSpec"
+            }
+          }
+        }
+      ]
+    },
+    "HostPathYamlSpec": {
       "type": "object",
-      "required": ["nodeSetupId", "scope"],
+      "required": ["path"],
       "properties": {
-        "scope": {
+        "path": {
           "type": "string"
         },
-        "nodeSetupId": {
+        "type": {
           "type": "string"
         }
       }
@@ -3830,7 +4318,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["KubernetesDirect", "UseFromStage", "VM"]
+          "enum": ["KubernetesDirect", "UseFromStage", "VM", "KubernetesHosted"]
         }
       }
     },
@@ -3841,14 +4329,10 @@
         },
         {
           "type": "object",
-          "required": ["accountId", "buildJobEnvInfo", "executionElementConfig", "infrastructure", "skipGitClone"],
+          "required": ["accountId", "executionElementConfig", "infrastructure", "skipGitClone"],
           "properties": {
             "accountId": {
               "type": "string"
-            },
-            "timeout": {
-              "type": "integer",
-              "format": "int32"
             },
             "buildJobEnvInfo": {
               "$ref": "#/definitions/BuildJobEnvInfo"
@@ -3864,20 +4348,25 @@
             },
             "infrastructure": {
               "$ref": "#/definitions/Infrastructure"
+            },
+            "executionSource": {
+              "$ref": "#/definitions/ExecutionSource"
+            },
+            "stageElementConfig": {
+              "$ref": "#/definitions/IntegrationStageConfig"
+            },
+            "variables": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/NGVariable"
+              }
+            },
+            "stageIdentifier": {
+              "type": "string"
             }
           }
         }
       ]
-    },
-    "InputSet": {
-      "type": "object",
-      "discriminator": "type",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["Manual", "Webhook"]
-        }
-      }
     },
     "InputSetValidator": {
       "type": "object",
@@ -3892,6 +4381,26 @@
       }
     },
     "IntegrationStageConfig": {
+      "type": "object",
+      "properties": {
+        "sharedPaths": {
+          "$ref": "#/definitions/ParameterFieldListString"
+        },
+        "cloneCodebase": {
+          "$ref": "#/definitions/ParameterFieldBoolean"
+        },
+        "serviceDependencies": {
+          "$ref": "#/definitions/ParameterFieldListDependencyElement"
+        },
+        "infrastructure": {
+          "$ref": "#/definitions/Infrastructure"
+        },
+        "execution": {
+          "$ref": "#/definitions/ExecutionElementConfig"
+        }
+      }
+    },
+    "IntegrationStageConfigImpl": {
       "allOf": [
         {
           "$ref": "#/definitions/StageInfoConfig"
@@ -4067,6 +4576,9 @@
         }
       ]
     },
+    "JsonNode": {
+      "type": "object"
+    },
     "K8BuildJobEnvInfo": {
       "allOf": [
         {
@@ -4084,7 +4596,10 @@
             "stepConnectorRefs": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/ConnectorConversionInfo"
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ConnectorConversionInfo"
+                }
               }
             }
           }
@@ -4102,7 +4617,7 @@
           "properties": {
             "type": {
               "type": "string",
-              "enum": ["KubernetesDirect", "UseFromStage", "VM"]
+              "enum": ["KubernetesDirect", "UseFromStage", "VM", "KubernetesHosted"]
             },
             "spec": {
               "$ref": "#/definitions/K8sDirectInfraYamlSpec"
@@ -4142,6 +4657,69 @@
         },
         "initTimeout": {
           "type": "string"
+        },
+        "nodeSelector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Toleration"
+          }
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CIVolume"
+          }
+        },
+        "automountServiceAccountToken": {
+          "type": "boolean"
+        },
+        "containerSecurityContext": {
+          "$ref": "#/definitions/SecurityContext"
+        },
+        "priorityClassName": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string",
+          "enum": ["Linux", "MacOS", "Windows"]
+        },
+        "harnessImageConnectorRef": {
+          "type": "string"
+        }
+      }
+    },
+    "K8sHostedInfraYaml": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Infrastructure"
+        },
+        {
+          "type": "object",
+          "required": ["spec", "type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["KubernetesDirect", "UseFromStage", "VM", "KubernetesHosted"]
+            },
+            "spec": {
+              "$ref": "#/definitions/K8sHostedInfraYamlSpec"
+            }
+          }
+        }
+      ]
+    },
+    "K8sHostedInfraYamlSpec": {
+      "type": "object",
+      "required": ["identifier"],
+      "properties": {
+        "identifier": {
+          "type": "string"
         }
       }
     },
@@ -4172,7 +4750,7 @@
       "properties": {
         "memory": {
           "type": "string",
-          "pattern": "^(([0-9]*[.])?[0-9]+)([GM]i?)$"
+          "pattern": "^(([0-9]*[.])?[0-9]+)([GM]i?)|<\\+input>$"
         },
         "cpu": {
           "type": "string"
@@ -4257,11 +4835,11 @@
       "type": "object",
       "discriminator": "type",
       "properties": {
-        "description": {
-          "type": "string"
-        },
         "required": {
           "type": "boolean"
+        },
+        "description": {
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -4320,7 +4898,8 @@
               "Timeout",
               "Authorization",
               "Verification",
-              "DelegateProvisioning"
+              "DelegateProvisioning",
+              "PolicyEvaluationFailure"
             ]
           }
         },
@@ -4443,6 +5022,31 @@
         }
       }
     },
+    "PVCVolume": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PodVolume"
+        },
+        {
+          "type": "object",
+          "required": ["claimName", "mountPath", "name"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "claimName": {
+              "type": "string"
+            },
+            "readOnly": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
     "ParallelStepElementConfig": {
       "type": "object",
       "required": ["sections"],
@@ -4481,7 +5085,7 @@
         }
       }
     },
-    "ParameterFieldInteger": {
+    "ParameterFieldBoolean": {
       "type": "object",
       "properties": {
         "expressionValue": {
@@ -4491,8 +5095,65 @@
           "type": "boolean"
         },
         "value": {
-          "type": "integer",
-          "format": "int32"
+          "type": "boolean"
+        },
+        "typeString": {
+          "type": "boolean"
+        },
+        "inputSetValidator": {
+          "$ref": "#/definitions/InputSetValidator"
+        },
+        "jsonResponseField": {
+          "type": "boolean"
+        },
+        "responseField": {
+          "type": "string"
+        }
+      }
+    },
+    "ParameterFieldListDependencyElement": {
+      "type": "object",
+      "properties": {
+        "expressionValue": {
+          "type": "string"
+        },
+        "expression": {
+          "type": "boolean"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DependencyElement"
+          }
+        },
+        "typeString": {
+          "type": "boolean"
+        },
+        "inputSetValidator": {
+          "$ref": "#/definitions/InputSetValidator"
+        },
+        "jsonResponseField": {
+          "type": "boolean"
+        },
+        "responseField": {
+          "type": "string"
+        }
+      }
+    },
+    "ParameterFieldListString": {
+      "type": "object",
+      "properties": {
+        "expressionValue": {
+          "type": "string"
+        },
+        "expression": {
+          "type": "boolean"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "typeString": {
           "type": "boolean"
@@ -4555,6 +5216,41 @@
             "AddSegmentToVariationTargetMap",
             "RemoveSegmentsToVariationTargetMap"
           ]
+        }
+      }
+    },
+    "PersistentVolumeClaimYaml": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/CIVolume"
+        },
+        {
+          "type": "object",
+          "required": ["mountPath", "spec", "type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["EmptyDir", "PersistentVolumeClaim", "HostPath"]
+            },
+            "mountPath": {
+              "type": "string"
+            },
+            "spec": {
+              "$ref": "#/definitions/PersistentVolumeClaimYamlSpec"
+            }
+          }
+        }
+      ]
+    },
+    "PersistentVolumeClaimYamlSpec": {
+      "type": "object",
+      "required": ["claimName"],
+      "properties": {
+        "claimName": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean"
         }
       }
     },
@@ -4642,6 +5338,12 @@
         },
         "workDirPath": {
           "type": "string"
+        },
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PodVolume"
+          }
         }
       }
     },
@@ -4653,6 +5355,16 @@
           "items": {
             "$ref": "#/definitions/ContainerDefinitionInfo"
           }
+        }
+      }
+    },
+    "PodVolume": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["EmptyDir", "PersistentVolumeClaim", "HostPath"]
         }
       }
     },
@@ -4683,6 +5395,7 @@
         },
         {
           "type": "object",
+          "required": ["policySets"],
           "properties": {
             "policySets": {
               "type": "array",
@@ -4832,7 +5545,8 @@
               "format": "int32"
             },
             "holdingScope": {
-              "$ref": "#/definitions/HoldingScope"
+              "type": "string",
+              "enum": ["PLAN", "PIPELINE", "STAGE", "STEP_GROUP"]
             }
           }
         }
@@ -4887,6 +5601,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -4932,6 +5649,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5072,6 +5792,9 @@
             "packages": {
               "type": "string"
             },
+            "namespaces": {
+              "type": "string"
+            },
             "runOnlySelectedTests": {
               "type": "boolean"
             },
@@ -5092,6 +5815,14 @@
               "additionalProperties": {
                 "type": "string"
               }
+            },
+            "buildEnvironment": {
+              "type": "string",
+              "enum": ["Core", "Framework"]
+            },
+            "frameworkVersion": {
+              "type": "string",
+              "enum": ["5.0", "6.0"]
             },
             "privileged": {
               "type": "boolean"
@@ -5149,6 +5880,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5200,6 +5934,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5227,6 +5964,68 @@
             },
             "default": {
               "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "SecurityContext": {
+      "type": "object",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "type": "boolean"
+        },
+        "procMount": {
+          "type": "string"
+        },
+        "privileged": {
+          "type": "boolean"
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean"
+        },
+        "runAsNonRoot": {
+          "type": "boolean"
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "runAsUser": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "capabilities": {
+          "$ref": "#/definitions/Capabilities"
+        }
+      }
+    },
+    "SecurityStageConfigImpl": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/StageInfoConfig"
+        },
+        {
+          "type": "object",
+          "required": ["infrastructure"],
+          "properties": {
+            "sharedPaths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "infrastructure": {
+              "$ref": "#/definitions/Infrastructure"
+            },
+            "serviceDependencies": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DependencyElement"
+              }
+            },
+            "cloneCodebase": {
+              "type": "boolean"
             }
           }
         }
@@ -5266,6 +6065,9 @@
             "imagePullPolicy": {
               "type": "string",
               "enum": ["Always", "Never", "IfNotPresent"]
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5305,6 +6107,95 @@
             },
             "rejectionCriteria": {
               "$ref": "#/definitions/CriteriaSpecWrapper"
+            },
+            "delegateSelectors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ServiceNowCreateStepInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/StepSpecType"
+        },
+        {
+          "type": "object",
+          "required": ["connectorRef", "ticketType", "useServiceNowTemplate"],
+          "properties": {
+            "connectorRef": {
+              "type": "string"
+            },
+            "ticketType": {
+              "type": "string"
+            },
+            "useServiceNowTemplate": {
+              "type": "boolean"
+            },
+            "templateName": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ServiceNowField"
+              }
+            },
+            "delegateSelectors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ServiceNowField": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "ServiceNowUpdateStepInfo": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/StepSpecType"
+        },
+        {
+          "type": "object",
+          "required": ["connectorRef", "ticketNumber", "ticketType", "useServiceNowTemplate"],
+          "properties": {
+            "connectorRef": {
+              "type": "string"
+            },
+            "ticketType": {
+              "type": "string"
+            },
+            "ticketNumber": {
+              "type": "string"
+            },
+            "useServiceNowTemplate": {
+              "type": "boolean"
+            },
+            "templateName": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ServiceNowField"
+              }
             },
             "delegateSelectors": {
               "type": "array",
@@ -5554,6 +6445,12 @@
             "$ref": "#/definitions/FailureStrategyConfig"
           }
         },
+        "delegateSelectors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "variables": {
           "type": "array",
           "items": {
@@ -5680,6 +6577,12 @@
           },
           "maxItems": 2147483647,
           "minItems": 1
+        },
+        "delegateSelectors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -5773,6 +6676,27 @@
         },
         "templateInputs": {
           "$ref": "#/definitions/JsonNode"
+        }
+      }
+    },
+    "Toleration": {
+      "type": "object",
+      "properties": {
+        "effect": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string"
+        },
+        "tolerationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "value": {
+          "type": "string"
         }
       }
     },
@@ -5871,6 +6795,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5903,6 +6830,9 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -5915,7 +6845,7 @@
         },
         {
           "type": "object",
-          "required": ["bucket", "connectorRef", "sourcePath"],
+          "required": ["bucket", "connectorRef", "region", "sourcePath"],
           "properties": {
             "connectorRef": {
               "type": "string"
@@ -5941,6 +6871,12 @@
             "runAsUser": {
               "type": "integer",
               "format": "int32"
+            },
+            "stripPrefix": {
+              "type": "string"
+            },
+            "baseImageConnectorRefs": {
+              "$ref": "#/definitions/ParameterFieldListString"
             }
           }
         }
@@ -6038,7 +6974,7 @@
           "properties": {
             "type": {
               "type": "string",
-              "enum": ["KubernetesDirect", "UseFromStage", "VM"]
+              "enum": ["KubernetesDirect", "UseFromStage", "VM", "KubernetesHosted"]
             },
             "spec": {
               "$ref": "#/definitions/VmInfraSpec"
@@ -6069,9 +7005,18 @@
     },
     "VmPoolYamlSpec": {
       "type": "object",
-      "required": ["identifier"],
       "properties": {
         "identifier": {
+          "type": "string"
+        },
+        "poolName": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string",
+          "enum": ["Linux", "MacOS", "Windows"]
+        },
+        "harnessImageConnectorRef": {
           "type": "string"
         }
       }
@@ -6168,21 +7113,6 @@
         }
       }
     },
-    "WebhookTriggerExecutionInputSet": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/InputSet"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "payload": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
     "WeightedVariation": {
       "type": "object",
       "required": ["variation", "weight"],
@@ -6214,165 +7144,31 @@
         }
       }
     },
-    "CIBuildAuthor": {
+    "PartialSchemaDTO": {
       "type": "object",
       "properties": {
-        "id": {
+        "schema": {
+          "$ref": "#/definitions/JsonNode"
+        },
+        "nodeType": {
           "type": "string"
         },
-        "name": {
+        "nodeName": {
           "type": "string"
         },
-        "email": {
+        "namespace": {
           "type": "string"
         },
-        "avatar": {
-          "type": "string"
-        }
-      }
-    },
-    "CIBuildBranchHook": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "commits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CIBuildCommit"
-          }
-        },
-        "triggerCommits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CIBuildCommit"
-          }
-        }
-      }
-    },
-    "CIBuildCommit": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "ownerName": {
-          "type": "string"
-        },
-        "ownerId": {
-          "type": "string"
-        },
-        "ownerEmail": {
-          "type": "string"
-        },
-        "timeStamp": {
-          "type": "integer",
-          "format": "int64"
-        }
-      }
-    },
-    "CIBuildPRHook": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "link": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "body": {
-          "type": "string"
-        },
-        "sourceRepo": {
-          "type": "string"
-        },
-        "sourceBranch": {
-          "type": "string"
-        },
-        "targetBranch": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "commits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CIBuildCommit"
-          }
-        },
-        "triggerCommits": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CIBuildCommit"
-          }
-        }
-      }
-    },
-    "CIPipelineModuleInfo": {
-      "type": "object",
-      "properties": {
-        "ciExecutionInfoDTO": {
-          "$ref": "#/definitions/CIWebhookInfoDTO"
-        },
-        "branch": {
-          "type": "string"
-        },
-        "repoName": {
-          "type": "string"
-        },
-        "triggerRepoName": {
-          "type": "string"
-        },
-        "tag": {
-          "type": "string"
-        },
-        "prNumber": {
-          "type": "string"
-        },
-        "buildType": {
-          "type": "string"
-        },
-        "isPrivateRepo": {
+        "skipStageSchema": {
           "type": "boolean"
+        },
+        "moduleType": {
+          "type": "string",
+          "enum": ["CD", "CI", "CV", "CF", "CE", "STO", "CORE", "PMS", "TEMPLATESERVICE", "GOVERNANCE"]
         }
       }
     },
-    "CIWebhookInfoDTO": {
-      "type": "object",
-      "properties": {
-        "event": {
-          "type": "string"
-        },
-        "author": {
-          "$ref": "#/definitions/CIBuildAuthor"
-        },
-        "branch": {
-          "$ref": "#/definitions/CIBuildBranchHook"
-        },
-        "pullRequest": {
-          "$ref": "#/definitions/CIBuildPRHook"
-        }
-      }
-    },
-    "ResponseCIPipelineModuleInfo": {
+    "ResponseListPartialSchemaDTO": {
       "type": "object",
       "properties": {
         "status": {
@@ -6380,7 +7176,10 @@
           "enum": ["SUCCESS", "FAILURE", "ERROR"]
         },
         "data": {
-          "$ref": "#/definitions/CIPipelineModuleInfo"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PartialSchemaDTO"
+          }
         },
         "metaData": {
           "type": "object"
@@ -6390,7 +7189,7 @@
         }
       }
     },
-    "ResponseYamlSchemaDetailsWrapper": {
+    "ResponseJsonNode": {
       "type": "object",
       "properties": {
         "status": {
@@ -6398,7 +7197,7 @@
           "enum": ["SUCCESS", "FAILURE", "ERROR"]
         },
         "data": {
-          "$ref": "#/definitions/YamlSchemaDetailsWrapper"
+          "$ref": "#/definitions/JsonNode"
         },
         "metaData": {
           "type": "object"
@@ -6438,7 +7237,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["CD", "CI", "CV", "CF", "CE", "CORE", "PMS", "TEMPLATESERVICE"]
+            "enum": ["CD", "CI", "CV", "CF", "CE", "STO", "CORE", "PMS", "TEMPLATESERVICE", "GOVERNANCE"]
           }
         },
         "featureFlags": {
@@ -6469,7 +7268,7 @@
         },
         "moduleType": {
           "type": "string",
-          "enum": ["CD", "CI", "CV", "CF", "CE", "CORE", "PMS", "TEMPLATESERVICE"]
+          "enum": ["CD", "CI", "CV", "CF", "CE", "STO", "CORE", "PMS", "TEMPLATESERVICE", "GOVERNANCE"]
         },
         "yamlSchemaMetadata": {
           "$ref": "#/definitions/YamlSchemaMetadata"
@@ -6485,7 +7284,7 @@
         }
       }
     },
-    "ResponseJsonNode": {
+    "ResponseYamlSchemaDetailsWrapper": {
       "type": "object",
       "properties": {
         "status": {
@@ -6493,7 +7292,7 @@
           "enum": ["SUCCESS", "FAILURE", "ERROR"]
         },
         "data": {
-          "$ref": "#/definitions/JsonNode"
+          "$ref": "#/definitions/YamlSchemaDetailsWrapper"
         },
         "metaData": {
           "type": "object"

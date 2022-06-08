@@ -291,6 +291,31 @@ const getDockerSchema = (connector: ConnectorInfoDTO): Array<ActivityDetailsRowI
   ]
 }
 
+const getJenkinsSchema = (connector: ConnectorInfoDTO): Array<ActivityDetailsRowInterface> => {
+  return [
+    {
+      label: 'connectors.jenkins.jenkinsUrl',
+      value: connector?.spec?.jenkinsUrl
+    },
+    {
+      label: 'credType',
+      value: getLabelForAuthType(connector?.spec?.auth?.type)
+    },
+    {
+      label: 'username',
+      value: connector?.spec?.auth?.spec?.username || connector?.spec?.auth?.spec?.usernameRef
+    },
+    {
+      label: 'connectors.jenkins.passwordAPIToken',
+      value: connector?.spec?.auth?.spec?.passwordRef
+    },
+    {
+      label: 'connectors.bearerToken',
+      value: connector?.spec?.auth?.spec?.tokenRef
+    }
+  ]
+}
+
 const getJiraSchema = (connector: ConnectorInfoDTO): Array<ActivityDetailsRowInterface> => {
   return [
     {
@@ -773,6 +798,8 @@ const getSchemaByType = (
       return getServiceNowSchema(connector)
     case Connectors.AZURE:
       return getAzureSchema(connector)
+    case Connectors.JENKINS:
+      return getJenkinsSchema(connector)
     default:
       return []
   }

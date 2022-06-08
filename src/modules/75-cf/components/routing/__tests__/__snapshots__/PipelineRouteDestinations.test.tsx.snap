@@ -22,7 +22,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
     }
   >
     <PipelineDetails>
-      <CIPipelineStudio />
+      <CFPipelineStudioWrapper />
     </PipelineDetails>
   </RouteWithLayout>
   <RouteWithLayout

@@ -5,10 +5,10 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { defaultTo, isEmpty } from 'lodash-es'
-import { FormInput, getMultiTypeFromValue, MultiTypeInputType } from '@wings-software/uicore'
+import { defaultTo, isEmpty, isNull, isUndefined } from 'lodash-es'
+import { FormInput, getMultiTypeFromValue, MultiTypeInputType, PageSpinner } from '@wings-software/uicore'
 import { useStrings, StringKeys } from 'framework/strings'
 import type {
   AccountPathProps,
@@ -16,14 +16,18 @@ import type {
   PipelinePathProps,
   PipelineType
 } from '@common/interfaces/RouteInterfaces'
-import { useQueryParams } from '@common/hooks'
+import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
 import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { FormMultiTypeTextAreaField } from '@common/components'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import type { ServiceNowTicketTypeDTO } from 'services/cd-ng'
-import { useGetServiceNowTicketTypes } from 'services/cd-ng'
-import { ServiceNowStaticFields } from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/types'
+import { useGetServiceNowIssueMetadata, useGetServiceNowTicketTypes } from 'services/cd-ng'
+import {
+  ServiceNowCreateFieldType,
+  ServiceNowFieldNGWithValue,
+  ServiceNowStaticFields
+} from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/types'
 
 import { getGenuineValue } from '@pipeline/components/PipelineSteps/Steps/ServiceNowApproval/helper'
 import type { ServiceNowTicketTypeSelectOption } from '@pipeline/components/PipelineSteps/Steps/ServiceNowApproval/types'
@@ -31,6 +35,10 @@ import type {
   ServiceNowUpdateDeploymentModeFormContentInterface,
   ServiceNowUpdateDeploymentModeProps
 } from '@pipeline/components/PipelineSteps/Steps/ServiceNowUpdate/types'
+import {
+  getInitialValueForSelectedField,
+  setServiceNowFieldAllowedValuesOptions
+} from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/helper'
 import { isApprovalStepFieldDisabled } from '../Common/ApprovalCommons'
 import css from './ServiceNowUpdate.module.scss'
 
@@ -44,7 +52,10 @@ function FormContent(formContentProps: ServiceNowUpdateDeploymentModeFormContent
     refetchServiceNowTicketTypes,
     fetchingServiceNowTicketTypes,
     serviceNowTicketTypesFetchError,
-    serviceNowTicketTypesResponse
+    serviceNowTicketTypesResponse,
+    refetchServiceNowMetadata,
+    fetchingServiceNowMetadata,
+    serviceNowMetadataResponse
   } = formContentProps
   const template = inputSetData?.template
   const path = inputSetData?.path
@@ -75,6 +86,18 @@ function FormContent(formContentProps: ServiceNowUpdateDeploymentModeFormContent
   const [serviceNowTicketTypesOptions, setServiceNowTicketTypesOptions] = React.useState<
     ServiceNowTicketTypeSelectOption[]
   >([])
+  const [customFields, setCustomFields] = useState<ServiceNowFieldNGWithValue[]>([])
+  const ticketTypeKeyFixedValue = getGenuineValue(
+    initialValues.spec?.ticketType || (inputSetData?.allValues?.spec?.ticketType as string)
+  )
+  // If there are fields apart from desc & short description, then fetch metadata
+  const areFieldsRuntime = template?.spec?.fields?.findIndex(
+    field =>
+      field?.name !== ServiceNowStaticFields.short_description && field?.name !== ServiceNowStaticFields.description
+  )
+  // If index is zero/ or greater than return true, if null (no field available) then return false
+  const fetchMetadataRequired = areFieldsRuntime === 0 ? true : areFieldsRuntime ? areFieldsRuntime > 0 : false
+
   useEffect(() => {
     if (connectorRefFixedValue) {
       refetchServiceNowTicketTypes({
@@ -97,6 +120,39 @@ function FormContent(formContentProps: ServiceNowUpdateDeploymentModeFormContent
     }))
     setServiceNowTicketTypesOptions(options)
   }, [serviceNowTicketTypesResponse?.data])
+  useDeepCompareEffect(() => {
+    if (connectorRefFixedValue && ticketTypeKeyFixedValue && fetchMetadataRequired) {
+      refetchServiceNowMetadata({
+        queryParams: {
+          ...commonParams,
+          connectorRef: connectorRefFixedValue.toString(),
+          ticketType: ticketTypeKeyFixedValue.toString()
+        }
+      })
+    }
+  }, [connectorRefFixedValue, ticketTypeKeyFixedValue])
+  useEffect(() => {
+    const selectedFields: ServiceNowFieldNGWithValue[] = []
+    if (ticketTypeKeyFixedValue) {
+      if (template?.spec?.fields && serviceNowMetadataResponse?.data) {
+        serviceNowMetadataResponse?.data.forEach(field => {
+          if (
+            field &&
+            field.key !== ServiceNowStaticFields.short_description &&
+            field.key !== ServiceNowStaticFields.description
+          ) {
+            const savedValueForThisField = getInitialValueForSelectedField(template?.spec?.fields || [], field)
+            if (savedValueForThisField) {
+              selectedFields.push({ ...field, value: savedValueForThisField })
+            }
+          }
+        })
+        setCustomFields(selectedFields)
+      } else if (ticketTypeKeyFixedValue !== undefined) {
+        setCustomFields([])
+      }
+    }
+  }, [serviceNowMetadataResponse?.data])
   return (
     <React.Fragment>
       {getMultiTypeFromValue(template?.timeout) === MultiTypeInputType.RUNTIME ? (
@@ -223,6 +279,82 @@ function FormContent(formContentProps: ServiceNowUpdateDeploymentModeFormContent
           className={css.deploymentViewMedium}
         />
       )}
+      {fetchingServiceNowMetadata ? (
+        <PageSpinner message={getString('pipeline.serviceNowCreateStep.fetchingFields')} className={css.fetching} />
+      ) : fetchMetadataRequired && customFields?.length === 0 ? (
+        // Metadata fetch failed, so display as key value pair
+
+        <div>
+          {template?.spec?.fields?.map((_unused: ServiceNowCreateFieldType, i: number) => {
+            if (
+              _unused.name !== ServiceNowStaticFields.description &&
+              _unused.name !== ServiceNowStaticFields.short_description
+            ) {
+              return (
+                <FormInput.MultiTextInput
+                  className={css.deploymentViewMedium}
+                  name={`${prefix}spec.fields[${i}].value`}
+                  label={_unused.name}
+                  placeholder={getString('common.valuePlaceholder')}
+                  disabled={isApprovalStepFieldDisabled(readonly)}
+                  multiTextInputProps={{
+                    allowableTypes: allowableTypes,
+                    expressions
+                  }}
+                />
+              )
+            }
+          })}
+        </div>
+      ) : (
+        template?.spec?.fields?.map((field, index) => {
+          if (
+            field.name !== ServiceNowStaticFields.short_description &&
+            field.name !== ServiceNowStaticFields.description
+          ) {
+            const fieldIndex = customFields?.findIndex(customField => customField.key === field.name)
+            if (fieldIndex >= 0) {
+              if (customFields[fieldIndex].allowedValues && customFields[fieldIndex].schema?.type === 'option') {
+                return (
+                  <FormInput.MultiTypeInput
+                    selectItems={setServiceNowFieldAllowedValuesOptions(customFields[fieldIndex].allowedValues)}
+                    label={customFields[fieldIndex].name}
+                    name={`${prefix}spec.fields[${index}].value`}
+                    placeholder={customFields[fieldIndex].name}
+                    disabled={isApprovalStepFieldDisabled(readonly)}
+                    className={css.deploymentViewMedium}
+                    multiTypeInputProps={{ allowableTypes: allowableTypes, expressions }}
+                    useValue
+                  />
+                )
+              } else if (
+                isNull(customFields[fieldIndex].schema) ||
+                isUndefined(customFields[fieldIndex].schema) ||
+                customFields[fieldIndex].schema.type === 'string' ||
+                customFields[fieldIndex].schema.type === 'glide_date_time' ||
+                customFields[fieldIndex].schema.type === 'integer' ||
+                (isEmpty(customFields[fieldIndex].allowedValues) &&
+                  customFields[fieldIndex].schema.type === 'option' &&
+                  customFields[fieldIndex].schema.array)
+              ) {
+                return (
+                  <FormInput.MultiTextInput
+                    label={customFields[fieldIndex].name}
+                    disabled={isApprovalStepFieldDisabled(readonly)}
+                    name={`${prefix}spec.fields[${index}].value`}
+                    placeholder={customFields[fieldIndex].name}
+                    className={css.deploymentViewMedium}
+                    multiTextInputProps={{
+                      allowableTypes: allowableTypes,
+                      expressions
+                    }}
+                  />
+                )
+              }
+            }
+          }
+        })
+      )}
     </React.Fragment>
   )
 }
@@ -252,6 +384,18 @@ export default function ServiceNowUpdateDeploymentMode(props: ServiceNowUpdateDe
       connectorRef: ''
     }
   })
+  const {
+    refetch: refetchServiceNowMetadata,
+    data: serviceNowMetadataResponse,
+    error: serviceNowMetadataFetchError,
+    loading: fetchingServiceNowMetadata
+  } = useGetServiceNowIssueMetadata({
+    lazy: true,
+    queryParams: {
+      ...commonParams,
+      connectorRef: ''
+    }
+  })
 
   return (
     <FormContent
@@ -260,6 +404,10 @@ export default function ServiceNowUpdateDeploymentMode(props: ServiceNowUpdateDe
       fetchingServiceNowTicketTypes={fetchingServiceNowTicketTypes}
       serviceNowTicketTypesResponse={serviceNowTicketTypesResponse}
       serviceNowTicketTypesFetchError={serviceNowTicketTypesFetchError}
+      refetchServiceNowMetadata={refetchServiceNowMetadata}
+      fetchingServiceNowMetadata={fetchingServiceNowMetadata}
+      serviceNowMetadataResponse={serviceNowMetadataResponse}
+      serviceNowMetadataFetchError={serviceNowMetadataFetchError}
     />
   )
 }

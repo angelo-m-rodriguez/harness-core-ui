@@ -336,7 +336,7 @@ exports[`Git Sync - Config tab rendering full sync entities 1`] = `
                 class="Layout--horizontal StyledProps--main"
               >
                 <span
-                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium"
+                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium StyledProps--color"
                   data-icon="connectors-icon"
                 >
                   <svg
@@ -473,7 +473,7 @@ exports[`Git Sync - Config tab rendering full sync entities 1`] = `
                 class="Layout--horizontal StyledProps--main"
               >
                 <span
-                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium"
+                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium StyledProps--color"
                   data-icon="connectors-icon"
                 >
                   <svg
@@ -610,7 +610,7 @@ exports[`Git Sync - Config tab rendering full sync entities 1`] = `
                 class="Layout--horizontal StyledProps--main"
               >
                 <span
-                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium"
+                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium StyledProps--color"
                   data-icon="connectors-icon"
                 >
                   <svg
@@ -737,7 +737,7 @@ exports[`Git Sync - Config tab rendering full sync entities 1`] = `
                 class="Layout--horizontal StyledProps--main"
               >
                 <span
-                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium"
+                  class="bp3-icon StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center StyledProps--margin-right-medium StyledProps--color"
                   data-icon="connectors-icon"
                 >
                   <svg

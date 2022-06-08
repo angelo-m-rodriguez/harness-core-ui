@@ -38,6 +38,7 @@ const CreateAwsSecretManagerConnector: React.FC<CreateConnectorModalProps> = pro
         mock={props.mock}
         gitDetails={props.gitDetails}
         disableGitSync={true}
+        helpPanelReferenceId="AWSSecretsManagerOverview"
       />
       <AwsSecretManagerConfig
         name={getString('details')}
@@ -54,6 +55,7 @@ const CreateAwsSecretManagerConnector: React.FC<CreateConnectorModalProps> = pro
         onConnectorCreated={onSuccess}
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
         disableGitSync={true}
       />
       <VerifyOutOfClusterDelegate
@@ -64,6 +66,7 @@ const CreateAwsSecretManagerConnector: React.FC<CreateConnectorModalProps> = pro
         isLastStep={true}
         type={Connectors.AWS_SECRET_MANAGER}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

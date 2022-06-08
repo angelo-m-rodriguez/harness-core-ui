@@ -126,5 +126,10 @@ export enum PermissionIdentifier {
   DELETE_GITOPS_GPGKEY = 'gitops_gpgkey_delete',
   VIEW_GITOPS_CERT = 'gitops_cert_view',
   EDIT_GITOPS_CERT = 'gitops_cert_edit',
-  DELETE_GITOPS_CERT = 'gitops_cert_delete'
+  DELETE_GITOPS_CERT = 'gitops_cert_delete',
+
+  // Chaos Permissions
+  VIEW_CHAOSHUB = 'chaos_chaoshub_view',
+  EDIT_CHAOSHUB = 'chaos_chaoshub_edit',
+  DELETE_CHAOSHUB = 'chaos_chaoshub_delete'
 }

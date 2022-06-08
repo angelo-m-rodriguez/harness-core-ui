@@ -86,7 +86,11 @@ describe('UsersPage Test', () => {
 
   beforeEach(async () => {
     const renderObj = render(
-      <TestWrapper path={routes.toUserGroups({ ...accountPathProps })} pathParams={{ accountId: 'testAcc' }}>
+      <TestWrapper
+        path={routes.toUserGroups({ ...accountPathProps })}
+        pathParams={{ accountId: 'testAcc' }}
+        defaultFeatureFlagValues={{ INHERITED_USER_GROUP: true }}
+      >
         <UserGroupsPage />
       </TestWrapper>
     )
@@ -165,7 +169,7 @@ describe('UsersPage Test', () => {
           routes.toUserGroupDetails({
             accountId: 'testAcc',
             userGroupIdentifier: userGroupsAggregate.data?.content?.[0].userGroupDTO.identifier
-          })
+          }) + `?parentScope=${'account'}`
         )
       ).toBeTruthy()
     })

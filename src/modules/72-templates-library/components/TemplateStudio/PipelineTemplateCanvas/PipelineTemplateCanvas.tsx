@@ -9,7 +9,6 @@ import React from 'react'
 import type { TemplateFormRef } from '@templates-library/components/TemplateStudio/TemplateStudio'
 import StageBuilder from '@pipeline/components/PipelineStudio/StageBuilder/StageBuilder'
 import { RightBar as PipelineStudioRightBar } from '@pipeline/components/PipelineStudio/RightBar/RightBar'
-import { TemplateDrawer } from '@templates-library/components/TemplateDrawer/TemplateDrawer'
 import { RightDrawer } from '@templates-library/components/TemplateStudio/RightDrawer/RightDrawer'
 import { useSaveTemplateListener } from '@pipeline/components/PipelineStudio/hooks/useSaveTemplateListener'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
@@ -39,7 +38,6 @@ const PipelineTemplateCanvas = (_props: unknown, _formikRef: TemplateFormRef): J
     <>
       <StageBuilder />
       <PipelineStudioRightBar />
-      <TemplateDrawer />
       <RightDrawer />
     </>
   )

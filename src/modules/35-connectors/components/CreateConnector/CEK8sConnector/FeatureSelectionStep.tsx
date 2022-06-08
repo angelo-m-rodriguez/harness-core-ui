@@ -12,6 +12,8 @@ import type { ConnectorInfoDTO } from 'services/cd-ng'
 
 import { CE_K8S_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import css from './CEK8sConnector.module.scss'
 
 enum Features {
@@ -75,6 +77,10 @@ const FeatureSelectionStep: React.FC<StepProps<StepSecretManagerProps> & Feature
   const handleSubmit = async () => {
     const featuresEnabled: FeaturesString[] = cardsSelected.map(card => card.value)
 
+    trackEvent(ConnectorActions.FeatureSelectionStepSubmit, {
+      category: Category.CONNECTOR
+    })
+
     // enable Secret creation step if OPTIMIZATION is selected
     await props.handleOptimizationSelection(featuresEnabled.indexOf('OPTIMIZATION') > -1)
 
@@ -103,6 +109,12 @@ const FeatureSelectionStep: React.FC<StepProps<StepSecretManagerProps> & Feature
     }
     setCardsSelected(selectedAr)
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.FeatureSelectionStepLoad, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <Layout.Vertical className={css.featureSelectionCont}>

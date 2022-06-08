@@ -11,7 +11,6 @@ import produce from 'immer'
 import { useCallback } from 'react'
 import type { StageElementConfig } from 'services/cd-ng'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import { useTemplateSelector } from '@pipeline/utils/useTemplateSelector'
 import { createTemplate, getStageType } from '@pipeline/utils/templateUtils'
 import type { TemplateSummaryResponse } from 'services/template-ng'
 
@@ -27,10 +26,10 @@ export function useStageTemplateActions(): TemplateActionsReturnType {
       templateTypes
     },
     updateStage,
-    getStageFromPipeline
+    getStageFromPipeline,
+    getTemplate
   } = usePipelineContext()
   const { stage } = getStageFromPipeline(selectedStageId)
-  const { getTemplate } = useTemplateSelector()
 
   const addOrUpdateTemplate = useCallback(
     async (selectedTemplate?: TemplateSummaryResponse) => {

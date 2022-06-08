@@ -9,7 +9,8 @@ import {
   executionLogs,
   executionLogsResponse,
   executionLogState,
-  executionLogStateWithSearch
+  executionLogStateWithSearch,
+  executionLogStateWithTAGS
 } from '@cv/hooks/useLogContentHook/__test__/ExecutionLog.mock'
 import { reducer, useActionCreator } from '../ExecutionLogState'
 import { defaultReducerState } from '../ExecutionLog.constants'
@@ -68,7 +69,7 @@ describe('Execution Log State', () => {
       payload: executionLogs
     })
 
-    expect(state).toEqual(executionLogState)
+    expect(state).toEqual(executionLogStateWithTAGS)
   })
 
   test('reducer - ResetExecutionLogs', () => {

@@ -18,6 +18,7 @@ declare const styles: {
   readonly discardBtn: string
   readonly folderName: string
   readonly gitDetails: string
+  readonly gitRemoteDetailsWrapper: string
   readonly modalCard: string
   readonly modalContent: string
   readonly pipelineIcon: string

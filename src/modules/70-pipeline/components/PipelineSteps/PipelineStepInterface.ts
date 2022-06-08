@@ -9,6 +9,7 @@ export enum StepType {
   HTTP = 'Http',
   SHELLSCRIPT = 'ShellScript',
   Barrier = 'Barrier',
+  Lock = 'Lock',
   K8sRollingRollback = 'K8sRollingRollback',
   K8sBlueGreenDeploy = 'K8sBlueGreenDeploy',
   K8sCanaryDeploy = 'K8sCanaryDeploy',

@@ -79,17 +79,13 @@ exports[`test case for anomalies detection overview page should be able to rende
     </div>
   </div>
   <div
-    class="Layout--horizontal Layout--layout-spacing-large StyledProps--main header"
+    class="Layout--horizontal StyledProps--main header"
   >
-    <div
-      class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
-      style="align-items: center;"
-    />
     <span
       style="flex-grow: 1;"
     />
     <div
-      class="bp3-popover-wrapper DropDown--main"
+      class="bp3-popover-wrapper DropDown--main DropDown--disabled"
     >
       <div
         class="bp3-popover-target"
@@ -99,8 +95,8 @@ exports[`test case for anomalies detection overview page should be able to rende
         >
           <div
             class="Layout--horizontal StyledProps--main DropDown--dropdownButton DropDown--withBorder DropDown--minWidth StyledProps--flex"
-            data-testid="dropdown-button"
-            style="min-width: 130px;"
+            data-testid="filter-select"
+            style="min-width: 220px;"
           >
             <div
               class="Layout--horizontal StyledProps--main DropDown--labelWrapper StyledProps--flex"
@@ -110,7 +106,7 @@ exports[`test case for anomalies detection overview page should be able to rende
                 data-testid="dropdown-value"
                 style="--text-line-clamp: 1;"
               >
-                ce.anomalyDetection.filters.groupByCloudProvidersPlaceholder
+                common.filters.noFilterSaved
               </p>
             </div>
             <div
@@ -137,8 +133,39 @@ exports[`test case for anomalies detection overview page should be able to rende
         </div>
       </div>
     </div>
-    <p
-      class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-right StyledProps--border-color-grey300"
+    <div
+      class="filterButtonContainer"
+    >
+      <button
+        class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main ngFilter StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--withLeftIcon"
+        id="ngfilterbtn"
+        type="button"
+      >
+        <span
+          class="bp3-icon StyledProps--main"
+          data-icon="ng-filter"
+        >
+          <svg
+            height="22"
+            viewBox="0 0 24 24"
+            width="22"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div
+      class="Layout--horizontal StyledProps--main"
+    />
+    <div
+      class="StyledProps--font StyledProps--main separator"
     />
     <span
       class="bp3-popover-wrapper"

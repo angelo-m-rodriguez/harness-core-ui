@@ -30,7 +30,7 @@ import { FontVariation } from '@harness/design-system'
 import cx from 'classnames'
 import { produce } from 'immer'
 import type { FormikProps } from 'formik'
-import Volumes, { VolumesInterface, VolumesTypes } from '@pipeline/components/Volumes/Volumes'
+import Volumes, { VolumesTypes } from '@pipeline/components/Volumes/Volumes'
 import MultiTypeCustomMap from '@common/components/MultiTypeCustomMap/MultiTypeCustomMap'
 import MultiTypeMap from '@common/components/MultiTypeMap/MultiTypeMap'
 import {
@@ -49,6 +49,7 @@ import {
   getFlattenedStages
 } from '@pipeline/components/PipelineStudio/StageBuilder/StageBuilderUtil'
 import { MultiTypeTextField } from '@common/components/MultiTypeText/MultiTypeText'
+import { MultiTypeSelectField } from '@common/components/MultiTypeSelect/MultiTypeSelect'
 import { FormMultiTypeCheckboxField, Separator } from '@common/components'
 import type {
   MultiTypeMapType,
@@ -62,11 +63,22 @@ import { MultiTypeList } from '@common/components/MultiTypeList/MultiTypeList'
 import { useHostedBuilds } from '@common/hooks/useHostedBuild'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import type { BuildStageElementConfig } from '@pipeline/utils/pipelineTypes'
-import type { K8sDirectInfraYaml, UseFromStageInfraYaml, VmInfraYaml, VmPoolYaml, Infrastructure } from 'services/ci'
+import type {
+  K8sDirectInfraYaml,
+  UseFromStageInfraYaml,
+  VmInfraYaml,
+  VmPoolYaml,
+  Infrastructure,
+  CIVolume,
+  EmptyDirYaml,
+  PersistentVolumeClaimYaml,
+  HostPathYaml
+} from 'services/ci'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { k8sLabelRegex, k8sAnnotationRegex } from '@common/utils/StringUtils'
 import ErrorsStripBinded from '@pipeline/components/ErrorsStrip/ErrorsStripBinded'
 import { Connectors } from '@connectors/constants'
+import { OsTypes } from '@pipeline/utils/constants'
 import { BuildTabs } from '../CIPipelineStagesUtils'
 import {
   KUBERNETES_HOSTED_INFRA_ID,
@@ -79,10 +91,11 @@ import { CIBuildInfrastructureType } from '../../../constants/Constants'
 import css from './BuildInfraSpecifications.module.scss'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
+type VolumeInterface = CIVolume | EmptyDirYaml | PersistentVolumeClaimYaml | HostPathYaml
 const logger = loggerFor(ModuleName.CD)
 const k8sClusterKeyRef = 'connectors.title.k8sCluster'
 const namespaceKeyRef = 'pipelineSteps.build.infraSpecifications.namespace'
-const poolIdKeyRef = 'pipeline.buildInfra.poolId'
+const poolNameKeyRef = 'pipeline.buildInfra.poolName'
 
 interface KubernetesBuildInfraFormValues {
   connectorRef?: string
@@ -94,7 +107,7 @@ interface KubernetesBuildInfraFormValues {
   annotations?: MultiTypeMapUIType
   labels?: MultiTypeMapUIType
   priorityClassName?: string
-  volumes?: VolumesInterface
+  volumes?: VolumeInterface[]
   automountServiceAccountToken?: boolean
   privileged?: boolean
   allowPrivilegeEscalation?: boolean
@@ -116,8 +129,10 @@ interface ContainerSecurityContext {
   runAsUser?: number
 }
 interface AWSVMInfraFormValues {
-  poolId?: string
+  poolId?: string // deprecated
+  poolName?: string
   harnessImageConnectorRef?: string
+  os?: string
 }
 
 type BuildInfraFormValues = (KubernetesBuildInfraFormValues | AWSVMInfraFormValues) & {
@@ -239,6 +254,57 @@ const getFieldSchema = (
   }
 }
 
+const renderUseFromStageVM = ({
+  propagatedStage,
+  getString
+}: {
+  propagatedStage?: { stage?: BuildStageElementConfig }
+  getString: UseStringsReturn['getString']
+}): JSX.Element => {
+  const poolName = ((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.poolName
+  // poolId is deprecated
+  const poolId = ((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.identifier
+
+  return (
+    <>
+      {(poolName || poolId) && (
+        <>
+          <Text font={{ variation: FontVariation.FORM_LABEL }} margin={{ bottom: 'xsmall' }}>
+            {getString(poolNameKeyRef)}
+          </Text>
+          <Text color="black" margin={{ bottom: 'medium' }}>
+            {poolName || poolId}
+          </Text>
+        </>
+      )}
+      {((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.os && (
+        <>
+          <Text font={{ variation: FontVariation.FORM_LABEL }} margin={{ bottom: 'xsmall' }}>
+            {getString('pipeline.infraSpecifications.os')}
+          </Text>
+          <Text color="black" margin={{ bottom: 'medium' }}>
+            {((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.os}
+          </Text>
+        </>
+      )}
+      {((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec
+        ?.harnessImageConnectorRef && (
+        <>
+          <Text font={{ variation: FontVariation.FORM_LABEL }} margin={{ bottom: 'xsmall' }}>
+            {getString(harnessImageConnectorRefKey)}
+          </Text>
+          <Text color="black" margin={{ bottom: 'medium' }}>
+            {
+              ((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec
+                ?.harnessImageConnectorRef
+            }
+          </Text>
+        </>
+      )}
+    </>
+  )
+}
+
 export default function BuildInfraSpecifications({ children }: React.PropsWithChildren<unknown>): JSX.Element {
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
@@ -283,7 +349,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
     ...(CI_VM_INFRASTRUCTURE
       ? [
           {
-            label: getString('ci.buildInfra.awsVMs'),
+            label: getString('ci.buildInfra.vMs'),
             icon: 'service-aws',
             value: CIBuildInfrastructureType.VM
           } as Item
@@ -422,7 +488,8 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
     (): BuildInfraFormValues => ({
       buildInfraType: CIBuildInfrastructureType.VM,
       harnessImageConnectorRef: ((stage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec
-        ?.harnessImageConnectorRef
+        ?.harnessImageConnectorRef,
+      os: ((stage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.os || OsTypes.Linux
     }),
     [stage]
   )
@@ -459,15 +526,17 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
           }
         } else if (infraType === CIBuildInfrastructureType.VM) {
           const identifier =
-            ((stage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.identifier || ''
+            ((stage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.poolName ||
+            ((stage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.identifier ||
+            ''
           if (!isEmpty(identifier)) {
             return {
-              poolId: identifier,
+              poolName: identifier,
               ...getVmInfraPayload
             }
           } else {
             return {
-              poolId: '',
+              poolName: '',
               ...getVmInfraPayload
             }
           }
@@ -482,8 +551,9 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
           annotations: '',
           labels: '',
           buildInfraType: undefined,
-          poolId: undefined,
+          poolName: undefined,
           harnessImageConnectorRef: undefined,
+          os: OsTypes.Linux,
           ...additionalDefaultFields
         }
       }
@@ -495,8 +565,9 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
       annotations: '',
       labels: '',
       buildInfraType: undefined,
-      poolId: undefined,
+      poolName: undefined,
       harnessImageConnectorRef: undefined,
+      os: OsTypes.Linux,
       ...additionalDefaultFields
     }
   }, [stage])
@@ -525,7 +596,9 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
             : values.tolerations
 
           const filteredVolumes = Array.isArray(values.volumes)
-            ? values.volumes.filter((volume: VolumesInterface) => volume.mountPath && volume.type)
+            ? values.volumes.filter(
+                (volume: EmptyDirYaml | PersistentVolumeClaimYaml | HostPathYaml) => volume.mountPath && volume.type
+              )
             : values.volumes
 
           const harnessImageConnectorRef =
@@ -618,8 +691,9 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
                   spec: {
                     type: 'Pool',
                     spec: {
-                      identifier: values.poolId,
-                      harnessImageConnectorRef
+                      poolName: values.poolName,
+                      harnessImageConnectorRef,
+                      os: values.os
                     }
                   }
                 }
@@ -1038,19 +1112,46 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
           <MultiTypeTextField
             label={
               <Text
-                tooltipProps={{ dataTooltipId: 'poolId' }}
+                tooltipProps={{ dataTooltipId: 'poolName' }}
                 font={{ variation: FontVariation.FORM_LABEL }}
                 margin={{ bottom: 'xsmall' }}
               >
-                {getString('pipeline.buildInfra.poolId')}
+                {getString('pipeline.buildInfra.poolName')}
               </Text>
             }
-            name={'poolId'}
-            style={{ width: 300, paddingBottom: 'var(--spacing-small)' }}
+            name={'poolName'}
+            style={{ width: 300 }}
             multiTextInputProps={{
               multiTextInputProps: { expressions, allowableTypes },
               disabled: isReadonly
             }}
+          />
+        </div>
+        <div className={cx(css.fieldsGroup, css.withoutSpacing)}>
+          <MultiTypeSelectField
+            label={
+              <Text
+                tooltipProps={{ dataTooltipId: 'os' }}
+                font={{ variation: FontVariation.FORM_LABEL }}
+                margin={{ bottom: 'xsmall' }}
+              >
+                {getString('pipeline.infraSpecifications.os')}
+              </Text>
+            }
+            name={'os'}
+            style={{ width: 300, paddingBottom: 'var(--spacing-small)' }}
+            multiTypeInputProps={{
+              selectItems: [
+                { label: getString('delegate.cardData.linux.name'), value: OsTypes.Linux },
+                { label: getString('pipeline.infraSpecifications.osTypes.macos'), value: OsTypes.MacOS },
+                { label: getString('pipeline.infraSpecifications.osTypes.windows'), value: OsTypes.Windows }
+              ],
+              multiTypeInputProps: {
+                allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME],
+                disabled: isReadonly
+              }
+            }}
+            useValue
           />
         </div>
         {renderHarnessImageConnectorRefField()}
@@ -1292,7 +1393,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
                 const pattern = /^\d+(\.\d+)?$|^\d+(\.\d+)?(G|M|Gi|Mi)$|^$/
                 // invalid if size doesn't follow pattern or is an integer without units
                 const isSizeInvalid = value?.some(
-                  (volume: VolumesInterface) =>
+                  (volume: EmptyDirYaml) =>
                     volume?.spec?.size &&
                     (!pattern.test(volume.spec.size) || !isNaN(volume.spec.size as unknown as number))
                 )
@@ -1303,7 +1404,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
             .test({
               test: value => {
                 const isPathMissing = value?.some(
-                  (volume: VolumesInterface) => volume.type === VolumesTypes.HostPath && !volume.spec?.path
+                  (volume: HostPathYaml) => volume.type === VolumesTypes.HostPath && !volume.spec?.path
                 )
                 return !isPathMissing
               },
@@ -1311,7 +1412,9 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
             })
             .test({
               test: value => {
-                const isTypeMissing = value?.some((volume: VolumesInterface) => volume.mountPath && !volume.type)
+                const isTypeMissing = value?.some(
+                  (volume: EmptyDirYaml | PersistentVolumeClaimYaml | HostPathYaml) => volume.mountPath && !volume.type
+                )
                 return !isTypeMissing
               },
               message: 'Type is required'
@@ -1343,14 +1446,26 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
                 return true
               }
             ),
-          poolId: yup
+          poolName: yup
             .string()
             .nullable()
             .test(
-              'pool id required only for New configuration',
-              getString('fieldRequired', { field: getString(poolIdKeyRef) }) || '',
-              function (poolId) {
-                if (isEmpty(poolId) && currentMode === Modes.NewConfiguration) {
+              'pool name required only for New configuration',
+              getString('fieldRequired', { field: getString(poolNameKeyRef) }) || '',
+              function (poolName) {
+                if (isEmpty(poolName) && currentMode === Modes.NewConfiguration) {
+                  return false
+                }
+                return true
+              }
+            ),
+          os: yup
+            .string()
+            .test(
+              'OS required only for New configuration',
+              getString('fieldRequired', { field: 'OS' }) || '',
+              function (os) {
+                if (isEmpty(os) && currentMode === Modes.NewConfiguration) {
                   return false
                 }
                 return true
@@ -1743,49 +1858,11 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
                                       />
                                     </Accordion>
                                   </>
-                                ) : buildInfraType === CIBuildInfrastructureType.VM &&
-                                  ((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)
-                                    ?.spec?.identifier ? (
-                                  <>
-                                    {((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)
-                                      ?.spec?.identifier && (
-                                      <>
-                                        <Text
-                                          font={{ variation: FontVariation.FORM_LABEL }}
-                                          margin={{ bottom: 'xsmall' }}
-                                        >
-                                          {getString(poolIdKeyRef)}
-                                        </Text>
-                                        <Text color="black" margin={{ bottom: 'medium' }}>
-                                          {
-                                            (
-                                              (propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)
-                                                ?.spec as VmPoolYaml
-                                            )?.spec?.identifier
-                                          }
-                                        </Text>
-                                      </>
-                                    )}
-                                    {((propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)
-                                      ?.spec?.harnessImageConnectorRef && (
-                                      <>
-                                        <Text
-                                          font={{ variation: FontVariation.FORM_LABEL }}
-                                          margin={{ bottom: 'xsmall' }}
-                                        >
-                                          {getString(harnessImageConnectorRefKey)}
-                                        </Text>
-                                        <Text color="black" margin={{ bottom: 'medium' }}>
-                                          {
-                                            (
-                                              (propagatedStage?.stage?.spec?.infrastructure as VmInfraYaml)
-                                                ?.spec as VmPoolYaml
-                                            )?.spec?.harnessImageConnectorRef
-                                          }
-                                        </Text>
-                                      </>
-                                    )}
-                                  </>
+                                ) : buildInfraType === CIBuildInfrastructureType.VM ? (
+                                  renderUseFromStageVM({
+                                    propagatedStage,
+                                    getString
+                                  })
                                 ) : null}
                               </div>
                               {/* New configuration section */}
@@ -1815,7 +1892,8 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
                                                 type: CIBuildInfrastructureType.VM,
                                                 spec: {
                                                   identifier: '',
-                                                  harnessImageConnectorRef: ''
+                                                  harnessImageConnectorRef: '',
+                                                  os: ''
                                                 }
                                               }
                                             : { type: undefined, spec: {} }

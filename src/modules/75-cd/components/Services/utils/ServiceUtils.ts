@@ -6,7 +6,7 @@
  */
 
 import { set } from 'lodash-es'
-import type { PipelineInfoConfig } from 'services/cd-ng'
+import type { PipelineInfoConfig, ServiceDefinition } from 'services/cd-ng'
 
 export enum ServiceTabs {
   SUMMARY = 'summaryTab',
@@ -19,11 +19,22 @@ export const DefaultNewStageName = 'Stage Name'
 export const DefaultNewStageId = 'stage_id'
 export const DefaultNewServiceId = '-1'
 
+export const newServiceState = {
+  service: {
+    name: '',
+    identifier: '',
+    description: '',
+    tags: {},
+    serviceDefinition: {
+      type: '' as ServiceDefinition['type'],
+      spec: {}
+    }
+  }
+}
+
 const DefaultService = {
   serviceDefinition: {
-    spec: {
-      variables: []
-    }
+    spec: {}
   }
 }
 

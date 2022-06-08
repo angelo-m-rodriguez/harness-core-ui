@@ -376,7 +376,7 @@ exports[`SegmentDetailsPage SegmentDetailsPage should render data correctly 1`] 
               style="flex-grow: 1;"
             />
             <button
-              class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color Button--without-shadow"
+              class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--variation Button--variation-link"
               data-testid="add-feature-flags-button"
               type="button"
             >

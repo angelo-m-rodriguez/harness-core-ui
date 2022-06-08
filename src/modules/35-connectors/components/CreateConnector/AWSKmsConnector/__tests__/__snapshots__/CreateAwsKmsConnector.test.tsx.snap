@@ -946,7 +946,6 @@ exports[`Create Secret Manager Wizard should be able to render first and second 
        
       <div
         class="StyledProps--font StyledProps--main StyledProps--padding-top-medium"
-        style="width: 64%;"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-h3 StyledProps--padding-bottom-xlarge"

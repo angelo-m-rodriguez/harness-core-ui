@@ -205,3 +205,15 @@ export enum RulesMode {
   ACTIVE = 'active',
   DRY = 'dryrun'
 }
+
+export const folderViewType = {
+  SAMPLE: 'SAMPLE',
+  CUSTOMER: 'CUSTOMER',
+  DEFAULT_AZURE: 'DEFAULT_AZURE',
+  DEFAULT: 'DEFAULT'
+}
+
+export const moveFolderType = {
+  NEW: 'NEW',
+  EXISTING: 'EXISTING'
+}

@@ -22,7 +22,7 @@ import type { Item } from '@wings-software/uicore/dist/components/ThumbnailSelec
 import { Color } from '@harness/design-system'
 import cx from 'classnames'
 import * as Yup from 'yup'
-import { omit, set } from 'lodash-es'
+import { omit } from 'lodash-es'
 import type { FormikProps } from 'formik'
 import { useStrings } from 'framework/strings'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
@@ -165,12 +165,6 @@ export const EditStageView: React.FC<EditStageViewProps> = ({
         /* istanbul ignore else */
         if (values.tags) {
           data.stage.tags = values.tags
-        }
-        if (!data.stage.spec?.serviceConfig) {
-          set(data, 'stage.spec.serviceConfig', {})
-        }
-        if (!data.stage.spec?.infrastructure) {
-          set(data, 'stage.spec.infrastructure', {})
         }
         onSubmit?.(data, values.identifier)
       }

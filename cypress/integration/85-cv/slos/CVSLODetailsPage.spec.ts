@@ -26,7 +26,6 @@ import {
   getSLORiskCountWithCVNGProd,
   getChangeEventDetail,
   changeEventDetailsResponse,
-  getSLODashboardWidgets,
   getSLOExecutionLogs,
   getSLOExecutionLogsResponse,
   getSLO_APICallLogs,
@@ -43,7 +42,8 @@ import {
   getSLODetailResponseSLOOutRange,
   getSLODetailResponseSLIRecalculation,
   getExecutionDetailv2,
-  mockedExecutionSummary
+  mockedExecutionSummary,
+  getMonitoredServiceChangeDetails
 } from '../../../support/85-cv/slos/constants'
 
 describe.skip('CVSLODetailsPage', () => {
@@ -183,7 +183,7 @@ describe.skip('CVSLODetailsPage', () => {
 
     cy.intercept('GET', getChangeEventDetail, changeEventDetailsResponse)
     cy.intercept('GET', getMonitoredServiceOverAllHealthScore, getMonitoredServiceOverAllHealthScoreResponse)
-    cy.intercept('GET', getSLODashboardWidgets, getSLODashboardWidgetsResponse)
+    cy.intercept('GET', getMonitoredServiceChangeDetails, getSLODashboardWidgetsResponse)
     cy.intercept('GET', getSLODetailsForSLO_1, getSLODetailsForSLO_1Response)
     cy.intercept('GET', getSLODetailsForSLO_2, errorResponse)
     cy.intercept('GET', getSLODetailsForSLO_3, getSLODetailsForSLO_1Response)
@@ -226,7 +226,7 @@ describe.skip('CVSLODetailsPage', () => {
 
     cy.intercept('GET', getChangeEventDetail, changeEventDetailsResponse)
     cy.intercept('GET', getMonitoredServiceOverAllHealthScore, getMonitoredServiceOverAllHealthScoreResponse)
-    cy.intercept('GET', getSLODashboardWidgets, getSLODashboardWidgetsEmptyResponse)
+    cy.intercept('GET', getMonitoredServiceChangeDetails, getSLODashboardWidgetsEmptyResponse)
 
     cy.get('.TableV2--body').children().first().click()
 
@@ -246,7 +246,7 @@ describe.skip('CVSLODetailsPage', () => {
 
     cy.intercept('GET', getChangeEventDetail, changeEventDetailsResponse)
     cy.intercept('GET', getMonitoredServiceOverAllHealthScore, getMonitoredServiceOverAllHealthScoreResponse)
-    cy.intercept('GET', getSLODashboardWidgets, getSLODashboardWidgetsResponse)
+    cy.intercept('GET', getMonitoredServiceChangeDetails, getSLODashboardWidgetsResponse)
     cy.intercept('GET', getSLODetailsForSLO_1, getSLODetailResponseSLOOutRange)
     cy.intercept('GET', getSLODetailsForSLO_2, getSLODetailResponseSLOOutRange)
     cy.intercept('GET', getSLODetailsForSLO_3, getSLODetailResponseSLOOutRange)
@@ -272,7 +272,7 @@ describe.skip('CVSLODetailsPage', () => {
 
     cy.intercept('GET', getChangeEventDetail, changeEventDetailsResponse)
     cy.intercept('GET', getMonitoredServiceOverAllHealthScore, getMonitoredServiceOverAllHealthScoreResponse)
-    cy.intercept('GET', getSLODashboardWidgets, getSLODashboardWidgetsResponse)
+    cy.intercept('GET', getMonitoredServiceChangeDetails, getSLODashboardWidgetsResponse)
     cy.intercept('GET', getSLODetailsForSLO_1, getSLODetailResponseSLIRecalculation)
     cy.intercept('GET', getSLODetailsForSLO_2, getSLODetailResponseSLIRecalculation)
     cy.intercept('GET', getSLODetailsForSLO_3, getSLODetailResponseSLIRecalculation)

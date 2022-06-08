@@ -5,7 +5,8 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
+import { defaultTo } from 'lodash-es'
 import { IPopoverProps, PopoverInteractionKind } from '@blueprintjs/core'
 import { Icon, Layout, Popover, Text } from '@wings-software/uicore'
 import type { IconProps } from '@harness/icons'
@@ -13,6 +14,7 @@ import { Color } from '@harness/design-system'
 import { getRepoDetailsByIndentifier } from '@common/utils/gitSyncUtils'
 import type { EntityGitDetails } from 'services/pipeline-ng'
 import { useStrings } from 'framework/strings'
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { useGitSyncStore } from 'framework/GitRepoStore/GitSyncStoreContext'
 import { getEntityUrl, getRepoEntityObject } from '@gitsync/common/gitSyncUtils'
 import type { GitSyncEntityDTO } from 'services/cd-ng'
@@ -31,12 +33,19 @@ export function RenderGitPopover(props: GitPopoverProps): React.ReactElement | n
   const { getString } = useStrings()
   const { data, iconProps, popoverProps, customUI } = props
   const { gitSyncRepos, loadingRepos } = useGitSyncStore()
-  const repo = getRepoDetailsByIndentifier(data?.repoIdentifier, gitSyncRepos)
+  const { isGitSyncEnabled } = useAppStore()
+
+  const repoLabel = useMemo(() => {
+    return isGitSyncEnabled ? data?.repoIdentifier : data?.repoName
+  }, [data?.repoIdentifier, data?.repoName, isGitSyncEnabled])
+
+  const repo = getRepoDetailsByIndentifier(repoLabel, gitSyncRepos)
   const repoEntity: GitSyncEntityDTO = getRepoEntityObject(repo, data)
   const popoverContent: GitPopoverInfoProps[] = [
     {
       heading: getString('repository'),
-      content: (!loadingRepos && getRepoDetailsByIndentifier(data?.repoIdentifier, gitSyncRepos)?.name) || '',
+      content:
+        (!loadingRepos && defaultTo(getRepoDetailsByIndentifier(repoLabel, gitSyncRepos)?.name, repoLabel)) || '',
       iconName: 'repository'
     },
 
@@ -82,7 +91,7 @@ export function RenderGitPopover(props: GitPopoverProps): React.ReactElement | n
     )
   }, [gitSyncRepos, data, loadingRepos, iconProps, popoverProps])
 
-  if (!data.repoIdentifier) {
+  if (!repoLabel) {
     return null
   }
 

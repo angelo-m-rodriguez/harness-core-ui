@@ -32,6 +32,7 @@ import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/Rout
 import { MinimalLayout } from '@common/layouts'
 
 import './components/PipelineSteps'
+import './components/MonitoredServiceTemplate'
 import './components/ExecutionVerification'
 import CVMonitoredService from '@cv/pages/monitored-service/CVMonitoredService/CVMonitoredService'
 import MonitoredServicePage from '@cv/pages/monitored-service/MonitoredServicePage'

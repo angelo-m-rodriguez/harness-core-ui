@@ -7,9 +7,12 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
+  readonly arrowDown: string
   readonly card: string
+  readonly cardsWrapper: string
   readonly connectors: string
   readonly delegates: string
+  readonly gitOpsEntities: string
   readonly secrets: string
   readonly smtp: string
   readonly templates: string

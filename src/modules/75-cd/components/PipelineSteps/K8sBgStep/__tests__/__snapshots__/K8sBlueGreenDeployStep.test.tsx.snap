@@ -1285,7 +1285,7 @@ exports[`Test K8sBlueGreenDeployStep should render null for StepviewType.templat
 exports[`Test K8sBlueGreenDeployStep should render variable view 1`] = `
 <div>
   <div
-    class="variablesListTable"
+    class="variablesListTable variablePaddingL3"
   >
     <div
       class="variableListRow variable-list-row"

@@ -13,17 +13,20 @@ import type { PermissionRequest } from '@rbac/hooks/usePermission'
 import type { FeaturesProps } from 'framework/featureStore/featureStoreUtil'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import type { ResourceScope } from 'services/rbac'
 
 interface ManagePrincipalButtonProps extends ButtonProps {
   resourceIdentifier?: string
   resourceType: ResourceType.USERGROUP | ResourceType.USER
   featuresProps?: FeaturesProps
+  resourceScope?: ResourceScope
 }
 
 const ManagePrincipalButton: React.FC<ManagePrincipalButtonProps> = ({
   resourceIdentifier,
   resourceType,
   featuresProps,
+  resourceScope,
   ...restProps
 }) => {
   const permission: PermissionRequest = {
@@ -31,6 +34,7 @@ const ManagePrincipalButton: React.FC<ManagePrincipalButtonProps> = ({
       resourceType,
       resourceIdentifier
     },
+    resourceScope,
     permission:
       resourceType === ResourceType.USER ? PermissionIdentifier.MANAGE_USER : PermissionIdentifier.MANAGE_USERGROUP
   }

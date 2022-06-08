@@ -38,6 +38,9 @@ import {
 } from 'services/cd-ng'
 import { CE_K8S_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import type { DetailsForm } from '../commonSteps/ConnectorDetailsStep'
 import css from '../commonSteps/ConnectorDetailsStep.module.scss'
 import overviewCss from './CEK8sConnector.module.scss'
@@ -175,6 +178,13 @@ const OverviewStep: React.FC<StepProps<ConnectorConfigDTO> & OverviewStepProps> 
     }
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.OverviewLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CEK8
+  })
+
   return (
     <Layout.Vertical spacing="xxlarge" className={cx(css.firstep, overviewCss.overviewStep)}>
       <div className={css.heading}>{getString(getHeadingIdByType(props.type))}</div>
@@ -184,6 +194,10 @@ const OverviewStep: React.FC<StepProps<ConnectorConfigDTO> & OverviewStepProps> 
         <Formik<OverviewDetailsForm>
           formName="overViewStepForm"
           onSubmit={formData => {
+            trackEvent(ConnectorActions.OverviewSubmit, {
+              category: Category.CONNECTOR,
+              connector_type: Connectors.CEK8
+            })
             handleSubmit(formData)
           }}
           validationSchema={Yup.object().shape({

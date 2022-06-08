@@ -40,6 +40,9 @@ import { setSecretField } from '@secrets/utils/SecretField'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { FeatureFlag } from '@common/featureFlags'
 import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import css from '../commonSteps/ConnectorCommonStyles.module.scss'
 
 interface AWSCCAuthStepProps extends StepProps<ConnectorConfigDTO> {
@@ -115,6 +118,13 @@ export default function AWSCCAuthStep(props: AWSCCAuthStepProps) {
     }
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.AWSCC
+  })
+
   if (loadingSecrets) {
     return <PageSpinner />
   }
@@ -132,6 +142,10 @@ export default function AWSCCAuthStep(props: AWSCCAuthStepProps) {
         })}
         formName="awsCcAuthForm"
         onSubmit={formData => {
+          trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.AWSCC
+          })
           handleSubmit({
             ...formData,
             projectIdentifier,

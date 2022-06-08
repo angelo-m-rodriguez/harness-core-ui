@@ -49,8 +49,8 @@ creationModal:
   variationSettingsHeading: Variation settings
   flagType: Flag Type
   defaultRules: Default rules for the flag
-  flagOn: If the flag is ON, serve
-  flagOff: If the flag is OFF, serve
+  flagOn: If the flag is Enabled, serve
+  flagOff: If the flag is Disabled, serve
   saveAndClose: '{{$.common.saveAndClose}}'
   nameIsRequired: Variation name is required
   valueIsRequired: Variation value is required
@@ -146,8 +146,8 @@ featureFlags:
   turnOffMessage: 'Please confirm that you want to turn off <strong>{{name}}</strong> on <strong>{{env}}</strong> environment.'
   defaultWillBeServed: '<strong>{{defaultVariation}}</strong> will be served.'
   customRuleMessage: There are custom rules configured for this flag, please review the rules on detail page.
-  defaultServedOn: '{{defaultVariation}} when flag is ON'
-  defaultServedOff: '{{defaultVariation}} when flag is OFF'
+  defaultServedOn: '{{defaultVariation}} when flag is Enabled'
+  defaultServedOff: '{{defaultVariation}} when flag is Disabled'
   createdDate: 'Created: {{date}}'
   modifiedDate: 'Modified: {{date}}'
   prerequisitesDesc: 'What’s required before enabling this flag'
@@ -171,10 +171,10 @@ featureFlags:
   deleteFlagMessage: Are you sure you want to delete flag <strong>{{name}}</strong>? This action cannot be undone.
   archiveFlag: Archive Flag
   archiveFlagMessage: Are you sure you want to archive flag <strong>{{name}}</strong>? This action cannot be undone.
-  flagOff: Flag is OFF
-  flagOn: Flag is ON
-  flagWillTurnOn: Turn flag on for this environment upon save
-  flagWillTurnOff: Turn flag off for this environment upon save
+  flagOff: Flag is Disabled
+  flagOn: Flag is Enabled
+  flagWillTurnOn: Enable flag for this environment upon save
+  flagWillTurnOff: Disable flag for this environment upon save
   targeting: Targeting
   activity: '{{ $.activity }}'
   results: Results
@@ -243,6 +243,13 @@ featureFlags:
     totalEvaluations: Total Evaluations
 featureFlagDetail:
   variationCount: '{{ count }} variations'
+flagFilters:
+  active: Active Flags
+  allFlags: All Flags
+  enabled: Enabled Flags
+  last24: Changed Last 24 Hours
+  permanent: Permanent
+  potentiallyStale: Potentially Stale
 targets:
   ID: '{{ $.common.ID }}'
   name: name
@@ -293,12 +300,20 @@ targetDetail:
   removeFromIncludeList: Are you sure you want to remove target <strong>{{targetName}}</strong> from include target group <strong>{{ segmentName}}</strong>? This action cannot be undone.
   removeFromExcludeListTitle: Remove from exclusion list
   removeFromExcludeList: Are you sure you want to remove target <strong>{{targetName}}</strong> from exclusion target group <strong>{{ segmentName}}</strong>? This action cannot be undone.
-  noFlagConfigured: No feature flags configured for this target
+  noFlagConfigured: No Feature Flags configured for this Target
   searchPlaceholder: Search Feature Flags...
   deleteTargetSuccess: Target <strong>{{name}}</strong> deleted.
   flagDisabled: This flag is disabled. The default off value will be served.
   addTargetToTargetGroup: Add Target to Target Group {{name}}
   noTargetGroupsAvailable: No Target Groups available
+  addFlagToTarget: Add Flag to Target
+targetManagementFlagConfiguration:
+  allFlagsRemoved: All Feature Flags removed
+  addFlag: Add Flag
+  addFlags: 'Add {{ flagCount }} Flags'
+  removeFlag: Remove Flag
+  noFlagsAvailable: No flags available
+  selectVariation: select variation
 selectSegmentModal:
   searchSegmentPlaceholder: Search for Target Group by Name or Description
   flagsUsingSegment: '{{ counter }} flag'
@@ -343,11 +358,14 @@ environments:
     emptyName: 'SDK Key name is required'
     addKey: '+ New SDK Key'
     clientType: '{{ $.cf.testTheFlag.sdkClient }}'
+    clientDescription: 'A client id will be generated as your client-side SDK key.'
     serverType: '{{ $.cf.testTheFlag.sdkServer }}'
+    serverDescription: 'A secret will be generated as your server-side SDK key.'
     deleteTitle: 'Confirm Key Delete?'
     deleteMessage: 'Are you sure you want to delete Key: <strong>{{keyName}}</strong>? You cannot recover it afterwards'
     deleteSuccess: 'Successfully deleted Key: {{keyName}}'
     keyType: 'Key Type'
+    applicableLanguages: 'Applicable Languages:'
     noKeysFoundTitle: There are no SDK keys for this environment
     noKeysFoundMessage: Create an <a href="https://ngdocs.harness.io/article/1j7pdkqh7j-create-a-feature-flag#step_3_create_an_sdk_key" target="_blank" rel="noreferrer"> SDK key</a> for this environment so that your application can connect to our FF client. We support SDK keys for multiple programming languages.
     redactionWarning: Your secret will be redacted once you leave the page. Please make sure to copy and store your secret.
@@ -490,13 +508,9 @@ segmentDetail:
   noFlags: There are no Flags specified for this Target Group
   headingFeatureFlag: FEATURE FLAG
   headingVariation: VARIATION
-  selectVariation: select variation
   variationIsRequired: Variation is required
   addFlagNameToTargetGroup: 'Add {{ flagName }} to Target Group'
   addFlagToTargetGroup: Add Flag to Target Group
-  addFlags: 'Add {{ flagCount }} Flags'
-  addFlag: Add Flag
-  noFlagsAvailable: No flags available
   updateSuccessful: Update successful
   flagsAddedSuccessfully: Flag(s) added successfully
 selectFlagsModal:
@@ -565,7 +579,7 @@ onboarding:
   clientKey: Client SDK Key
   setUpYourCode: Set up your code
   listenToEvent: We’re listening for the event of your feature flag.
-  toggleLabel: Toggle your flag ON/OFF and verify that the event we received has the same value.
+  toggleLabel: Enable or disable your flag by turning the flag toggle on or off, then verify the event we receive has the same value as your application.
   help:
     heading1: The Importance of Your Flag Id
     text1: Your flag Id is required to reference the flag in your code.

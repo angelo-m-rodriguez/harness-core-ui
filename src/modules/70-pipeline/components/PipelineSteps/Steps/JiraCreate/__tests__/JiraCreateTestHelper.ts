@@ -66,11 +66,11 @@ export const getJiraCreateEditModePropsWithValues = (): JiraCreateStepModeProps 
       projectKey: 'pid1',
       issueType: 'itd1',
       fields: [
+        { name: 'Summary', value: 'summary' },
+        { name: 'Description', value: 'descriptionval' },
         { name: 'f21', value: 'value1' },
         { name: 'f2', value: 2233 },
-        { name: 'date', value: '23-march' },
-        { name: 'Summary', value: 'summaryval' },
-        { name: 'Description', value: 'descriptionval' }
+        { name: 'date', value: '23-march' }
       ]
     }
   },
@@ -332,32 +332,71 @@ export const mockProjectMetadataResponse: UseGetMockData<ResponseJiraIssueCreate
     }
   }
 }
-export const getJiraFieldRendererProps = (): JiraFieldsRendererProps => ({
+export const getJiraOptionalFieldRendererProps = (): JiraFieldsRendererProps => ({
+  selectedFields: [
+    {
+      name: 'f3',
+      value: '',
+      key: 'f3',
+      allowedValues: [],
+      schema: {
+        typeStr: 'date',
+        type: 'date'
+      },
+      required: false
+    },
+    {
+      name: 'f4',
+      value: '',
+      key: 'f4',
+      allowedValues: [],
+      schema: {
+        typeStr: 'datetime',
+        type: 'datetime'
+      },
+      required: false
+    },
+    {
+      name: 'f5',
+      value: '',
+      key: 'f5',
+      allowedValues: [],
+      schema: {
+        typeStr: 'number',
+        type: 'number'
+      },
+      required: false
+    },
+    {
+      name: 'f6',
+      value: '',
+      key: 'f6',
+      allowedValues: [],
+      schema: {
+        typeStr: 'option',
+        type: 'option',
+        array: true
+      },
+      required: false
+    }
+  ],
+  readonly: false,
+  onDelete: jest.fn()
+})
+
+export const getJiraRequiredFieldRendererProps = (): JiraFieldsRendererProps => ({
   selectedFields: [
     {
       name: 'f2',
-      value: { label: 'vb2', value: 'vb2' },
+      value: 'val2',
       key: 'f2',
       allowedValues: [],
       schema: {
         typeStr: '',
         type: 'string'
-      }
-    },
-    {
-      name: 'f3',
-      value: [
-        { label: 'v3', value: 'v3' },
-        { label: 'v32', value: 'v32' }
-      ],
-      key: 'f3',
-      allowedValues: [],
-      schema: {
-        typeStr: '',
-        type: 'option'
-      }
+      },
+      required: true
     }
   ],
-  readonly: false,
-  onDelete: jest.fn()
+  renderRequiredFields: true
 })

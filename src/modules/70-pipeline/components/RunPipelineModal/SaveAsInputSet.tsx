@@ -9,9 +9,9 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import type { FormikErrors } from 'formik'
-import { defaultTo, isUndefined, omit, omitBy, isNull } from 'lodash-es'
+import { defaultTo, isUndefined, omit, omitBy, isNull, noop } from 'lodash-es'
 import type { MutateMethod } from 'restful-react'
-import { Button, ButtonVariation, Formik, Layout, Popover } from '@wings-software/uicore'
+import { Button, ButtonVariation, Container, Formik, Layout, Popover } from '@wings-software/uicore'
 import { Classes } from '@blueprintjs/core'
 import type { PipelineInfoConfig } from 'services/cd-ng'
 import {
@@ -28,6 +28,8 @@ import GitContextForm, { GitContextProps } from '@common/components/GitContextFo
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
 import { useSaveToGitDialog, UseSaveSuccessResponse } from '@common/modals/SaveToGitDialog/useSaveToGitDialog'
 import type { GitQueryParams, PipelineType } from '@common/interfaces/RouteInterfaces'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
+import { GitSyncForm } from '@gitsync/components/GitSyncForm/GitSyncForm'
 import { getFormattedErrors } from '@pipeline/utils/runPipelineUtils'
 import { useStrings } from 'framework/strings'
 import RbacButton from '@rbac/components/Button/Button'
@@ -45,14 +47,16 @@ interface UseCreateUpdateInputSetReturnType {
   createUpdateInputSet: (
     inputSetObj: InputSetDTO,
     initialGitDetails?: EntityGitDetails | undefined,
+    initialStoreMetadata?: StoreMetadata,
     gitDetails?: SaveToGitFormInterface | undefined,
     payload?: Omit<InputSetDTO, 'repo' | 'branch'> | undefined
-  ) => Promise<UseSaveSuccessResponse>
+  ) => Promise<ResponseInputSetResponse>
   createUpdateInputSetWithGitDetails: (
     savedInputSetObj: InputSetDTO,
     initialGitDetails: EntityGitDetails,
+    initialStoreMetadata: StoreMetadata,
     gitDetails: SaveToGitFormInterface
-  ) => Promise<UseSaveSuccessResponse>
+  ) => Promise<ResponseInputSetResponse>
 }
 
 const useCreateUpdateInputSet = (
@@ -78,9 +82,10 @@ const useCreateUpdateInputSet = (
   const createUpdateInputSet = async (
     inputSetObj: InputSetDTO,
     initialGitDetails?: EntityGitDetails,
+    initialStoreMetadata?: StoreMetadata,
     gitDetails?: SaveToGitFormInterface,
     payload?: Omit<InputSetDTO, 'repo' | 'branch'>
-  ): Promise<UseSaveSuccessResponse> => {
+  ): Promise<ResponseInputSetResponse> => {
     try {
       const response = await createInputSet(
         yamlStringify({
@@ -94,6 +99,7 @@ const useCreateUpdateInputSet = (
             pipelineIdentifier: pipeline?.identifier as string,
             pipelineRepoID: repoIdentifier,
             pipelineBranch: branch,
+            ...(initialStoreMetadata?.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
             ...(gitDetails ?? {}),
             ...(gitDetails && gitDetails.isNewBranch ? { baseBranch: initialGitDetails?.branch } : {})
           }
@@ -109,9 +115,7 @@ const useCreateUpdateInputSet = (
       } else {
         showSuccess(getString('inputSets.inputSetSaved'))
       }
-      return {
-        status: response?.status // nextCallback can be added if required
-      }
+      return response
     } catch (e) {
       showError(getRBACErrorMessage(e))
       // throw error here so that it's uncaught in handleSubmit and we don'tr end up reloading the modal
@@ -122,9 +126,10 @@ const useCreateUpdateInputSet = (
   const createUpdateInputSetWithGitDetails = (
     savedInputSetObj: InputSetDTO,
     initialGitDetails: EntityGitDetails,
+    initialStoreMetadata: StoreMetadata,
     gitDetails: SaveToGitFormInterface
   ): Promise<UseSaveSuccessResponse> => {
-    return createUpdateInputSet(savedInputSetObj, initialGitDetails, gitDetails).then(resp => {
+    return createUpdateInputSet(savedInputSetObj, initialGitDetails, initialStoreMetadata, gitDetails).then(resp => {
       getInputSetsList()
       return resp
     })
@@ -143,10 +148,14 @@ interface SaveAsInputSetProps {
   orgIdentifier: string
   canEdit: boolean
   repoIdentifier?: string
+  connectorRef?: string
+  repoName?: string
   branch?: string
+  storeType?: StoreType
   isGitSyncEnabled?: boolean
+  isGitSimplificationEnabled?: boolean
   setFormErrors: Dispatch<SetStateAction<FormikErrors<InputSetDTO>>>
-  refetchParentData: () => void
+  refetchParentData: (newId?: string) => void
 }
 
 function SaveAsInputSet({
@@ -158,9 +167,12 @@ function SaveAsInputSet({
   accountId,
   values,
   canEdit,
+  connectorRef,
   repoIdentifier,
   branch,
+  storeType,
   isGitSyncEnabled = false,
+  isGitSimplificationEnabled = false,
   setFormErrors,
   refetchParentData
 }: SaveAsInputSetProps): JSX.Element | null {
@@ -169,6 +181,12 @@ function SaveAsInputSet({
   const { showError, showSuccess } = useToaster()
   const [savedInputSetObj, setSavedInputSetObj] = React.useState<InputSetDTO>({})
   const [initialGitDetails, setInitialGitDetails] = React.useState<EntityGitDetails>({ repoIdentifier, branch })
+  const [initialStoreMetadata, setInitialStoreMetadata] = React.useState<StoreMetadata>({
+    repoName: repoIdentifier,
+    branch,
+    connectorRef,
+    storeType
+  })
 
   const { mutate: createInputSet, loading: createInputSetLoading } = useCreateInputSetForPipeline({
     queryParams: {
@@ -195,32 +213,52 @@ function SaveAsInputSet({
     onSuccess: (
       data: SaveToGitFormInterface,
       _payload?: Omit<InputSetDTO, 'repo' | 'branch'>
-    ): Promise<UseSaveSuccessResponse> =>
+    ): Promise<ResponseInputSetResponse> =>
       Promise.resolve(
-        createUpdateInputSetWithGitDetails(defaultTo(_payload, savedInputSetObj), initialGitDetails, data)
+        createUpdateInputSetWithGitDetails(
+          defaultTo(_payload, savedInputSetObj),
+          initialGitDetails,
+          initialStoreMetadata,
+          data
+        ).then(res => {
+          refetchParentData(res?.data?.identifier)
+          return res
+        })
       )
   })
 
   const handleSubmit = React.useCallback(
-    async (inputSetObj: InputSetDTO, gitDetails?: EntityGitDetails) => {
-      setSavedInputSetObj(omit(inputSetObj, 'repo', 'branch'))
+    async (inputSetObjWithGitInfo: InputSetDTO, gitDetails?: EntityGitDetails, storeMetadata?: StoreMetadata) => {
+      const inputSetObj = omit(
+        inputSetObjWithGitInfo,
+        'repo',
+        'branch',
+        'connectorRef',
+        'repoName',
+        'filePath',
+        'storeType',
+        'remoteType'
+      )
+      setSavedInputSetObj(inputSetObj)
       setInitialGitDetails(gitDetails as EntityGitDetails)
+      setInitialStoreMetadata(defaultTo(storeMetadata, {}))
 
       if (inputSetObj) {
-        if (isGitSyncEnabled) {
+        if (isGitSyncEnabled || storeMetadata?.storeType === StoreType.REMOTE) {
           openSaveToGitDialog({
             isEditing: false,
             resource: {
               type: 'InputSets',
               name: inputSetObj.name as string,
               identifier: inputSetObj.identifier as string,
-              gitDetails: gitDetails
+              gitDetails: gitDetails,
+              storeMetadata: storeMetadata?.storeType === StoreType.REMOTE ? storeMetadata : undefined
             },
-            payload: omit(inputSetObj, 'repo', 'branch')
+            payload: inputSetObj
           })
         } else {
-          createUpdateInputSet(omit(inputSetObj, 'repo', 'branch')).then(() => {
-            refetchParentData()
+          createUpdateInputSet(inputSetObj).then(data => {
+            refetchParentData(data?.data?.identifier)
           })
         }
       }
@@ -234,10 +272,20 @@ function SaveAsInputSet({
         lazy
         content={
           <div data-testid="save-as-inputset-form">
-            <Formik<InputSetDTO & GitContextProps>
+            <Formik<InputSetDTO & GitContextProps & StoreMetadata>
               formName="runPipelineForm"
               onSubmit={input => {
-                handleSubmit(input, { repoIdentifier: input.repo, branch: input.branch })
+                handleSubmit(
+                  input,
+                  { repoIdentifier: input.repo, branch: input.branch },
+                  {
+                    connectorRef: input.connectorRef,
+                    repoName: input.repoName,
+                    branch: input.branch,
+                    filePath: input.filePath,
+                    storeType: input.storeType
+                  }
+                )
               }}
               validationSchema={Yup.object().shape({
                 name: NameSchema({ requiredErrorMsg: getString('common.validation.nameIsRequired') }),
@@ -249,7 +297,11 @@ function SaveAsInputSet({
                   name: '',
                   identifier: '',
                   repo: defaultTo(repoIdentifier, ''),
-                  branch: defaultTo(branch, '')
+                  branch: defaultTo(branch, ''),
+                  connectorRef: defaultTo(connectorRef, ''),
+                  repoName: defaultTo(repoIdentifier, ''),
+                  storeType: defaultTo(storeType, StoreType.INLINE),
+                  filePath: '.harness/'
                 } as InputSetDTO & GitContextProps
               }
             >
@@ -279,6 +331,24 @@ function SaveAsInputSet({
                         />
                       </GitSyncStoreProvider>
                     )}
+
+                    {isGitSimplificationEnabled && storeType === StoreType.REMOTE && (
+                      <Container>
+                        <GitSyncForm
+                          formikProps={createInputSetFormikProps as any}
+                          handleSubmit={noop}
+                          isEdit={false}
+                          showRemoteTypeSelection={false}
+                          disableFields={{
+                            connectorRef: true,
+                            repoName: true,
+                            branch: true,
+                            filePath: false
+                          }}
+                        ></GitSyncForm>
+                      </Container>
+                    )}
+
                     <Layout.Horizontal spacing="medium">
                       <Button
                         variation={ButtonVariation.PRIMARY}

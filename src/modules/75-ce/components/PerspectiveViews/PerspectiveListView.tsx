@@ -27,6 +27,7 @@ import { QlceView, ViewState, ViewType } from 'services/ce/services'
 import { perspectiveDateLabelToDisplayText, SOURCE_ICON_MAPPING } from '@ce/utils/perspectiveUtils'
 import formatCost from '@ce/utils/formatCost'
 import { useStrings } from 'framework/strings'
+import useMoveFolderModal from '../PerspectiveFolders/MoveFolderModal'
 import css from './PerspectiveListView.module.scss'
 
 interface PerspectiveListViewProps {
@@ -39,13 +40,19 @@ interface PerspectiveListViewProps {
   ) => void
   deletePerpsective: (perspectiveId: string, perspectiveName: string) => void
   clonePerspective: (perspectiveId: string, perspectiveName: string) => void
+  setRefetchFolders: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectedFolder: (newState: string) => void
+  setRefetchPerspectives: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
   pespectiveData,
   navigateToPerspectiveDetailsPage,
   deletePerpsective,
-  clonePerspective
+  clonePerspective,
+  setRefetchFolders,
+  setSelectedFolder,
+  setRefetchPerspectives
 }) => {
   const history = useHistory()
   const { accountId } = useParams<{
@@ -143,6 +150,13 @@ const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
       }
     })
 
+    const { openMoveFoldersModal } = useMoveFolderModal({
+      perspectiveId: row.original.id || '',
+      setRefetchFolders,
+      setSelectedFolder,
+      setRefetchPerspectives
+    })
+
     const viewType = row?.original?.viewType
     const disableActions = viewType === ViewType.Default ? true : false
 
@@ -164,6 +178,12 @@ const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
       if (row.original.id && row.original.name) {
         clonePerspective(row.original.id, row.original.name)
       }
+    }
+
+    const onMoveClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void = e => {
+      e.stopPropagation()
+      setMenuOpen(false)
+      openMoveFoldersModal()
     }
 
     return (
@@ -195,6 +215,12 @@ const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
                 data-testid={`clone-perspective-${row.original.id}`}
               />
               <Menu.Item disabled={disableActions} onClick={onDeleteClick} icon="trash" text="Delete" />
+              <Menu.Item
+                disabled={disableActions}
+                onClick={onMoveClick}
+                icon="add-to-folder"
+                text={getString('ce.perspectives.folders.moveToLabel')}
+              />
             </Menu>
           </Container>
         </Popover>
@@ -239,6 +265,11 @@ const PerspectiveListView: React.FC<PerspectiveListViewProps> = ({
     ],
     []
   )
+
+  if (!pespectiveData.length) {
+    return null
+  }
+
   return (
     <TableV2<QlceView>
       onRowClick={row => {

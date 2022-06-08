@@ -27,6 +27,8 @@ export const getModuleIcon = (module: ModuleName): IconName => {
       return 'ce-main'
     case ModuleName.CF:
       return 'cf-main'
+    case ModuleName.STO:
+      return 'sto-color-filled'
   }
   return 'nav-project'
 }

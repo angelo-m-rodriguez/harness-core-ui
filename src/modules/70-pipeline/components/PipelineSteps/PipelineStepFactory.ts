@@ -10,6 +10,7 @@ import { AbstractStepFactory } from '@pipeline/components/AbstractSteps/Abstract
 import { StepGroupStep } from './Steps/StepGroupStep/StepGroupStep'
 import { CustomVariables } from './Steps/CustomVariables/CustomVariables'
 import { BarrierStep } from './Steps/Barrier/Barrier'
+import { LockStep } from './Steps/Lock/Lock'
 import { HarnessApproval } from './Steps/Approval/HarnessApproval'
 import { JiraApproval } from './Steps/JiraApproval/JiraApproval'
 import { ServiceNowApproval } from './Steps/ServiceNowApproval/ServiceNowApproval'
@@ -26,6 +27,7 @@ const factory = new PipelineStepFactory()
 
 // common
 factory.registerStep(new BarrierStep())
+factory.registerStep(new LockStep())
 factory.registerStep(new StepGroupStep())
 factory.registerStep(new CustomVariables())
 factory.registerStep(new HarnessApproval())

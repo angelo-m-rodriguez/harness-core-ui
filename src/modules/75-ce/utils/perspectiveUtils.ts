@@ -288,3 +288,11 @@ export const EMPTY_PERSPECTIVE_RULE = {
   viewOperator: 'IN',
   values: []
 }
+
+export const searchList = (searchVal: string, perspectiveList: any) => {
+  if (searchVal) {
+    return perspectiveList.filter((item: any) => item?.name?.toLowerCase().includes(searchVal.toLowerCase()))
+  }
+
+  return perspectiveList
+}

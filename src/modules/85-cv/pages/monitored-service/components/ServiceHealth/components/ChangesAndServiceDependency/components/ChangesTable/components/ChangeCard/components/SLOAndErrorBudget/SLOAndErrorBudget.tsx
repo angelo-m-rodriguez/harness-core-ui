@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { find } from 'lodash-es'
 import { Classes } from '@blueprintjs/core'
@@ -23,11 +23,11 @@ import {
   Text
 } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
-import { useGetSLODashboardWidgets } from 'services/cv'
+import { MonitoredServiceChangeDetailSLO, useGetMonitoredServiceChangeDetails } from 'services/cv'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { getErrorMessage } from '@cv/utils/CommonUtils'
 import SLOTargetChartWrapper from './SLOTargetChartWrapper'
-import { SelectedSLO, SLOAndErrorBudgetProps, SLOCardToggleViews } from './SLOAndErrorBudget.types'
+import { SLOAndErrorBudgetProps, SLOCardToggleViews } from './SLOAndErrorBudget.types'
 import css from './SLOAndErrorBudget.module.scss'
 
 const SLOAndErrorBudget: React.FC<SLOAndErrorBudgetProps> = ({
@@ -40,14 +40,14 @@ const SLOAndErrorBudget: React.FC<SLOAndErrorBudgetProps> = ({
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const [view, setView] = useState(SLOCardToggleViews.SLO)
-  const [selectedSLOs, setSelectedSLOs] = useState<SelectedSLO[]>([])
+  const [selectedSLOs, setSelectedSLOs] = useState<MonitoredServiceChangeDetailSLO[]>([])
 
-  const { data, loading, error } = useGetSLODashboardWidgets({
+  const { data, loading, error } = useGetMonitoredServiceChangeDetails({
+    monitoredServiceIdentifier,
     queryParams: {
       accountId,
       orgIdentifier,
-      projectIdentifier,
-      monitoredServiceIdentifier
+      projectIdentifier
     }
   })
 
@@ -67,7 +67,7 @@ const SLOAndErrorBudget: React.FC<SLOAndErrorBudgetProps> = ({
     className: css.pillToggle
   }
 
-  const handleCardSelectChange = (serviceLevelObjective: SelectedSLO): void => {
+  const handleCardSelectChange = (serviceLevelObjective: MonitoredServiceChangeDetailSLO): void => {
     setSelectedSLOs(prevSelectedSLOs => {
       if (find(prevSelectedSLOs, serviceLevelObjective)) {
         return prevSelectedSLOs.filter(item => item.identifier !== serviceLevelObjective.identifier)
@@ -77,18 +77,13 @@ const SLOAndErrorBudget: React.FC<SLOAndErrorBudgetProps> = ({
     })
   }
 
-  const serviceLevelObjectives: SelectedSLO[] = useMemo(
-    () => data?.data?.content?.map(widget => ({ title: widget.title, identifier: widget.sloIdentifier })) ?? [],
-    [data?.data?.content]
-  )
-
   useEffect(() => {
-    if (serviceLevelObjectives.length) {
-      setSelectedSLOs(serviceLevelObjectives.slice(0, 3))
+    if (data?.resource?.length) {
+      setSelectedSLOs(data.resource.slice(0, 3))
     }
-  }, [serviceLevelObjectives])
+  }, [data?.resource])
 
-  if (data?.data?.content?.length === 0) {
+  if (data?.resource?.length === 0) {
     return (
       <Container margin={{ top: 'large' }} padding="small" className={css.noSlo}>
         <Text font={{ variation: FontVariation.SMALL }} color={Color.GREY_600}>
@@ -126,10 +121,10 @@ const SLOAndErrorBudget: React.FC<SLOAndErrorBudgetProps> = ({
         )}
         {!loading && !error && (
           <Layout.Horizontal spacing="small">
-            {serviceLevelObjectives.map(item => (
+            {data?.resource?.map(item => (
               <Button
                 key={item.identifier}
-                text={item.title}
+                text={item.name}
                 size={ButtonSize.SMALL}
                 onClick={() => handleCardSelectChange(item)}
                 disabled={selectedSLOs.length === 3 && !find(selectedSLOs, item)}

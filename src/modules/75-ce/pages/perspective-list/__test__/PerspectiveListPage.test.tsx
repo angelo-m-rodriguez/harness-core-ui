@@ -13,12 +13,55 @@ import type { DocumentNode } from 'graphql'
 import { TestWrapper } from '@common/utils/testUtils'
 import { FetchAllPerspectivesDocument } from 'services/ce/services'
 import PerspectiveListPage from '../PerspectiveListPage'
-
+import FoldersData from './FoldersData.json'
 import ResponseData from './ResponseData.json'
 
 const params = {
   accountId: 'TEST_ACC'
 }
+
+jest.mock('services/ce', () => ({
+  useGetFolders: jest.fn().mockImplementation(() => {
+    return {
+      data: FoldersData,
+      refetch: jest.fn(),
+      error: null,
+      loading: false
+    }
+  }),
+  useCreatePerspective: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: {}
+      }
+    }
+  })),
+  useDeletePerspective: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: {}
+      }
+    }
+  })),
+  useClonePerspective: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: {}
+      }
+    }
+  })),
+  useDeleteFolder: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: {}
+      }
+    }
+  }))
+}))
 
 describe('test cases for Perspective details Page', () => {
   test('should be able to render the details page', async () => {
@@ -29,7 +72,6 @@ describe('test cases for Perspective details Page', () => {
         }
       }
     }
-
     const { container } = render(
       <TestWrapper pathParams={params}>
         <Provider value={responseState as any}>
@@ -39,7 +81,6 @@ describe('test cases for Perspective details Page', () => {
     )
     expect(container).toMatchSnapshot()
   })
-
   test('should be able to render and switch to list view', async () => {
     const responseState = {
       executeQuery: ({ query }: { query: DocumentNode }) => {
@@ -48,7 +89,6 @@ describe('test cases for Perspective details Page', () => {
         }
       }
     }
-
     const { container } = render(
       <TestWrapper pathParams={params}>
         <Provider value={responseState as any}>
@@ -56,9 +96,7 @@ describe('test cases for Perspective details Page', () => {
         </Provider>
       </TestWrapper>
     )
-
     const listIcon = queryByAttribute('class', container, /bp3-icon-list/)
-
     act(() => {
       fireEvent.click(listIcon!)
     })

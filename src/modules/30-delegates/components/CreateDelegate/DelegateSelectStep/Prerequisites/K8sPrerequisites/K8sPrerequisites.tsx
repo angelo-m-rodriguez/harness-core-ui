@@ -6,10 +6,9 @@
  */
 
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { Layout, Text, Container } from '@wings-software/uicore'
-import { Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
 import { DelegateSizeDetails, useGetDelegateSizes } from 'services/portal'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -46,11 +45,11 @@ const K8sPrerequisites = () => {
         </Text>
 
         <Container>
-          <Text className={css.preReqContent}>
+          <Text inline className={css.preReqContent}>
             {getString('delegate.kubernetes.prerequisites_info2')}
-            <Link color={Color.BLUE_600} to="https://app.harness.io" target="_blank">
-              https://app.harness.io
-            </Link>
+          </Text>
+          <Text inline font={{ weight: 'bold' }}>
+            https://app.harness.io
           </Text>
         </Container>
         <Text className={css.preReqContent}>{getString('delegate.kubernetes.prerequisites_info3')}</Text>

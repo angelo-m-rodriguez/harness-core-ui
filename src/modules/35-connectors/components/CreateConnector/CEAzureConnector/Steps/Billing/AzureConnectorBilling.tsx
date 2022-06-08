@@ -28,6 +28,8 @@ import type { BillingExportSpec, CEAzureConnector } from 'services/cd-ng'
 import { CE_AZURE_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import { connectorHelperUrls } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import ConnectorInstructionList from '@connectors/common/ConnectorCreationInstructionList/ConnectorCreationInstructionList'
 import ShowExistingBillingExports from './AzureExistingBillingExports'
 import { CEAzureDTO, guidRegex } from '../Overview/AzureConnectorOverview'
@@ -182,6 +184,12 @@ const BillingExport: React.FC<StepProps<CEAzureDTO>> = props => {
     }
   ]
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AzureConnectorBillingLoad, {
+    category: Category.CONNECTOR
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Text
@@ -198,6 +206,9 @@ const BillingExport: React.FC<StepProps<CEAzureDTO>> = props => {
       <Container>
         <Formik<BillingExportSpec>
           onSubmit={formData => {
+            trackEvent(ConnectorActions.AzureConnectorBillingSubmit, {
+              category: Category.CONNECTOR
+            })
             handleSubmit(formData)
           }}
           formName="billingExportsForm"

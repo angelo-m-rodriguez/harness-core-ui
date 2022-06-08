@@ -350,7 +350,12 @@ const RenderColumnMenu: Renderer<CellProps<ConnectorResponse>> = ({ row, column 
               setMenuOpen(true)
             }}
           />
-          <Menu style={{ minWidth: 'unset' }}>
+          <Menu
+            style={{ minWidth: 'unset' }}
+            onClick={e => {
+              e.stopPropagation()
+            }}
+          >
             <Menu.Item icon="edit" text="Edit" onClick={handleEdit} disabled={!canUpdate} />
             <Menu.Item icon="trash" text="Delete" onClick={handleDelete} disabled={!canDelete} />
           </Menu>

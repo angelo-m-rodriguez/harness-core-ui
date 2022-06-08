@@ -184,7 +184,13 @@ function PipelineStageNode(props: PipelineStageNodeProps): JSX.Element {
         {props?.data?.isInComplete && (
           <Icon className={defaultCss.inComplete} size={12} name={'warning-sign'} color="orange500" />
         )}
-        {props.icon && <Icon size={28} name={props.icon as IconName} inverse={isSelectedNode()} />}
+        {props.icon && (
+          <Icon
+            size={28}
+            name={props.icon as IconName}
+            {...(isSelectedNode() ? { color: Color.WHITE, className: defaultCss.primaryIcon, inverse: true } : {})}
+          />
+        )}
         {secondaryIcon && (
           <Icon
             name={secondaryIcon}

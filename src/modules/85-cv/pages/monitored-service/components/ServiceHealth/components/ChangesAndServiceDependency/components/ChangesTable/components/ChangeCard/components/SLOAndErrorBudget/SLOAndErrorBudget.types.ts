@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { ChangeEventDTO } from 'services/cv'
+import type { ChangeEventDTO, MonitoredServiceChangeDetailSLO } from 'services/cv'
 
 export interface SLOAndErrorBudgetProps {
   monitoredServiceIdentifier: string
@@ -20,14 +20,9 @@ export enum SLOCardToggleViews {
   ERROR_BUDGET = 'ERROR_BUDGET'
 }
 
-export interface SelectedSLO {
-  title: string
-  identifier: string
-}
-
 export interface SLOTargetChartWrapperProps {
   type: SLOCardToggleViews
-  selectedSLO: SelectedSLO
+  selectedSLO: MonitoredServiceChangeDetailSLO
   startTime: number
   endTime: number
   eventTime?: number

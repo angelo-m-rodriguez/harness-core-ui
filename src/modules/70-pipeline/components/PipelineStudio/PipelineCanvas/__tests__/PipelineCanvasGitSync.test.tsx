@@ -17,7 +17,7 @@ import gitSyncListResponse from '@common/utils/__tests__/mocks/gitSyncRepoListMo
 import { GitSyncTestWrapper } from '@common/utils/gitSyncTestUtils'
 import { branchStatusMock, sourceCodeManagers } from '@connectors/mocks/mock'
 import { ConnectorResponse } from '@pipeline/components/InputSetForm/__tests__/InputSetMocks'
-import { createPipelinePromise, putPipelinePromise } from 'services/pipeline-ng'
+import * as pipelineNg from 'services/pipeline-ng'
 import { PipelineCanvas } from '../PipelineCanvas'
 import { PipelineContext } from '../../PipelineContext/PipelineContext'
 import pipelineContextMock, { putPipelinePromiseArg, createPipelinePromiseArg } from './PipelineCanvasGitSyncTestHelper'
@@ -52,6 +52,7 @@ const getListGitSync = jest.fn(() => Promise.resolve(gitSyncListResponse))
 jest.mock('services/cd-ng', () => ({
   useGetConnector: jest.fn(() => ConnectorResponse),
   useCreatePR: jest.fn(() => noop),
+  useCreatePRV2: jest.fn(() => noop),
   useGetFileContent: jest.fn(() => noop),
   useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => {
     return { data: branchStatusMock, refetch: getListOfBranchesWithStatus, loading: false }
@@ -218,8 +219,8 @@ describe('PipelineCanvas tests', () => {
             expect(saveToGitSaveBtn).toBeInTheDocument()
           })
           fireEvent.click(saveToGitSaveBtn!)
-          await waitFor(() => expect(putPipelinePromise).toHaveBeenCalled())
-          expect(putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArg)
+          await waitFor(() => expect(pipelineNg.putPipelinePromise).toHaveBeenCalled())
+          expect(pipelineNg.putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArg)
         })
       })
 
@@ -253,7 +254,7 @@ describe('PipelineCanvas tests', () => {
           expect(saveToGitSaveBtn).toBeInTheDocument()
         })
         userEvent.click(saveToGitSaveBtn!)
-        await waitFor(() => expect(putPipelinePromise).toHaveBeenCalled())
+        await waitFor(() => expect(pipelineNg.putPipelinePromise).toHaveBeenCalled())
         const putPipelinePromiseArgNewBranch = {
           ...putPipelinePromiseArg,
           queryParams: {
@@ -264,7 +265,7 @@ describe('PipelineCanvas tests', () => {
             targetBranch: 'feature'
           }
         }
-        expect(putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArgNewBranch)
+        expect(pipelineNg.putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArgNewBranch)
       })
 
       test('save an existing pipeline and start a PR', async () => {
@@ -305,7 +306,7 @@ describe('PipelineCanvas tests', () => {
         userEvent.click(saveToGitSaveBtn!)
 
         // Check if putPipelinePromise (which makes API call) called with correct arguments
-        await waitFor(() => expect(putPipelinePromise).toHaveBeenCalled())
+        await waitFor(() => expect(pipelineNg.putPipelinePromise).toHaveBeenCalled())
         const putPipelinePromiseArgNewBranch = {
           ...putPipelinePromiseArg,
           queryParams: {
@@ -315,7 +316,65 @@ describe('PipelineCanvas tests', () => {
             targetBranch: 'gitSync'
           }
         }
-        expect(putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArgNewBranch)
+        expect(pipelineNg.putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArgNewBranch)
+      })
+
+      test('should display non schema error in git save progress modal', async () => {
+        jest.spyOn(pipelineNg, 'putPipelinePromise').mockImplementation((): any => {
+          return Promise.reject({
+            status: 'ERROR',
+            code: 'INVALID_REQUEST',
+            message: 'Invalid Request: Error while saving pipeline',
+            responseMessages: [
+              {
+                code: 'HINT',
+                level: 'INFO',
+                message:
+                  'Please check the input commit id of the requested file. It should match with current commit id of the file at head of the branch in the given Bitbucket repository'
+              },
+              {
+                code: 'EXPLANATION',
+                level: 'INFO',
+                message:
+                  "The input commit id of the requested file doesn't match with current commit id of the file at head of the branch in Bitbucket repository, which results in update operation failure."
+              },
+              {
+                code: 'SCM_CONFLICT_ERROR_V2',
+                level: 'ERROR',
+                message: 'Cannot update file as it has conflicts with remote'
+              }
+            ]
+          })
+        })
+
+        const { container } = render(
+          <PipelineCanvasTestWrapper
+            modifiedPipelineContextMock={pipelineContextMock}
+            pipelineIdentifier={'test_pipeline'}
+          />
+        )
+
+        const saveBtn = getByText(container, 'save').parentElement
+        expect(saveBtn).toBeInTheDocument()
+        fireEvent.click(saveBtn!)
+        let saveToGitSaveBtn: HTMLElement
+        await waitFor(() => {
+          const portalDiv = document.getElementsByClassName('bp3-portal')[0] as HTMLElement
+          const savePipelinesToGitHeader = getByText(portalDiv, 'common.git.saveResourceLabel')
+          expect(savePipelinesToGitHeader).toBeInTheDocument()
+          saveToGitSaveBtn = getByText(portalDiv, 'save').parentElement as HTMLElement
+          expect(saveToGitSaveBtn).toBeInTheDocument()
+        })
+        fireEvent.click(saveToGitSaveBtn!)
+        await waitFor(() => expect(pipelineNg.putPipelinePromise).toHaveBeenCalled())
+        expect(pipelineNg.putPipelinePromise).toHaveBeenCalledWith(putPipelinePromiseArg)
+
+        await waitFor(async () => {
+          const portalDiv = document.getElementsByClassName('bp3-portal')[0] as HTMLElement
+          expect(getByText(portalDiv, 'common.gitSync.pushingChangestoBranch')).toBeInTheDocument()
+          expect(getByText(portalDiv, 'common.updating')).toBeInTheDocument()
+          expect(getByText(portalDiv, 'Invalid Request: Error while saving pipeline')).toBeDefined()
+        })
       })
     })
 
@@ -410,8 +469,8 @@ describe('PipelineCanvas tests', () => {
             expect(saveToGitSaveBtn).toBeInTheDocument()
           })
           fireEvent.click(saveToGitSaveBtn!)
-          await waitFor(() => expect(createPipelinePromise).toHaveBeenCalled())
-          expect(createPipelinePromise).toHaveBeenCalledWith(createPipelinePromiseArg)
+          await waitFor(() => expect(pipelineNg.createPipelinePromise).toHaveBeenCalled())
+          expect(pipelineNg.createPipelinePromise).toHaveBeenCalledWith(createPipelinePromiseArg)
         })
       })
     })

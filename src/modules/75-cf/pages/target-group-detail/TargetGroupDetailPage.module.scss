@@ -6,12 +6,14 @@
  */
 
 .tabs {
+  --original-page-header-height: var(--page-header-height);
   background-color: var(--white);
   display: grid;
 
   > :global(.bp3-tabs) {
     display: grid;
     grid-template-rows: auto 1fr;
+    --page-header-height: calc(var(--original-page-header-height) + 60px);
 
     > :global(.bp3-tab-list) {
       padding: var(--spacing-medium) var(--spacing-xlarge) 0;

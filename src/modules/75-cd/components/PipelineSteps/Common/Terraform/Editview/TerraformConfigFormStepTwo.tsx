@@ -12,6 +12,7 @@ import {
   Layout,
   Heading,
   ButtonVariation,
+  Text,
   FormInput,
   SelectOption,
   getMultiTypeFromValue,
@@ -21,7 +22,7 @@ import {
   Checkbox,
   StepProps
 } from '@wings-software/uicore'
-import { Color } from '@harness/design-system'
+import { Color, FontVariation } from '@harness/design-system'
 import cx from 'classnames'
 import { Form } from 'formik'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
@@ -214,7 +215,12 @@ export const TerraformConfigStepTwo: React.FC<StepProps<any> & TerraformConfigSt
                       summary={getString('common.advanced')}
                       details={
                         <Container margin={{ top: 'xsmall' }}>
-                          <p className={css.sourceModule}>Module Source</p>
+                          <Text
+                            tooltipProps={{ dataTooltipId: 'sourceModule' }}
+                            font={{ variation: FontVariation.FORM_LABEL }}
+                          >
+                            Module Source
+                          </Text>
 
                           <>
                             <Checkbox

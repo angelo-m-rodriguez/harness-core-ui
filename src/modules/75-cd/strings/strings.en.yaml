@@ -51,7 +51,7 @@ serviceCreated: '{{ $.common.serviceCreated }}'
 serviceUpdated: '{{ $.common.serviceUpdated }}'
 environmentCreated: '{{ $.common.environmentCreated }}'
 environmentUpdated: '{{ $.common.environmentUpdated }}'
-preProduction: 'Pre Production'
+preProduction: 'Pre-Production'
 preProductionType: 'Pre-Prod'
 environmentDelete: '{{ $.common.deleteEnvironment.title }}'
 environmentDeleteMessage: 'Are you sure you want to delete environment <strong>{{name}}</strong>?'
@@ -89,6 +89,7 @@ specifyTfVarStore: Specify Terraform Var File Store
 addTFVarFileLabel: 'Add File Path'
 enterWorkDirectory: Enter Working Directory
 enterTragets: Enter Targets
+exportTerraformPlanJson: Export Json representation of Terraform Plan
 specifyTargetHost: Specify Target Host
 configurationFile: 'Configuration File Repository'
 terraformVarFiles: 'Terraform Var Files'
@@ -157,7 +158,7 @@ serviceDashboard:
 noEnvironment:
   title: No Environments Available
   message: Create an environment and let’s start configuring the deployment
-gitOps: GitOps
+gitOps: '{{ $.common.gitOps }}'
 addService: Add Service
 addEnvironment: Add Environment
 editIdError: 'ID: {{id}} cannot be edited'
@@ -262,6 +263,9 @@ infrastructure:
     hostConnectionAttributes: Host Connection Attributes
     usePublicDns: Use Public DNS connection
 cloudFormation:
+  createDescription: Provision resources using a CloudFormation template.
+  deleteDescription: Remove any CloudFormation stack you provisioned via Harness or other methods.
+  rollbackDescription: Roll back CloudFormation-provisioned resources to the last successful deployment of this stage.
   cfTemplateFile: Cloud Formation Template File
   templateFile: Template File
   specifyTemplateFile: Specify Template File
@@ -290,3 +294,5 @@ cloudFormation:
     awsURL: S3 url required
     getParam: AWS Connector, Region and Template File are required to retrieve parameters
     templateRequired: Template file required
+  deploymentTypes:
+    pdc: PDC

@@ -13,7 +13,7 @@ import {
   DefaultNewStageId,
   DefaultNewStageName
 } from '@templates-library/components/TemplateStudio/StageTemplateCanvas/StageTemplateForm/StageTemplateForm'
-import { TemplatePipelineProvider } from '@pipeline/components/TemplatePipelineContext'
+import { TemplatePipelineProvider } from '@templates-library/components/TemplatePipelineContext/TemplatePipelineContext'
 import { StageTemplateCanvasWithRef } from '@templates-library/components/TemplateStudio/StageTemplateCanvas/StageTemplateCanvas'
 import type { PipelineInfoConfig, StageElementConfig } from 'services/cd-ng'
 import { TemplateContext } from '@templates-library/components/TemplateStudio/TemplateContext/TemplateContext'
@@ -23,6 +23,7 @@ import type { ProjectPathProps, GitQueryParams } from '@common/interfaces/RouteI
 import { sanitize } from '@common/utils/JSONUtils'
 import { useQueryParams } from '@common/hooks'
 import { PipelineContextType } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
+import { useTemplateSelector } from '@templates-library/hooks/useTemplateSelector'
 
 const StageTemplateCanvasWrapper = (_props: unknown, formikRef: TemplateFormRef) => {
   const {
@@ -32,6 +33,7 @@ const StageTemplateCanvasWrapper = (_props: unknown, formikRef: TemplateFormRef)
   } = React.useContext(TemplateContext)
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
   const { branch, repoIdentifier } = useQueryParams<GitQueryParams>()
+  const { getTemplate } = useTemplateSelector()
 
   const createPipelineFromTemplate = () =>
     produce({ ...DefaultPipeline }, draft => {
@@ -68,6 +70,7 @@ const StageTemplateCanvasWrapper = (_props: unknown, formikRef: TemplateFormRef)
       onUpdatePipeline={onUpdatePipeline}
       contextType={PipelineContextType.StageTemplate}
       isReadOnly={isReadonly}
+      getTemplate={getTemplate}
     >
       <StageTemplateCanvasWithRef ref={formikRef} />
     </TemplatePipelineProvider>

@@ -38,6 +38,7 @@ const CreateGcpKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         mock={props.mock}
         gitDetails={props.gitDetails}
         disableGitSync
+        helpPanelReferenceId="GCPKeyManagementServiceOverview"
       />
       <GcpKmsConfig name={getString('details')} identifier={CONNECTOR_CREDENTIALS_STEP_IDENTIFIER} {...props} />
       <DelegateSelectorStep
@@ -45,6 +46,7 @@ const CreateGcpKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         buildPayload={buildGcpKmsPayload}
         disableGitSync
         {...props}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -54,6 +56,7 @@ const CreateGcpKmsConnector: React.FC<CreateConnectorModalProps> = props => {
         isLastStep
         type={Connectors.GCP_KMS}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

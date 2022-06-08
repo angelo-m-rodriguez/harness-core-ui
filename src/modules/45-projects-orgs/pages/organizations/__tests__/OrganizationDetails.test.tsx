@@ -10,6 +10,7 @@ import { act, fireEvent, getAllByText, render, waitFor, screen } from '@testing-
 import { findDialogContainer, TestWrapper } from '@common/utils/testUtils'
 import routes from '@common/RouteDefinitions'
 import { orgPathProps } from '@common/utils/routeUtils'
+import * as Licenses from '@common/hooks/useModuleLicenses'
 import mockImport from 'framework/utils/mockImport'
 import OrganizationDetailsPage from '../OrganizationDetails/OrganizationDetailsPage'
 import {
@@ -133,6 +134,8 @@ describe('Organization Details', () => {
       useFeatureFlags: () => ({ OPA_PIPELINE_GOVERNANCE: true, OPA_FF_GOVERNANCE: false })
     })
 
+    jest.spyOn(Licenses, 'useAnyEnterpriseLicense').mockReturnValue(true)
+
     renderComponent()
 
     expect(screen.getByText('common.governance')).toBeTruthy()
@@ -142,6 +145,8 @@ describe('Organization Details', () => {
     mockImport('@common/hooks/useFeatureFlag', {
       useFeatureFlags: () => ({ OPA_PIPELINE_GOVERNANCE: false, OPA_FF_GOVERNANCE: true })
     })
+
+    jest.spyOn(Licenses, 'useAnyEnterpriseLicense').mockReturnValue(true)
 
     renderComponent()
 

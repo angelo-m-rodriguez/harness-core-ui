@@ -11,6 +11,7 @@ declare const styles: {
   readonly cardContent: string
   readonly cardHeader: string
   readonly cardWrapper: string
+  readonly disableCursor: string
   readonly kubIcon: string
   readonly subTitle: string
 }

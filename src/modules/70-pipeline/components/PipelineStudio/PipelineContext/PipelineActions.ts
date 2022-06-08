@@ -11,7 +11,8 @@ import type { GetDataError } from 'restful-react'
 import type { YamlSnippetMetaData, PipelineInfoConfig } from 'services/cd-ng'
 import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
 import type * as Diagram from '@pipeline/components/Diagram'
-import type { EntityGitDetails, EntityValidityDetails, Failure } from 'services/pipeline-ng'
+import type { StoreMetadata } from '@common/constants/GitSyncTypes'
+import type { EntityGitDetails, EntityValidityDetails, ErrorNodeSummary, Failure } from 'services/pipeline-ng'
 import type { DependencyElement } from 'services/ci'
 import type { TemplateType } from '@common/interfaces/RouteInterfaces'
 import type { TemplateSummaryResponse } from 'services/template-ng'
@@ -35,10 +36,6 @@ export enum PipelineActions {
 }
 export const DefaultNewPipelineId = '-1'
 
-export enum TemplateDrawerTypes {
-  UseTemplate = 'UseTemplate'
-}
-
 export enum DrawerTypes {
   StepConfig = 'StepConfig',
   AddStep = 'AddCommand',
@@ -54,10 +51,6 @@ export enum DrawerTypes {
   ProvisionerStepConfig = 'ProvisionerStepConfig',
   AddProvisionerStep = 'AddProvisionerStep',
   TemplateInputs = 'TemplateInputs'
-}
-
-export const TemplateDrawerSizes: Record<TemplateDrawerTypes, React.CSSProperties['width']> = {
-  [TemplateDrawerTypes.UseTemplate]: 700
 }
 
 export const DrawerSizes: Record<DrawerTypes, React.CSSProperties['width']> = {
@@ -113,13 +106,6 @@ export interface SelectorData {
   onCancel?: () => void
 }
 
-export interface TemplateDrawerData extends Omit<IDrawerProps, 'isOpen'> {
-  type: TemplateDrawerTypes
-  data?: {
-    selectorData?: SelectorData
-  }
-}
-
 export interface PipelineViewData {
   isSplitViewOpen: boolean
   isYamlEditable: boolean
@@ -128,11 +114,6 @@ export interface PipelineViewData {
   }
   isDrawerOpened: boolean
   drawerData: DrawerData
-}
-
-export interface TemplateViewData {
-  isTemplateDrawerOpened: boolean
-  templateDrawerData: TemplateDrawerData
 }
 
 export interface SelectionState {
@@ -146,11 +127,11 @@ export interface PipelineReducerState {
   yamlHandler?: YamlBuilderHandlerBinding
   originalPipeline: PipelineInfoConfig
   pipelineView: PipelineViewData
-  templateView: TemplateViewData
   pipelineIdentifier: string
   error?: string
   schemaErrors: boolean
   templateTypes: { [key: string]: string }
+  storeMetadata?: StoreMetadata
   gitDetails: EntityGitDetails
   entityValidityDetails: EntityValidityDetails
   isDBInitialized: boolean
@@ -161,6 +142,7 @@ export interface PipelineReducerState {
   snippets?: YamlSnippetMetaData[]
   selectionState: SelectionState
   templateError?: GetDataError<Failure | Error> | null
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 export const DefaultPipeline: PipelineInfoConfig = {
@@ -172,6 +154,7 @@ export interface ActionResponse {
   error?: string
   schemaErrors?: boolean
   isUpdated?: boolean
+  storeMetadata?: StoreMetadata
   gitDetails?: EntityGitDetails
   entityValidityDetails?: EntityValidityDetails
   pipeline?: PipelineInfoConfig
@@ -181,9 +164,9 @@ export interface ActionResponse {
   originalPipeline?: PipelineInfoConfig
   isBEPipelineUpdated?: boolean
   pipelineView?: PipelineViewData
-  templateView?: TemplateViewData
   selectionState?: SelectionState
   templateError?: GetDataError<Failure | Error> | null
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 export interface ActionReturnType {
@@ -255,11 +238,8 @@ export const initialState: PipelineReducerState = {
       type: DrawerTypes.AddStep
     }
   },
-  templateView: {
-    isTemplateDrawerOpened: false,
-    templateDrawerData: { type: TemplateDrawerTypes.UseTemplate }
-  },
   schemaErrors: false,
+  storeMetadata: {},
   gitDetails: {},
   entityValidityDetails: {},
   templateTypes: {},
@@ -310,14 +290,6 @@ export const PipelineReducer = (state = initialState, data: ActionReturnType): P
           ? clone({ ...state.pipelineView, ...response?.pipelineView })
           : state.pipelineView
       }
-    case PipelineActions.UpdateTemplateView:
-      return {
-        ...state,
-        templateView: response?.templateView
-          ? clone({ ...state.templateView, ...response?.templateView })
-          : state.templateView
-      }
-
     case PipelineActions.UpdatePipeline:
       return {
         ...state,

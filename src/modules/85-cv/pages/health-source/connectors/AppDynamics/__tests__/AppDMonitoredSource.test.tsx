@@ -165,7 +165,7 @@ describe('Unit tests for createAppd monitoring source', () => {
 
   test('Validation in create mode', async () => {
     const submitData = jest.fn()
-    const { getByText } = render(
+    const { getByText, container } = render(
       <TestWrapper {...createModeProps}>
         <SetupSourceTabs data={{}} tabTitles={['Tab1']} determineMaxTab={() => 1}>
           <AppDHealthSourceContainer data={{}} onSubmit={submitData} />
@@ -173,9 +173,11 @@ describe('Unit tests for createAppd monitoring source', () => {
       </TestWrapper>
     )
     await waitFor(() => expect(getByText('submit')).not.toBeNull())
+    expect(container.querySelector('input[name="appdApplication"]')).toBeInTheDocument()
     await act(() => {
       fireEvent.click(getByText('submit'))
     })
+
     await waitFor(() => expect(getByText('cv.healthSource.connectors.AppDynamics.validation.application')).toBeTruthy())
   })
 })

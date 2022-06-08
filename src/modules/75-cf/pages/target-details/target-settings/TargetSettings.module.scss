@@ -24,6 +24,10 @@
   }
 }
 
+.tabPanel {
+  padding: var(--spacing-large) var(--spacing-xxlarge) var(--spacing-xxlarge);
+}
+
 .targetSettings {
   > h3 {
     position: sticky;

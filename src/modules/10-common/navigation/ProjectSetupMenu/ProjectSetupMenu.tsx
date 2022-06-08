@@ -13,6 +13,7 @@ import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { useHostedBuilds } from '@common/hooks/useHostedBuild'
 import type { GovernancePathProps, Module, PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 import { useSideNavContext } from 'framework/SideNavStore/SideNavContext'
 import { SidebarLink } from '../SideNav/SideNav'
 import NavExpandable from '../NavExpandable/NavExpandable'
@@ -24,13 +25,14 @@ interface ProjectSetupMenuProps {
 const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<PipelineType<ProjectPathProps>>()
-  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES } = useFeatureFlags()
+  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, NG_GIT_EXPERIENCE } = useFeatureFlags()
   const { showGetStartedTabInMainMenu } = useSideNavContext()
   const { enabledHostedBuildsForFreeUsers } = useHostedBuilds()
   const params = { accountId, orgIdentifier, projectIdentifier, module }
   const isCIorCD = module === 'ci' || module === 'cd'
   // const isCV = module === 'cv'
-  const getGitSyncEnabled = isCIorCD || !module
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
+  const getGitSyncEnabled = (isCIorCD || !module) && !NG_GIT_EXPERIENCE
 
   return (
     <NavExpandable title={getString('common.projectSetup')} route={routes.toSetup(params)}>
@@ -53,7 +55,7 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
         {NG_TEMPLATES && isCIorCD && (
           <SidebarLink label={getString('common.templates')} to={routes.toTemplates(params)} />
         )}
-        {OPA_PIPELINE_GOVERNANCE && isCIorCD && (
+        {OPA_PIPELINE_GOVERNANCE && isCIorCD && canUsePolicyEngine && (
           <SidebarLink label={getString('common.governance')} to={routes.toGovernance(params as GovernancePathProps)} />
         )}
         {enabledHostedBuildsForFreeUsers && !showGetStartedTabInMainMenu && module === 'ci' && (

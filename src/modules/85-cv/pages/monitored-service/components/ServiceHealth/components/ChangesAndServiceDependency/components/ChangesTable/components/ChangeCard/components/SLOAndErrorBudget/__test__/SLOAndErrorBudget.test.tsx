@@ -12,13 +12,15 @@ import * as cvServices from 'services/cv'
 import { TestWrapper } from '@common/utils/testUtils'
 import { responseSLODashboardDetail } from '@cv/pages/slos/CVSLODetailsPage/__test__/CVSLODetailsPage.mock'
 import SLOAndErrorBudget from '../SLOAndErrorBudget'
-import { dashboardWidgetsResponse } from './SLOAndErrorBudget.mock'
+import { monitoredServiceChangeDetailSLOResponse } from './SLOAndErrorBudget.mock'
 import type { SLOAndErrorBudgetProps } from '../SLOAndErrorBudget.types'
 
 const monitoredServiceIdentifier = 'monitored_service_identifier'
 
 jest.mock('services/cv', () => ({
-  useGetSLODashboardWidgets: jest.fn().mockImplementation(() => ({ data: dashboardWidgetsResponse, loading: false })),
+  useGetMonitoredServiceChangeDetails: jest
+    .fn()
+    .mockImplementation(() => ({ data: monitoredServiceChangeDetailSLOResponse, loading: false })),
   useGetSLODetails: jest
     .fn()
     .mockImplementation(() => ({ data: responseSLODashboardDetail, loading: false, error: null, refetch: jest.fn() }))
@@ -44,8 +46,9 @@ describe('SLOAndErrorBudget', () => {
     renderComponent()
 
     await waitFor(() =>
-      expect(cvServices.useGetSLODashboardWidgets).toHaveBeenLastCalledWith({
-        queryParams: { monitoredServiceIdentifier }
+      expect(cvServices.useGetMonitoredServiceChangeDetails).toHaveBeenLastCalledWith({
+        monitoredServiceIdentifier,
+        queryParams: {}
       })
     )
 
@@ -103,10 +106,8 @@ describe('SLOAndErrorBudget', () => {
 
   test('should handle no data of SLO widgets', () => {
     jest
-      .spyOn(cvServices, 'useGetSLODashboardWidgets')
-      .mockImplementation(
-        () => ({ data: { data: { content: [] } }, loading: false, error: null, refetch: jest.fn() } as any)
-      )
+      .spyOn(cvServices, 'useGetMonitoredServiceChangeDetails')
+      .mockImplementation(() => ({ data: { resource: [] }, loading: false, error: null, refetch: jest.fn() } as any))
 
     renderComponent()
 
@@ -115,7 +116,7 @@ describe('SLOAndErrorBudget', () => {
 
   test('should handle loading of SLO widgets', () => {
     jest
-      .spyOn(cvServices, 'useGetSLODashboardWidgets')
+      .spyOn(cvServices, 'useGetMonitoredServiceChangeDetails')
       .mockImplementation(() => ({ data: null, loading: true, error: null, refetch: jest.fn() } as any))
 
     const { container } = renderComponent()
@@ -126,7 +127,7 @@ describe('SLOAndErrorBudget', () => {
   test('should handle error of SLO widgets', () => {
     const errorMessage = 'TEST ERROR MESSAGE'
     jest
-      .spyOn(cvServices, 'useGetSLODashboardWidgets')
+      .spyOn(cvServices, 'useGetMonitoredServiceChangeDetails')
       .mockImplementation(
         () => ({ data: null, loading: false, error: { message: errorMessage }, refetch: jest.fn() } as any)
       )

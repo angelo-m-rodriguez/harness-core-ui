@@ -76,7 +76,8 @@ jest.mock('services/pipeline-ng', () => ({
   useRePostPipelineExecuteWithInputSetYaml: jest.fn(() => ({ data: null })),
   useRerunStagesWithRuntimeInputYaml: jest.fn(() => ({ data: null })),
   useGetInputSetsListForPipeline: jest.fn(() => ({ data: null, refetch: jest.fn() })),
-  useCreateVariablesV2: jest.fn(() => ({}))
+  useCreateVariablesV2: jest.fn(() => ({})),
+  useValidateTemplateInputs: jest.fn(() => ({ data: null }))
 }))
 
 const getListOfBranchesWithStatus = jest.fn(() => Promise.resolve(branchStatusMock))
@@ -102,6 +103,7 @@ jest.mock('services/cd-ng', () => ({
     return { data: sourceCodeManagers, refetch: jest.fn() }
   }),
   useCreatePR: jest.fn(() => noop),
+  useCreatePRV2: jest.fn(() => noop),
   useGetFileContent: jest.fn(() => noop)
 }))
 

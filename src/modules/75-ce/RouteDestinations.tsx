@@ -27,6 +27,7 @@ import featureFactory from 'framework/featureStore/FeaturesFactory'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import { BannerType } from '@common/layouts/Constants'
 import { FEATURE_USAGE_WARNING_LIMIT } from '@common/layouts/FeatureBanner'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import CEHomePage from './pages/home/CEHomePage'
 import CECODashboardPage from './pages/co-dashboard/CECODashboardPage'
 import CECOCreateGatewayPage from './pages/co-create-gateway/CECOCreateGatewayPage'
@@ -204,6 +205,7 @@ const CERoutes: React.FC = () => {
           layout={MinimalLayout}
           path={routes.toModuleTrialHome({ ...accountPathProps, module: 'ce' })}
           exact
+          pageName={PAGE_NAME.CETrialHomePage}
         >
           <CETrialHomePage />
         </RouteWithLayout>
@@ -211,6 +213,7 @@ const CERoutes: React.FC = () => {
           licenseRedirectData={licenseRedirectData}
           path={routes.toCEHome({ ...accountPathProps })}
           exact
+          pageName={PAGE_NAME.CEHomePage}
         >
           <CEHomePage />
         </RouteWithLayout>
@@ -221,6 +224,7 @@ const CERoutes: React.FC = () => {
           licenseRedirectData={licenseRedirectData}
           sidebarProps={CESideNavProps}
           path={routes.toCEOverview({ ...accountPathProps, ...projectPathProps })}
+          pageName={PAGE_NAME.CEOverviewPage}
         >
           <OverviewPage />
         </RouteWithLayout>
@@ -236,6 +240,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCECORules({ ...accountPathProps, ...projectPathProps })}
           exact
+          pageName={PAGE_NAME.CECODashboardPage}
         >
           <CECODashboardPage />
         </RouteWithLayout>
@@ -244,6 +249,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCECOCreateGateway({ ...accountPathProps, ...projectPathProps })}
           exact
+          pageName={PAGE_NAME.CECOCreateGatewayPage}
         >
           <CECOCreateGatewayPage />
         </RouteWithLayout>
@@ -256,6 +262,7 @@ const CERoutes: React.FC = () => {
             gatewayIdentifier: ':gatewayIdentifier'
           })}
           exact
+          pageName={PAGE_NAME.CECOEditGatewayPage}
         >
           <CECOEditGatewayPage />
         </RouteWithLayout>
@@ -264,6 +271,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCECOAccessPoints({ ...accountPathProps, ...projectPathProps })}
           exact
+          pageName={PAGE_NAME.CECOLoadBalancersPage}
         >
           <CECOLoadBalancersPage />
         </RouteWithLayout>
@@ -273,6 +281,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCEBudgets({ ...accountPathProps })}
           exact
+          pageName={PAGE_NAME.CEBudgets}
         >
           <Budgets />
         </RouteWithLayout>
@@ -285,6 +294,7 @@ const CERoutes: React.FC = () => {
             budgetId: ':budgetId',
             budgetName: ':budgetName'
           })}
+          pageName={PAGE_NAME.CEBudgetDetails}
         >
           <BudgetDetails />
         </RouteWithLayout>
@@ -294,6 +304,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCERecommendations({ ...accountPathProps, ...projectPathProps })}
           exact
+          pageName={PAGE_NAME.CERecommendationList}
         >
           <RecommendationList />
         </RouteWithLayout>
@@ -307,6 +318,7 @@ const CERoutes: React.FC = () => {
             recommendation: ':recommendation'
           })}
           exact
+          pageName={PAGE_NAME.CERecommendationDetailsPage}
         >
           <RecommendationDetailsPage />
         </RouteWithLayout>
@@ -333,6 +345,7 @@ const CERoutes: React.FC = () => {
             recommendation: ':recommendation'
           })}
           exact
+          pageName={PAGE_NAME.CENodeRecommendationDetailsPage}
         >
           <NodeRecommendationDetailsPage />
         </RouteWithLayout>
@@ -346,6 +359,7 @@ const CERoutes: React.FC = () => {
             recommendation: ':recommendation'
           })}
           exact
+          pageName={PAGE_NAME.CEECSRecommendationDetailsPage}
         >
           <ECSRecommendationDetailsPage />
         </RouteWithLayout>
@@ -357,6 +371,7 @@ const CERoutes: React.FC = () => {
             perspectiveName: ':perspectiveName'
           })}
           exact
+          pageName={PAGE_NAME.CEPerspectiveDetailsPage}
         >
           <PerspectiveDetailsPage />
         </RouteWithLayout>
@@ -369,6 +384,7 @@ const CERoutes: React.FC = () => {
             perspectiveId: ':perspectiveId'
           })}
           exact
+          pageName={PAGE_NAME.CECreatePerspectivePage}
         >
           <CreatePerspectivePage />
         </RouteWithLayout>
@@ -379,6 +395,7 @@ const CERoutes: React.FC = () => {
             ...accountPathProps
           })}
           exact
+          pageName={PAGE_NAME.CEPerspectiveListPage}
         >
           <PerspectiveListPage />
         </RouteWithLayout>
@@ -394,6 +411,7 @@ const CERoutes: React.FC = () => {
             workloadName: ':workloadName'
           })}
           exact
+          pageName={PAGE_NAME.CEWorkloadDetailsPage}
         >
           <WorkloadDetailsPage />
         </RouteWithLayout>
@@ -409,6 +427,7 @@ const CERoutes: React.FC = () => {
             workloadName: ':workloadName'
           })}
           exact
+          pageName={PAGE_NAME.CEWorkloadDetailsPage}
         >
           <WorkloadDetailsPage />
         </RouteWithLayout>
@@ -423,6 +442,7 @@ const CERoutes: React.FC = () => {
             nodeId: ':nodeId'
           })}
           exact
+          pageName={PAGE_NAME.CENodeDetailsPage}
         >
           <NodeDetailsPage />
         </RouteWithLayout>
@@ -433,6 +453,7 @@ const CERoutes: React.FC = () => {
             ...accountPathProps
           })}
           exact
+          pageName={PAGE_NAME.CEAnomaliesOverviewPage}
         >
           <AnomaliesOverviewPage />
         </RouteWithLayout>
@@ -442,6 +463,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toBusinessMapping({ ...accountPathProps })}
           exact
+          pageName={PAGE_NAME.CEBusinessMapping}
         >
           <BusinessMapping />
         </RouteWithLayout>
@@ -450,6 +472,7 @@ const CERoutes: React.FC = () => {
           sidebarProps={CESideNavProps}
           path={routes.toCEOverview({ ...accountPathProps })}
           exact
+          pageName={PAGE_NAME.CEOverviewPage}
         >
           <OverviewPage />
         </RouteWithLayout>

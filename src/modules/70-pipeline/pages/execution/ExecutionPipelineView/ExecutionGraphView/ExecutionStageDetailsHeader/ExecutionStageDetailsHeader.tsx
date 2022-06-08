@@ -6,11 +6,12 @@
  */
 
 import React from 'react'
-import { defaultTo, find } from 'lodash-es'
+import { defaultTo, find, identity } from 'lodash-es'
 
 import { useParams } from 'react-router-dom'
-import { ButtonVariation } from '@wings-software/uicore'
+import { ButtonVariation, Text } from '@harness/uicore'
 import { String as StrTemplate, useStrings } from 'framework/strings'
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { useExecutionContext } from '@pipeline/context/ExecutionContext'
 import type { StageDetailProps } from '@pipeline/factories/ExecutionFactory/types'
 import factory from '@pipeline/factories/ExecutionFactory'
@@ -25,16 +26,29 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import RbacButton from '@rbac/components/Button/Button'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
+import { extractInfo } from '@common/components/ErrorHandler/ErrorHandler'
+import type { StoreType } from '@common/constants/GitSyncTypes'
 import css from './ExecutionStageDetailsHeader.module.scss'
 
 export function ExecutionStageDetailsHeader(): React.ReactElement {
   const { selectedStageId, pipelineStagesMap, refetch, pipelineExecutionDetail, allNodeMap } = useExecutionContext()
   const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module } =
     useParams<PipelineType<ExecutionPathProps>>()
+  const { isGitSyncEnabled } = useAppStore()
   const stage = pipelineStagesMap.get(selectedStageId)
   const stageDetail = factory.getStageDetails(stage?.nodeType as StageType)
   const shouldShowError = isExecutionFailed(stage?.status)
-  const errorMessage = defaultTo(stage?.failureInfo?.message, '')
+  const responseMessages = defaultTo(
+    pipelineExecutionDetail?.pipelineExecutionSummary?.failureInfo?.responseMessages,
+    []
+  )
+  const errorMessage =
+    responseMessages.length > 0
+      ? extractInfo(responseMessages)
+          .map(err => err.error?.message)
+          .filter(identity)
+          .join(', ')
+      : defaultTo(stage?.failureInfo?.message, '')
   const { getString } = useStrings()
   const [canEdit, canExecute] = usePermission(
     {
@@ -78,8 +92,12 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
 
   const { openRunPipelineModal } = useRunPipelineModal({
     pipelineIdentifier,
-    repoIdentifier: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+    repoIdentifier: isGitSyncEnabled
+      ? pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier
+      : pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName,
     branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch,
+    connectorRef: pipelineExecutionDetail?.pipelineExecutionSummary?.connectorRef,
+    storeType: pipelineExecutionDetail?.pipelineExecutionSummary?.storeType as StoreType,
     stagesExecuted: [stage?.nodeIdentifier || '']
   })
 
@@ -117,7 +135,10 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
                 executionIdentifier,
                 module,
                 repoIdentifier: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoIdentifier,
-                branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch
+                connectorRef: pipelineExecutionDetail?.pipelineExecutionSummary?.connectorRef,
+                repoName: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.repoName,
+                branch: pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch,
+                storeType: pipelineExecutionDetail?.pipelineExecutionSummary?.storeType as StoreType
               }}
               noMenu
               stageName={stageNode?.name}
@@ -173,7 +194,7 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
           <ExecutionStatusLabel status={stage?.status as ExecutionStatus} />
           <div className={css.errorMsg}>
             <StrTemplate className={css.errorTitle} stringID="errorSummaryText" tagName="div" />
-            <p>{errorMessage}</p>
+            <Text lineClamp={1}>{errorMessage}</Text>
           </div>
         </div>
       ) : null}

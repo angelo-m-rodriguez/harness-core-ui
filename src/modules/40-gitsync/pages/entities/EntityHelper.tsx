@@ -15,7 +15,7 @@ import { Entities } from '@common/interfaces/GitSyncInterface'
 export const getEntityIconName = (entityType: string | undefined): IconName => {
   switch (entityType) {
     case Entities.PROJECTS:
-      return 'nav-project-selected'
+      return 'nav-project'
     case Entities.PIPELINES:
       return 'pipeline-ng'
     case Entities.INPUT_SETS:
@@ -33,11 +33,19 @@ export const getEntityIconName = (entityType: string | undefined): IconName => {
   }
 }
 
+export const getEntityIconColor = (iconName: IconName): Color | undefined => {
+  switch (iconName) {
+    case 'nav-project':
+      return Color.PRIMARY_7
+  }
+}
+
 const RenderEntity: Renderer<CellProps<GitSyncEntityDTO>> = ({ row }) => {
   const data = row.original
+  const iconName = getEntityIconName(data.entityType)
   return (
     <Layout.Horizontal>
-      <Icon inline name={getEntityIconName(data.entityType)}></Icon>
+      <Icon inline name={getEntityIconName(data.entityType)} color={getEntityIconColor(iconName)}></Icon>
       <Text padding={{ left: 'small' }} inline lineClamp={1}>
         {data.entityName}
       </Text>

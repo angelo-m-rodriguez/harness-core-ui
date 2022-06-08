@@ -84,6 +84,9 @@ const getCommonChartProperties = (minMaxAngle: MinMaxAngleState): Pick<Highchart
   boost: {
     enabled: true,
     seriesThreshold: 2000
+  },
+  credits: {
+    enabled: false
   }
 })
 

@@ -38,21 +38,22 @@ import Dependency from './components/Dependency/Dependency'
 import { getInitFormData } from './components/Service/Service.utils'
 import type { MonitoredServiceForm } from './components/Service/Service.types'
 import { determineUnSaveState, onTabChange, onSubmit, getImperativeHandleRef } from './Configurations.utils'
+import { useMonitoredServiceContext } from '../../MonitoredServiceContext'
 import css from './Configurations.module.scss'
 
 interface ConfigurationsInterface {
-  isTemplate?: boolean
   templateValue?: NGTemplateInfoConfig
   updateTemplate?: (template: MonitoredServiceForm) => void
 }
 
 export default function Configurations(
-  { isTemplate, updateTemplate, templateValue }: ConfigurationsInterface,
+  { updateTemplate, templateValue }: ConfigurationsInterface,
   formikRef: TemplateFormRef
 ): JSX.Element {
   const { getString } = useStrings()
   const { showWarning, showError, showSuccess } = useToaster()
   const history = useHistory()
+  const { isTemplate } = useMonitoredServiceContext()
   const { orgIdentifier, projectIdentifier, accountId, identifier } = useParams<
     ProjectPathProps & { identifier: string }
   >()
@@ -184,7 +185,8 @@ export default function Configurations(
       dataMonitoredServiceById?.data?.monitoredService.name,
       identifier,
       loadingGetMonitoredService,
-      defaultMonitoredService
+      defaultMonitoredService,
+      templateValue
     ]
   )
 

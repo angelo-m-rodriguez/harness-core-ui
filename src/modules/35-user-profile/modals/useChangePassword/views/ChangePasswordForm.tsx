@@ -17,8 +17,7 @@ import {
   Text,
   ModalErrorHandler,
   ModalErrorHandlerBinding,
-  ButtonVariation,
-  shouldShowError
+  ButtonVariation
 } from '@wings-software/uicore'
 import { Divider } from '@blueprintjs/core'
 import { Color } from '@harness/design-system'
@@ -34,7 +33,7 @@ import css from './ChangePasswordForm.module.scss'
 
 interface ChangePasswordFormProps {
   hideModal: () => void
-  passwordStrengthPolicy: PasswordStrengthPolicy
+  passwordStrengthPolicy?: PasswordStrengthPolicy
 }
 
 interface InputIcon {
@@ -70,7 +69,7 @@ const InputIcon = ({ isVisible, onClick }: InputIcon): React.ReactElement => (
   />
 )
 
-const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ hideModal, passwordStrengthPolicy }) => {
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ hideModal, passwordStrengthPolicy = {} }) => {
   const { getString } = useStrings()
   const { getRBACErrorMessage } = useRBACError()
   const { showSuccess } = useToaster()
@@ -95,21 +94,25 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ hideModal, pass
         currentPassword: values.currentPassword,
         newPassword: values.newPassword
       })
-
-      /* istanbul ignore else */ if (response) {
-        /* istanbul ignore else */ if (response.data === ChangePasswordResponse.PASSWORD_CHANGED) {
+      /* istanbul ignore next */ switch (response?.data) {
+        case ChangePasswordResponse.PASSWORD_CHANGED: {
           showSuccess(getString('userProfile.passwordChangedSuccessfully'), 5000)
           hideModal()
-        } /* istanbul ignore next */ else if (response.data === ChangePasswordResponse.INCORRECT_CURRENT_PASSWORD) {
-          modalErrorHandler?.showDanger(getString('userProfile.yourCurrentPasswordIncorrect'))
-        } /* istanbul ignore next */ else if (response.data === ChangePasswordResponse.PASSWORD_STRENGTH_VIOLATED) {
-          modalErrorHandler?.showDanger(getString('userProfile.newPasswordShouldMeetTheRequirements'))
+          break
         }
+        case ChangePasswordResponse.INCORRECT_CURRENT_PASSWORD: {
+          modalErrorHandler?.showDanger(getString('userProfile.yourCurrentPasswordIncorrect'))
+          break
+        }
+        case ChangePasswordResponse.PASSWORD_STRENGTH_VIOLATED: {
+          modalErrorHandler?.showDanger(getString('userProfile.newPasswordShouldMeetTheRequirements'))
+          break
+        }
+        default:
+          break
       }
     } catch (e) {
-      /* istanbul ignore next */ if (shouldShowError(e)) {
-        modalErrorHandler?.showDanger(getRBACErrorMessage(e))
-      }
+      modalErrorHandler?.showDanger(getRBACErrorMessage(e))
     }
   }
 

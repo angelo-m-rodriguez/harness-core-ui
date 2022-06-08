@@ -10,7 +10,7 @@ describe('CCM Budget Creation flow', () => {
     cy.login('test', 'test')
   })
 
-  it('should be able to create perspective', () => {
+  it.skip('should be able to create perspective', () => {
     cy.intercept('POST', '/ccm/api/graphql?accountIdentifier=accountId&routingId=accountId', req => {
       const { body } = req
       if (body.operationName === 'FetchCcmMetaData') {

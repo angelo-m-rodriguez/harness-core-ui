@@ -4304,7 +4304,7 @@ exports[`Test TerraformDestroy should render variable view 1`] = `
     class="variablesListTable variablePaddingL3"
   />
   <div
-    class="variablesListTable variablePaddingL2"
+    class="variablesListTable variablePaddingL3"
   >
     <div
       class="variableListRow variable-list-row"
@@ -4327,7 +4327,7 @@ exports[`Test TerraformDestroy should render variable view 1`] = `
     </div>
   </div>
   <div
-    class="variablesListTable variablePaddingL2"
+    class="variablesListTable variablePaddingL3"
   >
     <div
       class="variableListRow variable-list-row"

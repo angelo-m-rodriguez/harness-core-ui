@@ -20,7 +20,6 @@ import { useQueryParams } from '@common/hooks'
 import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
-import { FormMultiTypeTextAreaField } from '@common/components'
 import { JiraProjectBasicNG, JiraProjectNG, useGetJiraIssueCreateMetadata, useGetJiraProjects } from 'services/cd-ng'
 import { getGenuineValue, setIssueTypeOptions } from '../JiraApproval/helper'
 import type { JiraProjectSelectOption } from '../JiraApproval/types'
@@ -209,36 +208,6 @@ function FormContent(formContentProps: JiraCreateDeploymentModeFormContentInterf
               items: setIssueTypeOptions(projectMetadata?.issuetypes)
             }
           }}
-        />
-      ) : null}
-
-      {getMultiTypeFromValue(template?.spec?.fields?.find(field => field.name === 'Summary')?.value as string) ===
-      MultiTypeInputType.RUNTIME ? (
-        <FormInput.MultiTextInput
-          label={getString('summary')}
-          className={css.deploymentViewMedium}
-          name={`${prefix}spec.summary`}
-          disabled={isApprovalStepFieldDisabled(readonly)}
-          placeholder={getString('pipeline.jiraCreateStep.summaryPlaceholder')}
-          multiTextInputProps={{
-            allowableTypes,
-            expressions
-          }}
-        />
-      ) : null}
-
-      {getMultiTypeFromValue(template?.spec?.fields?.find(field => field.name === 'Description')?.value as string) ===
-      MultiTypeInputType.RUNTIME ? (
-        <FormMultiTypeTextAreaField
-          multiTypeTextArea={{
-            expressions,
-            allowableTypes
-          }}
-          label={getString('description')}
-          className={css.deploymentViewMedium}
-          name={`${prefix}spec.description`}
-          disabled={isApprovalStepFieldDisabled(readonly)}
-          placeholder={getString('common.descriptionPlaceholder')}
         />
       ) : null}
     </React.Fragment>

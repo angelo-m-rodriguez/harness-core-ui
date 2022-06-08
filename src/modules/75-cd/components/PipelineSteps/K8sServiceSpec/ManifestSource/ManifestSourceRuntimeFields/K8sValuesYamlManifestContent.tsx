@@ -73,6 +73,22 @@ const K8sValuesYamlManifestContent = (props: K8sValuesYamlManifestRenderProps): 
           />
         </div>
       )}
+
+      {isFieldRuntime(`${manifestPath}.spec.valuesPaths`, template) && (
+        <div className={css.verticalSpacingInput}>
+          <List
+            labelClassName={css.listLabel}
+            label={getString('pipeline.manifestType.valuesYamlPath')}
+            name={`${path}.${manifestPath}.spec.valuesPaths`}
+            placeholder={getString('pipeline.manifestType.manifestPathPlaceholder')}
+            disabled={isFieldDisabled(`${manifestPath}.spec.valuesPaths`)}
+            style={{ marginBottom: 'var(--spacing-small)' }}
+            expressions={expressions}
+            isNameOfArrayType
+          />
+        </div>
+      )}
+
       {isFieldRuntime(`${manifestPath}.spec.skipResourceVersioning`, template) && (
         <div className={css.verticalSpacingInput}>
           <FormMultiTypeCheckboxField

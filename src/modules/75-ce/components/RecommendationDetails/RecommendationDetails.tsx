@@ -86,8 +86,8 @@ const RecommendationDetails: React.FC<RecommendationDetailsProps> = ({
 
   const { getString } = useStrings()
 
-  const currentCPUResource = getCPUValueInCPUFromExpression(currentResources.requests.cpu || 1)
-  const currentMemResource = getMemoryValueInGBFromExpression(currentResources.requests.memory)
+  const currentCPUResource = getCPUValueInCPUFromExpression(currentResources?.requests?.cpu || 1)
+  const currentMemResource = getMemoryValueInGBFromExpression(currentResources?.requests?.memory)
 
   const cpuReqValue = Number(histogramData?.cpuHistogram.precomputed[cpuReqVal])
   const memReqValue = Number(histogramData?.memoryHistogram.precomputed[memReqVal])

@@ -526,7 +526,6 @@ exports[`Create Secret Manager Wizard should render form 2`] = `
        
       <div
         class="StyledProps--font StyledProps--main StyledProps--padding-top-medium"
-        style="width: 64%;"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-h3 StyledProps--padding-bottom-xlarge"
@@ -1197,7 +1196,6 @@ exports[`Create Secret Manager Wizard should render form 3`] = `
        
       <div
         class="StyledProps--font StyledProps--main StyledProps--padding-top-medium"
-        style="width: 64%;"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-h3 StyledProps--padding-bottom-xlarge StyledProps--color StyledProps--color-black"
@@ -1579,7 +1577,6 @@ exports[`Create Secret Manager Wizard should render form in edit 1`] = `
        
       <div
         class="StyledProps--font StyledProps--main StyledProps--padding-top-medium"
-        style="width: 64%;"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-h3 StyledProps--padding-bottom-xlarge"

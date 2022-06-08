@@ -54,6 +54,11 @@ function NotificationMethods({
             onChange={item => {
               setMethod(item)
             }}
+            inputProps={{
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              'data-testid': 'notificationType'
+            }}
           />
         </Layout.Vertical>
         {method?.value === NotificationType.MsTeams ? (

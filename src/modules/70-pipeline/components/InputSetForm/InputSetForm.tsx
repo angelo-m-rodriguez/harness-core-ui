@@ -45,7 +45,12 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { useToaster } from '@common/exports'
 import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
-import type { InputSetGitQueryParams, InputSetPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
+import type {
+  GitQueryParams,
+  InputSetGitQueryParams,
+  InputSetPathProps,
+  PipelineType
+} from '@common/interfaces/RouteInterfaces'
 import routes from '@common/RouteDefinitions'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useStrings } from 'framework/strings'
@@ -55,8 +60,10 @@ import { useMutateAsGet, useQueryParams } from '@common/hooks'
 import type { GitContextProps } from '@common/components/GitContextForm/GitContextForm'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import type { InputSetDTO, InputSetType } from '@pipeline/utils/types'
 import { clearNullUndefined, isInputSetInvalid } from '@pipeline/utils/inputSetUtils'
+import NoEntityFound from '@pipeline/pages/utils/NoEntityFound/NoEntityFound'
 import { clearRuntimeInput } from '../PipelineStudio/StepUtil'
 import GitPopover from '../GitPopover/GitPopover'
 import FormikInputSetForm from './FormikInputSetForm'
@@ -88,7 +95,8 @@ const getInputSet = (
   inputSetResponse: ResponseInputSetResponse | null,
   template: ResponseInputSetTemplateWithReplacedExpressionsResponse | null,
   mergeTemplate?: string,
-  isGitSyncEnabled = false
+  isGitSyncEnabled = false,
+  isRemotePipeline = false
 ): InputSetDTO | InputSetType => {
   if (inputSetResponse?.data) {
     const inputSetObj = inputSetResponse?.data
@@ -104,7 +112,7 @@ const getInputSet = (
       ? defaultTo(parse(defaultTo(mergeTemplate, ''))?.pipeline, {})
       : parsedInputSetObj?.inputSet?.pipeline
 
-    if (isGitSyncEnabled && parsedInputSetObj && parsedInputSetObj.inputSet) {
+    if ((isGitSyncEnabled || isRemotePipeline) && parsedInputSetObj && parsedInputSetObj.inputSet) {
       return {
         name: parsedInputSetObj.inputSet.name,
         tags: parsedInputSetObj.inputSet.tags,
@@ -115,7 +123,8 @@ const getInputSet = (
         pipeline: clearRuntimeInput(parsedPipelineWithValues),
         gitDetails: defaultTo(inputSetObj.gitDetails, {}),
         entityValidityDetails: defaultTo(inputSetObj.entityValidityDetails, {}),
-        outdated: inputSetObj.outdated
+        outdated: inputSetObj.outdated,
+        storeType: inputSetObj.storeType
       }
     }
     return {
@@ -128,7 +137,8 @@ const getInputSet = (
       pipeline: clearRuntimeInput(parsedPipelineWithValues),
       gitDetails: defaultTo(inputSetObj.gitDetails, {}),
       entityValidityDetails: defaultTo(inputSetObj.entityValidityDetails, {}),
-      outdated: inputSetObj.outdated
+      outdated: inputSetObj.outdated,
+      storeType: inputSetObj.storeType
     }
   }
   return getDefaultInputSet(
@@ -146,9 +156,11 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier, inputSetIdentifier, module } = useParams<
     PipelineType<InputSetPathProps> & { accountId: string }
   >()
-  const { repoIdentifier, branch, inputSetRepoIdentifier, inputSetBranch } = useQueryParams<InputSetGitQueryParams>()
-  const { isGitSyncEnabled } = React.useContext(AppStoreContext)
+  const { repoIdentifier, branch, inputSetRepoIdentifier, inputSetBranch, connectorRef, repoName, storeType } =
+    useQueryParams<InputSetGitQueryParams>()
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = React.useContext(AppStoreContext)
   const [inputSetUpdateResponse, setInputSetUpdateResponse] = React.useState<ResponseInputSetResponse>()
+  const [filePath, setFilePath] = React.useState<string>()
   const {
     refetch: refetchTemplate,
     data: template,
@@ -177,15 +189,16 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
   const {
     data: inputSetResponse,
     refetch,
-    loading: loadingInputSet
+    loading: loadingInputSet,
+    error: inputSetError
   } = useGetInputSetForPipeline({
     queryParams: {
       accountIdentifier: accountId,
       orgIdentifier,
       pipelineIdentifier,
       projectIdentifier,
-      repoIdentifier: inputSetRepoIdentifier,
-      branch: inputSetBranch
+      repoIdentifier: isGitSyncEnabled ? inputSetRepoIdentifier : repoName,
+      branch: isGitSyncEnabled ? inputSetBranch : branch
     },
     inputSetIdentifier: defaultTo(inputSetIdentifier, ''),
     lazy: true
@@ -204,8 +217,8 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
       pipelineIdentifier,
       pipelineRepoID: repoIdentifier,
       pipelineBranch: branch,
-      repoIdentifier: inputSetRepoIdentifier,
-      branch: inputSetBranch
+      repoIdentifier: isGitSyncEnabled ? inputSetRepoIdentifier : repoName,
+      branch: isGitSyncEnabled ? inputSetBranch : branch
     }
   })
 
@@ -273,7 +286,8 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
         inputSetUpdateResponse,
         template,
         mergeTemplate,
-        isGitSyncEnabled
+        isGitSyncEnabled,
+        isGitSimplificationEnabled && inputSetResponse?.data?.storeType === StoreType.REMOTE
       )
     }
     return getInputSet(orgIdentifier, projectIdentifier, inputSetResponse, template, mergeTemplate, isGitSyncEnabled)
@@ -287,7 +301,7 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
 
   const [disableVisualView, setDisableVisualView] = React.useState(inputSet.entityValidityDetails?.valid === false)
 
-  const formikRef = React.useRef<FormikProps<InputSetDTO & GitContextProps>>()
+  const formikRef = React.useRef<FormikProps<InputSetDTO & GitContextProps & StoreMetadata>>()
 
   const [canUpdateInputSet] = usePermission(
     {
@@ -312,8 +326,11 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
       accountId,
       pipelineIdentifier,
       module,
-      branch: pipeline?.data?.gitDetails?.branch,
-      repoIdentifier: pipeline?.data?.gitDetails?.repoIdentifier
+      connectorRef,
+      repoIdentifier: isGitSyncEnabled ? pipeline?.data?.gitDetails?.repoIdentifier : repoIdentifier,
+      repoName,
+      branch: isGitSyncEnabled ? pipeline?.data?.gitDetails?.branch : branch,
+      storeType
     })
     history.push(route)
   }
@@ -483,9 +500,15 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
           formikRef.current?.setValues({
             ...omit(inputSet, 'gitDetails', 'entityValidityDetails', 'outdated'),
             repo: defaultTo(repoIdentifier, ''),
-            branch: defaultTo(branch, '')
+            branch: defaultTo(branch, ''),
+            connectorRef: defaultTo(connectorRef, ''),
+            repoName: defaultTo(repoName, ''),
+            storeType: defaultTo(storeType, StoreType.INLINE),
+            filePath: defaultTo(inputSet.gitDetails?.filePath, filePath)
           })
         }
+      } else {
+        setFilePath(formikRef.current?.values.filePath)
       }
       setSelectedView(view)
     },
@@ -509,6 +532,7 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
         executionView={executionView}
         isEdit={isEdit}
         isGitSyncEnabled={isGitSyncEnabled}
+        isGitSimplificationEnabled={isGitSimplificationEnabled}
       />
     ),
     [
@@ -532,6 +556,8 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
 
   return executionView ? (
     child()
+  ) : isGitSimplificationEnabled && !loadingInputSet && inputSetError ? (
+    <NoEntityFound identifier={inputSetIdentifier} entityType={'inputSet'} />
   ) : (
     <InputSetFormWrapper
       loading={
@@ -583,6 +609,7 @@ export function InputSetFormWrapper(props: InputSetFormWrapperProps): React.Reac
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier, module } = useParams<
     PipelineType<InputSetPathProps> & { accountId: string }
   >()
+  const { connectorRef, repoIdentifier, repoName, branch, storeType } = useQueryParams<GitQueryParams>()
   const { getString } = useStrings()
 
   return (
@@ -628,8 +655,11 @@ export function InputSetFormWrapper(props: InputSetFormWrapperProps): React.Reac
                     accountId,
                     pipelineIdentifier,
                     module,
-                    branch: pipeline?.data?.gitDetails?.branch,
-                    repoIdentifier: pipeline?.data?.gitDetails?.repoIdentifier
+                    connectorRef,
+                    repoIdentifier: isGitSyncEnabled ? pipeline?.data?.gitDetails?.repoIdentifier : repoIdentifier,
+                    repoName,
+                    branch: isGitSyncEnabled ? pipeline?.data?.gitDetails?.branch : branch,
+                    storeType
                   }),
                   label: defaultTo(parse(defaultTo(pipeline?.data?.yamlPipeline, ''))?.pipeline.name, '')
                 }

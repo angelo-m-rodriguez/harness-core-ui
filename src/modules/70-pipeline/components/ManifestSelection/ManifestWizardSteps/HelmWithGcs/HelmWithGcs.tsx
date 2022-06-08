@@ -171,11 +171,7 @@ function HelmWithGcs({
         initialValues={getInitialValues()}
         formName="helmWithGcs"
         validationSchema={Yup.object().shape({
-          ...ManifestIdentifierValidation(
-            manifestIdsList,
-            initialValues?.identifier,
-            getString('pipeline.uniqueIdentifier')
-          ),
+          ...ManifestIdentifierValidation(manifestIdsList, initialValues?.identifier, getString('pipeline.uniqueName')),
           chartName: Yup.string().trim().required(getString('pipeline.manifestType.http.chartNameRequired')),
           helmVersion: Yup.string().trim().required(getString('pipeline.manifestType.helmVersionRequired')),
           bucketName: Yup.mixed().required(getString('pipeline.manifestType.bucketNameRequired')),

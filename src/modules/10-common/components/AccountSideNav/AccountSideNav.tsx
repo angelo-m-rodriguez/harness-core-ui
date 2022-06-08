@@ -14,6 +14,7 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { SidebarLink } from '@common/navigation/SideNav/SideNav'
 import { useStrings } from 'framework/strings'
 import { returnLaunchUrl } from '@common/utils/routeUtils'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { LaunchButton } from '../LaunchButton/LaunchButton'
 
@@ -22,13 +23,14 @@ export default function AccountSideNav(): React.ReactElement {
   const { accountId } = useParams<AccountPathProps>()
   const { NG_LICENSES_ENABLED, OPA_PIPELINE_GOVERNANCE, OPA_FF_GOVERNANCE, AUDIT_TRAIL_WEB_INTERFACE } =
     useFeatureFlags()
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
 
   return (
     <Layout.Vertical spacing="small" margin={{ top: 'xxxlarge' }}>
       <SidebarLink exact label={getString('overview')} to={routes.toAccountSettingsOverview({ accountId })} />
       <SidebarLink label={getString('authentication')} to={routes.toAuthenticationSettings({ accountId })} />
       <SidebarLink label={getString('common.accountResources')} to={routes.toAccountResources({ accountId })} />
-      {(OPA_PIPELINE_GOVERNANCE || OPA_FF_GOVERNANCE) && (
+      {canUsePolicyEngine && (OPA_PIPELINE_GOVERNANCE || OPA_FF_GOVERNANCE) && (
         <SidebarLink label={getString('common.governance')} to={routes.toGovernance({ accountId })} />
       )}
       <SidebarLink to={routes.toAccessControl({ accountId })} label={getString('accessControl')} />

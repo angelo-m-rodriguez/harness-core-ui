@@ -32,7 +32,8 @@ import {
   StageExecutionResponse,
   useRunStagesWithRuntimeInputYaml,
   useRerunStagesWithRuntimeInputYaml,
-  useGetStagesExecutionList
+  useGetStagesExecutionList,
+  useValidateTemplateInputs
 } from 'services/pipeline-ng'
 import { useToaster } from '@common/exports'
 import routes from '@common/RouteDefinitions'
@@ -68,6 +69,8 @@ import {
   getPipelineWithoutCodebaseInputs
 } from '@pipeline/utils/CIUtils'
 import { useDeepCompareEffect } from '@common/hooks/useDeepCompareEffect'
+import { StoreType } from '@common/constants/GitSyncTypes'
+import { PipelineErrorView } from '@pipeline/components/RunPipelineModal/PipelineErrorView'
 import { clearRuntimeInput, validatePipeline, getErrorsList } from '../PipelineStudio/StepUtil'
 import { PreFlightCheckModal } from '../PreFlightCheckModal/PreFlightCheckModal'
 import { YamlBuilderMemo } from '../PipelineStudio/PipelineYamlView/PipelineYamlView'
@@ -124,6 +127,8 @@ function RunPipelineFormBasic({
   executionView,
   branch,
   repoIdentifier,
+  connectorRef,
+  storeType,
   executionInputSetTemplateYaml = '',
   stagesExecuted,
   executionIdentifier
@@ -139,7 +144,7 @@ function RunPipelineFormBasic({
   const history = useHistory()
   const { getString } = useStrings()
   const { getRBACErrorMessage } = useRBACError()
-  const { isGitSyncEnabled } = useAppStore()
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const [runClicked, setRunClicked] = useState(false)
   const [expressionFormState, setExpressionFormState] = useState<KVPair>({})
   const [selectedStageData, setSelectedStageData] = useState<StageSelectionData>({
@@ -189,6 +194,18 @@ function RunPipelineFormBasic({
       repoIdentifier,
       branch,
       getTemplatesResolvedPipeline: true
+    }
+  })
+
+  const { data: validateTemplateInputsResponse, loading: loadingValidateTemplateInputs } = useValidateTemplateInputs({
+    queryParams: {
+      accountIdentifier: accountId,
+      orgIdentifier,
+      projectIdentifier,
+      identifier: pipelineIdentifier,
+      repoIdentifier,
+      branch,
+      getDefaultFromOtherRepo: true
     }
   })
 
@@ -377,6 +394,10 @@ function RunPipelineFormBasic({
       formikRef.current.setValues({ ...formikRef.current.values, ...newPipeline })
     }
   }, [formikRef?.current?.values?.template?.templateInputs, resolvedPipeline])
+
+  useEffect(() => {
+    setSkipPreFlightCheck(defaultTo(isGitSimplificationEnabled && storeType === StoreType.REMOTE, false))
+  }, [isGitSimplificationEnabled, storeType])
 
   const [showPreflightCheckModal, hidePreflightCheckModal] = useModalHook(() => {
     return (
@@ -616,7 +637,15 @@ function RunPipelineFormBasic({
   }
 
   const shouldShowPageSpinner = (): boolean => {
-    return loadingPipeline || runLoading || runStageLoading || reRunLoading || reRunStagesLoading || loadingInputSets
+    return (
+      loadingPipeline ||
+      runLoading ||
+      runStageLoading ||
+      reRunLoading ||
+      reRunStagesLoading ||
+      loadingInputSets ||
+      loadingValidateTemplateInputs
+    )
   }
 
   const formRefDom = React.useRef<HTMLElement | undefined>()
@@ -642,9 +671,30 @@ function RunPipelineFormBasic({
     return <PageSpinner />
   }
 
+  function handleInputSetSave(newId?: string): void {
+    if (newId) {
+      setSelectedInputSets([{ label: newId, value: newId, type: 'INPUT_SET' }])
+    }
+    getTemplateFromPipeline()
+  }
+
   let runPipelineFormContent: React.ReactElement | null = null
 
-  if (inputSetsError?.message) {
+  if (validateTemplateInputsResponse?.data?.validYaml === false) {
+    // repoName={repoIdentifier} because values is calculated at top and one of them (repoIdentifier, repoName)
+    // will be undefined based on the enabled flag (isGitSyncEnabled)
+    runPipelineFormContent = (
+      <PipelineErrorView
+        errorNodeSummary={validateTemplateInputsResponse.data.errorNodeSummary}
+        pipelineIdentifier={pipelineIdentifier}
+        repoIdentifier={repoIdentifier}
+        repoName={repoIdentifier}
+        branch={branch}
+        connectorRef={connectorRef}
+        storeType={storeType}
+      />
+    )
+  } else if (inputSetsError?.message) {
     runPipelineFormContent = <PipelineInvalidRequestContent onClose={onClose} getTemplateError={inputSetsError} />
   } else {
     runPipelineFormContent = (
@@ -740,6 +790,7 @@ function RunPipelineFormBasic({
                   skipPreFlightCheck={skipPreFlightCheck}
                   setSkipPreFlightCheck={setSkipPreFlightCheck}
                   setNotifyOnlyMe={setNotifyOnlyMe}
+                  storeType={storeType as StoreType}
                 />
                 {executionView ? null : (
                   <Layout.Horizontal
@@ -816,11 +867,14 @@ function RunPipelineFormBasic({
                       accountId={accountId}
                       projectIdentifier={projectIdentifier}
                       orgIdentifier={orgIdentifier}
+                      connectorRef={connectorRef}
                       repoIdentifier={repoIdentifier}
                       branch={branch}
+                      storeType={storeType}
                       isGitSyncEnabled={isGitSyncEnabled}
+                      isGitSimplificationEnabled={isGitSimplificationEnabled}
                       setFormErrors={setFormErrors}
-                      refetchParentData={getTemplateFromPipeline}
+                      refetchParentData={handleInputSetSave}
                     />
                   </Layout.Horizontal>
                 )}

@@ -36,6 +36,7 @@ import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterfa
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import type { StringsMap } from 'stringTypes'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 interface K8sBGSwapServicesData extends StepElementConfig {
   spec: K8sBGSwapServicesStepInfo
@@ -177,7 +178,14 @@ const K8sBGSwapServicesVariablesStep: React.FC<K8sBGSwapServicesVariablesStepPro
   metadataMap,
   initialValues
 }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8sBGSwapWidgetWithRef = React.forwardRef(K8sBGSwapWidget)

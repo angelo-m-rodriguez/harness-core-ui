@@ -8,8 +8,8 @@
 import React from 'react'
 import { CardSelect, Container, Text, Layout, Icon } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
+import cx from 'classnames'
 import { DelegateTypes } from '@delegates/constants'
-
 import type { CardData } from '../DelegateSelectStep'
 
 import Docker from './Icons/docker.svg'
@@ -44,27 +44,34 @@ const Delegates4Ways: React.FC<Delegates4WaysProps> = props => {
       data={selectCardData}
       cornerSelected={true}
       selected={selectedCard}
-      renderItem={item => (
-        <Container className={css.cardBody} data-type={item.type}>
-          {item.type !== DelegateTypes.KUBERNETES_CLUSTER && <img src={getIcon(item.type)} />}
-          {item.type === DelegateTypes.KUBERNETES_CLUSTER && (
-            <Icon name="service-kubernetes" size={20} className={css.kubIcon} />
-          )}
-          <Layout.Vertical className={css.cardContent}>
-            <Text font={{ weight: 'bold' }} color={Color.GREY_900} className={css.cardHeader}>
-              {item.name}
-            </Text>
-            <Text
-              style={{
-                color: '#6B6D85'
-              }}
-              className={css.subTitle}
-            >
-              {item.text}
-            </Text>
-          </Layout.Vertical>
-        </Container>
-      )}
+      renderItem={item => {
+        const isDelegateTypeAllowed = allowedDelegateTypes.includes(item.type)
+
+        return (
+          <Container
+            className={cx(css.cardBody, { [css.disableCursor]: !isDelegateTypeAllowed })}
+            data-type={item.type}
+          >
+            {item.type !== DelegateTypes.KUBERNETES_CLUSTER && <img src={getIcon(item.type)} />}
+            {item.type === DelegateTypes.KUBERNETES_CLUSTER && (
+              <Icon name="service-kubernetes" size={20} className={css.kubIcon} />
+            )}
+            <Layout.Vertical className={css.cardContent}>
+              <Text font={{ weight: 'bold' }} color={Color.GREY_900} className={css.cardHeader}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  color: '#6B6D85'
+                }}
+                className={css.subTitle}
+              >
+                {item.text}
+              </Text>
+            </Layout.Vertical>
+          </Container>
+        )
+      }}
       onChange={value => {
         if (allowedDelegateTypes.includes(value.type)) {
           /* istanbul ignore next */

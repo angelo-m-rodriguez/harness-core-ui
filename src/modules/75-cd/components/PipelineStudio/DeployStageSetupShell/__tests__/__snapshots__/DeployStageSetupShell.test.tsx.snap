@@ -619,7 +619,7 @@ exports[`DeployStageSetupShell tests opens services tab by default 1`] = `
                         common.comingSoon
                       </div>
                       <div
-                        class="tabSubHeading ng-tooltip-native"
+                        class="tabSubHeading currentGenSupported ng-tooltip-native"
                         data-tooltip-id="supportedInFirstGeneration"
                       >
                         common.currentlySupportedOn

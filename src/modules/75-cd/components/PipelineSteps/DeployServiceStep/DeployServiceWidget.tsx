@@ -15,7 +15,8 @@ import {
   Dialog,
   Layout,
   MultiTypeInputType,
-  SelectOption
+  SelectOption,
+  shouldShowError
 } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 import * as Yup from 'yup'
@@ -23,6 +24,7 @@ import { defaultTo, isEmpty, isNil, noop, omit } from 'lodash-es'
 import { useParams } from 'react-router-dom'
 import type { FormikProps, FormikValues } from 'formik'
 import type { IDialogProps } from '@blueprintjs/core'
+import produce from 'immer'
 import { ServiceRequestDTO, ServiceResponseDTO, ServiceYaml, useGetServiceList, useGetServiceV2 } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import type { PipelineType } from '@common/interfaces/RouteInterfaces'
@@ -77,25 +79,8 @@ function DeployServiceWidget({
 
   const { subscribeForm, unSubscribeForm } = React.useContext(StageErrorContext)
   const formikRef = React.useRef<FormikProps<unknown> | null>(null)
-
-  const updateServicesList = (value: ServiceRequestDTO): void => {
-    formikRef.current?.setValues({ serviceRef: value.identifier, ...(state.isService && { service: {} }) })
-    if (!isNil(services)) {
-      const newService = {
-        description: value.description,
-        identifier: defaultTo(value.identifier, ''),
-        name: value.name || '',
-        tags: value.tags
-      }
-      const newServicesList = [...services]
-      const existingIndex = newServicesList.findIndex(item => item.identifier === value.identifier)
-      if (existingIndex >= 0) {
-        newServicesList.splice(existingIndex, 1, newService)
-      } else {
-        newServicesList.unshift(newService)
-      }
-      setService(newServicesList)
-    }
+  const isNewServiceEntityDialog = (): boolean => {
+    return !!initialValues.isNewServiceEntity
   }
 
   const {
@@ -148,32 +133,30 @@ function DeployServiceWidget({
 
   useEffect(() => {
     if (!loading) {
-      const serviceList: ServiceYaml[] = []
+      let serviceList: ServiceYaml[] = []
       if (serviceResponse?.data?.content?.length) {
-        serviceResponse.data.content.forEach(service => {
-          serviceList.push({
-            description: service.service?.description,
-            identifier: service.service?.identifier || '',
-            name: service.service?.name || '',
-            tags: service.service?.tags
-          })
-        })
+        serviceList = serviceResponse.data.content.map(service => ({
+          identifier: defaultTo(service.service?.identifier, ''),
+          name: defaultTo(service.service?.name, ''),
+          description: service.service?.description,
+          tags: service.service?.tags
+        }))
       }
       if (initialValues.service) {
-        const identifier = initialValues.service.identifier
-        const isExist = serviceList.filter(service => service.identifier === identifier).length > 0
-        if (initialValues.service && identifier && !isExist) {
+        const { identifier } = initialValues.service
+        const isExist = serviceList.some(service => service.identifier === identifier)
+        if (identifier && !isExist) {
           serviceList.push({
+            identifier: defaultTo(initialValues.service?.identifier, ''),
+            name: defaultTo(initialValues.service?.name, ''),
             description: initialValues.service?.description,
-            identifier: initialValues.service?.identifier || '',
-            name: initialValues.service?.name || '',
             tags: initialValues.service?.tags
           })
         }
       }
       setService(serviceList)
     }
-  }, [loading, serviceResponse, serviceResponse?.data?.content?.length])
+  }, [loading, serviceResponse?.data?.content?.length])
 
   useEffect(() => {
     subscribeForm({ tab: DeployTabs.SERVICE, form: formikRef })
@@ -182,7 +165,41 @@ function DeployServiceWidget({
   }, [])
 
   if (error?.message) {
-    showError(getRBACErrorMessage(error), undefined, 'cd.svc.list.error')
+    if (shouldShowError(error)) {
+      showError(getRBACErrorMessage(error))
+    }
+  }
+
+  const updateServicesList = (value: ServiceRequestDTO): void => {
+    formikRef.current?.setValues({ serviceRef: value.identifier, ...(state.isService && { service: {} }) })
+    if (!isNil(services)) {
+      const newService = {
+        identifier: defaultTo(value.identifier, ''),
+        name: defaultTo(value.name, ''),
+        description: value.description,
+        tags: value.tags
+      }
+      const newServicesList = [...services]
+      const existingIndex = newServicesList.findIndex(item => item.identifier === value.identifier)
+      if (existingIndex >= 0) {
+        newServicesList.splice(existingIndex, 1, newService)
+      } else {
+        newServicesList.unshift(newService)
+      }
+      setService(newServicesList)
+    }
+  }
+
+  const onServiceEntityCreate = (newServiceInfo: ServiceYaml): void => {
+    hideModal()
+    formikRef.current?.setValues({ serviceRef: newServiceInfo.identifier, ...(state.isService && { service: {} }) })
+    const newServiceData = produce(services, draft => {
+      draft?.unshift({
+        identifier: newServiceInfo.identifier,
+        name: newServiceInfo.name
+      })
+    })
+    setService(newServiceData)
   }
 
   const onServiceChange = (
@@ -221,9 +238,6 @@ function DeployServiceWidget({
     showModal()
   }
 
-  const isNewServiceEntityDialog = (): boolean => {
-    return !!initialValues.isNewServiceEntity && state.isEdit
-  }
   const DIALOG_PROPS: IDialogProps = {
     isOpen: true,
     usePortal: true,
@@ -234,6 +248,12 @@ function DeployServiceWidget({
     className: isNewServiceEntityDialog() ? css.editServiceDialog : '',
     style: isNewServiceEntityDialog() ? { width: 1114 } : {}
   }
+  const serviceEntityProps = state.isEdit
+    ? {
+        serviceResponse: selectedServiceResponse?.data?.service as ServiceResponseDTO,
+        isLoading: serviceDataLoading
+      }
+    : {}
   const [showModal, hideModal] = useModalHook(
     () => (
       <Dialog
@@ -243,9 +263,10 @@ function DeployServiceWidget({
       >
         {isNewServiceEntityDialog() ? (
           <ServiceEntityEditModal
-            serviceResponse={selectedServiceResponse?.data?.service as ServiceResponseDTO}
+            {...serviceEntityProps}
             onCloseModal={hideModal}
-            isLoading={serviceDataLoading}
+            onServiceCreate={onServiceEntityCreate}
+            isServiceCreateModalView={!state.isEdit}
           />
         ) : (
           <NewEditServiceModal

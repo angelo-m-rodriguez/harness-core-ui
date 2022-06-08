@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { act, fireEvent, queryByAttribute, render, waitFor } from '@testing-library/react'
+import { act, findByText, fireEvent, queryByAttribute, render, waitFor } from '@testing-library/react'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { StepFormikRef, StepViewType } from '@pipeline/components/AbstractSteps/Step'
 
@@ -18,12 +18,15 @@ import { factory, TestStepWidget } from '../../__tests__/StepTestUtil'
 import { ServiceNowCreate } from '../ServiceNowCreate'
 import {
   getServiceNowCreateDeploymentModeProps,
+  getServiceNowCreateDeploymentModeWithCustomFieldsProps,
   getServiceNowCreateEditModeProps,
   getServiceNowCreateEditModePropsWithValues,
   getServiceNowCreateInputVariableModeProps,
+  getServiceNowCreateTemplateTypeEditModeProps,
   getServiceNowFieldRendererProps,
   mockConnectorResponse,
-  mockServiceNowMetadataResponse
+  mockServiceNowMetadataResponse,
+  mockServiceNowTemplateResponse
 } from './ServiceNowCreateTestHelper'
 
 jest.mock('@common/components/YAMLBuilder/YamlBuilder')
@@ -32,7 +35,7 @@ jest.mock('services/cd-ng', () => ({
   useGetConnector: () => mockConnectorResponse,
   useGetServiceNowTicketTypes: () => mockTicketTypesResponse,
   useGetServiceNowIssueMetadata: () => mockServiceNowMetadataResponse,
-  useGetServiceNowTemplateMetadata: () => jest.fn()
+  useGetServiceNowTemplateMetadata: () => mockServiceNowTemplateResponse
 }))
 
 describe('ServiceNow Create tests', () => {
@@ -192,6 +195,19 @@ describe('ServiceNow Create tests', () => {
     expect(queryByDisplayValue('value1')).toBeTruthy()
     expect(queryByDisplayValue('2233')).toBeTruthy()
     expect(queryByDisplayValue('23-march')).toBeTruthy()
+    expect(queryByDisplayValue('INCIDENT')).toBeTruthy()
+
+    // Update the ticket type to Change from Incident
+    const ticketType = container
+      .querySelector(`input[name="spec.ticketType"] + [class*="bp3-input-action"]`)
+      ?.querySelector('[data-icon="chevron-down"]')
+    await waitFor(() => {
+      fireEvent.click(ticketType!)
+    })
+    const changeTicketType = await findByText(document.body, 'CHANGE')
+    act(() => {
+      fireEvent.click(changeTicketType!)
+    })
 
     fireEvent.change(getByPlaceholderText('pipeline.serviceNowCreateStep.descriptionPlaceholder'), {
       target: { value: 'description' }
@@ -214,6 +230,12 @@ describe('ServiceNow Create tests', () => {
 
     // The selected field should be now added to the main form
     expect(queryByPlaceholderText('f1')).toBeTruthy()
+
+    // Delete a field
+    act(() => {
+      const deleteField = container?.querySelector(`button[data-testid="remove-selectedField-0"]`)
+      fireEvent.click(deleteField!)
+    })
 
     // Open the fields selector dialog again
     act(() => {
@@ -247,15 +269,12 @@ describe('ServiceNow Create tests', () => {
       spec: {
         connectorRef: 'cid1',
         useServiceNowTemplate: false,
-        ticketType: 'INCIDENT',
+        ticketType: 'CHANGE',
         delegateSelectors: undefined,
         fields: [
           { name: 'description', value: 'descriptionval' },
           { name: 'short_description', value: 'short description' },
-          { name: 'f2', value: 2233 },
           { name: 'f1', value: '' },
-          { name: 'f21', value: 'value1' },
-          { name: 'date', value: '23-march' },
           { name: 'issueKey1', value: 'issueKey1Value' }
         ]
       },
@@ -295,5 +314,35 @@ describe('ServiceNow Create tests', () => {
       viewType: StepViewType.TriggerForm
     })
     expect(response).toMatchSnapshot('Value must be greater than or equal to "10s"')
+  })
+
+  test('Edit Stage - readonly view for Template type', async () => {
+    const ref = React.createRef<StepFormikRef<unknown>>()
+    const props = getServiceNowCreateTemplateTypeEditModeProps()
+    const { container } = render(
+      <TestStepWidget
+        initialValues={props.initialValues}
+        type={StepType.ServiceNowCreate}
+        stepViewType={StepViewType.Edit}
+        ref={ref}
+        readonly={true}
+      />
+    )
+    expect(container).toMatchSnapshot('edit-templatetype-stage-readonly')
+  })
+
+  test('Deploymentform with custom fields as runtime', async () => {
+    const props = getServiceNowCreateDeploymentModeWithCustomFieldsProps()
+    const { container } = render(
+      <TestStepWidget
+        template={props.inputSetData?.template}
+        initialValues={props.initialValues}
+        type={StepType.ServiceNowCreate}
+        stepViewType={StepViewType.DeploymentForm}
+        inputSetData={{ ...props.inputSetData, path: props.inputSetData?.path || '', readonly: true }}
+      />
+    )
+
+    expect(container).toMatchSnapshot('serviceNow-create-deploymentform-customfields')
   })
 })

@@ -118,7 +118,7 @@ describe('Test stepUtils', () => {
     }
 
     expect(getStepPaletteModuleInfosFromStage(StageType.BUILD, testStage, 'Kubernetes', [])[0].module).toBe('ci')
-    expect(getStepPaletteModuleInfosFromStage(StageType.SECURITY, testStage, 'Kubernetes', [])[0].module).toBe('ci')
+    expect(getStepPaletteModuleInfosFromStage(StageType.SECURITY, testStage, 'Kubernetes', [])[0].module).toBe('sto')
     expect(getStepPaletteModuleInfosFromStage(StageType.FEATURE, testStage, 'Kubernetes', [])[0].module).toBe('pms')
     expect(getStepPaletteModuleInfosFromStage(undefined, testStage, 'Kubernetes', []).length).toBe(2)
   })

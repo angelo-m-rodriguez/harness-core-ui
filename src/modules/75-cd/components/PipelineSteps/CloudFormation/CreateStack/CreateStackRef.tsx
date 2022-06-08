@@ -278,6 +278,7 @@ export const CreateStack = (
         const remoteParameterFiles = config?.parameters || []
         const awsRegion = config?.region
         const parameterOverrides = config?.parameterOverrides || []
+        const templateError = get(errors, 'spec.configuration.templateFile.spec.store.spec.connectorRef')
         return (
           <>
             <div className={cx(stepCss.formGroup, stepCss.lg)}>
@@ -372,113 +373,128 @@ export const CreateStack = (
               </Layout.Horizontal>
             </Layout.Vertical>
             <div className={css.divider} />
-            <Layout.Vertical>
-              <Layout.Horizontal flex={{ alignItems: 'flex-start' }}>
+            <Layout.Horizontal flex={{ alignItems: 'flex-start' }}>
+              {(templateFileType === TemplateTypes.Remote || templateFileType === TemplateTypes.S3URL) && (
                 <Layout.Vertical>
                   <Label style={{ color: Color.GREY_900 }} className={css.configLabel}>
-                    {(templateFileType === TemplateTypes.Remote || templateFileType === TemplateTypes.S3URL) &&
-                      templateFile}
+                    {templateFile}
                   </Label>
                 </Layout.Vertical>
-                <Layout.Vertical>
-                  <select
-                    className={css.templateDropdown}
-                    name="spec.configuration.templateFile.type"
-                    disabled={readonly}
-                    value={templateFileType}
-                    onChange={e => {
-                      /* istanbul ignore next */
-                      onSelectChange(e, setFieldValue)
-                    }}
-                    data-testid="templateOptions"
-                  >
-                    <option value={TemplateTypes.Remote}>{getString('remote')}</option>
-                    <option value={TemplateTypes.Inline}>{getString('inline')}</option>
-                    <option value={TemplateTypes.S3URL}>{getString('cd.cloudFormation.awsURL')}</option>
-                  </select>
-                </Layout.Vertical>
-              </Layout.Horizontal>
-              {templateFileType === TemplateTypes.Remote && (
-                <div
-                  className={cx(css.configFile, css.configField, css.addMarginBottom)}
-                  onClick={() => {
-                    /* istanbul ignore next */
-                    setShowModal(true)
-                  }}
-                  data-testid="remoteTemplate"
-                >
-                  <>
-                    <a className={css.configPlaceHolder}>
-                      {
-                        /* istanbul ignore next */
-                        getMultiTypeFromValue(remoteTemplateFile?.paths) === MultiTypeInputType.RUNTIME
-                          ? `/${remoteTemplateFile?.paths}`
-                          : remoteTemplateFile?.paths?.[0]
-                          ? remoteTemplateFile?.paths?.[0]
-                          : getString('cd.cloudFormation.specifyTemplateFile')
-                      }
-                    </a>
-                    <Button
-                      minimal
-                      icon="Edit"
-                      withoutBoxShadow
-                      iconProps={{ size: 16 }}
-                      data-name="config-edit"
-                      withoutCurrentColor={true}
-                    />
-                  </>
-                </div>
               )}
-              <Text className={cx(css.formikError, css.addMarginBottom)} intent="danger">
-                {templateFileType === TemplateTypes.Remote &&
-                  !remoteTemplateFile?.paths &&
-                  get(errors, 'spec.configuration.templateFile.spec.store.spec.connectorRef')}
-              </Text>
-              {templateFileType === TemplateTypes.Inline && (
-                <div className={cx(stepCss.formGroup, stepCss.alignStart, css.addMarginTop, css.addMarginBottom)}>
-                  <MultiTypeFieldSelector
-                    name="spec.configuration.templateFile.spec.templateBody"
-                    label={<Text style={{ color: 'rgb(11, 11, 13)' }}>{templateFile}</Text>}
-                    defaultValueToReset=""
-                    allowedTypes={allowableTypes}
-                    skipRenderValueInExpressionLabel
-                    disabled={readonly}
-                  >
-                    <TFMonaco
-                      name="spec.configuration.templateFile.spec.templateBody"
-                      formik={formik}
-                      title={templateFile}
-                    />
-                  </MultiTypeFieldSelector>
-                  {
+              <div className={css.templateSelect}>
+                <select
+                  className={css.templateDropdown}
+                  name="spec.configuration.templateFile.type"
+                  disabled={readonly}
+                  value={templateFileType}
+                  onChange={e => {
                     /* istanbul ignore next */
-                    getMultiTypeFromValue(inlineTemplateFile) === MultiTypeInputType.RUNTIME && (
-                      <ConfigureOptions
-                        value={inlineTemplateFile}
-                        type="String"
-                        variableName="spec.configuration.templateFile.spec.templateBody"
-                        showRequiredField={false}
-                        showDefaultField={false}
-                        showAdvanced={true}
-                        onChange={value => {
-                          setFieldValue('spec.configuration.templateFile.spec.templateBody', value)
-                        }}
-                        isReadonly={readonly}
+                    onSelectChange(e, setFieldValue)
+                  }}
+                  data-testid="templateOptions"
+                >
+                  <option value={TemplateTypes.Remote}>{getString('remote')}</option>
+                  <option value={TemplateTypes.Inline}>{getString('inline')}</option>
+                  <option value={TemplateTypes.S3URL}>{getString('cd.cloudFormation.awsURL')}</option>
+                </select>
+              </div>
+            </Layout.Horizontal>
+            {templateFileType === TemplateTypes.Remote && (
+              <div
+                className={cx(css.configFile, css.configField, css.addMarginTop, css.addMarginBottom)}
+                onClick={() => {
+                  /* istanbul ignore next */
+                  setShowModal(true)
+                }}
+                data-testid="remoteTemplate"
+              >
+                <>
+                  <a className={css.configPlaceHolder}>
+                    {
+                      /* istanbul ignore next */
+                      getMultiTypeFromValue(remoteTemplateFile?.paths) === MultiTypeInputType.RUNTIME
+                        ? `/${remoteTemplateFile?.paths}`
+                        : remoteTemplateFile?.paths?.[0]
+                        ? remoteTemplateFile?.paths?.[0]
+                        : getString('cd.cloudFormation.specifyTemplateFile')
+                    }
+                  </a>
+                  <Button
+                    minimal
+                    icon="Edit"
+                    withoutBoxShadow
+                    iconProps={{ size: 16 }}
+                    data-name="config-edit"
+                    withoutCurrentColor={true}
+                  />
+                </>
+              </div>
+            )}
+            {templateFileType === TemplateTypes.Inline && (
+              <>
+                <MultiTypeFieldSelector
+                  name="spec.configuration.templateFile.spec.templateBody"
+                  label={<Text style={{ color: 'rgb(11, 11, 13)' }}>{templateFile}</Text>}
+                  defaultValueToReset=""
+                  allowedTypes={allowableTypes}
+                  skipRenderValueInExpressionLabel
+                  disabled={readonly}
+                  expressionRender={() => {
+                    /* istanbul ignore next */
+                    return (
+                      <TFMonaco
+                        name="spec.configuration.templateFile.spec.templateBody"
+                        formik={formik}
+                        title={templateFile}
+                        expressions={expressions}
                       />
                     )
-                  }
-                </div>
-              )}
-              {templateFileType === TemplateTypes.S3URL && (
-                <div className={stepCss.formGroup}>
-                  <FormInput.Text
-                    name={'spec.configuration.templateFile.spec.templateUrl'}
-                    label={''}
-                    placeholder="http://www.test.com"
+                  }}
+                >
+                  <TFMonaco
+                    name="spec.configuration.templateFile.spec.templateBody"
+                    formik={formik}
+                    title={templateFile}
+                    expressions={expressions}
                   />
-                </div>
-              )}
-            </Layout.Vertical>
+                </MultiTypeFieldSelector>
+                {
+                  /* istanbul ignore next */
+                  getMultiTypeFromValue(inlineTemplateFile) === MultiTypeInputType.RUNTIME && (
+                    <ConfigureOptions
+                      value={inlineTemplateFile}
+                      type="String"
+                      variableName="spec.configuration.templateFile.spec.templateBody"
+                      showRequiredField={false}
+                      showDefaultField={false}
+                      showAdvanced={true}
+                      onChange={value => {
+                        setFieldValue('spec.configuration.templateFile.spec.templateBody', value)
+                      }}
+                      isReadonly={readonly}
+                    />
+                  )
+                }
+              </>
+            )}
+            {templateFileType === TemplateTypes.S3URL && (
+              <FormInput.Text
+                name={'spec.configuration.templateFile.spec.templateUrl'}
+                label={''}
+                placeholder="http://www.test.com"
+                className={css.addMarginTop}
+              />
+            )}
+            {templateFileType === TemplateTypes.Remote && templateError && (
+              <Text
+                icon="circle-cross"
+                iconProps={{ size: 12 }}
+                className={cx(css.formikError, css.addMarginTop, css.addMarginBottom)}
+                intent="danger"
+              >
+                {templateError}
+              </Text>
+            )}
             <div className={cx(stepCss.formGroup, stepCss.md)}>
               <FormInput.MultiTextInput
                 name="spec.configuration.stackName"

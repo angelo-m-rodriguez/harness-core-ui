@@ -6,9 +6,17 @@
  */
 
 import React from 'react'
-import { SelectOption, FormInput } from '@wings-software/uicore'
+import {
+  SelectOption,
+  FormInput,
+  MultiTypeInputType,
+  getMultiTypeFromValue,
+  MultiTypeInput,
+  Label,
+  FormError
+} from '@wings-software/uicore'
 import { useStrings } from 'framework/strings'
-import { getPlaceholder, setAppDynamicsTier } from '../../AppDHealthSource.utils'
+import { getPlaceholder, getTypeOfInput, setAppDynamicsTier } from '../../AppDHealthSource.utils'
 import { getInputGroupProps } from '../../../MonitoredServiceConnector.utils'
 import css from '../../AppDHealthSource.module.scss'
 
@@ -24,7 +32,8 @@ interface AppDynamicsTierInterface {
       [key: string]: any
     }
   ) => Promise<void>
-  setCustomField: (tierValue: string) => void
+  setAppDTierCustomField: (tierValue: string) => void
+  tierError?: string
 }
 
 export default function AppDynamicsTier({
@@ -33,44 +42,68 @@ export default function AppDynamicsTier({
   tierLoading,
   formikValues,
   onValidate,
-  setCustomField
+  setAppDTierCustomField,
+  tierError
 }: AppDynamicsTierInterface): JSX.Element {
   const { getString } = useStrings()
+  const allowedTypes =
+    getMultiTypeFromValue(formikValues?.appdApplication) === MultiTypeInputType.RUNTIME ||
+    getMultiTypeFromValue(formikValues?.appdApplication) === MultiTypeInputType.EXPRESSION
+      ? [MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
+      : [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
+
+  const [multitypeInputValue, setMultitypeInputValue] = React.useState<MultiTypeInputType | undefined>(
+    getTypeOfInput(formikValues?.appDTier || formikValues?.appdApplication)
+  )
+
+  // React.useEffect(() => {
+  //   setMultitypeInputValue(getTypeOfInput(formikValues?.appdApplication))
+  // }, [formikValues?.appdApplication])
 
   return isTemplate ? (
-    <FormInput.MultiTypeInput
-      className={css.tierDropdown}
-      name={'appDTier'}
-      label={getString('cv.healthSource.connectors.AppDynamics.trierLabel')}
-      selectItems={tierOptions}
-      placeholder={getPlaceholder(tierLoading, 'cv.healthSource.connectors.AppDynamics.tierPlaceholder', getString)}
-      multiTypeInputProps={{
-        onChange: async item => {
+    <>
+      <Label>{getString('cv.healthSource.connectors.AppDynamics.trierLabel')}</Label>
+      <MultiTypeInput
+        key={multitypeInputValue}
+        name={'appDTier'}
+        placeholder={getPlaceholder(tierLoading, 'cv.healthSource.connectors.AppDynamics.tierPlaceholder', getString)}
+        selectProps={{
+          items: tierOptions
+        }}
+        allowableTypes={allowedTypes}
+        value={setAppDynamicsTier(tierLoading, formikValues?.appDTier, tierOptions, multitypeInputValue)}
+        style={{ width: '300px' }}
+        expressions={[]}
+        multitypeInputValue={multitypeInputValue}
+        onChange={async (item, _valueType, multiType) => {
+          if (multitypeInputValue !== multiType) {
+            setMultitypeInputValue(multiType)
+          }
           const selectedItem = item as string | SelectOption
           const selectedValue = typeof selectedItem === 'string' ? selectedItem : selectedItem?.label?.toString()
-          setCustomField(selectedValue)
+          setAppDTierCustomField(selectedValue as string)
           if (!(formikValues?.appdApplication === '<+input>' || formikValues?.appDTier === '<+input>')) {
-            await onValidate(formikValues.appdApplication, selectedValue, formikValues.metricData)
+            await onValidate(formikValues?.appdApplication, selectedValue, formikValues.metricData)
           }
-        },
-        value: setAppDynamicsTier(tierLoading, formikValues?.appDTier, tierOptions)
-      }}
-    />
+        }}
+      />
+      {tierError && <FormError name={'appdApplication'} errorMessage={tierError} />}
+    </>
   ) : (
     <FormInput.Select
       className={css.tierDropdown}
       name={'appDTier'}
       placeholder={getPlaceholder(tierLoading, 'cv.healthSource.connectors.AppDynamics.tierPlaceholder', getString)}
-      value={setAppDynamicsTier(tierLoading, formikValues?.appDTier, tierOptions)}
+      value={setAppDynamicsTier(tierLoading, formikValues?.appDTier, tierOptions) as SelectOption}
       onChange={async item => {
-        setCustomField(item.label)
+        setAppDTierCustomField(item.label)
         if (!(formikValues?.appdApplication === '<+input>' || formikValues?.appDTier === '<+input>')) {
           await onValidate(formikValues.appdApplication, item.label as string, formikValues.metricData)
         }
       }}
       items={tierOptions}
       label={getString('cv.healthSource.connectors.AppDynamics.trierLabel')}
-      {...getInputGroupProps(() => setCustomField(''))}
+      {...getInputGroupProps(() => setAppDTierCustomField(''))}
     />
   )
 }

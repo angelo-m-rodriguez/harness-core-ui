@@ -15,7 +15,7 @@ import {
   PipelineContextInterface,
   PipelineContextType
 } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import { DrawerTypes, TemplateDrawerTypes } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
+import { DrawerTypes } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
 import { factory } from '@pipeline/components/PipelineSteps/Steps/__tests__/StepTestUtil'
 import { CustomVariables } from '@pipeline/components/PipelineSteps/Steps/CustomVariables/CustomVariables'
 import { Scope } from '@common/interfaces/SecretsInterface'
@@ -36,10 +36,6 @@ const getPipelineContext = (): PipelineContextInterface => ({
       drawerData: { type: DrawerTypes.AddStep },
       splitViewData: {}
     },
-    templateView: {
-      isTemplateDrawerOpened: false,
-      templateDrawerData: { type: TemplateDrawerTypes.UseTemplate }
-    },
     schemaErrors: false,
     gitDetails: {},
     entityValidityDetails: {},
@@ -55,6 +51,7 @@ const getPipelineContext = (): PipelineContextInterface => ({
   contextType: PipelineContextType.Pipeline,
   allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION],
   setSchemaErrorView: jest.fn(),
+  updatePipelineStoreMetadata: jest.fn(),
   updateGitDetails: jest.fn(),
   updateEntityValidityDetails: jest.fn(),
   stagesMap: {},
@@ -65,7 +62,6 @@ const getPipelineContext = (): PipelineContextInterface => ({
   setYamlHandler: jest.fn(),
   updatePipeline: jest.fn(),
   updatePipelineView: jest.fn(),
-  updateTemplateView: jest.fn(),
   updateStage: jest.fn(),
   getStageFromPipeline: jest.fn(() => ({ stage: undefined, parent: undefined })),
   deletePipelineCache: jest.fn(),
@@ -79,7 +75,8 @@ const getPipelineContext = (): PipelineContextInterface => ({
   setSelectedSectionId: jest.fn(),
   setSelection: jest.fn(),
   getStagePathFromPipeline: jest.fn(),
-  setTemplateTypes: jest.fn()
+  setTemplateTypes: jest.fn(),
+  getTemplate: jest.fn()
 })
 
 describe('StepWidget tests', () => {

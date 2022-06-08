@@ -319,6 +319,75 @@ exports[`<ExecutionStatusLabel /> tests IgnoreFailed 1`] = `
 </div>
 `;
 
+exports[`<ExecutionStatusLabel /> tests InputWaiting 1`] = `
+<div>
+  <div
+    class="status inputwaiting"
+  >
+    <span
+      class="bp3-icon StyledProps--main icon"
+      data-icon="loading"
+    >
+      <svg
+        height="10"
+        viewBox="0 0 10 8"
+        width="10"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          fill="currentColor"
+          r="1"
+          transform="translate(2 4)"
+        >
+          <animatetransform
+            additive="sum"
+            attributeName="transform"
+            begin="0s"
+            dur="1s"
+            repeatCount="indefinite"
+            type="scale"
+            values="0; 1.25; 0"
+          />
+        </circle>
+        <circle
+          fill="currentColor"
+          r="1"
+          transform="translate(5 4)"
+        >
+          <animatetransform
+            additive="sum"
+            attributeName="transform"
+            begin="0.2s"
+            dur="1s"
+            repeatCount="indefinite"
+            type="scale"
+            values="0; 1.25; 0"
+          />
+        </circle>
+        <circle
+          fill="currentColor"
+          r="1"
+          transform="translate(8 4)"
+        >
+          <animatetransform
+            additive="sum"
+            attributeName="transform"
+            begin="0.4s"
+            dur="1s"
+            repeatCount="indefinite"
+            type="scale"
+            values="0; 1.25; 0"
+          />
+        </circle>
+      </svg>
+    </span>
+    <span>
+      pipeline.executionStatus.Waiting
+    </span>
+  </div>
+</div>
+`;
+
 exports[`<ExecutionStatusLabel /> tests InterventionWaiting 1`] = `
 <div>
   <div

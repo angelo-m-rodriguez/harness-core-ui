@@ -316,6 +316,7 @@ export class ExecutionStepModel extends DiagramModel {
         : SPACE_BETWEEN_ELEMENTS
 
       let stepIconColor = factory.getStepIconColor(stepType || '')
+      const stepIconSize = factory.getStepIconSize(stepType || '')
       if (stepIconColor && Object.values(Color).includes(stepIconColor)) {
         stepIconColor = Utils.getRealCSSColor(stepIconColor)
       }
@@ -368,6 +369,7 @@ export class ExecutionStepModel extends DiagramModel {
               name: node.step.name,
               icon: factory.getStepIcon(stepType || ''),
               iconStyle: {
+                width: stepIconSize,
                 color: this.selectedNodeId === node.step.identifier ? Utils.getRealCSSColor(Color.WHITE) : stepIconColor
               },
               allowAdd: allowAdd === true && !isReadonly,

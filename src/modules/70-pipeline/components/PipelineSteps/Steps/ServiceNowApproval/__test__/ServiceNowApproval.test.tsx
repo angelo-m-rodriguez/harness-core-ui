@@ -191,7 +191,7 @@ describe('ServiceNow Approval tests', () => {
     const queryByNameAttribute = (name: string): HTMLElement | null => queryByAttribute('name', container, name)
     fireEvent.change(queryByNameAttribute('name')!, { target: { value: 'serviceNow approval step' } })
     expect(queryByDisplayValue('10m')).toBeTruthy()
-    expect(queryByDisplayValue('p1')).toBeTruthy()
+    expect(queryByDisplayValue('INCIDENT')).toBeTruthy()
     expect(queryByDisplayValue('itd1')).toBeTruthy()
 
     expect(queryByDisplayValue('somevalue for f1')).toBeTruthy()
@@ -207,7 +207,7 @@ describe('ServiceNow Approval tests', () => {
       spec: {
         connectorRef: 'c1d1',
         ticketNumber: 'itd1',
-        ticketType: 'pid1',
+        ticketType: 'INCIDENT',
         approvalCriteria: {
           type: 'KeyValues',
           spec: {
@@ -311,7 +311,7 @@ describe('Test ServiceNowApproval Fields autocomplete', () => {
     let list: CompletionItemInterface[]
     list = await step.getTicketTypeListForYaml(ticketTypeRefPath, getYaml(), getParams())
     expect(list).toHaveLength(3)
-    expect(list[0].insertText).toBe('pid1')
+    expect(list[0].insertText).toBe('INCIDENT')
     list = await step.getTicketTypeListForYaml('invalid path', getYaml(), getParams())
     expect(list).toHaveLength(0)
   })

@@ -26,13 +26,14 @@ import { DialogExtensionContext } from '@connectors/common/ConnectorExtention/Di
 import { Connectors } from '@connectors/constants'
 import { useStrings } from 'framework/strings'
 import { useCloudCostK8sClusterSetup } from 'services/ce'
-import { useTelemetry } from '@common/hooks/useTelemetry'
 import { CE_K8S_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import { useMutateAsGet } from '@common/hooks'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { FeatureFlag } from '@common/featureFlags'
 import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
 import CopyCodeSection from './components/CopyCodeSection'
 import PermissionYAMLPreview from './PermissionYAMLPreview'
 import css from './CEK8sConnector.module.scss'
@@ -94,6 +95,10 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
   }
 
   const saveAndContinue = async (): Promise<void> => {
+    trackEvent(ConnectorActions.ProvidePermissionsSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.CEK8
+    })
     setIsSaving(true)
     try {
       modalErrorHandler?.hide()
@@ -116,6 +121,11 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
       setIsSaving(false)
     }
   }
+
+  useTrackEvent(ConnectorActions.ProvidePermissionsLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CEK8
+  })
 
   return (
     <Layout.Vertical spacing={'xlarge'} className={css.providePermissionContainer}>

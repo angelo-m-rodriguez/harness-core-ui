@@ -298,8 +298,10 @@ describe('BuildInfraSpecifications snapshot tests for AWS Build Infra', () => {
     expect(awsTile).toBeTruthy()
     fireEvent.click(awsTile)
     expect(container).toMatchSnapshot()
-    const poolIdInputText = await getByText('pipeline.buildInfra.poolId')
-    expect(poolIdInputText).toBeTruthy()
+    const poolNameInputText = await getByText('pipeline.buildInfra.poolName')
+    expect(poolNameInputText).toBeTruthy()
+    const osInputText = await getByText('pipeline.infraSpecifications.os')
+    expect(osInputText).toBeTruthy()
   })
 })
 

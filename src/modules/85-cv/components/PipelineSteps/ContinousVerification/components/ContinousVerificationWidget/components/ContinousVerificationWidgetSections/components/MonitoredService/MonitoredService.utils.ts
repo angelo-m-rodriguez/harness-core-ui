@@ -6,7 +6,7 @@
  */
 
 import { RUNTIME_INPUT_VALUE } from '@wings-software/uicore'
-import type { ContinousVerificationData, spec } from '@cv/components/PipelineSteps/ContinousVerification/types'
+import type { ContinousVerificationData } from '@cv/components/PipelineSteps/ContinousVerification/types'
 import type { HealthSource, MonitoredServiceDTO } from 'services/cv'
 import type { DeploymentStageElementConfig, StageElementWrapper } from '@pipeline/utils/pipelineTypes'
 import type { PipelineInfoConfig } from 'services/cd-ng'
@@ -14,10 +14,10 @@ import type { PipelineInfoConfig } from 'services/cd-ng'
 export const getNewSpecs = (
   monitoredServiceData: MonitoredServiceDTO | undefined,
   formValues: ContinousVerificationData
-): spec => {
+): ContinousVerificationData['spec'] => {
   const healthSources =
     monitoredServiceData?.sources?.healthSources?.map(el => {
-      return { identifier: (el as HealthSource)?.identifier }
+      return { identifier: (el as HealthSource)?.identifier as string }
     }) || []
 
   return { ...formValues.spec, monitoredServiceRef: monitoredServiceData?.identifier, healthSources }

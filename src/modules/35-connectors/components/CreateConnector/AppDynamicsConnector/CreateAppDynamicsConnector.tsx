@@ -13,6 +13,8 @@ import * as Yup from 'yup'
 import { useStrings } from 'framework/strings'
 import { AppDynamicsAuthType, buildAppDynamicsPayload } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
 import {
@@ -21,6 +23,7 @@ import {
 } from '../CommonCVConnector/components/ConnectorSecretField/ConnectorSecretField'
 import { initializeAppDConnector } from './utils'
 import { StepDetailsHeader } from '../CommonCVConnector/components/CredentialsStepHeader/CredentialsStepHeader'
+import { Connectors } from '../../../constants'
 import commonStyles from '@connectors/components/CreateConnector/commonSteps/ConnectorCommonStyles.module.scss'
 import styles from './CreateAppDynamicsConnector.module.scss'
 
@@ -89,6 +92,10 @@ function AppDynamicsConfigStep(props: ConnectionConfigProps): JSX.Element {
   const { nextStep, prevStepData, connectorInfo, accountId, projectIdentifier, orgIdentifier } = props
   const initialValues = initializeAppDConnector({ prevStepData, projectIdentifier, accountId, orgIdentifier })
   const handleSubmit = (formData: ConnectorConfigDTO) => {
+    trackEvent(ConnectorActions.CreateConnectorSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.AppDynamics
+    })
     nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })
   }
 
@@ -99,6 +106,13 @@ function AppDynamicsConfigStep(props: ConnectionConfigProps): JSX.Element {
   } else if (initialValues.authType === AppDynamicsAuthType.API_CLIENT_TOKEN) {
     secretFieldValue = prevData?.clientSecretRef?.referenceString || spec?.clientSecretRef
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.AppDynamics
+  })
 
   return (
     <>

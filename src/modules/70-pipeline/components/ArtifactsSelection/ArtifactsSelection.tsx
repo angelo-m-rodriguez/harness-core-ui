@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { StepWizard, useToaster } from '@harness/uicore'
+import { shouldShowError, StepWizard, useToaster } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 import { Color } from '@harness/design-system'
 import cx from 'classnames'
@@ -304,7 +304,9 @@ export default function ArtifactsSelection({
         }
       }
     } catch (e) {
-      showError(getRBACErrorMessage(e))
+      if (shouldShowError(e)) {
+        showError(getRBACErrorMessage(e))
+      }
     }
   }, [fetchConnectors, getPrimaryConnectorList, getSidecarConnectorList, showError])
 
@@ -460,7 +462,7 @@ export default function ArtifactsSelection({
     const updatedStage = produce(stage, draft => {
       if (isPropagating && draft?.stage?.spec?.serviceConfig?.stageOverrides?.artifacts) {
         draft.stage.spec.serviceConfig.stageOverrides.artifacts = artifacts
-      } else if (draft?.stage?.spec?.serviceConfig.serviceDefinition?.spec.artifacts) {
+      } else if (draft?.stage?.spec?.serviceConfig?.serviceDefinition?.spec.artifacts) {
         draft.stage.spec.serviceConfig.serviceDefinition.spec.artifacts = artifacts
       }
     })
@@ -472,7 +474,7 @@ export default function ArtifactsSelection({
     const updatedStage = produce(stage, draft => {
       if (isPropagating && draft?.stage?.spec?.serviceConfig?.stageOverrides?.artifacts) {
         draft.stage.spec.serviceConfig.stageOverrides.artifacts.sidecars = sideCarArtifact
-      } else if (draft?.stage?.spec?.serviceConfig.serviceDefinition?.spec.artifacts?.sidecars) {
+      } else if (draft?.stage?.spec?.serviceConfig?.serviceDefinition?.spec.artifacts?.sidecars) {
         draft.stage.spec.serviceConfig.serviceDefinition.spec.artifacts.sidecars = sideCarArtifact
       }
     })

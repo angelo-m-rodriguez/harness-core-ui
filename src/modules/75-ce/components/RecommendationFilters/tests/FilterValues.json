@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "key": "name",
+      "values": ["ECS__Fargate__Cluster__ecs__nginx__prod__7", "ECS__Fargate__Cluster__fargate__nginx__r53__dev__10"]
+    },
+    {
+      "key": "resourceType",
+      "values": ["ECS_SERVICE"]
+    },
+    {
+      "key": "namespace",
+      "values": ["namespace1"]
+    },
+    {
+      "key": "clusterName",
+      "values": ["TKCluster", "delegate-cluster-wfmx1"]
+    }
+  ]
+}

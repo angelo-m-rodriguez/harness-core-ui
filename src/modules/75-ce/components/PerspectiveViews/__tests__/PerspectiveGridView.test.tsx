@@ -22,6 +22,9 @@ describe('test cases for perspective grid view', () => {
           deletePerpsective={jest.fn()}
           navigateToPerspectiveDetailsPage={jest.fn()}
           pespectiveData={mockPerspectiveData as QlceView[]}
+          setRefetchFolders={jest.fn()}
+          setSelectedFolder={jest.fn()}
+          setRefetchPerspectives={jest.fn()}
         />
       </TestWrapper>
     )
@@ -39,6 +42,9 @@ describe('test cases for perspective grid view', () => {
           deletePerpsective={jest.fn()}
           navigateToPerspectiveDetailsPage={jest.fn()}
           pespectiveData={mockPerspectiveData as QlceView[]}
+          setRefetchFolders={jest.fn()}
+          setSelectedFolder={jest.fn()}
+          setRefetchPerspectives={jest.fn()}
         />
       </TestWrapper>
     )
@@ -64,6 +70,9 @@ describe('test cases for perspective grid view', () => {
           deletePerpsective={jest.fn()}
           navigateToPerspectiveDetailsPage={navigateToPerspectiveDetailsPageMock}
           pespectiveData={mockPerspectiveData as QlceView[]}
+          setRefetchFolders={jest.fn()}
+          setSelectedFolder={jest.fn()}
+          setRefetchPerspectives={jest.fn()}
         />
       </TestWrapper>
     )

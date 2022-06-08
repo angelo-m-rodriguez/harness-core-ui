@@ -30,6 +30,7 @@ connectThroughDelegate: 'Connect through a Harness Delegate'
 connectThroughPlatformInfo: 'Use this option to connect to a SaaS Git provider. Secure communication with the Git provider is done through the Harness Platform. All credentials are encrypted and stored in the Secret Manager configured in Harness.'
 connectThroughDelegateInfo: 'Use this option to connect to a Git Provider behind your corporate firewall. Secure communication with the Git provider is through a Harness Delegate you install in your environment. The Delegate securely connects to the Harness Platform and performs tasks using your repositories.'
 pipeline: Pipeline
+templateStartLabel: Start with Template
 duplicateId: 'Duplicate Identifier'
 createPipeline: Create a Pipeline
 production: Production
@@ -116,6 +117,7 @@ configureOptions:
   jexlLabel: 'Values ({{ $.common.jexlExpression }})'
   values: 'Values'
   enterTags: 'Enter values'
+  askDuringExecution: Request input value when the stage/step is being executed
   validationErrors:
     regExIsRequired: 'Regex value is required'
     defaultRegExValid: Default value should validate with regex provided
@@ -176,6 +178,7 @@ validation:
   environmentIsRequired: 'Environment is required'
   subscription: 'Subscription is required'
   repository: 'Repository is required'
+  projectIsRequired: Project is required
 specify: Specify
 role: Role
 projectViewer: Project Viewer
@@ -268,6 +271,7 @@ purpose:
     moduleSelectionSubHeading: Take your feature rollout processes to the next level using our Harness Feature Flags
   sto:
     continuous: Security Tests
+    moduleSelectionSubHeading: Take your security tests to the next level using our Harness Security Tests
 trialInProgress: Trial in progress
 trialInProgressDescription: A Project contains your pipelines, resources, and team members. Get started by creating your first Project.
 letsGetYouStarted: Let’s get you started
@@ -282,6 +286,7 @@ repo_provider:
   awscodecommit: AWS Code Commit
   azureDev: Azure Devops
 gitSync:
+  branchFetchFailed: Branch fetch failed
   resourceLabel: '{{resource}} Name'
   rootFolderLabel: Root Folder
   harnessFolderLabel: Harness Folder
@@ -354,8 +359,12 @@ git:
   startPRLabel: Start a pull request to merge
   noBranchesFound: No branches found for configured git repository
   onlyDefaultBranchFound: Cannot find additional branches to raise a pull request.
+  inlineStoreLabel: Pipeline content is stored in Harness
+  remoteStoreLabel: Pipeline content is stored in a Git repository
   validation:
     filePath: '{{$.common.git.filePath}} is required'
+    yamlPath: 'Yaml path is required'
+    yamlPathInvalid: 'Yaml path should begin with .harness/ and have a valid file/folder name and yaml extension'
     commitMessage: '{{$.common.git.commitMessage}} is required'
     sameBranches: 'Source and target branches cannot be same for a pull request'
     repoRequired: '{{ $.common.validation.repository }}'
@@ -368,6 +377,7 @@ options: Options
 note: Note
 link: link
 errorHandler:
+  possibleReasons: Possible reasons
   issueCouldBe: Issue could be
   tryTheseSuggestions: Try these suggestions
   contactLabel: 'Contact '
@@ -517,6 +527,7 @@ filters:
   saveNewFilter: Save New Filter
   unsavedFilter: Unsaved Filter
   noMatchingFilterData: No Results found matching the Filter criteria
+  noResultsFound: No results found
   clearFilters: Clear Filters
   noFilterSaved: No Filter Saved
 in: in
@@ -869,3 +880,10 @@ editName: Edit {{name}}
 selectName: Select {{name}}
 override: Override
 plusNewName: + New {{name}}
+fetchingBranches: Fetching branches
+download: Download
+gitOps: GitOps
+showHarnessManagedError: Harness Managed Resource cannot be edited
+
+# Chaos Module
+chaosText: Chaos

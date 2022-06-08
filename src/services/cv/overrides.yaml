@@ -134,6 +134,7 @@ allowpaths:
   - /monitored-service/{monitoredServiceIdentifier}/health-source/{healthSourceIdentifier}/slo-metrics
   - /monitored-service/{monitoredServiceIdentifier}/sli/onboarding-graph
   - /monitored-service/{monitoredServiceIdentifier}/logs
+  - /monitored-service/{monitoredServiceIdentifier}/change-details
   - /monitored-service/health-sources
   - /custom-health/sample-data
   - /parse-sample-data

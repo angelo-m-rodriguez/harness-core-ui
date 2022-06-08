@@ -15,7 +15,10 @@ import { useToaster } from '@common/exports'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
 import { useGetNewRelicEndPoints } from 'services/cv'
 import { buildNewRelicPayload } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { Connectors } from '@connectors/constants'
 import { useStrings } from 'framework/strings'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { StepDetailsHeader } from '../CommonCVConnector/components/CredentialsStepHeader/CredentialsStepHeader'
@@ -83,6 +86,12 @@ function NewRelicConfigStep(props: ConnectionConfigProps): JSX.Element {
     return filteredPoints
   }, [endPoints, endPointError, loadingEndpoints])
 
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.NewRelic
+  })
+
   return (
     <Container className={css.credentials}>
       <StepDetailsHeader connectorTypeLabel={getString('connectors.newRelicLabel')} />
@@ -95,6 +104,10 @@ function NewRelicConfigStep(props: ConnectionConfigProps): JSX.Element {
           apiKeyRef: Yup.string().trim().required(getString('connectors.encryptedAPIKeyValidation'))
         })}
         onSubmit={(formData: ConnectorConfigDTO) => {
+          trackEvent(ConnectorActions.CreateConnectorSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.NewRelic
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })
         }}
       >

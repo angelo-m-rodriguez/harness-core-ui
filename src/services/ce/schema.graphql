@@ -1,4 +1,4 @@
-# Copyright 2021 Harness Inc. All rights reserved.
+# Copyright 2022 Harness Inc. All rights reserved.
 # Use of this source code is governed by the PolyForm Shield 1.0.0 license
 # that can be found in the licenses directory at the root of this repository, also available at
 # https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
@@ -29,21 +29,6 @@ type AlertThreshold {
   percentage: Float!
   slackWebhooks: [String]
   userGroupIds: [String]
-}
-
-type AnomalyData {
-  actualAmount: Float
-  anomalyScore: Float
-  comment: String
-  entity: EntityInfo
-  expectedAmount: Float
-  id: String
-  time: Long
-  userFeedback: AnomalyFeedback
-}
-
-type AnomalyDataList {
-  data: [AnomalyData]
 }
 
 type BillingData {
@@ -286,20 +271,6 @@ type EfficiencyScoreStats {
   statsValue: String
 }
 
-type EntityInfo {
-  awsAccount: String
-  awsService: String
-  clusterId: String
-  clusterName: String
-  gcpProduct: String
-  gcpProject: String
-  gcpSKUDescription: String
-  gcpSKUId: String
-  namespace: String
-  workloadName: String
-  workloadType: String
-}
-
 type FilterStatsDTO {
   key: String
   values: [String]
@@ -430,6 +401,7 @@ type QLCEView {
   createdAt: Long
   createdBy: String
   dataSources: [ViewFieldIdentifier]
+  folderId: String
   groupBy: QLCEViewField
   id: String
   lastUpdatedAt: Long
@@ -469,8 +441,6 @@ type QLCEViewFieldIdentifierData {
 
 "Query root"
 type Query {
-  "Get Anomalies for perspective"
-  anomaliesForPerspective(filters: [QLCEViewFilterWrapperInput], groupBy: [QLCEViewGroupByInput]): AnomalyDataList
   billingData(request: GridRequestInput): [BillingData]
   billingJobLastProcessedTime: Long
   billingdata(clusterid: String, endTime: OffsetTime, startTime: OffsetTime): [BillingDataDemo]
@@ -553,7 +523,7 @@ type Query {
     isClusterQuery: Boolean
   ): PerspectiveTrendStats
   "Fetch perspectives for account"
-  perspectives: PerspectiveData
+  perspectives(folderId: String): PerspectiveData
   "recommendation details/drillDown"
   recommendationDetails(
     "defaults to Now()"
@@ -734,12 +704,6 @@ enum AggregationOperation {
 enum AlertThresholdBase {
   ACTUAL_COST
   FORECASTED_COST
-}
-
-enum AnomalyFeedback {
-  FALSE_ANOMALY
-  NOT_RESPONDED
-  TRUE_ANOMALY
 }
 
 enum BudgetPeriod {

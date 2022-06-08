@@ -39,6 +39,7 @@ import { FormMultiTypeCheckboxField } from '@common/components/MultiTypeCheckbox
 import type { StringsMap } from 'stringTypes'
 import { getNameAndIdentifierSchema } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 interface ServerlessLambdaRollbackData extends StepElementConfig {
   spec: Omit<ServerlessAwsLambdaRollbackStepInfo, 'skipDryRun'> & { skipDryRun: boolean }
@@ -191,7 +192,14 @@ const ServerlessLambdaRollbackVariableStep: React.FC<ServerlessLambdaRollbackVar
   metadataMap,
   initialValues
 }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const ServerlessLambdaRollbackWidgetWithRef = React.forwardRef(ServerlessLambdaRollbackWidget)

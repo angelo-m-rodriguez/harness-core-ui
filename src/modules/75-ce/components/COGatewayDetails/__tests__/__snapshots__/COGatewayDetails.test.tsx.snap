@@ -476,6 +476,41 @@ exports[`Test GatewayDetails renders review screen 1`] = `
                 </div>
               </div>
             </div>
+            <div
+              class="StyledProps--font StyledProps--main reviewDetailsSection"
+            >
+              <div
+                class="editCta"
+              >
+                <span>
+                  EDIT
+                </span>
+              </div>
+              <h2
+                class="StyledProps--font StyledProps--font-h2 StyledProps--main"
+                level="2"
+              >
+                ce.co.autoStoppingRule.configuration.step4.advancedConfiguration
+              </h2>
+              <div
+                class="Layout--vertical StyledProps--main"
+              >
+                <div
+                  class="Layout--horizontal Layout--layout-spacing-large StyledProps--main equalSpacing borderSpacing StyledProps--padding-bottom-medium"
+                >
+                  <p
+                    class="StyledProps--font StyledProps--main"
+                  >
+                    ce.co.autoStoppingRule.review.hideProgressPage
+                  </p>
+                  <p
+                    class="StyledProps--font StyledProps--main"
+                  >
+                    no
+                  </p>
+                </div>
+              </div>
+            </div>
             <p
               class="StyledProps--font StyledProps--main reviewHeading"
             >
@@ -1699,24 +1734,40 @@ exports[`Test GatewayDetails renders review screen 2`] = `
                       <div
                         class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
                       >
-                        <div
-                          class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
+                        <label
+                          class="Toggle--toggle StyledProps--main"
+                          data-testid="progressPageViewToggle"
                         >
-                          <label
-                            class="Toggle--toggle StyledProps--main"
-                            data-testid="dryRunToggle"
-                            data-tooltip-id="dryRunToggleTooltip"
+                          <input
+                            class="Toggle--input"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span
+                            class="Toggle--toggleIcon"
+                          />
+                          ce.co.autoStoppingRule.review.hideProgressPage
+                        </label>
+                        <div>
+                          <div
+                            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
                           >
-                            <input
-                              class="Toggle--input"
-                              type="checkbox"
-                              value=""
-                            />
-                            <span
-                              class="Toggle--toggleIcon"
-                            />
-                            ce.co.dryRunLabel
-                          </label>
+                            <label
+                              class="Toggle--toggle StyledProps--main"
+                              data-testid="dryRunToggle"
+                              data-tooltip-id="dryRunToggleTooltip"
+                            >
+                              <input
+                                class="Toggle--input"
+                                type="checkbox"
+                                value=""
+                              />
+                              <span
+                                class="Toggle--toggleIcon"
+                              />
+                              ce.co.dryRunLabel
+                            </label>
+                          </div>
                         </div>
                       </div>
                       <div
@@ -3525,24 +3576,40 @@ exports[`Test GatewayDetails renders setup access screen and move to previous st
                       <div
                         class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
                       >
-                        <div
-                          class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
+                        <label
+                          class="Toggle--toggle StyledProps--main"
+                          data-testid="progressPageViewToggle"
                         >
-                          <label
-                            class="Toggle--toggle StyledProps--main"
-                            data-testid="dryRunToggle"
-                            data-tooltip-id="dryRunToggleTooltip"
+                          <input
+                            class="Toggle--input"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span
+                            class="Toggle--toggleIcon"
+                          />
+                          ce.co.autoStoppingRule.review.hideProgressPage
+                        </label>
+                        <div>
+                          <div
+                            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
                           >
-                            <input
-                              class="Toggle--input"
-                              type="checkbox"
-                              value=""
-                            />
-                            <span
-                              class="Toggle--toggleIcon"
-                            />
-                            ce.co.dryRunLabel
-                          </label>
+                            <label
+                              class="Toggle--toggle StyledProps--main"
+                              data-testid="dryRunToggle"
+                              data-tooltip-id="dryRunToggleTooltip"
+                            >
+                              <input
+                                class="Toggle--input"
+                                type="checkbox"
+                                value=""
+                              />
+                              <span
+                                class="Toggle--toggleIcon"
+                              />
+                              ce.co.dryRunLabel
+                            </label>
+                          </div>
                         </div>
                       </div>
                       <div
@@ -4621,24 +4688,40 @@ exports[`Test GatewayDetails renders without crashing 1`] = `
                       <div
                         class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
                       >
-                        <div
-                          class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
+                        <label
+                          class="Toggle--toggle StyledProps--main"
+                          data-testid="progressPageViewToggle"
                         >
-                          <label
-                            class="Toggle--toggle StyledProps--main"
-                            data-testid="dryRunToggle"
-                            data-tooltip-id="dryRunToggleTooltip"
+                          <input
+                            class="Toggle--input"
+                            type="checkbox"
+                            value=""
+                          />
+                          <span
+                            class="Toggle--toggleIcon"
+                          />
+                          ce.co.autoStoppingRule.review.hideProgressPage
+                        </label>
+                        <div>
+                          <div
+                            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
                           >
-                            <input
-                              class="Toggle--input"
-                              type="checkbox"
-                              value=""
-                            />
-                            <span
-                              class="Toggle--toggleIcon"
-                            />
-                            ce.co.dryRunLabel
-                          </label>
+                            <label
+                              class="Toggle--toggle StyledProps--main"
+                              data-testid="dryRunToggle"
+                              data-tooltip-id="dryRunToggleTooltip"
+                            >
+                              <input
+                                class="Toggle--input"
+                                type="checkbox"
+                                value=""
+                              />
+                              <span
+                                class="Toggle--toggleIcon"
+                              />
+                              ce.co.dryRunLabel
+                            </label>
+                          </div>
                         </div>
                       </div>
                       <div

@@ -235,23 +235,20 @@ const COGatewayReview: React.FC<COGatewayReviewProps> = props => {
           )}
         </ReviewDetailsSection>
       )}
-      {(isK8sRule ||
+      {(isBoolean(props.gatewayDetails.opts?.hide_progress_page) ||
         isBoolean(props.gatewayDetails.opts?.dry_run) ||
-        !_isEmpty(props.gatewayDetails.resourceMeta?.container_svc) ||
         !_isEmpty(filteredSchedules)) && (
         <ReviewDetailsSection isEditable onEdit={handleAdvancedConfigEdit}>
           <Heading level={2}>{getString('ce.co.autoStoppingRule.configuration.step4.advancedConfiguration')}</Heading>
           <Layout.Vertical style={{ marginTop: 'var(--spacing-large)' }}>
-            {(isK8sRule || !_isEmpty(props.gatewayDetails.resourceMeta?.container_svc)) && (
-              <Layout.Horizontal
-                spacing={'large'}
-                padding={{ bottom: 'medium' }}
-                className={cx(css.equalSpacing, css.borderSpacing)}
-              >
-                <Text>{getString('ce.co.autoStoppingRule.review.hideProgressPage')}</Text>
-                <Text>{Utils.booleanToString(props.gatewayDetails.opts?.hide_progress_page)}</Text>
-              </Layout.Horizontal>
-            )}
+            <Layout.Horizontal
+              spacing={'large'}
+              padding={{ bottom: 'medium' }}
+              className={cx(css.equalSpacing, css.borderSpacing)}
+            >
+              <Text>{getString('ce.co.autoStoppingRule.review.hideProgressPage')}</Text>
+              <Text>{Utils.booleanToString(props.gatewayDetails.opts?.hide_progress_page)}</Text>
+            </Layout.Horizontal>
             {isBoolean(props.gatewayDetails.opts?.dry_run) && (
               <Layout.Horizontal
                 spacing={'large'}

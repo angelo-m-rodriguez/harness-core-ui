@@ -98,6 +98,7 @@ const YAMLBuilder: React.FC<YamlBuilderProps> = (props: YamlBuilderProps): JSX.E
     existingYaml,
     isReadOnlyMode,
     isEditModeSupported = true,
+    isHarnessManaged = false,
     hideErrorMesageOnReadOnlyMode = false,
     showSnippetSection = true,
     invocationMap,
@@ -255,6 +256,13 @@ const YAMLBuilder: React.FC<YamlBuilderProps> = (props: YamlBuilderProps): JSX.E
     []
   )
 
+  const showHarnessManagedError = useCallback(
+    throttle(() => {
+      showError(getString('common.showHarnessManagedError'), 5000)
+    }, 5000),
+    []
+  )
+
   const editorDidMount = (editor: editor.IStandaloneCodeEditor): void => {
     // editor.addAction({
     //   id: 'Paste',
@@ -388,7 +396,9 @@ const YAMLBuilder: React.FC<YamlBuilderProps> = (props: YamlBuilderProps): JSX.E
   })
 
   const handleEditorKeyDownEvent = (event: IKeyboardEvent, editor: any): void => {
-    if (props.isReadOnlyMode && isEditModeSupported) {
+    if (isHarnessManaged) {
+      showHarnessManagedError()
+    } else if (props.isReadOnlyMode && isEditModeSupported) {
       openDialog()
     } else if (props.isReadOnlyMode && !isEditModeSupported && !hideErrorMesageOnReadOnlyMode) {
       showNoPermissionError()

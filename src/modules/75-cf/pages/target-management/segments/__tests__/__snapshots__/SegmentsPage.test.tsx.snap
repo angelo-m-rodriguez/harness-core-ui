@@ -184,7 +184,7 @@ exports[`SegmentsPage No data view should be rendered 1`] = `
             </div>
           </div>
           <button
-            class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color"
+            class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color Button--variation Button--variation-primary"
             type="button"
           >
             <span
@@ -553,7 +553,7 @@ exports[`SegmentsPage SegmentsPage should render data correctly 1`] = `
         class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
       >
         <button
-          class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color"
+          class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--intent-primary Button--with-current-color Button--variation Button--variation-primary"
           type="button"
         >
           <span

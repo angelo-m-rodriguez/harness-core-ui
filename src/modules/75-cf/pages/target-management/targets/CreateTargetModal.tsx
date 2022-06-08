@@ -6,7 +6,16 @@
  */
 
 import React, { useState } from 'react'
-import { Button, Container, FlexExpander, Layout, SimpleTagInput, Text, TextInput } from '@wings-software/uicore'
+import {
+  Button,
+  ButtonVariation,
+  Container,
+  FlexExpander,
+  Layout,
+  SimpleTagInput,
+  Text,
+  TextInput
+} from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
 import { Color } from '@harness/design-system'
 import { Dialog, Radio, RadioGroup, Spinner } from '@blueprintjs/core'
@@ -316,8 +325,20 @@ const CreateTargetModal: React.FC<CreateTargetModalProps> = ({ loading, onSubmit
           </Container>
           {/* Buttons */}
           <Layout.Horizontal height={34} spacing="small">
-            <Button disabled={addDisabled || loading} text={getString('add')} intent="primary" onClick={handleSubmit} />
-            <Button disabled={loading} text={getString('cancel')} minimal onClick={handleCancel} />
+            <Button
+              variation={ButtonVariation.PRIMARY}
+              disabled={addDisabled || loading}
+              text={getString('add')}
+              intent="primary"
+              onClick={handleSubmit}
+            />
+            <Button
+              variation={ButtonVariation.TERTIARY}
+              disabled={loading}
+              text={getString('cancel')}
+              minimal
+              onClick={handleCancel}
+            />
             {loading && <Spinner size={16} />}
           </Layout.Horizontal>
         </Layout.Vertical>
@@ -328,6 +349,7 @@ const CreateTargetModal: React.FC<CreateTargetModalProps> = ({ loading, onSubmit
   return (
     <RbacButton
       intent="primary"
+      variation={ButtonVariation.PRIMARY}
       text={getString('cf.targets.create')}
       onClick={openModal}
       permission={{

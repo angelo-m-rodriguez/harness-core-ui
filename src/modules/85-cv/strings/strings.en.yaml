@@ -520,6 +520,9 @@ notifications:
   serviceHealthDescription: Focuses on changes to a service's code, configuration, behaviour, deployment and infrastructure.
   sloDescription: Focuses on SLO target and error budget changes on a given SLO.
   condition: Condition
+  changeType: Change Type
+  healthScoreBelow: Health score is below
+  thresholdBelow: Threshold is below
 changeSource:
   alertText: Alert
   incident: Incident
@@ -685,6 +688,7 @@ slos:
     nameValidation: SLO name is required
     userJourneyRequired: User journey is required
     healthSourceRequired: Health Source is required
+    specialCharacters: SLO Name can only contain alphanumeric, hyphen and underscore characters
   sloTargetAndBudget:
     periodType: Period Type
     periodTypeOptions:
@@ -734,6 +738,7 @@ SLOWithName: 'SLO: {{ name }}'
 lastModifiedOn: Last modified on
 createdOn: Created on
 SLOPerformanceTrend: SLO Performance Trend
+sloGraphUserHint: To view anomalies, metrics and logs for a specific time window, click the time slot on the timeline. To expand or contract the time window, simply drag the handles.
 sloRecalculationInProgress: SLO recalculation in progress
 errorBudgetRecalculationInProgress: Error Budget recalculation in progress
 errorBudgetRemaining: Error Budget Remaining
@@ -816,6 +821,7 @@ customHealthSource:
   addGroupNameTitle: Add New Custom Health Group Name
   customHealthMetric: Custom Health Metrics
   customHealthLog: Custom Health Log
+  chartRuntimeWarning: Runtime inputs will be required to verify your configurations
   Querymapping:
     title: Query specifications and mapping
     jsonPathTitle: JSON path selection
@@ -848,7 +854,7 @@ top: Top
 bottom: Bottom
 executionLogs: Execution Logs
 displayOnlyErrors: Display only errors
-download: Download
+download: '{{ $.common.download }}'
 lastOneHour: Last 1 hour
 last12Hours: Last 12 hours
 showingLogsFor: Showing logs for

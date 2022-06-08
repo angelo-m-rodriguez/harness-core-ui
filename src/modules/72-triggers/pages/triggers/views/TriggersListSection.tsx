@@ -6,6 +6,7 @@
  */
 
 import React from 'react'
+import { parse } from 'yaml'
 import ReactTimeago from 'react-timeago'
 import { useParams } from 'react-router-dom'
 import type { CellProps, Renderer } from 'react-table'
@@ -22,12 +23,13 @@ import {
   tagsType,
   useConfirmationDialog,
   useToaster,
-  TableV2
+  TableV2,
+  HarnessDocTooltip
 } from '@wings-software/uicore'
-import { Color } from '@harness/design-system'
+import { Color, FontVariation } from '@harness/design-system'
 import copy from 'clipboard-copy'
 import { Classes, Intent, Menu, Position } from '@blueprintjs/core'
-import { isUndefined, isEmpty, sum } from 'lodash-es'
+import { isUndefined, isEmpty, sum, get } from 'lodash-es'
 import cx from 'classnames'
 import { NGTriggerDetailsResponse, useDeleteTrigger, useUpdateTrigger } from 'services/pipeline-ng'
 import { usePermission } from '@rbac/hooks/usePermission'
@@ -56,6 +58,7 @@ interface TriggersListSectionProps {
   goToEditWizard: ({ triggerIdentifier, triggerType }: GoToEditWizardInterface) => void
   goToDetails: ({ triggerIdentifier, triggerType }: GoToEditWizardInterface) => void
   isPipelineInvalid?: boolean
+  gitAwareForTriggerEnabled?: boolean
 }
 
 // type CustomColumn<T extends object> = Column<T> & {
@@ -515,12 +518,31 @@ const RenderColumnEnable: Renderer<CellProps<NGTriggerDetailsResponse>> = ({
   )
 }
 
+const RenderPipelineReferenceBranch: Renderer<CellProps<NGTriggerDetailsResponse>> = ({
+  row
+}: {
+  row: RenderColumnRow
+}): JSX.Element => {
+  let data
+  try {
+    data = parse(row.original?.yaml || '')
+    return (
+      <Container flex>
+        <Text lineClamp={1}>{get(data, 'trigger.pipelineBranchName')}</Text>
+      </Container>
+    )
+  } catch (e) {
+    return <></>
+  }
+}
+
 export const TriggersListSection: React.FC<TriggersListSectionProps> = ({
   data,
   refetchTriggerList,
   goToEditWizard,
   goToDetails,
-  isPipelineInvalid
+  isPipelineInvalid,
+  gitAwareForTriggerEnabled
 }): JSX.Element => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
@@ -557,22 +579,42 @@ export const TriggersListSection: React.FC<TriggersListSectionProps> = ({
       {
         Header: getString('common.triggerLabel').toUpperCase(),
         accessor: 'name',
-        width: '25%',
+        width: gitAwareForTriggerEnabled ? '15%' : '25%',
         Cell: RenderColumnTrigger,
         getString
       },
       {
         Header: 'STATUS',
         accessor: 'status',
-        width: '20%',
+        width: gitAwareForTriggerEnabled ? '10%' : '15%',
         disableSortBy: true,
         Cell: RenderColumnStatus,
         getString
       },
+      ...(gitAwareForTriggerEnabled
+        ? [
+            {
+              Header: (
+                <Text
+                  font={{ variation: FontVariation.TABLE_HEADERS }}
+                  data-tooltip-id="triggerPipelineReferenceBranch"
+                >
+                  {getString('triggers.pipelineReferenceBranch').toUpperCase()}
+                  <HarnessDocTooltip tooltipId="triggerPipelineReferenceBranch" useStandAlone={true} />
+                </Text>
+              ),
+              accessor: 'yaml',
+              width: '20%',
+              disableSortBy: true,
+              Cell: RenderPipelineReferenceBranch,
+              getString
+            }
+          ]
+        : []),
       {
         Header: getString('activity').toUpperCase(),
         accessor: 'activity',
-        width: '18%',
+        width: gitAwareForTriggerEnabled ? '15%' : '20%',
         Cell: RenderColumnActivity,
         disableSortBy: true,
         getString
@@ -580,7 +622,7 @@ export const TriggersListSection: React.FC<TriggersListSectionProps> = ({
       {
         Header: getString('triggers.lastActivationLabel'),
         accessor: 'lastExecutionTime',
-        width: '14%',
+        width: gitAwareForTriggerEnabled ? '10%' : '15%',
         Cell: RenderColumnLastActivation,
         disableSortBy: true
       },
@@ -617,7 +659,7 @@ export const TriggersListSection: React.FC<TriggersListSectionProps> = ({
       {
         Header: '',
         accessor: 'type',
-        width: '3%',
+        width: '5%',
         Cell: RenderColumnMenu,
         disableSortBy: true,
         refetchTriggerList,
@@ -632,7 +674,7 @@ export const TriggersListSection: React.FC<TriggersListSectionProps> = ({
         isTriggerRbacDisabled
       }
     ],
-    [goToEditWizard, refetchTriggerList, getString]
+    [goToEditWizard, refetchTriggerList, getString, gitAwareForTriggerEnabled]
   )
 
   return (

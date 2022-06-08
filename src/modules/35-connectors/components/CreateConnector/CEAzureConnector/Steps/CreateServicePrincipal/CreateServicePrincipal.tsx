@@ -27,6 +27,8 @@ import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useSte
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { FeatureFlag } from '@common/featureFlags'
 import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import type { CEAzureDTO } from '../Overview/AzureConnectorOverview'
 import css from '../../CreateCeAzureConnector_new.module.scss'
 
@@ -54,6 +56,9 @@ const CreateServicePrincipal: React.FC<StepProps<CEAzureDTO>> = (props): JSX.Ele
   useStepLoadTelemetry(CE_AZURE_CONNECTOR_CREATION_EVENTS.LOAD_SERVICE_PRINCIPAL)
 
   const saveAndContinue = async () => {
+    trackEvent(ConnectorActions.CreateServicePrincipalSubmit, {
+      category: Category.CONNECTOR
+    })
     setIsSaving(true)
     try {
       if (prevStepData) {
@@ -102,6 +107,11 @@ const CreateServicePrincipal: React.FC<StepProps<CEAzureDTO>> = (props): JSX.Ele
     VISIBILITY: featuresEnabled.includes('VISIBILITY'),
     OPTIMIZATION: featuresEnabled.includes('OPTIMIZATION')
   }
+
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.CreateServicePrincipalLoad, {
+    category: Category.CONNECTOR
+  })
 
   // Keeping these commands as comment for reference purpose
   //

@@ -660,8 +660,11 @@ exports[`test cases for Workload details Page should be able to render the detai
         >
           <div
             class="Layout--horizontal StyledProps--main"
-            style="justify-content: flex-end;"
+            style="align-items: flex-end;"
           >
+            <span
+              style="flex-grow: 1;"
+            />
             <span
               class="bp3-popover-wrapper"
             >

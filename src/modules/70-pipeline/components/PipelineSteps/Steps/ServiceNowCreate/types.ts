@@ -18,6 +18,7 @@ import type {
   UseGetServiceNowTicketTypesProps,
   UseGetServiceNowIssueMetadataProps,
   UseGetServiceNowTemplateMetadataProps,
+  UseGetServiceNowIssueCreateMetadataProps,
   ResponseListServiceNowTemplate,
   ServiceNowFieldValueNG
 } from 'services/cd-ng'
@@ -125,6 +126,10 @@ export interface ServiceNowCreateDeploymentModeFormContentInterface extends Serv
   serviceNowTicketTypesFetchError?: GetDataError<Failure | Error> | null
   fetchingServiceNowTicketTypes: boolean
   serviceNowTicketTypesResponse: ResponseListServiceNowTicketTypeDTO | null
+  refetchServiceNowMetadata: (props: UseGetServiceNowIssueCreateMetadataProps) => Promise<void>
+  serviceNowMetadataFetchError?: GetDataError<Failure | Error> | null
+  fetchingServiceNowMetadata: boolean
+  serviceNowMetadataResponse: ResponseListServiceNowFieldNG | null
 }
 
 export enum ServiceNowStaticFields {

@@ -47,6 +47,7 @@ const CreateArtifactoryConnector: React.FC<CreateConnectorModalProps> = props =>
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
           mock={props.mock}
+          helpPanelReferenceId="AritfactoryOverview"
         />
         <StepArtifactoryAuthentication
           name={getString('details')}
@@ -63,6 +64,7 @@ const CreateArtifactoryConnector: React.FC<CreateConnectorModalProps> = props =>
           onConnectorCreated={props.onSuccess}
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
+          helpPanelReferenceId="ConnectorDelegatesSetup"
         />
         <VerifyOutOfClusterDelegate
           name={getString('connectors.stepThreeName')}
@@ -73,6 +75,7 @@ const CreateArtifactoryConnector: React.FC<CreateConnectorModalProps> = props =>
           onClose={props.onClose}
           setIsEditMode={props.setIsEditMode}
           stepIndex={TESTCONNECTION_STEP_INDEX}
+          helpPanelReferenceId="ConnectorTest"
         />
       </StepWizard>
     </>

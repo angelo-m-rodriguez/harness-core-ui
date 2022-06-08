@@ -36,7 +36,10 @@ import {
 import { Description, Tags } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
 import { CE_AWS_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
+import { Connectors } from '@connectors/constants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import css from '../CreateCeAwsConnector.module.scss'
 interface OverviewDetails {
   name: string
@@ -177,6 +180,12 @@ const OverviewStep: React.FC<OverviewProps> = props => {
     }
   }
 
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.OverviewLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.CENGAWS
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Text
@@ -199,6 +208,10 @@ const OverviewStep: React.FC<OverviewProps> = props => {
               .required(getString('connectors.ceAws.overview.validation.required'))
           })}
           onSubmit={values => {
+            trackEvent(ConnectorActions.OverviewSubmit, {
+              category: Category.CONNECTOR,
+              connector_type: Connectors.CENGAWS
+            })
             handleSubmit(values)
           }}
         >

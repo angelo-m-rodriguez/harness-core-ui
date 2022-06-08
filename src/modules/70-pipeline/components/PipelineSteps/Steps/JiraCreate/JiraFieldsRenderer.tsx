@@ -17,19 +17,28 @@ import type { JiraFieldNGWithValue } from './types'
 import css from './JiraCreate.module.scss'
 
 export interface JiraFieldsRendererProps {
+  renderRequiredFields?: boolean
   selectedFields?: JiraFieldNGWithValue[]
+  selectedRequiredFields?: JiraFieldNGWithValue[]
   readonly?: boolean
-  onDelete: (index: number, selectedField: JiraFieldNG) => void
+  onDelete?: (index: number, selectedField: JiraFieldNG) => void
 }
 
 interface MappedComponentInterface {
+  renderRequiredFields?: boolean
   selectedField: JiraFieldNG
   props: JiraFieldsRendererProps
   expressions: string[]
   index: number
 }
 
-function GetMappedFieldComponent({ selectedField, props, expressions, index }: MappedComponentInterface) {
+function GetMappedFieldComponent({
+  selectedField,
+  props,
+  expressions,
+  index,
+  renderRequiredFields
+}: MappedComponentInterface) {
   const showTextField = useCallback(() => {
     if (
       selectedField.schema.type === 'string' ||
@@ -53,12 +62,16 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
     return selectedField.allowedValues && selectedField.schema.type === 'option'
   }, [selectedField])
 
+  const formikFieldPath = renderRequiredFields
+    ? `spec.selectedRequiredFields[${index}].value`
+    : `spec.selectedOptionalFields[${index}].value`
+
   if (showTextField()) {
     return (
       <FormInput.MultiTextInput
         label={selectedField.name}
         disabled={isApprovalStepFieldDisabled(props.readonly)}
-        name={`spec.selectedFields[${index}].value`}
+        name={formikFieldPath}
         placeholder={selectedField.name}
         className={css.md}
         multiTextInputProps={{
@@ -72,7 +85,7 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
         selectItems={setAllowedValuesOptions(selectedField.allowedValues)}
         label={selectedField.name}
         disabled={isApprovalStepFieldDisabled(props.readonly)}
-        name={`spec.selectedFields[${index}].value`}
+        name={formikFieldPath}
         placeholder={selectedField.name}
         className={cx(css.multiSelect, css.md)}
         multiSelectTypeInputProps={{
@@ -85,7 +98,7 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
       <FormInput.MultiTypeInput
         selectItems={setAllowedValuesOptions(selectedField.allowedValues)}
         label={selectedField.name}
-        name={`spec.selectedFields[${index}].value`}
+        name={formikFieldPath}
         placeholder={selectedField.name}
         disabled={isApprovalStepFieldDisabled(props.readonly)}
         className={cx(css.multiSelect, css.md)}
@@ -98,7 +111,7 @@ function GetMappedFieldComponent({ selectedField, props, expressions, index }: M
 
 export function JiraFieldsRenderer(props: JiraFieldsRendererProps) {
   const { expressions } = useVariablesExpression()
-  const { readonly, selectedFields, onDelete } = props
+  const { readonly, selectedFields, renderRequiredFields, onDelete } = props
   return selectedFields ? (
     <>
       {selectedFields?.map((selectedField: JiraFieldNG, index: number) => (
@@ -107,15 +120,18 @@ export function JiraFieldsRenderer(props: JiraFieldsRendererProps) {
             selectedField={selectedField}
             props={props}
             expressions={expressions}
+            renderRequiredFields={renderRequiredFields}
             index={index}
           />
-          <Button
-            minimal
-            icon="trash"
-            disabled={isApprovalStepFieldDisabled(readonly)}
-            data-testid={`remove-selectedField-${index}`}
-            onClick={() => onDelete(index, selectedField)}
-          />
+          {!renderRequiredFields ? (
+            <Button
+              minimal
+              icon="trash"
+              disabled={isApprovalStepFieldDisabled(readonly)}
+              data-testid={`remove-selectedField-${index}`}
+              onClick={() => onDelete?.(index, selectedField)}
+            />
+          ) : null}
         </Layout.Horizontal>
       ))}
     </>

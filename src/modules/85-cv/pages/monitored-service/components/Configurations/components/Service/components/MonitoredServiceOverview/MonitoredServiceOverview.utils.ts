@@ -7,6 +7,7 @@
 
 import type { FormikProps } from 'formik'
 import type { MultiSelectOption, SelectOption } from '@wings-software/uicore'
+import type { MonitoredServiceForm } from '../../Service.types'
 
 export function generateMonitoredServiceName(serviceIdentifier?: string, envIdentifier?: string): string {
   let name = ''
@@ -58,4 +59,17 @@ export function updateMonitoredServiceNameForService(formik: FormikProps<any>, s
     name: monitoredServiceName,
     identifier: monitoredServiceName
   })
+}
+
+export const serviceOnSelect = (
+  isTemplate: boolean,
+  selectedService: SelectOption,
+  formikProps: FormikProps<MonitoredServiceForm>
+) => {
+  isTemplate
+    ? formikProps.setValues({
+        ...(formikProps?.values || {}),
+        serviceRef: selectedService?.value as string
+      })
+    : updateMonitoredServiceNameForService(formikProps, selectedService)
 }

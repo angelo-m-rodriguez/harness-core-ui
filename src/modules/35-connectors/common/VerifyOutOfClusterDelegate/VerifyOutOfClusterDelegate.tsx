@@ -44,6 +44,7 @@ import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { ErrorHandler } from '@common/components/ErrorHandler/ErrorHandler'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { connectorsTrackEventMap } from '@connectors/utils/connectorEvents'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
 import Suggestions from '../ErrorSuggestions/ErrorSuggestionsCe'
 import css from './VerifyOutOfClusterDelegate.module.scss'
 
@@ -62,6 +63,7 @@ interface VerifyOutOfClusterDelegateProps {
   isLastStep?: boolean
   name?: string
   connectorInfo: ConnectorInfoDTO | void
+  helpPanelReferenceId?: string
   gitDetails?: EntityGitDetails
   stepIndex?: number // will make this mandatory once all usages sends the value
 }
@@ -176,6 +178,9 @@ const VerifyOutOfClusterDelegate: React.FC<StepProps<VerifyOutOfClusterStepProps
       step: 1,
       intent: Intent.WARNING,
       status: 'PROCESS'
+    })
+    useConnectorWizard({
+      helpPanel: props.helpPanelReferenceId ? { referenceId: props.helpPanelReferenceId, contentWidth: 900 } : undefined
     })
 
     const showCustomErrorHints = showCustomErrorSuggestion(props.type)

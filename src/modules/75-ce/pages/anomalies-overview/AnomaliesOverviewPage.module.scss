@@ -78,3 +78,9 @@
   cursor: pointer;
   align-items: center;
 }
+
+.separator {
+  border-right: 1px solid var(--grey-300);
+  padding-left: var(--spacing-medium) !important;
+  margin-right: var(--spacing-medium) !important;
+}

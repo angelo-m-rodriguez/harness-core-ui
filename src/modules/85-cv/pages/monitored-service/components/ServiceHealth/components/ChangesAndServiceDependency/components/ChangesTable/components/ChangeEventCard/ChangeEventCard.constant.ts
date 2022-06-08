@@ -16,3 +16,7 @@ export enum VerificationStatus {
 }
 
 export const TWO_HOURS_IN_MILLISECONDS = 1000 * 60 * 60 * 2
+
+export const StageStatusMapper = {
+  IgnoreFailed: 'Failed'
+}

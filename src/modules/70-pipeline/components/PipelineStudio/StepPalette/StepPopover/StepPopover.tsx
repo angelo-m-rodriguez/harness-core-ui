@@ -86,7 +86,7 @@ export function StepPopover(props: StepPopoverProps): React.ReactElement {
 
           <Icon
             name={!isNil(step) ? step.getIconName?.() : iconMap[stepData.name || '']}
-            size={25}
+            size={!isNil(step?.getIconSize?.()) ? step?.getIconSize?.() : 25}
             {...(!isNil(step) && !isNil(step?.getIconColor?.()) ? { color: step.getIconColor() } : {})}
             style={{ color: step?.getIconColor?.() }}
           />

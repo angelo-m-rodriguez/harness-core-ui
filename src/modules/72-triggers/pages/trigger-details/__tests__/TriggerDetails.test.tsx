@@ -19,6 +19,10 @@ jest.mock('services/pipeline-ng', () => ({
   useGetPipelineSummary: jest.fn(() => PipelineResponse)
 }))
 
+jest.mock('framework/GitRepoStore/GitSyncStoreContext', () => ({
+  GitSyncStoreProvider: (props: { children?: React.ReactNode }) => <>{props.children}</>
+}))
+
 const TEST_PATH = routes.toTriggersWizardPage({ ...accountPathProps, ...triggerPathProps, ...pipelineModuleParams })
 describe('Trigger Details tests', () => {
   test('render snapshot view', async () => {

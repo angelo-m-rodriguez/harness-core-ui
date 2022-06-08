@@ -322,6 +322,50 @@ Array [
         "startTrialRedirect": [Function],
       }
     }
+    pageName="TemplateStudioWrapper"
+    path="/account/:accountId/:module(cf)/orgs/:orgIdentifier/projects/:projectIdentifier/setup/resources/template-studio/:templateType/template/:templateIdentifier/"
+    sidebarProps={
+      Object {
+        "icon": "cf-main",
+        "navComponent": [Function],
+        "title": "Feature Flags",
+      }
+    }
+  >
+    <TemplateStudioWrapper />
+  </RouteWithLayout>,
+  <RouteWithLayout
+    exact={true}
+    layout={[Function]}
+    licenseRedirectData={
+      Object {
+        "expiredTrialRedirect": [Function],
+        "licenseStateName": "FF_LICENSE_STATE",
+        "startTrialRedirect": [Function],
+      }
+    }
+    pageName="TemplatesPage"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/setup/resources/templates"
+    sidebarProps={
+      Object {
+        "icon": "cf-main",
+        "navComponent": [Function],
+        "title": "Feature Flags",
+      }
+    }
+  >
+    <TemplatesPage />
+  </RouteWithLayout>,
+  <RouteWithLayout
+    exact={true}
+    layout={[Function]}
+    licenseRedirectData={
+      Object {
+        "expiredTrialRedirect": [Function],
+        "licenseStateName": "FF_LICENSE_STATE",
+        "startTrialRedirect": [Function],
+      }
+    }
     pageName="CFWorkflowsPage"
     path="/account/:accountId/cf/orgs/:orgIdentifier/projects/:projectIdentifier/workflows"
     sidebarProps={

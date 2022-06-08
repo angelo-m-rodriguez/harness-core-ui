@@ -13,6 +13,7 @@ import { yupToFormErrors, FormikErrors } from 'formik'
 import { StepViewType, StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
+import type { StringsMap } from 'stringTypes'
 import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import type {
   RollbackStackData,
@@ -33,7 +34,9 @@ export class CFRollbackStack extends PipelineStep<RollbackStackStepInfo> {
 
   protected type = StepType.CloudFormationRollbackStack
   protected stepIcon: IconName = 'cloud-formation-rollback'
-  protected stepName = 'Cloud Formation Rollback Stack'
+  protected stepName = 'CloudFormation Rollback Stack'
+  protected stepDescription: keyof StringsMap = 'cd.cloudFormation.rollbackDescription'
+  protected stepIconSize = 32
 
   protected defaultValues = {
     type: StepType.CloudFormationRollbackStack,

@@ -8,8 +8,9 @@
 import type { LinkModelListener, NodeModelListener } from '@projectstorm/react-diagrams-core'
 import type { BaseModelListener } from '@projectstorm/react-canvas-core'
 import cx from 'classnames'
-import { last, isEmpty } from 'lodash-es'
+import { last, isEmpty, get } from 'lodash-es'
 import { ExecutionStatusEnum, isExecutionRunning } from '@pipeline/utils/statusHelpers'
+import { cloudFormationSteps } from '@pipeline/utils/executionUtils'
 import { ExecutionPipeline, ExecutionPipelineNode, ExecutionPipelineNodeType } from './ExecutionPipelineModel'
 import {
   getNodeStyles,
@@ -172,6 +173,7 @@ export class ExecutionStageDiagramModel extends Diagram.DiagramModel {
       const statusProps = getStatusProps(stage.status, type)
       const tertiaryIconProps = getTertiaryIconProps(stage)
       let nodeRender = this.getNodeFromId(stage.identifier)
+      const stepType = get(stage, 'data.stepType', '')
       const commonOption: Diagram.DiamondNodeModelOptions = {
         customNodeStyle: getNodeStyles(isSelected, stage.status, type, NODE_HAS_BORDER),
         canDelete: false,
@@ -186,7 +188,8 @@ export class ExecutionStageDiagramModel extends Diagram.DiagramModel {
         skipCondition: stage?.skipCondition,
         defaultSelected: isSelected,
         conditionalExecutionEnabled: getConditionalExecutionFlag(stage.when),
-        disableClick: stage.disableClick
+        disableClick: stage.disableClick,
+        iconSize: cloudFormationSteps.includes(stepType) ? 32 : 20
       }
       if (!nodeRender) {
         nodeRender =

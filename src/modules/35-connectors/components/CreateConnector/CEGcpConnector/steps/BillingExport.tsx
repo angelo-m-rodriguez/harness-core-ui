@@ -23,6 +23,8 @@ import { DialogExtensionContext } from '@connectors/common/ConnectorExtention/Di
 import type { GcpBillingExportSpec, GcpCloudCostConnector } from 'services/cd-ng'
 import { CE_GCP_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import type { CEGcpConnectorDTO } from './OverviewStep'
 import BillingExportExtention from './BillingExportExtention'
 import css from '../CreateCeGcpConnector.module.scss'
@@ -65,6 +67,12 @@ const BillingExport: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
     previousStep?.({ ...(prevStepData as CEGcpConnectorDTO) })
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CEGcpConnectorBillingExportLoad, {
+    category: Category.CONNECTOR
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Heading level={2} className={css.header}>
@@ -99,7 +107,12 @@ const BillingExport: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
             datasetId: prevStepData?.spec.billingExportSpec?.datasetId || '',
             tableId: get(prevStepData, 'spec.billingExportSpec.tableId', '')
           }}
-          onSubmit={formData => handleSubmit(formData)}
+          onSubmit={formData => {
+            trackEvent(ConnectorActions.CEGcpConnectorBillingExportSubmit, {
+              category: Category.CONNECTOR
+            })
+            handleSubmit(formData)
+          }}
           formName="ceGcpBillingExport"
         >
           {() => (

@@ -715,6 +715,13 @@ const routes = {
     ({ orgIdentifier, projectIdentifier, module }: PipelineType<ProjectPathProps>) =>
       `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/gitops`
   ),
+  toAccountResourcesGitOps: withAccountId(() => {
+    const path = `resources/gitops`
+    return getScopeBasedRoute({
+      scope: {},
+      path
+    })
+  }),
   toServices: withAccountId(
     ({ orgIdentifier, projectIdentifier, module }: PipelineType<ProjectPathProps>) =>
       `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/services`
@@ -1522,9 +1529,30 @@ const routes = {
       `/dashboards/folder/${folderId ? folderId : 'shared'}/view/${viewId}`
   ),
   toCustomFolderHome: withAccountId(() => '/dashboards/folders'),
-  toViewCustomFolder: withAccountId(({ folderId }: { folderId: string }) => `/dashboards/folder/${folderId}`)
+  toViewCustomFolder: withAccountId(({ folderId }: { folderId: string }) => `/dashboards/folder/${folderId}`),
 
   /****************** Secret Usage************************************************************************************/
+
+  /****************** Chaos Module ************************************************************************************/
+  toChaos: withAccountId(() => `/chaos`),
+  toChaosMicroFrontend: withAccountId(
+    ({ orgIdentifier, projectIdentifier }: Partial<ProjectPathProps>) =>
+      `/chaos/orgs/${orgIdentifier}/projects/${projectIdentifier}/`
+  ),
+
+  // These RoutesDestinations are defined in the MicroFrontend
+  toChaosWorkflows: withAccountId(
+    ({ orgIdentifier, projectIdentifier }: Partial<ProjectPathProps>) =>
+      `/chaos/orgs/${orgIdentifier}/projects/${projectIdentifier}/workflows`
+  ),
+  toChaosHubs: withAccountId(
+    ({ orgIdentifier, projectIdentifier }: Partial<ProjectPathProps>) =>
+      `/chaos/orgs/${orgIdentifier}/projects/${projectIdentifier}/chaos-hubs`
+  ),
+  toChaosAgents: withAccountId(
+    ({ orgIdentifier, projectIdentifier }: Partial<ProjectPathProps>) =>
+      `/chaos/orgs/${orgIdentifier}/projects/${projectIdentifier}/agents`
+  )
 }
 
 export default routes

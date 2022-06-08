@@ -82,6 +82,7 @@ describe('Landing Dashboard Page', () => {
     expect(getByText('projectsOrgs.landingDashboard.dashboardTitle')).toBeDefined()
     expect(getByText('common.welcome')).toBeDefined()
     expect(getByText('projectsOrgs.landingDashboard.atAGlance')).toBeDefined()
+    await waitFor(() => expect(document.title).toEqual('dashboardLabel | harness'))
   })
 
   test('Render Page Error', async () => {

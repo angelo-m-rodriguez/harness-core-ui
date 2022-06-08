@@ -153,11 +153,7 @@ function HelmWithHttp({
               })
             })
           ),
-          ...ManifestIdentifierValidation(
-            manifestIdsList,
-            initialValues?.identifier,
-            getString('pipeline.uniqueIdentifier')
-          )
+          ...ManifestIdentifierValidation(manifestIdsList, initialValues?.identifier, getString('pipeline.uniqueName'))
         })}
         onSubmit={formData => {
           submitFormData({

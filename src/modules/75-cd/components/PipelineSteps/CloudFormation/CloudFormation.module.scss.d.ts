@@ -34,6 +34,7 @@ declare const styles: {
   readonly selectInputs: string
   readonly squareCardContainer: string
   readonly templateDropdown: string
+  readonly templateSelect: string
   readonly truncate: string
   readonly wizard: string
 }

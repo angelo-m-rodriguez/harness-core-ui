@@ -44,11 +44,13 @@
       "@templates-library/*": ["modules/72-templates-library/*"],
       "@triggers/*": ["modules/72-triggers/*"],
       "@cd/*": ["modules/75-cd/*"],
+      "@chaos/*": ["modules/75-chaos/*"],
       "@cf/*": ["modules/75-cf/*"],
       "@ci/*": ["modules/75-ci/*"],
       "@cv/*": ["modules/85-cv/*"],
       "@sto-steps/*": ["modules/85-sto-steps/*"],
       "@ce/*": ["modules/75-ce/*"],
+      "@gitops/*": ["modules/90-gitops/*"],
       "@wings-software/*": ["../node_modules/@harness/*"]
     }
   },

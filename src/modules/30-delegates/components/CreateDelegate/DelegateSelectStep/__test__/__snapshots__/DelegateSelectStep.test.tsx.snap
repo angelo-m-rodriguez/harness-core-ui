@@ -136,7 +136,7 @@ exports[`Delgate Select StepWizard Click continue button 1`] = `
           tabindex="0"
         >
           <div
-            class="StyledProps--font StyledProps--main cardBody"
+            class="StyledProps--font StyledProps--main cardBody disableCursor"
             data-type="ECS"
           >
             <img
@@ -165,7 +165,7 @@ exports[`Delgate Select StepWizard Click continue button 1`] = `
           tabindex="0"
         >
           <div
-            class="StyledProps--font StyledProps--main cardBody"
+            class="StyledProps--font StyledProps--main cardBody disableCursor"
             data-type="LINUX"
           >
             <img
@@ -213,18 +213,16 @@ exports[`Delgate Select StepWizard Click continue button 1`] = `
         <div
           class="StyledProps--font StyledProps--main"
         >
-          <p
-            class="StyledProps--font StyledProps--main preReqContent"
+          <span
+            class="StyledProps--font StyledProps--main preReqContent StyledProps--inline"
           >
             delegate.kubernetes.prerequisites_info2
-            <a
-              color="blue600"
-              href="/https://app.harness.io"
-              target="_blank"
-            >
-              https://app.harness.io
-            </a>
-          </p>
+          </span>
+          <span
+            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-weight-bold"
+          >
+            https://app.harness.io
+          </span>
         </div>
         <p
           class="StyledProps--font StyledProps--main preReqContent"
@@ -507,7 +505,7 @@ exports[`Delgate Select StepWizard render DelegateSelectStep 1`] = `
           tabindex="0"
         >
           <div
-            class="StyledProps--font StyledProps--main cardBody"
+            class="StyledProps--font StyledProps--main cardBody disableCursor"
             data-type="ECS"
           >
             <img
@@ -536,7 +534,7 @@ exports[`Delgate Select StepWizard render DelegateSelectStep 1`] = `
           tabindex="0"
         >
           <div
-            class="StyledProps--font StyledProps--main cardBody"
+            class="StyledProps--font StyledProps--main cardBody disableCursor"
             data-type="LINUX"
           >
             <img
@@ -584,18 +582,16 @@ exports[`Delgate Select StepWizard render DelegateSelectStep 1`] = `
         <div
           class="StyledProps--font StyledProps--main"
         >
-          <p
-            class="StyledProps--font StyledProps--main preReqContent"
+          <span
+            class="StyledProps--font StyledProps--main preReqContent StyledProps--inline"
           >
             delegate.kubernetes.prerequisites_info2
-            <a
-              color="blue600"
-              href="/https://app.harness.io"
-              target="_blank"
-            >
-              https://app.harness.io
-            </a>
-          </p>
+          </span>
+          <span
+            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-weight-bold"
+          >
+            https://app.harness.io
+          </span>
         </div>
         <p
           class="StyledProps--font StyledProps--main preReqContent"

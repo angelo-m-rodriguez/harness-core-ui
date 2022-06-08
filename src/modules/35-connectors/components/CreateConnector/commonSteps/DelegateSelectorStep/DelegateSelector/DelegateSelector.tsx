@@ -304,12 +304,19 @@ export const DelegateSelector: React.FC<DelegateSelectorProps> = props => {
     }
   }
 
+  const resetDelegateSelectorsAndUpdateMode = (newMode: DelegateOptions) => {
+    if (mode !== newMode) {
+      setDelegateSelectors([])
+      setMode(newMode)
+    }
+  }
+
   return (
     <Layout.Vertical className={css.delegateSelectorContainer}>
       <Text color={Color.GREY_800} margin={{ top: 'xlarge', bottom: 'medium' }}>
         {getString('connectors.delegate.configure')}
       </Text>
-      <CustomRadioGroup items={options} onClick={newMode => setMode(newMode)} />
+      <CustomRadioGroup items={options} onClick={newMode => resetDelegateSelectorsAndUpdateMode(newMode)} />
       {CustomComponent}
       <Layout.Horizontal flex={{ justifyContent: 'space-between' }} margin={{ bottom: 'medium' }}>
         <Text font={{ size: 'medium', weight: 'semi-bold' }} color={Color.BLACK}>

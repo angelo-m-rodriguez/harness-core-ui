@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { isEmpty } from 'lodash-es'
+import { defaultTo, isEmpty } from 'lodash-es'
 import { Tag, Popover, PopoverInteractionKind } from '@blueprintjs/core'
 import { Layout, Text } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
@@ -15,6 +15,7 @@ import { useStrings } from 'framework/strings'
 import type { RoleAssignmentMetadataDTO, RoleBinding } from 'services/cd-ng'
 import type { PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import routes from '@common/RouteDefinitions'
+import { isAccountBasicRole } from '@rbac/utils/utils'
 import css from './RoleBindingsList.module.scss'
 
 interface RoleBindingsListProps {
@@ -62,8 +63,11 @@ const RoleBindingTag = ({ roleAssignment }: { roleAssignment: RoleBinding }): Re
 }
 
 const RoleBindingsList: React.FC<RoleBindingsListProps> = ({ data, length = data?.length, showNoData = false }) => {
-  const baseData = data?.slice(0, length)
-  const popoverData = data?.slice(length, data.length)
+  const filteredData = data?.filter(
+    val => !isAccountBasicRole(defaultTo((val as RoleAssignmentMetadataDTO).identifier, ''))
+  )
+  const baseData = filteredData?.slice(0, length)
+  const popoverData = filteredData?.slice(length, filteredData.length)
   const { getString } = useStrings()
   return (
     <>

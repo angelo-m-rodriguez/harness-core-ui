@@ -34,21 +34,25 @@
     .connectorName {
       display: inline-flex;
       color: var(--grey-500);
-      margin-right: var(--spacing-small);
       max-width: 236px;
       text-overflow: ellipsis;
     }
   }
 }
 .valuesList {
-  margin: 0 36px;
-  width: 93%;
+  margin-left: 30px;
   .valuesListItem {
-    padding: var(--spacing-small);
-    background-color: var(--grey-100);
+    padding-top: var(--spacing-small);
+    .valuesPathList {
+      display: grid;
+      grid-template-columns: 380px 1fr 80px;
+      column-gap: var(--spacing-8);
+      align-items: center;
+    }
   }
   .addValuesYaml {
     padding-left: 0 !important;
+    padding-top: var(--spacing-medium);
   }
 }
 .addManifest {
@@ -63,7 +67,8 @@
 
 .manifestList {
   display: grid;
-  grid-template-columns: 200px 200px 300px minmax(10px, 1fr) 80px;
+  grid-template-columns: 180px 230px 230px minmax(10px, 1fr) 80px;
+  column-gap: var(--spacing-medium);
   align-items: center;
   &.list-header {
     border-bottom: solid 1px var(--grey-100);

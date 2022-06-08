@@ -36,6 +36,16 @@
         },
         {
           "stage": {
+            "name": "Template Stage",
+            "identifier": "template_stage",
+            "template": {
+              "templateRef": "template_ref",
+              "versionLabel": "versionLabel"
+            }
+          }
+        },
+        {
+          "stage": {
             "name": "Stage 3",
             "identifier": "s3",
             "description": "",
@@ -215,7 +225,8 @@
     "isDBInitialized": true,
     "isUpdated": true,
     "isInitialized": true,
-    "error": ""
+    "error": "",
+    "templateTypes": { "template_ref": "Deployment" }
   },
   "stepsFactory": { "invocationMap": {}, "stepBank": {}, "stepIconMap": {}, "type": "pipeline-factory" },
   "stagesMap": {

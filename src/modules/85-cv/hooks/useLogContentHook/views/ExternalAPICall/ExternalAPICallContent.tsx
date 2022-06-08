@@ -24,6 +24,7 @@ import { useStrings } from 'framework/strings'
 import type { ApiCallLogDTO } from 'services/cv'
 import { CopyText } from '@common/components/CopyText/CopyText'
 import noLogsDataImage from '@cv/assets/genericEmptyState.svg'
+import { getTags } from '@cv/utils/CommonUtils'
 import { formatDate, getStatusColor } from '../../useLogContentHook.utils'
 import type { ExecutionAndAPICallLogProps } from '../../useLogContentHook.types'
 import type { KeyValuePairProps } from './ExternalAPICall.types'
@@ -84,7 +85,7 @@ const ExternalAPICallContent: React.FC<ExecutionAndAPICallLogProps> = ({
     <>
       <Container className={css.container}>
         {content.map((log: ApiCallLogDTO, index) => {
-          const { createdAt, requests, requestTime, responses, responseTime } = log
+          const { createdAt, requests, requestTime, responses, responseTime, tags } = log
           const request = requests?.find(_request => _request.name === 'url')
 
           const status = responses?.find(_response => _response.name === 'Status Code') ?? {}
@@ -128,6 +129,7 @@ const ExternalAPICallContent: React.FC<ExecutionAndAPICallLogProps> = ({
                   </Heading>
                   <KeyValuePair keyText="URL" value={request?.value} isLink />
                   <KeyValuePair keyText="Request Timestamp" value={formatDate(requestTime)} />
+                  <KeyValuePair keyText="Tags" value={getTags(tags)} />
                 </Container>
                 <Container padding={{ top: 'medium', right: 'large', bottom: 'medium', left: 'large' }}>
                   <Heading level={2} font={{ variation: FontVariation.BODY2 }} color={Color.GREY_900}>

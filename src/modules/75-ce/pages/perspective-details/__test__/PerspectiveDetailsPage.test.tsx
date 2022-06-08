@@ -6,18 +6,20 @@
  */
 
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, fireEvent, act, getByText } from '@testing-library/react'
 import { Provider } from 'urql'
 import { fromValue } from 'wonka'
 import type { DocumentNode } from 'graphql'
-import { TestWrapper } from '@common/utils/testUtils'
+import { findDialogContainer, TestWrapper } from '@common/utils/testUtils'
+import { fillAtForm, InputTypes } from '@common/utils/JestFormHelper'
 import {
   FetchPerspectiveTimeSeriesDocument,
   FetchPerspectiveDetailsSummaryDocument,
   FetchViewFieldsDocument,
   FetchperspectiveGridDocument,
   FetchPerspectiveBudgetDocument,
-  PerspectiveRecommendationsDocument
+  PerspectiveRecommendationsDocument,
+  FetchPerspectiveTotalCountDocument
 } from 'services/ce/services'
 import PerspectiveDetailsPage from '../PerspectiveDetailsPage'
 
@@ -181,5 +183,154 @@ describe('test cases for Perspective details Page', () => {
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
+  })
+
+  test('should be able to download perspective grid as CSV', async () => {
+    const responseState = {
+      executeQuery: jest
+        .fn()
+        .mockImplementationOnce(({ query }: { query: DocumentNode }) => {
+          if (query === FetchPerspectiveTimeSeriesDocument) {
+            return fromValue({
+              data: {
+                perspectiveTimeSeriesStats: {
+                  stats: []
+                }
+              }
+            })
+          }
+          if (query === FetchperspectiveGridDocument) {
+            return fromValue({
+              data: {
+                perspectiveGrid: {
+                  data: [
+                    {
+                      name: 'Cloud Logging',
+                      id: 'Mock Id 1',
+                      cost: 5681.17,
+                      costTrend: -22.41,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    },
+                    {
+                      name: 'Kubernetes Engine',
+                      id: 'Mock Id 2',
+                      cost: 2953.1,
+                      costTrend: -11.32,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    },
+                    {
+                      name: 'Kubernetes Engine 4',
+                      id: 'Mock Id 4',
+                      cost: 295433.1,
+                      costTrend: -151.32,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    },
+                    {
+                      name: 'Kubernetes Engine 8',
+                      id: 'Mock Id 8',
+                      cost: 243953.1,
+                      costTrend: -161.32,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    }
+                  ]
+                }
+              }
+            })
+          }
+          if (query === FetchPerspectiveDetailsSummaryDocument) {
+            return fromValue(SummaryResponseData)
+          }
+          if (query === FetchViewFieldsDocument) {
+            return fromValue(ViewFieldResponseData)
+          }
+          if (query === FetchPerspectiveTotalCountDocument) {
+            return fromValue({
+              data: {
+                perspectiveTotalCount: 2
+              }
+            })
+          }
+          return fromValue({})
+        })
+        .mockImplementation(({ query }: { query: DocumentNode }) => {
+          if (query === FetchPerspectiveTimeSeriesDocument) {
+            return fromValue({
+              data: {
+                perspectiveTimeSeriesStats: {
+                  stats: []
+                }
+              }
+            })
+          }
+          if (query === FetchperspectiveGridDocument) {
+            return fromValue({
+              data: {
+                perspectiveGrid: {
+                  data: [
+                    {
+                      name: 'Cloud Logging',
+                      id: 'Mock Id 1',
+                      cost: 5681.17,
+                      costTrend: -22.41,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    },
+                    {
+                      name: 'Kubernetes Engine',
+                      id: 'Mock Id 2',
+                      cost: 2953.1,
+                      costTrend: -11.32,
+                      __typename: 'QLCEViewEntityStatsDataPoint'
+                    }
+                  ]
+                }
+              }
+            })
+          }
+          if (query === FetchPerspectiveDetailsSummaryDocument) {
+            return fromValue(SummaryResponseData)
+          }
+          if (query === FetchViewFieldsDocument) {
+            return fromValue(ViewFieldResponseData)
+          }
+          if (query === FetchPerspectiveTotalCountDocument) {
+            return fromValue({
+              data: {
+                perspectiveTotalCount: 2
+              }
+            })
+          }
+          return fromValue({})
+        })
+    }
+
+    const { container } = render(
+      <TestWrapper pathParams={params}>
+        <Provider value={responseState as any}>
+          <PerspectiveDetailsPage />
+        </Provider>
+      </TestWrapper>
+    )
+
+    act(() => {
+      fireEvent.click(getByText(container, 'ce.perspectives.exportCSV'))
+    })
+
+    const dialog = findDialogContainer()
+
+    window.URL.createObjectURL = jest.fn()
+
+    fillAtForm([
+      { container: dialog!, fieldId: 'fileName', type: InputTypes.TEXTFIELD, value: 'File Name' },
+      { container: dialog!, fieldId: 'exportRowsUpto', type: InputTypes.TEXTFIELD, value: '2' },
+      { container: dialog!, fieldId: 'excludeRowsWithCost', type: InputTypes.TEXTFIELD, value: '500' }
+    ])
+
+    act(() => {
+      fireEvent.click(getByText(dialog!, 'common.download'))
+    })
+
+    expect(dialog?.querySelector('input[value="File Name"]')).toBeDefined()
+    expect(dialog?.querySelector('input[value="2"]')).toBeDefined()
+    expect(dialog?.querySelector('input[value="500"]')).toBeDefined()
   })
 })

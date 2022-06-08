@@ -25,14 +25,14 @@ export function ConfigVariables(props: TerraformVariableStepProps): React.ReactE
         data={variablesData?.spec?.configuration?.spec}
         originalData={initialValues.spec?.configuration?.spec}
         metadataMap={metadataMap}
-        className={pipelineVariableCss.variablePaddingL2}
+        className={pipelineVariableCss.variablePaddingL3}
       />
       {variablesData?.spec?.configuration?.spec?.configFiles?.store?.spec?.gitFetchType && (
         <VariablesListTable
           data={variablesData?.spec?.configuration?.spec?.configFiles?.store?.spec}
           originalData={initialValues.spec?.configuration?.spec?.configFiles?.store?.spec}
           metadataMap={metadataMap}
-          className={pipelineVariableCss.variablePaddingL2}
+          className={pipelineVariableCss.variablePaddingL3}
         />
       )}
       {variablesData?.spec?.configuration?.spec?.varFiles?.length && (
@@ -48,7 +48,7 @@ export function ConfigVariables(props: TerraformVariableStepProps): React.ReactE
                     initialValues?.spec?.configuration?.spec?.varFiles?.[index]?.varFile?.spec || ({} as any)
                   }
                   metadataMap={metadataMap}
-                  className={pipelineVariableCss.variablePaddingL2}
+                  className={pipelineVariableCss.variablePaddingL4}
                 />
               )
             } else if (varFile?.varFile?.type === 'Remote') {
@@ -62,7 +62,7 @@ export function ConfigVariables(props: TerraformVariableStepProps): React.ReactE
                   data={remoteSpec?.store?.spec}
                   originalData={initVarSpec?.store?.spec || ({} as any)}
                   metadataMap={metadataMap}
-                  className={pipelineVariableCss.variablePaddingL2}
+                  className={pipelineVariableCss.variablePaddingL4}
                 />
               )
             }

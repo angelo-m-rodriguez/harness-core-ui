@@ -34,6 +34,13 @@ export enum InfraDeploymentType {
   SshWinRmAzure = 'SshWinRmAzure'
 }
 
+export const deploymentTypeToInfraTypeMap = {
+  [ServiceDeploymentType.ServerlessAwsLambda]: InfraDeploymentType.ServerlessAwsLambda,
+  [ServiceDeploymentType.ServerlessAzureFunctions]: InfraDeploymentType.ServerlessAzureFunctions,
+  [ServiceDeploymentType.ServerlessGoogleFunctions]: InfraDeploymentType.ServerlessGoogleFunctions,
+  [ServiceDeploymentType.ssh]: InfraDeploymentType.PDC
+}
+
 export function getNameSpaceSchema(
   getString: UseStringsReturn['getString'],
   isRequired = true

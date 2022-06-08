@@ -7,18 +7,22 @@
 
 import React from 'react'
 import { PageSpinner } from '@harness/uicore'
-import type { ServiceResponseDTO } from 'services/cd-ng'
+import type { ServiceResponseDTO, ServiceYaml } from 'services/cd-ng'
 import ServiceConfigurationWrapper from '@cd/components/Services/ServiceStudio/ServiceConfigWrapper/ServiceConfigWrapper'
 import { ServiceContextProvider } from '@cd/context/ServiceContext'
 
 interface ServiceEntityEditModalProps {
-  serviceResponse: ServiceResponseDTO
   onCloseModal: () => void
-  isLoading: boolean
+  onServiceCreate: (val: ServiceYaml) => void
+  isServiceCreateModalView: boolean
+  serviceResponse?: ServiceResponseDTO
+  isLoading?: boolean
 }
 function ServiceEntityEditModal({
-  serviceResponse,
+  isServiceCreateModalView,
+  onServiceCreate,
   onCloseModal,
+  serviceResponse,
   isLoading
 }: ServiceEntityEditModalProps): React.ReactElement {
   if (isLoading) {
@@ -31,10 +35,12 @@ function ServiceEntityEditModal({
   }
   return (
     <ServiceContextProvider
-      serviceResponse={serviceResponse}
+      serviceResponse={isServiceCreateModalView ? {} : (serviceResponse as ServiceResponseDTO)}
       isServiceEntityModalView={true}
       onCloseModal={onCloseModal}
+      onServiceCreate={onServiceCreate}
       isServiceEntityPage={true}
+      isServiceCreateModalView={isServiceCreateModalView}
     >
       <ServiceConfigurationWrapper />
     </ServiceContextProvider>

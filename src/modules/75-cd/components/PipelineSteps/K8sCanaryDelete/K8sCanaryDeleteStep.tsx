@@ -30,6 +30,7 @@ import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { FormMultiTypeCheckboxField } from '@common/components/MultiTypeCheckbox/MultiTypeCheckbox'
 import type { StringsMap } from 'stringTypes'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 interface K8sCanaryDeleteStepData extends StepElementConfig {
   spec: K8sCanaryDeleteStepInfo
@@ -178,7 +179,14 @@ const K8sCanaryDeleteVariableStep: React.FC<K8sCanaryDeleteVariableStepProps> = 
   metadataMap,
   initialValues
 }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8sCanaryDeleteWidgetWithRef = React.forwardRef(K8sCanaryDeleteWidget)

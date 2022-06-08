@@ -16,7 +16,6 @@ import {
 import { stageTypeToIconMap } from '@pipeline/utils/constants'
 import type { DependencyElement } from 'services/ci'
 import { getDefaultBuildDependencies } from '@pipeline/utils/stageHelpers'
-import { getIdentifierFromValue } from '@common/components/EntityReference/EntityReference'
 import type { TemplateStepNode } from 'services/pipeline-ng'
 import { getConditionalExecutionFlag } from '@pipeline/components/ExecutionStageDiagram/ExecutionStageDiagramUtils'
 import { ExecutionStatusEnum } from '@pipeline/utils/statusHelpers'
@@ -368,9 +367,9 @@ const transformStageData = (
       const updatedStagetPath = `${parentPath}.${index + offsetIndex}`
       const hasErrors =
         errorMap && [...errorMap.keys()].some(key => updatedStagetPath && key.startsWith(updatedStagetPath))
-      const templateRef = getIdentifierFromValue(stage.stage?.template?.templateRef as string)
+      const templateRef = stage.stage?.template?.templateRef
 
-      const type = templateRef ? (templateTypes?.[templateRef] as string) : (stage.stage.type as string)
+      const type = (templateRef ? get(templateTypes, templateRef) : stage.stage.type) as string
       const { nodeType, iconName } = getNodeInfo(defaultTo(type, ''), graphType)
 
       finalData.push({
@@ -398,8 +397,8 @@ const transformStageData = (
         errorMap && [...errorMap.keys()].some(key => updatedStagetPath && key.startsWith(currentStagetPath))
 
       const [first, ...rest] = stage.parallel
-      const templateRef = getIdentifierFromValue(first.stage?.template?.templateRef as string)
-      const type = templateRef ? (templateTypes?.[templateRef] as string) : (first?.stage?.type as string)
+      const templateRef = first.stage?.template?.templateRef
+      const type = (templateRef ? get(templateTypes, templateRef) : first?.stage?.type) as string
       const { nodeType, iconName } = getNodeInfo(defaultTo(type, ''), graphType)
       finalData.push({
         id: uuid() as string,
@@ -444,11 +443,9 @@ const transformStepsData = (
       const hasErrors =
         errorMap && [...errorMap.keys()].some(key => updatedStagetPath && key.startsWith(updatedStagetPath))
 
-      const templateRef = getIdentifierFromValue(
-        (step?.step as unknown as TemplateStepNode)?.template?.templateRef as string
-      )
+      const templateRef = (step?.step as unknown as TemplateStepNode)?.template?.templateRef
       const stepIcon = get(step, 'step.icon')
-      const type = templateRef ? (templateTypes?.[templateRef] as string) : (step?.step?.type as string)
+      const type = (templateRef ? get(templateTypes, templateRef) : step?.step?.type) as string
       const { nodeType, iconName } = getNodeInfo(defaultTo(type, ''), graphType)
       const isExecutionView = get(step, 'step.status', false)
       finalData.push({
@@ -502,10 +499,8 @@ const transformStepsData = (
           )
         })
       } else {
-        const templateRef = getIdentifierFromValue(
-          (first?.step as unknown as TemplateStepNode)?.template?.templateRef as string
-        )
-        const type = templateRef ? (templateTypes?.[templateRef] as string) : (first?.step?.type as string)
+        const templateRef = (first?.step as unknown as TemplateStepNode)?.template?.templateRef
+        const type = (templateRef ? get(templateTypes, templateRef) : first?.step?.type) as string
         const { nodeType, iconName } = getNodeInfo(defaultTo(type, ''), graphType)
         const isExecutionView = get(first, 'step.status', false)
         finalData.push({

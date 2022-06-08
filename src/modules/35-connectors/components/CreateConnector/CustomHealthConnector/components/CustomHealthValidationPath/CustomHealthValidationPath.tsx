@@ -10,6 +10,8 @@ import * as Yup from 'yup'
 import { Formik, FormikForm, FormInput, Layout, Button } from '@wings-software/uicore'
 import { useStrings } from 'framework/strings'
 import type { ConnectionConfigProps } from '@connectors/components/CreateConnector/CommonCVConnector/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { HTTPRequestMethodOption } from './components/HTTPRequestMethod/HTTPRequestMethod'
 import type { CustomHealthValidationPathFormFields } from './CustomHealthValidationPath.types'
 import { CustomHealthValidationPathFieldNames } from './CustomHealthValidationPath.constants'
@@ -24,6 +26,12 @@ export function CustomHealthValidationPath(props: ConnectionConfigProps): JSX.El
     () => transformDataToStepData(prevStepData),
     [prevStepData]
   )
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CustomHealthValidationPathLoad, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <Formik<CustomHealthValidationPathFormFields>
@@ -43,9 +51,12 @@ export function CustomHealthValidationPath(props: ConnectionConfigProps): JSX.El
           })
       })}
       formName="customConnector-validationPath"
-      onSubmit={(formData): void =>
+      onSubmit={(formData): void => {
+        trackEvent(ConnectorActions.CustomHealthValidationPathSubmit, {
+          category: Category.CONNECTOR
+        })
         nextStep?.({ ...connectorInfo, ...prevStepData, ...formData, accountId, projectIdentifier, orgIdentifier })
-      }
+      }}
     >
       {formik => (
         <FormikForm>

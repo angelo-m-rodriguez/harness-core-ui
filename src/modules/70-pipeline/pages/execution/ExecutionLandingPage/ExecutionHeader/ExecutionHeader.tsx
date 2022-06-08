@@ -23,6 +23,7 @@ import { usePermission } from '@rbac/hooks/usePermission'
 import RbacButton from '@rbac/components/Button/Button'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import type { ExecutionPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
+import type { StoreType } from '@common/constants/GitSyncTypes'
 import type { ExecutionStatus } from '@pipeline/utils/statusHelpers'
 import { useExecutionContext } from '@pipeline/context/ExecutionContext'
 import { TagsPopover } from '@common/components'
@@ -79,8 +80,11 @@ export function ExecutionHeader(): React.ReactElement {
                 pipelineIdentifier,
                 accountId,
                 module,
+                repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+                connectorRef: pipelineExecutionSummary?.connectorRef,
+                repoName: pipelineExecutionSummary?.gitDetails?.repoName,
                 branch: pipelineExecutionSummary?.gitDetails?.branch,
-                repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier
+                storeType: pipelineExecutionSummary?.storeType as StoreType
               }),
               label: pipelineExecutionSummary.name || getString('common.pipeline')
             }
@@ -137,7 +141,10 @@ export function ExecutionHeader(): React.ReactElement {
                   accountId,
                   module,
                   repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+                  connectorRef: pipelineExecutionSummary?.connectorRef,
+                  repoName: pipelineExecutionSummary?.gitDetails?.repoName,
                   branch: pipelineExecutionSummary?.gitDetails?.branch,
+                  storeType: pipelineExecutionSummary?.storeType as StoreType,
                   stageId: matchedStageNode?.identifier,
                   stepId: matchedStepNode?.identifier
                 })
@@ -156,8 +163,11 @@ export function ExecutionHeader(): React.ReactElement {
               executionIdentifier,
               module,
               repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+              connectorRef: pipelineExecutionSummary?.connectorRef,
+              repoName: pipelineExecutionSummary?.gitDetails?.repoName,
               branch: pipelineExecutionSummary?.gitDetails?.branch,
-              stagesExecuted: pipelineExecutionSummary?.stagesExecuted
+              stagesExecuted: pipelineExecutionSummary?.stagesExecuted,
+              storeType: pipelineExecutionSummary?.storeType as StoreType
             }}
             isPipelineInvalid={isPipelineInvalid}
             canEdit={canEdit}

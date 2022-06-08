@@ -12,10 +12,10 @@ import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import type {
   ResponseConnectorResponse,
   ResponseListServiceNowFieldNG,
+  ResponseListServiceNowTemplate,
   ResponseListServiceNowTicketTypeDTO,
   ResponsePageConnectorResponse,
-  ServiceNowFieldSchemaNG,
-  ResponseListServiceNowTemplate
+  ServiceNowFieldSchemaNG
 } from 'services/cd-ng'
 import type { ServiceNowFieldsRendererProps } from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/ServiceNowFieldsRenderer'
 import type { ServiceNowCreateDeploymentModeProps, ServiceNowCreateStepModeProps } from '../types'
@@ -33,6 +33,26 @@ export const getServiceNowCreateEditModeProps = (): ServiceNowCreateStepModeProp
       fields: [],
       fieldType: FieldType.ConfigureFields,
       useServiceNowTemplate: false
+    }
+  },
+  onUpdate: jest.fn(),
+  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION],
+  stepViewType: StepViewType.Edit
+})
+
+export const getServiceNowCreateTemplateTypeEditModeProps = (): ServiceNowCreateStepModeProps => ({
+  initialValues: {
+    name: '',
+    identifier: '',
+    type: 'ServiceNowCreate',
+    timeout: '5s',
+    spec: {
+      connectorRef: 'cid1',
+      ticketType: 'INCIDENT',
+      fields: [],
+      fieldType: FieldType.CreateFromTemplate,
+      useServiceNowTemplate: true,
+      templateName: 'templateName'
     }
   },
   onUpdate: jest.fn(),
@@ -128,6 +148,57 @@ export const getServiceNowCreateDeploymentModeProps = (): ServiceNowCreateDeploy
             name: 'short_description',
             value: RUNTIME_INPUT_VALUE
           }
+        ]
+      }
+    }
+  },
+  onUpdate: jest.fn(),
+  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+})
+export const getServiceNowCreateDeploymentModeWithCustomFieldsProps = (): ServiceNowCreateDeploymentModeProps => ({
+  stepViewType: StepViewType.InputSet,
+  initialValues: {
+    name: '',
+    identifier: '',
+    type: 'ServiceNowCreate',
+    spec: {
+      connectorRef: 'cid1',
+      ticketType: 'INCIDENT',
+      fieldType: FieldType.ConfigureFields,
+      useServiceNowTemplate: false,
+      fields: [
+        {
+          name: 'description',
+          value: ''
+        },
+        {
+          name: 'short_description',
+          value: ''
+        }
+      ]
+    }
+  },
+  inputSetData: {
+    path: '/ab/',
+    template: {
+      name: '',
+      identifier: '',
+      type: 'ServiceNowCreate',
+      spec: {
+        connectorRef: 'cid1',
+        ticketType: 'INCIDENT',
+        fieldType: FieldType.ConfigureFields,
+        useServiceNowTemplate: false,
+        fields: [
+          {
+            name: 'description',
+            value: RUNTIME_INPUT_VALUE
+          },
+          {
+            name: 'short_description',
+            value: RUNTIME_INPUT_VALUE
+          },
+          { name: 'priority', value: RUNTIME_INPUT_VALUE }
         ]
       }
     }
@@ -277,7 +348,8 @@ export const getServiceNowFieldRendererProps = (): ServiceNowFieldsRendererProps
     }
   ],
   readonly: false,
-  onDelete: jest.fn()
+  onDelete: jest.fn(),
+  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION, MultiTypeInputType.RUNTIME]
 })
 export const mockTicketTypesErrorResponse: ResponseListServiceNowTicketTypeDTO = {
   // eslint-disable-next-line
@@ -332,6 +404,14 @@ export const mockServiceNowTemplateResponse: UseGetMockData<ResponseListServiceN
     correlationId: '',
     status: 'SUCCESS',
     metaData: null as unknown as undefined,
-    data: []
+    data: [
+      {
+        fields: {
+          fieldName: { displayValue: 'value', value: 'value' }
+        },
+        name: 'field1',
+        sys_id: 'field1'
+      }
+    ]
   }
 }

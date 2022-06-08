@@ -15,6 +15,9 @@ import { PageSpinner } from '@common/components'
 import { setupAzureKeyVaultFormData } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import type { SecretReference } from '@secrets/components/CreateOrSelectSecret/CreateOrSelectSecret'
 import type { StepDetailsProps, ConnectorDetailsProps } from '@connectors/interfaces/ConnectorInterface'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import AzureKeyVaultFormFields from './AzureKeyVaultFormFields'
 import css from '../CreateAzureKeyVaultConnector.module.scss'
 
@@ -40,7 +43,9 @@ const AzureKeyVaultForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetails
 
   const [initialValues, setInitialValues] = useState(defaultInitialFormData)
   const [loadingFormData, setLoadingFormData] = useState(isEditMode)
-
+  useConnectorWizard({
+    helpPanel: { referenceId: 'AzureKeyVaultDetails', contentWidth: 900 }
+  })
   React.useEffect(() => {
     if (isEditMode && connectorInfo) {
       setupAzureKeyVaultFormData(connectorInfo, accountId).then(data => {
@@ -50,8 +55,14 @@ const AzureKeyVaultForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetails
     }
   }, [isEditMode, connectorInfo])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AzureKeyValueFormLoad, {
+    category: Category.CONNECTOR
+  })
+
   return (
-    <Container padding={{ top: 'medium' }} width="64%">
+    <Container padding={{ top: 'medium' }}>
       <Text font={{ variation: FontVariation.H3 }} padding={{ bottom: 'xlarge' }}>
         {getString('details')}
       </Text>
@@ -69,6 +80,9 @@ const AzureKeyVaultForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetails
           })
         })}
         onSubmit={formData => {
+          trackEvent(ConnectorActions.AzureKeyValueFormSubmit, {
+            category: Category.CONNECTOR
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData } as StepDetailsProps)
         }}
       >

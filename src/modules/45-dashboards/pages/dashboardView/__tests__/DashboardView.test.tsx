@@ -11,30 +11,12 @@ import { TestWrapper } from '@common/utils/testUtils'
 import routes from '@common/RouteDefinitions'
 import { accountPathProps } from '@common/utils/routeUtils'
 import { useDashboardsContext } from '@dashboards/pages/DashboardsContext'
-import { useGetDashboardDetail, useMutateCreateSignedUrl } from '@dashboards/services/CustomDashboardsService'
-import { useGetFolderDetail } from 'services/custom-dashboards'
+import * as sharedService from 'services/custom-dashboards'
 import DashboardViewPage from '../DashboardView'
 
 const accountId = 'ggre4325'
 const folderId = 'gh544'
 const viewId = '45udb23'
-
-jest.mock('@dashboards/pages/DashboardsContext', () => ({
-  useDashboardsContext: jest.fn()
-}))
-
-jest.mock('@dashboards/services/CustomDashboardsService', () => ({
-  useGetDashboardDetail: jest.fn(),
-  useMutateCreateSignedUrl: jest.fn()
-}))
-const useDashboardsContextMock = useDashboardsContext as jest.Mock
-const useGetDashboardDetailMock = useGetDashboardDetail as jest.Mock
-const useMutateCreateSignedUrlMock = useMutateCreateSignedUrl as jest.Mock
-
-jest.mock('services/custom-dashboards', () => ({
-  useGetFolderDetail: jest.fn()
-}))
-const useGetFolderDetailMock = useGetFolderDetail as jest.Mock
 
 const renderComponent = (folder = folderId): RenderResult =>
   render(
@@ -46,19 +28,29 @@ const renderComponent = (folder = folderId): RenderResult =>
     </TestWrapper>
   )
 
+jest.mock('@dashboards/pages/DashboardsContext', () => ({
+  useDashboardsContext: jest.fn()
+}))
+
+const useDashboardsContextMock = useDashboardsContext as jest.Mock
+
 describe('DashboardView', () => {
+  const useCreateSignedUrlMock = jest.spyOn(sharedService, 'useCreateSignedUrl')
+  const useGetDashboardDetailMock = jest.spyOn(sharedService, 'useGetDashboardDetail')
+  const useGetFolderDetailMock = jest.spyOn(sharedService, 'useGetFolderDetail')
+
   const includeBreadcrumbs = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
-    useGetFolderDetailMock.mockReturnValue({ data: { resource: 'folder name' } })
-    useGetDashboardDetailMock.mockReturnValue({ data: { title: 'dashboard name' } })
-    useMutateCreateSignedUrlMock.mockReturnValue({
+    useGetFolderDetailMock.mockReturnValue({ data: { resource: 'folder name' } } as any)
+    useGetDashboardDetailMock.mockReturnValue({ resource: true, title: 'dashboard name' } as any)
+    useDashboardsContextMock.mockReturnValue({ includeBreadcrumbs: includeBreadcrumbs, breadcrumbs: [] })
+    useCreateSignedUrlMock.mockReturnValue({
       mutate: () => new Promise(() => void 0),
       loading: true,
       error: null
-    })
-    useDashboardsContextMock.mockReturnValue({ includeBreadcrumbs: includeBreadcrumbs, breadcrumbs: [] })
+    } as any)
   })
 
   test('it should display loading message before dashboard request completes', async () => {
@@ -68,11 +60,11 @@ describe('DashboardView', () => {
   })
 
   test('it should display Dashboard not available when dashboard request returns no URL', async () => {
-    useMutateCreateSignedUrlMock.mockReturnValue({
+    useCreateSignedUrlMock.mockReturnValue({
       mutate: () => new Promise(() => void 0),
       loading: false,
       error: null
-    })
+    } as any)
 
     renderComponent()
 
@@ -80,15 +72,16 @@ describe('DashboardView', () => {
   })
 
   test('it should display an error message when dashboard request fails', async () => {
-    useMutateCreateSignedUrlMock.mockReturnValue({
+    const testErrorMessage = 'this the actual error message'
+    useCreateSignedUrlMock.mockReturnValue({
       mutate: () => new Promise(() => void 0),
       loading: false,
-      error: { message: 'this is required by the error type', data: { message: 'this the actual error message' } }
-    })
+      error: { data: { responseMessages: testErrorMessage } }
+    } as any)
 
     renderComponent()
 
-    expect(screen.getByText('this the actual error message')).toBeInTheDocument()
+    expect(screen.getByText(testErrorMessage)).toBeInTheDocument()
   })
 
   test('it should include a folder link in breadcrumbs when using a named folder', async () => {
@@ -96,18 +89,31 @@ describe('DashboardView', () => {
 
     expect(includeBreadcrumbs).toBeCalledWith([
       { label: 'dashboards.homePage.folders', url: `/account/${accountId}/dashboards/folders` },
-      { label: 'folder name', url: `/account/${accountId}/dashboards/folder/${folderId}` },
-      { label: 'dashboard name', url: `/account/${accountId}/dashboards/folder/${folderId}/view/${viewId}` }
+      { label: 'folder name', url: `/account/${accountId}/dashboards/folder/${folderId}` }
+    ])
+  })
+
+  test('it should include a dashboard in breadcrumbs when a dashboard details has been retrieved', async () => {
+    useGetFolderDetailMock.mockReturnValue({ data: null } as any)
+
+    const mockDashboardTitle = 'Test Dashboard'
+    const mockDashboardDetail: sharedService.GetDashboardDetailResponse = {
+      resource: true,
+      title: mockDashboardTitle
+    }
+    useGetDashboardDetailMock.mockReturnValue({ data: mockDashboardDetail } as any)
+    renderComponent()
+
+    expect(includeBreadcrumbs).toBeCalledWith([
+      { label: mockDashboardTitle, url: `/account/${accountId}/dashboards/folder/${folderId}/view/${viewId}` }
     ])
   })
 
   test('it should not include a folder link in breadcrumbs when using the shared folder', async () => {
-    useGetFolderDetailMock.mockReturnValue({})
+    useGetFolderDetailMock.mockReturnValue({} as any)
 
     renderComponent('shared')
 
-    expect(includeBreadcrumbs).toBeCalledWith([
-      { label: 'dashboard name', url: `/account/${accountId}/dashboards/folder/shared/view/${viewId}` }
-    ])
+    expect(includeBreadcrumbs).toBeCalledWith([])
   })
 })

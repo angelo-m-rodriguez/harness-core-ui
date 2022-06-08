@@ -8,6 +8,7 @@
 // this is an auto-generated file, do not update this manually
 declare const styles: {
   readonly tabContainer: string
+  readonly tabPanel: string
   readonly tabTitle: string
   readonly targetSettings: string
 }

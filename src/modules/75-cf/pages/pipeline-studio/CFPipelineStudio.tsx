@@ -26,7 +26,7 @@ import { useQueryParams } from '@common/hooks'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { useLicenseStore } from 'framework/LicenseStore/LicenseStoreContext'
 import { FeatureFlag } from '@common/featureFlags'
-import { TemplateDrawer } from '@templates-library/components/TemplateDrawer/TemplateDrawer'
+import { useTemplateSelector } from '@templates-library/hooks/useTemplateSelector'
 import css from './CFPipelineStudio.module.scss'
 
 const CIPipelineStudio: React.FC = (): JSX.Element => {
@@ -37,8 +37,9 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
     pipelineIdentifier,
     module
   } = useParams<PipelineType<PipelinePathProps & AccountPathProps>>()
-  const { branch, repoIdentifier } = useQueryParams<GitQueryParams>()
+  const { branch, repoIdentifier, connectorRef, repoName, storeType } = useQueryParams<GitQueryParams>()
   const { getString } = useStrings()
+  const { getTemplate } = useTemplateSelector()
   const history = useHistory()
   const handleRunPipeline = (): void => {
     history.push(
@@ -50,6 +51,9 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
         module,
         branch,
         repoIdentifier,
+        connectorRef,
+        repoName,
+        storeType,
         runPipeline: true
       })
     )
@@ -77,6 +81,7 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
       }
       stepsFactory={factory}
       runPipeline={handleRunPipeline}
+      getTemplate={getTemplate}
     >
       <PipelineStudio
         className={css.container}
@@ -85,7 +90,6 @@ const CIPipelineStudio: React.FC = (): JSX.Element => {
         routePipelineProject={routes.toDeployments}
         routePipelineList={routes.toPipelines}
       />
-      <TemplateDrawer />
     </PipelineProvider>
   )
 }

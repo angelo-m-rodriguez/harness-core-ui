@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test ConfigureOptions should render configure options 1`] = `
+exports[`Test ConfigureOptions runtime execution input 1`] = `
 <div
-  class="bp3-dialog dialog bp3-dialog padded-dialog"
+  class="bp3-dialog Dialog--dialog dialog bp3-dialog padded-dialog"
 >
   <div
     class="bp3-dialog-header"
@@ -12,163 +12,197 @@ exports[`Test ConfigureOptions should render configure options 1`] = `
     >
       common.configureOptions.configureOptions
     </h4>
-    <button
-      aria-label="Close"
-      class="bp3-button bp3-minimal bp3-dialog-close-button"
-      type="button"
-    >
-      <span
-        class="bp3-icon bp3-icon-small-cross"
-        icon="small-cross"
-      >
-        <svg
-          data-icon="small-cross"
-          height="20"
-          viewBox="0 0 20 20"
-          width="20"
-        >
-          <desc>
-            small-cross
-          </desc>
-          <path
-            d="M11.41 10l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71L10 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42L8.59 10 5.3 13.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3.29-3.3 3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71L11.41 10z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </span>
-    </button>
   </div>
-  <div
-    class="OverlaySpinner--overlaySpinner"
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
   >
-    <div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          variableLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div
+      class="OverlaySpinner--overlaySpinner"
+    >
+      <div>
         <div
-          class="bp3-form-content"
+          class="bp3-form-group bp3-inline label"
         >
-          <p
-            class="StyledProps--font Text--lineclamp StyledProps--main"
-            style="--text-line-clamp: 1;"
+          <label
+            class="bp3-label"
           >
-            var-test
-          </p>
+            variableLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font Text--lineclamp StyledProps--main"
+              style="--text-line-clamp: 1;"
+            >
+              var-test
+            </p>
+          </div>
         </div>
-      </div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          typeLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
         <div
-          class="bp3-form-content"
+          class="bp3-form-group bp3-inline label"
         >
-          <p
-            class="StyledProps--font StyledProps--main"
+          <label
+            class="bp3-label"
           >
-            test
-          </p>
+            typeLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              Number
+            </p>
+          </div>
         </div>
-      </div>
-      <div
-        class="bp3-form-group"
-      >
-        <label
-          class="bp3-label"
-          for="defaultValue"
-        >
-          <span
-            class="Tooltip--acenter"
-            data-tooltip-id="configureOptionsForm_defaultValue"
-          >
-            common.configureOptions.defaultValue
-          </span>
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
+        <hr
+          class="division"
+        />
         <div
-          class="bp3-form-content"
+          class="bp3-form-group"
         >
           <div
-            class="bp3-popover-wrapper Select--main bp3-fill"
+            class="bp3-form-content"
           >
+            <label
+              class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox checkbox StyledProps--main StyledProps--inline"
+            >
+              <input
+                checked=""
+                name="isExecutionInput"
+                type="checkbox"
+              />
+              <span
+                class="bp3-control-indicator"
+              />
+              <span
+                class="Tooltip--acenter FormikForm--checkBoxDocTooltipLabel"
+                data-tooltip-id="configureOptionsForm_isExecutionInput"
+              >
+                common.configureOptions.askDuringExecution
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          class="validationOptions"
+        >
+          <div
+            class="bp3-form-group"
+          >
+            <label
+              class="bp3-label"
+              for="validation"
+            >
+              <span
+                class="Tooltip--acenter"
+                data-tooltip-id="configureOptionsForm_validation"
+              >
+                common.configureOptions.validation
+              </span>
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
             <div
-              class="bp3-popover-target"
+              class="bp3-form-content"
             >
               <div
-                class="bp3-input-group"
+                class="StyledProps--main"
               >
-                <input
-                  autocomplete="off"
-                  class="bp3-input"
-                  name="defaultValue"
-                  placeholder="- Select -"
-                  style="padding-right: 0px;"
-                  type="text"
-                  value=""
-                />
-                <span
-                  class="bp3-input-action"
+                
+                <div
+                  class="RadioButtonGroup--inline"
                 >
-                  <span
-                    class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
-                    icon="chevron-down"
+                  <label
+                    class="RadioButton--radio StyledProps--main"
                   >
-                    <svg
-                      data-icon="chevron-down"
-                      height="14"
-                      viewBox="0 0 16 16"
-                      width="14"
-                    >
-                      <desc>
-                        chevron-down
-                      </desc>
-                      <path
-                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </span>
+                    <input
+                      checked=""
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="None"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    none
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="AllowedValues"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    allowedValues
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="Regex"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    common.configureOptions.regex
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="split"
-      >
         <div
           class="bp3-form-group"
         >
           <label
             class="bp3-label"
-            for="validation"
+            for="defaultValue"
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="configureOptionsForm_validation"
+              data-tooltip-id="configureOptionsForm_defaultValue"
             >
-              common.configureOptions.validation
+              common.configureOptions.defaultValue (optional)
             </span>
              
             <span
@@ -179,97 +213,356 @@ exports[`Test ConfigureOptions should render configure options 1`] = `
             class="bp3-form-content"
           >
             <div
-              class="StyledProps--main"
+              class="bp3-popover-wrapper Select--main bp3-fill"
             >
-              
               <div
-                class=""
+                class="bp3-popover-target"
               >
-                <label
-                  class="RadioButton--radio StyledProps--main"
+                <div
+                  class="bp3-input-group"
                 >
                   <input
-                    checked=""
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="None"
+                    autocomplete="off"
+                    class="bp3-input"
+                    name="defaultValue"
+                    placeholder="- Select -"
+                    style="padding-right: 0px;"
+                    type="text"
+                    value=""
                   />
                   <span
-                    class="RadioButton--radioIcon"
-                  />
-                  none
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="AllowedValues"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  allowedValues
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="Regex"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  common.configureOptions.regex
-                </label>
+                    class="bp3-input-action"
+                  >
+                    <span
+                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                      icon="chevron-down"
+                    >
+                      <svg
+                        data-icon="chevron-down"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        width="14"
+                      >
+                        <desc>
+                          chevron-down
+                        </desc>
+                        <path
+                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="Layout--horizontal Layout--layout-spacing-xxlarge StyledProps--main StyledProps--margin-top-medium"
-    >
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
-        type="button"
+      <div
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--margin-top-xxlarge"
       >
-        <span
-          class="bp3-button-text"
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
         >
-          <span>
-            cancel
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              cancel
+            </span>
           </span>
-        </span>
-      </button>
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+          type="button"
         >
-          <span>
-            submit
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              submit
+            </span>
           </span>
-        </span>
-      </button>
-       
+        </button>
+      </div>
     </div>
   </div>
+  <footer />
+</div>
+`;
+
+exports[`Test ConfigureOptions should render configure options 1`] = `
+<div
+  class="bp3-dialog Dialog--dialog dialog bp3-dialog padded-dialog"
+>
+  <div
+    class="bp3-dialog-header"
+  >
+    <h4
+      class="bp3-heading"
+    >
+      common.configureOptions.configureOptions
+    </h4>
+  </div>
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
+  >
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div
+      class="OverlaySpinner--overlaySpinner"
+    >
+      <div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            variableLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font Text--lineclamp StyledProps--main"
+              style="--text-line-clamp: 1;"
+            >
+              var-test
+            </p>
+          </div>
+        </div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            typeLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              test
+            </p>
+          </div>
+        </div>
+        <hr
+          class="division"
+        />
+        <div
+          class="validationOptions"
+        >
+          <div
+            class="bp3-form-group"
+          >
+            <label
+              class="bp3-label"
+              for="validation"
+            >
+              <span
+                class="Tooltip--acenter"
+                data-tooltip-id="configureOptionsForm_validation"
+              >
+                common.configureOptions.validation
+              </span>
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="StyledProps--main"
+              >
+                
+                <div
+                  class="RadioButtonGroup--inline"
+                >
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      checked=""
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="None"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    none
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="AllowedValues"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    allowedValues
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="Regex"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    common.configureOptions.regex
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bp3-form-group"
+        >
+          <label
+            class="bp3-label"
+            for="defaultValue"
+          >
+            <span
+              class="Tooltip--acenter"
+              data-tooltip-id="configureOptionsForm_defaultValue"
+            >
+              common.configureOptions.defaultValue (optional)
+            </span>
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <div
+              class="bp3-popover-wrapper Select--main bp3-fill"
+            >
+              <div
+                class="bp3-popover-target"
+              >
+                <div
+                  class="bp3-input-group"
+                >
+                  <input
+                    autocomplete="off"
+                    class="bp3-input"
+                    name="defaultValue"
+                    placeholder="- Select -"
+                    style="padding-right: 0px;"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="bp3-input-action"
+                  >
+                    <span
+                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                      icon="chevron-down"
+                    >
+                      <svg
+                        data-icon="chevron-down"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        width="14"
+                      >
+                        <desc>
+                          chevron-down
+                        </desc>
+                        <path
+                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--margin-top-xxlarge"
+      >
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              cancel
+            </span>
+          </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              submit
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer />
 </div>
 `;
 
 exports[`Test ConfigureOptions test allowed advanced values 1`] = `
 <div
-  class="bp3-dialog dialog bp3-dialog padded-dialog"
+  class="bp3-dialog Dialog--dialog dialog bp3-dialog padded-dialog"
 >
   <div
     class="bp3-dialog-header"
@@ -279,94 +572,522 @@ exports[`Test ConfigureOptions test allowed advanced values 1`] = `
     >
       common.configureOptions.configureOptions
     </h4>
-    <button
-      aria-label="Close"
-      class="bp3-button bp3-minimal bp3-dialog-close-button"
-      type="button"
-    >
-      <span
-        class="bp3-icon bp3-icon-small-cross"
-        icon="small-cross"
-      >
-        <svg
-          data-icon="small-cross"
-          height="20"
-          viewBox="0 0 20 20"
-          width="20"
-        >
-          <desc>
-            small-cross
-          </desc>
-          <path
-            d="M11.41 10l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71L10 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42L8.59 10 5.3 13.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3.29-3.3 3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71L11.41 10z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </span>
-    </button>
   </div>
-  <div
-    class="OverlaySpinner--overlaySpinner"
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
   >
-    <div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          variableLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div
+      class="OverlaySpinner--overlaySpinner"
+    >
+      <div>
         <div
-          class="bp3-form-content"
+          class="bp3-form-group bp3-inline label"
         >
-          <p
-            class="StyledProps--font Text--lineclamp StyledProps--main"
-            style="--text-line-clamp: 1;"
+          <label
+            class="bp3-label"
           >
-            var-test
-          </p>
+            variableLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font Text--lineclamp StyledProps--main"
+              style="--text-line-clamp: 1;"
+            >
+              var-test
+            </p>
+          </div>
         </div>
-      </div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          typeLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
         <div
-          class="bp3-form-content"
+          class="bp3-form-group bp3-inline label"
         >
-          <div>
-            Var Test
+          <label
+            class="bp3-label"
+          >
+            typeLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <div>
+              Var Test
+            </div>
+          </div>
+        </div>
+        <hr
+          class="division"
+        />
+        <div
+          class="validationOptions"
+        >
+          <div
+            class="bp3-form-group"
+          >
+            <label
+              class="bp3-label"
+              for="validation"
+            >
+              <span
+                class="Tooltip--acenter"
+                data-tooltip-id="configureOptionsForm_validation"
+              >
+                common.configureOptions.validation
+              </span>
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="StyledProps--main"
+              >
+                
+                <div
+                  class="RadioButtonGroup--inline"
+                >
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="None"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    none
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      checked=""
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="AllowedValues"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    allowedValues
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="Regex"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    common.configureOptions.regex
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="allowedOptions"
+          >
+            <span
+              class="advancedBtn"
+            >
+              <button
+                class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-link"
+                type="button"
+              >
+                <span
+                  class="bp3-button-text"
+                >
+                  common.configureOptions.returnToBasic
+                </span>
+              </button>
+            </span>
+            <div
+              class="bp3-form-group"
+            >
+              <label
+                class="bp3-label"
+                for="advancedValue"
+              >
+                <span
+                  class="Tooltip--acenter"
+                  data-tooltip-id="configureOptionsForm_advancedValue"
+                >
+                  common.configureOptions.jexlLabel
+                </span>
+                 
+                <span
+                  class="bp3-text-muted"
+                />
+              </label>
+              <div
+                class="bp3-form-content"
+              >
+                <textarea
+                  autocomplete="off"
+                  class="bp3-input bp3-fill"
+                  maxlength="1024"
+                  name="advancedValue"
+                  placeholder="inputTypes.EXPRESSION"
+                >
+                  \${env.type} == “prod” ? aws1, aws2 : aws3, aws4
+                </textarea>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div
-        class="split"
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--margin-top-xxlarge"
       >
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              cancel
+            </span>
+          </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              submit
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer />
+</div>
+`;
+
+exports[`Test ConfigureOptions test allowed values 1`] = `
+<div
+  class="bp3-dialog Dialog--dialog dialog bp3-dialog padded-dialog"
+>
+  <div
+    class="bp3-dialog-header"
+  >
+    <h4
+      class="bp3-heading"
+    >
+      common.configureOptions.configureOptions
+    </h4>
+  </div>
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
+  >
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div
+      class="OverlaySpinner--overlaySpinner"
+    >
+      <div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            variableLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font Text--lineclamp StyledProps--main"
+              style="--text-line-clamp: 1;"
+            >
+              var-test
+            </p>
+          </div>
+        </div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            typeLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              test
+            </p>
+          </div>
+        </div>
+        <hr
+          class="division"
+        />
+        <div
+          class="bp3-form-group"
+        >
+          <div
+            class="bp3-form-content"
+          >
+            <label
+              class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox checkbox StyledProps--main StyledProps--inline"
+            >
+              <input
+                checked=""
+                name="isRequired"
+                type="checkbox"
+              />
+              <span
+                class="bp3-control-indicator"
+              />
+              <span
+                class="Tooltip--acenter FormikForm--checkBoxDocTooltipLabel"
+                data-tooltip-id="configureOptionsForm_isRequired"
+              >
+                common.configureOptions.requiredDuringExecution
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          class="validationOptions"
+        >
+          <div
+            class="bp3-form-group"
+          >
+            <label
+              class="bp3-label"
+              for="validation"
+            >
+              <span
+                class="Tooltip--acenter"
+                data-tooltip-id="configureOptionsForm_validation"
+              >
+                common.configureOptions.validation
+              </span>
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="StyledProps--main"
+              >
+                
+                <div
+                  class="RadioButtonGroup--inline"
+                >
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="None"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    none
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      checked=""
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="AllowedValues"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    allowedValues
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="Regex"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    common.configureOptions.regex
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="allowedOptions"
+          >
+            <span
+              class="advancedBtn"
+            >
+              <span
+                class="bp3-popover-wrapper"
+              >
+                <span
+                  class="bp3-popover-target"
+                >
+                  <button
+                    class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-link"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <span
+                      class="bp3-button-text"
+                    >
+                      advancedTitle
+                    </span>
+                  </button>
+                </span>
+              </span>
+            </span>
+            <div
+              class="bp3-form-group"
+            >
+              <label
+                class="bp3-label"
+                for="allowedValues"
+              >
+                <span
+                  class="Tooltip--acenter"
+                  data-tooltip-id="configureOptionsForm_allowedValues"
+                >
+                  common.configureOptions.values
+                </span>
+                 
+                <span
+                  class="bp3-text-muted"
+                />
+              </label>
+              <div
+                class="bp3-form-content"
+              >
+                <div
+                  class="bp3-popover-wrapper MultiSelect--main bp3-fill"
+                >
+                  <div
+                    class="bp3-popover-target"
+                  >
+                    <div
+                      class=""
+                    >
+                      <div
+                        class="bp3-input bp3-tag-input bp3-multi-select"
+                      >
+                        <div
+                          class="bp3-tag-input-values"
+                        >
+                          <input
+                            autocomplete="off"
+                            class="bp3-input-ghost bp3-multi-select-tag-input-input"
+                            name="allowedValues"
+                            placeholder="- Select -"
+                            value=""
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           class="bp3-form-group"
         >
           <label
             class="bp3-label"
-            for="validation"
+            for="defaultValue"
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="configureOptionsForm_validation"
+              data-tooltip-id="configureOptionsForm_defaultValue"
             >
-              common.configureOptions.validation
+              common.configureOptions.defaultValue (optional)
             </span>
              
             <span
@@ -377,91 +1098,262 @@ exports[`Test ConfigureOptions test allowed advanced values 1`] = `
             class="bp3-form-content"
           >
             <div
-              class="StyledProps--main"
+              class="bp3-popover-wrapper Select--main bp3-fill"
             >
-              
               <div
-                class=""
+                class="bp3-popover-target"
               >
-                <label
-                  class="RadioButton--radio StyledProps--main"
+                <div
+                  class="bp3-input-group"
                 >
                   <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="None"
+                    autocomplete="off"
+                    class="bp3-input"
+                    name="defaultValue"
+                    placeholder="- Select -"
+                    style="padding-right: 0px;"
+                    type="text"
+                    value=""
                   />
                   <span
-                    class="RadioButton--radioIcon"
-                  />
-                  none
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    checked=""
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="AllowedValues"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  allowedValues
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="Regex"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  common.configureOptions.regex
-                </label>
+                    class="bp3-input-action"
+                  >
+                    <span
+                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                      icon="chevron-down"
+                    >
+                      <svg
+                        data-icon="chevron-down"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        width="14"
+                      >
+                        <desc>
+                          chevron-down
+                        </desc>
+                        <path
+                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div
-          class="line"
-        />
-        <div
-          class="allowedOptions"
+      </div>
+      <div
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--margin-top-xxlarge"
+      >
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
         >
           <span
-            class="advancedBtn"
+            class="bp3-button-text"
           >
-            <button
-              class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-link"
-              type="button"
-            >
-              <span
-                class="bp3-button-text"
-              >
-                common.configureOptions.returnToBasic
-              </span>
-            </button>
+            <span>
+              cancel
+            </span>
           </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            <span>
+              submit
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer />
+</div>
+`;
+
+exports[`Test ConfigureOptions test regex expression 1`] = `
+<div
+  class="bp3-dialog Dialog--dialog dialog bp3-dialog padded-dialog"
+>
+  <div
+    class="bp3-dialog-header"
+  >
+    <h4
+      class="bp3-heading"
+    >
+      common.configureOptions.configureOptions
+    </h4>
+  </div>
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
+  >
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div
+      class="OverlaySpinner--overlaySpinner"
+    >
+      <div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            variableLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
           <div
-            class="bp3-form-group secondColumn"
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font Text--lineclamp StyledProps--main"
+              style="--text-line-clamp: 1;"
+            >
+              var-test
+            </p>
+          </div>
+        </div>
+        <div
+          class="bp3-form-group bp3-inline label"
+        >
+          <label
+            class="bp3-label"
+          >
+            typeLabel
+             
+            <span
+              class="bp3-text-muted"
+            />
+          </label>
+          <div
+            class="bp3-form-content"
+          >
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              test
+            </p>
+          </div>
+        </div>
+        <hr
+          class="division"
+        />
+        <div
+          class="validationOptions"
+        >
+          <div
+            class="bp3-form-group"
           >
             <label
               class="bp3-label"
-              for="advancedValue"
+              for="validation"
             >
               <span
                 class="Tooltip--acenter"
-                data-tooltip-id="configureOptionsForm_advancedValue"
+                data-tooltip-id="configureOptionsForm_validation"
               >
-                common.configureOptions.jexlLabel
+                common.configureOptions.validation
+              </span>
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="StyledProps--main"
+              >
+                
+                <div
+                  class="RadioButtonGroup--inline"
+                >
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="None"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    none
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="AllowedValues"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    allowedValues
+                  </label>
+                  <label
+                    class="RadioButton--radio StyledProps--main"
+                  >
+                    <input
+                      checked=""
+                      class="RadioButton--input"
+                      name="validation"
+                      type="radio"
+                      value="Regex"
+                    />
+                    <span
+                      class="RadioButton--radioIcon"
+                    />
+                    common.configureOptions.regex
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="bp3-form-group"
+          >
+            <label
+              class="bp3-label"
+              for="regExValues"
+            >
+              <span
+                class="Tooltip--acenter"
+                data-tooltip-id="configureOptionsForm_regExValues"
+              >
+                common.configureOptions.regex
               </span>
                
               <span
@@ -475,244 +1367,25 @@ exports[`Test ConfigureOptions test allowed advanced values 1`] = `
                 autocomplete="off"
                 class="bp3-input bp3-fill"
                 maxlength="1024"
-                name="advancedValue"
-                placeholder="inputTypes.EXPRESSION"
+                name="regExValues"
               >
-                \${env.type} == “prod” ? aws1, aws2 : aws3, aws4
+                ^a$
               </textarea>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      class="Layout--horizontal Layout--layout-spacing-xxlarge StyledProps--main StyledProps--margin-top-medium"
-    >
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            cancel
-          </span>
-        </span>
-      </button>
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            submit
-          </span>
-        </span>
-      </button>
-       
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Test ConfigureOptions test allowed values 1`] = `
-<div
-  class="bp3-dialog dialog bp3-dialog padded-dialog"
->
-  <div
-    class="bp3-dialog-header"
-  >
-    <h4
-      class="bp3-heading"
-    >
-      common.configureOptions.configureOptions
-    </h4>
-    <button
-      aria-label="Close"
-      class="bp3-button bp3-minimal bp3-dialog-close-button"
-      type="button"
-    >
-      <span
-        class="bp3-icon bp3-icon-small-cross"
-        icon="small-cross"
-      >
-        <svg
-          data-icon="small-cross"
-          height="20"
-          viewBox="0 0 20 20"
-          width="20"
-        >
-          <desc>
-            small-cross
-          </desc>
-          <path
-            d="M11.41 10l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71L10 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42L8.59 10 5.3 13.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3.29-3.3 3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71L11.41 10z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </span>
-    </button>
-  </div>
-  <div
-    class="OverlaySpinner--overlaySpinner"
-  >
-    <div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          variableLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <p
-            class="StyledProps--font Text--lineclamp StyledProps--main"
-            style="--text-line-clamp: 1;"
-          >
-            var-test
-          </p>
-        </div>
-      </div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          typeLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <p
-            class="StyledProps--font StyledProps--main"
-          >
-            test
-          </p>
-        </div>
-      </div>
-      <div
-        class="bp3-form-group"
-      >
-        <label
-          class="bp3-label"
-          for="defaultValue"
-        >
-          <span
-            class="Tooltip--acenter"
-            data-tooltip-id="configureOptionsForm_defaultValue"
-          >
-            common.configureOptions.defaultValue
-          </span>
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <div
-            class="bp3-popover-wrapper Select--main bp3-fill"
-          >
-            <div
-              class="bp3-popover-target"
-            >
-              <div
-                class="bp3-input-group"
-              >
-                <input
-                  autocomplete="off"
-                  class="bp3-input"
-                  name="defaultValue"
-                  placeholder="- Select -"
-                  style="padding-right: 0px;"
-                  type="text"
-                  value=""
-                />
-                <span
-                  class="bp3-input-action"
-                >
-                  <span
-                    class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
-                    icon="chevron-down"
-                  >
-                    <svg
-                      data-icon="chevron-down"
-                      height="14"
-                      viewBox="0 0 16 16"
-                      width="14"
-                    >
-                      <desc>
-                        chevron-down
-                      </desc>
-                      <path
-                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="bp3-form-group"
-      >
-        <div
-          class="bp3-form-content"
-        >
-          <label
-            class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox checkbox StyledProps--main StyledProps--inline"
-          >
-            <input
-              checked=""
-              name="isRequired"
-              type="checkbox"
-            />
-            <span
-              class="bp3-control-indicator"
-            />
-            <span
-              class="Tooltip--acenter FormikForm--checkBoxDocTooltipLabel"
-              data-tooltip-id="configureOptionsForm_isRequired"
-            >
-              common.configureOptions.requiredDuringExecution
-            </span>
-          </label>
-        </div>
-      </div>
-      <div
-        class="split"
-      >
         <div
           class="bp3-form-group"
         >
           <label
             class="bp3-label"
-            for="validation"
+            for="defaultValue"
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="configureOptionsForm_validation"
+              data-tooltip-id="configureOptionsForm_defaultValue"
             >
-              common.configureOptions.validation
+              common.configureOptions.defaultValue (optional)
             </span>
              
             <span
@@ -723,471 +1396,82 @@ exports[`Test ConfigureOptions test allowed values 1`] = `
             class="bp3-form-content"
           >
             <div
-              class="StyledProps--main"
+              class="bp3-popover-wrapper Select--main bp3-fill"
             >
-              
               <div
-                class=""
-              >
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="None"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  none
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    checked=""
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="AllowedValues"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  allowedValues
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="Regex"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  common.configureOptions.regex
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="line"
-        />
-        <div
-          class="allowedOptions"
-        >
-          <span
-            class="advancedBtn"
-          >
-            <span
-              class="bp3-popover-wrapper"
-            >
-              <span
                 class="bp3-popover-target"
               >
-                <button
-                  class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-link"
-                  tabindex="0"
-                  type="button"
-                >
-                  <span
-                    class="bp3-button-text"
-                  >
-                    advancedTitle
-                  </span>
-                </button>
-              </span>
-            </span>
-          </span>
-          <div
-            class="bp3-form-group secondColumn"
-          >
-            <label
-              class="bp3-label"
-              for="allowedValues"
-            >
-              <span
-                class="Tooltip--acenter"
-                data-tooltip-id="configureOptionsForm_allowedValues"
-              >
-                common.configureOptions.values
-              </span>
-               
-              <span
-                class="bp3-text-muted"
-              />
-            </label>
-            <div
-              class="bp3-form-content"
-            >
-              <div
-                class="bp3-popover-wrapper MultiSelect--main bp3-fill"
-              >
                 <div
-                  class="bp3-popover-target"
+                  class="bp3-input-group"
                 >
-                  <div
-                    class=""
+                  <input
+                    autocomplete="off"
+                    class="bp3-input"
+                    name="defaultValue"
+                    placeholder="- Select -"
+                    style="padding-right: 0px;"
+                    type="text"
+                    value=""
+                  />
+                  <span
+                    class="bp3-input-action"
                   >
-                    <div
-                      class="bp3-input bp3-tag-input bp3-multi-select"
+                    <span
+                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                      icon="chevron-down"
                     >
-                      <div
-                        class="bp3-tag-input-values"
+                      <svg
+                        data-icon="chevron-down"
+                        height="14"
+                        viewBox="0 0 16 16"
+                        width="14"
                       >
-                        <input
-                          autocomplete="off"
-                          class="bp3-input-ghost bp3-multi-select-tag-input-input"
-                          name="allowedValues"
-                          placeholder="- Select -"
-                          value=""
+                        <desc>
+                          chevron-down
+                        </desc>
+                        <path
+                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                          fill-rule="evenodd"
                         />
-                      </div>
-                    </div>
-                  </div>
+                      </svg>
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="Layout--horizontal Layout--layout-spacing-xxlarge StyledProps--main StyledProps--margin-top-medium"
-    >
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            cancel
-          </span>
-        </span>
-      </button>
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            submit
-          </span>
-        </span>
-      </button>
-       
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Test ConfigureOptions test regex expression 1`] = `
-<div
-  class="bp3-dialog dialog bp3-dialog padded-dialog"
->
-  <div
-    class="bp3-dialog-header"
-  >
-    <h4
-      class="bp3-heading"
-    >
-      common.configureOptions.configureOptions
-    </h4>
-    <button
-      aria-label="Close"
-      class="bp3-button bp3-minimal bp3-dialog-close-button"
-      type="button"
-    >
-      <span
-        class="bp3-icon bp3-icon-small-cross"
-        icon="small-cross"
-      >
-        <svg
-          data-icon="small-cross"
-          height="20"
-          viewBox="0 0 20 20"
-          width="20"
-        >
-          <desc>
-            small-cross
-          </desc>
-          <path
-            d="M11.41 10l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71L10 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42L8.59 10 5.3 13.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3.29-3.3 3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71L11.41 10z"
-            fill-rule="evenodd"
-          />
-        </svg>
-      </span>
-    </button>
-  </div>
-  <div
-    class="OverlaySpinner--overlaySpinner"
-  >
-    <div>
       <div
-        class="bp3-form-group bp3-inline label"
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--margin-top-xxlarge"
       >
-        <label
-          class="bp3-label"
-        >
-          variableLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <p
-            class="StyledProps--font Text--lineclamp StyledProps--main"
-            style="--text-line-clamp: 1;"
-          >
-            var-test
-          </p>
-        </div>
-      </div>
-      <div
-        class="bp3-form-group bp3-inline label"
-      >
-        <label
-          class="bp3-label"
-        >
-          typeLabel
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <p
-            class="StyledProps--font StyledProps--main"
-          >
-            test
-          </p>
-        </div>
-      </div>
-      <div
-        class="bp3-form-group"
-      >
-        <label
-          class="bp3-label"
-          for="defaultValue"
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
         >
           <span
-            class="Tooltip--acenter"
-            data-tooltip-id="configureOptionsForm_defaultValue"
+            class="bp3-button-text"
           >
-            common.configureOptions.defaultValue
-          </span>
-           
-          <span
-            class="bp3-text-muted"
-          />
-        </label>
-        <div
-          class="bp3-form-content"
-        >
-          <div
-            class="bp3-popover-wrapper Select--main bp3-fill"
-          >
-            <div
-              class="bp3-popover-target"
-            >
-              <div
-                class="bp3-input-group"
-              >
-                <input
-                  autocomplete="off"
-                  class="bp3-input"
-                  name="defaultValue"
-                  placeholder="- Select -"
-                  style="padding-right: 0px;"
-                  type="text"
-                  value=""
-                />
-                <span
-                  class="bp3-input-action"
-                >
-                  <span
-                    class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
-                    icon="chevron-down"
-                  >
-                    <svg
-                      data-icon="chevron-down"
-                      height="14"
-                      viewBox="0 0 16 16"
-                      width="14"
-                    >
-                      <desc>
-                        chevron-down
-                      </desc>
-                      <path
-                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="split"
-      >
-        <div
-          class="bp3-form-group"
-        >
-          <label
-            class="bp3-label"
-            for="validation"
-          >
-            <span
-              class="Tooltip--acenter"
-              data-tooltip-id="configureOptionsForm_validation"
-            >
-              common.configureOptions.validation
+            <span>
+              cancel
             </span>
-             
-            <span
-              class="bp3-text-muted"
-            />
-          </label>
-          <div
-            class="bp3-form-content"
-          >
-            <div
-              class="StyledProps--main"
-            >
-              
-              <div
-                class=""
-              >
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="None"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  none
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="AllowedValues"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  allowedValues
-                </label>
-                <label
-                  class="RadioButton--radio StyledProps--main"
-                >
-                  <input
-                    checked=""
-                    class="RadioButton--input"
-                    name="validation"
-                    type="radio"
-                    value="Regex"
-                  />
-                  <span
-                    class="RadioButton--radioIcon"
-                  />
-                  common.configureOptions.regex
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="line"
-        />
-        <div
-          class="bp3-form-group secondColumn"
+          </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+          type="button"
         >
-          <label
-            class="bp3-label"
-            for="regExValues"
+          <span
+            class="bp3-button-text"
           >
-            <span
-              class="Tooltip--acenter"
-              data-tooltip-id="configureOptionsForm_regExValues"
-            >
-              common.configureOptions.regex
+            <span>
+              submit
             </span>
-             
-            <span
-              class="bp3-text-muted"
-            />
-          </label>
-          <div
-            class="bp3-form-content"
-          >
-            <textarea
-              autocomplete="off"
-              class="bp3-input bp3-fill"
-              maxlength="1024"
-              name="regExValues"
-            >
-              ^a$
-            </textarea>
-          </div>
-        </div>
+          </span>
+        </button>
       </div>
     </div>
-    <div
-      class="Layout--horizontal Layout--layout-spacing-xxlarge StyledProps--main StyledProps--margin-top-medium"
-    >
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-secondary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            cancel
-          </span>
-        </span>
-      </button>
-      <button
-        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
-        type="button"
-      >
-        <span
-          class="bp3-button-text"
-        >
-          <span>
-            submit
-          </span>
-        </span>
-      </button>
-       
-    </div>
   </div>
+  <footer />
 </div>
 `;

@@ -32,12 +32,11 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import ModuleTagsFilter from '@dashboards/components/ModuleTagsFilter/ModuleTagsFilter'
 
-import { ErrorResponse, useGetFolderDetail, useSearch } from 'services/custom-dashboards'
+import { ErrorResponse, useDeleteDashboard, useGetFolderDetail, useSearch } from 'services/custom-dashboards'
 import routes from '@common/RouteDefinitions'
 
 import { DashboardLayoutViews } from '@dashboards/types/DashboardTypes'
 import { useStrings } from 'framework/strings'
-import { useDeleteDashboard } from '@dashboards/services/CustomDashboardsService'
 import Dashboards from './Dashboards'
 import { useDashboardsContext } from '../DashboardsContext'
 import FilterTagsSideBar from './FilterTagsSideBar'
@@ -171,7 +170,7 @@ const HomePage: React.FC = () => {
     queryParams: { accountId, folderId }
   })
 
-  const { mutate: deleteDashboard, loading: deleting } = useDeleteDashboard(accountId)
+  const { mutate: deleteDashboard, loading: deleting } = useDeleteDashboard({ queryParams: { accountId } })
 
   React.useEffect(() => {
     if (folderId !== 'shared') {

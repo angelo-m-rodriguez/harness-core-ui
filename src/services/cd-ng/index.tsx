@@ -1077,6 +1077,15 @@ export interface AzureCredentialSpec {
   [key: string]: any
 }
 
+export interface AzureDeploymentSlotDTO {
+  name: string
+  type: string
+}
+
+export interface AzureDeploymentSlotsDTO {
+  deploymentSlots?: AzureDeploymentSlotDTO[]
+}
+
 export type AzureInheritFromDelegateDetails = AzureCredentialSpec & {
   auth: AzureMSIAuth
 }
@@ -1199,6 +1208,10 @@ export interface AzureTagsDTO {
 
 export type AzureUserAssignedMSIAuth = AzureAuthCredentialDTO & {
   clientId: string
+}
+
+export interface AzureWebAppNamesDTO {
+  webAppNames?: string[]
 }
 
 export interface BarrierInfoConfig {
@@ -1533,8 +1546,14 @@ export interface ClusterRequest {
 export interface ClusterResponse {
   clusterRef?: string
   envRef?: string
+  linkedAt?: number
   orgIdentifier?: string
   projectIdentifier?: string
+}
+
+export interface ClusterYaml {
+  metadata?: string
+  ref: string
 }
 
 export interface CodeBase {
@@ -1935,6 +1954,16 @@ export interface CreatePRResponse {
   prNumber?: number
 }
 
+export type CreatePRStepInfo = StepSpecType & {
+  commitMessage?: string
+  delegateSelectors?: string[]
+  isNewBranch?: boolean
+  prTitle?: string
+  store?: StoreConfigWrapper
+  stringMap?: ParameterFieldMapStringString
+  targetBranch?: string
+}
+
 export interface CriteriaSpec {
   [key: string]: any
 }
@@ -2254,9 +2283,13 @@ export interface DeploymentInfo {
 }
 
 export type DeploymentStageConfig = StageInfoConfig & {
+  deploymentType?: 'Kubernetes' | 'NativeHelm' | 'Ssh' | 'WinRm' | 'ServerlessAwsLambda'
+  environment?: EnvironmentYamlV2
+  environmentGroup?: EnvironmentGroupYaml
   execution: ExecutionElementConfig
-  infrastructure: PipelineInfrastructure
-  serviceConfig: ServiceConfig
+  infrastructure?: PipelineInfrastructure
+  service?: ServiceYamlV2
+  serviceConfig?: ServiceConfig
 }
 
 export interface DeploymentStatsSummary {
@@ -2505,6 +2538,7 @@ export interface EntityDetail {
   entityRef?: EntityReference
   name?: string
   type?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -2726,6 +2760,13 @@ export interface EnvironmentGroupResponseDTO {
   }
 }
 
+export interface EnvironmentGroupYaml {
+  deployToAll?: boolean
+  envGroupConfig?: EnvironmentYamlV2[]
+  envGroupRef: string
+  metadata?: string
+}
+
 export interface EnvironmentInfoByServiceId {
   artifactImage?: string
   environmentId?: string
@@ -2781,6 +2822,17 @@ export interface EnvironmentYaml {
     [key: string]: string
   }
   type: 'PreProduction' | 'Production'
+}
+
+export interface EnvironmentYamlV2 {
+  deployToAll?: boolean
+  environmentInputs?: {
+    [key: string]: { [key: string]: any }
+  }
+  environmentRef: string
+  gitOpsClusters?: ClusterYaml[]
+  infrastructureDefinitions?: InfraStructureDefinitionYaml[]
+  metadata?: string
 }
 
 export interface Error {
@@ -3125,6 +3177,12 @@ export type ErrorTrackingConnectorDTO = ConnectorConfigDTO & {
   apiKeyRef: string
   delegateSelectors?: string[]
   url: string
+}
+
+export interface ExcludeConfig {
+  exclude?: {
+    [key: string]: string
+  }
 }
 
 export type ExecutableElementsFilter = Filter & {
@@ -3784,6 +3842,7 @@ export interface FileDTO {
 }
 
 export type FileNodeDTO = FileStoreNodeDTO & {
+  content?: string
   description?: string
   fileUsage: 'MANIFEST_FILE' | 'CONFIG' | 'SCRIPT'
   mimeType?: string
@@ -4005,6 +4064,7 @@ export interface GitEnabledDTO {
 
 export interface GitEntityBranchFilterSummaryProperties {
   entityTypes?: (
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4090,6 +4150,7 @@ export interface GitEntityBranchFilterSummaryProperties {
 
 export interface GitEntityFilterProperties {
   entityTypes?: (
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4208,6 +4269,7 @@ export interface GitFullSyncEntityInfoDTO {
   accountIdentifier?: string
   branch?: string
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4301,6 +4363,7 @@ export interface GitFullSyncEntityInfoDTO {
 
 export interface GitFullSyncEntityInfoFilterKeys {
   entityTypes?: (
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4432,7 +4495,7 @@ export interface GitPRCreateRequest {
   targetBranch: string
   title: string
   useUserFromToken?: boolean
-  yamlGitConfigRef: string
+  yamlGitConfigRef?: string
 }
 
 export interface GitRepositoryResponseDTO {
@@ -4472,6 +4535,7 @@ export interface GitSyncEntityDTO {
   entityName?: string
   entityReference?: EntityReference
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4559,6 +4623,7 @@ export interface GitSyncEntityDTO {
 export interface GitSyncEntityListDTO {
   count?: number
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4663,6 +4728,7 @@ export interface GitSyncErrorDTO {
   completeFilePath?: string
   createdAt?: number
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -4940,6 +5006,10 @@ export type HarnessApprovalStepInfo = StepSpecType & {
   includePipelineExecutionHistory: boolean
 }
 
+export interface HarnessForConfig {
+  iteration?: number
+}
+
 export interface HarnessServiceInfoNG {
   envId?: string
   infraMappingId?: string
@@ -5147,6 +5217,14 @@ export interface InfraExecutionSummary {
 export interface InfraOverrides {
   environment?: EnvironmentYaml
   infrastructureDefinition?: InfrastructureDef
+}
+
+export interface InfraStructureDefinitionYaml {
+  inputs?: {
+    [key: string]: { [key: string]: any }
+  }
+  metadata?: string
+  ref: string
 }
 
 export interface InfraUseFromStage {
@@ -5952,6 +6030,10 @@ export type ManualInterventionFailureActionConfig = FailureStrategyActionConfig 
 
 export type MarkAsSuccessFailureActionConfig = FailureStrategyActionConfig & {
   type: 'MarkAsSuccess'
+}
+
+export interface MatrixConfig {
+  exclude?: ExcludeConfig[]
 }
 
 export interface Member {
@@ -6767,6 +6849,18 @@ export interface ParameterFieldBoolean {
   value?: boolean
 }
 
+export interface ParameterFieldMapStringString {
+  expression?: boolean
+  expressionValue?: string
+  inputSetValidator?: InputSetValidator
+  jsonResponseField?: boolean
+  responseField?: string
+  typeString?: boolean
+  value?: {
+    [key: string]: string
+  }
+}
+
 export interface ParameterFieldString {
   expression?: boolean
   expressionValue?: string
@@ -7158,6 +7252,7 @@ export interface ResourceDTO {
     | 'GOVERNANCE_POLICY_SET'
     | 'VARIABLE'
     | 'CHAOS_HUB'
+    | 'MONITORED_SERVICE'
     | 'CHAOS_AGENT'
 }
 
@@ -7300,6 +7395,13 @@ export interface ResponseAzureClustersDTO {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseAzureDeploymentSlotsDTO {
+  correlationId?: string
+  data?: AzureDeploymentSlotsDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseAzureResourceGroupsDTO {
   correlationId?: string
   data?: AzureResourceGroupsDTO
@@ -7313,10 +7415,16 @@ export interface ResponseAzureSubscriptionsDTO {
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
-
 export interface ResponseAzureTagsDTO {
   correlationId?: string
   data?: AzureTagsDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseAzureWebAppNamesDTO {
+  correlationId?: string
+  data?: AzureWebAppNamesDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -7779,6 +7887,7 @@ export interface ResponseListConnectorResponse {
 export interface ResponseListEntityType {
   correlationId?: string
   data?: (
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -8911,6 +9020,13 @@ export interface ResponseServiceHeaderInfo {
 export interface ResponseServiceInstanceUsageDTO {
   correlationId?: string
   data?: ServiceInstanceUsageDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseServiceOverrideResponseDTO {
+  correlationId?: string
+  data?: ServiceOverrideResponseDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -10064,6 +10180,23 @@ export type ServiceNowUpdateStepInfo = StepSpecType & {
   useServiceNowTemplate: boolean
 }
 
+export interface ServiceOverrideRequestDTO {
+  environmentRef?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  serviceRef?: string
+  yaml?: string
+}
+
+export interface ServiceOverrideResponseDTO {
+  accountId?: string
+  environmentRef?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  serviceRef?: string
+  yaml?: string
+}
+
 export interface ServiceOverrides {
   description?: string
   name?: string
@@ -10141,6 +10274,14 @@ export interface ServiceYaml {
   tags?: {
     [key: string]: string
   }
+}
+
+export interface ServiceYamlV2 {
+  metadata?: string
+  serviceInputs?: {
+    [key: string]: { [key: string]: any }
+  }
+  serviceRef: string
 }
 
 export interface ServicesCount {
@@ -10315,10 +10456,13 @@ export type SshWinRmAzureInfrastructure = Infrastructure & {
 }
 
 export interface StackTraceElement {
+  classLoaderName?: string
   className?: string
   fileName?: string
   lineNumber?: number
   methodName?: string
+  moduleName?: string
+  moduleVersion?: string
   nativeMethod?: boolean
 }
 
@@ -10329,6 +10473,7 @@ export interface StageElementConfig {
   identifier: string
   name: string
   spec?: StageInfoConfig
+  strategy?: StrategyConfig
   tags?: {
     [key: string]: string
   }
@@ -10387,6 +10532,7 @@ export interface StepCategory {
 export interface StepData {
   name?: string
   type?:
+    | 'CreatePR'
     | 'APPLY'
     | 'SCALE'
     | 'STAGE_DEPLOYMENT'
@@ -10474,6 +10620,12 @@ export interface StoreConfigWrapper {
 export interface StoreConfigWrapperParameters {
   spec?: StoreConfig
   type?: string
+}
+
+export interface StrategyConfig {
+  batchSize?: number
+  for?: HarnessForConfig
+  matrix?: MatrixConfig
 }
 
 export type StringNGVariable = NGVariable & {
@@ -11289,7 +11441,7 @@ export type GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody = string
 
 export type GetBuildDetailsForArtifactoryArtifactWithYamlBodyRequestBody = string
 
-export type ProcessPollingResultNgBodyRequestBody = string[]
+export type SubscribeBodyRequestBody = string[]
 
 export type UpdateWhitelistedDomainsBodyRequestBody = string[]
 
@@ -11770,6 +11922,7 @@ export interface ListActivitiesQueryParams {
   endTime: number
   status?: 'SUCCESS' | 'FAILED'
   referredEntityType:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -11849,6 +12002,7 @@ export interface ListActivitiesQueryParams {
     | 'RollbackStack'
     | 'Infrastructure'
   referredByEntityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -12032,6 +12186,7 @@ export interface GetActivitiesSummaryQueryParams {
   endTime: number
   timeGroupType: 'HOUR' | 'DAY' | 'WEEK'
   referredEntityType:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -12111,6 +12266,7 @@ export interface GetActivitiesSummaryQueryParams {
     | 'RollbackStack'
     | 'Infrastructure'
   referredByEntityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -16653,6 +16809,189 @@ export const getAzureResourceGroupsBySubscriptionPromise = (
     GetAzureResourceGroupsBySubscriptionPathParams
   >(getConfig('ng/api'), `/azure/subscriptions/${subscriptionId}/resourceGroups`, props, signal)
 
+export interface GetAzureWebAppNamesQueryParams {
+  connectorRef: string
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+}
+
+export interface GetAzureWebAppNamesPathParams {
+  subscriptionId: string
+  resourceGroup: string
+}
+
+export type GetAzureWebAppNamesProps = Omit<
+  GetProps<ResponseAzureWebAppNamesDTO, Failure | Error, GetAzureWebAppNamesQueryParams, GetAzureWebAppNamesPathParams>,
+  'path'
+> &
+  GetAzureWebAppNamesPathParams
+
+/**
+ * Gets azure app services names by subscriptionId and resourceGroup
+ */
+export const GetAzureWebAppNames = ({ subscriptionId, resourceGroup, ...props }: GetAzureWebAppNamesProps) => (
+  <Get<ResponseAzureWebAppNamesDTO, Failure | Error, GetAzureWebAppNamesQueryParams, GetAzureWebAppNamesPathParams>
+    path={`/azure/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/app-services-names`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetAzureWebAppNamesProps = Omit<
+  UseGetProps<
+    ResponseAzureWebAppNamesDTO,
+    Failure | Error,
+    GetAzureWebAppNamesQueryParams,
+    GetAzureWebAppNamesPathParams
+  >,
+  'path'
+> &
+  GetAzureWebAppNamesPathParams
+
+/**
+ * Gets azure app services names by subscriptionId and resourceGroup
+ */
+export const useGetAzureWebAppNames = ({ subscriptionId, resourceGroup, ...props }: UseGetAzureWebAppNamesProps) =>
+  useGet<ResponseAzureWebAppNamesDTO, Failure | Error, GetAzureWebAppNamesQueryParams, GetAzureWebAppNamesPathParams>(
+    (paramsInPath: GetAzureWebAppNamesPathParams) =>
+      `/azure/subscriptions/${paramsInPath.subscriptionId}/resourceGroups/${paramsInPath.resourceGroup}/app-services-names`,
+    { base: getConfig('ng/api'), pathParams: { subscriptionId, resourceGroup }, ...props }
+  )
+
+/**
+ * Gets azure app services names by subscriptionId and resourceGroup
+ */
+export const getAzureWebAppNamesPromise = (
+  {
+    subscriptionId,
+    resourceGroup,
+    ...props
+  }: GetUsingFetchProps<
+    ResponseAzureWebAppNamesDTO,
+    Failure | Error,
+    GetAzureWebAppNamesQueryParams,
+    GetAzureWebAppNamesPathParams
+  > & { subscriptionId: string; resourceGroup: string },
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<
+    ResponseAzureWebAppNamesDTO,
+    Failure | Error,
+    GetAzureWebAppNamesQueryParams,
+    GetAzureWebAppNamesPathParams
+  >(
+    getConfig('ng/api'),
+    `/azure/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/app-services-names`,
+    props,
+    signal
+  )
+
+export interface GetAzureWebAppDeploymentSlotsQueryParams {
+  connectorRef: string
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+}
+
+export interface GetAzureWebAppDeploymentSlotsPathParams {
+  subscriptionId: string
+  resourceGroup: string
+  webAppName: string
+}
+
+export type GetAzureWebAppDeploymentSlotsProps = Omit<
+  GetProps<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  >,
+  'path'
+> &
+  GetAzureWebAppDeploymentSlotsPathParams
+
+/**
+ * Gets azure webApp deployment slots
+ */
+export const GetAzureWebAppDeploymentSlots = ({
+  subscriptionId,
+  resourceGroup,
+  webAppName,
+  ...props
+}: GetAzureWebAppDeploymentSlotsProps) => (
+  <Get<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  >
+    path={`/azure/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/app-services/${webAppName}/slots`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetAzureWebAppDeploymentSlotsProps = Omit<
+  UseGetProps<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  >,
+  'path'
+> &
+  GetAzureWebAppDeploymentSlotsPathParams
+
+/**
+ * Gets azure webApp deployment slots
+ */
+export const useGetAzureWebAppDeploymentSlots = ({
+  subscriptionId,
+  resourceGroup,
+  webAppName,
+  ...props
+}: UseGetAzureWebAppDeploymentSlotsProps) =>
+  useGet<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  >(
+    (paramsInPath: GetAzureWebAppDeploymentSlotsPathParams) =>
+      `/azure/subscriptions/${paramsInPath.subscriptionId}/resourceGroups/${paramsInPath.resourceGroup}/app-services/${paramsInPath.webAppName}/slots`,
+    { base: getConfig('ng/api'), pathParams: { subscriptionId, resourceGroup, webAppName }, ...props }
+  )
+
+/**
+ * Gets azure webApp deployment slots
+ */
+export const getAzureWebAppDeploymentSlotsPromise = (
+  {
+    subscriptionId,
+    resourceGroup,
+    webAppName,
+    ...props
+  }: GetUsingFetchProps<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  > & { subscriptionId: string; resourceGroup: string; webAppName: string },
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<
+    ResponseAzureDeploymentSlotsDTO,
+    Failure | Error,
+    GetAzureWebAppDeploymentSlotsQueryParams,
+    GetAzureWebAppDeploymentSlotsPathParams
+  >(
+    getConfig('ng/api'),
+    `/azure/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/app-services/${webAppName}/slots`,
+    props,
+    signal
+  )
+
 export interface GetAzureClustersQueryParams {
   connectorRef: string
   accountIdentifier: string
@@ -20941,6 +21280,7 @@ export interface ListReferredByEntitiesQueryParams {
   projectIdentifier?: string
   identifier?: string
   referredEntityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -22298,6 +22638,138 @@ export const getEnvironmentListV2Promise = (
     void
   >('POST', getConfig('ng/api'), `/environmentsV2/listV2`, props, signal)
 
+export interface DeleteServiceOverrideQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  environmentIdentifier?: string
+  serviceIdentifier?: string
+}
+
+export type DeleteServiceOverrideProps = Omit<
+  MutateProps<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete a Service Override entity
+ */
+export const DeleteServiceOverride = (props: DeleteServiceOverrideProps) => (
+  <Mutate<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>
+    verb="DELETE"
+    path={`/environmentsV2/serviceOverrides`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseDeleteServiceOverrideProps = Omit<
+  UseMutateProps<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete a Service Override entity
+ */
+export const useDeleteServiceOverride = (props: UseDeleteServiceOverrideProps) =>
+  useMutate<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>(
+    'DELETE',
+    `/environmentsV2/serviceOverrides`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Delete a Service Override entity
+ */
+export const deleteServiceOverridePromise = (
+  props: MutateUsingFetchProps<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>(
+    'DELETE',
+    getConfig('ng/api'),
+    `/environmentsV2/serviceOverrides`,
+    props,
+    signal
+  )
+
+export interface UpsertServiceOverrideQueryParams {
+  accountIdentifier: string
+}
+
+export type UpsertServiceOverrideProps = Omit<
+  MutateProps<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >,
+  'path' | 'verb'
+>
+
+/**
+ * upsert a Service Override
+ */
+export const UpsertServiceOverride = (props: UpsertServiceOverrideProps) => (
+  <Mutate<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >
+    verb="POST"
+    path={`/environmentsV2/serviceOverrides`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseUpsertServiceOverrideProps = Omit<
+  UseMutateProps<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >,
+  'path' | 'verb'
+>
+
+/**
+ * upsert a Service Override
+ */
+export const useUpsertServiceOverride = (props: UseUpsertServiceOverrideProps) =>
+  useMutate<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >('POST', `/environmentsV2/serviceOverrides`, { base: getConfig('ng/api'), ...props })
+
+/**
+ * upsert a Service Override
+ */
+export const upsertServiceOverridePromise = (
+  props: MutateUsingFetchProps<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<
+    ResponseServiceOverrideResponseDTO,
+    Failure | Error,
+    UpsertServiceOverrideQueryParams,
+    ServiceOverrideRequestDTO,
+    void
+  >('POST', getConfig('ng/api'), `/environmentsV2/serviceOverrides`, props, signal)
+
 export interface UpsertEnvironmentV2QueryParams {
   accountIdentifier: string
 }
@@ -23058,6 +23530,7 @@ export interface GetReferencedByInScopeQueryParams {
   orgIdentifier?: string
   projectIdentifier?: string
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -23504,6 +23977,7 @@ export interface GetReferencedByQueryParams {
   orgIdentifier?: string
   projectIdentifier?: string
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -24793,6 +25267,7 @@ export interface ListGitSyncEntitiesByTypeQueryParams {
 
 export interface ListGitSyncEntitiesByTypePathParams {
   entityType:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -24940,6 +25415,7 @@ export const listGitSyncEntitiesByTypePromise = (
     ListGitSyncEntitiesByTypePathParams
   > & {
     entityType:
+      | 'CreatePR'
       | 'Projects'
       | 'Pipelines'
       | 'PipelineSteps'
@@ -25937,6 +26413,7 @@ export interface GetClusterListFromSourceQueryParams {
   accountIdentifier: string
   orgIdentifier?: string
   projectIdentifier?: string
+  searchTerm?: string
 }
 
 export type GetClusterListFromSourceProps = Omit<
@@ -29402,6 +29879,7 @@ export interface GetStepYamlSchemaQueryParams {
   orgIdentifier?: string
   scope?: 'account' | 'org' | 'project' | 'unknown'
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -29609,6 +30087,7 @@ export interface GetEntityYamlSchemaQueryParams {
   projectIdentifier?: string
   orgIdentifier?: string
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -30133,7 +30612,7 @@ export type ProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -30145,7 +30624,7 @@ export const ProcessPollingResultNg = ({ perpetualTaskId, ...props }: ProcessPol
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >
     verb="POST"
@@ -30160,7 +30639,7 @@ export type UseProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -30172,7 +30651,7 @@ export const useProcessPollingResultNg = ({ perpetualTaskId, ...props }: UseProc
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >(
     'POST',
@@ -30188,7 +30667,7 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   > & { perpetualTaskId: string },
   signal?: RequestInit['signal']
@@ -30197,17 +30676,17 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    ProcessPollingResultNgBodyRequestBody,
+    SubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >('POST', getConfig('ng/api'), `/polling/delegate-response/${perpetualTaskId}`, props, signal)
 
 export type SubscribeProps = Omit<
-  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
+  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Subscribe = (props: SubscribeProps) => (
-  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>
+  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>
     verb="POST"
     path={`/polling/subscribe`}
     base={getConfig('ng/api')}
@@ -30216,28 +30695,22 @@ export const Subscribe = (props: SubscribeProps) => (
 )
 
 export type UseSubscribeProps = Omit<
-  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
+  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useSubscribe = (props: UseSubscribeProps) =>
-  useMutate<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
+  useMutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
     'POST',
     `/polling/subscribe`,
     { base: getConfig('ng/api'), ...props }
   )
 
 export const subscribePromise = (
-  props: MutateUsingFetchProps<
-    ResponsePollingResponseDTO,
-    Failure | Error,
-    void,
-    ProcessPollingResultNgBodyRequestBody,
-    void
-  >,
+  props: MutateUsingFetchProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
+  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/subscribe`,
@@ -30246,12 +30719,12 @@ export const subscribePromise = (
   )
 
 export type UnsubscribeProps = Omit<
-  MutateProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
+  MutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Unsubscribe = (props: UnsubscribeProps) => (
-  <Mutate<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>
+  <Mutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>
     verb="POST"
     path={`/polling/unsubscribe`}
     base={getConfig('ng/api')}
@@ -30260,22 +30733,21 @@ export const Unsubscribe = (props: UnsubscribeProps) => (
 )
 
 export type UseUnsubscribeProps = Omit<
-  UseMutateProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
+  UseMutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useUnsubscribe = (props: UseUnsubscribeProps) =>
-  useMutate<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
-    'POST',
-    `/polling/unsubscribe`,
-    { base: getConfig('ng/api'), ...props }
-  )
+  useMutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>('POST', `/polling/unsubscribe`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
 
 export const unsubscribePromise = (
-  props: MutateUsingFetchProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
+  props: MutateUsingFetchProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
+  mutateUsingFetch<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/unsubscribe`,
@@ -31824,10 +32296,10 @@ export interface GetFileByBranchQueryParams {
   accountIdentifier: string
   orgIdentifier?: string
   projectIdentifier?: string
-  RepoName: string
-  filePath: string
+  connectorRef?: string
+  repoName?: string
   branch?: string
-  ConnectorRef?: string
+  filePath: string
 }
 
 export type GetFileByBranchProps = Omit<
@@ -39843,6 +40315,7 @@ export const webhookEndpointPromise = (
 
 export interface GetYamlSchemaQueryParams {
   entityType:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'

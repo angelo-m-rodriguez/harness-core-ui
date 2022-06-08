@@ -7,10 +7,10 @@
 
 import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { SelectOption, FormInput } from '@wings-software/uicore'
+import { SelectOption, FormInput, MultiTypeInputType, FormError, MultiTypeInput, Label } from '@wings-software/uicore'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
-import { getPlaceholder, setAppDynamicsApplication } from '../../AppDHealthSource.utils'
+import { getPlaceholder, getTypeOfInput, setAppDynamicsApplication } from '../../AppDHealthSource.utils'
 import { getInputGroupProps } from '../../../MonitoredServiceConnector.utils'
 import css from '../../AppDHealthSource.module.scss'
 
@@ -18,22 +18,24 @@ interface AppDApplicationsInterface {
   applicationOptions: any
   applicationLoading: boolean
   connectorIdentifier: string
-  formikSetFieldValue: (key: string, value: string) => void
   formikAppDynamicsValue: any
   refetchTier: any
   setCustomFieldAndValidation: any
   isTemplate?: boolean
+  applicationError?: string
+  allowedTypes?: MultiTypeInputType[]
 }
 
 export default function AppDApplications({
   applicationOptions,
   applicationLoading,
   connectorIdentifier,
-  formikSetFieldValue,
   formikAppDynamicsValue,
   refetchTier,
   setCustomFieldAndValidation,
-  isTemplate
+  isTemplate,
+  allowedTypes,
+  applicationError
 }: AppDApplicationsInterface): JSX.Element {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
@@ -49,36 +51,57 @@ export default function AppDApplications({
     }
   }, [])
 
+  const [inputType, setInputType] = React.useState<MultiTypeInputType | undefined>(
+    getTypeOfInput(formikAppDynamicsValue)
+  )
+
+  React.useEffect(() => {
+    if (
+      getTypeOfInput(connectorIdentifier) !== MultiTypeInputType.FIXED &&
+      getTypeOfInput(formikAppDynamicsValue) !== MultiTypeInputType.FIXED
+    ) {
+      setInputType(getTypeOfInput(formikAppDynamicsValue))
+    }
+  }, [formikAppDynamicsValue])
+
   return isTemplate ? (
-    <FormInput.MultiTypeInput
-      className={css.applicationDropdown}
-      name={'appdApplication'}
-      label={getString('cv.healthSource.connectors.AppDynamics.applicationLabel')}
-      selectItems={applicationOptions}
-      placeholder={getPlaceholder(
-        applicationLoading,
-        'cv.healthSource.connectors.AppDynamics.applicationPlaceholder',
-        getString
-      )}
-      multiTypeInputProps={{
-        onChange: item => {
+    <>
+      <Label>{getString('cv.healthSource.connectors.AppDynamics.applicationLabel')}</Label>
+      <MultiTypeInput
+        key={inputType}
+        name={'appdApplication'}
+        placeholder={getPlaceholder(
+          applicationLoading,
+          'cv.healthSource.connectors.AppDynamics.applicationPlaceholder',
+          getString
+        )}
+        selectProps={{
+          items: applicationOptions
+        }}
+        multitypeInputValue={inputType}
+        allowableTypes={allowedTypes}
+        value={setAppDynamicsApplication(formikAppDynamicsValue, applicationOptions, inputType)}
+        style={{ width: '300px' }}
+        expressions={[]}
+        onChange={(item, _valueType, multiType) => {
+          if (inputType !== multiType) {
+            setInputType(multiType)
+          }
           const selectedItem = item as string | SelectOption
           const selectedValue = typeof selectedItem === 'string' ? selectedItem : selectedItem?.label?.toString()
-          if (selectedValue && selectedValue !== '<+input>') {
+          if (selectedValue && selectedValue !== '<+input>' && !/^</.test(selectedValue)) {
             refetchTier({
               queryParams: {
                 appName: selectedValue,
                 ...queryParams
               }
             })
-          } else {
-            formikSetFieldValue('appDTier', '<+input>')
           }
           setCustomFieldAndValidation(selectedValue, true)
-        },
-        value: setAppDynamicsApplication(formikAppDynamicsValue, applicationOptions)
-      }}
-    />
+        }}
+      />
+      {applicationError && <FormError name={'appdApplication'} errorMessage={applicationError} />}
+    </>
   ) : (
     <FormInput.Select
       className={css.applicationDropdown}
@@ -91,7 +114,7 @@ export default function AppDApplications({
         })
         setCustomFieldAndValidation(item.label, true)
       }}
-      value={setAppDynamicsApplication(formikAppDynamicsValue, applicationOptions)}
+      value={setAppDynamicsApplication(formikAppDynamicsValue, applicationOptions) as SelectOption}
       name={'appdApplication'}
       placeholder={getPlaceholder(
         applicationLoading,

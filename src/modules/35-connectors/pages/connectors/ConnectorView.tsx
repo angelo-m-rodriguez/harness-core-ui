@@ -241,6 +241,7 @@ const ConnectorView: React.FC<ConnectorViewProps> = props => {
                   showSnippetSection={false}
                   onEnableEditMode={() => state.setEnableEdit(true)}
                   isEditModeSupported={canEditConnector}
+                  isHarnessManaged={isHarnessManaged}
                 />
               </div>
             </Layout.Horizontal>

@@ -5,8 +5,9 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import type { SelectOption } from '@wings-software/uicore'
+import type { SelectOption } from '@harness/uicore'
 import type { StringKeys } from 'framework/strings'
+import type { NGVariable } from 'services/cd-ng'
 
 export enum VariableType {
   String = 'String',
@@ -25,3 +26,8 @@ export const getVariableTypeOptions = (getString: (key: StringKeys) => string): 
     label: getString(labelStringMap[type]),
     value: type
   }))
+
+export interface NGServiceOverrides {
+  serviceRef: string
+  variables: NGVariable[]
+}

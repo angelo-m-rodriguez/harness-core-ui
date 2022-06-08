@@ -38,7 +38,7 @@ export type MapAppDynamicsMetric = {
 export interface AppDynamicsData {
   name: string
   identifier: string
-  connectorRef: { connector: { identifier: string } }
+  connectorRef: { connector: { identifier: string }; value: string }
   isEdit: boolean
   product: string
   type: HealthSourceTypes
@@ -96,4 +96,13 @@ export interface ValidateMappingInterface {
   selectedMetricIndex: number
   getString: (key: StringKeys) => string
   mappedMetrics?: Map<string, CustomMappedMetric>
+}
+
+export interface NonCustomFeildsInterface {
+  appdApplication: string
+  appDTier: string
+  metricPacks: MetricPackDTO[] | undefined
+  metricData: {
+    [key: string]: boolean
+  }
 }

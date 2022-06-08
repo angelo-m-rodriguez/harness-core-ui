@@ -26,6 +26,8 @@ import { CE_AWS_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import ConnectorInstructionList from '@connectors/common/ConnectorCreationInstructionList/ConnectorCreationInstructionList'
 import { connectorHelperUrls } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import CostUsageReportExisting from './CostUsageReportExisting'
 import type { CEAwsConnectorDTO } from './OverviewStep'
 import css from '../CreateCeAwsConnector.module.scss'
@@ -100,6 +102,12 @@ const CostUsageStep: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
     }
   ]
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CENGAwsConnectorCostUsageReportLoad, {
+    category: Category.CONNECTOR
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Text
@@ -123,7 +131,12 @@ const CostUsageStep: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
             s3BucketName: prevStepData?.spec?.curAttributes?.s3BucketName || ''
           }}
           validationSchema={getValidationScheme()}
-          onSubmit={formData => handleSubmit(formData)}
+          onSubmit={formData => {
+            trackEvent(ConnectorActions.CENGAwsConnectorCostUsageReportSubmit, {
+              category: Category.CONNECTOR
+            })
+            handleSubmit(formData)
+          }}
         >
           {() => (
             <FormikForm>

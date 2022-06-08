@@ -74,6 +74,8 @@ addHeader: Add Header
 addParameter: Add Parameter
 baseURL: Base URL
 requestMethod: Request Method
+optionalAuthentication: Authentication (optional)
+bearerToken: Bearer Token(HTTP Header)
 connectivityMode:
   title: 'Connectivity Mode'
   validation: 'Please select connectivity mode'
@@ -285,6 +287,13 @@ docker:
   quay: 'Quay'
   other: 'Other (Docker V2 compliant)'
   dockerRepository: Docker Repository
+jenkins:
+  bearerTokenRequired: Bearer token is required
+  usernamePasswordAPIToken: 'Username and Password/APIToken'
+  passwordAPIToken: 'Password/APIToken'
+  jenkins: 'Jenkins'
+  jenkinsUrlRequired: 'Jenkins Registry URL is required'
+  jenkinsUrl: 'Jenkins Registry URL'
 helmRepo:
   helmRepoUrl: 'Helm Repository URL'
 aws:

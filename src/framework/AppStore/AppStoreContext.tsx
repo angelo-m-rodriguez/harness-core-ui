@@ -22,8 +22,7 @@ import {
   isGitSyncEnabledPromise,
   GitEnabledDTO,
   Organization,
-  useGetOrganization,
-  Error
+  useGetOrganization
 } from 'services/cd-ng'
 import { useGetFeatureFlags } from 'services/portal'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -31,6 +30,7 @@ import type { FeatureFlag } from '@common/featureFlags'
 import { useTelemetryInstance } from '@common/hooks/useTelemetryInstance'
 import { PreferenceScope, usePreferenceStore } from 'framework/PreferenceStore/PreferenceStoreContext'
 import routes from '@common/RouteDefinitions'
+import type { Error } from 'services/cd-ng'
 
 export type FeatureFlagMap = Partial<Record<FeatureFlag, boolean>>
 
@@ -43,6 +43,7 @@ export interface AppStoreContextProps {
   readonly selectedProject?: Project
   readonly selectedOrg?: Organization
   readonly isGitSyncEnabled?: boolean
+  readonly isGitSimplificationEnabled?: boolean
   readonly connectivityMode?: GitEnabledDTO['connectivityMode'] //'MANAGER' | 'DELEGATE'
   readonly currentUserInfo: UserInfo
   /** feature flags */
@@ -89,7 +90,7 @@ const getRedirectionUrl = (accountId: string, source: string | undefined): strin
   return source === 'signup' ? onboardingUrl : dashboardUrl
 }
 
-const LOCAL_FF_PREFERENCE_STORE_ENABLED = false
+const LOCAL_FF_PREFERENCE_STORE_ENABLED = true
 
 export function AppStoreProvider(props: React.PropsWithChildren<unknown>): React.ReactElement {
   const { showError } = useToaster()
@@ -106,14 +107,14 @@ export function AppStoreProvider(props: React.PropsWithChildren<unknown>): React
   const {
     preference: savedProject,
     setPreference: setSavedProject,
-    clearPreference: clearSavedProject,
-    updatePreferenceStore
+    clearPreference: clearSavedProject
   } = usePreferenceStore<SavedProjectDetails>(PreferenceScope.USER, 'savedProject')
 
   const [state, setState] = React.useState<Omit<AppStoreContextProps, 'updateAppStore' | 'strings'>>({
     featureFlags: {},
     currentUserInfo: { uuid: '' },
     isGitSyncEnabled: false,
+    isGitSimplificationEnabled: undefined,
     connectivityMode: undefined
   })
 
@@ -166,7 +167,6 @@ export function AppStoreProvider(props: React.PropsWithChildren<unknown>): React
     if (userInfo?.data?.email && telemetry.initialized) {
       telemetry.identify({ userId: userInfo?.data?.email })
     }
-    updatePreferenceStore({ currentUserInfo: userInfo?.data })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo?.data?.email, telemetry])
 
@@ -188,6 +188,24 @@ export function AppStoreProvider(props: React.PropsWithChildren<unknown>): React
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [featureFlags])
 
+  useEffect(() => {
+    if (
+      state.featureFlags &&
+      Object.keys(state.featureFlags).length > 0 &&
+      typeof state.isGitSimplificationEnabled === 'boolean'
+    ) {
+      if (state.isGitSimplificationEnabled && state.isGitSyncEnabled) {
+        // Old git experience and git simplification should never be true together
+        // logging to bugsnag if it happens
+        window.bugsnagClient?.notify?.(new Error(`Inconsistent git sync state for account ${accountId}`))
+      }
+      setState(prevState => ({
+        ...prevState,
+        isGitSimplificationEnabled: state.featureFlags.NG_GIT_EXPERIENCE || state.isGitSimplificationEnabled
+      }))
+    }
+  }, [state.featureFlags, state.isGitSimplificationEnabled])
+
   // update gitSyncEnabled when selectedProject changes
   useEffect(() => {
     // For gitSync, using path params instead of project/org from PreferenceFramework
@@ -202,14 +220,16 @@ export function AppStoreProvider(props: React.PropsWithChildren<unknown>): React
         setState(prevState => ({
           ...prevState,
           isGitSyncEnabled: !!response?.gitSyncEnabled,
-          connectivityMode: response?.connectivityMode
+          connectivityMode: response?.connectivityMode,
+          isGitSimplificationEnabled: !!response?.gitSimplificationEnabled
         }))
       })
     } else {
       setState(prevState => ({
         ...prevState,
         isGitSyncEnabled: false,
-        connectivityMode: undefined
+        connectivityMode: undefined,
+        isGitSimplificationEnabled: false
       }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

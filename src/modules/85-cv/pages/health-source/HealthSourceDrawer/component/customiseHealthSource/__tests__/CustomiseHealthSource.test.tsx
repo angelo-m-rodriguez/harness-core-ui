@@ -51,8 +51,7 @@ jest.mock('services/cv', () => ({
     jest.fn().mockImplementation(() => ({ loading: false, error: null, data: {}, refetch: jest.fn() })),
   useGetMetricPacks: () =>
     jest.fn().mockImplementation(() => ({ loading: false, error: null, data: {}, refetch: jest.fn() })),
-  useGetAppDynamicsApplications: () =>
-    jest.fn().mockImplementation(() => ({ loading: false, error: null, data: {}, refetch: jest.fn() })),
+  useGetAppDynamicsApplications: () => ({ loading: false, error: null, data: {}, refetch: jest.fn() }),
   useGetAppDynamicsTiers: () =>
     jest.fn().mockImplementation(() => ({ loading: false, error: null, data: {}, refetch: jest.fn() })),
   useGetAppdynamicsBaseFolders: jest

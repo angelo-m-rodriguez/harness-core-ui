@@ -6,6 +6,8 @@
  */
 
 import { ManifestDataType } from '@pipeline/components/ManifestSelection/Manifesthelper'
+import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
+import type { DeploymentStageElementConfig } from '../pipelineTypes'
 import {
   changeEmptyValuesToRunTimeInput,
   getHelpeTextForTags,
@@ -15,7 +17,9 @@ import {
   isServerlessDeploymentType,
   isServerlessManifestType,
   ServiceDeploymentType,
-  getCustomStepProps
+  getCustomStepProps,
+  getStepTypeByDeploymentType,
+  deleteStageData
 } from '../stageHelpers'
 import inputSetPipeline from './inputset-pipeline.json'
 test('if empty values are being replaced with <+input> except for tags', () => {
@@ -57,6 +61,54 @@ test('isInfraDefinitionPresent', () => {
       }
     })
   ).toBe(true)
+})
+
+test('deleteStageData', () => {
+  const deploymentConfig = {
+    identifier: '1',
+    name: 'test',
+    spec: {
+      execution: {
+        steps: [],
+        rollbackSteps: [
+          {
+            name: 'step1'
+          }
+        ]
+      },
+      infrastructure: {
+        allowSimultaneousDeployments: false,
+        infrastructureDefinition: {
+          type: 'Pdc',
+          spec: {}
+        }
+      },
+      serviceConfig: {
+        serviceDefinition: {
+          spec: {
+            artifacts: ['test'],
+            manifests: ['test']
+          }
+        }
+      }
+    }
+  }
+
+  deleteStageData(deploymentConfig as unknown as DeploymentStageElementConfig)
+
+  expect(deploymentConfig.spec?.execution?.rollbackSteps).toBeUndefined()
+  expect(deploymentConfig.spec?.serviceConfig?.serviceDefinition?.spec.artifacts).toBeUndefined()
+  expect(deploymentConfig.spec?.serviceConfig?.serviceDefinition?.spec.manifests).toBeUndefined()
+  expect(deploymentConfig.spec?.infrastructure?.allowSimultaneousDeployments).toBeUndefined()
+  expect(deploymentConfig.spec?.infrastructure?.infrastructureDefinition).toBeUndefined()
+  expect(deploymentConfig.spec?.execution?.steps.length).toBe(0)
+
+  expect(deleteStageData(undefined)).toBe(undefined)
+})
+
+test('getStepTypeByDeploymentType', () => {
+  expect(getStepTypeByDeploymentType(ServiceDeploymentType.ServerlessAwsLambda)).toBe(StepType.ServerlessAwsLambda)
+  expect(getStepTypeByDeploymentType(ServiceDeploymentType.Kubernetes)).toBe(StepType.K8sServiceSpec)
 })
 
 test('isServerlessDeploymentType', () => {

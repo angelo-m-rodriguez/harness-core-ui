@@ -239,17 +239,11 @@ exports[`Validate ChangeCard should render Pager Duty card 1`] = `
         cv.serviceHealthTrend
       </p>
       <div
-        class="StyledProps--font StyledProps--main main"
+        class="StyledProps--font StyledProps--main main extraMarginForChart"
       >
         <div
           class="StyledProps--font StyledProps--main timelineRow"
         >
-          <p
-            class="StyledProps--font StyledProps--main rowLabel"
-            style="width: 90px;"
-          >
-            cv.monitoredServices.serviceHealth.overallHealthScore
-          </p>
           <div
             class="StyledProps--font StyledProps--main NoDataCard--noDataCard noData StyledProps--flex StyledProps--flex-align-center-center"
           >

@@ -24,13 +24,13 @@ export function ConfigVariables(props: TerraformPlanVariableStepProps): React.Re
         data={variablesData?.spec?.configuration}
         originalData={initialValues.spec?.configuration}
         metadataMap={metadataMap}
-        className={pipelineVariableCss.variablePaddingL2}
+        className={pipelineVariableCss.variablePaddingL3}
       />
       <VariablesListTable
         data={variablesData?.spec?.configuration?.configFiles}
         originalData={initialValues.spec?.configuration?.configFiles}
         metadataMap={metadataMap}
-        className={pipelineVariableCss.variablePaddingL2}
+        className={pipelineVariableCss.variablePaddingL3}
       />
       {variablesData?.spec?.configuration?.configFiles?.store?.spec?.gitFetchType && (
         <>
@@ -39,7 +39,7 @@ export function ConfigVariables(props: TerraformPlanVariableStepProps): React.Re
             data={variablesData?.spec?.configuration?.configFiles?.store?.spec}
             originalData={initialValues.spec?.configuration?.configFiles?.store?.spec}
             metadataMap={metadataMap}
-            className={pipelineVariableCss.variablePaddingL2}
+            className={pipelineVariableCss.variablePaddingL4}
           />
         </>
       )}
@@ -54,7 +54,7 @@ export function ConfigVariables(props: TerraformPlanVariableStepProps): React.Re
                   data={variablesData?.spec?.configuration?.varFiles?.[index]?.varFile?.spec}
                   originalData={initialValues?.spec?.configuration?.varFiles?.[index]?.varFile?.spec || ({} as any)}
                   metadataMap={metadataMap}
-                  className={pipelineVariableCss.variablePaddingL2}
+                  className={pipelineVariableCss.variablePaddingL4}
                 />
               )
             } else if (varFile?.varFile?.type === 'Remote') {
@@ -68,7 +68,7 @@ export function ConfigVariables(props: TerraformPlanVariableStepProps): React.Re
                   data={remoteSpec?.store?.spec}
                   originalData={initVarSpec?.store?.spec || ({} as any)}
                   metadataMap={metadataMap}
-                  className={pipelineVariableCss.variablePaddingL2}
+                  className={pipelineVariableCss.variablePaddingL4}
                 />
               )
             }

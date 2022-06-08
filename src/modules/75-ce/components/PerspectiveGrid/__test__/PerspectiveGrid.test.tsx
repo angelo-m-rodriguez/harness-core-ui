@@ -8,6 +8,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
+import type { QlceViewEntityStatsDataPoint } from 'services/ce/services'
 import PerspectiveGrid, { PerspectiveGridProps } from '../PerspectiveGrid'
 import MockResponse from './MockPerspectiveGridResponse.json'
 
@@ -21,7 +22,12 @@ describe('test cases for Perspective Grid', () => {
   test('should be able to render Perspective Grid', async () => {
     const { container, getByText } = render(
       <TestWrapper pathParams={params}>
-        <PerspectiveGrid {...(MockResponse as PerspectiveGridProps)} />
+        <PerspectiveGrid
+          {...({
+            ...MockResponse,
+            gridData: MockResponse.gridData as QlceViewEntityStatsDataPoint[]
+          } as PerspectiveGridProps)}
+        />
       </TestWrapper>
     )
 

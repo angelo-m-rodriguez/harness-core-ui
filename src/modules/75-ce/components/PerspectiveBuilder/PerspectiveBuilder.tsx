@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Formik,
   FormikForm,
@@ -16,13 +16,14 @@ import {
   Button,
   Text,
   PageSpinner,
-  useToaster
+  useToaster,
+  ExpandingSearchInput
 } from '@wings-software/uicore'
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core'
 import { FontVariation } from '@harness/design-system'
 import { useParams, useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
-import { useUpdatePerspective, CEView } from 'services/ce'
+import { useUpdatePerspective, CEView, useGetFolders, CEViewFolder } from 'services/ce'
 import {
   QlceViewRuleInput,
   QlceViewFieldInputInput,
@@ -32,9 +33,10 @@ import {
 } from 'services/ce/services'
 import { useStrings } from 'framework/strings'
 import type { ViewIdCondition } from 'services/ce/'
-import { DEFAULT_GROUP_BY, perspectiveDateLabelToDisplayText } from '@ce/utils/perspectiveUtils'
+import { DEFAULT_GROUP_BY, perspectiveDateLabelToDisplayText, searchList } from '@ce/utils/perspectiveUtils'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { USER_JOURNEY_EVENTS } from '@ce/TrackingEventsConstants'
+import { folderViewType } from '@ce/constants'
 import PerspectiveFilters from '../PerspectiveFilters'
 import PerspectiveBuilderPreview from '../PerspectiveBuilderPreview/PerspectiveBuilderPreview'
 // import ProTipIcon from './images/pro-tip.svg'
@@ -60,13 +62,86 @@ export interface PerspectiveFormValues {
   }
 }
 
+interface FolderSelectionProps {
+  selectedFolder: CEViewFolder
+  setSelectedFolder: (value: CEViewFolder) => void
+  foldersList: CEViewFolder[]
+}
+
+const FolderSelection: React.FC<FolderSelectionProps> = ({ selectedFolder, setSelectedFolder, foldersList }) => {
+  const { getString } = useStrings()
+  const [folders, setFolders] = useState<CEViewFolder[]>(foldersList)
+  const onSearch = (searchVal: string) => {
+    const filteredList = searchList(searchVal, foldersList)
+    setFolders(filteredList)
+  }
+
+  useEffect(() => {
+    setFolders(foldersList)
+  }, [foldersList])
+
+  return (
+    <Popover
+      position={Position.BOTTOM_RIGHT}
+      modifiers={{
+        arrow: { enabled: false },
+        flip: { enabled: true },
+        keepTogether: { enabled: true },
+        preventOverflow: { enabled: true }
+      }}
+      hoverCloseDelay={0}
+      transitionDuration={0}
+      minimal={true}
+      content={
+        <Menu>
+          <ExpandingSearchInput
+            onChange={text => onSearch(text.trim())}
+            alwaysExpanded={true}
+            placeholder={getString('search')}
+          />
+          {folders.map(folder => {
+            if (folder.viewType === folderViewType.SAMPLE) {
+              return null
+            }
+            return (
+              <MenuItem
+                key={folder.uuid}
+                active={selectedFolder.uuid === folder.uuid}
+                onClick={() => {
+                  setSelectedFolder(folder)
+                }}
+                icon={'folder-close'}
+                text={folder.name}
+              />
+            )
+          })}
+        </Menu>
+      }
+    >
+      <Layout.Horizontal flex={{ alignItems: 'center' }}>
+        <Text font={{ variation: FontVariation.BODY }}>{getString('ce.perspectives.createPerspective.nameLabel')}</Text>
+        <Button
+          intent="primary"
+          minimal
+          text={selectedFolder?.name || ''}
+          iconProps={{
+            size: 16
+          }}
+          rightIcon="caret-down"
+          className={css.folderSelectionBtn}
+        />
+      </Layout.Horizontal>
+    </Popover>
+  )
+}
+
 const PerspectiveBuilder: React.FC<{ perspectiveData?: CEView; onNext: (resource: CEView) => void }> = props => {
   const { getString } = useStrings()
   const { perspectiveId, accountId } = useParams<{ perspectiveId: string; accountId: string }>()
   const history = useHistory()
   const { showError } = useToaster()
   const { trackEvent } = useTelemetry()
-
+  const [selectedFolder, setSelectedFolder] = useState<CEViewFolder>({})
   const { perspectiveData } = props
 
   const { mutate: createView, loading } = useUpdatePerspective({
@@ -75,6 +150,23 @@ const PerspectiveBuilder: React.FC<{ perspectiveData?: CEView; onNext: (resource
     }
   })
 
+  const { data: foldersListResullt } = useGetFolders({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
+  const foldersList = foldersListResullt?.data || []
+
+  useEffect(() => {
+    if (foldersList) {
+      const defaultFolder = foldersList.filter(data =>
+        perspectiveData?.folderId ? data.uuid === perspectiveData?.folderId : data.viewType === folderViewType.DEFAULT
+      )
+      setSelectedFolder(defaultFolder[0])
+    }
+  }, [foldersList])
+
   /* istanbul ignore next */
   const makeCreateCall: (value: CEView) => void = async values => {
     const apiObject = {
@@ -82,7 +174,8 @@ const PerspectiveBuilder: React.FC<{ perspectiveData?: CEView; onNext: (resource
       ...values,
       viewState: 'DRAFT',
       viewType: 'CUSTOMER',
-      uuid: perspectiveId
+      uuid: perspectiveId,
+      folderId: selectedFolder?.uuid || ''
     }
 
     if (apiObject.viewRules) {
@@ -201,10 +294,16 @@ const PerspectiveBuilder: React.FC<{ perspectiveData?: CEView; onNext: (resource
                   <Text font={{ variation: FontVariation.H4 }} margin={{ bottom: 'large' }}>
                     {getString('ce.perspectives.createPerspective.title')}
                   </Text>
-                  <Layout.Horizontal>
+                  <Layout.Horizontal style={{ position: 'relative' }}>
                     <FormInput.Text
                       name="name"
-                      label={getString('ce.perspectives.createPerspective.nameLabel')}
+                      label={
+                        <FolderSelection
+                          selectedFolder={selectedFolder}
+                          setSelectedFolder={setSelectedFolder}
+                          foldersList={foldersList}
+                        />
+                      }
                       placeholder={getString('ce.perspectives.createPerspective.name')}
                       tooltipProps={{
                         dataTooltipId: 'perspectiveNameInput'

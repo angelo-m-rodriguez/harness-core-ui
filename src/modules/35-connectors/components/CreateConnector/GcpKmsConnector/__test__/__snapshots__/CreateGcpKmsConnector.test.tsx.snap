@@ -144,7 +144,6 @@ exports[`Create Secret Manager Wizard Create GcpKms Connector 1`] = `
        
       <div
         class="StyledProps--font StyledProps--main StyledProps--padding-top-medium"
-        style="width: 64%;"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-size-medium StyledProps--padding-bottom-xlarge"

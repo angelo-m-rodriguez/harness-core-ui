@@ -137,7 +137,7 @@ exports[`Create Delegate Wizard render data 1`] = `
             tabindex="0"
           >
             <div
-              class="StyledProps--font StyledProps--main cardBody"
+              class="StyledProps--font StyledProps--main cardBody disableCursor"
               data-type="ECS"
             >
               <img
@@ -166,7 +166,7 @@ exports[`Create Delegate Wizard render data 1`] = `
             tabindex="0"
           >
             <div
-              class="StyledProps--font StyledProps--main cardBody"
+              class="StyledProps--font StyledProps--main cardBody disableCursor"
               data-type="LINUX"
             >
               <img

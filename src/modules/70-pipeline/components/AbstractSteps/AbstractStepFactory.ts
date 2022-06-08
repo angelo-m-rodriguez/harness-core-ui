@@ -94,6 +94,10 @@ export abstract class AbstractStepFactory {
     return this.stepBank.get(type)?.getIconColor() || undefined
   }
 
+  getStepIconSize(type: string): number | undefined {
+    return this.stepBank.get(type)?.getIconSize() || undefined
+  }
+
   getStepIsHarnessSpecific(type: string): boolean {
     return this.stepBank.get(type)?.getIsHarnessSpecific() || false
   }

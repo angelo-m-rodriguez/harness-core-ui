@@ -43,6 +43,7 @@ const getListGitSync = jest.fn(() => Promise.resolve(gitConfigs))
 
 jest.mock('services/cd-ng', () => ({
   useCreatePR: jest.fn(() => noop),
+  useCreatePRV2: jest.fn(() => noop),
   useGetFileContent: jest.fn(() => noop),
   useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => {
     return { data: branchStatusMock, refetch: getListOfBranchesWithStatus, loading: false }

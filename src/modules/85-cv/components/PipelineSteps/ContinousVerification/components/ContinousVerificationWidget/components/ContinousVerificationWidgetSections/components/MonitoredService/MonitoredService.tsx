@@ -33,7 +33,8 @@ import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './MonitoredService.module.scss'
 
 export default function MonitoredService({
-  formik: { values: formValues, setFieldValue }
+  formik: { values: formValues, setFieldValue },
+  formik
 }: MonitoredServiceProps): JSX.Element {
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps & AccountPathProps>()
   const [monitoredService, setMonitoredService] = useState({
@@ -89,17 +90,18 @@ export default function MonitoredService({
   const monitoredServiceData = data?.data?.monitoredService
 
   useEffect(() => {
+    let newSpecs = { ...formValues.spec }
     if (environmentIdentifier === RUNTIME_INPUT_VALUE || serviceIdentifier === RUNTIME_INPUT_VALUE) {
       //when serviceIdentifier or environmentIdentifier are runtime
-      const newSpecs = { ...formValues.spec, monitoredServiceRef: RUNTIME_INPUT_VALUE }
+      newSpecs = { ...newSpecs, monitoredServiceRef: RUNTIME_INPUT_VALUE }
       setFieldValue('spec', newSpecs)
     } else if (isAnExpression(environmentIdentifier) || isAnExpression(serviceIdentifier)) {
       //when serviceIdentifier or environmentIdentifier is an expression
-      const newSpecs = { ...formValues.spec, monitoredServiceRef: MONITORED_SERVICE_EXPRESSION }
+      newSpecs = { ...newSpecs, monitoredServiceRef: MONITORED_SERVICE_EXPRESSION }
       setFieldValue('spec', newSpecs)
     } else if (!loading && !error) {
       //when monitoredServiceData is derived from service and env.
-      const newSpecs = getNewSpecs(monitoredServiceData, formValues)
+      newSpecs = getNewSpecs(monitoredServiceData, formValues)
       setFieldValue('spec', newSpecs)
       setHealthSourcesList(monitoredServiceData?.sources?.healthSources as RowData[])
       setMonitoredService({
@@ -107,6 +109,8 @@ export default function MonitoredService({
         name: monitoredServiceData?.name as string
       })
     }
+    const formNewValues = { ...formValues, spec: newSpecs }
+    formik.resetForm({ values: formNewValues })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoredServiceData, error, loading, environmentIdentifier, serviceIdentifier])
 
@@ -117,7 +121,6 @@ export default function MonitoredService({
       monitoredServiceRef: createdMonitoredService?.resource?.monitoredService?.identifier
     }
     setFieldValue('spec', newSpecs)
-
     setMonitoredService({
       identifier: createdMonitoredService?.resource?.monitoredService?.identifier as string,
       name: createdMonitoredService?.resource?.monitoredService?.name as string

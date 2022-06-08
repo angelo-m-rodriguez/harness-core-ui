@@ -12,7 +12,8 @@ import type { UseStringsReturn } from 'framework/strings'
 import type { ResponseListEnvironmentResponse, EnvironmentResponse } from 'services/cd-ng'
 import type { StringsMap } from 'stringTypes'
 import type { MonitoredServiceEnum } from '@cv/pages/monitored-service/MonitoredServicePage.constants'
-import type { SloHealthIndicatorDTO } from 'services/cv'
+import type { CVNGLogTag, SloHealthIndicatorDTO } from 'services/cv'
+import { formatDatetoLocale } from '@common/utils/dateUtils'
 
 export enum EVENT_TYPE {
   KNOWN = 'KNOWN',
@@ -226,4 +227,23 @@ export function getEventTypeChartColor(eventType?: string, realCSSColor = true):
     default:
       return realCSSColor ? Utils.getRealCSSColor(Color.GREY_300) : Color.GREY_300
   }
+}
+
+export const getTags = (tags?: CVNGLogTag[]) => {
+  const result = {} as any
+  const formatDatesFor = ['startTime', 'endTime']
+  tags
+    ?.filter(tag => tag.type === 'STRING' || tag.type === 'TIMESTAMP')
+    .forEach(tag => {
+      if (!tag.key) {
+        return
+      }
+      if (formatDatesFor.includes(tag.key)) {
+        result[tag.key] = tag.value ? formatDatetoLocale(+tag.value) : ''
+      } else {
+        result[tag.key] = tag.value
+      }
+    })
+
+  return JSON.stringify(result)
 }

@@ -20,7 +20,7 @@ interface FormInputValues {
   container: HTMLElement
   type: InputTypes
   fieldId: string
-  value?: string
+  value?: string | boolean
   multiSelectValues?: string[] // string[] for multi SELECT
 }
 

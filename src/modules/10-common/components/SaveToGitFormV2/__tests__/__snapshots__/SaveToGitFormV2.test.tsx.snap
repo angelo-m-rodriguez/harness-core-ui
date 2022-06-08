@@ -1,0 +1,304 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SaveToGitFormV2 test Creating new branch and PR in SaveToGitFormV2 1`] = `
+<div>
+  <div
+    class="StyledProps--font StyledProps--main modalContainer"
+    style="height: inherit;"
+  >
+    <p
+      class="StyledProps--font StyledProps--main modalHeader StyledProps--font-weight-semi-bold StyledProps--color StyledProps--color-grey800 StyledProps--padding-bottom-small StyledProps--margin-bottom-small StyledProps--margin-top-xlarge"
+    >
+      common.git.saveResourceLabel
+    </p>
+    <div
+      class="StyledProps--font StyledProps--main modalBody"
+    >
+      <div
+        class="OverlaySpinner--overlaySpinner"
+      >
+        <form
+          action="#"
+          class="FormikForm--main"
+        >
+          <div>
+            <div
+              class="StyledProps--font StyledProps--main formBody"
+            >
+              <div
+                class="bp3-form-group"
+                data-id="commitMsg-0"
+              >
+                <label
+                  class="bp3-label"
+                  for="commitMsg"
+                >
+                  <span
+                    class="Tooltip--acenter"
+                    data-tooltip-id="saveToGitFormV2_commitMsg"
+                  >
+                    common.git.commitMessage
+                  </span>
+                   
+                  <span
+                    class="bp3-text-muted"
+                  />
+                </label>
+                <div
+                  class="bp3-form-content"
+                >
+                  <textarea
+                    autocomplete="off"
+                    class="bp3-input bp3-fill"
+                    maxlength="1024"
+                    name="commitMsg"
+                  >
+                    common.gitSync.createResource
+                  </textarea>
+                </div>
+              </div>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium StyledProps--color StyledProps--color-grey600 StyledProps--padding-bottom-small StyledProps--margin-top-large"
+              >
+                common.git.branchSelectHeader
+              </p>
+              <div
+                class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+              >
+                <div
+                  class="StyledProps--font StyledProps--main branchSection StyledProps--padding-top-small"
+                >
+                  <label
+                    class="bp3-control bp3-radio bp3-large StyledProps--font Radio--radio StyledProps--main"
+                  >
+                    <input
+                      checked=""
+                      type="radio"
+                    />
+                    <span
+                      class="bp3-control-indicator"
+                    />
+                    <span
+                      class="bp3-icon StyledProps--main"
+                      data-icon="git-branch-existing"
+                    >
+                      <svg
+                        fill="none"
+                        height="16"
+                        viewBox="0 0 16 9"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          clip-rule="evenodd"
+                          d="M12.403 3.67H16v1.626h-3.597a4.477 4.477 0 01-8.807 0H0V3.67h3.596a4.477 4.477 0 018.807 0zm-7.26.813a2.857 2.857 0 105.714 0 2.857 2.857 0 00-5.714 0z"
+                          fill="#383946"
+                          fill-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      class="StyledProps--font StyledProps--main StyledProps--margin-left-small StyledProps--inline"
+                    >
+                      common.git.existingBranchCommitLabel
+                    </span>
+                    <span
+                      class="StyledProps--font StyledProps--main StyledProps--margin-left-small StyledProps--inline StyledProps--padding-top-xsmall StyledProps--padding-bottom-xsmall StyledProps--padding-left-small StyledProps--padding-right-small StyledProps--background-primary2 StyledProps--border StyledProps--color StyledProps--color-black"
+                    >
+                      testBranch
+                    </span>
+                  </label>
+                </div>
+                <div
+                  class="StyledProps--font StyledProps--main branchSection"
+                >
+                  <label
+                    class="bp3-control bp3-radio bp3-large StyledProps--font Radio--radio StyledProps--main"
+                  >
+                    <input
+                      data-test="newBranchRadioBtn"
+                      type="radio"
+                    />
+                    <span
+                      class="bp3-control-indicator"
+                    />
+                    <span
+                      class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey700"
+                      data-icon="git-new-branch"
+                    >
+                      <svg
+                        height="16"
+                        viewBox="0 0 13 16"
+                        width="16"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M10.406.003a2.399 2.399 0 00-.8 4.658v.94a.8.8 0 01-.8.8H4.001a2.413 2.413 0 00-.8.14V4.66A2.399 2.399 0 002.402 0a2.399 2.399 0 00-.8 4.661v6.678a2.399 2.399 0 00.8 4.661 2.399 2.399 0 00.8-4.661v-2.54a.8.8 0 01.8-.799h4.803a2.4 2.4 0 002.402-2.4v-.939a2.399 2.399 0 00-.8-4.658z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--margin-left-small"
+                    >
+                      common.git.newBranchCommitLabel
+                    </span>
+                  </label>
+                  <div
+                    class="StyledProps--font StyledProps--main StyledProps--padding-top-small"
+                  >
+                    <div
+                      class="bp3-form-group branchInput"
+                    >
+                      <label
+                        class="bp3-label"
+                        for="branch"
+                      >
+                        <span
+                          class="Tooltip--acenter"
+                          data-tooltip-id="saveToGitFormV2_branch"
+                        >
+                          common.git.branchName
+                        </span>
+                         
+                        <span
+                          class="bp3-text-muted"
+                        />
+                      </label>
+                      <div
+                        class="bp3-form-content"
+                      >
+                        <div
+                          class="bp3-input-group"
+                        >
+                          <input
+                            autocomplete="off"
+                            class="bp3-input"
+                            name="branch"
+                            type="text"
+                            value="newBranch"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-flex-start StyledProps--padding-top-small"
+                    >
+                      <div
+                        class="bp3-form-group"
+                      >
+                        <div
+                          class="bp3-form-content"
+                        >
+                          <label
+                            class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox StyledProps--main StyledProps--margin-right-small StyledProps--inline"
+                          >
+                            <input
+                              name="createPr"
+                              type="checkbox"
+                            />
+                            <span
+                              class="bp3-control-indicator"
+                            />
+                            <span
+                              class="Tooltip--acenter FormikForm--checkBoxDocTooltipLabel"
+                              data-tooltip-id="saveToGitFormV2_createPr"
+                            >
+                              common.git.startPRLabel
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        class="Layout--horizontal StyledProps--main"
+                      >
+                        <div
+                          class="bp3-form-group branchSelector"
+                        >
+                          
+                          <div
+                            class="bp3-form-content"
+                          >
+                            <div
+                              class="bp3-popover-wrapper Select--main bp3-fill"
+                            >
+                              <div
+                                class="bp3-popover-target"
+                              >
+                                <div
+                                  class="bp3-input-group"
+                                >
+                                  <input
+                                    autocomplete="off"
+                                    class="bp3-input"
+                                    name="targetBranch"
+                                    placeholder="- select -"
+                                    style="padding-right: 0px;"
+                                    type="text"
+                                    value=""
+                                  />
+                                  <span
+                                    class="bp3-input-action"
+                                  >
+                                    <span
+                                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                      icon="chevron-down"
+                                    >
+                                      <svg
+                                        data-icon="chevron-down"
+                                        height="14"
+                                        viewBox="0 0 16 16"
+                                        width="14"
+                                      >
+                                        <desc>
+                                          chevron-down
+                                        </desc>
+                                        <path
+                                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                          fill-rule="evenodd"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main StyledProps--padding-top-medium"
+            >
+              <button
+                class="bp3-button Button--button StyledProps--font StyledProps--main formButton StyledProps--intent-primary Button--with-current-color"
+                type="submit"
+              >
+                <span
+                  class="bp3-button-text"
+                >
+                  save
+                </span>
+              </button>
+              <button
+                class="bp3-button Button--button StyledProps--font StyledProps--main formButton StyledProps--margin-left-medium Button--with-current-color"
+                type="button"
+              >
+                <span
+                  class="bp3-button-text"
+                >
+                  cancel
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -20,8 +20,16 @@ import { findDialogContainer, findPopoverContainer, TestWrapper } from '@common/
 import routes from '@common/RouteDefinitions'
 import { accountPathProps, userGroupPathProps } from '@common/utils/routeUtils'
 import { ResponseBoolean, useGetUserGroupAggregate } from 'services/cd-ng'
+import * as hooks from '@common/hooks/useFeatureFlag'
 import UserGroupDetails from '../UserGroupDetails'
-import { mockResponse, userGroupInfo, userInfo, userGroupInfoSSOLinked, mockSSOSettings } from './mock'
+import {
+  mockResponse,
+  userGroupInfo,
+  userInfo,
+  userGroupInfoSSOLinked,
+  mockSSOSettings,
+  inheritingChildScopeListData
+} from './mock'
 
 const deleteMember = jest.fn()
 const deleteMemberMock = (): ResponseBoolean => {
@@ -48,6 +56,7 @@ const unLinkToSSoMock = (): ResponseBoolean => {
 
 jest.mock('services/cd-ng', () => ({
   useGetUserGroupAggregate: jest.fn(),
+  useGetInheritingChildScopeList: jest.fn().mockImplementation(() => inheritingChildScopeListData),
   useRemoveMember: jest.fn().mockImplementation(() => {
     return { mutate: deleteMemberMock }
   }),
@@ -86,6 +95,10 @@ describe('UserGroupDetails Test', () => {
       error: null,
       loading: false
     }))
+    const useFeatureFlags = jest.spyOn(hooks, 'useFeatureFlags')
+    useFeatureFlags.mockReturnValue({
+      INHERITED_USER_GROUP: true
+    })
     const renderObj = render(
       <TestWrapper
         path={routes.toUserGroupDetails({ ...accountPathProps, ...userGroupPathProps })}

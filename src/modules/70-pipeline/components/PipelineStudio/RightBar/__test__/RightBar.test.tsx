@@ -136,9 +136,9 @@ export const pipelineContext: PipelineContextInterface = {
   renderPipelineStage: jest.fn(),
   setView: jest.fn(),
   updateGitDetails: jest.fn(),
+  updatePipelineStoreMetadata: jest.fn(),
   updateEntityValidityDetails: jest.fn(),
   updatePipelineView: jest.fn(),
-  updateTemplateView: jest.fn(),
   fetchPipeline: jest.fn(),
   deletePipelineCache: jest.fn(),
   getStageFromPipeline: jest.fn(),
@@ -151,7 +151,8 @@ export const pipelineContext: PipelineContextInterface = {
   setSelectedSectionId: jest.fn(),
   setSelection: jest.fn(),
   getStagePathFromPipeline: jest.fn(),
-  setTemplateTypes: jest.fn()
+  setTemplateTypes: jest.fn(),
+  getTemplate: jest.fn()
 }
 
 describe('RightBar', () => {

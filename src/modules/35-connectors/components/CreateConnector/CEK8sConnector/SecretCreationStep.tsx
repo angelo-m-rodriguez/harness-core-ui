@@ -14,6 +14,8 @@ import { useStrings } from 'framework/strings'
 import type { ConnectorInfoDTO } from 'services/cd-ng'
 import { CE_K8S_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import CopyCodeSection from './components/CopyCodeSection'
 import css from './CEK8sConnector.module.scss'
 
@@ -53,8 +55,17 @@ const SecretCreationStep: React.FC<StepProps<StepSecretManagerProps> & SecretCre
   }
 
   const handleSubmit = () => {
+    trackEvent(ConnectorActions.SecretCreationStepSubmit, {
+      category: Category.CONNECTOR
+    })
     nextStep?.({ ...prevStepData } as ConnectorInfoDTO)
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.SecretCreationStepLoad, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <Layout.Vertical className={css.secretCreationCont}>

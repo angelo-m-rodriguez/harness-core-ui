@@ -50,6 +50,7 @@ export type ArtifactType =
   | 'ArtifactoryRegistry'
   | 'CustomArtifact'
   | 'Acr'
+  | 'Jenkins'
 export interface OrganizationCreationType {
   type: ArtifactType
 }

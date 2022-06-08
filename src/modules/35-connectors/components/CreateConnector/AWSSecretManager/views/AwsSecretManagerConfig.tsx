@@ -31,6 +31,10 @@ import {
   StepDetailsProps
 } from '@connectors/interfaces/ConnectorInterface'
 import { PageSpinner } from '@common/components'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import AwsSecretManagerAccessKeyForm from './AwsSecretManagerAccessKeyForm'
 import css from '../CreateAwsSecretManagerConnector.module.scss'
 
@@ -75,6 +79,7 @@ const AwsSecretManagerConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDe
 
   const [initialValues, setInitialValues] = useState(defaultInitialFormData)
   const [loadingFormData, setLoadingFormData] = useState(isEditMode)
+  useConnectorWizard({ helpPanel: { referenceId: 'AWSSecretManagerDetails', contentWidth: 900 } })
 
   React.useEffect(() => {
     if (isEditMode && connectorInfo) {
@@ -85,10 +90,17 @@ const AwsSecretManagerConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDe
     }
   }, [isEditMode, connectorInfo, accountId])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ConfigLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.AWSSecretMgr
+  })
+
   return loadingFormData ? (
     <PageSpinner />
   ) : (
-    <Container padding={{ top: 'medium' }} width="64%">
+    <Container padding={{ top: 'medium' }}>
       <Text font={{ variation: FontVariation.H3 }} padding={{ bottom: 'xlarge' }}>
         {getString('details')}
       </Text>
@@ -129,6 +141,10 @@ const AwsSecretManagerConfig: React.FC<StepProps<StepDetailsProps> & ConnectorDe
           })
         })}
         onSubmit={formData => {
+          trackEvent(ConnectorActions.ConfigSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.AWSSecretMgr
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData } as StepDetailsProps)
         }}
       >

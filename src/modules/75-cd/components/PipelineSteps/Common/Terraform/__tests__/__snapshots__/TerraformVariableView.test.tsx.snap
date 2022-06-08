@@ -42,7 +42,7 @@ exports[`Terraform Variable view  initial render inline with no values 1`] = `
     cd.terraformVarFiles
   </p>
   <div
-    class="variablesListTable variablePaddingL2"
+    class="variablesListTable variablePaddingL4"
   />
   <p
     class="StyledProps--font StyledProps--main stepTitle"
@@ -63,7 +63,7 @@ exports[`Terraform Variable view  should render with inline config 1`] = `
     class="variablesListTable variablePaddingL3"
   />
   <div
-    class="variablesListTable variablePaddingL2"
+    class="variablesListTable variablePaddingL3"
   />
   <p
     class="StyledProps--font StyledProps--main stepTitle"
@@ -71,7 +71,7 @@ exports[`Terraform Variable view  should render with inline config 1`] = `
     cd.terraformVarFiles
   </p>
   <div
-    class="variablesListTable variablePaddingL2"
+    class="variablesListTable variablePaddingL4"
   />
   <p
     class="StyledProps--font StyledProps--main stepTitle"
@@ -79,7 +79,7 @@ exports[`Terraform Variable view  should render with inline config 1`] = `
     pipelineSteps.backendConfig
   </p>
   <div
-    class="variablesListTable variablePaddingL3"
+    class="variablesListTable variablePaddingL4"
   />
   <p
     class="StyledProps--font StyledProps--main stepTitle"
@@ -87,10 +87,10 @@ exports[`Terraform Variable view  should render with inline config 1`] = `
     environmentVariables
   </p>
   <div
-    class="variablesListTable variablePaddingL3"
+    class="variablesListTable variablePaddingL4"
   />
   <div
-    class="variablesListTable variablePaddingL3"
+    class="variablesListTable variablePaddingL4"
   />
 </div>
 `;

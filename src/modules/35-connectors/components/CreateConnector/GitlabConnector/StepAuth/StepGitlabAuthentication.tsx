@@ -30,6 +30,9 @@ import SSHSecretInput from '@secrets/components/SSHSecretInput/SSHSecretInput'
 import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import TextReference, { TextReferenceInterface, ValueType } from '@secrets/components/TextReference/TextReference'
 import { useStrings } from 'framework/strings'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import { GitAuthTypes, GitAPIAuthTypes } from '@connectors/pages/connectors/utils/ConnectorHelper'
 import { getCommonConnectorsValidationSchema } from '../../CreateConnectorUtils'
 import commonStyles from '@connectors/components/CreateConnector/commonSteps/ConnectorCommonStyles.module.scss'
@@ -199,8 +202,17 @@ const StepGitlabAuthentication: React.FC<StepProps<StepGitlabAuthenticationProps
     }, [loadingConnectorSecrets])
 
     const handleSubmit = (formData: ConnectorConfigDTO) => {
+      trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+        category: Category.CONNECTOR,
+        connector_type: Connectors.GitLab
+      })
       nextStep?.({ ...props.connectorInfo, ...prevStepData, ...formData } as StepGitlabAuthenticationProps)
     }
+    const { trackEvent } = useTelemetry()
+    useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.GitLab
+    })
 
     return loadingConnectorSecrets ? (
       <PageSpinner />

@@ -1,0 +1,30 @@
+{
+  "status": "SUCCESS",
+  "data": [
+    {
+      "uuid": "string",
+      "accountId": "string",
+      "name": "string",
+      "pinned": true,
+      "tags": ["string"],
+      "description": "string",
+      "viewType": "SAMPLE",
+      "createdAt": 0,
+      "lastUpdatedAt": 0,
+      "createdBy": {
+        "uuid": "string",
+        "name": "string",
+        "email": "string",
+        "externalUserId": "string"
+      },
+      "lastUpdatedBy": {
+        "uuid": "string",
+        "name": "string",
+        "email": "string",
+        "externalUserId": "string"
+      }
+    }
+  ],
+  "metaData": {},
+  "correlationId": "string"
+}

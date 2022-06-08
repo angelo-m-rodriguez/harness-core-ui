@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react'
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { get, isEmpty, isUndefined, set } from 'lodash-es'
 import {
@@ -198,7 +198,6 @@ function CICodebaseInputSetFormInternal({
   const showSetContainerResources = isCpuLimitRuntimeInput || isMemoryLimitRuntimeInput
   const [isConnectorExpression, setIsConnectorExpression] = useState<boolean>(false)
   const containerWidth = viewTypeMetadata?.isTemplateDetailDrawer ? '100%' : '50%' // drawer view is much smaller 50% would cut out
-  const showBuildAsDisabledTextField = viewTypeMetadata?.isTemplateBuilder || viewTypeMetadata?.isTemplateDetailDrawer // should disable when template is applied to pipeline
   const savedValues = useRef<Record<string, string>>({
     branch: '',
     tag: '',
@@ -213,7 +212,7 @@ function CICodebaseInputSetFormInternal({
   const buildSpecPath = `${formattedPath}properties.ci.codebase.build.spec`
   const codeBaseTypePath = `${formattedPath}properties.ci.codebase.build.type`
   const prCloneStrategyOptions = getPrCloneStrategyOptions(getString)
-  const [codeBaseType, setCodeBaseType] = useState<CodeBaseType>(get(formik?.values, codeBaseTypePath))
+  const [codeBaseType, setCodeBaseType] = useState<CodeBaseType | undefined>(get(formik?.values, codeBaseTypePath))
 
   const radioLabels = {
     branch: getString('gitBranch'),
@@ -240,6 +239,26 @@ function CICodebaseInputSetFormInternal({
     memoryLimit: `${formattedPath}properties.ci.codebase.resources.limits.memory`,
     cpuLimit: `${formattedPath}properties.ci.codebase.resources.limits.cpu`
   }
+
+  const showBuildAsDisabledTextField = useMemo(() => {
+    return (
+      (viewTypeMetadata?.isTemplateBuilder &&
+        get(formik?.values, codeBaseInputFieldFormName.connectorRef) === RUNTIME_INPUT_VALUE) ||
+      viewTypeMetadata?.isTemplateDetailDrawer
+    ) // should disable when template is applied to pipeline
+  }, [viewTypeMetadata, formik?.values])
+
+  useEffect(() => {
+    if (get(formik?.values, codeBaseInputFieldFormName.connectorRef) === RUNTIME_INPUT_VALUE) {
+      formik?.setFieldValue(buildPath, RUNTIME_INPUT_VALUE)
+    }
+  }, [get(formik?.values, codeBaseInputFieldFormName.connectorRef)])
+
+  useEffect(() => {
+    if (get(formik?.values, buildPath) === RUNTIME_INPUT_VALUE) {
+      setCodeBaseType(undefined)
+    }
+  }, [get(formik?.values, buildPath)])
 
   const codeBaseInputDefaultValue = {
     depth: 50,
@@ -390,6 +409,13 @@ function CICodebaseInputSetFormInternal({
       </Container>
     )
   }
+
+  const AllowableTypesForCodebaseProperties = useMemo(() => {
+    return viewTypeMetadata?.isTemplateBuilder || viewTypeMetadata?.isTemplateDetailDrawer
+      ? [MultiTypeInputType.RUNTIME, MultiTypeInputType.FIXED]
+      : [MultiTypeInputType.FIXED]
+  }, [viewTypeMetadata?.isTemplateBuilder])
+
   return (
     <Layout.Vertical spacing="small">
       {loadingConnectorDetails ? (
@@ -421,7 +447,7 @@ function CICodebaseInputSetFormInternal({
                 multiTypeProps={{
                   expressions,
                   disabled: readonly,
-                  allowableTypes: [MultiTypeInputType.FIXED]
+                  allowableTypes: AllowableTypesForCodebaseProperties
                 }}
                 onChange={(value, _valueType, connectorRefType) =>
                   handleCIConnectorRefOnChange({
@@ -471,7 +497,7 @@ function CICodebaseInputSetFormInternal({
                     multiTextInputProps={{
                       multiTextInputProps: {
                         expressions,
-                        allowableTypes: [MultiTypeInputType.FIXED]
+                        allowableTypes: AllowableTypesForCodebaseProperties
                       },
                       disabled: readonly
                     }}
@@ -493,8 +519,7 @@ function CICodebaseInputSetFormInternal({
             (isConnectorRuntimeInput && get(formik?.values, codeBaseInputFieldFormName.connectorRef))) && (
             <>
               <Text
-                color={Color.GREY_600}
-                font={{ size: 'small', weight: 'semi-bold' }}
+                font={{ variation: FontVariation.FORM_LABEL }}
                 tooltipProps={{ dataTooltipId: 'ciCodebaseBuildType' }}
               >
                 {getString('filters.executions.buildType')}
@@ -592,7 +617,7 @@ function CICodebaseInputSetFormInternal({
                 multiTextInputProps={{
                   multiTextInputProps: {
                     expressions,
-                    allowableTypes: [MultiTypeInputType.FIXED],
+                    allowableTypes: AllowableTypesForCodebaseProperties,
                     textProps: { type: 'number' }
                   },
                   disabled: readonly
@@ -618,7 +643,7 @@ function CICodebaseInputSetFormInternal({
                       addClearBtn: true,
                       items: sslVerifyOptions as unknown as SelectOption[]
                     },
-                    allowableTypes: [MultiTypeInputType.FIXED]
+                    allowableTypes: AllowableTypesForCodebaseProperties
                   },
                   disabled: readonly
                 }}
@@ -642,7 +667,7 @@ function CICodebaseInputSetFormInternal({
                   multiTypeInputProps: {
                     expressions,
                     selectProps: { addClearBtn: true, items: prCloneStrategyOptions },
-                    allowableTypes: [MultiTypeInputType.FIXED]
+                    allowableTypes: AllowableTypesForCodebaseProperties
                   },
                   disabled: readonly
                 }}
@@ -680,7 +705,7 @@ function CICodebaseInputSetFormInternal({
                     multiTextInputProps={{
                       multiTextInputProps: {
                         expressions,
-                        allowableTypes: [MultiTypeInputType.FIXED]
+                        allowableTypes: AllowableTypesForCodebaseProperties
                       },
                       disabled: readonly
                     }}
@@ -708,7 +733,7 @@ function CICodebaseInputSetFormInternal({
                     multiTextInputProps={{
                       multiTextInputProps: {
                         expressions,
-                        allowableTypes: [MultiTypeInputType.FIXED]
+                        allowableTypes: AllowableTypesForCodebaseProperties
                       },
                       disabled: readonly
                     }}

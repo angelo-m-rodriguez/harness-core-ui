@@ -48,6 +48,7 @@ import type { StringsMap } from 'stringTypes'
 import { getNameAndIdentifierSchema } from '../StepsValidateUtils'
 import css from './Barrier.module.scss'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 type BarrierData = StepElementConfig
 
@@ -274,7 +275,14 @@ function BarrierVariableStep({
   metadataMap,
   initialValues
 }: BarrierVariableStepProps): React.ReactElement {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const BarrierWidgetWithRef = React.forwardRef(BarrierWidget)

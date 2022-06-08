@@ -1841,7 +1841,7 @@ exports[`Test K8sCanaryDeployStep should render null for StepviewType.template 1
 exports[`Test K8sCanaryDeployStep should render variable view 1`] = `
 <div>
   <div
-    class="variablesListTable"
+    class="variablesListTable variablePaddingL3"
   >
     <div
       class="variableListRow variable-list-row"

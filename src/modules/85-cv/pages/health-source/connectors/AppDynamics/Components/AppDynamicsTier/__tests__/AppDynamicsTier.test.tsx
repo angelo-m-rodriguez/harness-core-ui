@@ -22,7 +22,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={false}
           formikValues={{}}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )
@@ -37,7 +37,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={true}
           formikValues={{}}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )
@@ -52,7 +52,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={false}
           formikValues={{ appDtier: 'tier value', appdApplication: 'app value' }}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )
@@ -70,7 +70,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={false}
           formikValues={{}}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )
@@ -85,7 +85,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={true}
           formikValues={{}}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )
@@ -100,7 +100,7 @@ describe('AppDynamicsTier', () => {
           tierLoading={false}
           formikValues={{ appDtier: '<+input>', appdApplication: '<+input>' }}
           onValidate={onValidate}
-          setCustomField={setCustomField}
+          setAppDTierCustomField={setCustomField}
         />
       </TestWrapper>
     )

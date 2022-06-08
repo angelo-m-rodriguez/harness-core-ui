@@ -8,6 +8,7 @@
 import React from 'react'
 import { render, fireEvent, act, waitFor } from '@testing-library/react'
 import { findPopoverContainer } from '@common/utils/testUtils'
+import * as FeatureFlag from '@common/hooks/useFeatureFlag'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { factory, TestStepWidget } from '@pipeline/components/PipelineSteps/Steps/__tests__/StepTestUtil'
@@ -27,6 +28,9 @@ describe('RunTests Step', () => {
 
   describe('Edit View', () => {
     test('should render properly for AWS VMs build infra', async () => {
+      jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
+        TI_DOTNET: true
+      })
       const { container, getByText } = render(
         <TestStepWidget initialValues={{}} type={StepType.RunTests} stepViewType={StepViewType.Edit} />
       )
@@ -45,9 +49,8 @@ describe('RunTests Step', () => {
         fireEvent.click(dropdownSelects[0])
         const menuItemLabels = findPopoverContainer()?.querySelectorAll('[class*="menuItemLabel"]')
         expect(menuItemLabels?.length).toEqual(2)
-        // Csharp option should only be visible for AWS VMs Build Infra
-        expect(menuItemLabels?.[0].innerHTML).toEqual('Csharp')
-        expect(menuItemLabels?.[1].innerHTML).toEqual('Java')
+        expect(menuItemLabels?.[0].innerHTML).toEqual('ci.runTestsStep.csharp')
+        expect(menuItemLabels?.[1].innerHTML).toEqual('ci.runTestsStep.java')
       })
 
       expect(getByText('common.shell')).toBeTruthy()

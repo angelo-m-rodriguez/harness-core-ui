@@ -58,6 +58,7 @@ import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
 import { Connectors } from '@connectors/constants'
 import { useQueryParams } from '@common/hooks'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 import { isRuntimeInput } from '@pipeline/utils/CIUtils'
 import { PipelineContextType, usePipelineContext } from '../PipelineContext/PipelineContext'
 import { DrawerTypes } from '../PipelineContext/PipelineActions'
@@ -159,6 +160,7 @@ export function RightBar(): JSX.Element {
   const connectorId = getIdentifierFromValue((codebase?.connectorRef as string) || '')
   const initialScope = getScopeFromValue((codebase?.connectorRef as string) || '')
   const { expressions } = useVariablesExpression()
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
 
   const {
     data: connector,
@@ -411,7 +413,7 @@ export function RightBar(): JSX.Element {
         />
       )}
 
-      {enableGovernanceSidebar && contextType === PipelineContextType.Pipeline && (
+      {canUsePolicyEngine && enableGovernanceSidebar && contextType === PipelineContextType.Pipeline && (
         <Button
           className={cx(css.iconButton, {
             [css.selected]: type === DrawerTypes.PolicySets

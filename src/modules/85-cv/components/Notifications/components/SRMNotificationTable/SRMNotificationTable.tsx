@@ -128,7 +128,7 @@ function SRMNotificationTable(props: SRMNotificationTableProps): React.ReactElem
 
     const handleEdit = (): void => {
       const currentNotification = getCurrentNotification(data)
-      ;(column as any).openNotificationModal?.(currentNotification)
+      ;(column as any).openNotificationModal?.(currentNotification, true)
     }
 
     const handleDelete = (): void => {

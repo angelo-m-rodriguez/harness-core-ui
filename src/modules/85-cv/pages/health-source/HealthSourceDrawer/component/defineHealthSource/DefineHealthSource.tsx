@@ -5,7 +5,19 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 import React, { useCallback, useContext, useMemo } from 'react'
-import { Card, Container, Formik, FormikForm, FormInput, Icon, IconName, Layout, Text } from '@wings-software/uicore'
+import {
+  Card,
+  Container,
+  Formik,
+  FormikForm,
+  FormInput,
+  getMultiTypeFromValue,
+  Icon,
+  IconName,
+  Layout,
+  MultiTypeInputType,
+  Text
+} from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import { Color } from '@harness/design-system'
 import cx from 'classnames'
@@ -85,16 +97,12 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // useEffect(() => {
-  //   if (sourceData.selectedDashboards) {
-  //     sourceData.selectedDashboards = new Map()
-  //   }
-  // }, [sourceData?.connectorRef])
   const connectorData = useCallback(
     formik => {
       return (templateType as unknown as TemplateType) === TemplateType.MonitoredService ? (
         <FormMultiTypeConnectorField
-          name={'connectorId'}
+          name={formik?.values?.[ConnectorRefFieldName] ? ConnectorRefFieldName : 'connectorId'}
+          disabled={!formik?.values?.sourceType}
           label={
             <Text color={Color.BLACK} font={'small'} margin={{ bottom: 'small' }}>
               {getString('connectors.selectConnector')}
@@ -103,7 +111,6 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
           placeholder={getString('cv.healthSource.connectors.selectConnector', {
             sourceType: formik?.values?.sourceType
           })}
-          disabled={isEdit ? !!formik?.values?.connectorRef && isEdit : !formik?.values?.sourceType}
           accountIdentifier={accountId}
           projectIdentifier={projectIdentifier}
           orgIdentifier={orgIdentifier}
@@ -139,6 +146,18 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
     },
     [templateType]
   )
+
+  const getDetails = (value: string) => {
+    switch (getMultiTypeFromValue(value)) {
+      case MultiTypeInputType.RUNTIME:
+        return MultiTypeInputType.RUNTIME
+      case MultiTypeInputType.EXPRESSION:
+        return MultiTypeInputType.EXPRESSION
+      default:
+        return value
+    }
+  }
+
   return (
     <BGColorWrapper>
       <Formik
@@ -246,8 +265,10 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
                   </Container>
                   <Text font={'small'} color={Color.BLACK}>
                     {getString('cv.healthSource.seriveEnvironmentNote', {
-                      service: formik?.values?.serviceRef,
-                      environment: formik?.values?.environmentRef
+                      service: templateType ? getDetails(formik?.values?.serviceRef) : formik?.values?.serviceRef,
+                      environment: templateType
+                        ? getDetails(formik?.values?.environmentRef)
+                        : formik?.values?.environmentRef
                     })}
                   </Text>
                 </>

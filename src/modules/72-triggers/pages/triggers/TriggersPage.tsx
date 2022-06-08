@@ -5,11 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import routes from '@common/RouteDefinitions'
 import type { GitQueryParams, PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { useGetPipelineSummary } from 'services/pipeline-ng'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useQueryParams } from '@common/hooks'
@@ -27,7 +28,7 @@ const TriggersPage: React.FC = (): React.ReactElement => {
     }>
   >()
   const history = useHistory()
-  const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+  const { repoIdentifier, branch, connectorRef, repoName, storeType } = useQueryParams<GitQueryParams>()
   const onNewTriggerClick = (val: TriggerDataInterface): void => {
     const { triggerType, sourceRepo, manifestType, artifactType } = val
     history.push(
@@ -43,7 +44,10 @@ const TriggersPage: React.FC = (): React.ReactElement => {
         artifactType,
         module,
         repoIdentifier,
-        branch
+        connectorRef,
+        repoName,
+        branch,
+        storeType
       })
     )
   }
@@ -64,12 +68,20 @@ const TriggersPage: React.FC = (): React.ReactElement => {
 
   const isPipelineInvalid = pipeline?.data?.entityValidityDetails?.valid === false
 
+  const { isGitSimplificationEnabled } = useAppStore()
+  const isGitSyncEnabled = useMemo(() => !!pipeline?.data?.gitDetails?.branch, [pipeline])
+  const gitAwareForTriggerEnabled = useMemo(
+    () => isGitSyncEnabled && isGitSimplificationEnabled,
+    [isGitSyncEnabled, isGitSimplificationEnabled]
+  )
+
   return (
     <TriggersList
       onNewTriggerClick={onNewTriggerClick}
       repoIdentifier={repoIdentifier}
       branch={branch}
       isPipelineInvalid={isPipelineInvalid}
+      gitAwareForTriggerEnabled={gitAwareForTriggerEnabled}
     />
   )
 }

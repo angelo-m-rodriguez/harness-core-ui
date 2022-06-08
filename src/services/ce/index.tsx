@@ -46,6 +46,46 @@ export interface AnomalyFeedbackDTO {
   feedback?: 'TRUE_ANOMALY' | 'FALSE_ANOMALY' | 'NOT_RESPONDED'
 }
 
+export interface AnomalyFilterProperties {
+  aggregations?: CCMAggregation[]
+  awsAccounts?: string[]
+  awsServices?: string[]
+  awsUsageTypes?: string[]
+  azureResources?: string[]
+  azureServiceNames?: string[]
+  azureSubscriptions?: string[]
+  filterType?:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+  gcpProducts?: string[]
+  gcpProjects?: string[]
+  gcpSKUDescriptions?: string[]
+  groupBy?: CCMGroupBy[]
+  k8sClusterNames?: string[]
+  k8sNamespaces?: string[]
+  k8sWorkloadNames?: string[]
+  limit?: number
+  minActualAmount?: number
+  minAnomalousSpend?: number
+  offset?: number
+  orderBy?: CCMSort[]
+  searchText?: string[]
+  tags?: {
+    [key: string]: string
+  }
+  timeFilters?: CCMTimeFilter[]
+}
+
 export interface AnomalyQueryDTO {
   aggregations?: CCMAggregation[]
   filter?: CCMFilter
@@ -268,6 +308,10 @@ export interface AzureCredentialSpec {
   [key: string]: any
 }
 
+export type AzureInheritFromDelegateDetails = AzureCredentialSpec & {
+  auth: AzureMSIAuth
+}
+
 export type AzureKeyVaultConnectorDTO = ConnectorConfigDTO & {
   azureEnvironmentType?: 'AZURE' | 'AZURE_US_GOVERNMENT'
   clientId: string
@@ -279,10 +323,71 @@ export type AzureKeyVaultConnectorDTO = ConnectorConfigDTO & {
   vaultName: string
 }
 
+export interface AzureMSIAuth {
+  [key: string]: any
+}
+
 export type AzureManualDetails = AzureCredentialSpec & {
+  applicationId: string
   auth: AzureAuthDTO
-  clientId: string
   tenantId: string
+}
+
+export interface AzureRepoApiAccess {
+  spec?: AzureRepoApiAccessSpecDTO
+  type: 'Token'
+}
+
+export interface AzureRepoApiAccessSpecDTO {
+  [key: string]: any
+}
+
+export interface AzureRepoAuthentication {
+  spec: AzureRepoCredentialsDTO
+  type: 'Http' | 'Ssh'
+}
+
+export type AzureRepoConnector = ConnectorConfigDTO & {
+  apiAccess?: AzureRepoApiAccess
+  authentication: AzureRepoAuthentication
+  delegateSelectors?: string[]
+  type: 'Account' | 'Repo'
+  url: string
+  validationProject?: string
+  validationRepo?: string
+}
+
+export interface AzureRepoCredentialsDTO {
+  [key: string]: any
+}
+
+export type AzureRepoHttpCredentials = AzureRepoCredentialsDTO & {
+  spec: AzureRepoHttpCredentialsSpecDTO
+  type: 'UsernameToken'
+}
+
+export interface AzureRepoHttpCredentialsSpecDTO {
+  [key: string]: any
+}
+
+export type AzureRepoSshCredentials = AzureRepoCredentialsDTO & {
+  sshKeyRef: string
+}
+
+export type AzureRepoTokenSpec = AzureRepoApiAccessSpecDTO & {
+  tokenRef: string
+}
+
+export type AzureRepoUsernameToken = AzureRepoHttpCredentialsSpecDTO & {
+  tokenRef: string
+  username?: string
+  usernameRef?: string
+}
+
+export type AzureSystemAssignedMSIAuth = AzureAuthCredentialDTO & { [key: string]: any }
+
+export type AzureUserAssignedMSIAuth = AzureAuthCredentialDTO & {
+  clientId: string
 }
 
 export interface BillingExportSpec {
@@ -636,6 +741,31 @@ export interface CCMPerspectiveNotificationChannelsDTO {
   perspectiveName?: string
 }
 
+export interface CCMRecommendationFilterProperties {
+  filterType?:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+  k8sRecommendationFilterPropertiesDTO?: K8sRecommendationFilterPropertiesDTO
+  limit?: number
+  minCost?: number
+  minSaving?: number
+  offset?: number
+  perspectiveFilters?: QLCEViewFilterWrapper[]
+  tags?: {
+    [key: string]: string
+  }
+}
+
 export interface CCMSort {
   field?:
     | 'PERSPECTIVE_ID'
@@ -840,17 +970,33 @@ export interface CEView {
   createdAt?: number
   createdBy?: EmbeddedUser
   dataSources?: ('CLUSTER' | 'AWS' | 'GCP' | 'AZURE' | 'COMMON' | 'CUSTOM' | 'BUSINESS_MAPPING' | 'LABEL')[]
+  folderId?: string
   lastUpdatedAt?: number
   lastUpdatedBy?: EmbeddedUser
   name?: string
   totalCost?: number
   uuid?: string
+  viewPreferences?: ViewPreferences
   viewRules?: ViewRule[]
   viewState?: 'DRAFT' | 'COMPLETED'
   viewTimeRange?: ViewTimeRange
-  viewType?: 'SAMPLE' | 'CUSTOMER' | 'DEFAULT_AZURE' | 'DEFAULT'
+  viewType?: 'SAMPLE' | 'CUSTOMER' | 'DEFAULT'
   viewVersion?: string
   viewVisualization?: ViewVisualization
+}
+
+export interface CEViewFolder {
+  accountId?: string
+  createdAt?: number
+  createdBy?: EmbeddedUser
+  description?: string
+  lastUpdatedAt?: number
+  lastUpdatedBy?: EmbeddedUser
+  name?: string
+  pinned?: boolean
+  tags?: string[]
+  uuid?: string
+  viewType?: 'SAMPLE' | 'CUSTOMER' | 'DEFAULT'
 }
 
 export type ClusterBudgetScope = BudgetScope & {
@@ -990,6 +1136,8 @@ export interface ConnectorInfoDTO {
     | 'ServiceNow'
     | 'ErrorTracking'
     | 'Pdc'
+    | 'AzureRepo'
+    | 'Jenkins'
 }
 
 export interface ConnectorResponse {
@@ -998,6 +1146,7 @@ export interface ConnectorResponse {
   createdAt?: number
   entityValidityDetails?: EntityValidityDetails
   gitDetails?: EntityGitDetails
+  governanceMetadata?: GovernanceMetadata
   harnessManaged?: boolean
   lastModifiedAt?: number
   status?: ConnectorConnectivityDetails
@@ -1095,6 +1244,7 @@ export interface CostDetailsQueryParamsDTO {
     | 'ANOMALY_TIME'
     | 'ACTUAL_COST'
     | 'EXPECTED_COST'
+    | 'ANOMALOUS_SPEND'
     | 'COST_IMPACT'
     | 'ALL'
   )[]
@@ -1108,6 +1258,11 @@ export interface CostDetailsQueryParamsDTO {
 export interface CostTarget {
   name?: string
   rules?: ViewRule[]
+}
+
+export interface CreatePerspectiveFolderDTO {
+  ceViewFolder?: CEViewFolder
+  perspectiveIds?: string[]
 }
 
 export interface CrossAccountAccess {
@@ -1172,6 +1327,24 @@ export type DynatraceConnectorDTO = ConnectorConfigDTO & {
   url: string
 }
 
+export interface ECSRecommendationDTO {
+  clusterName?: string
+  cpuHistogram?: HistogramExp
+  current?: {
+    [key: string]: string
+  }
+  id?: string
+  lastDayCost?: Cost
+  memoryHistogram?: HistogramExp
+  percentileBased?: {
+    [key: string]: {
+      [key: string]: string
+    }
+  }
+  serviceArn?: string
+  serviceName?: string
+}
+
 export type EmailNotificationChannel = CCMNotificationChannel & {
   emails?: string[]
 }
@@ -1185,6 +1358,7 @@ export interface EmbeddedUser {
 
 export interface EntityGitDetails {
   branch?: string
+  commitId?: string
   filePath?: string
   objectId?: string
   repoIdentifier?: string
@@ -1499,9 +1673,11 @@ export interface Error {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -1526,6 +1702,15 @@ export interface Error {
     | 'INVALID_ARTIFACTORY_REGISTRY_REQUEST'
     | 'INVALID_NEXUS_REGISTRY_REQUEST'
     | 'ENTITY_NOT_FOUND'
+    | 'INVALID_AZURE_CONTAINER_REGISTRY_REQUEST'
+    | 'AZURE_AUTHENTICATION_ERROR'
+    | 'AZURE_CONFIG_ERROR'
+    | 'DATA_PROCESSING_ERROR'
+    | 'INVALID_AZURE_AKS_REQUEST'
+    | 'AWS_IAM_ERROR'
+    | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   correlationId?: string
   detailedMessage?: string
   message?: string
@@ -1832,9 +2017,11 @@ export interface Failure {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -1859,10 +2046,47 @@ export interface Failure {
     | 'INVALID_ARTIFACTORY_REGISTRY_REQUEST'
     | 'INVALID_NEXUS_REGISTRY_REQUEST'
     | 'ENTITY_NOT_FOUND'
+    | 'INVALID_AZURE_CONTAINER_REGISTRY_REQUEST'
+    | 'AZURE_AUTHENTICATION_ERROR'
+    | 'AZURE_CONFIG_ERROR'
+    | 'DATA_PROCESSING_ERROR'
+    | 'INVALID_AZURE_AKS_REQUEST'
+    | 'AWS_IAM_ERROR'
+    | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   correlationId?: string
   errors?: ValidationError[]
   message?: string
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface FilterDTO {
+  filterProperties: FilterProperties
+  filterVisibility?: 'EveryOne' | 'OnlyCreator'
+  identifier: string
+  name: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+}
+
+export interface FilterProperties {
+  filterType?:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+  tags?: {
+    [key: string]: string
+  }
 }
 
 export interface FilterStatsDTO {
@@ -1872,7 +2096,7 @@ export interface FilterStatsDTO {
 
 export interface FilterValuesDTO {
   columns?: string[]
-  filter?: K8sRecommendationFilterDTO
+  filter?: CCMRecommendationFilterProperties
 }
 
 export interface GcpBillingExportSpec {
@@ -1888,7 +2112,7 @@ export type GcpCloudCostConnector = ConnectorConfigDTO & {
 }
 
 export type GcpConnector = ConnectorConfigDTO & {
-  credential?: GcpConnectorCredential
+  credential: GcpConnectorCredential
   delegateSelectors?: string[]
 }
 
@@ -2063,6 +2287,10 @@ export type GitlabUsernameToken = GitlabHttpCredentialsSpecDTO & {
   usernameRef?: string
 }
 
+export interface GovernanceMetadata {
+  [key: string]: any
+}
+
 export interface GraphQLQuery {
   operationName?: string
   query?: string
@@ -2151,6 +2379,31 @@ export interface InstanceDetails {
   workload?: string
 }
 
+export interface JenkinsAuthCredentialsDTO {
+  [key: string]: any
+}
+
+export interface JenkinsAuthenticationDTO {
+  spec?: JenkinsAuthCredentialsDTO
+  type: 'UsernamePassword' | 'Anonymous' | 'Bearer Token(HTTP Header)'
+}
+
+export type JenkinsBearerTokenDTO = JenkinsAuthCredentialsDTO & {
+  tokenRef: string
+}
+
+export type JenkinsConnectorDTO = ConnectorConfigDTO & {
+  auth?: JenkinsAuthenticationDTO
+  delegateSelectors?: string[]
+  jenkinsUrl: string
+}
+
+export type JenkinsUserNamePasswordDTO = JenkinsAuthCredentialsDTO & {
+  passwordRef: string
+  username?: string
+  usernameRef?: string
+}
+
 export type JiraConnector = ConnectorConfigDTO & {
   delegateSelectors?: string[]
   jiraUrl: string
@@ -2177,7 +2430,15 @@ export interface K8sRecommendationFilterDTO {
   namespaces?: string[]
   offset?: number
   perspectiveFilters?: QLCEViewFilterWrapper[]
-  resourceTypes?: ('WORKLOAD' | 'NODE_POOL')[]
+  resourceTypes?: ('WORKLOAD' | 'NODE_POOL' | 'ECS_SERVICE')[]
+}
+
+export interface K8sRecommendationFilterPropertiesDTO {
+  clusterNames?: string[]
+  ids?: string[]
+  names?: string[]
+  namespaces?: string[]
+  resourceTypes?: ('WORKLOAD' | 'NODE_POOL' | 'ECS_SERVICE')[]
 }
 
 export interface KubernetesAuthCredentialDTO {
@@ -2251,6 +2512,11 @@ export type MicrosoftTeamsNotificationChannel = CCMNotificationChannel & {
   microsoftTeamsUrl?: string
 }
 
+export interface MovePerspectiveDTO {
+  newFolderId?: string
+  perspectiveIds?: string[]
+}
+
 export type NewRelicConnectorDTO = ConnectorConfigDTO & {
   apiKeyRef: string
   delegateSelectors?: string[]
@@ -2280,6 +2546,13 @@ export type NexusUsernamePasswordAuth = NexusAuthCredentials & {
   usernameRef?: string
 }
 
+export interface NodeErrorInfo {
+  fqn?: string
+  identifier?: string
+  name?: string
+  type?: string
+}
+
 export interface NodePool {
   role?: string
   sumNodes?: number
@@ -2303,6 +2576,26 @@ export interface NodeRecommendationDTO {
 
 export interface Number {
   [key: string]: any
+}
+
+export interface Page {
+  content?: { [key: string]: any }[]
+  empty?: boolean
+  pageIndex?: number
+  pageItemCount?: number
+  pageSize?: number
+  totalItems?: number
+  totalPages?: number
+}
+
+export interface PageFilterDTO {
+  content?: FilterDTO[]
+  empty?: boolean
+  pageIndex?: number
+  pageItemCount?: number
+  pageSize?: number
+  totalItems?: number
+  totalPages?: number
 }
 
 export type PagerDutyConnectorDTO = ConnectorConfigDTO & {
@@ -2346,7 +2639,6 @@ export interface PerspectiveTimeSeriesData {
 export type PhysicalDataCenterConnectorDTO = ConnectorConfigDTO & {
   delegateSelectors?: string[]
   hosts?: HostDTO[]
-  sshKeyRef: string
 }
 
 export type PrometheusConnectorDTO = ConnectorConfigDTO & {
@@ -2359,6 +2651,7 @@ export interface QLCEView {
   createdAt?: number
   createdBy?: string
   dataSources?: ('CLUSTER' | 'AWS' | 'GCP' | 'AZURE' | 'COMMON' | 'CUSTOM' | 'BUSINESS_MAPPING' | 'LABEL')[]
+  folderId?: string
   groupBy?: QLCEViewField
   id?: string
   lastUpdatedAt?: number
@@ -2366,8 +2659,9 @@ export interface QLCEView {
   reportScheduledConfigured?: boolean
   timeRange?: 'LAST_7' | 'LAST_30' | 'LAST_MONTH' | 'CURRENT_MONTH' | 'CUSTOM'
   totalCost?: number
+  viewPreferences?: ViewPreferences
   viewState?: 'DRAFT' | 'COMPLETED'
-  viewType?: 'SAMPLE' | 'CUSTOMER' | 'DEFAULT_AZURE' | 'DEFAULT'
+  viewType?: 'SAMPLE' | 'CUSTOMER' | 'DEFAULT'
 }
 
 export interface QLCEViewEntityStatsDataPoint {
@@ -2465,7 +2759,7 @@ export interface RecommendationItemDTO {
   monthlySaving?: number
   namespace?: string
   resourceName?: string
-  resourceType: 'WORKLOAD' | 'NODE_POOL'
+  resourceType: 'WORKLOAD' | 'NODE_POOL' | 'ECS_SERVICE'
 }
 
 export interface RecommendationOverviewStats {
@@ -2497,6 +2791,7 @@ export interface Reference {
 
 export interface ReferenceDTO {
   accountIdentifier?: string
+  count?: number
   identifier?: string
   name?: string
   orgIdentifier?: string
@@ -2576,6 +2871,13 @@ export interface ResponseCEView {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseCEViewFolder {
+  correlationId?: string
+  data?: CEViewFolder
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseConnectorValidationResult {
   correlationId?: string
   data?: ConnectorValidationResult
@@ -2586,6 +2888,20 @@ export interface ResponseConnectorValidationResult {
 export interface ResponseDouble {
   correlationId?: string
   data?: number
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseECSRecommendationDTO {
+  correlationId?: string
+  data?: ECSRecommendationDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseFilterDTO {
+  correlationId?: string
+  data?: FilterDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -2642,6 +2958,20 @@ export interface ResponseListCCMPerspectiveNotificationChannelsDTO {
 export interface ResponseListCEReportSchedule {
   correlationId?: string
   data?: CEReportSchedule[]
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseListCEView {
+  correlationId?: string
+  data?: CEView[]
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseListCEViewFolder {
+  correlationId?: string
+  data?: CEViewFolder[]
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -2958,9 +3288,11 @@ export interface ResponseMessage {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -2985,6 +3317,15 @@ export interface ResponseMessage {
     | 'INVALID_ARTIFACTORY_REGISTRY_REQUEST'
     | 'INVALID_NEXUS_REGISTRY_REQUEST'
     | 'ENTITY_NOT_FOUND'
+    | 'INVALID_AZURE_CONTAINER_REGISTRY_REQUEST'
+    | 'AZURE_AUTHENTICATION_ERROR'
+    | 'AZURE_CONFIG_ERROR'
+    | 'DATA_PROCESSING_ERROR'
+    | 'INVALID_AZURE_AKS_REQUEST'
+    | 'AWS_IAM_ERROR'
+    | 'AWS_CF_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
   exception?: Throwable
   failureTypes?: (
     | 'EXPIRED'
@@ -3004,6 +3345,13 @@ export interface ResponseMessage {
 export interface ResponseNodeRecommendationDTO {
   correlationId?: string
   data?: NodeRecommendationDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponsePageFilterDTO {
+  correlationId?: string
+  data?: PageFilterDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -3032,6 +3380,20 @@ export interface ResponseRecommendationOverviewStats {
 export interface ResponseRecommendationsDTO {
   correlationId?: string
   data?: RecommendationsDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseServiceInstanceUsageDTO {
+  correlationId?: string
+  data?: ServiceInstanceUsageDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseServiceUsageDTO {
+  correlationId?: string
+  data?: ServiceUsageDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -3114,12 +3476,31 @@ export interface SecretRefData {
   scope?: 'account' | 'org' | 'project' | 'unknown'
 }
 
+export interface ServiceInstanceUsageDTO {
+  accountIdentifier?: string
+  activeServiceInstances?: UsageDataDTO
+  activeServices?: UsageDataDTO
+  cdLicenseType?: 'SERVICES' | 'SERVICE_INSTANCES'
+  module?: string
+  timestamp?: number
+}
+
 export type ServiceNowConnector = ConnectorConfigDTO & {
   delegateSelectors?: string[]
   passwordRef: string
   serviceNowUrl: string
   username?: string
   usernameRef?: string
+}
+
+export interface ServiceUsageDTO {
+  accountIdentifier?: string
+  activeServiceInstances?: UsageDataDTO
+  activeServices?: UsageDataDTO
+  cdLicenseType?: 'SERVICES' | 'SERVICE_INSTANCES'
+  module?: string
+  serviceLicenses?: UsageDataDTO
+  timestamp?: number
 }
 
 export interface SharedCost {
@@ -3296,7 +3677,12 @@ export interface ViewField {
 export type ViewIdCondition = ViewCondition & {
   values?: string[]
   viewField?: ViewField
-  viewOperator?: 'IN' | 'NOT_IN' | 'NOT_NULL' | 'NULL'
+  viewOperator?: 'NOT_IN' | 'IN' | 'EQUALS' | 'NOT_NULL' | 'NULL' | 'LIKE'
+}
+
+export interface ViewPreferences {
+  includeOthers?: boolean
+  includeUnallocatedCost?: boolean
 }
 
 export interface ViewRule {
@@ -3341,7 +3727,19 @@ export interface WorkloadRecommendationDTO {
   lastDayCost?: Cost
 }
 
-export type AnomalyQueryDTORequestBody = AnomalyQueryDTO
+export interface YamlSchemaErrorDTO {
+  fqn?: string
+  hintMessage?: string
+  message?: string
+  stageInfo?: NodeErrorInfo
+  stepInfo?: NodeErrorInfo
+}
+
+export type YamlSchemaErrorWrapperDTO = ErrorMetadataDTO & {
+  schemaErrors?: YamlSchemaErrorDTO[]
+}
+
+export type AnomalyFilterPropertiesRequestBody = AnomalyFilterProperties
 
 export type BudgetRequestBody = Budget
 
@@ -3349,15 +3747,17 @@ export type BusinessMappingRequestBody = BusinessMapping
 
 export type CCMNotificationSettingRequestBody = CCMNotificationSetting
 
+export type CCMRecommendationFilterPropertiesRequestBody = CCMRecommendationFilterProperties
+
 export type CEReportScheduleRequestBody = CEReportSchedule
 
 export type CEViewRequestBody = CEView
 
 export type CostDetailsQueryParamsDTORequestBody = CostDetailsQueryParamsDTO
 
-export type K8sClusterSetupRequestRequestBody = K8sClusterSetupRequest
+export type FilterDTORequestBody = FilterDTO
 
-export type K8sRecommendationFilterDTORequestBody = K8sRecommendationFilterDTO
+export type K8sClusterSetupRequestRequestBody = K8sClusterSetupRequest
 
 export type ViewCustomFieldRequestBody = ViewCustomField
 
@@ -3366,7 +3766,7 @@ export interface ListAnomaliesQueryParams {
 }
 
 export type ListAnomaliesProps = Omit<
-  MutateProps<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyQueryDTORequestBody, void>,
+  MutateProps<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyFilterPropertiesRequestBody, void>,
   'path' | 'verb'
 >
 
@@ -3374,7 +3774,7 @@ export type ListAnomaliesProps = Omit<
  * List Anomalies
  */
 export const ListAnomalies = (props: ListAnomaliesProps) => (
-  <Mutate<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyQueryDTORequestBody, void>
+  <Mutate<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyFilterPropertiesRequestBody, void>
     verb="POST"
     path={`/anomaly`}
     base={getConfig('ccm/api')}
@@ -3383,7 +3783,7 @@ export const ListAnomalies = (props: ListAnomaliesProps) => (
 )
 
 export type UseListAnomaliesProps = Omit<
-  UseMutateProps<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyQueryDTORequestBody, void>,
+  UseMutateProps<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyFilterPropertiesRequestBody, void>,
   'path' | 'verb'
 >
 
@@ -3391,7 +3791,7 @@ export type UseListAnomaliesProps = Omit<
  * List Anomalies
  */
 export const useListAnomalies = (props: UseListAnomaliesProps) =>
-  useMutate<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyQueryDTORequestBody, void>(
+  useMutate<ResponseListAnomalyData, unknown, ListAnomaliesQueryParams, AnomalyFilterPropertiesRequestBody, void>(
     'POST',
     `/anomaly`,
     { base: getConfig('ccm/api'), ...props }
@@ -3431,6 +3831,42 @@ export const useReportAnomalyFeedback = (props: UseReportAnomalyFeedbackProps) =
   useMutate<ResponseBoolean, unknown, ReportAnomalyFeedbackQueryParams, AnomalyFeedbackDTO, void>(
     'PUT',
     `/anomaly/feedback`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
+export interface AnomalyFilterValuesQueryParams {
+  accountIdentifier: string
+}
+
+export type AnomalyFilterValuesProps = Omit<
+  MutateProps<ResponseListFilterStatsDTO, unknown, AnomalyFilterValuesQueryParams, string[], void>,
+  'path' | 'verb'
+>
+
+/**
+ * Filter Values available for given Anomaly-Filter fields
+ */
+export const AnomalyFilterValues = (props: AnomalyFilterValuesProps) => (
+  <Mutate<ResponseListFilterStatsDTO, unknown, AnomalyFilterValuesQueryParams, string[], void>
+    verb="POST"
+    path={`/anomaly/filter-values`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseAnomalyFilterValuesProps = Omit<
+  UseMutateProps<ResponseListFilterStatsDTO, unknown, AnomalyFilterValuesQueryParams, string[], void>,
+  'path' | 'verb'
+>
+
+/**
+ * Filter Values available for given Anomaly-Filter fields
+ */
+export const useAnomalyFilterValues = (props: UseAnomalyFilterValuesProps) =>
+  useMutate<ResponseListFilterStatsDTO, unknown, AnomalyFilterValuesQueryParams, string[], void>(
+    'POST',
+    `/anomaly/filter-values`,
     { base: getConfig('ccm/api'), ...props }
   )
 
@@ -3505,7 +3941,13 @@ export interface GetAnomaliesSummaryQueryParams {
 }
 
 export type GetAnomaliesSummaryProps = Omit<
-  MutateProps<ResponseListAnomalySummary, unknown, GetAnomaliesSummaryQueryParams, AnomalyQueryDTORequestBody, void>,
+  MutateProps<
+    ResponseListAnomalySummary,
+    unknown,
+    GetAnomaliesSummaryQueryParams,
+    AnomalyFilterPropertiesRequestBody,
+    void
+  >,
   'path' | 'verb'
 >
 
@@ -3513,7 +3955,7 @@ export type GetAnomaliesSummaryProps = Omit<
  * Get Anomalies Summary
  */
 export const GetAnomaliesSummary = (props: GetAnomaliesSummaryProps) => (
-  <Mutate<ResponseListAnomalySummary, unknown, GetAnomaliesSummaryQueryParams, AnomalyQueryDTORequestBody, void>
+  <Mutate<ResponseListAnomalySummary, unknown, GetAnomaliesSummaryQueryParams, AnomalyFilterPropertiesRequestBody, void>
     verb="POST"
     path={`/anomaly/summary`}
     base={getConfig('ccm/api')}
@@ -3522,7 +3964,13 @@ export const GetAnomaliesSummary = (props: GetAnomaliesSummaryProps) => (
 )
 
 export type UseGetAnomaliesSummaryProps = Omit<
-  UseMutateProps<ResponseListAnomalySummary, unknown, GetAnomaliesSummaryQueryParams, AnomalyQueryDTORequestBody, void>,
+  UseMutateProps<
+    ResponseListAnomalySummary,
+    unknown,
+    GetAnomaliesSummaryQueryParams,
+    AnomalyFilterPropertiesRequestBody,
+    void
+  >,
   'path' | 'verb'
 >
 
@@ -3530,11 +3978,13 @@ export type UseGetAnomaliesSummaryProps = Omit<
  * Get Anomalies Summary
  */
 export const useGetAnomaliesSummary = (props: UseGetAnomaliesSummaryProps) =>
-  useMutate<ResponseListAnomalySummary, unknown, GetAnomaliesSummaryQueryParams, AnomalyQueryDTORequestBody, void>(
-    'POST',
-    `/anomaly/summary`,
-    { base: getConfig('ccm/api'), ...props }
-  )
+  useMutate<
+    ResponseListAnomalySummary,
+    unknown,
+    GetAnomaliesSummaryQueryParams,
+    AnomalyFilterPropertiesRequestBody,
+    void
+  >('POST', `/anomaly/summary`, { base: getConfig('ccm/api'), ...props })
 
 export interface GetAnomalyWidgetsDataQueryParams {
   accountIdentifier: string
@@ -3545,7 +3995,7 @@ export type GetAnomalyWidgetsDataProps = Omit<
     ResponseListAnomalyWidgetData,
     unknown,
     GetAnomalyWidgetsDataQueryParams,
-    AnomalyQueryDTORequestBody,
+    AnomalyFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -3555,7 +4005,13 @@ export type GetAnomalyWidgetsDataProps = Omit<
  * Get Anomaly Widgets
  */
 export const GetAnomalyWidgetsData = (props: GetAnomalyWidgetsDataProps) => (
-  <Mutate<ResponseListAnomalyWidgetData, unknown, GetAnomalyWidgetsDataQueryParams, AnomalyQueryDTORequestBody, void>
+  <Mutate<
+    ResponseListAnomalyWidgetData,
+    unknown,
+    GetAnomalyWidgetsDataQueryParams,
+    AnomalyFilterPropertiesRequestBody,
+    void
+  >
     verb="POST"
     path={`/anomaly/widgets`}
     base={getConfig('ccm/api')}
@@ -3568,7 +4024,7 @@ export type UseGetAnomalyWidgetsDataProps = Omit<
     ResponseListAnomalyWidgetData,
     unknown,
     GetAnomalyWidgetsDataQueryParams,
-    AnomalyQueryDTORequestBody,
+    AnomalyFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -3578,11 +4034,13 @@ export type UseGetAnomalyWidgetsDataProps = Omit<
  * Get Anomaly Widgets
  */
 export const useGetAnomalyWidgetsData = (props: UseGetAnomalyWidgetsDataProps) =>
-  useMutate<ResponseListAnomalyWidgetData, unknown, GetAnomalyWidgetsDataQueryParams, AnomalyQueryDTORequestBody, void>(
-    'POST',
-    `/anomaly/widgets`,
-    { base: getConfig('ccm/api'), ...props }
-  )
+  useMutate<
+    ResponseListAnomalyWidgetData,
+    unknown,
+    GetAnomalyWidgetsDataQueryParams,
+    AnomalyFilterPropertiesRequestBody,
+    void
+  >('POST', `/anomaly/widgets`, { base: getConfig('ccm/api'), ...props })
 
 export interface ListBudgetsForAccountQueryParams {
   accountIdentifier: string
@@ -4383,6 +4841,233 @@ export const useCostdetailttimeseries = (props: UseCostdetailttimeseriesProps) =
     void
   >('POST', `/costdetails/timeseriesformat`, { base: getConfig('ccm/api'), ...props })
 
+export interface GetFilterListQueryParams {
+  pageIndex?: number
+  pageSize?: number
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  type:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+}
+
+export type GetFilterListProps = Omit<
+  GetProps<ResponsePageFilterDTO, Failure | Error, GetFilterListQueryParams, void>,
+  'path'
+>
+
+/**
+ * Get Filter
+ */
+export const GetFilterList = (props: GetFilterListProps) => (
+  <Get<ResponsePageFilterDTO, Failure | Error, GetFilterListQueryParams, void>
+    path={`/filters`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetFilterListProps = Omit<
+  UseGetProps<ResponsePageFilterDTO, Failure | Error, GetFilterListQueryParams, void>,
+  'path'
+>
+
+/**
+ * Get Filter
+ */
+export const useGetFilterList = (props: UseGetFilterListProps) =>
+  useGet<ResponsePageFilterDTO, Failure | Error, GetFilterListQueryParams, void>(`/filters`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface PostFilterQueryParams {
+  accountIdentifier: string
+}
+
+export type PostFilterProps = Omit<
+  MutateProps<ResponseFilterDTO, Failure | Error, PostFilterQueryParams, FilterDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Create a Filter
+ */
+export const PostFilter = (props: PostFilterProps) => (
+  <Mutate<ResponseFilterDTO, Failure | Error, PostFilterQueryParams, FilterDTORequestBody, void>
+    verb="POST"
+    path={`/filters`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UsePostFilterProps = Omit<
+  UseMutateProps<ResponseFilterDTO, Failure | Error, PostFilterQueryParams, FilterDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Create a Filter
+ */
+export const usePostFilter = (props: UsePostFilterProps) =>
+  useMutate<ResponseFilterDTO, Failure | Error, PostFilterQueryParams, FilterDTORequestBody, void>('POST', `/filters`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface UpdateFilterQueryParams {
+  accountIdentifier: string
+}
+
+export type UpdateFilterProps = Omit<
+  MutateProps<ResponseFilterDTO, Failure | Error, UpdateFilterQueryParams, FilterDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Update a Filter
+ */
+export const UpdateFilter = (props: UpdateFilterProps) => (
+  <Mutate<ResponseFilterDTO, Failure | Error, UpdateFilterQueryParams, FilterDTORequestBody, void>
+    verb="PUT"
+    path={`/filters`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateFilterProps = Omit<
+  UseMutateProps<ResponseFilterDTO, Failure | Error, UpdateFilterQueryParams, FilterDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Update a Filter
+ */
+export const useUpdateFilter = (props: UseUpdateFilterProps) =>
+  useMutate<ResponseFilterDTO, Failure | Error, UpdateFilterQueryParams, FilterDTORequestBody, void>(
+    'PUT',
+    `/filters`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
+export interface DeleteFilterQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  type:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+}
+
+export type DeleteFilterProps = Omit<
+  MutateProps<ResponseBoolean, Failure | Error, DeleteFilterQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete a filter
+ */
+export const DeleteFilter = (props: DeleteFilterProps) => (
+  <Mutate<ResponseBoolean, Failure | Error, DeleteFilterQueryParams, string, void>
+    verb="DELETE"
+    path={`/filters`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseDeleteFilterProps = Omit<
+  UseMutateProps<ResponseBoolean, Failure | Error, DeleteFilterQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete a filter
+ */
+export const useDeleteFilter = (props: UseDeleteFilterProps) =>
+  useMutate<ResponseBoolean, Failure | Error, DeleteFilterQueryParams, string, void>('DELETE', `/filters`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface GetFilterQueryParams {
+  accountIdentifier: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  type:
+    | 'Connector'
+    | 'DelegateProfile'
+    | 'Delegate'
+    | 'PipelineSetup'
+    | 'PipelineExecution'
+    | 'Deployment'
+    | 'Audit'
+    | 'Template'
+    | 'EnvironmentGroup'
+    | 'FileStore'
+    | 'CCMRecommendation'
+    | 'Anomaly'
+}
+
+export interface GetFilterPathParams {
+  identifier: string
+}
+
+export type GetFilterProps = Omit<
+  GetProps<ResponseFilterDTO, Failure | Error, GetFilterQueryParams, GetFilterPathParams>,
+  'path'
+> &
+  GetFilterPathParams
+
+/**
+ * Get Filter
+ */
+export const GetFilter = ({ identifier, ...props }: GetFilterProps) => (
+  <Get<ResponseFilterDTO, Failure | Error, GetFilterQueryParams, GetFilterPathParams>
+    path={`/filters/${identifier}`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetFilterProps = Omit<
+  UseGetProps<ResponseFilterDTO, Failure | Error, GetFilterQueryParams, GetFilterPathParams>,
+  'path'
+> &
+  GetFilterPathParams
+
+/**
+ * Get Filter
+ */
+export const useGetFilter = ({ identifier, ...props }: UseGetFilterProps) =>
+  useGet<ResponseFilterDTO, Failure | Error, GetFilterQueryParams, GetFilterPathParams>(
+    (paramsInPath: GetFilterPathParams) => `/filters/${paramsInPath.identifier}`,
+    { base: getConfig('ccm/api'), pathParams: { identifier }, ...props }
+  )
+
 export interface Execute1Response {
   [key: string]: { [key: string]: any }
 }
@@ -4394,12 +5079,12 @@ export interface Execute1QueryParams {
 }
 
 export type Execute1Props = Omit<
-  MutateProps<Execute1Response, unknown, Execute1QueryParams, void, void>,
+  MutateProps<Execute1Response, unknown, Execute1QueryParams, GraphQLQuery, void>,
   'path' | 'verb'
 >
 
 export const Execute1 = (props: Execute1Props) => (
-  <Mutate<Execute1Response, unknown, Execute1QueryParams, void, void>
+  <Mutate<Execute1Response, unknown, Execute1QueryParams, GraphQLQuery, void>
     verb="POST"
     path={`/graphql`}
     base={getConfig('ccm/api')}
@@ -4408,12 +5093,12 @@ export const Execute1 = (props: Execute1Props) => (
 )
 
 export type UseExecute1Props = Omit<
-  UseMutateProps<Execute1Response, unknown, Execute1QueryParams, void, void>,
+  UseMutateProps<Execute1Response, unknown, Execute1QueryParams, GraphQLQuery, void>,
   'path' | 'verb'
 >
 
 export const useExecute1 = (props: UseExecute1Props) =>
-  useMutate<Execute1Response, unknown, Execute1QueryParams, void, void>('POST', `/graphql`, {
+  useMutate<Execute1Response, unknown, Execute1QueryParams, GraphQLQuery, void>('POST', `/graphql`, {
     base: getConfig('ccm/api'),
     ...props
   })
@@ -5287,6 +5972,219 @@ export const useGetLastPeriodCost = (props: UseGetLastPeriodCostProps) =>
     ...props
   })
 
+export interface GetFoldersQueryParams {
+  accountIdentifier: string
+}
+
+export type GetFoldersProps = Omit<GetProps<ResponseListCEViewFolder, unknown, GetFoldersQueryParams, void>, 'path'>
+
+/**
+ * Get folders for account
+ */
+export const GetFolders = (props: GetFoldersProps) => (
+  <Get<ResponseListCEViewFolder, unknown, GetFoldersQueryParams, void>
+    path={`/perspectiveFolders`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetFoldersProps = Omit<
+  UseGetProps<ResponseListCEViewFolder, unknown, GetFoldersQueryParams, void>,
+  'path'
+>
+
+/**
+ * Get folders for account
+ */
+export const useGetFolders = (props: UseGetFoldersProps) =>
+  useGet<ResponseListCEViewFolder, unknown, GetFoldersQueryParams, void>(`/perspectiveFolders`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface UpdateFolderQueryParams {
+  accountIdentifier: string
+}
+
+export type UpdateFolderProps = Omit<
+  MutateProps<ResponseCEViewFolder, unknown, UpdateFolderQueryParams, CEViewFolder, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Update a folder
+ */
+export const UpdateFolder = (props: UpdateFolderProps) => (
+  <Mutate<ResponseCEViewFolder, unknown, UpdateFolderQueryParams, CEViewFolder, void>
+    verb="PUT"
+    path={`/perspectiveFolders`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateFolderProps = Omit<
+  UseMutateProps<ResponseCEViewFolder, unknown, UpdateFolderQueryParams, CEViewFolder, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Update a folder
+ */
+export const useUpdateFolder = (props: UseUpdateFolderProps) =>
+  useMutate<ResponseCEViewFolder, unknown, UpdateFolderQueryParams, CEViewFolder, void>('PUT', `/perspectiveFolders`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface CreatePerspectiveFolderQueryParams {
+  accountIdentifier: string
+}
+
+export type CreatePerspectiveFolderProps = Omit<
+  MutateProps<ResponseCEViewFolder, unknown, CreatePerspectiveFolderQueryParams, CreatePerspectiveFolderDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Create perspective folder
+ */
+export const CreatePerspectiveFolder = (props: CreatePerspectiveFolderProps) => (
+  <Mutate<ResponseCEViewFolder, unknown, CreatePerspectiveFolderQueryParams, CreatePerspectiveFolderDTO, void>
+    verb="POST"
+    path={`/perspectiveFolders/create`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseCreatePerspectiveFolderProps = Omit<
+  UseMutateProps<ResponseCEViewFolder, unknown, CreatePerspectiveFolderQueryParams, CreatePerspectiveFolderDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Create perspective folder
+ */
+export const useCreatePerspectiveFolder = (props: UseCreatePerspectiveFolderProps) =>
+  useMutate<ResponseCEViewFolder, unknown, CreatePerspectiveFolderQueryParams, CreatePerspectiveFolderDTO, void>(
+    'POST',
+    `/perspectiveFolders/create`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
+export interface MovePerspectivesQueryParams {
+  accountIdentifier: string
+}
+
+export type MovePerspectivesProps = Omit<
+  MutateProps<ResponseListCEView, unknown, MovePerspectivesQueryParams, MovePerspectiveDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Move perspectives
+ */
+export const MovePerspectives = (props: MovePerspectivesProps) => (
+  <Mutate<ResponseListCEView, unknown, MovePerspectivesQueryParams, MovePerspectiveDTO, void>
+    verb="POST"
+    path={`/perspectiveFolders/movePerspectives`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseMovePerspectivesProps = Omit<
+  UseMutateProps<ResponseListCEView, unknown, MovePerspectivesQueryParams, MovePerspectiveDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Move perspectives
+ */
+export const useMovePerspectives = (props: UseMovePerspectivesProps) =>
+  useMutate<ResponseListCEView, unknown, MovePerspectivesQueryParams, MovePerspectiveDTO, void>(
+    'POST',
+    `/perspectiveFolders/movePerspectives`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
+export interface DeleteFolderQueryParams {
+  accountIdentifier: string
+}
+
+export type DeleteFolderProps = Omit<
+  MutateProps<ResponseBoolean, unknown, DeleteFolderQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete folder
+ */
+export const DeleteFolder = (props: DeleteFolderProps) => (
+  <Mutate<ResponseBoolean, unknown, DeleteFolderQueryParams, string, void>
+    verb="DELETE"
+    path={`/perspectiveFolders`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseDeleteFolderProps = Omit<
+  UseMutateProps<ResponseBoolean, unknown, DeleteFolderQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Delete folder
+ */
+export const useDeleteFolder = (props: UseDeleteFolderProps) =>
+  useMutate<ResponseBoolean, unknown, DeleteFolderQueryParams, string, void>('DELETE', `/perspectiveFolders`, {
+    base: getConfig('ccm/api'),
+    ...props
+  })
+
+export interface GetAllFolderPerspectivesQueryParams {
+  accountIdentifier: string
+}
+
+export interface GetAllFolderPerspectivesPathParams {
+  folderId: string
+}
+
+export type GetAllFolderPerspectivesProps = Omit<
+  GetProps<ResponseListQLCEView, unknown, GetAllFolderPerspectivesQueryParams, GetAllFolderPerspectivesPathParams>,
+  'path'
+> &
+  GetAllFolderPerspectivesPathParams
+
+/**
+ * Get All perspectives in a folder
+ */
+export const GetAllFolderPerspectives = ({ folderId, ...props }: GetAllFolderPerspectivesProps) => (
+  <Get<ResponseListQLCEView, unknown, GetAllFolderPerspectivesQueryParams, GetAllFolderPerspectivesPathParams>
+    path={`/perspectiveFolders/${folderId}/perspectives`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetAllFolderPerspectivesProps = Omit<
+  UseGetProps<ResponseListQLCEView, unknown, GetAllFolderPerspectivesQueryParams, GetAllFolderPerspectivesPathParams>,
+  'path'
+> &
+  GetAllFolderPerspectivesPathParams
+
+/**
+ * Get All perspectives in a folder
+ */
+export const useGetAllFolderPerspectives = ({ folderId, ...props }: UseGetAllFolderPerspectivesProps) =>
+  useGet<ResponseListQLCEView, unknown, GetAllFolderPerspectivesQueryParams, GetAllFolderPerspectivesPathParams>(
+    (paramsInPath: GetAllFolderPerspectivesPathParams) => `/perspectiveFolders/${paramsInPath.folderId}/perspectives`,
+    { base: getConfig('ccm/api'), pathParams: { folderId }, ...props }
+  )
+
 export interface DeleteReportSettingQueryParams {
   reportId?: string
   perspectiveId?: string
@@ -5452,6 +6350,43 @@ export const useUpdateReportSetting = ({ accountIdentifier, ...props }: UseUpdat
     { base: getConfig('ccm/api'), pathParams: { accountIdentifier }, ...props }
   )
 
+export interface EcsRecommendationDetailQueryParams {
+  accountIdentifier: string
+  id: string
+  from?: string
+  to?: string
+}
+
+export type EcsRecommendationDetailProps = Omit<
+  GetProps<ResponseECSRecommendationDTO, unknown, EcsRecommendationDetailQueryParams, void>,
+  'path'
+>
+
+/**
+ * ECS Recommendation Details
+ */
+export const EcsRecommendationDetail = (props: EcsRecommendationDetailProps) => (
+  <Get<ResponseECSRecommendationDTO, unknown, EcsRecommendationDetailQueryParams, void>
+    path={`/recommendation/details/ecs-service`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseEcsRecommendationDetailProps = Omit<
+  UseGetProps<ResponseECSRecommendationDTO, unknown, EcsRecommendationDetailQueryParams, void>,
+  'path'
+>
+
+/**
+ * ECS Recommendation Details
+ */
+export const useEcsRecommendationDetail = (props: UseEcsRecommendationDetailProps) =>
+  useGet<ResponseECSRecommendationDTO, unknown, EcsRecommendationDetailQueryParams, void>(
+    `/recommendation/details/ecs-service`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
 export interface NodeRecommendationDetailQueryParams {
   accountIdentifier: string
   id: string
@@ -5529,7 +6464,13 @@ export interface RecommendationsCountQueryParams {
 }
 
 export type RecommendationsCountProps = Omit<
-  MutateProps<ResponseInteger, unknown, RecommendationsCountQueryParams, K8sRecommendationFilterDTORequestBody, void>,
+  MutateProps<
+    ResponseInteger,
+    unknown,
+    RecommendationsCountQueryParams,
+    CCMRecommendationFilterPropertiesRequestBody,
+    void
+  >,
   'path' | 'verb'
 >
 
@@ -5537,7 +6478,7 @@ export type RecommendationsCountProps = Omit<
  * Recommendations count
  */
 export const RecommendationsCount = (props: RecommendationsCountProps) => (
-  <Mutate<ResponseInteger, unknown, RecommendationsCountQueryParams, K8sRecommendationFilterDTORequestBody, void>
+  <Mutate<ResponseInteger, unknown, RecommendationsCountQueryParams, CCMRecommendationFilterPropertiesRequestBody, void>
     verb="POST"
     path={`/recommendation/overview/count`}
     base={getConfig('ccm/api')}
@@ -5550,7 +6491,7 @@ export type UseRecommendationsCountProps = Omit<
     ResponseInteger,
     unknown,
     RecommendationsCountQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -5560,11 +6501,13 @@ export type UseRecommendationsCountProps = Omit<
  * Recommendations count
  */
 export const useRecommendationsCount = (props: UseRecommendationsCountProps) =>
-  useMutate<ResponseInteger, unknown, RecommendationsCountQueryParams, K8sRecommendationFilterDTORequestBody, void>(
-    'POST',
-    `/recommendation/overview/count`,
-    { base: getConfig('ccm/api'), ...props }
-  )
+  useMutate<
+    ResponseInteger,
+    unknown,
+    RecommendationsCountQueryParams,
+    CCMRecommendationFilterPropertiesRequestBody,
+    void
+  >('POST', `/recommendation/overview/count`, { base: getConfig('ccm/api'), ...props })
 
 export interface RecommendationFilterValuesQueryParams {
   accountIdentifier: string
@@ -5611,7 +6554,7 @@ export type ListRecommendationsProps = Omit<
     ResponseRecommendationsDTO,
     unknown,
     ListRecommendationsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -5625,7 +6568,7 @@ export const ListRecommendations = (props: ListRecommendationsProps) => (
     ResponseRecommendationsDTO,
     unknown,
     ListRecommendationsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >
     verb="POST"
@@ -5640,7 +6583,7 @@ export type UseListRecommendationsProps = Omit<
     ResponseRecommendationsDTO,
     unknown,
     ListRecommendationsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -5654,7 +6597,7 @@ export const useListRecommendations = (props: UseListRecommendationsProps) =>
     ResponseRecommendationsDTO,
     unknown,
     ListRecommendationsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >('POST', `/recommendation/overview/list`, { base: getConfig('ccm/api'), ...props })
 
@@ -5667,7 +6610,7 @@ export type RecommendationStatsProps = Omit<
     ResponseRecommendationOverviewStats,
     unknown,
     RecommendationStatsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -5681,7 +6624,7 @@ export const RecommendationStats = (props: RecommendationStatsProps) => (
     ResponseRecommendationOverviewStats,
     unknown,
     RecommendationStatsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >
     verb="POST"
@@ -5696,7 +6639,7 @@ export type UseRecommendationStatsProps = Omit<
     ResponseRecommendationOverviewStats,
     unknown,
     RecommendationStatsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >,
   'path' | 'verb'
@@ -5710,7 +6653,7 @@ export const useRecommendationStats = (props: UseRecommendationStatsProps) =>
     ResponseRecommendationOverviewStats,
     unknown,
     RecommendationStatsQueryParams,
-    K8sRecommendationFilterDTORequestBody,
+    CCMRecommendationFilterPropertiesRequestBody,
     void
   >('POST', `/recommendation/overview/stats`, { base: getConfig('ccm/api'), ...props })
 
@@ -5783,6 +6726,76 @@ export const useGetConnectorDetails = (props: UseGetConnectorDetailsProps) =>
     base: getConfig('ccm/api'),
     ...props
   })
+
+export interface GetCDLicenseUsageForServiceInstancesQueryParams {
+  accountIdentifier?: string
+  timestamp?: number
+}
+
+export type GetCDLicenseUsageForServiceInstancesProps = Omit<
+  GetProps<ResponseServiceInstanceUsageDTO, Failure | Error, GetCDLicenseUsageForServiceInstancesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets License Usage By Timestamp for Service Instances in CD Module
+ */
+export const GetCDLicenseUsageForServiceInstances = (props: GetCDLicenseUsageForServiceInstancesProps) => (
+  <Get<ResponseServiceInstanceUsageDTO, Failure | Error, GetCDLicenseUsageForServiceInstancesQueryParams, void>
+    path={`/usage/CD/serviceInstancesLicense`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetCDLicenseUsageForServiceInstancesProps = Omit<
+  UseGetProps<ResponseServiceInstanceUsageDTO, Failure | Error, GetCDLicenseUsageForServiceInstancesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets License Usage By Timestamp for Service Instances in CD Module
+ */
+export const useGetCDLicenseUsageForServiceInstances = (props: UseGetCDLicenseUsageForServiceInstancesProps) =>
+  useGet<ResponseServiceInstanceUsageDTO, Failure | Error, GetCDLicenseUsageForServiceInstancesQueryParams, void>(
+    `/usage/CD/serviceInstancesLicense`,
+    { base: getConfig('ccm/api'), ...props }
+  )
+
+export interface GetCDLicenseUsageForServicesQueryParams {
+  accountIdentifier?: string
+  timestamp?: number
+}
+
+export type GetCDLicenseUsageForServicesProps = Omit<
+  GetProps<ResponseServiceUsageDTO, Failure | Error, GetCDLicenseUsageForServicesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets License Usage By Timestamp for Services in CD Module
+ */
+export const GetCDLicenseUsageForServices = (props: GetCDLicenseUsageForServicesProps) => (
+  <Get<ResponseServiceUsageDTO, Failure | Error, GetCDLicenseUsageForServicesQueryParams, void>
+    path={`/usage/CD/servicesLicense`}
+    base={getConfig('ccm/api')}
+    {...props}
+  />
+)
+
+export type UseGetCDLicenseUsageForServicesProps = Omit<
+  UseGetProps<ResponseServiceUsageDTO, Failure | Error, GetCDLicenseUsageForServicesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets License Usage By Timestamp for Services in CD Module
+ */
+export const useGetCDLicenseUsageForServices = (props: UseGetCDLicenseUsageForServicesProps) =>
+  useGet<ResponseServiceUsageDTO, Failure | Error, GetCDLicenseUsageForServicesQueryParams, void>(
+    `/usage/CD/servicesLicense`,
+    { base: getConfig('ccm/api'), ...props }
+  )
 
 export interface GetLicenseUsageQueryParams {
   accountIdentifier?: string

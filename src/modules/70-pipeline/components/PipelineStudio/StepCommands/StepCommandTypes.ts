@@ -34,7 +34,7 @@ export interface StepCommandsProps {
   step: StepOrStepGroupOrTemplateStepData
   onChange?: (step: Partial<Values>) => void
   onUpdate: (step: Partial<Values>) => void
-  onUseTemplate?: (selectedTemplate?: TemplateSummaryResponse) => void
+  onUseTemplate?: (selectedTemplate: TemplateSummaryResponse) => void
   onRemoveTemplate?: () => Promise<void>
   stepsFactory: AbstractStepFactory
   isStepGroup: boolean

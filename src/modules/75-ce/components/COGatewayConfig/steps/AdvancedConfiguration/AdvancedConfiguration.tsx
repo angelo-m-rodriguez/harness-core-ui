@@ -42,8 +42,6 @@ const AdvancedConfiguration: React.FC<AdvancedConfigurationProps> = props => {
       : AdvancedConfigTabs.deps
   )
 
-  const isK8sSelected = props.selectedResource === RESOURCES.KUBERNETES
-  const isEcsSelected = props.selectedResource === RESOURCES.ECS
   const isAwsProvider = Utils.isProviderAws(props.gatewayDetails.provider)
 
   const handleTabChange = (id: string) => {
@@ -70,35 +68,35 @@ const AdvancedConfiguration: React.FC<AdvancedConfigurationProps> = props => {
     >
       <Layout.Vertical spacing="medium">
         <Layout.Horizontal spacing={'large'}>
-          {(isK8sSelected || isEcsSelected) && (
-            <Toggle
-              label={getString('ce.co.autoStoppingRule.review.hideProgressPage')}
-              checked={props.gatewayDetails.opts.hide_progress_page}
-              onToggle={isToggled => {
-                props.setGatewayDetails({
-                  ...props.gatewayDetails,
-                  opts: { ...props.gatewayDetails.opts, hide_progress_page: isToggled }
-                })
-              }}
-              data-testid={'progressPageViewToggle'}
-            />
-          )}
+          <Toggle
+            label={getString('ce.co.autoStoppingRule.review.hideProgressPage')}
+            checked={props.gatewayDetails.opts.hide_progress_page}
+            onToggle={isToggled => {
+              props.setGatewayDetails({
+                ...props.gatewayDetails,
+                opts: { ...props.gatewayDetails.opts, hide_progress_page: isToggled }
+              })
+            }}
+            data-testid={'progressPageViewToggle'}
+          />
           {dryRunModeEnabled && (
-            <Layout.Horizontal flex={{ alignItems: 'baseline' }}>
-              <Toggle
-                label={getString('ce.co.dryRunLabel')}
-                checked={props.gatewayDetails.opts.dry_run}
-                onToggle={isToggled => {
-                  props.setGatewayDetails({
-                    ...props.gatewayDetails,
-                    opts: { ...props.gatewayDetails.opts, dry_run: isToggled }
-                  })
-                }}
-                data-testid={'dryRunToggle'}
-                data-tooltip-id="dryRunToggleTooltip"
-              />
-              <HarnessDocTooltip tooltipId="dryRunToggleTooltip" useStandAlone={true} />
-            </Layout.Horizontal>
+            <div>
+              <Layout.Horizontal flex={{ alignItems: 'baseline' }}>
+                <Toggle
+                  label={getString('ce.co.dryRunLabel')}
+                  checked={props.gatewayDetails.opts.dry_run}
+                  onToggle={isToggled => {
+                    props.setGatewayDetails({
+                      ...props.gatewayDetails,
+                      opts: { ...props.gatewayDetails.opts, dry_run: isToggled }
+                    })
+                  }}
+                  data-testid={'dryRunToggle'}
+                  data-tooltip-id="dryRunToggleTooltip"
+                />
+                <HarnessDocTooltip tooltipId="dryRunToggleTooltip" useStandAlone={true} />
+              </Layout.Horizontal>
+            </div>
           )}
         </Layout.Horizontal>
         <Tabs id="advancedConfigTabs" selectedTabId={selectedTab} onChange={handleTabChange}>

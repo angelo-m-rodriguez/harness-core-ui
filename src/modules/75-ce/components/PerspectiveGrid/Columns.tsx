@@ -23,7 +23,7 @@ import CostTrend from '@ce/common/CostTrend'
 import { CE_COLOR_CONST } from '../CEChart/CEChartOptions'
 import css from './PerspectiveGrid.module.scss'
 
-type AggregationFunction = {
+export type AggregationFunction = {
   operationType: QlceViewAggregateOperation
   columnName: string
 }
@@ -216,7 +216,7 @@ export type Column = {
   Cell?: (props: CellProps<GridData>) => ReactNode
 }
 
-const COLUMNS: Record<string, Column> = {
+export const COLUMNS: Record<string, Column> = {
   NAME: {
     Header: 'Name',
     accessor: 'name',

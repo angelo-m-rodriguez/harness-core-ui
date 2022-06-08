@@ -51,6 +51,7 @@ const ServiceNowConnector: React.FC<CreateServiceNowConnectorProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         mock={props.mock}
+        helpPanelReferenceId="ServiceNowConnectorOverview"
       />
       <ServiceNowDetailsForm
         name={getString('details')}
@@ -70,6 +71,7 @@ const ServiceNowConnector: React.FC<CreateServiceNowConnectorProps> = props => {
         onConnectorCreated={props.onConnectorCreated}
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -79,6 +81,7 @@ const ServiceNowConnector: React.FC<CreateServiceNowConnectorProps> = props => {
         type={Connectors.SERVICE_NOW}
         onClose={props.onClose}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

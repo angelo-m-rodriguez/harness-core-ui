@@ -44,7 +44,10 @@ export enum Types {
   ImagePullPolicy,
   Shell,
   Numeric,
-  KeyValue
+  KeyValue,
+  BuildEnvironment,
+  FrameworkVersion,
+  BuildTool
 }
 
 interface Field {

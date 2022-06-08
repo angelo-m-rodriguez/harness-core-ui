@@ -6,6 +6,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-duplicate-imports */
 declare const __DEV__: boolean
 declare const Bugsnag: any
 declare const __BUGSNAG_RELEASE_VERSION__: string
@@ -92,6 +93,12 @@ declare module 'gitopsui/MicroFrontendApp' {
   export default ChildApp
 }
 
+declare module 'chaos/MicroFrontendApp' {
+  import type { ChildAppComponent } from './microfrontends'
+  const ChildApp: ChildAppComponent
+  export default ChildApp
+}
+
 declare module 'errortracking/App' {
   const ChildApp: ChildAppComponent
   export default ChildApp
@@ -99,6 +106,12 @@ declare module 'errortracking/App' {
 
 declare module 'sto/App' {
   const ChildApp: ChildAppComponent
+  export default ChildApp
+}
+
+declare module 'sto/PipelineSecurityView' {
+  import type { PipelineSecurityViewProps } from '@pipeline/interfaces/STOApp'
+  const ChildApp: React.ComponentType<PipelineSecurityViewProps>
   export default ChildApp
 }
 

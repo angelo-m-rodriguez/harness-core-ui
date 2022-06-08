@@ -13,6 +13,7 @@ import { NavLink, useParams, useLocation, matchPath } from 'react-router-dom'
 import routes from '@common/RouteDefinitions'
 import { useQueryParams, useUpdateQueryParams } from '@common/hooks'
 import { accountPathProps, executionPathProps, pipelineModuleParams } from '@common/utils/routeUtils'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 import type { ExecutionPathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import type { CIWebhookInfoDTO } from 'services/ci'
 import type { ExecutionQueryParams } from '@pipeline/utils/executionUtils'
@@ -52,6 +53,7 @@ export default function ExecutionTabs(props: ExecutionTabsProps): React.ReactEle
   const opaBasedGovernanceEnabled = useFeatureFlag(FeatureFlag.OPA_PIPELINE_GOVERNANCE)
   const stoCDPipelineSecurityEnabled = useFeatureFlag(FeatureFlag.STO_CD_PIPELINE_SECURITY)
   const stoCIPipelineSecurityEnabled = useFeatureFlag(FeatureFlag.STO_CI_PIPELINE_SECURITY)
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
 
   const routeParams = { ...accountPathProps, ...executionPathProps, ...pipelineModuleParams }
   const isLogView =
@@ -156,7 +158,7 @@ export default function ExecutionTabs(props: ExecutionTabsProps): React.ReactEle
     })
   }
 
-  if (opaBasedGovernanceEnabled) {
+  if (canUsePolicyEngine && opaBasedGovernanceEnabled) {
     tabList.push({
       id: TAB_ID_MAP.POLICY_EVALUATIONS,
       title: (

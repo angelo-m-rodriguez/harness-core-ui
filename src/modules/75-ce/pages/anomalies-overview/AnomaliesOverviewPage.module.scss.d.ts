@@ -16,6 +16,7 @@ declare const styles: {
   readonly rowGap8: string
   readonly searchFilterWrapper: string
   readonly searchInput: string
+  readonly separator: string
   readonly sortingColumn: string
   readonly sortingIcon: string
   readonly summaryCharts: string

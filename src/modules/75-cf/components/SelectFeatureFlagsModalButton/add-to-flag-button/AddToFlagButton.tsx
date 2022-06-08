@@ -6,7 +6,7 @@
  */
 
 import React, { ReactElement } from 'react'
-import type { ButtonProps as CoreButtonProps } from '@harness/uicore'
+import { ButtonProps as CoreButtonProps, ButtonVariation } from '@harness/uicore'
 import usePlanEnforcement from '@cf/hooks/usePlanEnforcement'
 import RbacButton from '@rbac/components/Button/Button'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
@@ -38,6 +38,7 @@ const AddToFlagButton = (props: AddToFlagButtonProps): ReactElement => {
     <RbacButton
       data-testid="add-feature-flags-button"
       onClick={handleClick}
+      variation={ButtonVariation.LINK}
       {...props}
       permission={{
         resource: { resourceType: ResourceType.ENVIRONMENT, resourceIdentifier: activeEnvironment },

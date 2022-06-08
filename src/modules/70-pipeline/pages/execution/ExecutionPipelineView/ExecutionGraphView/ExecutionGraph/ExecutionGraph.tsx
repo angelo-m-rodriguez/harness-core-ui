@@ -195,7 +195,7 @@ export default function ExecutionGraph(props: ExecutionGraphProps): React.ReactE
         event,
         data: stage
       },
-      { useArrows: true, darkMode: false, fixedPosition: false }
+      { useArrows: true, darkMode: false, fixedPosition: false, placement: 'top' }
     )
     const isFinished = stage?.data?.endTs
     const hasStarted = stage?.data?.startTs
@@ -214,7 +214,7 @@ export default function ExecutionGraph(props: ExecutionGraphProps): React.ReactE
         event,
         data: currentStage
       },
-      { useArrows: true, darkMode: false, fixedPosition: false }
+      { useArrows: true, darkMode: false, fixedPosition: false, placement: 'top' }
     )
     if (!isFinished && hasStarted) {
       setStageSetupIdId(currentStage?.nodeUuid)

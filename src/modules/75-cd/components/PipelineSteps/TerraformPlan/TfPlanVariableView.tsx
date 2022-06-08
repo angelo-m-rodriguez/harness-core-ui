@@ -23,7 +23,7 @@ export function TerraformVariableStep(props: TerraformPlanVariableStepProps): Re
         data={variablesData.spec?.provisionerIdentifier}
         originalData={initialValues.spec?.provisionerIdentifier}
         metadataMap={metadataMap}
-        className={pipelineVariableCss.variablePaddingL2}
+        className={pipelineVariableCss.variablePaddingL3}
       />
       <ConfigVariables {...props} />
       {variablesData?.spec?.configuration?.backendConfig?.spec && (
@@ -33,7 +33,7 @@ export function TerraformVariableStep(props: TerraformPlanVariableStepProps): Re
             data={variablesData?.spec?.configuration?.backendConfig?.spec}
             originalData={initialValues.spec?.configuration?.backendConfig?.spec}
             metadataMap={metadataMap}
-            className={pipelineVariableCss.variablePaddingL2}
+            className={pipelineVariableCss.variablePaddingL4}
           />
         </>
       )}
@@ -48,7 +48,7 @@ export function TerraformVariableStep(props: TerraformPlanVariableStepProps): Re
             data={variablesData.spec?.configuration?.environmentVariables?.[index]}
             originalData={initialValues.spec?.configuration?.environmentVariables?.[index]}
             metadataMap={metadataMap}
-            className={pipelineVariableCss.variablePaddingL2}
+            className={pipelineVariableCss.variablePaddingL4}
           />
         )
       })}

@@ -847,7 +847,7 @@ exports[`Test K8sRollingRollback Step should render variable view 1`] = `
       class="bp3-card bp3-elevation-0 Card--card"
     >
       <div
-        class="variablesListTable"
+        class="variablesListTable variablePaddingL3"
       >
         <div
           class="variableListRow variable-list-row"

@@ -21,22 +21,17 @@
     }
   }
   .checkbox {
-    padding-left: var(--spacing-xlarge) !important;
+    padding-left: 0 !important;
   }
 
-  .split {
-    display: grid;
-    grid-template-columns: 150px 1px 1fr;
+  .validationOptions {
+    padding: var(--spacing-medium) 0;
+  }
 
-    .line {
-      border-right: 1px solid var(--grey-250);
-      height: 83px;
-      margin-top: var(--spacing-large);
-    }
-
-    .second-column {
-      padding-top: var(--spacing-medium);
-      padding-left: var(--spacing-medium);
+  .radioGroup {
+    & :global(.RadioButtonGroup--inline) {
+      align-items: center;
+      column-gap: var(--spacing-6);
     }
   }
 
@@ -51,6 +46,12 @@
       top: -8px;
     }
   }
+}
+
+.division {
+  border-color: var(--grey-200);
+  margin: var(--spacing-6) 0;
+  opacity: 0.3;
 }
 
 .cogBtnTooltipContainer {

@@ -12,7 +12,6 @@ import type { TemplateFormRef } from '@templates-library/components/TemplateStud
 import { StageTemplateFormWithRef } from '@templates-library/components/TemplateStudio/StageTemplateCanvas/StageTemplateForm/StageTemplateForm'
 import { StageTemplateDiagram } from '@templates-library/components/TemplateStudio/StageTemplateCanvas/StageTemplateDiagram/StageTemplateDiagram'
 import { RightDrawer } from '@pipeline/components/PipelineStudio/RightDrawer/RightDrawer'
-import { TemplateDrawer } from '@templates-library/components/TemplateDrawer/TemplateDrawer'
 import { SplitViewTypes } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { useSaveTemplateListener } from '@pipeline/components/PipelineStudio/hooks/useSaveTemplateListener'
@@ -78,7 +77,6 @@ const StageTemplateCanvas = (_props: unknown, formikRef: TemplateFormRef): JSX.E
         {openSplitView && type === SplitViewTypes.StageView ? <StageTemplateFormWithRef ref={formikRef} /> : null}
       </SplitPane>
       <RightDrawer />
-      <TemplateDrawer />
     </>
   )
 }

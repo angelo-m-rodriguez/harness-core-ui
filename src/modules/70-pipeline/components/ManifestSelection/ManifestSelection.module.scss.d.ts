@@ -25,5 +25,6 @@ declare const styles: {
   readonly type: string
   readonly valuesList: string
   readonly valuesListItem: string
+  readonly valuesPathList: string
 }
 export default styles

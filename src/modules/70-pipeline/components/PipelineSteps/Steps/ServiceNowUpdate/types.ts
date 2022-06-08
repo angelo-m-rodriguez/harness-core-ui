@@ -96,4 +96,8 @@ export interface ServiceNowUpdateDeploymentModeFormContentInterface extends Serv
   serviceNowTicketTypesFetchError?: GetDataError<Failure | Error> | null
   fetchingServiceNowTicketTypes: boolean
   serviceNowTicketTypesResponse: ResponseListServiceNowTicketTypeDTO | null
+  refetchServiceNowMetadata: (props: UseGetServiceNowIssueCreateMetadataProps) => Promise<void>
+  serviceNowMetadataFetchError?: GetDataError<Failure | Error> | null
+  fetchingServiceNowMetadata: boolean
+  serviceNowMetadataResponse: ResponseListServiceNowFieldNG | null
 }

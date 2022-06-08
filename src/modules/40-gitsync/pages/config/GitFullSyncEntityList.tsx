@@ -12,7 +12,7 @@ import { Color } from '@harness/design-system'
 import type { IconProps } from '@harness/icons'
 import { useStrings } from 'framework/strings'
 import type { PageGitFullSyncEntityInfoDTO, GitFullSyncEntityInfoDTO } from 'services/cd-ng'
-import { getEntityIconName } from '../entities/EntityHelper'
+import { getEntityIconName, getEntityIconColor } from '../entities/EntityHelper'
 import css from './GitSyncConfigTab.module.scss'
 
 interface GitFullSyncEntityListProps {
@@ -96,13 +96,16 @@ const RenderEntityStatus: React.FC<RenderEntityStatusProp> = props => {
 const RenderEntityDetails: Renderer<CellProps<GitFullSyncEntityInfoDTO>> = ({ row }) => {
   const data = row.original
   const { getString } = useStrings()
+  const entityIconName = getEntityIconName(data.entityType)
+  const entityIconColor = getEntityIconColor(entityIconName)
   return (
     <Layout.Horizontal>
       <Icon
-        name={getEntityIconName(data.entityType)}
+        name={entityIconName}
         size={20}
         flex={{ alignItems: 'center' }}
         margin={{ right: 'medium' }}
+        color={entityIconColor}
       ></Icon>
       <Layout.Vertical className={css.nameIdWrapper}>
         <Text lineClamp={1} color={Color.GREY_900} font={{ weight: 'semi-bold' }}>

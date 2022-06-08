@@ -29,8 +29,8 @@ export default function ChangeDetails({
   const { type, category, status, executedBy } = ChangeDetailsData
   let { details } = ChangeDetailsData
   const { color, backgroundColor } = statusToColorMapping(status, type) || {}
-  if (type === ChangeSourceTypes.HarnessCDNextGen) {
-    details = { source: type, ...details, executedBy: (executedBy as any) || null }
+  if ([ChangeSourceTypes.HarnessCDNextGen, ChangeSourceTypes.K8sCluster].includes(type as ChangeSourceTypes)) {
+    details = { source: type as string, ...details, executedBy: (executedBy as any) || null }
   }
   return (
     <Container>
@@ -52,11 +52,18 @@ export const getChanges = (details: {
 }) => {
   return _map(_entries(details), item => {
     const isExecutedBy = item[0] === EXECUTED_BY
-    const value = isExecutedBy ? item[1] : typeof item[1] === 'string' ? item[1] : item[1]?.name
+    let value
+    let shouldVisible = true
+    if (isExecutedBy) {
+      shouldVisible = (item[1] as any).shouldVisible ?? true
+      value = (item[1] as any).component
+    } else {
+      value = typeof item[1] === 'string' ? item[1] : item[1]?.name
+    }
     return value ? (
       <>
         <Text className={css.gridItem} font={{ size: 'small' }}>
-          {item[0]}
+          {shouldVisible ? item[0] : ''}
         </Text>
         {isExecutedBy ? (
           value

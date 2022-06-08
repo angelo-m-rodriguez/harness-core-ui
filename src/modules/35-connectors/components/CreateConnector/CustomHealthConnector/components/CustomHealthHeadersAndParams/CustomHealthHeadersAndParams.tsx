@@ -20,6 +20,8 @@ import {
 } from '@wings-software/uicore'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { CustomHealthKeyValueMapper } from '../CustomHealthKeyValueMapper/CustomHealthKeyValueMapper'
 import type { BaseCompFields, CustomHealthHeadersAndParamsProps } from './CustomHealthHeadersAndParams.types'
 import { DefaultHeadersAndParamsInitialValues, FieldNames } from './CustomHealthHeadersAndParams.constants'
@@ -58,6 +60,12 @@ export function CustomHealthHeadersAndParams(props: CustomHealthHeadersAndParams
       })
   }, [prevStepData, projectIdentifier, orgIdentifier, accountId])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CustomHealthHeadersAndParamsLoad, {
+    category: Category.CONNECTOR
+  })
+
   if (loading) {
     return <PageSpinner />
   }
@@ -70,6 +78,9 @@ export function CustomHealthHeadersAndParams(props: CustomHealthHeadersAndParams
         validate={formData => validateHeadersAndParams(formData, getString)}
         formName={`customConnector-${subStepName}`}
         onSubmit={(formData: BaseCompFields): void => {
+          trackEvent(ConnectorActions.CustomHealthHeadersAndParamsSubmit, {
+            category: Category.CONNECTOR
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData, accountId, projectIdentifier, orgIdentifier })
         }}
       >

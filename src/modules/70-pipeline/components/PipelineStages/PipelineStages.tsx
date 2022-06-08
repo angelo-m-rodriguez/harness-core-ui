@@ -9,7 +9,7 @@ import React from 'react'
 import { defaultTo } from 'lodash-es'
 import type { PipelineInfoConfig } from 'services/cd-ng'
 import type { TemplateSummaryResponse } from 'services/template-ng'
-import type { GetTemplateProps, GetTemplateResponse } from '@pipeline/utils/useTemplateSelector'
+import type { PipelineContextInterface } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { AddStageView } from './views/AddStageView'
 import type { PipelineStageProps } from './PipelineStage'
 
@@ -24,7 +24,7 @@ export interface PipelineStagesProps<T = Record<string, unknown>> {
   onSelectStage?: (stageType: string, stage?: T, pipeline?: PipelineInfoConfig) => void
   showSelectMenu?: boolean
   contextType?: string
-  getTemplate?: (data: GetTemplateProps) => Promise<GetTemplateResponse>
+  getTemplate?: PipelineContextInterface['getTemplate']
 }
 
 interface PipelineStageMap extends Omit<PipelineStageProps, 'minimal'> {

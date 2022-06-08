@@ -102,7 +102,10 @@ export const getSLOFormValidationSchema = (getString: UseStringsReturn['getStrin
   const METRIC_IS_REQUIRED = getString('cv.metricIsRequired')
 
   return Yup.object().shape({
-    [SLOFormFields.NAME]: Yup.string().trim().required(getString('cv.slos.validations.nameValidation')),
+    [SLOFormFields.NAME]: Yup.string()
+      .trim()
+      .required(getString('cv.slos.validations.nameValidation'))
+      .matches(/^[0-9a-zA-Z-_\s]+$/, getString('cv.slos.validations.specialCharacters')),
     [SLOFormFields.IDENTIFIER]: Yup.string().when([SLOFormFields.NAME], {
       is: name => name,
       then: Yup.string().trim().required(getString('validation.identifierRequired'))

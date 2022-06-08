@@ -155,6 +155,7 @@ export const getInitialValues = (sourceData: any, getString: UseStringsReturn['g
   )
   const selectedFeature = currentHealthSource?.spec?.feature
   const initialValues = {
+    [ConnectorRefFieldName]: '',
     ...sourceData,
     product: selectedFeature
       ? { label: selectedFeature, value: selectedFeature }

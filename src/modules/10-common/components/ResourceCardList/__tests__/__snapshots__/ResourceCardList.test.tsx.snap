@@ -3,7 +3,7 @@
 exports[`Resource card list test render 1`] = `
 <div>
   <div
-    class="Layout--horizontal Layout--layout-spacing-xxlarge StyledProps--main"
+    class="cardsWrapper"
   >
     <div
       class="bp3-card bp3-elevation-0 Card--card card connectors"

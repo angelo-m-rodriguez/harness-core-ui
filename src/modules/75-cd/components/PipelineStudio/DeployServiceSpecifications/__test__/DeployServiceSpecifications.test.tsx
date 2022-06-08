@@ -127,6 +127,14 @@ describe('Deploy service stage specifications', () => {
       fireEvent.click(service2Option)
     })
     expect((propagateFromDropdown as HTMLInputElement).value).toBe('Stage [Stage 2] - Service [Other Service]')
+
+    //  Another Service Option
+    const service3Option = getByText('Stage [Template Stage] - [Template]')
+    expect(service3Option).toBeInTheDocument()
+    act(() => {
+      fireEvent.click(service3Option)
+    })
+    expect((propagateFromDropdown as HTMLInputElement).value).toBe('Stage [Template Stage] - [Template]')
   })
 
   test(`Variables section is present`, async () => {

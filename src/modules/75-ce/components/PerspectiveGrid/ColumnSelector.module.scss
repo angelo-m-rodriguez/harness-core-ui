@@ -39,3 +39,8 @@
     margin: var(--spacing-xsmall) var(--spacing-large) var(--spacing-xsmall) 0;
   }
 }
+
+.exportCsvBtn {
+  cursor: pointer;
+  padding-left: var(--spacing-medium) !important;
+}

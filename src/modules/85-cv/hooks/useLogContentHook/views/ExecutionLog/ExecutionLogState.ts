@@ -11,6 +11,7 @@ import type { Dispatch } from 'react'
 import type { ExecutionLogDTO } from 'services/cv'
 import { formatDatetoLocale } from '@common/utils/dateUtils'
 import { escapeStringRegexp, sanitizeHTML } from '@common/utils/StringUtils'
+import { getTags } from '@cv/utils/CommonUtils'
 import { Action, ActionType, State, LogLineData, TextKeys, UseActionCreatorReturn } from './ExecutionLog.types'
 import { defaultReducerState } from './ExecutionLog.constants'
 
@@ -18,6 +19,7 @@ const setExecutionLogs = (state: State, action: Action<ActionType.SetExecutionLo
   const payload: LogLineData[] = action.payload.map(executionLog => ({
     text: {
       logLevel: executionLog.logLevel,
+      tags: getTags(executionLog.tags),
       createdAt: executionLog.createdAt ? formatDatetoLocale(executionLog.createdAt) : '',
       log: executionLog.log
     }
@@ -31,7 +33,7 @@ const setExecutionLogs = (state: State, action: Action<ActionType.SetExecutionLo
 
 const search = (state: State, action: Action<ActionType.Search>): State => {
   const { payload } = action
-  const dataKeys: TextKeys[] = ['logLevel', 'createdAt', 'log']
+  const dataKeys: TextKeys[] = ['logLevel', 'tags', 'createdAt', 'log']
   const searchRegex = new RegExp(escapeStringRegexp(sanitizeHTML(payload)), 'gi')
 
   return produce(state, draft => {

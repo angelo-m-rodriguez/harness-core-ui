@@ -152,9 +152,11 @@ export const isFormDataValid = (formikProps: FormikProps<SLOForm>, selectedTabId
     formikProps.setFieldTouched(SLOFormFields.USER_JOURNEY_REF, true)
     formikProps.setFieldTouched(SLOFormFields.MONITORED_SERVICE_REF, true)
 
-    const { name, identifier, userJourneyRef } = formikProps.values
+    const isNameValid = /^[0-9a-zA-Z-_\s]+$/.test(formikProps.values[SLOFormFields.NAME])
 
-    if (!name || !identifier || !userJourneyRef) {
+    const { name, identifier, userJourneyRef, monitoredServiceRef } = formikProps.values
+
+    if (!name || !identifier || !userJourneyRef || !monitoredServiceRef || !isNameValid) {
       return false
     }
   }

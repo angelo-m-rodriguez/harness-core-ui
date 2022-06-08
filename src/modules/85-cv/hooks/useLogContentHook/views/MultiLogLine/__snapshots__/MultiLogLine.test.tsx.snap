@@ -1,0 +1,348 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MultiLogLine /> tests search with highlight works 1`] = `
+<div>
+  <div
+    class="logLine"
+    style="--char-size: 3ch;"
+  >
+    <span
+      class="lineNumber"
+    >
+      101
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        INFO
+      </span>
+    </span>
+    <span
+      class="time"
+    >
+      12:30 AM
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        Tags
+      </span>
+    </span>
+    <span
+      class="logLine tags"
+    >
+      <span
+        class=""
+      />
+    </span>
+    <span
+      class="logLine"
+    >
+      <span
+        class=""
+      >
+        Error: something went 
+        <mark
+          data-current-search-result="true"
+          data-search-result-index="1"
+        >
+          wrong
+        </mark>
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<MultiLogLine /> tests search works 1`] = `
+<div>
+  <div
+    class="logLine"
+    style="--char-size: 3ch;"
+  >
+    <span
+      class="lineNumber"
+    >
+      101
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        INFO
+      </span>
+    </span>
+    <span
+      class="time"
+    >
+      12:30 AM
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        Tags
+      </span>
+    </span>
+    <span
+      class="logLine tags"
+    >
+      <span
+        class=""
+      />
+    </span>
+    <span
+      class="logLine"
+    >
+      <span
+        class=""
+      >
+        Error: something went 
+        <mark
+          data-search-result-index="1"
+        >
+          wrong
+        </mark>
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<MultiLogLine /> tests snapshot test 1`] = `
+<div>
+  <div
+    class="logLine"
+    style="--char-size: 3ch;"
+  >
+    <span
+      class="lineNumber"
+    >
+      101
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        INFO
+      </span>
+    </span>
+    <span
+      class="time"
+    >
+      12:30 AM
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        Tags
+      </span>
+    </span>
+    <span
+      class="logLine tags"
+    >
+      <span
+        class=""
+      />
+    </span>
+    <span
+      class="logLine"
+    >
+      <span
+        class=""
+      >
+        Error: something went wrong
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<MultiLogLine /> tests works with link containing search text 2`] = `
+<div>
+  <div
+    class="logLine"
+    style="--char-size: 2ch;"
+  >
+    <span
+      class="lineNumber"
+    >
+      2
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        info
+      </span>
+    </span>
+    <span
+      class="time"
+    >
+      20/08/2021 11:12:18
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        Tags
+      </span>
+    </span>
+    <span
+      class="logLine tags"
+    >
+      <span
+        class=""
+      />
+    </span>
+    <span
+      class="logLine"
+    >
+      <span
+        class=""
+      >
+        + echo @wings-software:registry=
+        <a
+          class="ansi-decoration-link"
+          href="https://npm.pkg.github.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          https://npm.
+          <mark
+            data-current-search-result="true"
+            data-search-result-index="0"
+          >
+            pk
+          </mark>
+          g.github.com
+        </a>
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<MultiLogLine /> tests works with mutliple links containing search text 1`] = `
+<div>
+  <div
+    class="logLine"
+    style="--char-size: 2ch;"
+  >
+    <span
+      class="lineNumber"
+    >
+      2
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        info
+      </span>
+    </span>
+    <span
+      class="time"
+    >
+      20/08/2021 11:12:18
+    </span>
+    <span
+      class="logLine level"
+    >
+      <span
+        class=""
+      >
+        Tags
+      </span>
+    </span>
+    <span
+      class="logLine tags"
+    >
+      <span
+        class=""
+      />
+    </span>
+    <span
+      class="logLine"
+    >
+      <span
+        class=""
+      >
+        registry=
+        <a
+          class="ansi-decoration-link"
+          href="https://npm.pkg.github.com,"
+          rel="noreferrer"
+          target="_blank"
+        >
+          https://npm.
+          <mark
+            data-current-search-result="true"
+            data-search-result-index="0"
+          >
+            pk
+          </mark>
+          g.github.com,
+        </a>
+         
+        <mark
+          data-search-result-index="1"
+        >
+          pk
+        </mark>
+        g:harness, registry=
+        <a
+          class="ansi-decoration-link"
+          href="https://npm.pkg.github.com,"
+          rel="noreferrer"
+          target="_blank"
+        >
+          https://npm.
+          <mark
+            data-search-result-index="2"
+          >
+            pk
+          </mark>
+          g.github.com,
+        </a>
+         registry=
+        <a
+          class="ansi-decoration-link"
+          href="https://npm.pkg.github.com"
+          rel="noreferrer"
+          target="_blank"
+        >
+          https://npm.
+          <mark
+            data-search-result-index="3"
+          >
+            pk
+          </mark>
+          g.github.com
+        </a>
+      </span>
+    </span>
+  </div>
+</div>
+`;

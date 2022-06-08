@@ -7,6 +7,7 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
+  readonly bodyWrapper: string
   readonly count: string
   readonly disabledMode: string
   readonly excludeSideNavOverlay: string

@@ -31,10 +31,18 @@ export interface UseRunPipelineModalReturn {
 }
 
 export const useRunPipelineModal = (
-  runPipelineModaParams: RunPipelineModalParams & GitQueryParams
+  runPipelineModaParams: RunPipelineModalParams & Omit<GitQueryParams, 'repoName'>
 ): UseRunPipelineModalReturn => {
-  const { inputSetSelected, pipelineIdentifier, branch, repoIdentifier, executionId, stagesExecuted } =
-    runPipelineModaParams
+  const {
+    inputSetSelected,
+    pipelineIdentifier,
+    branch,
+    repoIdentifier,
+    connectorRef,
+    storeType,
+    executionId,
+    stagesExecuted
+  } = runPipelineModaParams
   const { projectIdentifier, orgIdentifier, accountId, module, executionIdentifier } =
     useParams<PipelineType<ExecutionPathProps>>()
 
@@ -113,6 +121,8 @@ export const useRunPipelineModal = (
               inputSetYAML={inputSetYaml || ''}
               repoIdentifier={repoIdentifier}
               branch={branch}
+              connectorRef={connectorRef}
+              storeType={storeType}
               inputSetSelected={getInputSetSelected()}
               onClose={() => {
                 hideRunPipelineModal()

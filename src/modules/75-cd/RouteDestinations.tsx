@@ -51,7 +51,7 @@ import CDSideNav from '@cd/components/CDSideNav/CDSideNav'
 import CDHomePage from '@cd/pages/home/CDHomePage'
 import CDDashboardPage from '@cd/pages/dashboard/CDDashboardPage'
 import DeploymentsList from '@pipeline/pages/deployments-list/DeploymentsList'
-import CDPipelineStudio from '@cd/pages/pipeline-studio/CDPipelineStudio'
+import CDPipelineStudioWrapper from '@cd/pages/pipeline-studio/CDPipelineStudioWrapper'
 import PipelinesPage from '@pipeline/pages/pipelines/PipelinesPage'
 import ConnectorsPage from '@connectors/pages/connectors/ConnectorsPage'
 import SecretsPage from '@secrets/pages/secrets/SecretsPage'
@@ -83,7 +83,6 @@ import TriggersDetailPage from '@triggers/pages/triggers/TriggersDetailPage'
 import CreateConnectorFromYamlPage from '@connectors/pages/createConnectorFromYaml/CreateConnectorFromYamlPage'
 import CreateSecretFromYamlPage from '@secrets/pages/createSecretFromYaml/CreateSecretFromYamlPage'
 import { Services } from '@cd/components/Services/Services'
-import ChildAppMounter from 'microfrontends/ChildAppMounter'
 
 import './components/PipelineSteps'
 import './components/PipelineStudio/DeployStage'
@@ -134,24 +133,12 @@ import { CDExecutionCardSummary } from './components/CDExecutionCardSummary/CDEx
 import { CDExecutionSummary } from './components/CDExecutionSummary/CDExecutionSummary'
 import { CDStageDetails } from './components/CDStageDetails/CDStageDetails'
 
-import GitOpsServersPage from './pages/gitops/GitOpsServersHomePage'
-import GitOpsModalContainer from './pages/gitops/NativeArgo/GitOpsProvidersList'
 import artifactSourceBaseFactory from './factory/ArtifactSourceFactory/ArtifactSourceBaseFactory'
 import { KubernetesArtifacts } from './components/PipelineSteps/K8sServiceSpec/KubernetesArtifacts/KubernetesArtifacts'
 import { KubernetesManifests } from './components/PipelineSteps/K8sServiceSpec/KubernetesManifests/KubernetesManifests'
 import manifestSourceBaseFactory from './factory/ManifestSourceFactory/ManifestSourceBaseFactory'
-import {
-  DeployEnvironmentWidget,
-  NewEditEnvironmentModal
-} from './components/PipelineSteps/DeployEnvStep/DeployEnvStep'
-import type { GitOpsCustomMicroFrontendProps } from './interfaces/GitOps.types'
 import { getBannerText } from './utils/renderMessageUtils'
 import ServiceStudio from './components/Services/ServiceStudio/ServiceStudio'
-import { NewEditServiceModal } from './components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
-import DeployServiceWidget from './components/PipelineSteps/DeployServiceStep/DeployServiceWidget'
-
-// eslint-disable-next-line import/no-unresolved
-const GitOpsServersList = React.lazy(() => import('gitopsui/MicroFrontendApp'))
 
 RbacFactory.registerResourceCategory(ResourceCategory.GITOPS, {
   icon: 'gitops-agent',
@@ -347,34 +334,6 @@ const RedirectToModuleTrialHome = (): React.ReactElement => {
   )
 }
 
-const GitOpsPage = (): React.ReactElement | null => {
-  const { ARGO_PHASE1, ARGO_PHASE2_MANAGED } = useFeatureFlags()
-
-  if (ARGO_PHASE2_MANAGED) {
-    return (
-      <ChildAppMounter<GitOpsCustomMicroFrontendProps>
-        ChildApp={GitOpsServersList}
-        customComponents={{
-          DeployEnvironmentWidget,
-          DeployServiceWidget,
-          NewEditEnvironmentModal,
-          NewEditServiceModal
-        }}
-      />
-    )
-  }
-
-  if (ARGO_PHASE1) {
-    return (
-      <GitOpsServersPage>
-        <GitOpsModalContainer />
-      </GitOpsServersPage>
-    )
-  }
-
-  return null
-}
-
 const RedirectToSubscriptions = (): React.ReactElement => {
   const { accountId } = useParams<{
     accountId: string
@@ -550,7 +509,7 @@ export default (
       pageName={PAGE_NAME.CDPipelineStudio}
     >
       <PipelineDetails>
-        <CDPipelineStudio />
+        <CDPipelineStudioWrapper />
       </PipelineDetails>
     </RouteWithLayout>
     <RouteWithLayout
@@ -1126,14 +1085,6 @@ export default (
       pageName={PAGE_NAME.TemplatesPage}
     >
       <TemplatesPage />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CDSideNavProps}
-      path={[routes.toGitOps({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })]}
-      pageName={PAGE_NAME.GitOpsPage}
-    >
-      <GitOpsPage />
     </RouteWithLayout>
 
     {GovernanceRouteDestinations({

@@ -37,6 +37,9 @@ import {
 } from '@connectors/components/CreateConnector/commonSteps/DelegateSelectorStep/DelegateSelector/DelegateSelector'
 import { CredTypeValues, HashiCorpVaultAccessTypes } from '@connectors/interfaces/ConnectorInterface'
 import useCreateEditConnector, { BuildPayloadProps } from '@connectors/hooks/useCreateEditConnector'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import css from '@connectors/components/CreateConnector/commonSteps/DelegateSelectorStep/DelegateSelector/DelegateSelector.module.scss'
 
 interface DelegateSelectorStepData extends BuildPayloadProps {
@@ -55,6 +58,7 @@ export interface DelegateSelectorProps {
   submitOnNextStep?: boolean
   customHandleCreate?: (payload: ConnectorConfigDTO) => Promise<ConnectorInfoDTO | undefined>
   customHandleUpdate?: (payload: ConnectorConfigDTO) => Promise<ConnectorInfoDTO | undefined>
+  helpPanelReferenceId?: string
 }
 
 type InitialFormData = { delegateSelectors: Array<string> }
@@ -123,6 +127,9 @@ const DelegateSelectorStep: React.FC<StepProps<ConnectorConfigDTO> & DelegateSel
   const { getString } = useStrings()
   const isGitSyncEnabled = useAppStore().isGitSyncEnabled && !props.disableGitSync && orgIdentifier && projectIdentifier
   const [modalErrorHandler, setModalErrorHandler] = useState<ModalErrorHandlerBinding | undefined>()
+  useConnectorWizard({
+    helpPanel: props.helpPanelReferenceId ? { referenceId: props.helpPanelReferenceId, contentWidth: 1050 } : undefined
+  })
 
   const afterSuccessHandler = (response: ResponseConnectorResponse): void => {
     props.onConnectorCreated?.(response?.data)
@@ -165,6 +172,11 @@ const DelegateSelectorStep: React.FC<StepProps<ConnectorConfigDTO> & DelegateSel
     loading
 
   const connectorName = (prevStepData as ConnectorConfigDTO)?.name || (connectorInfo as ConnectorInfoDTO)?.name
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.DelegateSelectorStepLoad, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <>
@@ -201,6 +213,9 @@ const DelegateSelectorStep: React.FC<StepProps<ConnectorConfigDTO> & DelegateSel
           //   })
           // })}
           onSubmit={stepData => {
+            trackEvent(ConnectorActions.DelegateSelectorStepSubmit, {
+              category: Category.CONNECTOR
+            })
             modalErrorHandler?.hide()
             const updatedStepData = {
               ...stepData,

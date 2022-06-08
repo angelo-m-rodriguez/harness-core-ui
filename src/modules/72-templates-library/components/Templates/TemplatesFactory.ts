@@ -9,16 +9,12 @@ import { TemplateFactory } from '@templates-library/components/AbstractTemplate/
 import { StepTemplate } from '@templates-library/components/Templates/StepTemplate/StepTemplate'
 import { StageTemplate } from '@templates-library/components/Templates/StageTemplate/StageTemplate'
 import { PipelineTemplate } from '@templates-library/components/Templates/PipelineTemplate/PipelineTemplate'
-import { MonitoredServiceTemplate } from './MonitoredServiceTemplate/MonitoredServiceTemplate'
 
 const templateFactory = new TemplateFactory()
 
 // common
 templateFactory.registerTemplate(new StepTemplate())
 templateFactory.registerTemplate(new StageTemplate())
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-templateFactory.registerTemplate(new MonitoredServiceTemplate())
 templateFactory.registerTemplate(new PipelineTemplate())
 
 // build steps

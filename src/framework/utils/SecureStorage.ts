@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { PREFERENCES_TOP_LEVEL_KEY } from 'framework/PreferenceStore/PreferenceStoreContext'
+const PREFERENCES_TOP_LEVEL_KEY = 'preferences'
 
 export function encode(arg: unknown): string | undefined {
   if (typeof arg != 'undefined') return btoa(encodeURIComponent(JSON.stringify(arg)))

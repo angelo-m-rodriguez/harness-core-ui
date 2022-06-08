@@ -47,6 +47,20 @@ describe('LOADING', () => {
     const spinner = container.querySelector('.bp3-spinner')
     expect(spinner).toBeTruthy()
   })
+
+  test('show spinner when approvalInstanceId is absent', async () => {
+    const { container } = render(
+      <TestWrapper>
+        <HarnessApprovalView
+          step={{
+            status: 'ResourceWaiting'
+          }}
+        />
+      </TestWrapper>
+    )
+    const spinner = container.querySelector('.bp3-spinner')
+    expect(spinner).toBeTruthy()
+  })
 })
 
 describe('SUCCESS', () => {
@@ -82,19 +96,6 @@ describe('SUCCESS', () => {
       fireEvent.click(getByText('common.approve'))
     })
     await waitFor(() => expect(mockAuthData.refetch).toBeCalled())
-  })
-
-  test('show text when approvalInstanceId is absent', async () => {
-    const { queryByText } = render(
-      <TestWrapper>
-        <HarnessApprovalView
-          step={{
-            status: 'ResourceWaiting'
-          }}
-        />
-      </TestWrapper>
-    )
-    await waitFor(() => expect(queryByText('pipeline.noApprovalInstanceCreated')).toBeTruthy())
   })
 })
 

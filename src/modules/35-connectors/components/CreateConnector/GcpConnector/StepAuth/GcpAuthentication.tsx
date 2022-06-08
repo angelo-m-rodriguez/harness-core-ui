@@ -30,6 +30,9 @@ import type { ConnectorConfigDTO, ConnectorInfoDTO } from 'services/cd-ng'
 import SecretInput from '@secrets/components/SecretInput/SecretInput'
 import { useStrings } from 'framework/strings'
 import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { useConnectorWizard } from '../../../CreateConnectorWizard/ConnectorWizardContext'
 import css from '../CreateGcpConnector.module.scss'
 
 interface GcpAuthenticationProps {
@@ -92,8 +95,20 @@ const GcpAuthentication: React.FC<StepProps<StepConfigureProps> & GcpAuthenticat
   }, [loadingConnectorSecrets])
 
   const handleSubmit = (formData: ConnectorConfigDTO) => {
+    trackEvent(ConnectorActions.AuthenticationStepSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.Gcp
+    })
     nextStep?.({ ...props.connectorInfo, ...prevStepData, ...formData } as StepConfigureProps)
   }
+  useConnectorWizard({ helpPanel: { referenceId: 'GoogleCloudProviderDetails', contentWidth: 1100 } })
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.AuthenticationStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Gcp
+  })
 
   return loadingConnectorSecrets ? (
     <PageSpinner />

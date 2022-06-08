@@ -7,6 +7,7 @@
 
 import React, { createRef, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { defaultTo } from 'lodash-es'
 import {
   Button,
   ButtonVariation,
@@ -81,7 +82,7 @@ const GitSyncErrors: React.FC = () => {
 
   const setGitFilters = ({ branch: filterBranch, repo: filterRepo }: GitFilterScope): void => {
     setBranch(filterBranch || '')
-    setRepoIdentifier(filterRepo)
+    setRepoIdentifier(defaultTo(filterRepo, ''))
     setSearchTerm('')
     searchRef.current?.clear()
   }

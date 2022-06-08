@@ -6,7 +6,7 @@
  */
 
 import React, { useMemo } from 'react'
-import { defaultTo, isNull, isUndefined, omit, omitBy } from 'lodash-es'
+import { defaultTo, isNull, isUndefined, noop, omit, omitBy } from 'lodash-es'
 import type { MutateRequestOptions } from 'restful-react/dist/Mutate'
 import { Classes, Dialog, IDialogProps } from '@blueprintjs/core'
 import * as Yup from 'yup'
@@ -20,7 +20,8 @@ import {
   PageSpinner,
   VisualYamlSelectedView as SelectedView,
   VisualYamlToggle,
-  Heading
+  Heading,
+  Container
 } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import { parse } from 'yaml'
@@ -55,12 +56,14 @@ import YAMLBuilder from '@common/components/YAMLBuilder/YamlBuilder'
 import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import { NameIdDescriptionTags } from '@common/components'
 import { useStrings } from 'framework/strings'
-import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
+import type { InputSetGitQueryParams } from '@common/interfaces/RouteInterfaces'
 import { UseSaveSuccessResponse, useSaveToGitDialog } from '@common/modals/SaveToGitDialog/useSaveToGitDialog'
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
 import GitContextForm, { GitContextProps } from '@common/components/GitContextForm/GitContextForm'
 import { useQueryParams } from '@common/hooks'
-import { AppStoreContext } from 'framework/AppStore/AppStoreContext'
+import { GitSyncForm } from '@gitsync/components/GitSyncForm/GitSyncForm'
+import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
+import { AppStoreContext, useAppStore } from 'framework/AppStore/AppStoreContext'
 import { GitSyncStoreProvider } from 'framework/GitRepoStore/GitSyncStoreContext'
 import type { CreateUpdateInputSetsReturnType, InputSetDTO } from '@pipeline/utils/types'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
@@ -148,15 +151,22 @@ export function OverlayInputSetForm({
   const [isEdit, setIsEdit] = React.useState(false)
   const [savedInputSetObj, setSavedInputSetObj] = React.useState<OverlayInputSetDTO>({})
   const { isGitSyncEnabled } = React.useContext(AppStoreContext)
+  const { isGitSimplificationEnabled: gitSimplification } = useAppStore()
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier } = useParams<{
     projectIdentifier: string
     orgIdentifier: string
     accountId: string
     pipelineIdentifier: string
   }>()
-  const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+  const { repoIdentifier, branch, connectorRef, storeType, repoName } = useQueryParams<InputSetGitQueryParams>()
 
   const [initialGitDetails, setInitialGitDetails] = React.useState<EntityGitDetails>({ repoIdentifier, branch })
+  const [initialStoreMetadata, setInitialStoreMetadata] = React.useState<StoreMetadata>({
+    repoName,
+    branch,
+    connectorRef,
+    storeType
+  })
   const [selectedView, setSelectedView] = React.useState<SelectedView>(SelectedView.VISUAL)
   const [yamlHandler, setYamlHandler] = React.useState<YamlBuilderHandlerBinding | undefined>()
   const [selectedRepo, setSelectedRepo] = React.useState<string>(overlayInputSetRepoIdentifier || repoIdentifier || '')
@@ -184,8 +194,8 @@ export function OverlayInputSetForm({
   } = useGetOverlayInputSetForPipeline({
     queryParams: {
       ...commonQueryParams,
-      repoIdentifier: overlayInputSetRepoIdentifier,
-      branch: overlayInputSetBranch
+      repoIdentifier: isGitSyncEnabled ? overlayInputSetRepoIdentifier : repoName,
+      branch: isGitSyncEnabled ? overlayInputSetBranch : branch
     },
     inputSetIdentifier: defaultTo(identifier, ''),
     lazy: true
@@ -241,7 +251,7 @@ export function OverlayInputSetForm({
     }
     const inputSetObj = overlayInputSetResponse.data
     const parsedInputSetObj = parse(defaultTo(inputSetObj?.overlayInputSetYaml, ''))
-    if (isGitSyncEnabled && parsedInputSetObj?.overlayInputSet) {
+    if ((isGitSyncEnabled || inputSetObj.storeType === StoreType.REMOTE) && parsedInputSetObj?.overlayInputSet) {
       const parsedOverlayInputSet = parsedInputSetObj.overlayInputSet as OverlayInputSetDTO
       return {
         name: parsedOverlayInputSet.name as string,
@@ -376,7 +386,8 @@ export function OverlayInputSetForm({
         projectIdentifier,
         pipelineIdentifier,
         gitDetails,
-        objectId
+        objectId,
+        initialStoreMetadata
       })
       response = isEdit
         ? await updateOverlayInputSet(requestData, {
@@ -391,7 +402,7 @@ export function OverlayInputSetForm({
 
       if (response) {
         // This is done because when git sync is enabled, errors are displayed in a modal
-        if (!isGitSyncEnabled) {
+        if (!isGitSyncEnabled && initialStoreMetadata.storeType !== StoreType.REMOTE) {
           if (response.data?.errorResponse) {
             clear()
             showError(getString('inputSets.overlayInputSetSavedError'), undefined, 'pipeline.overlayinputset.error')
@@ -401,7 +412,7 @@ export function OverlayInputSetForm({
           }
         }
       }
-      if (!isGitSyncEnabled) {
+      if (!isGitSyncEnabled && initialStoreMetadata.storeType !== StoreType.REMOTE) {
         closeForm()
       }
     } catch (e) {
@@ -409,8 +420,8 @@ export function OverlayInputSetForm({
       if (Object.keys(invaliderrors).length) {
         setFormErrors(invaliderrors)
       }
-      // This is done because when git sync is enabled, errors are displayed in a modal
-      if (!isGitSyncEnabled) {
+      // This is done because when git sync is enabled or storeType is REMOTE, errors are displayed in a modal
+      if (!isGitSyncEnabled && initialStoreMetadata.storeType !== StoreType.REMOTE) {
         showError(getRBACErrorMessage(e), undefined, 'pipeline.common.error')
       } else {
         throw e
@@ -432,20 +443,35 @@ export function OverlayInputSetForm({
   })
 
   const handleSubmit = React.useCallback(
-    async (inputSetObjWithGitInfo: OverlayInputSetDTO, gitDetails?: EntityGitDetails) => {
-      const inputSetObj = omit(inputSetObjWithGitInfo, 'repo', 'branch')
+    async (
+      inputSetObjWithGitInfo: OverlayInputSetDTO,
+      gitDetails?: EntityGitDetails,
+      storeMetadata?: StoreMetadata
+    ) => {
+      const inputSetObj = omit(
+        inputSetObjWithGitInfo,
+        'repo',
+        'branch',
+        'connectorRef',
+        'repoName',
+        'filePath',
+        'storeType',
+        'remoteType'
+      )
       setSavedInputSetObj(inputSetObj)
-      setInitialGitDetails(gitDetails as EntityGitDetails)
+      setInitialGitDetails(defaultTo(isEdit ? overlayInputSetResponse?.data?.gitDetails : gitDetails, {}))
+      setInitialStoreMetadata(defaultTo(storeMetadata, {}))
       if (inputSetObj) {
         delete inputSetObj.pipeline
-        if (isGitSyncEnabled) {
+        if (isGitSyncEnabled || storeMetadata?.storeType === StoreType.REMOTE) {
           openSaveToGitDialog({
             isEditing: isEdit,
             resource: {
               type: 'InputSets',
               name: inputSetObj.name as string,
               identifier: inputSetObj.identifier as string,
-              gitDetails: isEdit ? overlayInputSetResponse?.data?.gitDetails : gitDetails
+              gitDetails: isEdit ? overlayInputSetResponse?.data?.gitDetails : gitDetails,
+              storeMetadata: storeMetadata?.storeType === StoreType.REMOTE ? storeMetadata : undefined
             },
             payload: { overlayInputSet: inputSetObj }
           })
@@ -544,11 +570,15 @@ export function OverlayInputSetForm({
             />
           </div>
 
-          <Formik<OverlayInputSetDTO & GitContextProps>
+          <Formik<OverlayInputSetDTO & GitContextProps & StoreMetadata>
             initialValues={{
               ...omit(inputSet, 'gitDetails', 'entityValidityDetails'),
               repo: defaultTo(repoIdentifier, ''),
-              branch: defaultTo(branch, '')
+              branch: defaultTo(branch, ''),
+              connectorRef: defaultTo(connectorRef, ''),
+              repoName: defaultTo(repoName, ''),
+              storeType: defaultTo(storeType, StoreType.INLINE),
+              filePath: defaultTo(inputSet.gitDetails?.filePath, `.harness/${inputSet.identifier}.yaml`)
             }}
             formName="overlayInputSet"
             enableReinitialize={true}
@@ -559,7 +589,14 @@ export function OverlayInputSetForm({
             onSubmit={values => {
               handleSubmit(
                 { ...values, inputSetReferences: selectedInputSetReferences },
-                { repoIdentifier: values.repo, branch: values.branch }
+                { repoIdentifier: values.repo, branch: values.branch },
+                {
+                  connectorRef: values.connectorRef,
+                  repoName: values.repoName,
+                  branch: values.branch,
+                  filePath: values.filePath,
+                  storeType: values.storeType
+                }
               )
             }}
           >
@@ -603,6 +640,26 @@ export function OverlayInputSetForm({
                                 onBranchChange={onBranchChange}
                               />
                             </GitSyncStoreProvider>
+                          )}
+                          {!isGitSyncEnabled && gitSimplification && storeType === StoreType.REMOTE && (
+                            <Container>
+                              <GitSyncForm
+                                formikProps={formikProps as any}
+                                handleSubmit={noop}
+                                isEdit={isEdit}
+                                showRemoteTypeSelection={false}
+                                disableFields={
+                                  !isEdit
+                                    ? {
+                                        connectorRef: true,
+                                        repoName: true,
+                                        branch: true,
+                                        filePath: false
+                                      }
+                                    : {}
+                                }
+                              ></GitSyncForm>
+                            </Container>
                           )}
                           <Layout.Vertical padding={{ top: 'large', bottom: 'xxxlarge' }} spacing="small">
                             <Heading level={5}>{getString('inputSets.selectInputSets')}</Heading>
@@ -651,7 +708,17 @@ export function OverlayInputSetForm({
                           {...yamlBuilderReadOnlyModeProps}
                           existingJSON={{
                             overlayInputSet: {
-                              ...omit(formikProps?.values, 'pipeline', 'repo', 'branch'),
+                              ...omit(
+                                formikProps?.values,
+                                'pipeline',
+                                'repo',
+                                'branch',
+                                'connectorRef',
+                                'repoName',
+                                'filePath',
+                                'storeType',
+                                'remoteType'
+                              ),
                               inputSetReferences: selectedInputSetReferences
                             }
                           }}
@@ -671,10 +738,20 @@ export function OverlayInputSetForm({
                           onClick={() => {
                             const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), '')
 
-                            handleSubmit(parse(latestYaml)?.overlayInputSet, {
-                              repoIdentifier: formikProps.values.repo,
-                              branch: formikProps.values.branch
-                            })
+                            handleSubmit(
+                              parse(latestYaml)?.overlayInputSet,
+                              {
+                                repoIdentifier: formikProps.values.repo,
+                                branch: formikProps.values.branch
+                              },
+                              {
+                                connectorRef: formikProps.values.connectorRef,
+                                repoName: formikProps.values.repoName,
+                                branch: formikProps.values.branch,
+                                filePath: formikProps.values.filePath,
+                                storeType: formikProps.values.storeType
+                              }
+                            )
                           }}
                           disabled={isReadOnly}
                         />

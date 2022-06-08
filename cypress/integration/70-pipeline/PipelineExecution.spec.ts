@@ -81,8 +81,8 @@ describe('Pipeline Execution', () => {
       cy.get('.default-node').should('be.visible').trigger('onmouseover')
       cy.get('.default-node').should('be.visible').trigger('mouseenter')
 
-      cy.get('span[data-popper-placement="right"]').should('be.visible')
-      cy.get('span[data-popper-placement="right"]').within(() => {
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').should('be.visible')
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').within(() => {
         cy.get('span[icon="warning-sign"]')
           .should('be.visible')
           .siblings()
@@ -202,8 +202,8 @@ describe('Pipeline Execution', () => {
       cy.get('.default-node').should('be.visible').trigger('mouseover')
       cy.get('.default-node').should('be.visible').trigger('onmouseover')
       cy.get('.default-node').should('be.visible').trigger('mouseenter')
-      cy.get('span[data-popper-placement="right"]').should('be.visible')
-      cy.get('span[data-popper-placement="right"]').within(() => {
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').should('be.visible')
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').within(() => {
         cy.get('span[icon="tick-circle"]')
           .should('be.visible')
           .siblings()
@@ -306,8 +306,8 @@ describe('Pipeline Execution', () => {
       cy.get('.default-node').should('be.visible').trigger('mouseenter')
       cy.wait(2000)
 
-      cy.get('span[data-popper-placement="right"]').should('be.visible')
-      cy.get('span[data-popper-placement="right"]').within(() => {
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').should('be.visible')
+      cy.get('[class^="DynamicPopover-module_dynamic-popover"]').within(() => {
         cy.get('span[icon="warning-sign"]')
           .should('be.visible')
           .siblings()

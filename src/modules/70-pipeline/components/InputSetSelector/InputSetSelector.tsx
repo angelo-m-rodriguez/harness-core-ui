@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Layout,
   Popover,
@@ -68,6 +68,8 @@ export function InputSetSelector({
     accountId: string
   }>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+
+  useEffect(() => setSelectedInputSets(defaultTo(value, [])), [value])
 
   const getGitQueryParams = React.useCallback(() => {
     if (!isEmpty(selectedRepo) && !isEmpty(selectedBranch)) {

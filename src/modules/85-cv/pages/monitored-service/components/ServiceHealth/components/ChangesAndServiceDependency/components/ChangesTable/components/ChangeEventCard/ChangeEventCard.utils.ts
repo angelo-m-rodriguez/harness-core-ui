@@ -11,7 +11,7 @@ import type { EventData } from '@cv/components/ActivitiesTimelineView/Activities
 import type { ChangeEventMetadata, ChangeEventDTO } from 'services/cv'
 import type { UseStringsReturn } from 'framework/strings'
 import type { CustomChangeEventDTO } from './ChangeEventCard.types'
-import { VerificationStatus } from './ChangeEventCard.constant'
+import { StageStatusMapper, VerificationStatus } from './ChangeEventCard.constant'
 
 export const createChangeDetailsData = (resource: ChangeEventDTO | undefined) => {
   const { type, category, serviceName = '', environmentName = '', metadata } = resource || {}
@@ -22,6 +22,19 @@ export const createChangeDetailsData = (resource: ChangeEventDTO | undefined) =>
     details: {
       service: { name: serviceName },
       environment: { name: environmentName },
+      source: { name: type as string, url: metadata?.htmlUrl }
+    }
+  }
+}
+export const createChangeDetailsDataForKubernetes = (resource: ChangeEventDTO | undefined) => {
+  const { type, category, metadata, name } = resource || {}
+  return {
+    type,
+    category,
+    status: metadata?.status,
+    name,
+    details: {
+      eventType: { name: `${category} (${name})` },
       source: { name: type, url: metadata?.htmlUrl }
     }
   }
@@ -48,16 +61,21 @@ export const createChangeInfoData = (metadata: ChangeEventMetadata | undefined) 
   }
 }
 
-export const createChangeTitleData = (resource: CustomChangeEventDTO | undefined) => {
+export const createChangeTitleData = (
+  resource: CustomChangeEventDTO | undefined,
+  pipelineIdentifier?: string,
+  runSequence?: number,
+  status?: string
+) => {
   const { name, id = '', type, metadata, serviceIdentifier, envIdentifier } = resource || {}
   return {
-    name,
+    name: pipelineIdentifier ?? name,
     type,
-    executionId: id,
+    executionId: runSequence ?? id,
     url: metadata?.pipelinePath,
     serviceIdentifier,
     envIdentifier,
-    status: metadata?.status
+    status: (StageStatusMapper as any)[`${status}`] || status
   }
 }
 

@@ -164,7 +164,7 @@ export default function ExecutionStageDetails(props: ExecutionStageDetailsProps)
         event,
         data: { ...currentStage, ...stage }
       },
-      { useArrows: true, darkMode: false, fixedPosition: false }
+      { useArrows: true, darkMode: false, fixedPosition: false, placement: 'top' }
     )
     if (!isFinished && hasStarted) {
       if (currentStage?.data?.stepType === StepType.Barrier && status !== 'Success') {
@@ -192,7 +192,7 @@ export default function ExecutionStageDetails(props: ExecutionStageDetailsProps)
         event,
         data: stageData
       },
-      { useArrows: true, darkMode: false, fixedPosition: false }
+      { useArrows: true, darkMode: false, fixedPosition: false, placement: 'top' }
     )
     if (!isFinished && hasStarted) {
       if (stageData?.stepType === StepType.Barrier && status !== 'Success') {

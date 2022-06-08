@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scope list of a user group renders blank results card: Blank results card 1`] = `
+<div>
+  <div
+    class="bp3-card bp3-elevation-0 Card--card"
+  >
+    <p
+      class="StyledProps--font StyledProps--main"
+    >
+      rbac.inheritedScope.orgScopeNoData
+    </p>
+  </div>
+</div>
+`;

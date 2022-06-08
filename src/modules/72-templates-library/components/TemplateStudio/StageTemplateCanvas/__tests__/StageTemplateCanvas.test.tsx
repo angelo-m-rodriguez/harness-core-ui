@@ -30,10 +30,6 @@ jest.mock('@pipeline/components/PipelineStudio/RightDrawer/RightDrawer', () => (
   RightDrawer: () => <div />
 }))
 
-jest.mock('@templates-library/components/TemplateDrawer/TemplateDrawer', () => ({
-  TemplateDrawer: () => <div />
-}))
-
 describe('<StageTemplateCanvasWithRef /> tests', () => {
   test('should match snapshot in empty state', async () => {
     const context = produce(pipelineContextMock, draft => {

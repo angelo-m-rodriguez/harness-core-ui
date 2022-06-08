@@ -49,6 +49,7 @@ const CreateDockerConnector: React.FC<CreateDockerConnectorProps> = props => {
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
           mock={props.mock}
+          helpPanelReferenceId="DockerConnectorOverview"
         />
         <StepDockerAuthentication
           name={getString('details')}
@@ -66,6 +67,7 @@ const CreateDockerConnector: React.FC<CreateDockerConnectorProps> = props => {
           onConnectorCreated={props.onSuccess}
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
+          helpPanelReferenceId="ConnectorDelegatesSetup"
         />
         <VerifyOutOfClusterDelegate
           name={getString('connectors.stepThreeName')}
@@ -75,6 +77,7 @@ const CreateDockerConnector: React.FC<CreateDockerConnectorProps> = props => {
           type={Connectors.DOCKER}
           onClose={props.onClose}
           stepIndex={TESTCONNECTION_STEP_INDEX}
+          helpPanelReferenceId="ConnectorTest"
         />
       </StepWizard>
     </>

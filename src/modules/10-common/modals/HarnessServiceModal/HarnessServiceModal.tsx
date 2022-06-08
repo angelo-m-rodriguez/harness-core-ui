@@ -187,7 +187,7 @@ export const useHarnessServicetModal = (
         />
       </Dialog>
     ),
-    [customLoading]
+    [customLoading, formik?.values, onCreateOrUpdate]
   )
   return {
     openHarnessServiceModal: showModal,

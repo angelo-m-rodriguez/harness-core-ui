@@ -11,6 +11,7 @@ import { MultiTypeInputType, VisualYamlSelectedView as SelectedView } from '@win
 import produce from 'immer'
 import {
   PipelineContext,
+  PipelineContextInterface,
   PipelineContextType
 } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { yamlParse } from '@common/utils/YamlHelperMethods'
@@ -64,6 +65,7 @@ export interface ServicePipelineProviderProps {
   contextType: PipelineContextType
   isReadOnly: boolean
   serviceIdentifier: string
+  getTemplate: PipelineContextInterface['getTemplate']
 }
 const getServiceByIdentifier = (
   queryParams: GetServiceV2QueryParams,
@@ -95,6 +97,7 @@ export function ServicePipelineProvider({
   onUpdatePipeline,
   isReadOnly,
   contextType,
+  getTemplate,
   children
 }: React.PropsWithChildren<ServicePipelineProviderProps>): React.ReactElement {
   const allowableTypes = [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
@@ -269,12 +272,12 @@ export function ServicePipelineProvider({
         // eslint-disable-next-line react/display-name
         renderPipelineStage: () => <div />,
         fetchPipeline,
+        updatePipelineStoreMetadata: Promise.resolve,
         updateGitDetails: Promise.resolve,
         updateEntityValidityDetails: Promise.resolve,
         updatePipeline,
         updateStage,
         updatePipelineView,
-        updateTemplateView: noop,
         pipelineSaved: noop,
         deletePipelineCache: Promise.resolve,
         isReadonly: isReadOnly,
@@ -284,7 +287,8 @@ export function ServicePipelineProvider({
         setSelectedSectionId: noop,
         setSelection,
         getStagePathFromPipeline,
-        setTemplateTypes: noop
+        setTemplateTypes: noop,
+        getTemplate
       }}
     >
       {children}

@@ -39,8 +39,16 @@ describe('AccountSideNav', () => {
       OPA_PIPELINE_GOVERNANCE: true,
       OPA_FF_GOVERNANCE: false
     })
+
     const renderObj = render(
-      <TestWrapper>
+      <TestWrapper
+        defaultLicenseStoreValues={{
+          licenseInformation: {
+            CI: { edition: 'ENTERPRISE', licenseType: 'PAID' },
+            CD: { edition: 'FREE', licenseType: 'TRIAL' }
+          }
+        }}
+      >
         <AccountSideNav />
       </TestWrapper>
     )
@@ -52,8 +60,16 @@ describe('AccountSideNav', () => {
       OPA_PIPELINE_GOVERNANCE: false,
       OPA_FF_GOVERNANCE: true
     })
+
     const renderObj = render(
-      <TestWrapper>
+      <TestWrapper
+        defaultLicenseStoreValues={{
+          licenseInformation: {
+            CI: { edition: 'ENTERPRISE', licenseType: 'PAID' },
+            CD: { edition: 'FREE', licenseType: 'TRIAL' }
+          }
+        }}
+      >
         <AccountSideNav />
       </TestWrapper>
     )

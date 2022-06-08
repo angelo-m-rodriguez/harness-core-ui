@@ -17,7 +17,9 @@ import {
   Layout,
   SelectOption,
   Utils,
-  useToaster
+  useToaster,
+  MultiTypeInputType,
+  getMultiTypeFromValue
 } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -39,10 +41,15 @@ import useGroupedSideNaveHook from '@cv/hooks/GroupedSideNaveHook/useGroupedSide
 import { getOptions, validateMetrics, createMetricDataFormik } from '../MonitoredServiceConnector.utils'
 import { HealthSoureSupportedConnectorTypes } from '../MonitoredServiceConnector.constants'
 import {
+  checkAppAndTierAreNotFixed,
   createAppDFormData,
+  getAllowedTypes,
   initAppDCustomFormValue,
   initializeNonCustomFields,
+  resetShowCustomMetric,
+  setAppAndTierAsInputIfConnectorIsInput,
   setCustomFieldAndValidation,
+  shouldMakeTierCall,
   showValidation,
   submitData,
   validateMapping
@@ -80,24 +87,32 @@ export default function AppDMonitoredSource({
   })
   const [guidMap, setGuidMap] = useState(new Map())
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
-  const connectorIdentifier = (appDynamicsData?.connectorRef?.connector?.identifier ||
-    appDynamicsData?.connectorRef) as string
+  const connectorIdentifier = (appDynamicsData?.connectorRef?.value || appDynamicsData?.connectorRef) as string
+
+  const isConnectorRuntimeOrExpression = getMultiTypeFromValue(connectorIdentifier) !== MultiTypeInputType.FIXED
 
   const {
     data: applicationsData,
     loading: applicationLoading,
-    error: applicationError
-  } = useGetAppDynamicsApplications({
-    queryParams: {
-      accountId,
-      connectorIdentifier,
-      orgIdentifier,
-      projectIdentifier,
-      offset: 0,
-      pageSize: 10000,
-      filter: ''
+    error: applicationError,
+    refetch: refetchAppDApplication
+  } = useGetAppDynamicsApplications({ lazy: true })
+
+  useEffect(() => {
+    if (!isConnectorRuntimeOrExpression) {
+      refetchAppDApplication({
+        queryParams: {
+          accountId,
+          connectorIdentifier,
+          orgIdentifier,
+          projectIdentifier,
+          offset: 0,
+          pageSize: 10000,
+          filter: ''
+        }
+      })
     }
-  })
+  }, [accountId, orgIdentifier, projectIdentifier, connectorIdentifier, refetchAppDApplication])
 
   const {
     data: tierData,
@@ -109,7 +124,7 @@ export default function AppDMonitoredSource({
   })
 
   useEffect(() => {
-    if (appDynamicsData?.applicationName) {
+    if (shouldMakeTierCall(appDynamicsData?.applicationName)) {
       refetchTier({
         queryParams: {
           appName: appDynamicsData?.applicationName,
@@ -126,6 +141,9 @@ export default function AppDMonitoredSource({
   }, [appDynamicsData?.applicationName])
 
   const onValidate = async (appName: string, tierName: string, metricObject: { [key: string]: any }): Promise<void> => {
+    if (checkAppAndTierAreNotFixed(appName, tierName)) {
+      return
+    }
     setAppDValidation({ status: StatusOfValidation.IN_PROGRESS, result: [] })
     const filteredMetricPack = selectedMetricPacks.filter(item => metricObject[item.identifier as string])
     const guid = Utils.randomId()
@@ -210,9 +228,7 @@ export default function AppDMonitoredSource({
   )
 
   useEffect(() => {
-    if (!selectedMetric && !mappedMetrics.size) {
-      setShowCustomMetric(false)
-    }
+    resetShowCustomMetric(selectedMetric, mappedMetrics, setShowCustomMetric)
   }, [mappedMetrics, selectedMetric])
 
   useEffect(() => {
@@ -221,12 +237,16 @@ export default function AppDMonitoredSource({
     applicationError && showError(getErrorMessage(applicationError))
   }, [applicationError, tierError])
 
-  const setCustomField = (tierValue: string): void => {
+  const setAppDTierCustomField = (tierValue: string): void => {
     setNonCustomFeilds({
       ...nonCustomFeilds,
       appDTier: tierValue
     })
   }
+
+  useEffect(() => {
+    setAppAndTierAsInputIfConnectorIsInput(isConnectorRuntimeOrExpression, nonCustomFeilds, setNonCustomFeilds)
+  }, [])
 
   return (
     <Formik<AppDynamicsFomikFormInterface>
@@ -262,10 +282,11 @@ export default function AppDMonitoredSource({
               <Layout.Horizontal spacing={'large'} className={css.horizontalCenterAlign}>
                 <Container margin={{ bottom: 'small' }} width={'300px'} color={Color.BLACK}>
                   <AppDApplications
+                    allowedTypes={getAllowedTypes(isConnectorRuntimeOrExpression)}
                     applicationOptions={applicationOptions}
                     applicationLoading={applicationLoading}
+                    applicationError={formik?.errors?.appdApplication}
                     connectorIdentifier={connectorIdentifier}
-                    formikSetFieldValue={formik.setFieldValue}
                     formikAppDynamicsValue={formik?.values?.appdApplication}
                     refetchTier={refetchTier}
                     setCustomFieldAndValidation={(value: string, validate = false) =>
@@ -288,7 +309,8 @@ export default function AppDMonitoredSource({
                       tierLoading={tierLoading}
                       formikValues={formik?.values}
                       onValidate={onValidate}
-                      setCustomField={setCustomField}
+                      tierError={formik?.errors?.appDTier}
+                      setAppDTierCustomField={setAppDTierCustomField}
                     />
                   </Container>
                 )}

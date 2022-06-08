@@ -226,6 +226,7 @@ export interface TFDataSpec {
     }
   }
   varFiles?: TerraformVarFileWrapper[]
+  exportTerraformPlanJson?: boolean
 }
 
 export interface TFFormData extends StepElementConfig {
@@ -459,6 +460,12 @@ export const onSubmitTFPlanData = (values: any): TFPlanFormData => {
     configObject['secretManagerRef'] = values?.spec?.configuration?.secretManagerRef
       ? values?.spec?.configuration?.secretManagerRef
       : ''
+  }
+
+  if (values?.spec?.configuration?.exportTerraformPlanJson) {
+    configObject['exportTerraformPlanJson'] = values?.spec?.configuration?.exportTerraformPlanJson
+      ? values?.spec?.configuration?.exportTerraformPlanJson
+      : false
   }
 
   return {

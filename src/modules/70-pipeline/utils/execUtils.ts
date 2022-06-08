@@ -210,7 +210,14 @@ const processStepGroupSteps = ({ nodeAdjacencyListMap, id, nodeMap, rootNodes }:
         )
       }
     } else {
-      steps.push({ step: nodeMap?.[childId] })
+      steps.push({
+        step: {
+          ...nodeMap?.[childId],
+          ...getNodeConditions(nodeMap?.[childId] as ExecutionNode),
+          graphType: PipelineGraphType.STEP_GRAPH,
+          ...getIconDataBasedOnType(nodeMap?.[childId])
+        }
+      })
     }
     const processChildNodes = processNextNodes({
       nodeMap,
@@ -348,7 +355,6 @@ ProcessGroupItemArgs): void => {
   if (!nodeData) {
     return
   }
-
   const iconData = getIconDataBasedOnType(nodeData)
 
   const steps: Array<StepPipelineGraphState | ParallelStepPipelineGraphState> = []

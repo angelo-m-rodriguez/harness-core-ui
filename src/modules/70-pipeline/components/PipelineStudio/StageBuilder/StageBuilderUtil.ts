@@ -27,7 +27,6 @@ import {
 import type { StageType } from '@pipeline/utils/stageHelpers'
 import type { DeploymentStageElementConfig, StageElementWrapper } from '@pipeline/utils/pipelineTypes'
 import type { TemplateSummaryResponse } from 'services/template-ng'
-import type { GetTemplateProps, GetTemplateResponse } from '@pipeline/utils/useTemplateSelector'
 import type { DynamicPopoverHandlerBinding } from '@common/components/DynamicPopover/DynamicPopover'
 import { DiagramType, Event } from '@pipeline/components/Diagram'
 import { PipelineOrStageStatus } from '@pipeline/components/PipelineSteps/AdvancedSteps/ConditionalExecutionPanel/ConditionalExecutionPanelUtils'
@@ -79,7 +78,7 @@ export interface PopoverData {
   onClickGroupStage?: (stageId: string, type: StageType) => void
   renderPipelineStage: PipelineContextInterface['renderPipelineStage']
   isHoverView?: boolean
-  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>
+  getTemplate: PipelineContextInterface['getTemplate']
   templateTypes: { [key: string]: string }
   newPipelineStudioEnabled?: boolean
 }
@@ -444,7 +443,7 @@ export const getLinkEventListeners = (
   ) => void,
   updateMoveStageDetails: (moveStageDetails: MoveStageDetailsType) => void,
   confirmMoveStage: () => void,
-  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>,
+  getTemplate: PipelineContextInterface['getTemplate'],
   stageMap: Map<string, StageState>,
   newPipelineStudioEnabled?: boolean
 ): LinkModelListener => {
@@ -570,7 +569,7 @@ export const getNodeEventListerner = (
 
   updateMoveStageDetails: (moveStageDetails: MoveStageDetailsType) => void,
   confirmMoveStage: () => void,
-  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>,
+  getTemplate: PipelineContextInterface['getTemplate'],
   stageMap: Map<string, StageState>,
   newPipelineStudioEnabled?: boolean
 ): NodeModelListener => {

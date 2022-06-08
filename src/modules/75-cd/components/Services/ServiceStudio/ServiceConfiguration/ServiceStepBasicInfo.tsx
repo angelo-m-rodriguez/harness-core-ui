@@ -22,7 +22,7 @@ function ServiceStepBasicInfo(): React.ReactElement {
     updatePipeline
   } = usePipelineContext()
 
-  const { isServiceEntityModalView } = useServiceContext()
+  const { isServiceEntityModalView, isServiceCreateModalView } = useServiceContext()
 
   const onUpdate = useCallback(
     (value: NGServiceV2InfoConfig): void => {
@@ -48,7 +48,7 @@ function ServiceStepBasicInfo(): React.ReactElement {
                 className={css.nameIdDescriptionTags}
                 formikProps={formikProps}
                 identifierProps={{
-                  isIdentifierEditable: false,
+                  isIdentifierEditable: isServiceCreateModalView,
                   inputGroupProps: {
                     disabled: isReadonly
                   }

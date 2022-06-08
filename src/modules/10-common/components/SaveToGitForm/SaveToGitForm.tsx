@@ -40,6 +40,7 @@ import {
 import { useStrings } from 'framework/strings'
 import { useGitSyncStore } from 'framework/GitRepoStore/GitSyncStoreContext'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
+import type { StoreMetadata } from '@common/constants/GitSyncTypes'
 import { getEntityNameFromType } from '@common/utils/StringUtils'
 import paths from '@common/RouteDefinitions'
 import { validateFilePath } from '@common/utils/gitSyncUtils'
@@ -51,6 +52,7 @@ export interface GitResourceInterface {
   name: string
   identifier: string
   gitDetails?: EntityGitDetails
+  storeMetadata?: StoreMetadata
 }
 
 interface SaveToGitFormProps {
@@ -69,9 +71,10 @@ interface ModalConfigureProps {
 export interface SaveToGitFormInterface {
   name?: string
   identifier?: string
-  repoIdentifier: string
-  rootFolder: string
-  filePath: string
+  repoIdentifier?: string
+  repoName?: string
+  rootFolder?: string
+  filePath?: string
   isNewBranch: boolean
   branch: string
   targetBranch?: string

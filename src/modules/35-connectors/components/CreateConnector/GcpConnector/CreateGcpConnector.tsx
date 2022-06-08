@@ -48,6 +48,7 @@ const CreateGcpConnector: React.FC<CreateConnectorModalProps> = props => {
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
           mock={props.mock}
+          helpPanelReferenceId="GoogleCloudProviderOverview"
         />
         <GcpAuthentication
           name={getString('details')}
@@ -65,6 +66,7 @@ const CreateGcpConnector: React.FC<CreateConnectorModalProps> = props => {
           onConnectorCreated={props.onSuccess}
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
+          helpPanelReferenceId="ConnectorDelegatesSetup"
         />
         <VerifyOutOfClusterDelegate
           name={getString('connectors.stepThreeName')}
@@ -74,6 +76,7 @@ const CreateGcpConnector: React.FC<CreateConnectorModalProps> = props => {
           type={Connectors.GCP}
           onClose={props.onClose}
           stepIndex={TESTCONNECTION_STEP_INDEX}
+          helpPanelReferenceId="ConnectorTest"
         />
       </StepWizard>
     </>

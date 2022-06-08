@@ -22,7 +22,7 @@ import {
 } from '@common/utils/routeUtils'
 import type { ExecutionPathProps, PipelinePathProps, PipelineType } from '@common/interfaces/RouteInterfaces'
 import PipelineDetails from '@pipeline/pages/pipeline-details/PipelineDetails'
-import CFPipelineStudio from '@cf/pages/pipeline-studio/CFPipelineStudio'
+import CFPipelineStudioWrapper from '@cf/pages/pipeline-studio/CFPipelineStudioWrapper'
 import PipelinesPage from '@pipeline/pages/pipelines/PipelinesPage'
 import DeploymentsList from '@pipeline/pages/deployments-list/DeploymentsList'
 import InputSetList from '@pipeline/pages/inputSet-list/InputSetList'
@@ -61,7 +61,7 @@ const PipelineRouteDestinations: FC = () => (
       path={routes.toPipelineStudio({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })}
     >
       <PipelineDetails>
-        <CFPipelineStudio />
+        <CFPipelineStudioWrapper />
       </PipelineDetails>
     </RouteWithLayout>
 

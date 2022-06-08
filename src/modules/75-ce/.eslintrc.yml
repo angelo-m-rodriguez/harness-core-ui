@@ -7,14 +7,18 @@ rules:
         - '!microfrontends/ChildAppMounter'
         - modules/75-cd/*
         - modules/75-cf/*
+        - modules/75-chaos/*
         - modules/75-ci/*
         - modules/85-cv/*
         - modules/85-sto-steps/*
+        - modules/90-gitops/*
         - '@cd/*'
         - '@cf/*'
+        - '@chaos/*'
         - '@ci/*'
         - '@cv/*'
         - '@sto-steps/*'
+        - '@gitops/*'
       paths:
         - lodash
         - name: yaml

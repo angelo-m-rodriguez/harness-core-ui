@@ -287,6 +287,12 @@
   }
 }
 
+.variable-padding-l4 {
+  :global(.variable-list-row) {
+    padding-left: var(--spacing-13) !important;
+  }
+}
+
 .variable-padding--tag-l0 {
   :global(.variable-list-row) {
     padding-left: calc(var(--spacing-large) + 12px) !important;

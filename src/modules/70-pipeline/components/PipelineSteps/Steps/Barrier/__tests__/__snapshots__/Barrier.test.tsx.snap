@@ -678,7 +678,7 @@ exports[`Barrier tests Renders Input Set View 1`] = `
 exports[`Barrier tests Variable view 1`] = `
 <div>
   <div
-    class="variablesListTable"
+    class="variablesListTable variablePaddingL3"
   />
 </div>
 `;

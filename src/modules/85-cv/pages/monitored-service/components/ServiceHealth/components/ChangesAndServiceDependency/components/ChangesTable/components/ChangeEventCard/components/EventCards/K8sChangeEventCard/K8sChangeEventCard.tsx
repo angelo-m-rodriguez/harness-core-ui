@@ -6,7 +6,8 @@
  */
 
 import React, { useMemo, useState } from 'react'
-import { Button, Card, Container, Text } from '@wings-software/uicore'
+import { Button, Card, Container, Layout, Text } from '@wings-software/uicore'
+import { Color } from '@harness/design-system'
 import { useModalHook } from '@harness/use-modal'
 import { Divider, Dialog } from '@blueprintjs/core'
 import { MonacoDiffEditor } from 'react-monaco-editor'
@@ -16,20 +17,23 @@ import ChangeEventServiceHealth from '@cv/pages/monitored-service/components/Ser
 import SLOAndErrorBudget from '@cv/pages/monitored-service/components/ServiceHealth/components/ChangesAndServiceDependency/components/ChangesTable/components/ChangeCard/components/SLOAndErrorBudget/SLOAndErrorBudget'
 import ChangeDetails from '../../ChangeDetails/ChangeDetails'
 import type { ChangeTitleData, ChangeDetailsDataInterface, ChangeInfoData } from '../../../ChangeEventCard.types'
-import { createChangeTitleData, createChangeDetailsData } from '../../../ChangeEventCard.utils'
-import ChangeTitle from '../../ChangeTitle/ChangeTitle'
+import { createChangeTitleData, createChangeDetailsDataForKubernetes } from '../../../ChangeEventCard.utils'
 import ChangeInformation from '../../ChangeInformation/ChangeInformation'
 import K8sChangeEventYAML from './components/K8sChangeEventYAML/K8sChangeEventYAML'
 import { K8sChangeEventDrawerProps } from './K8sChangeEventCard.constants'
 import { createK8ChangeInfoData } from './K8sChangeEventCard.utils'
 import { TWO_HOURS_IN_MILLISECONDS } from '../../../ChangeEventCard.constant'
+import { IconWithText } from '../../IconWithText/IconWithText'
 import changeEventCardCss from '../../../ChangeEventCard.module.scss'
 import css from './K8sChangeEventCard.module.scss'
 
 export default function K8sChangeEventCard({ data }: { data: ChangeEventDTO }): JSX.Element {
   const [timeStamps, setTimestamps] = useState<[number, number]>([0, 0])
   const changeTitleData: ChangeTitleData = useMemo(() => createChangeTitleData(data), [data])
-  const changeDetailsData: ChangeDetailsDataInterface = useMemo(() => createChangeDetailsData(data), [data])
+  const changeDetailsData: ChangeDetailsDataInterface = useMemo(
+    () => createChangeDetailsDataForKubernetes(data),
+    [data]
+  )
   const changeInfoData: ChangeInfoData = useMemo(() => createK8ChangeInfoData(data.metadata), [data.metadata])
   const { getString } = useStrings()
   const [showModal, hideModal] = useModalHook(() => (
@@ -50,9 +54,40 @@ export default function K8sChangeEventCard({ data }: { data: ChangeEventDTO }): 
 
   return (
     <Card className={changeEventCardCss.main}>
-      <ChangeTitle changeTitleData={changeTitleData} />
+      <Container>
+        <Layout.Horizontal spacing="small" flex>
+          <Text lineClamp={1} font={{ size: 'medium', weight: 'bold' }} color={Color.BLACK}>
+            Workload: {data.metadata.workload} - Namespace: {data.metadata.namespace}
+          </Text>
+          <Text font={{ size: 'xsmall' }} color={Color.GREY_800}>
+            {getString('cd.serviceDashboard.executionId')}
+            <span>{changeTitleData.executionId}</span>
+          </Text>
+        </Layout.Horizontal>
+        <Layout.Horizontal>
+          <IconWithText icon={'cd-solid'} />
+          <IconWithText icon={'main-setup'} text={changeTitleData.serviceIdentifier} />
+          <IconWithText icon={'environments'} text={changeTitleData.envIdentifier} />
+          <IconWithText text={status} />
+        </Layout.Horizontal>
+      </Container>
+
       <Divider className={changeEventCardCss.divider} />
-      <ChangeDetails ChangeDetailsData={changeDetailsData} />
+      <ChangeDetails
+        ChangeDetailsData={{
+          ...changeDetailsData,
+          executedBy: {
+            shouldVisible: false,
+            component: changeInfoData?.triggerAt ? (
+              <Text icon={'time'} iconProps={{ size: 13 }} font={{ size: 'small' }}>
+                {`${getString('cv.changeSource.changeSourceCard.triggred')} ${changeInfoData.triggerAt}`}
+              </Text>
+            ) : (
+              <></>
+            )
+          }
+        }}
+      />
       <Divider className={changeEventCardCss.divider} />
       <Container>
         <Button
@@ -68,7 +103,7 @@ export default function K8sChangeEventCard({ data }: { data: ChangeEventDTO }): 
       {data.eventTime && data.monitoredServiceIdentifier && (
         <>
           <ChangeEventServiceHealth
-            monitoredServiceIdentifier={data.monitoredServiceIdentifier}
+            monitoredServiceIdentifier={data?.metadata?.dependentMonitoredService || data.monitoredServiceIdentifier}
             startTime={data.eventTime}
             eventType={data.type}
             timeStamps={timeStamps}
@@ -77,7 +112,7 @@ export default function K8sChangeEventCard({ data }: { data: ChangeEventDTO }): 
           <SLOAndErrorBudget
             eventType={data.type}
             eventTime={data.eventTime}
-            monitoredServiceIdentifier={data.monitoredServiceIdentifier}
+            monitoredServiceIdentifier={data?.metadata?.dependentMonitoredService || data.monitoredServiceIdentifier}
             startTime={timeStamps[0] || data.eventTime}
             endTime={timeStamps[1] || data.eventTime + TWO_HOURS_IN_MILLISECONDS}
           />

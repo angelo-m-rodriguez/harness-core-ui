@@ -24,9 +24,10 @@ import { usePostRoleAssignments, RoleAssignment as RBACRoleAssignment } from 'se
 import { useStrings } from 'framework/strings'
 import type { RoleAssignmentMetadataDTO, ServiceAccountDTO, UserGroupDTO } from 'services/cd-ng'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { getAssignments, isNewRoleAssignment, PrincipalType } from '@rbac/utils/utils'
+import { getAssignments, isNewRoleAssignment, isUserGroupInherited, PrincipalType } from '@rbac/utils/utils'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { isCommunityPlan } from '@common/utils/utils'
+import { getPrincipalScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import RoleAssignmentForm from './RoleAssignmentForm'
 import type { Assignment } from './UserRoleAssigment'
 
@@ -71,7 +72,15 @@ const RoleAssignment: React.FC<RoleAssignmentData> = ({
         return {
           resourceGroupIdentifier: value.resourceGroup.value.toString(),
           roleIdentifier: value.role.value.toString(),
-          principal: { identifier: principalInfo.identifier, type }
+          principal: {
+            identifier: principalInfo.identifier,
+            type,
+            scopeLevel:
+              type === PrincipalType.USER_GROUP &&
+              isUserGroupInherited(accountId, orgIdentifier, projectIdentifier, principalInfo)
+                ? getPrincipalScopeFromDTO(principalInfo)
+                : undefined
+          }
         }
       })
 

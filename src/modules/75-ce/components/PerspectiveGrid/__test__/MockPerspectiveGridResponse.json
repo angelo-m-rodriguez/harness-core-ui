@@ -59,5 +59,6 @@
       "cost": 0,
       "costTrend": -10.2
     }
-  ]
+  ],
+  "allowExportAsCSV": true
 }

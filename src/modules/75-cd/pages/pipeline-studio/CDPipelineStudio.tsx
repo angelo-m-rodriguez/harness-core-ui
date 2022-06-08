@@ -21,7 +21,6 @@ import { getCDPipelineStages } from '@cd/components/PipelineStudio/CDPipelineSta
 import { useStrings } from 'framework/strings'
 import { PipelineProvider } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { PipelineStudio } from '@pipeline/components/PipelineStudio/PipelineStudio'
-import { TemplateDrawer } from '@templates-library/components/TemplateDrawer/TemplateDrawer'
 import { getCDTrialDialog } from '@cd/modals/CDTrial/useCDTrialModal'
 import { TrialType } from '@pipeline/components/TrialModalTemplate/trialModalUtils'
 import type { PipelineInfoConfig } from 'services/cd-ng'
@@ -29,13 +28,14 @@ import { useQueryParams } from '@common/hooks'
 import { useLicenseStore } from 'framework/LicenseStore/LicenseStoreContext'
 import { FeatureFlag } from '@common/featureFlags'
 import type { ModuleLicenseType } from '@common/constants/SubscriptionTypes'
+import { useTemplateSelector } from '@templates-library/hooks/useTemplateSelector'
 import css from './CDPipelineStudio.module.scss'
 
 const CDPipelineStudio: React.FC = (): JSX.Element => {
   const { accountId, projectIdentifier, orgIdentifier, pipelineIdentifier, module } =
     useParams<PipelineType<PipelinePathProps & AccountPathProps>>()
 
-  const { branch, repoIdentifier } = useQueryParams<GitQueryParams>()
+  const { branch, repoIdentifier, repoName, connectorRef, storeType } = useQueryParams<GitQueryParams>()
 
   const history = useHistory()
 
@@ -63,6 +63,9 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
         module,
         branch,
         repoIdentifier,
+        repoName,
+        connectorRef,
+        storeType,
         runPipeline: true
       })
     )
@@ -74,6 +77,7 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
   const isSTOEnabled = useFeatureFlag(FeatureFlag.SECURITY_STAGE)
   const isCustomStageEnabled = useFeatureFlag(FeatureFlag.NG_CUSTOM_STAGE)
   const { getString } = useStrings()
+  const { getTemplate } = useTemplateSelector()
 
   return (
     <PipelineProvider
@@ -94,6 +98,7 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
       }
       stepsFactory={factory}
       runPipeline={handleRunPipeline}
+      getTemplate={getTemplate}
     >
       <PipelineStudio
         className={css.container}
@@ -103,7 +108,6 @@ const CDPipelineStudio: React.FC = (): JSX.Element => {
         routePipelineList={routes.toPipelines}
         getOtherModal={getOtherModal}
       />
-      <TemplateDrawer />
     </PipelineProvider>
   )
 }

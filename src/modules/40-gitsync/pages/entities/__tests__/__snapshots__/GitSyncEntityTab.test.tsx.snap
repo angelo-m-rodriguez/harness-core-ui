@@ -381,7 +381,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  1`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="pipeline-ng"
                   >
                     <svg
@@ -520,7 +520,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  1`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="connectors-icon"
                   >
                     <svg
@@ -598,7 +598,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  1`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="connectors-icon"
                   >
                     <svg
@@ -749,7 +749,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  1`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="cf-main"
                   >
                     <svg
@@ -934,7 +934,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  2`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="pipeline-ng"
                   >
                     <svg
@@ -1208,7 +1208,7 @@ exports[`Git Sync - entity tab rendering summary view of a gitSyncRepo  2`] = `
                   class="Layout--horizontal StyledProps--main"
                 >
                   <span
-                    class="bp3-icon StyledProps--main StyledProps--inline"
+                    class="bp3-icon StyledProps--main StyledProps--inline StyledProps--color"
                     data-icon="cf-main"
                   >
                     <svg

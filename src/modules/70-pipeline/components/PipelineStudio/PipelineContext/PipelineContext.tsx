@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { deleteDB, IDBPDatabase, openDB } from 'idb'
-import { cloneDeep, defaultTo, isEmpty, isEqual, isNil, omit, pick } from 'lodash-es'
+import { cloneDeep, defaultTo, get, isEmpty, isEqual, isNil, omit, pick } from 'lodash-es'
 import { parse } from 'yaml'
 import { IconName, MultiTypeInputType, VisualYamlSelectedView as SelectedView } from '@wings-software/uicore'
 import merge from 'lodash-es/merge'
@@ -23,6 +23,7 @@ import {
   CreatePipelineQueryParams,
   createPipelineV2Promise,
   EntityGitDetails,
+  ErrorNodeSummary,
   EntityValidityDetails,
   Failure,
   getPipelinePromise,
@@ -30,7 +31,9 @@ import {
   putPipelinePromise,
   PutPipelineQueryParams,
   putPipelineV2Promise,
-  ResponsePMSPipelineResponseDTO
+  ResponsePMSPipelineResponseDTO,
+  validateTemplateInputsPromise,
+  ValidateTemplateInputsQueryParams
 } from 'services/pipeline-ng'
 import { useGlobalEventListener, useLocalStorage, useQueryParams } from '@common/hooks'
 import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
@@ -41,7 +44,8 @@ import { yamlStringify } from '@common/utils/YamlHelperMethods'
 import type { PipelineStageWrapper } from '@pipeline/utils/pipelineTypes'
 import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import { Scope } from '@common/interfaces/SecretsInterface'
-import { getTemplateTypesByRef } from '@pipeline/utils/templateUtils'
+import { GetTemplateProps, GetTemplateResponse, getTemplateTypesByRef } from '@pipeline/utils/templateUtils'
+import type { StoreMetadata } from '@common/constants/GitSyncTypes'
 import {
   ActionReturnType,
   DefaultNewPipelineId,
@@ -52,8 +56,7 @@ import {
   PipelineReducer,
   PipelineReducerState,
   PipelineViewData,
-  SelectionState,
-  TemplateViewData
+  SelectionState
 } from './PipelineActions'
 import type { AbstractStepFactory } from '../../AbstractSteps/AbstractStepFactory'
 import type { PipelineStagesProps } from '../../PipelineStages/PipelineStages'
@@ -84,7 +87,8 @@ export const getPipelineByIdentifier = (
         accountIdentifier: params.accountIdentifier,
         orgIdentifier: params.orgIdentifier,
         projectIdentifier: params.projectIdentifier,
-        ...(params.repoIdentifier ? { repoIdentifier: params.repoIdentifier, branch: params.branch } : {})
+        ...(params.branch ? { branch: params.branch } : {}),
+        ...(params.repoIdentifier ? { repoIdentifier: params.repoIdentifier } : {})
       },
       requestOptions: {
         headers: {
@@ -125,6 +129,23 @@ export const getPipelineByIdentifier = (
       }
     }
   })
+}
+
+const getTemplateErrorNodeSummary = (
+  queryParams: ValidateTemplateInputsQueryParams
+): Promise<ErrorNodeSummary | undefined> => {
+  return validateTemplateInputsPromise({ queryParams })
+    .then(response => {
+      if (response && response.status === 'SUCCESS') {
+        if (response.data?.validYaml === false && response.data.errorNodeSummary) {
+          return response.data.errorNodeSummary
+        }
+      }
+      throw response
+    })
+    .catch(_error => {
+      return undefined
+    })
 }
 
 export const savePipeline = (
@@ -219,10 +240,10 @@ export interface PipelineContextInterface {
   setYamlHandler: (yamlHandler: YamlBuilderHandlerBinding) => void
   setTemplateTypes: (data: { [key: string]: string }) => void
   updatePipeline: (pipeline: PipelineInfoConfig) => Promise<void>
+  updatePipelineStoreMetadata: (storeMetadata: StoreMetadata, gitDetails: EntityGitDetails) => Promise<void>
   updateGitDetails: (gitDetails: EntityGitDetails) => Promise<void>
   updateEntityValidityDetails: (entityValidityDetails: EntityValidityDetails) => Promise<void>
   updatePipelineView: (data: PipelineViewData) => void
-  updateTemplateView: (data: TemplateViewData) => void
   deletePipelineCache: (gitDetails?: EntityGitDetails) => Promise<void>
   getStageFromPipeline<T extends StageElementConfig = StageElementConfig>(
     stageId: string,
@@ -239,6 +260,7 @@ export interface PipelineContextInterface {
   setSelectedSectionId: (selectedSectionId: string | undefined) => void
   setSelection: (selectionState: PipelineSelectionState) => void
   getStagePathFromPipeline(stageId: string, prefix?: string, pipeline?: PipelineInfoConfig): string
+  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>
 }
 
 interface PipelinePayload {
@@ -246,8 +268,10 @@ interface PipelinePayload {
   pipeline: PipelineInfoConfig | undefined
   originalPipeline?: PipelineInfoConfig
   isUpdated: boolean
+  storeMetadata?: StoreMetadata
   gitDetails: EntityGitDetails
   entityValidityDetails?: EntityValidityDetails
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 const getId = (
@@ -306,6 +330,10 @@ const getTemplateType = (pipeline: PipelineInfoConfig, queryParams: GetPipelineQ
   )
 }
 
+const getRepoIdentifierName = (gitDetails?: EntityGitDetails) => {
+  return gitDetails?.repoIdentifier || gitDetails?.repoName || ''
+}
+
 const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipelineUnboundProps): Promise<void> => {
   const { dispatch, queryParams, pipelineIdentifier: identifier, gitDetails } = props
   const { forceFetch = false, forceUpdate = false, newPipelineId, signal, repoIdentifier, branch } = params
@@ -330,8 +358,16 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
   }
 
   if ((!data || forceFetch) && pipelineId !== DefaultNewPipelineId) {
+    const templateInputsErrorNodeSummary = await getTemplateErrorNodeSummary({
+      ...queryParams,
+      identifier: pipelineId,
+      repoIdentifier,
+      branch,
+      getDefaultFromOtherRepo: true
+    })
+
     const pipelineWithGitDetails: PipelineInfoConfigWithGitDetails = await getPipelineByIdentifier(
-      { ...queryParams, ...(repoIdentifier && branch ? { repoIdentifier, branch } : {}) },
+      { ...queryParams, ...(repoIdentifier ? { repoIdentifier } : {}), ...(branch ? { branch } : {}) },
       pipelineId,
       signal
     )
@@ -347,7 +383,7 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
       defaultTo(queryParams.orgIdentifier, ''),
       defaultTo(queryParams.projectIdentifier, ''),
       pipelineId,
-      defaultTo(gitDetails.repoIdentifier, defaultTo(pipelineWithGitDetails?.gitDetails?.repoIdentifier, '')),
+      defaultTo(gitDetails.repoIdentifier, getRepoIdentifierName(pipelineWithGitDetails.gitDetails)),
       defaultTo(gitDetails.branch, defaultTo(pipelineWithGitDetails?.gitDetails?.branch, ''))
     )
 
@@ -361,20 +397,24 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
       'gitDetails',
       'entityValidityDetails',
       'repo',
-      'branch'
+      'branch',
+      'connectorRef',
+      'filePath'
     )
     const payload: PipelinePayload = {
       [KeyPath]: id,
       pipeline,
       originalPipeline: cloneDeep(pipeline),
       isUpdated: false,
-      gitDetails: pipelineWithGitDetails?.gitDetails?.objectId
-        ? pipelineWithGitDetails.gitDetails
-        : data?.gitDetails ?? {},
+      gitDetails:
+        pipelineWithGitDetails?.gitDetails?.objectId || pipelineWithGitDetails?.gitDetails?.commitId
+          ? pipelineWithGitDetails.gitDetails
+          : data?.gitDetails ?? {},
       entityValidityDetails: defaultTo(
         pipelineWithGitDetails?.entityValidityDetails,
         defaultTo(data?.entityValidityDetails, {})
-      )
+      ),
+      templateInputsErrorNodeSummary
     }
     const templateQueryParams = {
       ...queryParams,
@@ -393,14 +433,16 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
           originalPipeline: cloneDeep(pipeline),
           isBEPipelineUpdated: !isEqual(pipeline, data.originalPipeline),
           isUpdated: !isEqual(pipeline, data.pipeline),
-          gitDetails: pipelineWithGitDetails?.gitDetails?.objectId
-            ? pipelineWithGitDetails.gitDetails
-            : defaultTo(data?.gitDetails, {}),
+          gitDetails:
+            pipelineWithGitDetails?.gitDetails?.objectId || pipelineWithGitDetails?.gitDetails?.commitId
+              ? pipelineWithGitDetails.gitDetails
+              : defaultTo(data?.gitDetails, {}),
           templateTypes,
           entityValidityDetails: defaultTo(
             pipelineWithGitDetails?.entityValidityDetails,
             defaultTo(data?.entityValidityDetails, {})
-          )
+          ),
+          templateInputsErrorNodeSummary
         })
       )
     } else {
@@ -419,7 +461,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
           isUpdated: false,
           gitDetails: payload.gitDetails,
           entityValidityDetails: payload.entityValidityDetails,
-          templateTypes
+          templateTypes,
+          templateInputsErrorNodeSummary
         })
       )
     }
@@ -513,6 +556,42 @@ interface UpdateGitDetailsArgs {
   originalPipeline: PipelineInfoConfig
   pipeline: PipelineInfoConfig
 }
+
+const _updateStoreMetadata = async (
+  args: UpdateGitDetailsArgs,
+  storeMetadata: StoreMetadata,
+  gitDetails: EntityGitDetails
+): Promise<void> => {
+  const { dispatch, queryParams, identifier, originalPipeline, pipeline } = args
+  await _deletePipelineCache(queryParams, identifier, {})
+  const id = getId(
+    queryParams.accountIdentifier,
+    queryParams.orgIdentifier || '',
+    queryParams.projectIdentifier || '',
+    identifier,
+    getRepoIdentifierName(gitDetails),
+    gitDetails.branch || ''
+  )
+  const isUpdated = !isEqual(originalPipeline, pipeline)
+  try {
+    if (IdbPipeline) {
+      const payload: PipelinePayload = {
+        [KeyPath]: id,
+        pipeline,
+        originalPipeline,
+        isUpdated,
+        storeMetadata,
+        gitDetails
+      }
+      await IdbPipeline.put(IdbPipelineStoreName, payload)
+    }
+    dispatch(PipelineContextActions.success({ error: '', pipeline, isUpdated, storeMetadata, gitDetails }))
+  } catch (_) {
+    logger.info(DBNotFoundErrorMessage)
+    dispatch(PipelineContextActions.success({ error: '', pipeline, isUpdated, storeMetadata, gitDetails }))
+  }
+}
+
 const _updateGitDetails = async (args: UpdateGitDetailsArgs, gitDetails: EntityGitDetails): Promise<void> => {
   const { dispatch, queryParams, identifier, originalPipeline, pipeline } = args
   await _deletePipelineCache(queryParams, identifier, {})
@@ -704,7 +783,7 @@ const _deletePipelineCache = async (
     queryParams.orgIdentifier || '',
     queryParams.projectIdentifier || '',
     identifier,
-    gitDetails?.repoIdentifier || '',
+    getRepoIdentifierName(gitDetails),
     gitDetails?.branch || ''
   )
   deletePipelineCacheFromIDB(IdbPipeline, id)
@@ -715,7 +794,7 @@ const _deletePipelineCache = async (
     queryParams.orgIdentifier || '',
     queryParams.projectIdentifier || '',
     DefaultNewPipelineId,
-    gitDetails?.repoIdentifier || '',
+    getRepoIdentifierName(gitDetails),
     gitDetails?.branch || ''
   )
   deletePipelineCacheFromIDB(IdbPipeline, defaultId)
@@ -738,6 +817,7 @@ export const PipelineContext = React.createContext<PipelineContextInterface>({
   view: SelectedView.VISUAL,
   contextType: PipelineContextType.Pipeline,
   allowableTypes: [],
+  updatePipelineStoreMetadata: () => new Promise<void>(() => undefined),
   updateGitDetails: () => new Promise<void>(() => undefined),
   updateEntityValidityDetails: () => new Promise<void>(() => undefined),
   setView: () => void 0,
@@ -746,7 +826,6 @@ export const PipelineContext = React.createContext<PipelineContextInterface>({
   renderPipelineStage: () => <div />,
   fetchPipeline: () => new Promise<void>(() => undefined),
   updatePipelineView: () => undefined,
-  updateTemplateView: () => undefined,
   updateStage: () => new Promise<void>(() => undefined),
   getStageFromPipeline: () => ({ stage: undefined, parent: undefined }),
   setYamlHandler: () => undefined,
@@ -758,7 +837,8 @@ export const PipelineContext = React.createContext<PipelineContextInterface>({
   setSelectedStepId: (_selectedStepId: string | undefined) => undefined,
   setSelectedSectionId: (_selectedSectionId: string | undefined) => undefined,
   setSelection: (_selectedState: PipelineSelectionState | undefined) => undefined,
-  getStagePathFromPipeline: () => ''
+  getStagePathFromPipeline: () => '',
+  getTemplate: () => new Promise<GetTemplateResponse>(() => undefined)
 })
 
 export interface PipelineProviderProps {
@@ -768,6 +848,7 @@ export interface PipelineProviderProps {
   stagesMap: StagesMap
   runPipeline: (identifier: string) => void
   renderPipelineStage: PipelineContextInterface['renderPipelineStage']
+  getTemplate: PipelineContextInterface['getTemplate']
 }
 
 export function PipelineProvider({
@@ -777,7 +858,8 @@ export function PipelineProvider({
   renderPipelineStage,
   stepsFactory,
   stagesMap,
-  runPipeline
+  runPipeline,
+  getTemplate
 }: React.PropsWithChildren<PipelineProviderProps>): React.ReactElement {
   const contextType = PipelineContextType.Pipeline
   const allowableTypes = [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
@@ -814,6 +896,15 @@ export function PipelineProvider({
       branch
     }
   })
+
+  const updatePipelineStoreMetadata = _updateStoreMetadata.bind(null, {
+    dispatch,
+    queryParams,
+    identifier: pipelineIdentifier,
+    originalPipeline: state.originalPipeline,
+    pipeline: state.pipeline
+  })
+
   const updateGitDetails = _updateGitDetails.bind(null, {
     dispatch,
     queryParams,
@@ -821,6 +912,7 @@ export function PipelineProvider({
     originalPipeline: state.originalPipeline,
     pipeline: state.pipeline
   })
+
   const updateEntityValidityDetails = _updateEntityValidityDetails.bind(null, {
     dispatch,
     queryParams,
@@ -877,10 +969,6 @@ export function PipelineProvider({
     dispatch(PipelineContextActions.updatePipelineView({ pipelineView: data }))
   }, [])
 
-  const updateTemplateView = React.useCallback((data: TemplateViewData) => {
-    dispatch(PipelineContextActions.updateTemplateView({ templateView: data }))
-  }, [])
-
   // stage/step selection
   const queryParamStateSelection = usePipelineQuestParamState()
   const setSelection = (selectedState: PipelineSelectionState) => {
@@ -911,6 +999,24 @@ export function PipelineProvider({
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParamStateSelection.stepId, queryParamStateSelection.stageId, queryParamStateSelection.sectionId])
+
+  React.useEffect(() => {
+    const templateRefs = findAllByKey('templateRef', state.pipeline).filter(templateRef =>
+      isEmpty(get(state.templateTypes, templateRef))
+    )
+    getTemplateTypesByRef(
+      {
+        ...queryParams,
+        templateListType: 'Stable',
+        repoIdentifier: state.gitDetails.repoIdentifier,
+        branch: state.gitDetails.repoIdentifier,
+        getDefaultFromOtherRepo: true
+      },
+      templateRefs
+    ).then(resp => {
+      setTemplateTypes(merge(state.templateTypes, resp))
+    })
+  }, [state.pipeline])
 
   const getStageFromPipeline = React.useCallback(
     <T extends StageElementConfig = StageElementConfig>(
@@ -1017,12 +1123,12 @@ export function PipelineProvider({
         getStageFromPipeline,
         renderPipelineStage,
         fetchPipeline,
+        updatePipelineStoreMetadata,
         updateGitDetails,
         updateEntityValidityDetails,
         updatePipeline,
         updateStage,
         updatePipelineView,
-        updateTemplateView,
         pipelineSaved,
         deletePipelineCache,
         isReadonly,
@@ -1033,7 +1139,8 @@ export function PipelineProvider({
         setSelectedSectionId,
         setSelection,
         getStagePathFromPipeline,
-        setTemplateTypes
+        setTemplateTypes,
+        getTemplate
       }}
     >
       {children}

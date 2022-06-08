@@ -26,7 +26,7 @@ import {
   ServiceRequestDTO,
   ServiceResponseDTO,
   useUpsertServiceV2,
-  useCreateServicesV2,
+  useCreateServiceV2,
   useGetYamlSchema
 } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
@@ -85,7 +85,7 @@ export const NewEditServiceModal: React.FC<NewEditServiceModalProps> = ({
 
   const [yamlHandler, setYamlHandler] = React.useState<YamlBuilderHandlerBinding | undefined>()
   const [selectedView, setSelectedView] = React.useState<SelectedView>(SelectedView.VISUAL)
-  const { loading: createLoading, mutate: createService } = useCreateServicesV2({
+  const { loading: createLoading, mutate: createService } = useCreateServiceV2({
     queryParams: {
       accountIdentifier: accountId
     }
@@ -123,7 +123,7 @@ export const NewEditServiceModal: React.FC<NewEditServiceModalProps> = ({
             onCreateOrUpdate(values)
           }
         } else {
-          const response = await createService([{ ...values, orgIdentifier, projectIdentifier }])
+          const response = await createService({ ...values, orgIdentifier, projectIdentifier })
           if (response.status === 'SUCCESS') {
             clear()
             showSuccess(getString('cd.serviceCreated'))

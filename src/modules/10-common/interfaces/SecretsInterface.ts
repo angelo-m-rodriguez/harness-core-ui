@@ -10,3 +10,9 @@ export enum Scope {
   ORG = 'org',
   ACCOUNT = 'account'
 }
+
+export enum PrincipalScope {
+  PROJECT = 'project',
+  ORG = 'organization',
+  ACCOUNT = 'account'
+}

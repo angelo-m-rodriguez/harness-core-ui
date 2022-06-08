@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Spinner, Tabs } from '@blueprintjs/core'
 import { Button, Layout, PageError } from '@wings-software/uicore'
 import { get, merge } from 'lodash-es'
@@ -27,7 +27,6 @@ import {
 } from '@pipeline/components/execution/StepDetails/tabs/HarnessApprovalTab/HarnessApprovalTab'
 import { PipelineDetailsTab } from '@pipeline/components/execution/StepDetails/tabs/PipelineDetailsTab/PipelineDetailsTab'
 import { InputOutputTab } from '@pipeline/components/execution/StepDetails/tabs/InputOutputTab/InputOutputTab'
-import { NoApprovalInstance } from '../NoApprovalInstanceCreated'
 import tabCss from '../DefaultView/DefaultView.module.scss'
 
 export interface HarnessApprovalViewProps extends StepDetailProps {
@@ -50,6 +49,7 @@ export function HarnessApprovalView(props: HarnessApprovalViewProps): React.Reac
   // store the data in state because the approve/reject call returns the updated state
   // hence we can save one additional call to the server
   const [approvalData, setApprovalData] = React.useState<ApprovalData>(null)
+  const shouldFetchData = !!approvalInstanceId
 
   const {
     data,
@@ -59,7 +59,7 @@ export function HarnessApprovalView(props: HarnessApprovalViewProps): React.Reac
   } = useGetApprovalInstance({
     approvalInstanceId,
     mock,
-    lazy: true
+    lazy: !shouldFetchData
   })
 
   const {
@@ -68,15 +68,9 @@ export function HarnessApprovalView(props: HarnessApprovalViewProps): React.Reac
     loading: loadingAuthData
   } = useGetHarnessApprovalInstanceAuthorization({
     approvalInstanceId,
-    lazy: !isWaiting,
+    lazy: !shouldFetchData,
     mock: getApprovalAuthorizationMock
   })
-
-  useEffect(() => {
-    if (approvalInstanceId) {
-      refetch()
-    }
-  }, [approvalInstanceId])
 
   useDeepCompareEffect(() => {
     setApprovalData(data?.data as ApprovalData)
@@ -90,7 +84,7 @@ export function HarnessApprovalView(props: HarnessApprovalViewProps): React.Reac
     )
   }
 
-  if (loadingApprovalData || loadingAuthData) {
+  if (loadingApprovalData || loadingAuthData || !shouldFetchData) {
     return (
       <Layout.Vertical height="100%" flex={{ alignItems: 'center', justifyContent: 'center' }}>
         <Spinner />
@@ -105,21 +99,17 @@ export function HarnessApprovalView(props: HarnessApprovalViewProps): React.Reac
         id="Approval"
         title={getString('approvalStage.title')}
         panel={
-          approvalInstanceId ? (
-            <HarnessApprovalTab
-              approvalInstanceId={approvalInstanceId}
-              approvalData={approvalData}
-              isWaiting={isWaiting}
-              authData={authData}
-              updateState={updatedData => {
-                setApprovalData(updatedData)
-                refetchAuthData()
-              }}
-              stepParameters={step.stepParameters}
-            />
-          ) : (
-            <NoApprovalInstance />
-          )
+          <HarnessApprovalTab
+            approvalInstanceId={approvalInstanceId}
+            approvalData={approvalData}
+            isWaiting={isWaiting}
+            authData={authData}
+            updateState={updatedData => {
+              setApprovalData(updatedData)
+              refetchAuthData()
+            }}
+            stepParameters={step.stepParameters}
+          />
         }
       />
       <Tabs.Tab

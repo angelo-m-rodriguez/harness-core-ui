@@ -14,6 +14,7 @@ import type { UserMetadataDTO, RoleAssignmentMetadataDTO, UserGroupDTO, ServiceA
 import UserRoleAssignment from '@rbac/modals/RoleAssignmentModal/views/UserRoleAssigment'
 import type { StringsMap } from 'framework/strings/StringsContext'
 import RoleAssignment from '@rbac/modals/RoleAssignmentModal/views/RoleAssignment'
+import AssignRoles from '@rbac/modals/RoleAssignmentModal/views/AssignRoles'
 import { PrincipalType } from '@rbac/utils/utils'
 
 export interface UseRoleAssignmentModalProps {
@@ -30,9 +31,12 @@ export interface UseRoleAssignmentModalReturn {
   closeRoleAssignmentModal: () => void
 }
 
-const getTitle = (principal: PrincipalType, isInvite: boolean): keyof StringsMap => {
-  if (principal === PrincipalType.USER && isInvite) {
+const getTitle = (principal: PrincipalType, isInviteOrAssignRoles: boolean): keyof StringsMap => {
+  if (principal === PrincipalType.USER && isInviteOrAssignRoles) {
     return 'rbac.usersPage.userForm.title'
+  }
+  if (principal === PrincipalType.USER_GROUP && isInviteOrAssignRoles) {
+    return 'rbac.userGroupPage.assignRoles'
   }
   return 'rbac.addRole'
 }
@@ -73,7 +77,17 @@ export const useRoleAssignmentModal = ({
               onCancel={hideModal}
             />
           ) : null}
-          {principal === PrincipalType.USER_GROUP ? (
+          {principal === PrincipalType.USER_GROUP && !principalInfo ? (
+            <AssignRoles
+              onSubmit={() => {
+                onSuccess()
+                hideModal()
+              }}
+              onRoleAssignmentSuccess={onSuccess}
+              onCancel={hideModal}
+            />
+          ) : null}
+          {principal === PrincipalType.USER_GROUP && principalInfo ? (
             <RoleAssignment
               roleBindings={roleBindings}
               type={PrincipalType.USER_GROUP}

@@ -135,7 +135,7 @@ export default function WorkflowVariables({
       if (!isEmpty(serviceData?.yaml)) {
         const parsedYaml = yamlParse<NGServiceConfig>(defaultTo(serviceData.yaml, ''))
         const serviceInfo = parsedYaml.service?.serviceDefinition
-        return serviceInfo?.spec.variables as Variable[]
+        return defaultTo(serviceInfo?.spec.variables, []) as Variable[]
       }
       return []
     }

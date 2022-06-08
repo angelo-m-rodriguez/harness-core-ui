@@ -5,10 +5,11 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import cx from 'classnames'
-import { Button, ButtonSize, Card, Icon, IconName, Layout, Text } from '@wings-software/uicore'
+import { Button, ButtonSize, Card, Layout, Text, useToggleOpen } from '@wings-software/uicore'
+import { Icon, IconName } from '@harness/icons'
 import { FontVariation, Color } from '@harness/design-system'
 import { String, useStrings } from 'framework/strings'
 import type { OrgPathProps } from '@common/interfaces/RouteInterfaces'
@@ -22,10 +23,11 @@ export interface ResourceOption {
   label: JSX.Element
   icon: IconName
   route?: string
-  colorClass: string
+  colorClass?: string
   onClick?: () => void
   subLabel?: JSX.Element
   disabled?: boolean
+  selectable?: boolean
 }
 interface ResourceCardListProps {
   items?: ResourceOption[]
@@ -36,16 +38,23 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
   const history = useHistory()
   const { getString } = useStrings()
   const { NG_TEMPLATES, NG_VARIABLES } = useFeatureFlags()
+  const { isOpen: showGitOpsEntities, toggle: toggleShowGitOpsEntities } = useToggleOpen()
   const { loading, data, refetch } = useGetSmtpConfig({ queryParams: { accountId } })
   const refetchSmtpData = (): void => {
     refetch()
   }
   const { openCreateSmtpModal } = useCreateSmtpModal({ onCloseModal: refetchSmtpData })
+  // showGitOpsCard defaults to false for now while the feature is being developed
+  const showGitOpsCard = useMemo(
+    () => history?.location?.pathname.includes('resources') && false,
+    [history?.location?.pathname]
+  )
   const smtpResource: ResourceOption[] = [
     {
       label: <String stringID="common.smtp.conifg" />,
       icon: 'smtp',
       disabled: loading,
+      colorClass: css.smtp,
       onClick: () => {
         if (!loading) {
           if (!data?.data) {
@@ -55,7 +64,6 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
           }
         }
       },
-      colorClass: css.smtp,
       subLabel: (
         <>
           {loading ? (
@@ -77,6 +85,14 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
       )
     }
   ]
+  const gitOpsCard: ResourceOption[] = [
+    {
+      label: <String stringID="common.gitOps" />,
+      icon: 'gitops-blue',
+      onClick: toggleShowGitOpsEntities,
+      selectable: true
+    } as ResourceOption
+  ]
   const options: ResourceOption[] = items || [
     {
       label: <String stringID="connectorsLabel" />,
@@ -93,8 +109,8 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
     {
       label: <String stringID="common.secrets" />,
       icon: 'secrets-icon',
-      route: routes.toSecrets({ accountId, orgIdentifier }),
-      colorClass: css.secrets
+      colorClass: css.secrets,
+      route: routes.toSecrets({ accountId, orgIdentifier })
     },
     ...(!orgIdentifier ? smtpResource : []),
     ...(NG_TEMPLATES
@@ -102,8 +118,8 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
           {
             label: <String stringID="common.templates" />,
             icon: 'templates-icon',
-            route: routes.toTemplates({ accountId, orgIdentifier }),
-            colorClass: css.templates
+            colorClass: css.templates,
+            route: routes.toTemplates({ accountId, orgIdentifier })
           } as ResourceOption
         ]
       : []),
@@ -112,37 +128,79 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
           {
             label: <String stringID="common.variables" />,
             icon: 'variable',
-            route: routes.toVariables({ accountId, orgIdentifier }),
-            colorClass: css.variables
+            colorClass: css.variables,
+            route: routes.toVariables({ accountId, orgIdentifier })
           } as ResourceOption
         ]
-      : [])
+      : []),
+    ...(showGitOpsCard ? gitOpsCard : [])
+  ]
+
+  const gitOpsEntities = [
+    {
+      label: <String stringID="common.agents" />,
+      icon: 'gitops-agent-blue',
+      route: routes.toAccountResourcesGitOps({ accountId })
+    } as ResourceOption
   ]
 
   return (
-    <Layout.Horizontal spacing="xxlarge">
-      {options.map(option => (
-        <Card
-          key={option.icon}
-          className={cx(css.card, option.colorClass)}
-          disabled={option.disabled}
-          onClick={() => {
-            option?.onClick?.()
-            if (option.route) {
-              history.push(option.route)
-            }
-          }}
-        >
-          <Layout.Vertical flex spacing="small">
-            <Icon name={option.icon} size={70} />
-            <Text color={Color.BLACK} font={{ weight: 'semi-bold' }}>
-              {option.label}
-            </Text>
-            {option.subLabel}
-          </Layout.Vertical>
-        </Card>
-      ))}
-    </Layout.Horizontal>
+    <>
+      <div className={css.cardsWrapper}>
+        {options.map(option => (
+          <Card
+            key={option.icon}
+            className={cx(css.card, option.colorClass)}
+            disabled={option.disabled}
+            onClick={() => {
+              option?.onClick?.()
+              if (option.route) {
+                history.push(option.route)
+              }
+            }}
+            selected={option.selectable && showGitOpsEntities}
+          >
+            <Layout.Vertical flex spacing="small">
+              <Icon name={option.icon} size={70} />
+              <Text color={Color.BLACK} font={{ weight: 'semi-bold' }}>
+                {option.label}
+              </Text>
+              {option.subLabel}
+            </Layout.Vertical>
+            {showGitOpsEntities && option.icon.includes('gitops') && <div className={css.arrowDown} />}
+          </Card>
+        ))}
+      </div>
+      {showGitOpsEntities && (
+        <div className={css.gitOpsEntities}>
+          <Text color={Color.BLACK} font={{ size: 'medium', weight: 'semi-bold' }} margin={{ bottom: 'medium' }}>
+            {getString('common.gitOps')}
+          </Text>
+          <div className={css.cardsWrapper}>
+            {gitOpsEntities.map(gitOpsEntity => (
+              <Card
+                key={gitOpsEntity.icon}
+                className={cx(css.card)}
+                onClick={() => {
+                  gitOpsEntity?.onClick?.()
+                  if (gitOpsEntity.route) {
+                    history.push(gitOpsEntity.route)
+                  }
+                }}
+              >
+                <Layout.Vertical flex spacing="small">
+                  <Icon name={gitOpsEntity.icon} size={70} />
+                  <Text color={Color.BLACK} font={{ weight: 'semi-bold' }}>
+                    {gitOpsEntity.label}
+                  </Text>
+                  {gitOpsEntity.subLabel}
+                </Layout.Vertical>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

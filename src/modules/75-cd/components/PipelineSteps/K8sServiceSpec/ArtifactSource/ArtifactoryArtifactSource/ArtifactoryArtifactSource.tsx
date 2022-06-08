@@ -193,7 +193,7 @@ const Content = (props: ArtifactoryRenderContent): JSX.Element => {
         (currStage: StageElementWrapper) => currStage.stage?.identifier === props.stageIdentifier
       ).stage.spec as DeploymentStageConfig
     }
-    return selectedStageSpec?.serviceConfig.serviceDefinition?.type as ServiceDeploymentType
+    return selectedStageSpec?.serviceConfig?.serviceDefinition?.type as ServiceDeploymentType
   }, [props.formik.values.pipeline, props.formik.values.stages, props.stageIdentifier])
 
   const isServerlessDeploymentTypeSelected = isServerlessDeploymentType(selectedDeploymentType)

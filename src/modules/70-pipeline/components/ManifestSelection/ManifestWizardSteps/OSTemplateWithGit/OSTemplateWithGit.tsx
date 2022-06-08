@@ -157,11 +157,7 @@ function OpenShiftTemplateWithGit({
         initialValues={getInitialValues()}
         formName="osTemplateWithGit"
         validationSchema={Yup.object().shape({
-          ...ManifestIdentifierValidation(
-            manifestIdsList,
-            initialValues?.identifier,
-            getString('pipeline.uniqueIdentifier')
-          ),
+          ...ManifestIdentifierValidation(manifestIdsList, initialValues?.identifier, getString('pipeline.uniqueName')),
           path: Yup.string().trim().required(getString('pipeline.manifestType.osTemplatePathRequired')),
           branch: Yup.string().when('gitFetchType', {
             is: 'Branch',

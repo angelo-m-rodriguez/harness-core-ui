@@ -38,8 +38,8 @@ export function useCcmMetaDataQuery(options?: Omit<Urql.UseQueryArgs<CcmMetaData
   return Urql.useQuery<CcmMetaDataQuery>({ query: CcmMetaDataDocument, ...options })
 }
 export const FetchAllPerspectivesDocument = gql`
-  query FetchAllPerspectives {
-    perspectives {
+  query FetchAllPerspectives($folderId: String) {
+    perspectives(folderId: $folderId) {
       sampleViews {
         id
         name
@@ -60,6 +60,7 @@ export const FetchAllPerspectivesDocument = gql`
         timeRange
         reportScheduledConfigured
         dataSources
+        folderId
         groupBy {
           fieldId
           fieldName
@@ -1208,7 +1209,9 @@ export type CcmMetaDataQuery = {
   } | null
 }
 
-export type FetchAllPerspectivesQueryVariables = Exact<{ [key: string]: never }>
+export type FetchAllPerspectivesQueryVariables = Exact<{
+  folderId: InputMaybe<Scalars['String']>
+}>
 
 export type FetchAllPerspectivesQuery = {
   __typename?: 'Query'
@@ -1236,6 +1239,7 @@ export type FetchAllPerspectivesQuery = {
       timeRange: ViewTimeRangeType | null
       reportScheduledConfigured: boolean
       dataSources: Array<ViewFieldIdentifier | null> | null
+      folderId: string | null
       groupBy: {
         __typename?: 'QLCEViewField'
         fieldId: string
@@ -2258,29 +2262,6 @@ export enum AlertThresholdBase {
   ForecastedCost = 'FORECASTED_COST'
 }
 
-export type AnomalyData = {
-  __typename?: 'AnomalyData'
-  actualAmount: Maybe<Scalars['Float']>
-  anomalyScore: Maybe<Scalars['Float']>
-  comment: Maybe<Scalars['String']>
-  entity: Maybe<EntityInfo>
-  expectedAmount: Maybe<Scalars['Float']>
-  id: Maybe<Scalars['String']>
-  time: Maybe<Scalars['Long']>
-  userFeedback: Maybe<AnomalyFeedback>
-}
-
-export type AnomalyDataList = {
-  __typename?: 'AnomalyDataList'
-  data: Maybe<Array<Maybe<AnomalyData>>>
-}
-
-export enum AnomalyFeedback {
-  FalseAnomaly = 'FALSE_ANOMALY',
-  NotResponded = 'NOT_RESPONDED',
-  TrueAnomaly = 'TRUE_ANOMALY'
-}
-
 export type BillingData = {
   __typename?: 'BillingData'
   accountid: Maybe<Scalars['String']>
@@ -2549,21 +2530,6 @@ export type EfficiencyScoreStats = {
   statsValue: Maybe<Scalars['String']>
 }
 
-export type EntityInfo = {
-  __typename?: 'EntityInfo'
-  awsAccount: Maybe<Scalars['String']>
-  awsService: Maybe<Scalars['String']>
-  clusterId: Maybe<Scalars['String']>
-  clusterName: Maybe<Scalars['String']>
-  gcpProduct: Maybe<Scalars['String']>
-  gcpProject: Maybe<Scalars['String']>
-  gcpSKUDescription: Maybe<Scalars['String']>
-  gcpSKUId: Maybe<Scalars['String']>
-  namespace: Maybe<Scalars['String']>
-  workloadName: Maybe<Scalars['String']>
-  workloadType: Maybe<Scalars['String']>
-}
-
 export type FieldAggregationInput = {
   field: InputMaybe<Scalars['String']>
   operation: InputMaybe<AggregationOperation>
@@ -2773,6 +2739,7 @@ export type QlceView = {
   createdAt: Maybe<Scalars['Long']>
   createdBy: Maybe<Scalars['String']>
   dataSources: Maybe<Array<Maybe<ViewFieldIdentifier>>>
+  folderId: Maybe<Scalars['String']>
   groupBy: Maybe<QlceViewField>
   id: Maybe<Scalars['String']>
   lastUpdatedAt: Maybe<Scalars['Long']>
@@ -2911,8 +2878,6 @@ export type QlceViewTimeTruncGroupByInput = {
 /** Query root */
 export type Query = {
   __typename?: 'Query'
-  /** Get Anomalies for perspective */
-  anomaliesForPerspective: Maybe<AnomalyDataList>
   billingData: Maybe<Array<Maybe<BillingData>>>
   billingJobLastProcessedTime: Maybe<Scalars['Long']>
   billingdata: Maybe<Array<Maybe<BillingDataDemo>>>
@@ -2956,12 +2921,6 @@ export type Query = {
   recommendationStatsV2: Maybe<RecommendationOverviewStats>
   /** The list of all types of recommendations for overview page */
   recommendationsV2: Maybe<RecommendationsDto>
-}
-
-/** Query root */
-export type QueryAnomaliesForPerspectiveArgs = {
-  filters: InputMaybe<Array<InputMaybe<QlceViewFilterWrapperInput>>>
-  groupBy: InputMaybe<Array<InputMaybe<QlceViewGroupByInput>>>
 }
 
 /** Query root */
@@ -3077,6 +3036,11 @@ export type QueryPerspectiveTrendStatsArgs = {
   aggregateFunction: InputMaybe<Array<InputMaybe<QlceViewAggregationInput>>>
   filters: InputMaybe<Array<InputMaybe<QlceViewFilterWrapperInput>>>
   isClusterQuery: InputMaybe<Scalars['Boolean']>
+}
+
+/** Query root */
+export type QueryPerspectivesArgs = {
+  folderId: InputMaybe<Scalars['String']>
 }
 
 /** Query root */

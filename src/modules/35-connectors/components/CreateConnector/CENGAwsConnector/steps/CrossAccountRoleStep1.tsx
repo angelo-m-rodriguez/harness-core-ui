@@ -11,6 +11,8 @@ import { FontVariation, Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
 import { CE_AWS_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import type { CEAwsConnectorDTO } from './OverviewStep'
 import css from '../CreateCeAwsConnector.module.scss'
 
@@ -124,6 +126,11 @@ const CrossAccountRoleStep1: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
     }
     const payload = prevStepData
     if (payload) payload.spec = newspec
+
+    trackEvent(ConnectorActions.CENGAwsConnectorCrossAccountRoleStep1Submit, {
+      category: Category.CONNECTOR
+    })
+
     nextStep?.(payload)
   }
 
@@ -142,6 +149,12 @@ const CrossAccountRoleStep1: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
 
     setSelectedCards(sc)
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.CENGAwsConnectorCrossAccountRoleStep1Load, {
+    category: Category.CONNECTOR
+  })
 
   return (
     <Layout.Vertical className={css.stepContainer}>

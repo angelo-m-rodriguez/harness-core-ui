@@ -15,6 +15,20 @@ export enum AddTargetToTargetGroupsDialogStatus {
   submitting
 }
 
+export enum FlagSettingsStatus {
+  error,
+  loading,
+  initialLoading,
+  noFlags,
+  noSearchResults,
+  ok,
+  submitting
+}
+
 export interface AddTargetToTargetGroupsDialogFormValues {
   targetGroups: Record<string, string>
+}
+
+export interface TargetFlagSettingsFormValues {
+  flags: Record<string, { variation: string }>
 }

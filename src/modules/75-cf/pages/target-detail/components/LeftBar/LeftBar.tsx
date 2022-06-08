@@ -31,12 +31,14 @@ const LeftBar: FC<LeftBarProps> = ({ target }) => {
           {
             id: 'targetAttributesPanel',
             title: getString('cf.targetDetail.attributes', { counter: attributesCount }),
-            panel: <TargetAttributes target={target} />
+            panel: <TargetAttributes target={target} />,
+            className: css.panel
           },
           {
             id: 'targetGroupsPanel',
             title: getString('cf.shared.segments'),
-            panel: <TargetGroups target={target} />
+            panel: <TargetGroups target={target} />,
+            className: css.panel
           }
         ]}
       />

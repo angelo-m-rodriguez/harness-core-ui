@@ -54,6 +54,7 @@ import DeployInfraSpecifications, {
 } from '@cd/components/PipelineStudio/DeployInfraSpecifications/DeployInfraSpecifications'
 import { DefaultNewStageId, DefaultNewStageName } from '@cd/components/Services/utils/ServiceUtils'
 import { InfrastructurePipelineProvider } from '@cd/context/InfrastructurePipelineContext'
+import { useTemplateSelector } from '@templates-library/hooks/useTemplateSelector'
 import css from './InfrastructureDefinition.module.scss'
 
 const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
@@ -71,6 +72,7 @@ const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
 
 export function InfrastructureModal({ hideModal, refetch, infrastructureToEdit, setInfrastructureToEdit }: any) {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
+  const { getTemplate } = useTemplateSelector()
 
   const infrastructureDefinition = useMemo(() => {
     return (parse(defaultTo(infrastructureToEdit, '{}')) as InfrastructureConfig).infrastructureDefinition
@@ -107,6 +109,7 @@ export function InfrastructureModal({ hideModal, refetch, infrastructureToEdit, 
       queryParams={{ accountIdentifier: accountId, orgIdentifier, projectIdentifier }}
       initialValue={pipeline as PipelineInfoConfig}
       isReadOnly={false}
+      getTemplate={getTemplate}
     >
       <BootstrapDeployInfraSpecifications
         hideModal={hideModal}

@@ -6,16 +6,22 @@
  */
 
 import React from 'react'
-import { act, fireEvent, queryByAttribute, render, waitFor } from '@testing-library/react'
+import { act, findByText, fireEvent, queryByAttribute, render, waitFor } from '@testing-library/react'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { StepFormikRef, StepViewType } from '@pipeline/components/AbstractSteps/Step'
-import { mockServiceNowMetadataResponse } from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/__tests__/ServiceNowCreateTestHelper'
+import {
+  mockServiceNowMetadataResponse,
+  mockServiceNowTemplateResponse
+} from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/__tests__/ServiceNowCreateTestHelper'
 import { mockTicketTypesResponse } from '@pipeline/components/PipelineSteps/Steps/ServiceNowApproval/__test__/ServiceNowApprovalTestHelper'
 import { FieldType } from '@pipeline/components/PipelineSteps/Steps/ServiceNowCreate/types'
 import {
   getServiceNowUpdateDeploymentModeProps,
+  getServiceNowUpdateDeploymentModeWithCustomFieldsProps,
   getServiceNowUpdateEditModeProps,
+  getServiceNowUpdateEditModePropsWithValues,
   getServiceNowUpdateInputVariableModeProps,
+  getServiceNowUpdateTemplateTypeEditModeProps,
   mockConnectorResponse
 } from './ServiceNowUpdateTestHelper'
 import type { ServiceNowUpdateData } from '../types'
@@ -29,7 +35,7 @@ jest.mock('services/cd-ng', () => ({
   useGetConnector: () => mockConnectorResponse,
   useGetServiceNowTicketTypes: () => mockTicketTypesResponse,
   useGetServiceNowIssueMetadata: () => mockServiceNowMetadataResponse,
-  useGetServiceNowTemplateMetadata: () => jest.fn()
+  useGetServiceNowTemplateMetadata: () => mockServiceNowTemplateResponse
 }))
 
 describe('ServiceNow Update tests', () => {
@@ -159,6 +165,139 @@ describe('ServiceNow Update tests', () => {
     expect(container).toMatchSnapshot('editstage-readonly')
   })
 
+  test('Edit Stage - readonly view for Template type', async () => {
+    const ref = React.createRef<StepFormikRef<unknown>>()
+    const props = getServiceNowUpdateTemplateTypeEditModeProps()
+    const { container } = render(
+      <TestStepWidget
+        initialValues={props.initialValues}
+        type={StepType.ServiceNowUpdate}
+        stepViewType={StepViewType.Edit}
+        ref={ref}
+        readonly={true}
+      />
+    )
+    expect(container).toMatchSnapshot('edit-templatetype-stage-readonly')
+  })
+
+  test('Open a saved step - edit stage view', async () => {
+    const ref = React.createRef<StepFormikRef<unknown>>()
+    const props = { ...getServiceNowUpdateEditModePropsWithValues() }
+    const {
+      container,
+      getByText,
+      getByTestId,
+      queryByPlaceholderText,
+      getByPlaceholderText,
+      queryByDisplayValue,
+      queryByText
+    } = render(
+      <TestStepWidget
+        initialValues={props.initialValues}
+        type={StepType.ServiceNowUpdate}
+        stepViewType={StepViewType.Edit}
+        ref={ref}
+        onUpdate={props.onUpdate}
+      />
+    )
+
+    const queryByNameAttribute = (name: string): HTMLElement | null => queryByAttribute('name', container, name)
+    fireEvent.change(queryByNameAttribute('name')!, { target: { value: 'serviceNow update step' } })
+    expect(queryByDisplayValue('1d')).toBeTruthy()
+
+    // Check if fields are populated
+    expect(queryByDisplayValue('value1')).toBeTruthy()
+    expect(queryByDisplayValue('2233')).toBeTruthy()
+    expect(queryByDisplayValue('23-march')).toBeTruthy()
+    expect(queryByDisplayValue('INCIDENT')).toBeTruthy()
+
+    // Update the ticket type to Change from Incident
+    const ticketType = container
+      .querySelector(`input[name="spec.ticketType"] + [class*="bp3-input-action"]`)
+      ?.querySelector('[data-icon="chevron-down"]')
+    await waitFor(() => {
+      fireEvent.click(ticketType!)
+    })
+    const changeTicketType = await findByText(document.body, 'CHANGE')
+    act(() => {
+      fireEvent.click(changeTicketType)
+    })
+
+    fireEvent.change(getByPlaceholderText('pipeline.serviceNowCreateStep.descriptionPlaceholder'), {
+      target: { value: 'description' }
+    })
+
+    // Open the fields selector dialog
+    act(() => {
+      fireEvent.click(getByText('pipeline.jiraCreateStep.fieldSelectorAdd'))
+    })
+
+    await waitFor(() => expect(queryByText('pipeline.serviceNowCreateStep.selectFieldListHelp')).toBeTruthy())
+    const dialogContainer = document.body.querySelector('.bp3-portal')
+
+    // Click the new custom field
+    fireEvent.click(getByText('f1'))
+
+    // Add the field to serviceNow create form
+    const button = dialogContainer?.querySelector('.bp3-button-text')
+    fireEvent.click(button!)
+
+    // The selected field should be now added to the main form
+    expect(queryByPlaceholderText('f1')).toBeTruthy()
+
+    // Delete a field
+    act(() => {
+      const deleteField = container?.querySelector(`button[data-testid="remove-selectedField-0"]`)
+      fireEvent.click(deleteField!)
+    })
+
+    // Open the fields selector dialog again
+    act(() => {
+      fireEvent.click(getByText('pipeline.jiraCreateStep.fieldSelectorAdd'))
+    })
+    // Click on provide field list option - to add KV pairs
+    fireEvent.click(getByText('pipeline.jiraCreateStep.provideFieldList'))
+
+    const dialogContainerPostUpdate = document.body.querySelector('.bp3-portal')
+    act(() => {
+      fireEvent.click(getByTestId('add-fieldList'))
+    })
+    // add the new KV pair inside the dialog container
+    const keyDiv = dialogContainerPostUpdate?.querySelector('input[name="fieldList[0].name"]')
+    fireEvent.change(keyDiv!, { target: { value: 'issueKey1' } })
+    const valueDiv = dialogContainerPostUpdate?.querySelector('input[name="fieldList[0].value"]')
+    fireEvent.change(valueDiv!, { target: { value: 'issueKey1Value' } })
+
+    // Add the field to form
+    const addButton = dialogContainerPostUpdate?.querySelector('button[type="submit"]')
+    fireEvent.click(addButton!)
+
+    // the new kv pair should now be visible in the main form
+    expect(queryByDisplayValue('issueKey1')).toBeTruthy()
+    expect(queryByDisplayValue('issueKey1Value')).toBeTruthy()
+    await act(() => ref.current?.submitForm()!)
+
+    expect(props.onUpdate).toBeCalledWith({
+      identifier: 'serviceNow_update_step',
+      timeout: '1d',
+      type: 'ServiceNowUpdate',
+      spec: {
+        connectorRef: 'c1d1',
+        useServiceNowTemplate: false,
+        ticketType: 'CHANGE',
+        ticketNumber: '<+ticketNumber>',
+        delegateSelectors: undefined,
+        fields: [
+          { name: 'description', value: 'desc' },
+          { name: 'short_description', value: 'short desc' },
+          { name: 'f1', value: '' },
+          { name: 'issueKey1', value: 'issueKey1Value' }
+        ]
+      },
+      name: 'serviceNow update step'
+    })
+  })
+
   test('Minimum time cannot be less than 10s', () => {
     const response = new ServiceNowUpdate().validateInputSet({
       data: {
@@ -192,6 +331,20 @@ describe('ServiceNow Update tests', () => {
       viewType: StepViewType.TriggerForm
     })
     expect(response).toMatchSnapshot('Value must be greater than or equal to "10s"')
+  })
+
+  test('Deploymentform with custom fields as runtime', async () => {
+    const props = getServiceNowUpdateDeploymentModeWithCustomFieldsProps()
+    const { container } = render(
+      <TestStepWidget
+        template={props.inputSetData?.template}
+        initialValues={props.initialValues}
+        type={StepType.ServiceNowUpdate}
+        stepViewType={StepViewType.DeploymentForm}
+        inputSetData={{ ...props.inputSetData, path: props.inputSetData?.path || '', readonly: true }}
+      />
+    )
+    expect(container).toMatchSnapshot('serviceNow-update-deploymentform-customFields')
   })
 })
 

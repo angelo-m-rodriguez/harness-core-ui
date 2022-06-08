@@ -8,7 +8,8 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react'
 import { useLocation } from 'react-router-dom'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, unset } from 'lodash-es'
+import produce from 'immer'
 import { TestWrapper } from '@common/utils/testUtils'
 import { mockTemplates, mockTemplatesSuccessResponse } from '@templates-library/TemplatesTestHelper'
 import { TemplateDetails, TemplateDetailsProps } from '../TemplateDetails'
@@ -56,6 +57,19 @@ describe('<TemplateDetails /> tests', () => {
     )
     const dropValue = getByTestId('dropdown-value')
     expect(dropValue).toHaveTextContent('templatesLibrary.stableVersion')
+  })
+
+  test('should show always use stable version of the template ', async () => {
+    const newBaseProps = produce(baseProps, draft => {
+      unset(draft, 'template.versionLabel')
+    })
+    const { getByTestId } = render(
+      <TestWrapper>
+        <ComponentWrapper {...newBaseProps} allowStableSelection={true} />
+      </TestWrapper>
+    )
+    const dropValue = getByTestId('dropdown-value')
+    expect(dropValue).toHaveTextContent('templatesLibrary.alwaysUseStableVersion')
   })
 
   test('should open template studio on clicking open in template studio', async () => {

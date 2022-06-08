@@ -22,9 +22,7 @@ export const useChangePassword = (): ModalReturn => {
   const [showModal, hideModal] = useModalHook(
     () => (
       <Dialog enforceFocus={false} isOpen title="" onClose={hideModal} className={cx(css.dialog, Classes.DIALOG)}>
-        {passwordStrengthPolicy && (
-          <ChangePasswordForm hideModal={hideModal} passwordStrengthPolicy={passwordStrengthPolicy} />
-        )}
+        <ChangePasswordForm hideModal={hideModal} passwordStrengthPolicy={passwordStrengthPolicy} />
       </Dialog>
     ),
     [passwordStrengthPolicy]

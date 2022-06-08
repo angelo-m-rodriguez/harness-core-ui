@@ -48,6 +48,7 @@ const CreateAWSConnector: React.FC<CreateConnectorModalProps> = props => {
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
           mock={props.mock}
+          helpPanelReferenceId="AwsConnectorOverview"
         />
         <StepAWSAuthentication
           name={getString('credentials')}
@@ -65,6 +66,7 @@ const CreateAWSConnector: React.FC<CreateConnectorModalProps> = props => {
           onConnectorCreated={props.onSuccess}
           connectorInfo={props.connectorInfo}
           gitDetails={props.gitDetails}
+          helpPanelReferenceId="ConnectorDelegatesSetup"
         />
         <VerifyOutOfClusterDelegate
           name={getString('connectors.stepThreeName')}
@@ -73,6 +75,7 @@ const CreateAWSConnector: React.FC<CreateConnectorModalProps> = props => {
           isLastStep={true}
           type={Connectors.AWS}
           onClose={props.onClose}
+          helpPanelReferenceId="ConnectorTest"
           stepIndex={TESTCONNECTION_STEP_INDEX}
         />
       </StepWizard>

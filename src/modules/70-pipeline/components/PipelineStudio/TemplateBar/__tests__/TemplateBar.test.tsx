@@ -125,7 +125,7 @@ describe('<TemplateBar /> tests', () => {
     await act(async () => {
       fireEvent.click(removeBtn)
     })
-    const submitBtn = getByText(findDialogContainer() as HTMLElement, 'common.remove')
+    const submitBtn = getByText(findDialogContainer() as HTMLElement, 'confirm')
     await act(async () => {
       fireEvent.click(submitBtn)
     })

@@ -37,6 +37,8 @@ import { String, useStrings } from 'framework/strings'
 import { GitUrlType, GitConnectionType, saveCurrentStepData } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import css from './ConnectorDetailsStep.module.scss'
 import commonCss from './ConnectorCommonStyles.module.scss'
 
@@ -162,6 +164,10 @@ const GitDetailsStep: React.FC<StepProps<ConnectorConfigDTO> & ConnectorDetailsS
    * Function to handleSubmit
    */
   const handleSubmit = async (formData: ConnectorConfigDTO): Promise<void> => {
+    trackEvent(ConnectorActions.DetailsStepSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: Connectors.Git
+    })
     mounted.current = true
     if (isEdit) {
       //In edit mode validateTheIdentifierIsUnique API not required
@@ -226,6 +232,13 @@ const GitDetailsStep: React.FC<StepProps<ConnectorConfigDTO> & ConnectorDetailsS
       }
     }
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.DetailsStepLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Git
+  })
 
   return (
     <Layout.Vertical className={cx(css.gitDetails, css.firstep, commonCss.stepContainer)}>

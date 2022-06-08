@@ -47,6 +47,7 @@ const CreateK8sConnector: React.FC<CreateConnectorModalProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         mock={props.mock}
+        helpPanelReferenceId="KubernetesConnectorOverview"
       />
       <Stepk8ClusterDetails
         name={getString('details')}
@@ -64,6 +65,7 @@ const CreateK8sConnector: React.FC<CreateConnectorModalProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         hideModal={props.onClose}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -74,6 +76,7 @@ const CreateK8sConnector: React.FC<CreateConnectorModalProps> = props => {
         onClose={props.onClose}
         setIsEditMode={props.setIsEditMode}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

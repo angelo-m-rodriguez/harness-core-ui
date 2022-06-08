@@ -21,6 +21,14 @@ import AnomalyData from './AnomalyData.json'
 jest.mock('@ce/components/CEChart/CEChart', () => 'mock')
 
 jest.mock('services/ce', () => ({
+  useAnomalyFilterValues: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: []
+      }
+    }
+  })),
   useListAnomalies: jest.fn().mockImplementation(() => ({
     mutate: async () => {
       return {
@@ -44,7 +52,14 @@ jest.mock('services/ce', () => ({
         data: {}
       }
     }
-  }))
+  })),
+  useGetFilterList: jest.fn().mockImplementation(() => {
+    return {
+      data: [],
+      refetch: jest.fn(),
+      loading: false
+    }
+  })
 }))
 
 const params = {

@@ -716,6 +716,7 @@ exports[`testing notification method selecting slack as notification method from
               <input
                 autocomplete="off"
                 class="bp3-input"
+                data-testid="notificationType"
                 placeholder="- Select -"
                 style="padding-right: 0px;"
                 type="text"

@@ -159,11 +159,7 @@ function KustomizeWithGIT({
         initialValues={getInitialValues()}
         formName="kustomizeGit"
         validationSchema={Yup.object().shape({
-          ...ManifestIdentifierValidation(
-            manifestIdsList,
-            initialValues?.identifier,
-            getString('pipeline.uniqueIdentifier')
-          ),
+          ...ManifestIdentifierValidation(manifestIdsList, initialValues?.identifier, getString('pipeline.uniqueName')),
           folderPath: Yup.string().trim().required(getString('pipeline.manifestType.kustomizeFolderPathRequired')),
           branch: Yup.string().when('gitFetchType', {
             is: 'Branch',

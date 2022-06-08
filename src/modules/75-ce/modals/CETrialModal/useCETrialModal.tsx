@@ -16,6 +16,8 @@ import { useStrings } from 'framework/strings'
 import { TrialModalTemplate } from '@pipeline/components/TrialModalTemplate/TrialModalTemplate'
 import { ModuleLicenseType, Editions } from '@common/constants/SubscriptionTypes'
 import { useLicenseStore } from 'framework/LicenseStore/LicenseStoreContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, CCMActions } from '@common/constants/TrackingConstants'
 import ceImage from './images/ccm.png'
 
 import css from './useCETrialModal.module.scss'
@@ -49,6 +51,11 @@ const CETrial: React.FC<CETrialModalData> = props => {
   const isFree = ceLicenseInformation?.edition === Editions.FREE
   const expiryDate = isFree ? getString('common.subscriptions.overview.freeExpiry') : time.format('DD MMM YYYY')
   const isTrialPlan = experience === ModuleLicenseType.TRIAL
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(CCMActions.CCMStartPlanModal, {
+    category: Category.SIGNUP
+  })
 
   function getChildComponent(): React.ReactElement {
     return (
@@ -84,7 +91,16 @@ const CETrial: React.FC<CETrialModalData> = props => {
             <Text className={css.description}>{getString('ce.ceTrialHomePage.modal.description')}</Text>
           </Layout.Vertical>
           <Layout.Horizontal spacing="small" padding={{ top: 'large' }}>
-            <Button intent="primary" text={getString('continue')} onClick={onContinue} />
+            <Button
+              intent="primary"
+              text={getString('continue')}
+              onClick={() => {
+                trackEvent(CCMActions.CCMStartPlanContinue, {
+                  category: Category.SIGNUP
+                })
+                onContinue()
+              }}
+            />
           </Layout.Horizontal>
         </Layout.Vertical>
       </>

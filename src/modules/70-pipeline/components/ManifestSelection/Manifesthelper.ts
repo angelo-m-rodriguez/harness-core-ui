@@ -9,8 +9,8 @@ import type { Schema } from 'yup'
 import type { IconName } from '@wings-software/uicore'
 import { Connectors } from '@connectors/constants'
 import type { ConnectorInfoDTO } from 'services/cd-ng'
-import { StringKeys, useStrings } from 'framework/strings'
-import { IdentifierSchemaWithOutName } from '@common/utils/Validation'
+import type { StringKeys } from 'framework/strings'
+import { NameSchema } from '@common/utils/Validation'
 import type { HelmVersionOptions, ManifestStores, ManifestTypes, PrimaryManifestType } from './ManifestInterface'
 
 export const ManifestDataType: Record<ManifestTypes, ManifestTypes> = {
@@ -170,18 +170,16 @@ export const gitFetchTypeList = [
 ]
 
 export const ManifestIdentifierValidation = (
-  manifestIdentifiers: Array<string>,
+  manifestNames: Array<string>,
   id: string | undefined,
   validationMsg: string
 ): { identifier: Schema<unknown> } => {
-  const { getString } = useStrings()
-
   if (!id) {
     return {
-      identifier: IdentifierSchemaWithOutName(getString).notOneOf(manifestIdentifiers, validationMsg)
+      identifier: NameSchema().notOneOf(manifestNames, validationMsg)
     }
   }
   return {
-    identifier: IdentifierSchemaWithOutName(getString)
+    identifier: NameSchema()
   }
 }

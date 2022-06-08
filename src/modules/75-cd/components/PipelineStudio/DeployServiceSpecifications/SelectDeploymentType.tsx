@@ -314,7 +314,7 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
             <Layout.Horizontal>
               <div className={deployServiceCsss.comingSoonBanner}>{getString('common.comingSoon')}</div>
               <div
-                className={cx(stageCss.tabSubHeading, 'ng-tooltip-native')}
+                className={cx(stageCss.tabSubHeading, deployServiceCsss.currentGenSupported, 'ng-tooltip-native')}
                 data-tooltip-id="supportedInFirstGeneration"
               >
                 {getString('common.currentlySupportedOn')}

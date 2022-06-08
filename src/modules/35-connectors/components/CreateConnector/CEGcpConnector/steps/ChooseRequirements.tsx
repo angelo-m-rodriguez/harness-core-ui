@@ -16,6 +16,8 @@ import {
   FeaturesString
 } from '@connectors/common/RequirementCard/RequirementCard'
 import type { GcpCloudCostConnector } from 'services/cd-ng'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions, ConnectorTypes } from '@common/constants/TrackingConstants'
 import type { CEGcpConnectorDTO } from './OverviewStep'
 import css from '../CreateCeGcpConnector.module.scss'
 
@@ -91,6 +93,10 @@ const ChooseRequirements: React.FC<StepProps<CEGcpConnectorDTO>> = ({ prevStepDa
   const { selectedCards, setSelectedCards } = useSelectCards({ featuresEnabled, featureCards })
 
   const handleSubmit = () => {
+    trackEvent(ConnectorActions.ChooseRequirementsSubmit, {
+      category: Category.CONNECTOR,
+      connector_type: ConnectorTypes.CEGcp
+    })
     const features: FeaturesString[] = selectedCards.map(card => card.value)
     if (prevStepData?.includeBilling) {
       features.push('BILLING')
@@ -125,6 +131,13 @@ const ChooseRequirements: React.FC<StepProps<CEGcpConnectorDTO>> = ({ prevStepDa
       setSelectedCards(sc)
     }
   }
+
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ChooseRequirementsLoad, {
+    category: Category.CONNECTOR,
+    connector_type: ConnectorTypes.CEGcp
+  })
 
   return (
     <Layout.Vertical className={css.stepContainer}>

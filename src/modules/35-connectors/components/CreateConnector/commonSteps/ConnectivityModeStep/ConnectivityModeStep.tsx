@@ -35,6 +35,8 @@ import ConnectivityMode, {
 } from '@common/components/ConnectivityMode/ConnectivityMode'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import useCreateEditConnector, { BuildPayloadProps } from '@connectors/hooks/useCreateEditConnector'
 import css from './ConnectivityModeStep.module.scss'
@@ -104,6 +106,12 @@ const ConnectivityModeStep: React.FC<StepProps<ConnectorConfigDTO> & Connectivit
   const defaultInitialValues = { connectivityMode: undefined }
 
   const connectorName = (prevStepData as ConnectorConfigDTO)?.name || (connectorInfo as ConnectorInfoDTO)?.name
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ConnectivityModeStepLoad, {
+    category: Category.CONNECTOR
+  })
+
   return (
     <>
       {!isGitSyncEnabled && loading ? (
@@ -126,6 +134,9 @@ const ConnectivityModeStep: React.FC<StepProps<ConnectorConfigDTO> & Connectivit
             connectivityMode: Yup.string().required(getString('connectors.connectivityMode.validation'))
           })}
           onSubmit={stepData => {
+            trackEvent(ConnectorActions.ConnectivityModeStepSubmit, {
+              category: Category.CONNECTOR
+            })
             if (props.submitOnNextStep || stepData.connectivityMode === ConnectivityModeType.Delegate) {
               nextStep?.({ ...prevStepData, ...stepData, projectIdentifier, orgIdentifier })
               return

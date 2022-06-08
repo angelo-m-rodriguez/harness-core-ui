@@ -30,8 +30,47 @@ export const getServiceNowUpdateEditModeProps = (): ServiceNowUpdateStepModeProp
       ticketType: '',
       ticketNumber: '',
       fieldType: FieldType.ConfigureFields,
-      fields: [],
+      fields: [
+        {
+          name: 'description',
+          value: 'desc'
+        },
+        {
+          name: 'short_description',
+          value: 'short desc'
+        },
+        { name: 'random', value: 'test' }
+      ],
       useServiceNowTemplate: false
+    }
+  },
+  onUpdate: jest.fn(),
+  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION],
+  stepViewType: StepViewType.Edit
+})
+export const getServiceNowUpdateTemplateTypeEditModeProps = (): ServiceNowUpdateStepModeProps => ({
+  initialValues: {
+    name: '',
+    type: 'ServiceNowUpdate',
+    identifier: '',
+    timeout: '5s',
+    spec: {
+      connectorRef: 'cid1',
+      ticketType: 'INCIDENT',
+      ticketNumber: '',
+      fieldType: FieldType.CreateFromTemplate,
+      fields: [
+        {
+          name: 'description',
+          value: 'desc'
+        },
+        {
+          name: 'short_description',
+          value: 'short desc'
+        }
+      ],
+      useServiceNowTemplate: true,
+      templateName: 'test'
     }
   },
   onUpdate: jest.fn(),
@@ -67,13 +106,15 @@ export const getServiceNowUpdateEditModePropsWithValues = (): ServiceNowUpdateSt
     identifier: '',
     spec: {
       connectorRef: 'c1d1',
-      ticketType: '',
+      ticketType: 'INCIDENT',
       ticketNumber: '<+ticketNumber>',
       fieldType: FieldType.ConfigureFields,
       fields: [
         { name: 'f21', value: 'value1' },
         { name: 'f2', value: 2233 },
-        { name: 'date', value: '23-march' }
+        { name: 'date', value: '23-march' },
+        { name: 'description', value: 'desc' },
+        { name: 'short_description', value: 'short desc' }
       ],
       useServiceNowTemplate: false
     }
@@ -110,6 +151,45 @@ export const getServiceNowUpdateDeploymentModeProps = (): ServiceNowUpdateDeploy
         ticketNumber: RUNTIME_INPUT_VALUE,
         fieldType: FieldType.ConfigureFields,
         fields: [],
+        useServiceNowTemplate: false
+      }
+    }
+  },
+  onUpdate: jest.fn(),
+  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+})
+export const getServiceNowUpdateDeploymentModeWithCustomFieldsProps = (): ServiceNowUpdateDeploymentModeProps => ({
+  stepViewType: StepViewType.InputSet,
+  initialValues: {
+    name: '',
+    type: 'ServiceNowUpdate',
+    identifier: '',
+    spec: {
+      connectorRef: 'cid1',
+      ticketType: 'INCIDENT',
+      ticketNumber: '',
+      fieldType: FieldType.ConfigureFields,
+      fields: [],
+      useServiceNowTemplate: false
+    }
+  },
+  inputSetData: {
+    path: '/ab/',
+    template: {
+      name: '',
+      type: 'ServiceNowUpdate',
+      identifier: '',
+      spec: {
+        connectorRef: 'cid1',
+        ticketType: 'INCIDENT',
+        ticketNumber: RUNTIME_INPUT_VALUE,
+        fieldType: FieldType.ConfigureFields,
+        fields: [
+          {
+            name: 'Test',
+            value: RUNTIME_INPUT_VALUE
+          }
+        ],
         useServiceNowTemplate: false
       }
     }

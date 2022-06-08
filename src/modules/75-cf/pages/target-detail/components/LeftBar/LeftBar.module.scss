@@ -7,7 +7,14 @@
 
 .tabs {
   > :global(.bp3-tabs > .bp3-tab-list) {
-    padding: var(--spacing-xsmall) var(--spacing-xlarge) 0;
+    padding: calc(var(--spacing-large) + 1px) var(--spacing-xlarge) 0;
     border-bottom: 1px solid var(--grey-200);
   }
+}
+
+.panel {
+  margin: 0;
+  padding: var(--spacing-xlarge);
+  max-height: calc(100vh - var(--page-header-height) - 65px - var(--git-sync-toolbar-height, 0px));
+  overflow: auto;
 }

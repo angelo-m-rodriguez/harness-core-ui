@@ -33,6 +33,7 @@ import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import type { StringsMap } from 'stringTypes'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 export interface K8sCanaryDeployData extends StepElementConfig {
   spec: Omit<K8sRollingStepInfo, 'skipDryRun'> & {
@@ -237,7 +238,14 @@ const K8sCanaryDeployVariableStep: React.FC<K8sCanaryDeployVariableStepProps> = 
   metadataMap,
   initialValues
 }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8CanaryDeployWidgetWithRef = React.forwardRef(K8CanaryDeployWidget)

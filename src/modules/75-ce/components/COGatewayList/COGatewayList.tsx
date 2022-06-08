@@ -229,7 +229,11 @@ function ResourcesCell(tableProps: CellProps<Service>): JSX.Element {
     e.stopPropagation()
     if (isSubmittedRule) return
     const link = getClickableLink()
-    window.open(`http://${link}`, '_blank')
+    const hasHttpsConfig = !_isEmpty(
+      tableProps.row.original.routing?.ports?.find(portConfig => portConfig.protocol === 'https')
+    )
+    const protocol = Utils.getConditionalResult(hasHttpsConfig, 'https', 'http')
+    window.open(`${protocol}://${link}`, '_blank')
   }
 
   const renderLink = (linkStr = '') => {

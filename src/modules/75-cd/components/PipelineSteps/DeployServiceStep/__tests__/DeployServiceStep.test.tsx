@@ -35,17 +35,17 @@ jest.mock('services/cd-ng', () => ({
     .fn()
     .mockImplementation(() => ({ loading: false, data: inputSetServiceData, refetch: jest.fn() })),
   useGetYamlSchema: jest.fn(() => ({ data: null })),
-  useCreateServicesV2: jest.fn().mockImplementation(() => ({
+  useCreateServiceV2: jest.fn().mockImplementation(() => ({
     cancel: jest.fn(),
     loading: false,
     mutate: jest.fn().mockImplementation(obj => {
       serviceData.data.content.push({
         service: {
           accountId: 'AQ8xhfNCRtGIUjq5bSM8Fg',
-          identifier: obj[0].identifier,
+          identifier: obj.identifier,
           orgIdentifier: 'default',
           projectIdentifier: 'asdsaff',
-          name: obj[0].name,
+          name: obj.name,
           description: null,
           deleted: false,
           tags: {},

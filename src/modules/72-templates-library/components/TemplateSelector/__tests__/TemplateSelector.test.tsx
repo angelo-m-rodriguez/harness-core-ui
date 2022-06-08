@@ -11,10 +11,10 @@ import { set } from 'lodash-es'
 import produce from 'immer'
 import { findDialogContainer, TestWrapper } from '@common/utils/testUtils'
 import type { TemplateSelectorLeftViewProps } from '@templates-library/components/TemplateSelector/TemplateSelectorLeftView/TemplateSelectorLeftView'
-import { PipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import pipelineContextMock from '@pipeline/components/PipelineStudio/RightDrawer/__tests__/stateMock'
 import { mockTemplates } from '@templates-library/TemplatesTestHelper'
 import type { TemplateDetailsProps } from '@templates-library/components/TemplateDetails/TemplateDetails'
+import { TemplateSelectorContext } from '@templates-library/components/TemplateSelectorContext/TemplateSelectorContext'
+import { templateSelectorContextMock } from '@templates-library/components/TemplateSelectorContext/stateMocks'
 import { TemplateSelector } from '../TemplateSelector'
 
 jest.mock('@common/components/YAMLBuilder/YamlBuilder')
@@ -47,10 +47,6 @@ jest.mock('@templates-library/components/TemplateDetails/TemplateDetails', () =>
   }
 }))
 
-const pipelineContext = produce(pipelineContextMock, draft => {
-  set(draft, 'state.templateView.templateDrawerData.data.selectorData.onSubmit', jest.fn())
-})
-
 describe('<TemplateSelector /> tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -58,70 +54,66 @@ describe('<TemplateSelector /> tests', () => {
 
   test('should match snapshot when selected template is not set', async () => {
     const { container, getByRole } = render(
-      <PipelineContext.Provider value={pipelineContext}>
+      <TemplateSelectorContext.Provider value={templateSelectorContextMock}>
         <TestWrapper>
           <TemplateSelector />
         </TestWrapper>
-      </PipelineContext.Provider>
+      </TemplateSelectorContext.Provider>
     )
 
     expect(container).toMatchSnapshot()
 
-    const copyTemplateBtn = getByRole('button', { name: 'templatesLibrary.copyToPipeline' })
+    const copyTemplateBtn = getByRole('button', { name: 'templatesLibrary.copyTemplateLabel' })
     await act(async () => {
       fireEvent.click(copyTemplateBtn)
     })
-    expect(pipelineContext.state.templateView.templateDrawerData.data?.selectorData?.onSubmit).toBeCalledWith(
+    expect(templateSelectorContextMock.state.selectorData?.onSubmit).toBeCalledWith(
       mockTemplates.data?.content?.[0],
       true
     )
 
-    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplate' })
+    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplateLabel' })
     await act(async () => {
       fireEvent.click(useTemplateBtn)
     })
-    expect(pipelineContext.state.templateView.templateDrawerData.data?.selectorData?.onSubmit).toBeCalledWith(
+    expect(templateSelectorContextMock.state.selectorData?.onSubmit).toBeCalledWith(
       mockTemplates.data?.content?.[0],
       false
     )
   })
 
   test('should disable use template button when same selected template is set', async () => {
-    const context = produce(pipelineContext, draft => {
-      set(
-        draft,
-        'state.templateView.templateDrawerData.data.selectorData.selectedTemplate',
-        mockTemplates.data?.content?.[0]
-      )
+    const context = produce(templateSelectorContextMock, draft => {
+      set(draft, 'state.selectorData.selectedTemplate', mockTemplates.data?.content?.[0])
     })
     const { getByRole } = render(
-      <PipelineContext.Provider value={context}>
+      <TemplateSelectorContext.Provider value={context}>
         <TestWrapper>
           <TemplateSelector />
         </TestWrapper>
-      </PipelineContext.Provider>
+      </TemplateSelectorContext.Provider>
     )
 
-    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplate' })
+    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplateLabel' })
     expect(useTemplateBtn).toBeDisabled()
   })
 
   test('should work correctly when different selected template is set', async () => {
-    const context = produce(pipelineContext, draft => {
-      set(draft, 'state.templateView.templateDrawerData.data.selectorData.selectedTemplate', {
+    const context = produce(templateSelectorContextMock, draft => {
+      set(draft, 'state.selectorData.selectedTemplate', {
         ...mockTemplates.data?.content?.[0],
         versionLabel: 'v5'
       })
     })
     const { getByRole } = render(
-      <PipelineContext.Provider value={context}>
+      <TemplateSelectorContext.Provider value={context}>
         <TestWrapper>
           <TemplateSelector />
         </TestWrapper>
-      </PipelineContext.Provider>
+      </TemplateSelectorContext.Provider>
     )
 
-    const copyTemplateBtn = getByRole('button', { name: 'templatesLibrary.copyToPipeline' })
+    const copyTemplateBtn = getByRole('button', { name: 'templatesLibrary.copyTemplateLabel' })
     await act(async () => {
       fireEvent.click(copyTemplateBtn)
     })
@@ -129,12 +121,9 @@ describe('<TemplateSelector /> tests', () => {
     await act(async () => {
       fireEvent.click(copyBtn)
     })
-    expect(pipelineContext.state.templateView.templateDrawerData.data?.selectorData?.onSubmit).toBeCalledWith(
-      mockTemplates.data?.content?.[0],
-      true
-    )
+    expect(context.state.selectorData?.onSubmit).toBeCalledWith(mockTemplates.data?.content?.[0], true)
 
-    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplate' })
+    const useTemplateBtn = getByRole('button', { name: 'templatesLibrary.useTemplateLabel' })
     await act(async () => {
       fireEvent.click(useTemplateBtn)
     })
@@ -142,9 +131,6 @@ describe('<TemplateSelector /> tests', () => {
     await act(async () => {
       fireEvent.click(useBtn)
     })
-    expect(pipelineContext.state.templateView.templateDrawerData.data?.selectorData?.onSubmit).toBeCalledWith(
-      mockTemplates.data?.content?.[0],
-      false
-    )
+    expect(context.state?.selectorData?.onSubmit).toBeCalledWith(mockTemplates.data?.content?.[0], false)
   })
 })

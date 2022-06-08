@@ -49,10 +49,8 @@ jest.mock('services/cd-ng', () => ({
   useGetSourceCodeManagers: () => ({
     data: []
   }),
-  useCreatePR: () => ({
-    data: [],
-    mutate: jest.fn()
-  }),
+  useCreatePR: () => ({ data: [], mutate: jest.fn() }),
+  useCreatePRV2: () => ({ data: [], mutate: jest.fn() }),
   useGetFileContent: () => ({
     data: [],
     mutate: jest.fn(),
@@ -93,7 +91,8 @@ jest.mock('services/pipeline-ng', () => ({
 
   // used within PreFlightCheckModal
   useGetPreflightCheckResponse: jest.fn(() => ({ data: { data: { status: 'SUCCESS' } } })),
-  startPreflightCheckPromise: jest.fn().mockResolvedValue({})
+  startPreflightCheckPromise: jest.fn().mockResolvedValue({}),
+  useValidateTemplateInputs: jest.fn(() => getMockFor_Generic_useMutate())
 }))
 
 describe('STUDIO MODE', () => {

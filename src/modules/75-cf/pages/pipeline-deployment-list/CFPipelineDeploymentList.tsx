@@ -16,7 +16,7 @@ import { useGetPipelineSummary } from 'services/pipeline-ng'
 export default function CFPipelineDeploymentList(): React.ReactElement {
   const { pipelineIdentifier, orgIdentifier, projectIdentifier, accountId, module } =
     useParams<PipelineType<PipelinePathProps>>()
-  const { branch, repoIdentifier } = useQueryParams<GitQueryParams>()
+  const { branch, repoIdentifier, connectorRef, repoName, storeType } = useQueryParams<GitQueryParams>()
 
   const history = useHistory()
   const onRunPipeline = (): void => {
@@ -29,6 +29,9 @@ export default function CFPipelineDeploymentList(): React.ReactElement {
         module,
         branch,
         repoIdentifier,
+        repoName,
+        connectorRef,
+        storeType,
         runPipeline: true
       })
     )

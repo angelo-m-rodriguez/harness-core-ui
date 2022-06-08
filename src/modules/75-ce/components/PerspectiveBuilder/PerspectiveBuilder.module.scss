@@ -39,4 +39,9 @@
   .linkText {
     cursor: pointer;
   }
+
+  .folderSelectionBtn {
+    padding-left: var(--spacing-huge) !important;
+    padding-right: 0 !important;
+  }
 }

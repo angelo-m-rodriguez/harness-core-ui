@@ -9,9 +9,6 @@ exports[`<PipelineTemplateCanvasWrapper/> tests should match snapshot 1`] = `
     class="pipeline-studio-right-bar-mock"
   />
   <div
-    class="template-drawer-mock"
-  />
-  <div
     class="right-drawer-mock"
   />
 </div>

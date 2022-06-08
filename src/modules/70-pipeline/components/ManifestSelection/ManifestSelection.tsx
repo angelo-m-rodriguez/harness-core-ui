@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { Layout, useToaster } from '@harness/uicore'
+import { Layout, shouldShowError, useToaster } from '@harness/uicore'
 
 import { useParams } from 'react-router-dom'
 import { defaultTo, get, isEmpty } from 'lodash-es'
@@ -132,7 +132,9 @@ export default function ManifestSelection({
         setFetchedConnectorResponse(connectorResponse)
       }
     } catch (e) {
-      showError(getRBACErrorMessage(e))
+      if (shouldShowError(e)) {
+        showError(getRBACErrorMessage(e))
+      }
     }
   }
 

@@ -22,6 +22,7 @@ purposeList:
   ci: '{{$.common.purpose.ci.continuous}}'
   ce: '{{$.common.purpose.ce.continuous}}'
   cf: '{{$.common.purpose.cf.continuous}}'
+  sto: '{{$.common.purpose.sto.continuous}}'
   linkcv: 'Add New Monitoring Source'
   moduleSuccess: '{{$.common.purpose.moduleSuccess}}'
   name: 'Which Harness modules would you like to enable for this project?'

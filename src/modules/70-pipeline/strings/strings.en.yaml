@@ -1,23 +1,24 @@
 verificationResult: 'Verification result:'
 estimatedTimeRemaining: 'Estimated time remaining:'
 progressPercentage: 'Progress percentage:'
+clone: Clone Pipeline
 discard: '{{ $.common.discard }}'
 serviceDependencyText: Service Dependency
 serviceDependenciesText: Service Dependencies
 stepLabel: '{{name}} (Id: {{identifier}})'
 enableVerificationOptions: Enable verification options
+openInPipelineStudio: Open in Pipeline Studio
 closeStepConfig: Step Config
-stepConfigHasChanges: Form has some unsaved changed, Do you want to apply the changes?
+stepConfigHasChanges: Form has some unsaved changes, Do you want to apply the changes?
 clickHere: Click here
 stepDetails: Step details
 stageVariables: Stage Variables
 scriptInputVariables: Script Input Variables
 scriptOutputVariables: Script Output Variables
 executionTarget: Execution Target
-removeTemplate: The applied template will be removed from your stage.
-changeTemplate: 'Applying {{name}} to your {{entity}} might reset some fields.'
+removeTemplate: '<b>{{name}}</b> will be removed from this {{entity}}.'
+cloneSuccess: 'Pipeline {{name}} has been cloned successfully as {{cloneName}}'
 templateSaved: 'Template {{name}} has been published successfully. Applying {{name}} to your {{entity}} might reset some fields.'
-copyTemplate: Template configurations will be copied to your pipeline and made editable.
 collapseIsDisabledWhileStageIsRunning: Collapse is disable while stage is running
 changeTemplateLabel: Change Template
 removeTemplateLabel: Remove Template
@@ -104,6 +105,13 @@ approvalStep:
     REJECT: Rejected
   notAuthorizedExecution: User is not authorized to approve/reject the pipeline
   disallowedApproverExecution: This approval step has been configured to disallow pipeline executors to approve this stage.
+lockStep:
+  keyPlaceholder: Enter Resource Key
+  resourceKey: Resource Key
+  keyRequired: Resource Key is required
+  scopeRequired: Scope is required
+  scopePlaceholder: Select Scope
+  scope: Scope (to release constraint)
 jiraApprovalStep:
   connectToJira: Connect to Jira
   connectorRef: Jira Connector
@@ -137,9 +145,10 @@ jiraApprovalStep:
       not_in: '{{ key }} is not in'
   validations:
     connectorRef: Jira Connector is required
-    project: Project is required
+    project: '{{$.common.validation.projectIsRequired}}'
     issueKey: Issue Key is required
     issueType: Issue Type is required
+    requiredField: This is a required field.
 jiraCreateStep:
   fields: Jira Fields
   summaryPlaceholder: Enter a Title or Summary
@@ -231,14 +240,14 @@ serviceNowUpdateStep:
     applyFromTemplate: Apply from template
     updateFields: Update Fields
 manifestType:
-  attachPath: + Attach / Edit {{manifestPath}}
+  attachPath: + Attach {{manifestPath}}
   manifestTyperequired: Manifest Type is required
   gitConnectorLabel: 'Git'
   bitBucketLabel: 'Bitbucket'
   InheritFromManifest: 'Inherit From Manifest'
   httpHelmRepoConnectorLabel: 'HTTP Helm'
-  manifestIdentifier: Manifest Identifier
-  manifestPlaceholder: Enter Manifest Identifier
+  manifestIdentifier: Manifest Name
+  manifestPlaceholder: Enter Manifest Name
   manifestSource: Manifest Source
   manifestDetails: Manifest Details
   manifestRepoType: '{{ $.manifestsText }} {{ $.typeLabel }}'
@@ -365,6 +374,7 @@ createPipeline:
   setupSubtitle: Let’s get you started on your pipeline.
   setupLater: Setup Later
   learnMore: Learn More
+  choosePipelineSetupHeader: How do you want to setup your pipeline?
 selectOrCreateForm:
   description: '{{$.common.selectAVersion.description}}'
 execution:
@@ -523,6 +533,8 @@ dashboards:
   successfulBuilds: Successful Builds
   pipelineHealth: Pipeline health
   totalExecutions: Total Executions
+  pipelineExecution: Pipeline Executions
+  executionsLabel: '# of Executions'
   successRate: Success Rate
   meanDuration: Mean Duration
   medianDuration: Median Duration
@@ -530,7 +542,7 @@ savingInProgress: Saving in progress...
 gitExperience:
   skipNow: SKIP NOW
   selectRepoBranch: Please select Repository and Branch from the pipeline edit modal
-  noPipelineFound: The {{entityType}} does not exist in the selected Branch.
+  noEntityFound: The {{entityType}} does not exist in the selected Branch.
   selectDiffBranch: Please select a different Branch.
 testsReports:
   callgraphTitle: Call Graph
@@ -604,6 +616,7 @@ testsReports:
     addRunTestsStep: Add 'Run Tests step' to your Pipeline
     requiresEnterprisePlan: Requires Enterprise Plan to access Test Intelligence
 uniqueIdentifier: Identifier must be unique
+uniqueName: Name must be unique
 inputSets:
   inputSetNameLabel: Input Set Name
   applyInputSet: Apply Input Set
@@ -649,6 +662,10 @@ infraSpecifications:
   initTimeoutPlaceholder: Enter Init Timeout
   validation:
     requiredExistingStage: Existing stage is a required field
+  os: OS
+  osTypes:
+    windows: Windows
+    macos: MacOS
 imagePathLabel: Image Path
 artifactPathLabel: Artifact Path
 artifactPathFilterLabel: Artifact Path Filter
@@ -790,6 +807,7 @@ stepDescription:
   HTTP: Run HTTP requests containing URLs, methods, headers, assertions, and variables.
   SHELLSCRIPT: Execute scripts in the shell session. The scripts can be executed on the pod/instance running a Harness Delegate or on a remote host in the infrastructure.
   Barrier: Synchronize multiple Pipelines to coordinate deployments systematically.
+  Lock: Description of lock step comes here.
   K8sRollingRollback: Roll back the workloads deployed by the stage.
   K8sBlueGreenDeploy: Deploy your new app version to the stage environment.
   K8sCanaryDeploy: Define how many pods are deployed for a Canary test of your new service version.
@@ -932,9 +950,6 @@ approvalTypeRequired: Approval type is required
 executionList:
   servicesDeployedText: 'Services deployed ({{size}})'
   EnvironmentsText: 'Environments ({{size}})'
-commentModal:
-  heading: 'Save {{ name }} ({{ version }})'
-  info: 'By saving, all pipelines referencing the stable version will receive your changes.'
 replacedExpressions: Replaced Expressions
 expressionRequired: Expression value is required.
 nativeHelm: Native Helm
@@ -955,7 +970,7 @@ runtimeInputNotSupported: '{{field}} cannot be runtime inputs'
 runPipeline:
   ciCodebaseConfig: CI Codebase Configuration is missing. Codebase is required when the pipeline contains a CI stage that is set to clone codebase.
 buildInfra:
-  poolId: Pool Id
+  poolName: Pool Name
   nodeSelector: Node Selector
   tolerations: Tolerations
   volumes: Volumes
@@ -1028,6 +1043,19 @@ cannotRunInvalidPipeline: Cannot run the pipeline because it's invalid, please r
 cannotAddTriggerInvalidPipeline: Cannot add a trigger because pipeline is invalid, please review the configuration.
 cannotAddInputSetInvalidPipeline: Cannot add an input set because pipeline is invalid, please review the configuration.
 cannotEditTriggerInvalidPipeline: Cannot edit the trigger because pipeline is invalid, please review the configuration.
+outOfSyncErrorStrip:
+  reconcile: Reconcile
+  unsyncedTemplateInfo: Some template(s) referenced in this {{entity}} have gone out of sync.
+  updatedTemplateInfo: Some template(s) referenced in this {{entity}} have been updated.
+reconcileDialog:
+  title: Template Error Inspection
+  subtitle: Error Trace
+  unsyncedTemplateInfo: The error detected in <b>{{name}}</b> is parsed from unsynced templates.
+  updatedTemplateInfo: The error detected in <b>{{name}}</b> is parsed from updated templates.
+  originalYamlLabel: Original
+  refreshedYamlLabel: Refreshed
+  updateAllLabel: Update all unsynced entities
+  updateEntityLabel: 'Update {{entity}}'
 ACR:
   name: ACR
   subscription: '{{ $.common.subscriptionId }}'
@@ -1039,3 +1067,8 @@ ACR:
   repositoryPlaceholder: 'Select or add Repository'
   repositoryError: 'No repository found with given Registry'
   tagError: 'No tags found with given Connector, Subscription Id, Registry and Repository'
+OverviewEmptyStates:
+  createPipelineHeaderMsg: Set up a Pipeline and run your first deployment!
+  createPipelineInfo: A Harness Pipeline is a series of stages that performs operations like building and deploying software.
+  runPipelineHeaderMsg: You haven’t tried running your pipelines yet.
+  runPipelineInfo: Click the button below to select a pipeline and get your deployments started.

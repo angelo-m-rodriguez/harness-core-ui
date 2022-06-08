@@ -26,8 +26,21 @@ import {
   GetTemplateListQueryParams,
   ResponsePageTemplateSummaryResponse
 } from 'services/template-ng'
+import type { TemplateType } from '@common/interfaces/RouteInterfaces'
 
 export const TEMPLATE_INPUT_PATH = 'template.templateInputs'
+
+export interface GetTemplateResponse {
+  template: TemplateSummaryResponse
+  isCopied: boolean
+}
+
+export interface GetTemplateProps {
+  templateType: TemplateType
+  selectedChildType?: string
+  allChildTypes?: string[]
+  selectedTemplate?: TemplateSummaryResponse
+}
 
 export const getTemplateNameWithLabel = (template?: TemplateSummaryResponse): string => {
   return `${template?.name} (${defaultTo(template?.versionLabel, 'Stable')})`
@@ -42,7 +55,7 @@ export const getScopeBasedTemplateRef = (template: TemplateSummaryResponse): str
 export const getStageType = (stage?: StageElementConfig, templateTypes?: { [key: string]: string }): StageType => {
   return stage?.template
     ? templateTypes
-      ? (get(templateTypes, getIdentifierFromValue(defaultTo(stage.template.templateRef, ''))) as StageType)
+      ? (get(templateTypes, stage.template.templateRef) as StageType)
       : ((stage.template.templateInputs as StageElementConfig)?.type as StageType)
     : (stage?.type as StageType)
 }
@@ -134,7 +147,7 @@ export const getTemplateTypesByRef = (
       const templateTypes = {}
       responses.forEach(response => {
         response.data?.content?.forEach(item => {
-          set(templateTypes, item.identifier || '', parse(item.yaml || '').template.spec.type)
+          set(templateTypes, getScopeBasedTemplateRef(item), parse(item.yaml || '').template.spec.type)
         })
       })
       return templateTypes

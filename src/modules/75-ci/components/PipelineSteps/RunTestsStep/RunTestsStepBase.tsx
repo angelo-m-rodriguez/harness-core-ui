@@ -31,8 +31,9 @@ import { MultiTypeSelectField } from '@common/components/MultiTypeSelect/MultiTy
 import { FormMultiTypeCheckboxField } from '@common/components'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
-import { useStrings } from 'framework/strings'
+import { useStrings, UseStringsReturn } from 'framework/strings'
 import type { StringsMap } from 'stringTypes'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { MultiTypeTextField } from '@common/components/MultiTypeText/MultiTypeText'
 import StepCommonFields, {
   GetImagePullPolicyOptions,
@@ -64,17 +65,29 @@ interface FieldRenderProps {
   renderOptionalSublabel?: boolean
   selectFieldOptions?: SelectOption[]
   onSelectChange?: (SelectOption: any) => void
+  disabled?: boolean
 }
 
-const javaBuildToolOptions = [
-  { label: 'Bazel', value: 'Bazel' },
-  { label: 'Maven', value: 'Maven' },
-  { label: 'Gradle', value: 'Gradle' }
+const qaLocation = 'https://qa.harness.io'
+
+const getJavaBuildToolOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: getString('ci.runTestsStep.bazel'), value: 'Bazel' },
+  { label: getString('ci.runTestsStep.maven'), value: 'Maven' },
+  { label: getString('ci.runTestsStep.gradle'), value: 'Gradle' }
 ]
 
-const cSharpBuildToolOptions = [
-  { label: 'Dotnet', value: 'Dotnet' },
-  { label: 'Nunit Console', value: 'Nunitconsole' }
+export const getBuildEnvironmentOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: getString('ci.runTestsStep.dotNetCore'), value: 'Core' }
+]
+
+export const getFrameworkVersionOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: getString('ci.runTestsStep.sixPointZero'), value: '6.0' },
+  { label: getString('ci.runTestsStep.fivePointZero'), value: '5.0' }
+]
+
+export const getCSharpBuildToolOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: getString('ci.runTestsStep.dotnet'), value: 'Dotnet' },
+  { label: getString('ci.runTestsStep.nUnitConsole'), value: 'Nunitconsole' }
 ]
 
 const enum Language {
@@ -82,11 +95,19 @@ const enum Language {
   Csharp = 'Csharp'
 }
 
-const getBuildToolOptions = (language?: string): SelectOption[] | undefined => {
+const getLanguageOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: getString('ci.runTestsStep.csharp'), value: Language.Csharp },
+  { label: getString('ci.runTestsStep.java'), value: Language.Java }
+]
+
+const getBuildToolOptions = (
+  getString: UseStringsReturn['getString'],
+  language?: string
+): SelectOption[] | undefined => {
   if (language === Language.Java) {
-    return javaBuildToolOptions
+    return getJavaBuildToolOptions(getString)
   } else if (language === Language.Csharp) {
-    return cSharpBuildToolOptions
+    return getCSharpBuildToolOptions(getString)
   }
   return undefined
 }
@@ -100,27 +121,16 @@ export const RunTestsStepBase = (
       selectionState: { selectedStageId }
     }
   } = usePipelineContext()
-
+  const { TI_DOTNET } = useFeatureFlags()
+  // temporary enable in QA for docs
+  const isQAEnvironment = window.location.origin === qaLocation
   const [mavenSetupQuestionAnswer, setMavenSetupQuestionAnswer] = React.useState('yes')
   const currentStage = useGetPropagatedStageById(selectedStageId || '')
   const buildInfrastructureType: CIBuildInfrastructureType = get(currentStage, 'stage.spec.infrastructure.type')
-  const [languageOptions, setLanguageOptions] = React.useState<SelectOption[]>([
-    { label: 'Csharp', value: Language.Csharp },
-    { label: 'Java', value: Language.Java }
-  ])
-
-  React.useEffect(() => {
-    if (buildInfrastructureType !== CIBuildInfrastructureType.VM) {
-      setLanguageOptions([{ label: 'Java', value: Language.Java }])
-    }
-  }, [buildInfrastructureType])
-
-  const [buildToolOptions, setBuildToolOptions] = React.useState<SelectOption[]>(
-    getBuildToolOptions(initialValues?.spec?.language) || []
-  )
-
   const { getString } = useStrings()
-
+  const [buildToolOptions, setBuildToolOptions] = React.useState<SelectOption[]>(
+    getBuildToolOptions(getString, initialValues?.spec?.language) || []
+  )
   const { expressions } = useVariablesExpression()
 
   // TODO: Right now we do not support Image Pull Policy but will do in the future
@@ -166,19 +176,35 @@ export const RunTestsStepBase = (
   )
 
   const renderMultiTypeSelectField = React.useCallback(
-    ({ name, fieldLabelKey, tooltipId, selectFieldOptions = [], onSelectChange, allowableTypes }: FieldRenderProps) => {
+    ({
+      name,
+      fieldLabelKey,
+      tooltipId,
+      selectFieldOptions = [],
+      renderOptionalSublabel = false,
+      onSelectChange,
+      allowableTypes
+    }: FieldRenderProps) => {
       return (
         <MultiTypeSelectField
           name={name}
           label={
-            <Text
-              className={css.inpLabel}
-              color={Color.GREY_600}
-              font={{ size: 'small', weight: 'semi-bold' }}
-              tooltipProps={{ dataTooltipId: tooltipId }}
-            >
-              {getString(fieldLabelKey)}
-            </Text>
+            <Layout.Horizontal flex={{ justifyContent: 'flex-start', alignItems: 'baseline' }}>
+              <Text
+                className={css.inpLabel}
+                color={Color.GREY_600}
+                font={{ size: 'small', weight: 'semi-bold' }}
+                tooltipProps={renderOptionalSublabel ? {} : { dataTooltipId: tooltipId }}
+              >
+                {getString(fieldLabelKey)}
+              </Text>
+              {renderOptionalSublabel ? (
+                <>
+                  &nbsp;
+                  {getOptionalSubLabel(getString, tooltipId)}
+                </>
+              ) : null}
+            </Layout.Horizontal>
           }
           multiTypeInputProps={{
             selectItems: selectFieldOptions,
@@ -239,9 +265,11 @@ export const RunTestsStepBase = (
         transformValuesFieldsConfig,
         {
           buildToolOptions,
-          languageOptions,
+          languageOptions: getLanguageOptions(getString),
           imagePullPolicyOptions: GetImagePullPolicyOptions(),
-          shellOptions: GetShellOptions(getString)
+          shellOptions: GetShellOptions(getString),
+          buildEnvironmentOptions: getBuildEnvironmentOptions(getString),
+          frameworkVersionOptions: getFrameworkVersionOptions(getString)
         }
       )}
       formName="ciRunTests"
@@ -260,7 +288,10 @@ export const RunTestsStepBase = (
         onChange?.(schemaValues)
         return validate(
           valuesToValidate,
-          getEditViewValidateFieldsConfig(buildInfrastructureType),
+          getEditViewValidateFieldsConfig(
+            buildInfrastructureType,
+            (valuesToValidate?.spec?.language as any)?.value === Language.Csharp
+          ),
           {
             initialValues,
             steps: currentStage?.stage?.spec?.execution?.steps || {},
@@ -281,6 +312,7 @@ export const RunTestsStepBase = (
       {(formik: FormikProps<RunTestsStepData>) => {
         // This is required
         setFormikRef?.(formikRef, formik)
+        const selectedLanguageValue = (formik.values?.spec?.language as any)?.value
 
         return (
           <FormikForm>
@@ -302,24 +334,61 @@ export const RunTestsStepBase = (
                 name: 'spec.language',
                 fieldLabelKey: 'languageLabel',
                 tooltipId: 'runTestsLanguage',
-                selectFieldOptions: languageOptions,
-                onSelectChange: (option?: SelectOption) => {
-                  const newBuildToolOptions = getBuildToolOptions(option?.value as string)
+                selectFieldOptions:
+                  isQAEnvironment || TI_DOTNET
+                    ? getLanguageOptions(getString)
+                    : getLanguageOptions(getString).slice(1, 2),
+                onSelectChange: option => {
+                  const newBuildToolOptions = getBuildToolOptions(getString, option?.value as string)
+                  const newValues = { ...formik.values }
                   if (newBuildToolOptions) {
                     setBuildToolOptions(newBuildToolOptions)
-                    formik.setFieldValue('spec.buildTool', '')
+                  }
+                  if (option) {
+                    // reset downstream values if language changed
+                    newValues.spec.language = option
+                    newValues.spec.testAnnotations = undefined
+                    newValues.spec.buildEnvironment = undefined
+                    newValues.spec.frameworkVersion = undefined
+                    newValues.spec.packages = undefined
+                    newValues.spec.namespaces = undefined
+                    newValues.spec.buildTool = ''
+                    newValues.spec.args = ''
+                    formik.setValues({ ...newValues })
                   }
                 },
-                allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+                allowableTypes: [MultiTypeInputType.FIXED]
               })}
             </Container>
+            {selectedLanguageValue === Language.Csharp && (
+              <>
+                <Container className={cx(css.formGroup, css.lg, css.bottomMargin5)}>
+                  {renderMultiTypeSelectField({
+                    name: 'spec.buildEnvironment',
+                    fieldLabelKey: 'ci.runTestsStep.buildEnvironment',
+                    tooltipId: 'buildEnvironment',
+                    selectFieldOptions: getBuildEnvironmentOptions(getString),
+                    allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME]
+                  })}
+                </Container>
+                <Container className={cx(css.formGroup, css.lg, css.bottomMargin5)}>
+                  {renderMultiTypeSelectField({
+                    name: 'spec.frameworkVersion',
+                    fieldLabelKey: 'ci.runTestsStep.frameworkVersion',
+                    tooltipId: 'frameworkVersion',
+                    selectFieldOptions: getFrameworkVersionOptions(getString),
+                    allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME]
+                  })}
+                </Container>
+              </>
+            )}
             <Container className={cx(css.formGroup, css.lg, css.bottomMargin5)}>
               {renderMultiTypeSelectField({
                 name: 'spec.buildTool',
                 fieldLabelKey: 'buildToolLabel',
                 tooltipId: 'runTestsBuildTool',
                 selectFieldOptions: buildToolOptions,
-                allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+                allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME]
               })}
             </Container>
             {(formik.values?.spec?.language as any)?.value === Language.Java &&
@@ -380,12 +449,12 @@ gradle.projectsEvaluated {
                     format="pre"
                     snippet={getString('ci.gradleNote1')}
                   />
-                  <Text margin={{ top: 'small' }} color="grey800">
+                  <Text margin={{ top: 'small', bottom: 'medium' }} color="grey800">
                     {getString('ci.gradleNote2')}
                   </Text>
                 </>
               )}
-            <Container className={cx(css.formGroup, css.lg, css.bottomMargin5)}>
+            <Container className={cx(css.formGroup, css.lg)}>
               {renderMultiTypeTextField({
                 name: 'spec.args',
                 fieldLabelKey: 'argsLabel',
@@ -393,14 +462,27 @@ gradle.projectsEvaluated {
                 allowableTypes: AllMultiTypeInputTypesForStep
               })}
             </Container>
-            <Container className={cx(css.formGroup, css.lg)}>
-              {renderMultiTypeTextField({
-                name: 'spec.packages',
-                fieldLabelKey: 'packagesLabel',
-                tooltipId: 'runTestsPackages',
-                allowableTypes: AllMultiTypeInputTypesForStep
-              })}
-            </Container>
+            {selectedLanguageValue === Language.Java && (
+              <Container className={cx(css.formGroup, css.lg)}>
+                {renderMultiTypeTextField({
+                  name: 'spec.packages',
+                  fieldLabelKey: 'packagesLabel',
+                  tooltipId: 'runTestsPackages',
+                  renderOptionalSublabel: true,
+                  allowableTypes: AllMultiTypeInputTypesForStep
+                })}
+              </Container>
+            )}
+            {selectedLanguageValue === Language.Csharp && (
+              <Container className={cx(css.formGroup, css.lg)}>
+                {renderMultiTypeTextField({
+                  name: 'spec.namespaces',
+                  fieldLabelKey: 'ci.runTestsStep.namespaces',
+                  tooltipId: 'runTestsNamespaces',
+                  allowableTypes: AllMultiTypeInputTypesForStep
+                })}
+              </Container>
+            )}
             <Accordion className={css.accordion}>
               <Accordion.Panel
                 id="optional-config"
@@ -427,15 +509,17 @@ gradle.projectsEvaluated {
                         disabled={readonly}
                       />
                     </Container>
-                    <Container className={cx(css.formGroup, css.sm, css.bottomMargin5)}>
-                      {renderMultiTypeTextField({
-                        name: 'spec.testAnnotations',
-                        fieldLabelKey: 'testAnnotationsLabel',
-                        tooltipId: '',
-                        renderOptionalSublabel: true,
-                        allowableTypes: AllMultiTypeInputTypesForStep
-                      })}
-                    </Container>
+                    {selectedLanguageValue === Language.Java && (
+                      <Container className={cx(css.formGroup, css.lg, css.bottomMargin5)}>
+                        {renderMultiTypeTextField({
+                          name: 'spec.testAnnotations',
+                          fieldLabelKey: 'testAnnotationsLabel',
+                          tooltipId: '',
+                          renderOptionalSublabel: true,
+                          allowableTypes: AllMultiTypeInputTypesForStep
+                        })}
+                      </Container>
+                    )}
                     <Container className={css.bottomMargin5}>
                       <div
                         className={cx(css.fieldsGroup, css.withoutSpacing)}

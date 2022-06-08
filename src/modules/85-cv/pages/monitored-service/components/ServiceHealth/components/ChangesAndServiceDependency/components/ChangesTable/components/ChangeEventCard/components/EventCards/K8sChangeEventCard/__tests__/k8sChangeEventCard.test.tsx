@@ -42,7 +42,13 @@ describe('Unit tests for K8sChangeEventCard', () => {
         <K8sChangeEventCard data={mockK8sChangeResponse} />
       </TestWrapper>
     )
-    await waitFor(() => expect(getByText('Kubernetes ConfigMap event.')).not.toBeNull())
+    await waitFor(() =>
+      expect(
+        getByText(
+          `Workload: ${mockK8sChangeResponse.metadata.workload} - Namespace: ${mockK8sChangeResponse.metadata.namespace}`
+        )
+      ).toBeInTheDocument()
+    )
 
     // expand yaml
     fireEvent.click(container.querySelector('[data-testid="eventYAML-panel"]')!)

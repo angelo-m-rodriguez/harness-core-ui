@@ -46,7 +46,7 @@ export const getServiceNowApprovalEditModePropsWithValues = (): ServiceNowApprov
     identifier: '',
     spec: {
       connectorRef: 'c1d1',
-      ticketType: 'pid1',
+      ticketType: 'INCIDENT',
       ticketNumber: 'itd1',
       approvalCriteria: {
         type: ApprovalRejectionCriteriaType.KeyValues,
@@ -206,16 +206,16 @@ export const mockTicketTypesResponse: UseGetMockData<ResponseListServiceNowTicke
     metaData: null as unknown as undefined,
     data: [
       {
-        key: 'pid1',
-        name: 'p1'
+        key: 'INCIDENT',
+        name: 'INCIDENT'
       },
       {
-        key: 'pid2',
-        name: 'p2'
+        key: 'CHANGE',
+        name: 'CHANGE'
       },
       {
-        key: 'pid3',
-        name: 'p3'
+        key: 'CHANGE_TASK',
+        name: 'CHANGE_TASK'
       }
     ]
   }

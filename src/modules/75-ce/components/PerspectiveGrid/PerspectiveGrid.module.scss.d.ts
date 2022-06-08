@@ -7,6 +7,7 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
+  readonly dialog: string
   readonly efficiencyScore: string
   readonly gridLoadingContainer: string
   readonly legendColor: string

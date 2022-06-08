@@ -37,7 +37,7 @@ import css from './InputSetList.module.scss'
 function InputSetList(): React.ReactElement {
   const [searchParam, setSearchParam] = React.useState('')
   const [page, setPage] = React.useState(0)
-  const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
+  const { connectorRef, repoIdentifier, repoName, branch, storeType } = useQueryParams<GitQueryParams>()
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier, module } = useParams<
     PipelineType<PipelinePathProps> & { accountId: string }
   >()
@@ -134,8 +134,11 @@ function InputSetList(): React.ReactElement {
           module,
           inputSetRepoIdentifier: inputSetTemp?.gitDetails?.repoIdentifier,
           inputSetBranch: inputSetTemp?.gitDetails?.branch,
+          connectorRef,
           repoIdentifier,
-          branch
+          repoName,
+          branch,
+          storeType
         })
       )
     },

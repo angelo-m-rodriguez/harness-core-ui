@@ -1,0 +1,418 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test MonitoredTemplateCanvasWithRef should match snapshot for MonitoredTemplateCanvasWithRef 1`] = `
+<div>
+  <div
+    class="StyledProps--font StyledProps--main configurationTabs"
+  >
+    <div
+      class="bp3-tabs Tabs--main Tabs--horizontal"
+    >
+      <div
+        class="bp3-tab-list"
+        role="tablist"
+      >
+        <div
+          class="bp3-tab-indicator-wrapper"
+          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
+        >
+          <div
+            class="bp3-tab-indicator"
+          />
+        </div>
+        <div
+          aria-controls="bp3-tab-panel_configurationTabs_service"
+          aria-disabled="false"
+          aria-expanded="true"
+          aria-selected="true"
+          class="bp3-tab"
+          data-tab-id="service"
+          id="bp3-tab-title_configurationTabs_service"
+          role="tab"
+          tabindex="0"
+        >
+          service
+        </div>
+        <div
+          aria-controls="bp3-tab-panel_configurationTabs_pipelines-studio.dependenciesGroupTitle"
+          aria-disabled="false"
+          aria-expanded="false"
+          aria-selected="false"
+          class="bp3-tab"
+          data-tab-id="pipelines-studio.dependenciesGroupTitle"
+          id="bp3-tab-title_configurationTabs_pipelines-studio.dependenciesGroupTitle"
+          role="tab"
+          tabindex="0"
+        >
+          pipelines-studio.dependenciesGroupTitle
+        </div>
+      </div>
+      <div
+        aria-hidden="false"
+        aria-labelledby="bp3-tab-title_configurationTabs_service"
+        class="bp3-tab-panel"
+        id="bp3-tab-panel_configurationTabs_service"
+        role="tabpanel"
+      >
+        <div
+          class="OverlaySpinner--overlaySpinner"
+        >
+          <div>
+            <div
+              class="Layout--vertical StyledProps--main tooltipStyle monitoredService StyledProps--margin-xxlarge"
+            >
+              <p
+                class="StyledProps--font StyledProps--main header StyledProps--color StyledProps--color-black"
+              >
+                overview
+              </p>
+              <div
+                class="bp3-card bp3-elevation-0 Card--card sectionCard shadow"
+              >
+                <div
+                  class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
+                >
+                  <div
+                    class="bp3-form-group"
+                  >
+                    <label
+                      class="bp3-label"
+                      for="type"
+                    >
+                      <span
+                        class="Tooltip--acenter"
+                        data-tooltip-id="monitoredServiceType"
+                      >
+                        typeLabel
+                      </span>
+                       
+                      <span
+                        class="bp3-text-muted"
+                      />
+                    </label>
+                    <div
+                      class="bp3-form-content"
+                    >
+                      <div
+                        class="bp3-popover-wrapper Select--main bp3-fill"
+                      >
+                        <div
+                          class="bp3-popover-target"
+                        >
+                          <div
+                            class="bp3-input-group"
+                          >
+                            <input
+                              autocomplete="off"
+                              class="bp3-input"
+                              name="type"
+                              placeholder="- Select -"
+                              style="padding-right: 0px;"
+                              type="text"
+                              value="Application"
+                            />
+                            <span
+                              class="bp3-input-action"
+                            >
+                              <span
+                                class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                icon="chevron-down"
+                              >
+                                <svg
+                                  data-icon="chevron-down"
+                                  height="14"
+                                  viewBox="0 0 16 16"
+                                  width="14"
+                                >
+                                  <desc>
+                                    chevron-down
+                                  </desc>
+                                  <path
+                                    d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="StyledProps--font StyledProps--main"
+                  >
+                    <button
+                      class="bp3-button Button--button StyledProps--font StyledProps--main addService Button--with-current-color Button--iconOnly"
+                      type="button"
+                    />
+                  </div>
+                  <div
+                    class="StyledProps--font StyledProps--main"
+                  >
+                    <button
+                      class="bp3-button Button--button StyledProps--font StyledProps--main addEnv Button--with-current-color Button--iconOnly"
+                      type="button"
+                    />
+                  </div>
+                </div>
+                <hr
+                  class="divider"
+                />
+              </div>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main sourceTableLabel StyledProps--color StyledProps--color-black"
+            >
+              cv.healthSource.defineYourSource
+            </p>
+            <div
+              class="Layout--vertical StyledProps--main tooltipStyle StyledProps--margin-xxlarge"
+            >
+              <div
+                class="bp3-card bp3-elevation-0 Card--card sectionCard shadow"
+              >
+                <div
+                  class="Text--withDocsTooltip"
+                  data-tooltip-id="changeSourceTable"
+                >
+                  <p
+                    class="StyledProps--font StyledProps--main tableTitle"
+                  >
+                    cv.navLinks.adminSideNavLinks.activitySources
+                  </p>
+                </div>
+                <div
+                  class="StyledProps--font StyledProps--main noData"
+                >
+                  <div
+                    class="StyledProps--font StyledProps--main NoDataCard--noDataCard StyledProps--flex StyledProps--flex-align-center-center"
+                  >
+                    <div
+                      class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+                      style="align-items: center; margin-top: -48px; width: 470px;"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-join-table StyledProps--main StyledProps--color StyledProps--color-grey600"
+                        icon="join-table"
+                      >
+                        <svg
+                          data-icon="join-table"
+                          height="48"
+                          viewBox="0 0 20 20"
+                          width="48"
+                        >
+                          <desc>
+                            join-table
+                          </desc>
+                          <path
+                            d="M19 6h-4V2c0-.55-.45-1-1-1H1c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h4v4c0 .55.45 1 1 1h13c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zM6 12H2V9h4v3zm0-4H2V5h4v3zm7 9H7v-3h6v3zm0-4H7V9h6v4zm0-5H7V5h6v3zm5 9h-4v-3h4v3zm0-4h-4v-3h4v3z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                      <p
+                        class="StyledProps--font StyledProps--main NoDataCard--message StyledProps--font-align-center StyledProps--color StyledProps--color-grey600"
+                      >
+                        cv.changeSource.noChangeSource
+                      </p>
+                      <div
+                        class="NoDataCard--buttonContainer"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-top-small Button--with-current-color Button--withLeftIcon Button--variation Button--variation-link"
+                  type="button"
+                >
+                  <span
+                    class="bp3-icon bp3-icon-plus StyledProps--main StyledProps--padding-right-xsmall"
+                    icon="plus"
+                  >
+                    <svg
+                      data-icon="plus"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      width="16"
+                    >
+                      <desc>
+                        plus
+                      </desc>
+                      <path
+                        d="M13 7H9V3c0-.55-.45-1-1-1s-1 .45-1 1v4H3c-.55 0-1 .45-1 1s.45 1 1 1h4v4c0 .55.45 1 1 1s1-.45 1-1V9h4c.55 0 1-.45 1-1s-.45-1-1-1z"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    class="bp3-button-text"
+                  >
+                    cv.changeSource.addChangeSource
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main tooltipStyle StyledProps--margin-xxlarge"
+            >
+              <div
+                class="bp3-card bp3-elevation-0 Card--card sectionCard shadow"
+              >
+                <div
+                  class="Text--withDocsTooltip"
+                  data-tooltip-id="healthSourcesLabel"
+                >
+                  <p
+                    class="StyledProps--font StyledProps--main tableTitle"
+                  >
+                    connectors.cdng.healthSources.label
+                  </p>
+                </div>
+                <div
+                  class="StyledProps--font StyledProps--main noData"
+                >
+                  <div
+                    class="StyledProps--font StyledProps--main NoDataCard--noDataCard StyledProps--flex StyledProps--flex-align-center-center"
+                  >
+                    <div
+                      class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+                      style="align-items: center; margin-top: -48px; width: 470px;"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-join-table StyledProps--main StyledProps--color StyledProps--color-grey600"
+                        icon="join-table"
+                      >
+                        <svg
+                          data-icon="join-table"
+                          height="48"
+                          viewBox="0 0 20 20"
+                          width="48"
+                        >
+                          <desc>
+                            join-table
+                          </desc>
+                          <path
+                            d="M19 6h-4V2c0-.55-.45-1-1-1H1c-.55 0-1 .45-1 1v11c0 .55.45 1 1 1h4v4c0 .55.45 1 1 1h13c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zM6 12H2V9h4v3zm0-4H2V5h4v3zm7 9H7v-3h6v3zm0-4H7V9h6v4zm0-5H7V5h6v3zm5 9h-4v-3h4v3zm0-4h-4v-3h4v3z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                      <p
+                        class="StyledProps--font StyledProps--main NoDataCard--message StyledProps--font-align-center StyledProps--color StyledProps--color-grey600"
+                      >
+                        cv.healthSource.noData
+                      </p>
+                      <div
+                        class="NoDataCard--buttonContainer"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-top-small Button--with-current-color Button--withLeftIcon Button--variation Button--variation-link"
+                  data-testid="addHealthSource-button"
+                  type="button"
+                >
+                  <span
+                    class="bp3-icon bp3-icon-plus StyledProps--main StyledProps--padding-right-xsmall"
+                    icon="plus"
+                  >
+                    <svg
+                      data-icon="plus"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      width="16"
+                    >
+                      <desc>
+                        plus
+                      </desc>
+                      <path
+                        d="M13 7H9V3c0-.55-.45-1-1-1s-1 .45-1 1v4H3c-.55 0-1 .45-1 1s.45 1 1 1h4v4c0 .55.45 1 1 1s1-.45 1-1V9h4c.55 0 1-.45 1-1s-.45-1-1-1z"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    class="bp3-button-text"
+                  >
+                    cv.healthSource.addHealthSource
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main tooltipStyle notificationsContainer StyledProps--margin-xxlarge"
+            >
+              <div
+                class="bp3-card bp3-elevation-0 Card--card sectionCard shadow"
+              >
+                <div
+                  class="Text--withDocsTooltip"
+                  data-tooltip-id="healthSourcesLabel"
+                >
+                  <p
+                    class="StyledProps--font StyledProps--main tableTitle"
+                  >
+                    notifications.name
+                  </p>
+                </div>
+                <div
+                  class="StyledProps--font StyledProps--main NoDataCard--noDataCard notificationsNoData StyledProps--flex StyledProps--flex-align-center-center"
+                >
+                  <div
+                    class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+                    style="align-items: center; margin-top: -48px; width: 470px;"
+                  >
+                    <img
+                      src="test-file-stub"
+                    />
+                    <p
+                      class="StyledProps--font StyledProps--main NoDataCard--message StyledProps--font-align-center StyledProps--color StyledProps--color-grey600"
+                    >
+                      There are no notifications
+                    </p>
+                    <div
+                      class="NoDataCard--buttonContainer"
+                    >
+                      <button
+                        class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--withLeftIcon Button--variation Button--variation-primary"
+                        type="button"
+                      >
+                        <span
+                          class="bp3-icon bp3-icon-plus StyledProps--main StyledProps--padding-right-xsmall"
+                          icon="plus"
+                        >
+                          <svg
+                            data-icon="plus"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            width="16"
+                          >
+                            <desc>
+                              plus
+                            </desc>
+                            <path
+                              d="M13 7H9V3c0-.55-.45-1-1-1s-1 .45-1 1v4H3c-.55 0-1 .45-1 1s.45 1 1 1h4v4c0 .55.45 1 1 1s1-.45 1-1V9h4c.55 0 1-.45 1-1s-.45-1-1-1z"
+                              fill-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          class="bp3-button-text"
+                        >
+                          cv.notifications.newNotificationRule
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

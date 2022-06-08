@@ -43,16 +43,12 @@ const TargetAttributes: React.FC<TargetAttributesProps> = ({ target }) => {
     <dl className={css.list}>
       {attributes.map(([key, val]) => (
         <ItemContainer key={key}>
-          <dt>
-            <Text lineClamp={1} margin={{ bottom: 'xsmall' }} font={{ variation: FontVariation.FORM_LABEL }}>
-              {key}
-            </Text>
-          </dt>
-          <dd>
-            <Text lineClamp={2} color={Color.GREY_800}>
-              {val}
-            </Text>
-          </dd>
+          <Text tag="dt" lineClamp={1} margin={{ bottom: 'xsmall' }} font={{ variation: FontVariation.FORM_LABEL }}>
+            {key}
+          </Text>
+          <Text tag="dd" lineClamp={2} color={Color.GREY_800}>
+            {val}
+          </Text>
         </ItemContainer>
       ))}
     </dl>

@@ -31,6 +31,7 @@ export { ChildAppProps }
 
 export interface BaseChildAppMounterProps {
   ChildApp: React.LazyExoticComponent<React.ComponentType<ChildAppProps>>
+  children?: React.ReactNode
 }
 
 export type ChildAppMounterProps<T = never> = T extends never ? BaseChildAppMounterProps : T & BaseChildAppMounterProps
@@ -91,7 +92,9 @@ export class ChildAppMounter<T = never> extends React.Component<
           hooks={{
             useDocumentTitle
           }}
-        />
+        >
+          {children}
+        </ChildApp>
       </React.Suspense>
     )
   }

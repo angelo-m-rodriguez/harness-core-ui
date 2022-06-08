@@ -41,6 +41,9 @@ import GitContextForm, { GitContextProps, IGitContextFormProps } from '@common/c
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
 import { CE_AZURE_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { Connectors } from '@connectors/constants'
 import ShowConnectorError from '../ShowConnectorError'
 import css from '../../CreateCeAzureConnector_new.module.scss'
 
@@ -199,6 +202,13 @@ const Overview: React.FC<StepProps<CEAzureDTO> & OverviewProps> = props => {
     }
   }
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.OverviewLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Azure
+  })
+
   return (
     <Layout.Vertical className={css.stepContainer}>
       <Text
@@ -211,6 +221,10 @@ const Overview: React.FC<StepProps<CEAzureDTO> & OverviewProps> = props => {
       <ModalErrorHandler bind={setModalErrorHandler} />
       <Formik<OverviewForm>
         onSubmit={formData => {
+          trackEvent(ConnectorActions.OverviewSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.Azure
+          })
           handleSubmit(formData)
         }}
         formName="connectorOverviewForm"

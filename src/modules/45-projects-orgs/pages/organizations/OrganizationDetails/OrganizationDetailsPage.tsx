@@ -22,6 +22,7 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import RbacAvatarGroup from '@rbac/components/RbacAvatarGroup/RbacAvatarGroup'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import ResourceCardList, { ResourceOption } from '@common/components/ResourceCardList/ResourceCardList'
+import { useAnyEnterpriseLicense } from '@common/hooks/useModuleLicenses'
 import { useProjectModal } from '@projects-orgs/modals/ProjectModal/useProjectModal'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import RbacButton from '@rbac/components/Button/Button'
@@ -33,6 +34,7 @@ const OrganizationDetailsPage: React.FC = () => {
   const { OPA_PIPELINE_GOVERNANCE, OPA_FF_GOVERNANCE, AUDIT_TRAIL_WEB_INTERFACE } = useFeatureFlags()
   const history = useHistory()
   const { getString } = useStrings()
+  const canUsePolicyEngine = useAnyEnterpriseLicense()
   const { data, refetch, loading, error } = useGetOrganizationAggregateDTO({
     identifier: orgIdentifier,
     queryParams: {
@@ -221,7 +223,7 @@ const OrganizationDetailsPage: React.FC = () => {
             </Heading>
             <ResourceCardList items={getResourceCardList()} />
           </Layout.Vertical>
-          {(OPA_PIPELINE_GOVERNANCE || OPA_FF_GOVERNANCE) && (
+          {canUsePolicyEngine && (OPA_PIPELINE_GOVERNANCE || OPA_FF_GOVERNANCE) && (
             <Layout.Vertical spacing="medium" padding={{ top: 'large' }}>
               <Heading font={{ size: 'medium', weight: 'bold' }} color={Color.BLACK}>
                 {getString('projectsOrgs.orgGovernance')}

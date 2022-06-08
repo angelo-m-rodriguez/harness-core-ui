@@ -12,6 +12,7 @@ import { IconName, MultiTypeInputType, getMultiTypeFromValue } from '@harness/ui
 import { yupToFormErrors, FormikErrors } from 'formik'
 import { StepViewType, StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
+import type { StringsMap } from 'stringTypes'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import type {
@@ -33,7 +34,9 @@ export class CFCreateStack extends PipelineStep<CreateStackStepInfo> {
 
   protected type = StepType.CloudFormationCreateStack
   protected stepIcon: IconName = 'cloud-formation-create'
-  protected stepName = 'Cloud Formation Create Stack'
+  protected stepName = 'CloudFormation Create Stack'
+  protected stepDescription: keyof StringsMap = 'cd.cloudFormation.createDescription'
+  protected stepIconSize = 32
 
   protected defaultValues: CreateStackStepInfo = {
     type: StepType.CloudFormationCreateStack,

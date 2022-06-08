@@ -1770,7 +1770,7 @@ exports[`ServiceNow Approval tests Open a saved serviceNow approval step - edit 
                         placeholder="select"
                         style="padding-right: 0px;"
                         type="text"
-                        value="p1"
+                        value="INCIDENT"
                       />
                       <span
                         class="bp3-input-action"

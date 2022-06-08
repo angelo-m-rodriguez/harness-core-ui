@@ -5,37 +5,16 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-/* eslint-disable react/display-name */
-import React, { useEffect } from 'react'
-import { render, RenderResult, screen, waitFor } from '@testing-library/react'
+import React from 'react'
+import { getByPlaceholderText, render, RenderResult, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { TestWrapper } from '@common/utils/testUtils'
+import { cloneDeep } from 'lodash-es'
 import * as cfServices from 'services/cf'
+import { TestWrapper } from '@common/utils/testUtils'
+import { mockFeatures, mockTargetGroup } from '@cf/pages/target-group-detail/__tests__/mocks'
+import { CF_DEFAULT_PAGE_SIZE } from '@cf/utils/CFUtils'
 import FlagSettingsPanel, { FlagSettingsPanelProps } from '../FlagSettingsPanel'
-import type { FlagSettingsFormProps } from '../FlagSettingsForm'
-import { mockFeatures, mockSegmentFlags, mockTargetGroup } from '../../../__tests__/mocks'
-import type { AddFlagsToTargetGroupDialogProps } from '../AddFlagsToTargetGroupDialog/AddFlagsToTargetGroupDialog'
-
-jest.mock('../FlagSettingsForm', () => ({
-  __esModule: true,
-  default: ({ onChange, openAddFlagDialog }: Pick<FlagSettingsFormProps, 'onChange' | 'openAddFlagDialog'>) => (
-    <div data-testid="flag-settings-form">
-      <button onClick={() => onChange()}>Trigger onChange</button>
-      <button onClick={() => openAddFlagDialog()}>Trigger openAddFlagDialog</button>
-    </div>
-  )
-}))
-
-jest.mock('../AddFlagsToTargetGroupDialog/AddFlagsToTargetGroupDialog', () => ({
-  __esModule: true,
-  default: function AddFlagsToTargetGroupDialog({ onChange }: Pick<AddFlagsToTargetGroupDialogProps, 'onChange'>) {
-    useEffect(() => {
-      onChange()
-    }, [onChange])
-
-    return null
-  }
-}))
+import * as useGetTargetGroupFlagsHook from '../../../hooks/useGetTargetGroupFlags'
 
 jest.mock('@common/components/ContainerSpinner/ContainerSpinner', () => ({
   ContainerSpinner: () => <span data-testid="container-spinner">Container Spinner</span>
@@ -49,29 +28,50 @@ const renderComponent = (props: Partial<FlagSettingsPanelProps> = {}): RenderRes
   )
 
 describe('FlagSettingsPanel', () => {
-  const getSegmentFlagsMock = jest.spyOn(cfServices, 'useGetSegmentFlags')
-  const getAllFeaturesMock = jest.spyOn(cfServices, 'useGetAllFeatures')
+  const useGetTargetGroupFlagsMock = jest.spyOn(useGetTargetGroupFlagsHook, 'default')
+  const patchSegmentMock = jest.fn()
+  const usePatchSegmentMock = jest.spyOn(cfServices, 'usePatchSegment')
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
 
-    getSegmentFlagsMock.mockReturnValue({
-      data: mockSegmentFlags,
+    useGetTargetGroupFlagsMock.mockReturnValue({
+      data: mockFeatures,
       loading: false,
       error: null,
       refetch: jest.fn()
     } as any)
 
-    getAllFeaturesMock.mockReturnValue({
-      data: { features: mockFeatures },
-      loading: false,
-      error: null,
-      refetch: jest.fn()
+    usePatchSegmentMock.mockReturnValue({
+      mutate: patchSegmentMock
     } as any)
   })
 
-  test('it should display the loading indicator when the segment flags are loading', async () => {
-    getSegmentFlagsMock.mockReturnValue({
+  test('it should display the error message when it fails to load flags ', async () => {
+    const message = 'ERROR MESSAGE'
+    const refetchMock = jest.fn()
+
+    useGetTargetGroupFlagsMock.mockReturnValue({
+      data: null,
+      loading: false,
+      error: { message },
+      refetch: refetchMock
+    } as any)
+
+    renderComponent()
+
+    const btn = screen.getByRole('button', { name: 'Retry' })
+    expect(btn).toBeInTheDocument()
+    expect(refetchMock).not.toHaveBeenCalled()
+    expect(screen.getByText(message)).toBeInTheDocument()
+
+    userEvent.click(btn)
+
+    await waitFor(() => expect(refetchMock).toHaveBeenCalled())
+  })
+
+  test('it should show the loading spinner when loading flags', async () => {
+    useGetTargetGroupFlagsMock.mockReturnValue({
       data: null,
       loading: true,
       error: null,
@@ -83,89 +83,139 @@ describe('FlagSettingsPanel', () => {
     expect(screen.getByTestId('container-spinner')).toBeInTheDocument()
   })
 
-  test('it should display the error message when an error occurs', async () => {
-    const message = 'TEST ERROR'
+  test('it should call the patchSegment hook and reload the flags when the form is submitted with changes', async () => {
     const refetchMock = jest.fn()
 
-    getSegmentFlagsMock.mockReturnValue({
-      data: null,
-      loading: false,
-      error: { message },
-      refetch: refetchMock
-    } as any)
-
-    renderComponent()
-
-    expect(screen.getByText(message)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
-    expect(refetchMock).not.toHaveBeenCalled()
-
-    userEvent.click(screen.getByRole('button', { name: 'Retry' }))
-
-    await waitFor(() => expect(refetchMock).toHaveBeenCalled())
-  })
-
-  test('it should display the form when there are flags to display', async () => {
-    renderComponent()
-
-    expect(screen.getByTestId('flag-settings-form')).toBeInTheDocument()
-  })
-
-  test('it should display the empty state screen when there are no flags to display', async () => {
-    getSegmentFlagsMock.mockReturnValue({
-      data: [],
-      loading: false,
-      error: null,
-      refetch: jest.fn()
-    } as any)
-
-    renderComponent()
-
-    expect(screen.queryByTestId('flag-settings-form')).not.toBeInTheDocument()
-    expect(screen.getByText('cf.segmentDetail.noFlags')).toBeInTheDocument()
-  })
-
-  test('it should display a success message and refetch target group flags when a new flag is added', async () => {
-    const refetchMock = jest.fn()
-    getSegmentFlagsMock.mockReturnValue({
-      data: mockSegmentFlags,
+    useGetTargetGroupFlagsMock.mockReturnValue({
+      data: mockFeatures,
       loading: false,
       error: null,
       refetch: refetchMock
     } as any)
 
+    patchSegmentMock.mockResolvedValue(undefined)
+
     renderComponent()
 
-    expect(refetchMock).not.toHaveBeenCalled()
-    expect(screen.queryByText('cf.segmentDetail.flagsAddedSuccessfully')).not.toBeInTheDocument()
+    userEvent.click(screen.getAllByRole('button', { name: 'cf.targetManagementFlagConfiguration.removeFlag' })[0])
+    await waitFor(() => screen.getByRole('button', { name: 'saveChanges' }))
 
-    userEvent.click(screen.getByRole('button', { name: 'Trigger openAddFlagDialog' }))
+    expect(patchSegmentMock).not.toHaveBeenCalled()
+    expect(refetchMock).not.toHaveBeenCalled()
+
+    userEvent.click(screen.getByRole('button', { name: 'saveChanges' }))
 
     await waitFor(() => {
+      expect(patchSegmentMock).toHaveBeenCalled()
       expect(refetchMock).toHaveBeenCalled()
-      expect(screen.getByText('cf.segmentDetail.flagsAddedSuccessfully')).toBeInTheDocument()
     })
   })
 
-  test('it should display a success message and refetch target group flags when existing flags are updated', async () => {
+  test('it should display an error and not refetch if the patchTarget hook fails', async () => {
+    const message = 'ERROR MESSAGE'
     const refetchMock = jest.fn()
-    getSegmentFlagsMock.mockReturnValue({
-      data: mockSegmentFlags,
+
+    useGetTargetGroupFlagsMock.mockReturnValue({
+      data: mockFeatures,
       loading: false,
       error: null,
       refetch: refetchMock
-    } as any)
+    })
+
+    patchSegmentMock.mockRejectedValue({ message })
 
     renderComponent()
 
-    expect(refetchMock).not.toHaveBeenCalled()
-    expect(screen.queryByText('cf.segmentDetail.updateSuccessful')).not.toBeInTheDocument()
+    userEvent.click(screen.getAllByRole('button', { name: 'cf.targetManagementFlagConfiguration.removeFlag' })[0])
+    await waitFor(() => screen.getByRole('button', { name: 'saveChanges' }))
 
-    userEvent.click(screen.getByRole('button', { name: 'Trigger onChange' }))
+    expect(refetchMock).not.toHaveBeenCalled()
+
+    userEvent.click(screen.getByRole('button', { name: 'saveChanges' }))
 
     await waitFor(() => {
-      expect(refetchMock).toHaveBeenCalled()
-      expect(screen.getByText('cf.segmentDetail.updateSuccessful')).toBeInTheDocument()
+      expect(patchSegmentMock).toHaveBeenCalled()
+      expect(refetchMock).not.toHaveBeenCalled()
+      expect(screen.getByText(message)).toBeInTheDocument()
+    })
+  })
+
+  describe('add flag', () => {
+    const openAndSubmitDialog = async (refetchMock: jest.Mock): Promise<void> => {
+      const newFlag = cloneDeep(mockFeatures[0])
+      newFlag.identifier = 'newFlag'
+      newFlag.name = 'New Flag'
+      newFlag.variations[0].name = 'NEW VARIATION'
+
+      jest.spyOn(cfServices, 'useGetAllFeatures').mockReturnValue({
+        data: {
+          pageSize: CF_DEFAULT_PAGE_SIZE,
+          itemCount: 1,
+          pageCount: 1,
+          pageIndex: 0,
+          features: [newFlag]
+        }
+      } as any)
+
+      useGetTargetGroupFlagsMock.mockReturnValue({
+        data: mockFeatures,
+        loading: false,
+        error: null,
+        refetch: refetchMock
+      })
+
+      renderComponent()
+
+      userEvent.click(screen.getByRole('button', { name: 'cf.targetManagementFlagConfiguration.addFlag' }))
+
+      await waitFor(() => expect(screen.getByText('cf.segmentDetail.addFlagToTargetGroup')).toBeInTheDocument())
+
+      const checkbox = screen.getByRole('checkbox')
+      userEvent.click(checkbox)
+      userEvent.click(
+        getByPlaceholderText(
+          checkbox.closest('[role="row"]') as HTMLElement,
+          '- cf.targetManagementFlagConfiguration.selectVariation -'
+        )
+      )
+
+      await waitFor(() => expect(screen.getByText(newFlag.variations[0].name as string)).toBeInTheDocument())
+      userEvent.click(screen.getByText(newFlag.variations[0].name as string))
+
+      const submitBtn = screen.getByRole('button', { name: 'cf.targetManagementFlagConfiguration.addFlags' })
+      await waitFor(() => {
+        expect(submitBtn).toBeEnabled()
+        expect(patchSegmentMock).not.toHaveBeenCalled()
+        expect(refetchMock).not.toHaveBeenCalled()
+      })
+
+      userEvent.click(submitBtn)
+    }
+
+    test('it should call patchTargetGroup and refetch when the add flags form is submitted', async () => {
+      patchSegmentMock.mockResolvedValue(undefined)
+      const refetchMock = jest.fn()
+
+      await openAndSubmitDialog(refetchMock)
+
+      await waitFor(() => {
+        expect(patchSegmentMock).toHaveBeenCalled()
+        expect(refetchMock).toHaveBeenCalled()
+      })
+    })
+
+    test('it should display the error message and not refetch when the add flags submission fails', async () => {
+      const message = 'ERROR MESSAGE'
+      patchSegmentMock.mockRejectedValue({ message })
+      const refetchMock = jest.fn()
+
+      await openAndSubmitDialog(refetchMock)
+
+      await waitFor(() => {
+        expect(patchSegmentMock).toHaveBeenCalled()
+        expect(refetchMock).not.toHaveBeenCalled()
+        expect(screen.getByText(message)).toBeInTheDocument()
+      })
     })
   })
 })

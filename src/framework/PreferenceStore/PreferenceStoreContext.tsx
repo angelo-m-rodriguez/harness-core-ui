@@ -7,12 +7,10 @@
 
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { defaultTo, get as lodashGet } from 'lodash-es'
 
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useLocalStorage } from '@common/hooks'
-import type { UserInfo } from 'services/cd-ng'
-
+import SecureStorage from 'framework/utils/SecureStorage'
 export interface PreferencePeripheralProps extends ProjectPathProps {
   userId: string
 }
@@ -29,10 +27,6 @@ export interface PreferenceStoreOptions {
   fromBackend?: boolean
 }
 
-export interface PreferenceStoreStateProps {
-  readonly currentUserInfo: UserInfo | undefined
-}
-
 /**
  * Preference Store - helps to save ANY user-personalisation info
  */
@@ -40,7 +34,6 @@ export interface PreferenceStoreProps<T> {
   set(scope: PreferenceScope, entityToPersist: string, value: T): void
   get(scope: PreferenceScope, entityToRetrieve: string): T
   clear(scope: PreferenceScope, entityToRetrieve: string): void
-  updatePreferenceStore(data: PreferenceStoreStateProps): void
 }
 
 export interface ScopeContext {
@@ -54,7 +47,6 @@ export interface PreferenceStoreContextProps<T> {
   preference: T
   setPreference: (value: T) => void
   clearPreference: () => void
-  updatePreferenceStore: (data: PreferenceStoreStateProps) => void
 }
 
 export const PREFERENCES_TOP_LEVEL_KEY = 'preferences'
@@ -62,18 +54,17 @@ export const PREFERENCES_TOP_LEVEL_KEY = 'preferences'
 export const PreferenceStoreContext = React.createContext<PreferenceStoreProps<any>>({
   set: /* istanbul ignore next */ () => void 0,
   get: /* istanbul ignore next */ () => void 0,
-  clear: /* istanbul ignore next */ () => void 0,
-  updatePreferenceStore: /* istanbul ignore next */ () => void 0
+  clear: /* istanbul ignore next */ () => void 0
 })
 
 export function usePreferenceStore<T>(scope: PreferenceScope, entity: string): PreferenceStoreContextProps<T> {
-  const { get, set, clear, updatePreferenceStore } = React.useContext(PreferenceStoreContext)
+  const { get, set, clear } = React.useContext(PreferenceStoreContext)
 
   const preference = get(scope, entity)
   const setPreference = set.bind(null, scope, entity)
   const clearPreference = clear.bind(null, scope, entity)
 
-  return { preference, setPreference, clearPreference, updatePreferenceStore }
+  return { preference, setPreference, clearPreference }
 }
 
 const checkAccess = (scope: PreferenceScope, contextArr: (string | undefined)[]): void => {
@@ -88,13 +79,11 @@ const getKey = (arr: (string | undefined)[], entity: string): string => {
 
 export const PreferenceStoreProvider: React.FC = (props: React.PropsWithChildren<unknown>) => {
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
-  const [state, setState] = React.useState<PreferenceStoreStateProps>({
-    currentUserInfo: { uuid: '' }
-  })
+
   const [currentPreferences, setPreferences] = useLocalStorage<Record<string, unknown>>(PREFERENCES_TOP_LEVEL_KEY, {})
-  const userId = lodashGet(state.currentUserInfo, 'email')
+  const userEmail = SecureStorage.get('email') as string
   const [scopeToKeyMap, setScopeToKeyMap] = React.useState({
-    [PreferenceScope.USER]: [userId],
+    [PreferenceScope.USER]: [userEmail],
     [PreferenceScope.ACCOUNT]: [accountId],
     [PreferenceScope.ORG]: [accountId, orgIdentifier],
     [PreferenceScope.PROJECT]: [accountId, orgIdentifier, projectIdentifier],
@@ -103,13 +92,13 @@ export const PreferenceStoreProvider: React.FC = (props: React.PropsWithChildren
 
   useEffect(() => {
     setScopeToKeyMap({
-      [PreferenceScope.USER]: [userId],
+      [PreferenceScope.USER]: [userEmail],
       [PreferenceScope.ACCOUNT]: [accountId],
       [PreferenceScope.ORG]: [accountId, orgIdentifier],
       [PreferenceScope.PROJECT]: [accountId, orgIdentifier, projectIdentifier],
       [PreferenceScope.MACHINE]: []
     })
-  }, [accountId, orgIdentifier, projectIdentifier, userId])
+  }, [accountId, orgIdentifier, projectIdentifier, userEmail])
 
   const setPreference = (key: string, value: unknown): void => {
     const newPreferences = { ...currentPreferences, [key]: value }
@@ -142,20 +131,12 @@ export const PreferenceStoreProvider: React.FC = (props: React.PropsWithChildren
     clearPreference(key)
   }
 
-  function updatePreferenceStore(data: PreferenceStoreStateProps): void {
-    setState(prevState => ({
-      ...prevState,
-      currentUserInfo: defaultTo(data.currentUserInfo, prevState.currentUserInfo)
-    }))
-  }
-
   return (
     <PreferenceStoreContext.Provider
       value={{
         set,
         get,
-        clear,
-        updatePreferenceStore
+        clear
       }}
     >
       {props.children}

@@ -9,10 +9,13 @@ import React, { useMemo } from 'react'
 import cx from 'classnames'
 import { Layout, Text, Icon, IconName, Container } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
-import type { ResponseMessage } from 'services/cd-ng'
+import type { ResponseMessage as ResponseMessageCDNG } from 'services/cd-ng'
+import type { ResponseMessage as ResponseMessagePipeline } from 'services/pipeline-ng'
 import { useStrings } from 'framework/strings'
 import { LinkifyText } from '@common/components/LinkifyText/LinkifyText'
 import css from '@common/components/ErrorHandler/ErrorHandler.module.scss'
+
+type ResponseMessage = ResponseMessageCDNG | ResponseMessagePipeline
 
 export interface ErrorHandlerProps {
   responseMessages: ResponseMessage[]
@@ -23,13 +26,13 @@ export interface ErrorHandlerProps {
   errorHintsRenderer?: (item: ResponseMessage[]) => React.ReactElement
 }
 
-const extractInfo = (
-  responseMessages: ErrorHandlerProps['responseMessages']
-): {
+export interface ExtractedInfo {
   error?: ResponseMessage
   explanations?: ResponseMessage[]
   hints?: ResponseMessage[]
-}[] => {
+}
+
+export const extractInfo = (responseMessages: ResponseMessage[]): ExtractedInfo[] => {
   const errorObjects = []
   let explanations: ResponseMessage[] = []
   let hints: ResponseMessage[] = []

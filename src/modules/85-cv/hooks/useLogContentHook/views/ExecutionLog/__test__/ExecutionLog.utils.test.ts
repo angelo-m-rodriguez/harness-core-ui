@@ -15,8 +15,8 @@ describe('Utils', () => {
     }
 
     expect(convertLogDataToLogLineData(logData)).toEqual({
-      text: { level: 'INFO', time: '3/16/2022 8:23:10 AM', out: 'Learning engine task status: SUCCESS' },
-      searchIndices: { level: [0], time: [1], out: [2] }
+      text: { logLevel: 'INFO', createdAt: '3/16/2022 8:23:10 AM', log: 'Learning engine task status: SUCCESS' },
+      searchIndices: { logLevel: [0], createdAt: [1], log: [2] }
     })
   })
 
@@ -28,11 +28,11 @@ describe('Utils', () => {
 
     expect(convertLogDataToLogLineData(logData)).toEqual({
       text: {
-        level: 'WARN',
-        time: '3/16/2022 8:23:10 AM',
-        out: '\u001b[1;33m\u001b[40mLearning engine task status: SUCCESS\u001b[0m'
+        logLevel: 'WARN',
+        createdAt: '3/16/2022 8:23:10 AM',
+        log: '\u001b[1;33m\u001b[40mLearning engine task status: SUCCESS\u001b[0m'
       },
-      searchIndices: { level: [0], time: [1], out: [2] }
+      searchIndices: { logLevel: [0], createdAt: [1], log: [2] }
     })
   })
 
@@ -44,11 +44,11 @@ describe('Utils', () => {
 
     expect(convertLogDataToLogLineData(logData)).toEqual({
       text: {
-        level: '\u001b[1;31m\u001b[40mERROR\u001b[0m',
-        time: '3/16/2022 8:23:10 AM',
-        out: '\u001b[1;31m\u001b[40mLearning engine task status: SUCCESS\u001b[0m'
+        logLevel: '\u001b[1;31m\u001b[40mERROR\u001b[0m',
+        createdAt: '3/16/2022 8:23:10 AM',
+        log: '\u001b[1;31m\u001b[40mLearning engine task status: SUCCESS\u001b[0m'
       },
-      searchIndices: { level: [0], time: [1], out: [2] }
+      searchIndices: { logLevel: [0], createdAt: [1], log: [2] }
     })
   })
 
@@ -58,7 +58,7 @@ describe('Utils', () => {
     }
 
     expect(convertLogDataToLogLineData(logData)).toEqual({
-      text: { level: 'INFO', time: '3/16/2022 8:23:10 AM', out: 'Learning engine task status: SUCCESS' }
+      text: { logLevel: 'INFO', createdAt: '3/16/2022 8:23:10 AM', log: 'Learning engine task status: SUCCESS' }
     })
   })
 })

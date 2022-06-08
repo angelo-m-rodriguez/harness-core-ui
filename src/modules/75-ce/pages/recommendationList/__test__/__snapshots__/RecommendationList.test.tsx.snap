@@ -79,58 +79,98 @@ exports[`test cases for Recommendation List Page should be able to render empty 
     </div>
   </div>
   <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
+    class="bp3-card bp3-elevation-0 Card--card"
+    style="width: 100%;"
   >
     <div
-      class="bp3-card bp3-elevation-0 Card--card"
-      style="width: 100%;"
+      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
     >
       <div
-        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
+        class="bp3-popover-wrapper DropDown--main"
       >
         <div
-          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-        />
-        <span
-          class="bp3-popover-wrapper"
+          class="bp3-popover-target"
         >
-          <span
-            class="bp3-popover-target"
+          <div
+            class=""
           >
             <div
-              class="StyledProps--font StyledProps--main StyledProps--border StyledProps--padding-xsmall"
-              style="width: 220px;"
+              class="Layout--horizontal StyledProps--main DropDown--dropdownButton DropDown--withBorder DropDown--minWidth StyledProps--flex"
+              data-testid="filter-select"
+              style="min-width: 220px;"
             >
-              <p
-                class="StyledProps--font StyledProps--main"
-                style="display: flex; align-items: center;"
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--labelWrapper StyledProps--flex"
+              >
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main DropDown--label"
+                  data-testid="dropdown-value"
+                  style="--text-line-clamp: 1;"
+                >
+                  filters.selectFilter
+                </p>
+              </div>
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--btnWrapper StyledProps--flex"
               >
                 <span
-                  class="bp3-icon StyledProps--main Text--icon StyledProps--padding-right-xsmall"
-                  data-icon="ng-filter"
+                  class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey400"
+                  data-icon="main-chevron-down"
                 >
                   <svg
-                    height="16"
-                    viewBox="0 0 24 24"
-                    width="16"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    width="8"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      clip-rule="evenodd"
-                      d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
-                      fill="currentColor"
-                      fill-rule="evenodd"
+                      d="M13 0c-.3 0-.5.1-.7.3L7 5.6 1.7.3C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7l6 6c.2.2.4.3.7.3s.5-.1.7-.3l6-6c.2-.2.3-.4.3-.7 0-.6-.4-1-1-1z"
+                      fill="#4d5969"
                     />
                   </svg>
                 </span>
-                ce.recommendation.listPage.filterHereText
-              </p>
+              </div>
             </div>
-          </span>
-        </span>
+          </div>
+        </div>
       </div>
+      <div
+        class="filterButtonContainer"
+      >
+        <button
+          class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main ngFilter StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--withLeftIcon"
+          id="ngfilterbtn"
+          type="button"
+        >
+          <span
+            class="bp3-icon StyledProps--main"
+            data-icon="ng-filter"
+          >
+            <svg
+              height="22"
+              viewBox="0 0 24 24"
+              width="22"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main"
+      />
     </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main PageBody--pageBody"
+    data-name="page-body"
+  >
     <div
       class="StyledProps--font StyledProps--main listContainer"
     >
@@ -430,7 +470,7 @@ exports[`test cases for Recommendation List Page should be able to render empty 
             <p
               class="StyledProps--font StyledProps--main errorText"
             >
-              ce.pageErrorMsg.noRecommendations
+              ce.pageErrorMsg.noFilteredRecommendations
             </p>
           </div>
         </div>
@@ -519,58 +559,98 @@ exports[`test cases for Recommendation List Page should be able to render page w
     </div>
   </div>
   <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
+    class="bp3-card bp3-elevation-0 Card--card"
+    style="width: 100%;"
   >
     <div
-      class="bp3-card bp3-elevation-0 Card--card"
-      style="width: 100%;"
+      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
     >
       <div
-        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
+        class="bp3-popover-wrapper DropDown--main"
       >
         <div
-          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-        />
-        <span
-          class="bp3-popover-wrapper"
+          class="bp3-popover-target"
         >
-          <span
-            class="bp3-popover-target"
+          <div
+            class=""
           >
             <div
-              class="StyledProps--font StyledProps--main StyledProps--border StyledProps--padding-xsmall"
-              style="width: 220px;"
+              class="Layout--horizontal StyledProps--main DropDown--dropdownButton DropDown--withBorder DropDown--minWidth StyledProps--flex"
+              data-testid="filter-select"
+              style="min-width: 220px;"
             >
-              <p
-                class="StyledProps--font StyledProps--main"
-                style="display: flex; align-items: center;"
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--labelWrapper StyledProps--flex"
+              >
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main DropDown--label"
+                  data-testid="dropdown-value"
+                  style="--text-line-clamp: 1;"
+                >
+                  filters.selectFilter
+                </p>
+              </div>
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--btnWrapper StyledProps--flex"
               >
                 <span
-                  class="bp3-icon StyledProps--main Text--icon StyledProps--padding-right-xsmall"
-                  data-icon="ng-filter"
+                  class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey400"
+                  data-icon="main-chevron-down"
                 >
                   <svg
-                    height="16"
-                    viewBox="0 0 24 24"
-                    width="16"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    width="8"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      clip-rule="evenodd"
-                      d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
-                      fill="currentColor"
-                      fill-rule="evenodd"
+                      d="M13 0c-.3 0-.5.1-.7.3L7 5.6 1.7.3C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7l6 6c.2.2.4.3.7.3s.5-.1.7-.3l6-6c.2-.2.3-.4.3-.7 0-.6-.4-1-1-1z"
+                      fill="#4d5969"
                     />
                   </svg>
                 </span>
-                ce.recommendation.listPage.filterHereText
-              </p>
+              </div>
             </div>
-          </span>
-        </span>
+          </div>
+        </div>
       </div>
+      <div
+        class="filterButtonContainer"
+      >
+        <button
+          class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main ngFilter StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--withLeftIcon"
+          id="ngfilterbtn"
+          type="button"
+        >
+          <span
+            class="bp3-icon StyledProps--main"
+            data-icon="ng-filter"
+          >
+            <svg
+              height="22"
+              viewBox="0 0 24 24"
+              width="22"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main"
+      />
     </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main PageBody--pageBody"
+    data-name="page-body"
+  >
     <div
       class="StyledProps--font StyledProps--main listContainer"
     >
@@ -955,58 +1035,98 @@ exports[`test cases for Recommendation List Page should be able to render page w
     </div>
   </div>
   <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
+    class="bp3-card bp3-elevation-0 Card--card"
+    style="width: 100%;"
   >
     <div
-      class="bp3-card bp3-elevation-0 Card--card"
-      style="width: 100%;"
+      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
     >
       <div
-        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
+        class="bp3-popover-wrapper DropDown--main"
       >
         <div
-          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-        />
-        <span
-          class="bp3-popover-wrapper"
+          class="bp3-popover-target"
         >
-          <span
-            class="bp3-popover-target"
+          <div
+            class=""
           >
             <div
-              class="StyledProps--font StyledProps--main StyledProps--border StyledProps--padding-xsmall"
-              style="width: 220px;"
+              class="Layout--horizontal StyledProps--main DropDown--dropdownButton DropDown--withBorder DropDown--minWidth StyledProps--flex"
+              data-testid="filter-select"
+              style="min-width: 220px;"
             >
-              <p
-                class="StyledProps--font StyledProps--main"
-                style="display: flex; align-items: center;"
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--labelWrapper StyledProps--flex"
+              >
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main DropDown--label"
+                  data-testid="dropdown-value"
+                  style="--text-line-clamp: 1;"
+                >
+                  filters.selectFilter
+                </p>
+              </div>
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--btnWrapper StyledProps--flex"
               >
                 <span
-                  class="bp3-icon StyledProps--main Text--icon StyledProps--padding-right-xsmall"
-                  data-icon="ng-filter"
+                  class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey400"
+                  data-icon="main-chevron-down"
                 >
                   <svg
-                    height="16"
-                    viewBox="0 0 24 24"
-                    width="16"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    width="8"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      clip-rule="evenodd"
-                      d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
-                      fill="currentColor"
-                      fill-rule="evenodd"
+                      d="M13 0c-.3 0-.5.1-.7.3L7 5.6 1.7.3C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7l6 6c.2.2.4.3.7.3s.5-.1.7-.3l6-6c.2-.2.3-.4.3-.7 0-.6-.4-1-1-1z"
+                      fill="#4d5969"
                     />
                   </svg>
                 </span>
-                ce.recommendation.listPage.filterHereText
-              </p>
+              </div>
             </div>
-          </span>
-        </span>
+          </div>
+        </div>
       </div>
+      <div
+        class="filterButtonContainer"
+      >
+        <button
+          class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main ngFilter StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--withLeftIcon"
+          id="ngfilterbtn"
+          type="button"
+        >
+          <span
+            class="bp3-icon StyledProps--main"
+            data-icon="ng-filter"
+          >
+            <svg
+              height="22"
+              viewBox="0 0 24 24"
+              width="22"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main"
+      />
     </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main PageBody--pageBody"
+    data-name="page-body"
+  >
     <div
       class="StyledProps--font StyledProps--main listContainer"
     >
@@ -1412,58 +1532,98 @@ exports[`test cases for Recommendation List Page should be able to render the li
     </div>
   </div>
   <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
+    class="bp3-card bp3-elevation-0 Card--card"
+    style="width: 100%;"
   >
     <div
-      class="bp3-card bp3-elevation-0 Card--card"
-      style="width: 100%;"
+      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
     >
       <div
-        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-end"
+        class="bp3-popover-wrapper DropDown--main"
       >
         <div
-          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-        />
-        <span
-          class="bp3-popover-wrapper"
+          class="bp3-popover-target"
         >
-          <span
-            class="bp3-popover-target"
+          <div
+            class=""
           >
             <div
-              class="StyledProps--font StyledProps--main StyledProps--border StyledProps--padding-xsmall"
-              style="width: 220px;"
+              class="Layout--horizontal StyledProps--main DropDown--dropdownButton DropDown--withBorder DropDown--minWidth StyledProps--flex"
+              data-testid="filter-select"
+              style="min-width: 220px;"
             >
-              <p
-                class="StyledProps--font StyledProps--main"
-                style="display: flex; align-items: center;"
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--labelWrapper StyledProps--flex"
+              >
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main DropDown--label"
+                  data-testid="dropdown-value"
+                  style="--text-line-clamp: 1;"
+                >
+                  filters.selectFilter
+                </p>
+              </div>
+              <div
+                class="Layout--horizontal StyledProps--main DropDown--btnWrapper StyledProps--flex"
               >
                 <span
-                  class="bp3-icon StyledProps--main Text--icon StyledProps--padding-right-xsmall"
-                  data-icon="ng-filter"
+                  class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey400"
+                  data-icon="main-chevron-down"
                 >
                   <svg
-                    height="16"
-                    viewBox="0 0 24 24"
-                    width="16"
+                    height="8"
+                    viewBox="0 0 14 8"
+                    width="8"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      clip-rule="evenodd"
-                      d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
-                      fill="currentColor"
-                      fill-rule="evenodd"
+                      d="M13 0c-.3 0-.5.1-.7.3L7 5.6 1.7.3C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7l6 6c.2.2.4.3.7.3s.5-.1.7-.3l6-6c.2-.2.3-.4.3-.7 0-.6-.4-1-1-1z"
+                      fill="#4d5969"
                     />
                   </svg>
                 </span>
-                ce.recommendation.listPage.filterHereText
-              </p>
+              </div>
             </div>
-          </span>
-        </span>
+          </div>
+        </div>
       </div>
+      <div
+        class="filterButtonContainer"
+      >
+        <button
+          class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main ngFilter StyledProps--intent-primary Button--with-current-color Button--without-shadow Button--withLeftIcon"
+          id="ngfilterbtn"
+          type="button"
+        >
+          <span
+            class="bp3-icon StyledProps--main"
+            data-icon="ng-filter"
+          >
+            <svg
+              height="22"
+              viewBox="0 0 24 24"
+              width="22"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M16.5 8V7H19a.5.5 0 000-1h-2.5V5a.5.5 0 00-1 0v1H5a.5.5 0 000 1h10.5v1a.5.5 0 001 0zM5 11.5h3v-1a.5.5 0 011 0v1h10a.5.5 0 010 1H9v1a.5.5 0 01-1 0v-1H5a.5.5 0 010-1zM5 17a.5.5 0 000 1h7v1a.5.5 0 001 0v-1h6a.5.5 0 000-1h-6v-1a.5.5 0 00-1 0v1H5z"
+                fill="currentColor"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main"
+      />
     </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main PageBody--pageBody"
+    data-name="page-body"
+  >
     <div
       class="StyledProps--font StyledProps--main listContainer"
     >
@@ -1704,7 +1864,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                       </g>
                     </svg>
                   </span>
-                  $0.00
+                  $-
                 </span>
               </div>
               <p
@@ -1735,7 +1895,7 @@ exports[`test cases for Recommendation List Page should be able to render the li
                 <span
                   class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-h3 StyledProps--color StyledProps--color-grey800"
                 >
-                  $0.00
+                  $-
                 </span>
                 <span
                   class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey400 StyledProps--font-variation-tiny StyledProps--margin-left-xsmall"
@@ -1755,775 +1915,16 @@ exports[`test cases for Recommendation List Page should be able to render the li
           class="Layout--vertical Layout--layout-spacing-large StyledProps--main"
         >
           <div
-            class="TableV2--table"
+            class="StyledProps--font StyledProps--main errorContainer"
           >
-            <div
-              class="TableV2--header"
-              role="row"
+            <img
+              src="test-file-stub"
+            />
+            <p
+              class="StyledProps--font StyledProps--main errorText"
             >
-              <div
-                class="TableV2--cell"
-                colspan="1"
-                role="columnheader"
-                style="width: 36%;"
-              >
-                <p
-                  class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
-                >
-                  ce.recommendation.listPage.listTableHeaders.resourceName
-                </p>
-              </div>
-              <div
-                class="TableV2--cell"
-                colspan="1"
-                role="columnheader"
-                style="width: 18%;"
-              >
-                <p
-                  class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
-                >
-                  ce.recommendation.listPage.listTableHeaders.monthlySavings
-                </p>
-              </div>
-              <div
-                class="TableV2--cell"
-                colspan="1"
-                role="columnheader"
-                style="width: 18%;"
-              >
-                <p
-                  class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
-                >
-                  ce.recommendation.listPage.listTableHeaders.monthlyCost
-                </p>
-              </div>
-              <div
-                class="TableV2--cell"
-                colspan="1"
-                role="columnheader"
-                style="width: 18%;"
-              >
-                <p
-                  class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
-                >
-                  ce.recommendation.listPage.listTableHeaders.recommendationType
-                </p>
-              </div>
-            </div>
-            <div
-              class="TableV2--body"
-            >
-              <div
-                class="TableV2--row TableV2--card TableV2--clickable"
-                role="row"
-              >
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 36%;"
-                >
-                  <div
-                    class="Layout--horizontal StyledProps--main"
-                  >
-                    <span
-                      class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
-                      data-icon="app-kubernetes"
-                    >
-                      <svg
-                        height="28"
-                        viewBox="0 0 32 30"
-                        width="28"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g
-                          fill="none"
-                        >
-                          <path
-                            d="M15.94.023c-.228 0-.457 0-.685.229L4.512 5.28c-.457.229-.915.686-1.143 1.372L.626 18.08c-.229.457 0 1.143.229 1.6l.228.229 7.314 9.143c.458.457.915.685 1.6.685h11.886c.686 0 1.143-.228 1.6-.685l7.314-9.143c.458-.457.458-1.143.458-1.6L28.512 6.88c-.229-.685-.457-1.143-1.143-1.371L16.626.48c0-.228-.457-.457-.686-.457z"
-                            fill="#326CE5"
-                          />
-                          <path
-                            d="M15.94 3.909c-.457 0-.685.228-.685.686v2.057c0 .228-.229.228-.229.228v.229c-.457 0-.686 0-1.143.228-1.6.458-3.2 1.143-4.114 2.286l-.229-.228h-.457c-.228-.23-.457-.458-.914-.686l-.457-.457h-.229c-.228 0-.228-.229-.457-.229s-.457 0-.457.229c-.229.228-.229.685.228.914h.23c.228.229.456.229.456.229.457.228.686.457.914.685 0 0 .23.229.23.457l.228.229c-1.143 1.6-1.6 3.657-1.372 5.714h-.228l-.229.229c-.229 0-.686.228-1.143.228H4.97c-.457 0-.686.458-.457.686 0 .229.457.457.914.457h.229c.228 0 .457-.228.685-.228.457-.229.686-.229 1.143-.229.229 0 .229 0 .457.229h.229c.686 2.057 2.057 3.657 3.657 4.571l-.229.229v.457c-.228.228-.228.686-.685 1.143-.229.228-.229.228-.229.457v.228c-.228.458 0 .686.229.915.228.228.685 0 .914-.457v-.23c0-.228.229-.456.229-.685.228-.457.228-.914.457-1.143 0 0 .228 0 .228-.228l.229-.229c1.371.457 3.2.686 4.8.457.457 0 .686-.228 1.143-.228l.228.228s.229 0 .229.229c.228.229.228.686.457 1.143 0 .228 0 .457.229.686v.228c.228.457.457.457.914.457.228-.228.457-.457.228-.914v-.229c0-.228-.228-.228-.228-.457-.229-.457-.457-.685-.457-.914v-.686c1.828-1.143 2.971-2.743 3.657-4.571h.228s.23-.229.458-.229.685.229 1.142.229c.23 0 .458.228.686.228h.229c.457 0 .685-.228.914-.457 0-.228-.229-.685-.457-.685h-.914c-.458 0-.915 0-1.143-.23-.229 0-.229-.228-.229-.228h-.228c.228-.914 0-2.057-.229-2.971-.229-.914-.686-2.057-1.143-2.743l.229-.228c0-.23 0-.23.228-.458.229-.228.457-.457.915-.685.228 0 .457-.229.457-.229h.228c.229-.228.457-.686.229-.914-.229-.229-.686-.229-.914 0h-.229l-.457.457c-.229.229-.686.686-.914.686h-.458l-.228.228a8.778 8.778 0 00-5.257-2.514v-.229l-.229-.228V5.052c-.457-.686-.686-1.143-1.143-1.143zm-.685 5.028l-.229 3.429a.492.492 0 01-.457.457h-.229l-2.743-2.057c.915-.914 1.83-1.371 3.2-1.829h.458zm1.6 0c1.371.229 2.742.915 3.885 1.829l-2.743 1.829c-.228.228-.685.228-.685 0l-.229-.23-.228-3.428zm-6.4 3.2l2.514 2.286c.228.229.228.457 0 .686l-.229.228-3.2.915c-.228-1.6 0-2.972.915-4.115zm11.2 0c.457.686.685 1.372.914 2.058.228.685.228 1.37.228 2.057l-3.2-.915c-.228 0-.457-.457-.457-.685 0-.229 0-.229.229-.229l2.286-2.286zm-6.172 2.286h.914l.686.686-.228.914-.915.457-.914-.457-.229-.914.686-.686zm3.2 2.743c.229 0 .229 0 0 0l3.429.457c-.457 1.372-1.372 2.514-2.743 3.429l-1.372-3.2c.23-.229.23-.457.686-.686h0zm-5.486 0c.23 0 .458.229.458.457v.457l-1.372 3.2c-1.143-.685-2.057-1.828-2.743-3.428l3.657-.686zm2.743 1.371h.229l.228.229 1.6 2.971c-.228 0-.457.229-.685.229-1.143.229-2.515.229-3.657-.229l1.6-2.971c.457 0 .457-.229.685-.229h0z"
-                            fill="#FFF"
-                            stroke="#FFF"
-                            stroke-width="0.25"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <div
-                      class="Layout--vertical StyledProps--main"
-                    >
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          common.cluster: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            clusterName
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          ce.recommendation.listPage.filters.namespace: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            namespace
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
-                        >
-                          pipelineSteps.workload: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName/namespace/namespace/workload/resource-1/details"
-                        >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                            style="--text-line-clamp: 1;"
-                          >
-                            resource-1
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <div
-                    class="StyledProps--font StyledProps--main"
-                  >
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-h5"
-                    >
-                      $19.08
-                    </span>
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-body2 StyledProps--margin-left-small"
-                    >
-                      (38%)
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-h6"
-                  >
-                    $49.82
-                  </p>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
-                  >
-                    ce.overview.workload
-                  </p>
-                </div>
-              </div>
-              <div
-                class="TableV2--row TableV2--card TableV2--clickable"
-                role="row"
-              >
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 36%;"
-                >
-                  <div
-                    class="Layout--horizontal StyledProps--main"
-                  >
-                    <span
-                      class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
-                      data-icon="app-kubernetes"
-                    >
-                      <svg
-                        height="28"
-                        viewBox="0 0 32 30"
-                        width="28"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g
-                          fill="none"
-                        >
-                          <path
-                            d="M15.94.023c-.228 0-.457 0-.685.229L4.512 5.28c-.457.229-.915.686-1.143 1.372L.626 18.08c-.229.457 0 1.143.229 1.6l.228.229 7.314 9.143c.458.457.915.685 1.6.685h11.886c.686 0 1.143-.228 1.6-.685l7.314-9.143c.458-.457.458-1.143.458-1.6L28.512 6.88c-.229-.685-.457-1.143-1.143-1.371L16.626.48c0-.228-.457-.457-.686-.457z"
-                            fill="#326CE5"
-                          />
-                          <path
-                            d="M15.94 3.909c-.457 0-.685.228-.685.686v2.057c0 .228-.229.228-.229.228v.229c-.457 0-.686 0-1.143.228-1.6.458-3.2 1.143-4.114 2.286l-.229-.228h-.457c-.228-.23-.457-.458-.914-.686l-.457-.457h-.229c-.228 0-.228-.229-.457-.229s-.457 0-.457.229c-.229.228-.229.685.228.914h.23c.228.229.456.229.456.229.457.228.686.457.914.685 0 0 .23.229.23.457l.228.229c-1.143 1.6-1.6 3.657-1.372 5.714h-.228l-.229.229c-.229 0-.686.228-1.143.228H4.97c-.457 0-.686.458-.457.686 0 .229.457.457.914.457h.229c.228 0 .457-.228.685-.228.457-.229.686-.229 1.143-.229.229 0 .229 0 .457.229h.229c.686 2.057 2.057 3.657 3.657 4.571l-.229.229v.457c-.228.228-.228.686-.685 1.143-.229.228-.229.228-.229.457v.228c-.228.458 0 .686.229.915.228.228.685 0 .914-.457v-.23c0-.228.229-.456.229-.685.228-.457.228-.914.457-1.143 0 0 .228 0 .228-.228l.229-.229c1.371.457 3.2.686 4.8.457.457 0 .686-.228 1.143-.228l.228.228s.229 0 .229.229c.228.229.228.686.457 1.143 0 .228 0 .457.229.686v.228c.228.457.457.457.914.457.228-.228.457-.457.228-.914v-.229c0-.228-.228-.228-.228-.457-.229-.457-.457-.685-.457-.914v-.686c1.828-1.143 2.971-2.743 3.657-4.571h.228s.23-.229.458-.229.685.229 1.142.229c.23 0 .458.228.686.228h.229c.457 0 .685-.228.914-.457 0-.228-.229-.685-.457-.685h-.914c-.458 0-.915 0-1.143-.23-.229 0-.229-.228-.229-.228h-.228c.228-.914 0-2.057-.229-2.971-.229-.914-.686-2.057-1.143-2.743l.229-.228c0-.23 0-.23.228-.458.229-.228.457-.457.915-.685.228 0 .457-.229.457-.229h.228c.229-.228.457-.686.229-.914-.229-.229-.686-.229-.914 0h-.229l-.457.457c-.229.229-.686.686-.914.686h-.458l-.228.228a8.778 8.778 0 00-5.257-2.514v-.229l-.229-.228V5.052c-.457-.686-.686-1.143-1.143-1.143zm-.685 5.028l-.229 3.429a.492.492 0 01-.457.457h-.229l-2.743-2.057c.915-.914 1.83-1.371 3.2-1.829h.458zm1.6 0c1.371.229 2.742.915 3.885 1.829l-2.743 1.829c-.228.228-.685.228-.685 0l-.229-.23-.228-3.428zm-6.4 3.2l2.514 2.286c.228.229.228.457 0 .686l-.229.228-3.2.915c-.228-1.6 0-2.972.915-4.115zm11.2 0c.457.686.685 1.372.914 2.058.228.685.228 1.37.228 2.057l-3.2-.915c-.228 0-.457-.457-.457-.685 0-.229 0-.229.229-.229l2.286-2.286zm-6.172 2.286h.914l.686.686-.228.914-.915.457-.914-.457-.229-.914.686-.686zm3.2 2.743c.229 0 .229 0 0 0l3.429.457c-.457 1.372-1.372 2.514-2.743 3.429l-1.372-3.2c.23-.229.23-.457.686-.686h0zm-5.486 0c.23 0 .458.229.458.457v.457l-1.372 3.2c-1.143-.685-2.057-1.828-2.743-3.428l3.657-.686zm2.743 1.371h.229l.228.229 1.6 2.971c-.228 0-.457.229-.685.229-1.143.229-2.515.229-3.657-.229l1.6-2.971c.457 0 .457-.229.685-.229h0z"
-                            fill="#FFF"
-                            stroke="#FFF"
-                            stroke-width="0.25"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <div
-                      class="Layout--vertical StyledProps--main"
-                    >
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          common.cluster: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName1%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            clusterName1
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          ce.recommendation.listPage.filters.namespace: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName1%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace1%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            namespace1
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
-                        >
-                          pipelineSteps.workload: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName1/namespace/namespace1/workload/resource-2/details"
-                        >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                            style="--text-line-clamp: 1;"
-                          >
-                            resource-2
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <div
-                    class="StyledProps--font StyledProps--main"
-                  >
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-h5"
-                    >
-                      $19.08
-                    </span>
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-body2 StyledProps--margin-left-small"
-                    >
-                      (38%)
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-h6"
-                  >
-                    $49.82
-                  </p>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
-                  >
-                    ce.overview.workload
-                  </p>
-                </div>
-              </div>
-              <div
-                class="TableV2--row TableV2--card TableV2--clickable"
-                role="row"
-              >
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 36%;"
-                >
-                  <div
-                    class="Layout--horizontal StyledProps--main"
-                  >
-                    <span
-                      class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
-                      data-icon="app-kubernetes"
-                    >
-                      <svg
-                        height="28"
-                        viewBox="0 0 32 30"
-                        width="28"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g
-                          fill="none"
-                        >
-                          <path
-                            d="M15.94.023c-.228 0-.457 0-.685.229L4.512 5.28c-.457.229-.915.686-1.143 1.372L.626 18.08c-.229.457 0 1.143.229 1.6l.228.229 7.314 9.143c.458.457.915.685 1.6.685h11.886c.686 0 1.143-.228 1.6-.685l7.314-9.143c.458-.457.458-1.143.458-1.6L28.512 6.88c-.229-.685-.457-1.143-1.143-1.371L16.626.48c0-.228-.457-.457-.686-.457z"
-                            fill="#326CE5"
-                          />
-                          <path
-                            d="M15.94 3.909c-.457 0-.685.228-.685.686v2.057c0 .228-.229.228-.229.228v.229c-.457 0-.686 0-1.143.228-1.6.458-3.2 1.143-4.114 2.286l-.229-.228h-.457c-.228-.23-.457-.458-.914-.686l-.457-.457h-.229c-.228 0-.228-.229-.457-.229s-.457 0-.457.229c-.229.228-.229.685.228.914h.23c.228.229.456.229.456.229.457.228.686.457.914.685 0 0 .23.229.23.457l.228.229c-1.143 1.6-1.6 3.657-1.372 5.714h-.228l-.229.229c-.229 0-.686.228-1.143.228H4.97c-.457 0-.686.458-.457.686 0 .229.457.457.914.457h.229c.228 0 .457-.228.685-.228.457-.229.686-.229 1.143-.229.229 0 .229 0 .457.229h.229c.686 2.057 2.057 3.657 3.657 4.571l-.229.229v.457c-.228.228-.228.686-.685 1.143-.229.228-.229.228-.229.457v.228c-.228.458 0 .686.229.915.228.228.685 0 .914-.457v-.23c0-.228.229-.456.229-.685.228-.457.228-.914.457-1.143 0 0 .228 0 .228-.228l.229-.229c1.371.457 3.2.686 4.8.457.457 0 .686-.228 1.143-.228l.228.228s.229 0 .229.229c.228.229.228.686.457 1.143 0 .228 0 .457.229.686v.228c.228.457.457.457.914.457.228-.228.457-.457.228-.914v-.229c0-.228-.228-.228-.228-.457-.229-.457-.457-.685-.457-.914v-.686c1.828-1.143 2.971-2.743 3.657-4.571h.228s.23-.229.458-.229.685.229 1.142.229c.23 0 .458.228.686.228h.229c.457 0 .685-.228.914-.457 0-.228-.229-.685-.457-.685h-.914c-.458 0-.915 0-1.143-.23-.229 0-.229-.228-.229-.228h-.228c.228-.914 0-2.057-.229-2.971-.229-.914-.686-2.057-1.143-2.743l.229-.228c0-.23 0-.23.228-.458.229-.228.457-.457.915-.685.228 0 .457-.229.457-.229h.228c.229-.228.457-.686.229-.914-.229-.229-.686-.229-.914 0h-.229l-.457.457c-.229.229-.686.686-.914.686h-.458l-.228.228a8.778 8.778 0 00-5.257-2.514v-.229l-.229-.228V5.052c-.457-.686-.686-1.143-1.143-1.143zm-.685 5.028l-.229 3.429a.492.492 0 01-.457.457h-.229l-2.743-2.057c.915-.914 1.83-1.371 3.2-1.829h.458zm1.6 0c1.371.229 2.742.915 3.885 1.829l-2.743 1.829c-.228.228-.685.228-.685 0l-.229-.23-.228-3.428zm-6.4 3.2l2.514 2.286c.228.229.228.457 0 .686l-.229.228-3.2.915c-.228-1.6 0-2.972.915-4.115zm11.2 0c.457.686.685 1.372.914 2.058.228.685.228 1.37.228 2.057l-3.2-.915c-.228 0-.457-.457-.457-.685 0-.229 0-.229.229-.229l2.286-2.286zm-6.172 2.286h.914l.686.686-.228.914-.915.457-.914-.457-.229-.914.686-.686zm3.2 2.743c.229 0 .229 0 0 0l3.429.457c-.457 1.372-1.372 2.514-2.743 3.429l-1.372-3.2c.23-.229.23-.457.686-.686h0zm-5.486 0c.23 0 .458.229.458.457v.457l-1.372 3.2c-1.143-.685-2.057-1.828-2.743-3.428l3.657-.686zm2.743 1.371h.229l.228.229 1.6 2.971c-.228 0-.457.229-.685.229-1.143.229-2.515.229-3.657-.229l1.6-2.971c.457 0 .457-.229.685-.229h0z"
-                            fill="#FFF"
-                            stroke="#FFF"
-                            stroke-width="0.25"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <div
-                      class="Layout--vertical StyledProps--main"
-                    >
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          common.cluster: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName2%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            clusterName2
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          ce.recommendation.listPage.filters.namespace: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName2%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace2%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            namespace2
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
-                        >
-                          pipelineSteps.workload: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName2/namespace/namespace2/workload/resource-3/details"
-                        >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                            style="--text-line-clamp: 1;"
-                          >
-                            resource-3
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <div
-                    class="StyledProps--font StyledProps--main"
-                  >
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-h5"
-                    >
-                      $18.79
-                    </span>
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-body2 StyledProps--margin-left-small"
-                    >
-                      (53%)
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-h6"
-                  >
-                    $35.34
-                  </p>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
-                  >
-                    ce.overview.workload
-                  </p>
-                </div>
-              </div>
-              <div
-                class="TableV2--row TableV2--card TableV2--clickable"
-                role="row"
-              >
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 36%;"
-                >
-                  <div
-                    class="Layout--horizontal StyledProps--main"
-                  >
-                    <span
-                      class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
-                      data-icon="app-kubernetes"
-                    >
-                      <svg
-                        height="28"
-                        viewBox="0 0 32 30"
-                        width="28"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g
-                          fill="none"
-                        >
-                          <path
-                            d="M15.94.023c-.228 0-.457 0-.685.229L4.512 5.28c-.457.229-.915.686-1.143 1.372L.626 18.08c-.229.457 0 1.143.229 1.6l.228.229 7.314 9.143c.458.457.915.685 1.6.685h11.886c.686 0 1.143-.228 1.6-.685l7.314-9.143c.458-.457.458-1.143.458-1.6L28.512 6.88c-.229-.685-.457-1.143-1.143-1.371L16.626.48c0-.228-.457-.457-.686-.457z"
-                            fill="#326CE5"
-                          />
-                          <path
-                            d="M15.94 3.909c-.457 0-.685.228-.685.686v2.057c0 .228-.229.228-.229.228v.229c-.457 0-.686 0-1.143.228-1.6.458-3.2 1.143-4.114 2.286l-.229-.228h-.457c-.228-.23-.457-.458-.914-.686l-.457-.457h-.229c-.228 0-.228-.229-.457-.229s-.457 0-.457.229c-.229.228-.229.685.228.914h.23c.228.229.456.229.456.229.457.228.686.457.914.685 0 0 .23.229.23.457l.228.229c-1.143 1.6-1.6 3.657-1.372 5.714h-.228l-.229.229c-.229 0-.686.228-1.143.228H4.97c-.457 0-.686.458-.457.686 0 .229.457.457.914.457h.229c.228 0 .457-.228.685-.228.457-.229.686-.229 1.143-.229.229 0 .229 0 .457.229h.229c.686 2.057 2.057 3.657 3.657 4.571l-.229.229v.457c-.228.228-.228.686-.685 1.143-.229.228-.229.228-.229.457v.228c-.228.458 0 .686.229.915.228.228.685 0 .914-.457v-.23c0-.228.229-.456.229-.685.228-.457.228-.914.457-1.143 0 0 .228 0 .228-.228l.229-.229c1.371.457 3.2.686 4.8.457.457 0 .686-.228 1.143-.228l.228.228s.229 0 .229.229c.228.229.228.686.457 1.143 0 .228 0 .457.229.686v.228c.228.457.457.457.914.457.228-.228.457-.457.228-.914v-.229c0-.228-.228-.228-.228-.457-.229-.457-.457-.685-.457-.914v-.686c1.828-1.143 2.971-2.743 3.657-4.571h.228s.23-.229.458-.229.685.229 1.142.229c.23 0 .458.228.686.228h.229c.457 0 .685-.228.914-.457 0-.228-.229-.685-.457-.685h-.914c-.458 0-.915 0-1.143-.23-.229 0-.229-.228-.229-.228h-.228c.228-.914 0-2.057-.229-2.971-.229-.914-.686-2.057-1.143-2.743l.229-.228c0-.23 0-.23.228-.458.229-.228.457-.457.915-.685.228 0 .457-.229.457-.229h.228c.229-.228.457-.686.229-.914-.229-.229-.686-.229-.914 0h-.229l-.457.457c-.229.229-.686.686-.914.686h-.458l-.228.228a8.778 8.778 0 00-5.257-2.514v-.229l-.229-.228V5.052c-.457-.686-.686-1.143-1.143-1.143zm-.685 5.028l-.229 3.429a.492.492 0 01-.457.457h-.229l-2.743-2.057c.915-.914 1.83-1.371 3.2-1.829h.458zm1.6 0c1.371.229 2.742.915 3.885 1.829l-2.743 1.829c-.228.228-.685.228-.685 0l-.229-.23-.228-3.428zm-6.4 3.2l2.514 2.286c.228.229.228.457 0 .686l-.229.228-3.2.915c-.228-1.6 0-2.972.915-4.115zm11.2 0c.457.686.685 1.372.914 2.058.228.685.228 1.37.228 2.057l-3.2-.915c-.228 0-.457-.457-.457-.685 0-.229 0-.229.229-.229l2.286-2.286zm-6.172 2.286h.914l.686.686-.228.914-.915.457-.914-.457-.229-.914.686-.686zm3.2 2.743c.229 0 .229 0 0 0l3.429.457c-.457 1.372-1.372 2.514-2.743 3.429l-1.372-3.2c.23-.229.23-.457.686-.686h0zm-5.486 0c.23 0 .458.229.458.457v.457l-1.372 3.2c-1.143-.685-2.057-1.828-2.743-3.428l3.657-.686zm2.743 1.371h.229l.228.229 1.6 2.971c-.228 0-.457.229-.685.229-1.143.229-2.515.229-3.657-.229l1.6-2.971c.457 0 .457-.229.685-.229h0z"
-                            fill="#FFF"
-                            stroke="#FFF"
-                            stroke-width="0.25"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <div
-                      class="Layout--vertical StyledProps--main"
-                    >
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          common.cluster: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName3%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            clusterName3
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          ce.recommendation.listPage.filters.namespace: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName3%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace3%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            namespace3
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
-                        >
-                          pipelineSteps.workload: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName3/namespace/namespace3/workload/resource-4/details"
-                        >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                            style="--text-line-clamp: 1;"
-                          >
-                            resource-4
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <div
-                    class="StyledProps--font StyledProps--main"
-                  >
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-h5"
-                    >
-                      $18.79
-                    </span>
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-body2 StyledProps--margin-left-small"
-                    >
-                      (53%)
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-h6"
-                  >
-                    $35.34
-                  </p>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
-                  >
-                    ce.overview.workload
-                  </p>
-                </div>
-              </div>
-              <div
-                class="TableV2--row TableV2--card TableV2--clickable"
-                role="row"
-              >
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 36%;"
-                >
-                  <div
-                    class="Layout--horizontal StyledProps--main"
-                  >
-                    <span
-                      class="bp3-icon StyledProps--main StyledProps--padding-right-medium"
-                      data-icon="app-kubernetes"
-                    >
-                      <svg
-                        height="28"
-                        viewBox="0 0 32 30"
-                        width="28"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g
-                          fill="none"
-                        >
-                          <path
-                            d="M15.94.023c-.228 0-.457 0-.685.229L4.512 5.28c-.457.229-.915.686-1.143 1.372L.626 18.08c-.229.457 0 1.143.229 1.6l.228.229 7.314 9.143c.458.457.915.685 1.6.685h11.886c.686 0 1.143-.228 1.6-.685l7.314-9.143c.458-.457.458-1.143.458-1.6L28.512 6.88c-.229-.685-.457-1.143-1.143-1.371L16.626.48c0-.228-.457-.457-.686-.457z"
-                            fill="#326CE5"
-                          />
-                          <path
-                            d="M15.94 3.909c-.457 0-.685.228-.685.686v2.057c0 .228-.229.228-.229.228v.229c-.457 0-.686 0-1.143.228-1.6.458-3.2 1.143-4.114 2.286l-.229-.228h-.457c-.228-.23-.457-.458-.914-.686l-.457-.457h-.229c-.228 0-.228-.229-.457-.229s-.457 0-.457.229c-.229.228-.229.685.228.914h.23c.228.229.456.229.456.229.457.228.686.457.914.685 0 0 .23.229.23.457l.228.229c-1.143 1.6-1.6 3.657-1.372 5.714h-.228l-.229.229c-.229 0-.686.228-1.143.228H4.97c-.457 0-.686.458-.457.686 0 .229.457.457.914.457h.229c.228 0 .457-.228.685-.228.457-.229.686-.229 1.143-.229.229 0 .229 0 .457.229h.229c.686 2.057 2.057 3.657 3.657 4.571l-.229.229v.457c-.228.228-.228.686-.685 1.143-.229.228-.229.228-.229.457v.228c-.228.458 0 .686.229.915.228.228.685 0 .914-.457v-.23c0-.228.229-.456.229-.685.228-.457.228-.914.457-1.143 0 0 .228 0 .228-.228l.229-.229c1.371.457 3.2.686 4.8.457.457 0 .686-.228 1.143-.228l.228.228s.229 0 .229.229c.228.229.228.686.457 1.143 0 .228 0 .457.229.686v.228c.228.457.457.457.914.457.228-.228.457-.457.228-.914v-.229c0-.228-.228-.228-.228-.457-.229-.457-.457-.685-.457-.914v-.686c1.828-1.143 2.971-2.743 3.657-4.571h.228s.23-.229.458-.229.685.229 1.142.229c.23 0 .458.228.686.228h.229c.457 0 .685-.228.914-.457 0-.228-.229-.685-.457-.685h-.914c-.458 0-.915 0-1.143-.23-.229 0-.229-.228-.229-.228h-.228c.228-.914 0-2.057-.229-2.971-.229-.914-.686-2.057-1.143-2.743l.229-.228c0-.23 0-.23.228-.458.229-.228.457-.457.915-.685.228 0 .457-.229.457-.229h.228c.229-.228.457-.686.229-.914-.229-.229-.686-.229-.914 0h-.229l-.457.457c-.229.229-.686.686-.914.686h-.458l-.228.228a8.778 8.778 0 00-5.257-2.514v-.229l-.229-.228V5.052c-.457-.686-.686-1.143-1.143-1.143zm-.685 5.028l-.229 3.429a.492.492 0 01-.457.457h-.229l-2.743-2.057c.915-.914 1.83-1.371 3.2-1.829h.458zm1.6 0c1.371.229 2.742.915 3.885 1.829l-2.743 1.829c-.228.228-.685.228-.685 0l-.229-.23-.228-3.428zm-6.4 3.2l2.514 2.286c.228.229.228.457 0 .686l-.229.228-3.2.915c-.228-1.6 0-2.972.915-4.115zm11.2 0c.457.686.685 1.372.914 2.058.228.685.228 1.37.228 2.057l-3.2-.915c-.228 0-.457-.457-.457-.685 0-.229 0-.229.229-.229l2.286-2.286zm-6.172 2.286h.914l.686.686-.228.914-.915.457-.914-.457-.229-.914.686-.686zm3.2 2.743c.229 0 .229 0 0 0l3.429.457c-.457 1.372-1.372 2.514-2.743 3.429l-1.372-3.2c.23-.229.23-.457.686-.686h0zm-5.486 0c.23 0 .458.229.458.457v.457l-1.372 3.2c-1.143-.685-2.057-1.828-2.743-3.428l3.657-.686zm2.743 1.371h.229l.228.229 1.6 2.971c-.228 0-.457.229-.685.229-1.143.229-2.515.229-3.657-.229l1.6-2.971c.457 0 .457-.229.685-.229h0z"
-                            fill="#FFF"
-                            stroke="#FFF"
-                            stroke-width="0.25"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <div
-                      class="Layout--vertical StyledProps--main"
-                    >
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          common.cluster: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName4%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            clusterName4
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="StyledProps--font StyledProps--main"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small"
-                        >
-                          ce.recommendation.listPage.filters.namespace: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined?filters=%5B%7B%22field%22%3A%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22clusterName4%22%5D%7D%2C%7B%22field%22%3A%7B%22fieldId%22%3A%22namespace%22%2C%22fieldName%22%3A%22Namespace%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D%2C%22operator%22%3A%22IN%22%2C%22type%22%3A%22VIEW_ID_CONDITION%22%2C%22values%22%3A%5B%22namespace4%22%5D%7D%5D&groupBy=%7B%22fieldId%22%3A%22clusterName%22%2C%22fieldName%22%3A%22Cluster%20Name%22%2C%22identifier%22%3A%22CLUSTER%22%2C%22identifierName%22%3A%22CLUSTER%22%7D"
-                        >
-                          <span
-                            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                          >
-                            namespace4
-                          </span>
-                        </a>
-                      </div>
-                      <div
-                        class="Layout--horizontal StyledProps--main resourceNameContainer"
-                      >
-                        <span
-                          class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-grey500 StyledProps--font-variation-small-bold StyledProps--margin-right-xsmall"
-                        >
-                          pipelineSteps.workload: 
-                        </span>
-                        <a
-                          href="/account/undefined/ce/perspectives/undefined/name/undefined/cluster/clusterName4/namespace/namespace4/workload/resource-5/details"
-                        >
-                          <span
-                            class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-primary7 StyledProps--font-variation-body2"
-                            style="--text-line-clamp: 1;"
-                          >
-                            resource-5
-                          </span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <div
-                    class="StyledProps--font StyledProps--main"
-                  >
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-h5"
-                    >
-                      $18.79
-                    </span>
-                    <span
-                      class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--color StyledProps--color-green700 StyledProps--font-variation-body2 StyledProps--margin-left-small"
-                    >
-                      (53%)
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-h6"
-                  >
-                    $35.34
-                  </p>
-                </div>
-                <div
-                  class="TableV2--cell"
-                  role="cell"
-                  style="width: 18%;"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey600 StyledProps--font-variation-small"
-                  >
-                    ce.overview.workload
-                  </p>
-                </div>
-              </div>
-            </div>
+              ce.pageErrorMsg.noFilteredRecommendations
+            </p>
           </div>
         </div>
       </div>

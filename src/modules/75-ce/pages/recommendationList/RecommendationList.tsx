@@ -6,27 +6,28 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { Card, Text, Layout, Container, Icon, Button, ButtonVariation, TableV2, IconName } from '@wings-software/uicore'
+import {
+  Card,
+  Text,
+  Layout,
+  Container,
+  Icon,
+  Button,
+  ButtonVariation,
+  TableV2,
+  IconName,
+  getErrorInfoFromErrorObject
+} from '@wings-software/uicore'
 import { useHistory, useParams, Link } from 'react-router-dom'
 import type { CellProps, Renderer } from 'react-table'
 import qs from 'qs'
 import { Color, FontVariation } from '@harness/design-system'
-import { defaultTo, get } from 'lodash-es'
+import { defaultTo, get, omit } from 'lodash-es'
 import { String, useStrings } from 'framework/strings'
-import {
-  RecommendationItemDto,
-  useRecommendationsQuery,
-  useRecommendationsSummaryQuery,
-  K8sRecommendationFilterDtoInput,
-  ResourceType,
-  useFetchCcmMetaDataQuery,
-  CcmMetaData,
-  Maybe
-} from 'services/ce/services'
-
+import { ResourceType, useFetchCcmMetaDataQuery, CcmMetaData, Maybe } from 'services/ce/services'
 import routes from '@common/RouteDefinitions'
-import { Page } from '@common/exports'
-import { useQueryParams } from '@common/hooks'
+import { Page, useToaster } from '@common/exports'
+import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
 import formatCost from '@ce/utils/formatCost'
 import { getViewFilterForId, GROUP_BY_CLUSTER_NAME } from '@ce/utils/perspectiveUtils'
 import EmptyView from '@ce/images/empty-state.svg'
@@ -37,11 +38,22 @@ import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { CCM_PAGE_TYPE, CloudProvider } from '@ce/types'
 import { calculateSavingsPercentage, getProviderIcon } from '@ce/utils/recommendationUtils'
 import { generateFilters } from '@ce/utils/anomaliesUtils'
+import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
+import {
+  CCMRecommendationFilterProperties,
+  QLCEViewFilterWrapper,
+  RecommendationItemDTO,
+  RecommendationOverviewStats,
+  useListRecommendations,
+  useRecommendationsCount,
+  useRecommendationStats
+} from 'services/ce'
 import { getEmissionsValue } from '@ce/utils/formatResourceValue'
 import greenLeafImg from '@ce/common/images/green-leaf.svg'
 import grayLeafImg from '@ce/common/images/gray-leaf.svg'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { removeNullAndEmpty } from '@common/components/Filter/utils/FilterUtils'
 import type { StringsMap } from 'stringTypes'
 import RecommendationSavingsCard from '../../components/RecommendationSavingsCard/RecommendationSavingsCard'
 import RecommendationFilters from '../../components/RecommendationFilters'
@@ -57,7 +69,7 @@ type RouteFn = (
 ) => string
 
 interface RecommendationListProps {
-  data: Array<RecommendationItemDto>
+  data: RecommendationItemDTO[]
   fetching: boolean
   ccmData: Maybe<CcmMetaData> | undefined
   pagination: {
@@ -68,6 +80,7 @@ interface RecommendationListProps {
     gotoPage: (pageNumber: number) => void
   }
   onAddClusterSuccess: () => void
+  filters: CCMRecommendationFilterProperties
 }
 
 const RecommendationsList: React.FC<RecommendationListProps> = ({
@@ -75,7 +88,8 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
   pagination,
   fetching,
   ccmData,
-  onAddClusterSuccess
+  onAddClusterSuccess,
+  filters
 }) => {
   const history = useHistory()
   const { trackEvent } = useTelemetry()
@@ -98,6 +112,8 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     }),
     []
   )
+
+  const areFiltersApplied = removeNullAndEmpty(omit(filters, 'filterType'))
 
   if (fetching) {
     return (
@@ -140,7 +156,7 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     count: data.length
   })
 
-  const NameCell: Renderer<CellProps<RecommendationItemDto>> = cell => {
+  const NameCell: Renderer<CellProps<RecommendationItemDTO>> = cell => {
     const originalRowData = cell.row.original
     const { clusterName, namespace, resourceType } = originalRowData
 
@@ -211,48 +227,43 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     }
 
     return (
-      <Layout.Horizontal>
+      <Layout.Horizontal style={{ alignItems: 'center' }}>
         <Icon name={iconName} size={28} padding={{ right: 'medium' }} />
-        <Layout.Vertical>
-          <Container>
-            <Text inline color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+        <Layout.Vertical style={{ flex: 1 }}>
+          <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+            <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
               {`${getString('common.cluster')}: `}
             </Text>
             <Link to={clusterLink} onClick={e => e.stopPropagation()}>
-              <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }}>
+              <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                 {clusterName}
               </Text>
             </Link>
-          </Container>
+          </Layout.Horizontal>
           {namespace ? (
-            <Container>
-              <Text inline color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+            <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+              <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
                 {`${getString('ce.recommendation.listPage.filters.namespace')}: `}
               </Text>
               <Link to={namespaceLink} onClick={e => e.stopPropagation()}>
-                <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }}>
+                <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                   {namespace}
                 </Text>
               </Link>
-            </Container>
+            </Layout.Horizontal>
           ) : null}
-          <Layout.Horizontal className={css.resourceNameContainer}>
-            <Text
-              inline
-              color={Color.GREY_500}
-              font={{ variation: FontVariation.SMALL_BOLD }}
-              margin={{ right: 'xsmall' }}
-            >
+          <Layout.Horizontal spacing="xsmall" className={css.nameContainer}>
+            <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL_BOLD }}>
               {`${getString(resourceTypeStringKey[resourceType])}: `}
             </Text>
             {resourceType === ResourceType.Workload ? (
               <Link to={resourceDetailsLink} onClick={e => e.stopPropagation()}>
-                <Text inline color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
+                <Text color={Color.PRIMARY_7} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                   {cell.value}
                 </Text>
               </Link>
             ) : (
-              <Text inline color={Color.GREY_700} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
+              <Text color={Color.GREY_700} font={{ variation: FontVariation.BODY2 }} lineClamp={1}>
                 {cell.value}
               </Text>
             )}
@@ -262,17 +273,17 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     )
   }
 
-  const RecommendationTypeCell: Renderer<CellProps<RecommendationItemDto>> = ({ row }) => {
+  const RecommendationTypeCell: Renderer<CellProps<RecommendationItemDTO>> = ({ row }) => {
     const rowData = row.original
     const { resourceType } = rowData
     return (
-      <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }}>
+      <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }} lineClamp={1}>
         {resourceTypeMap[resourceType]}
       </Text>
     )
   }
 
-  const CostCell: Renderer<CellProps<RecommendationItemDto>> = cell => {
+  const CostCell: Renderer<CellProps<RecommendationItemDTO>> = cell => {
     return cell.value ? (
       <Text color={Color.GREY_600} font={{ variation: FontVariation.H6 }}>
         {formatCost(cell.value)}
@@ -280,7 +291,7 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     ) : null
   }
 
-  const SavingCell: Renderer<CellProps<RecommendationItemDto>> = cell => {
+  const SavingCell: Renderer<CellProps<RecommendationItemDTO>> = cell => {
     return !isNaN(cell.value) ? (
       <Container>
         <Text inline color={Color.GREEN_700} font={{ variation: FontVariation.H5 }}>
@@ -297,7 +308,7 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
     <>
       <Layout.Vertical spacing="large">
         {data.length ? (
-          <TableV2<RecommendationItemDto>
+          <TableV2<RecommendationItemDTO>
             onRowClick={({ id, resourceType, resourceName, monthlySaving }) => {
               trackEvent(USER_JOURNEY_EVENTS.RECOMMENDATION_CLICK, {
                 recommendationID: id,
@@ -342,7 +353,11 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
         ) : (
           <Container className={css.errorContainer}>
             <img src={EmptyView} />
-            <Text className={css.errorText}>{getString('ce.pageErrorMsg.noRecommendations')}</Text>
+            <Text className={css.errorText}>
+              {getString(
+                areFiltersApplied ? 'ce.pageErrorMsg.noFilteredRecommendations' : 'ce.pageErrorMsg.noRecommendations'
+              )}
+            </Text>
           </Container>
         )}
       </Layout.Vertical>
@@ -350,19 +365,19 @@ const RecommendationsList: React.FC<RecommendationListProps> = ({
   ) : null
 }
 
-const RecommendationList: React.FC = () => {
-  const [costFilters, setCostFilters] = useState<Record<string, number>>({})
-  const [page, setPage] = useState(0)
+const RecommendationListPage: React.FC = () => {
+  const [page, setPage] = useQueryParamsState('page', 0)
+
+  const { showError } = useToaster()
 
   const { trackPage } = useTelemetry()
   const history = useHistory()
   const { accountId } = useParams<{ accountId: string }>()
-  const sustainabilityEnabled = useFeatureFlag(FeatureFlag.CCM_SUSTAINABILITY)
   const {
     perspectiveId,
     perspectiveName,
-    filters: filterQuery = {},
-    origin
+    origin,
+    filters: filterQuery = {}
   } = useQueryParams<{
     perspectiveId: string
     perspectiveName: string
@@ -370,72 +385,64 @@ const RecommendationList: React.FC = () => {
     origin: string
   }>()
 
-  const [filters, setFilters] = useState<Record<string, string[]>>(filterQuery)
+  const [selectedFilterProperties, setSelectedFilterProperties] =
+    useQueryParamsState<CCMRecommendationFilterProperties>('filters', {})
+  const [recommendationStats, setRecommendationStats] = useState<RecommendationOverviewStats>()
+  const [recommendationCount, setRecommendationCount] = useState<number>()
+  const [recommendationList, setRecommendationList] = useState<RecommendationItemDTO[]>([])
+
+  const perspectiveFilters = (perspectiveId ? [getViewFilterForId(perspectiveId)] : []) as QLCEViewFilterWrapper[]
 
   useEffect(() => {
     trackPage(PAGE_NAMES.RECOMMENDATIONS_PAGE, {})
   }, [])
 
-  const modifiedCostFilters = costFilters['minSaving'] ? costFilters : { ...costFilters, minSaving: 0 }
-
   const [ccmMetaResult, refetchCCMMetaData] = useFetchCcmMetaDataQuery()
   const { data: ccmData, fetching: fetchingCCMMetaData } = ccmMetaResult
 
-  const perspectiveFilters = (
-    perspectiveId ? { perspectiveFilters: getViewFilterForId(perspectiveId) } : ({} as any)
-  ) as K8sRecommendationFilterDtoInput
-
-  const [result] = useRecommendationsQuery({
-    variables: {
-      filter: {
-        ...filters,
-        ...perspectiveFilters,
-        ...modifiedCostFilters,
-        offset: page * 10,
-        limit: 10
-      } as K8sRecommendationFilterDtoInput
-    },
-    pause: fetchingCCMMetaData
-  })
-
-  const [summaryResult] = useRecommendationsSummaryQuery({
-    variables: {
-      filter: {
-        ...filters,
-        ...perspectiveFilters,
-        ...modifiedCostFilters
-      } as unknown as K8sRecommendationFilterDtoInput
+  const { loading: statsLoading, mutate: fetchRecommendationStats } = useRecommendationStats({
+    queryParams: {
+      accountIdentifier: accountId
     }
   })
 
-  const { data, fetching } = result
-  const { data: summaryData } = summaryResult
+  const { loading: countLoading, mutate: fetchRecommendationCount } = useRecommendationsCount({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
+  const { loading: listLoading, mutate: fetchRecommendationList } = useListRecommendations({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
 
   const { getString } = useStrings()
 
-  const totalMonthlyCost = summaryData?.recommendationStatsV2?.totalMonthlyCost || 0
-  const totalSavings = summaryData?.recommendationStatsV2?.totalMonthlySaving || 0
-
-  const recommendationItems = data?.recommendationsV2?.items || []
+  const totalMonthlyCost = defaultTo(recommendationStats?.totalMonthlyCost, 0)
+  const totalSavings = defaultTo(recommendationStats?.totalMonthlySaving, 0)
 
   const gotoPage = (pageNumber: number) => setPage(pageNumber)
 
   const goBackToPerspective: () => void = () => {
     if (origin === CCM_PAGE_TYPE.Workload) {
-      const clusterName = filterQuery.clusterNames[0],
-        namespace = filterQuery.namespaces[0],
-        workloadName = filterQuery.names[0]
+      const clusterName = filterQuery?.clusterNames?.[0],
+        namespace = filterQuery?.namespaces?.[0],
+        workloadName = filterQuery?.names?.[0]
 
-      history.push(
-        routes.toCEPerspectiveWorkloadDetails({
-          accountId,
-          perspectiveId,
-          perspectiveName,
-          clusterName,
-          namespace,
-          workloadName
-        })
-      )
+      if (clusterName && namespace && workloadName) {
+        history.push(
+          routes.toCEPerspectiveWorkloadDetails({
+            accountId,
+            perspectiveId,
+            perspectiveName,
+            clusterName,
+            namespace,
+            workloadName
+          })
+        )
+      }
     } else {
       history.push(
         routes.toPerspectiveDetails({
@@ -448,16 +455,58 @@ const RecommendationList: React.FC = () => {
   }
 
   const pagination = {
-    itemCount: summaryData?.recommendationStatsV2?.count || 0,
+    itemCount: (recommendationCount || 0) as number,
     pageSize: 10,
-    pageCount: summaryData?.recommendationStatsV2?.count
-      ? Math.ceil(summaryData?.recommendationStatsV2?.count / 10)
-      : 0,
+    pageCount: recommendationCount ? Math.ceil(recommendationCount / 10) : 0,
     pageIndex: page,
     gotoPage: gotoPage
   }
 
-  const isEmptyView = !fetching && !recommendationItems?.length
+  const isEmptyView = !listLoading && !recommendationList?.length
+
+  const getRecommendationData = async () => {
+    try {
+      const [stats, count] = await Promise.all([
+        fetchRecommendationStats({
+          ...selectedFilterProperties,
+          filterType: 'CCMRecommendation',
+          perspectiveFilters
+        }),
+        fetchRecommendationCount({
+          ...selectedFilterProperties,
+          filterType: 'CCMRecommendation',
+          perspectiveFilters
+        })
+      ])
+
+      setRecommendationStats(stats.data)
+      setRecommendationCount(count.data)
+    } catch (error: any) {
+      showError(getErrorInfoFromErrorObject(error))
+    }
+  }
+
+  const getRecommendationList = async () => {
+    const response = await fetchRecommendationList({
+      ...selectedFilterProperties,
+      filterType: 'CCMRecommendation',
+      perspectiveFilters,
+      offset: page * 10,
+      limit: 10
+    })
+
+    setRecommendationList(response.data?.items || [])
+  }
+
+  useDeepCompareEffect(() => {
+    getRecommendationData()
+  }, [selectedFilterProperties])
+
+  useDeepCompareEffect(() => {
+    getRecommendationList()
+  }, [selectedFilterProperties, page])
+
+  const isPageLoading = listLoading || countLoading || statsLoading
 
   return (
     <>
@@ -485,84 +534,34 @@ const RecommendationList: React.FC = () => {
           ) : null
         }
       />
-      <Page.Body loading={fetching || fetchingCCMMetaData}>
-        <Card style={{ width: '100%' }}>
-          <Layout.Horizontal flex={{ justifyContent: 'flex-end' }}>
-            <RecommendationFilters
-              costFilters={costFilters}
-              setCostFilters={setCostFilters}
-              setFilters={setFilters}
-              filters={filters}
-            />
-          </Layout.Horizontal>
-        </Card>
+      <Card style={{ width: '100%' }}>
+        <Layout.Horizontal flex={{ justifyContent: 'flex-end' }}>
+          <RecommendationFilters
+            applyFilters={(properties: CCMRecommendationFilterProperties) => {
+              setPage(0)
+              setSelectedFilterProperties(properties)
+            }}
+          />
+        </Layout.Horizontal>
+      </Card>
+      <Page.Body loading={isPageLoading || fetchingCCMMetaData}>
         <Container className={css.listContainer}>
           <Layout.Vertical spacing="large">
-            <Layout.Horizontal spacing="medium">
-              <RecommendationSavingsCard
-                title={getString('ce.recommendation.listPage.monthlySavingsText')}
-                amount={isEmptyView ? '$-' : formatCost(totalSavings)}
-                iconName="money-icon"
-                subTitle={getString('ce.recommendation.listPage.recommendationCount', {
-                  count: summaryData?.recommendationStatsV2?.count
-                })}
-              />
-              {sustainabilityEnabled && (
-                <RecommendationSavingsCard
-                  title={getString('ce.recommendation.listPage.potentialReducedEmissionTitle')}
-                  titleImg={greenLeafImg}
-                  amount={
-                    isEmptyView ? (
-                      ''
-                    ) : (
-                      <String
-                        stringID="ce.common.emissionUnitHTML"
-                        vars={{ value: getEmissionsValue(totalSavings) }}
-                        useRichText
-                      />
-                    )
-                  }
-                  cardCssName={css.potentialReducedEmissionCard}
-                  subTitle={getString('ce.recommendation.listPage.potentialReducedEmissionSubtitle', {
-                    count: summaryData?.recommendationStatsV2?.count
-                  })}
-                />
-              )}
-              <RecommendationSavingsCard
-                title={getString('ce.recommendation.listPage.monthlyPotentialCostText')}
-                amount={isEmptyView ? '$-' : formatCost(totalMonthlyCost)}
-                amountSubTitle={getString('ce.recommendation.listPage.byEOM')}
-                subTitle={getString('ce.recommendation.listPage.forecatedCostSubText')}
-              />
-              {sustainabilityEnabled && (
-                <RecommendationSavingsCard
-                  title={getString('ce.recommendation.listPage.potentialEmissionTitle')}
-                  titleImg={grayLeafImg}
-                  amount={
-                    isEmptyView ? (
-                      ''
-                    ) : (
-                      <String
-                        stringID="ce.common.emissionUnitHTML"
-                        vars={{ value: getEmissionsValue(totalMonthlyCost) }}
-                        useRichText
-                      />
-                    )
-                  }
-                  cardCssName={css.potentialEmissionCard}
-                  amountSubTitle={getString('ce.recommendation.listPage.byEOM')}
-                  subTitle={getString('ce.recommendation.listPage.forecatedCostSubText')}
-                />
-              )}
-            </Layout.Horizontal>
+            <RecommendationCards
+              isEmptyView={isEmptyView}
+              recommendationCount={defaultTo(recommendationCount, 0)}
+              totalMonthlyCost={totalMonthlyCost}
+              totalSavings={totalSavings}
+            />
             <RecommendationsList
               onAddClusterSuccess={() => {
                 refetchCCMMetaData()
               }}
               ccmData={ccmData?.ccmMetaData}
               pagination={pagination}
-              fetching={fetching || fetchingCCMMetaData}
-              data={recommendationItems as Array<RecommendationItemDto>}
+              fetching={listLoading || fetchingCCMMetaData}
+              data={recommendationList}
+              filters={selectedFilterProperties}
             />
           </Layout.Vertical>
         </Container>
@@ -571,4 +570,81 @@ const RecommendationList: React.FC = () => {
   )
 }
 
-export default RecommendationList
+export default RecommendationListPage
+
+interface RecommendationCardsProps {
+  isEmptyView: boolean
+  recommendationCount: number
+  totalMonthlyCost: number
+  totalSavings: number
+}
+
+const RecommendationCards: React.FC<RecommendationCardsProps> = ({
+  isEmptyView,
+  recommendationCount,
+  totalMonthlyCost,
+  totalSavings
+}) => {
+  const { getString } = useStrings()
+  const sustainabilityEnabled = useFeatureFlag(FeatureFlag.CCM_SUSTAINABILITY)
+
+  return (
+    <Layout.Horizontal spacing="medium">
+      <RecommendationSavingsCard
+        title={getString('ce.recommendation.listPage.monthlySavingsText')}
+        amount={isEmptyView ? '$-' : formatCost(totalSavings)}
+        iconName="money-icon"
+        subTitle={getString('ce.recommendation.listPage.recommendationCount', {
+          count: recommendationCount
+        })}
+      />
+      {sustainabilityEnabled && (
+        <RecommendationSavingsCard
+          title={getString('ce.recommendation.listPage.potentialReducedEmissionTitle')}
+          titleImg={greenLeafImg}
+          amount={
+            isEmptyView ? (
+              ''
+            ) : (
+              <String
+                stringID="ce.common.emissionUnitHTML"
+                vars={{ value: getEmissionsValue(totalSavings) }}
+                useRichText
+              />
+            )
+          }
+          cardCssName={css.potentialReducedEmissionCard}
+          subTitle={getString('ce.recommendation.listPage.potentialReducedEmissionSubtitle', {
+            count: recommendationCount || 0
+          })}
+        />
+      )}
+      <RecommendationSavingsCard
+        title={getString('ce.recommendation.listPage.monthlyPotentialCostText')}
+        amount={isEmptyView ? '$-' : formatCost(totalMonthlyCost)}
+        amountSubTitle={getString('ce.recommendation.listPage.byEOM')}
+        subTitle={getString('ce.recommendation.listPage.forecatedCostSubText')}
+      />
+      {sustainabilityEnabled && (
+        <RecommendationSavingsCard
+          title={getString('ce.recommendation.listPage.potentialEmissionTitle')}
+          titleImg={grayLeafImg}
+          amount={
+            isEmptyView ? (
+              ''
+            ) : (
+              <String
+                stringID="ce.common.emissionUnitHTML"
+                vars={{ value: getEmissionsValue(totalMonthlyCost) }}
+                useRichText
+              />
+            )
+          }
+          cardCssName={css.potentialEmissionCard}
+          amountSubTitle={getString('ce.recommendation.listPage.byEOM')}
+          subTitle={getString('ce.recommendation.listPage.forecatedCostSubText')}
+        />
+      )}
+    </Layout.Horizontal>
+  )
+}

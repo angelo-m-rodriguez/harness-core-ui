@@ -97,6 +97,5 @@ exports[`<StageTemplateCanvasWithRef /> tests should match snapshot in empty sta
     </div>
   </div>
   <div />
-  <div />
 </div>
 `;

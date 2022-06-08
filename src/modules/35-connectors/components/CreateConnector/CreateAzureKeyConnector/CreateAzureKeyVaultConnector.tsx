@@ -41,6 +41,7 @@ const CreateAzureKeyVaultConnector: React.FC<CreateConnectorModalProps> = props 
         connectorInfo={props.connectorInfo}
         mock={props.mock}
         disableGitSync={true}
+        helpPanelReferenceId="AzureKeyVaultOverview"
       />
       <AzureKeyVaultForm
         name={getString('details')}
@@ -62,6 +63,7 @@ const CreateAzureKeyVaultConnector: React.FC<CreateConnectorModalProps> = props 
         gitDetails={props.gitDetails}
         disableGitSync={true}
         submitOnNextStep
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <SetupVault
         name={getString('connectors.azureKeyVault.labels.setupVault')}
@@ -81,6 +83,7 @@ const CreateAzureKeyVaultConnector: React.FC<CreateConnectorModalProps> = props 
         isLastStep={true}
         type={Connectors.AZURE_KEY_VAULT}
         stepIndex={GIT_TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

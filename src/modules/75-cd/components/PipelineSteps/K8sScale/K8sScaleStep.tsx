@@ -43,6 +43,7 @@ import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import type { StringsMap } from 'stringTypes'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
+import pipelineVariablesCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
 export interface K8sScaleData extends StepElementConfig {
   spec: Omit<K8sScaleStepInfo, 'skipSteadyStateCheck'> & { skipSteadyStateCheck: boolean }
@@ -287,7 +288,14 @@ const K8ScaleInputStep: React.FC<K8sScaleProps> = ({ template, readonly, path, a
 }
 
 const K8sScaleVariableStep: React.FC<K8sScaleVariableStepProps> = ({ variablesData, metadataMap, initialValues }) => {
-  return <VariablesListTable data={variablesData.spec} originalData={initialValues.spec} metadataMap={metadataMap} />
+  return (
+    <VariablesListTable
+      data={variablesData.spec}
+      originalData={initialValues.spec}
+      metadataMap={metadataMap}
+      className={pipelineVariablesCss.variablePaddingL3}
+    />
+  )
 }
 
 const K8ScaleDeployWidgetWithRef = React.forwardRef(K8ScaleDeployWidget)

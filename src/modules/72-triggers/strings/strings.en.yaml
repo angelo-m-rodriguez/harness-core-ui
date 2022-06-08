@@ -20,6 +20,8 @@ cronLabel: 'Cron'
 scheduledLabel: 'Scheduled'
 triggerConfigurationLabel: 'Trigger Configuration'
 pipelineInputLabel: 'Pipeline Input'
+branchNameCantBeExpression: Branch Name cannot be an expresion for non-Webhook triggers
+inputSetIsRequired: Input Set(s) is required.
 updateTrigger: 'Update Trigger'
 createTrigger: 'Create Trigger'
 deleteTrigger: 'Delete Trigger'
@@ -34,7 +36,13 @@ cannotParseTriggersData: 'Cannot parse trigger data'
 cannotParseTriggersYaml: 'Cannot parse trigger YAML'
 cannotParseInputYaml: 'Cannot parse inputYaml in trigger YAML'
 cannotParseInputValues: 'Cannot parse pipeline input values'
+pipelineReferenceBranch: Pipeline Reference Branch
+triggerCouldNotBeSavedTitle: Trigger Couldn't Be Saved
+triggerSaveWithError: ' You can continue to save your Trigger with an Error.'
+triggerCouldNotBeSavedContent: Do you want to continue?
+triggerCouldNotBeSavedGenericError: Failed to save Trigger.
 updateTriggerDetails: 'Your trigger has been overwritten because you have updated your pipeline. You may go to Pipeline Input and update your trigger.'
+retryTriggerSave: The inputset you selected was not found in the default branch in your repository. You can continue to save your Trigger with an error.
 validation:
   triggerName: 'Trigger Name is required.'
   identifier: '{{$.validation.identifierRequired}}'

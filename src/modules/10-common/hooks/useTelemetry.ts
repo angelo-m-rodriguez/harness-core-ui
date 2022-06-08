@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
@@ -92,4 +92,12 @@ export function useTelemetry(pageParams: PageParams = {}): TelemetryReturnType {
     })
   }
   return { trackEvent, identifyUser, trackPage }
+}
+
+export function useTrackEvent(eventName: string, properties: Record<string, unknown>): void {
+  const { trackEvent } = useTelemetry()
+  React.useEffect(() => {
+    trackEvent(eventName, properties)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 }

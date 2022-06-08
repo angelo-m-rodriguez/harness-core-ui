@@ -20,6 +20,7 @@ import formatCost from '../formatCost'
 import { clusterInfoUtil, DEFAULT_GROUP_BY } from '../perspectiveUtils'
 import { generateGroupBy, getCloudProviderFromFields, getFiltersFromEnityMap } from '../anomaliesUtils'
 import { addBufferToValue, calculateNodes, isResourceConsistent } from '../recommendationUtils'
+import { flattenPerspectiveGridData } from '../downloadPerspectiveGridAsCsv'
 
 describe('test cases for recommendation utils', () => {
   test('test cases for CPU value formatter', () => {
@@ -224,7 +225,10 @@ describe('test cases for anomalyUtils', () => {
         awsInstancetype: 'Instance Type',
         awsUsageType: 'Usage Type',
         workloadType: 'Workload Type',
-        awsAccount: 'Account'
+        awsAccount: 'Account',
+        azureSubscriptionGuid: 'Subscription ID',
+        azureMeterCategory: 'Meter category',
+        azureResourceGroup: 'Resource group name'
       },
       {
         gcpProduct: 'Product1',
@@ -238,7 +242,10 @@ describe('test cases for anomalyUtils', () => {
         awsInstancetype: 'Instance Type1',
         awsUsageType: 'Usage Type1',
         workloadType: 'Workload Type1',
-        awsAccount: 'Account1'
+        awsAccount: 'Account1',
+        azureSubscriptionGuid: 'Subscription ID1',
+        azureMeterCategory: 'Meter category1',
+        azureResourceGroup: 'Resource group name1'
       }
     ]
 
@@ -289,5 +296,50 @@ describe('test cases for anomalyUtils', () => {
         values: ['Usage Type', 'Usage Type1']
       }
     ])
+
+    expect(getFiltersFromEnityMap(entityMapArray, CloudProvider.AZURE)).toEqual([
+      {
+        field: {
+          fieldId: 'azureSubscriptionGuid',
+          fieldName: 'Subscription ID',
+          identifier: 'AZURE',
+          identifierName: 'AZURE'
+        },
+        operator: 'IN',
+        type: 'VIEW_ID_CONDITION',
+        values: ['Subscription ID', 'Subscription ID1']
+      },
+      {
+        field: {
+          fieldId: 'azureMeterCategory',
+          fieldName: 'Meter category',
+          identifier: 'AZURE',
+          identifierName: 'AZURE'
+        },
+        operator: 'IN',
+        type: 'VIEW_ID_CONDITION',
+        values: ['Meter category', 'Meter category1']
+      },
+      {
+        field: {
+          fieldId: 'azureResourceGroup',
+          fieldName: 'Resource group name',
+          identifier: 'AZURE',
+          identifierName: 'AZURE'
+        },
+        operator: 'IN',
+        type: 'VIEW_ID_CONDITION',
+        values: ['Resource group name', 'Resource group name1']
+      }
+    ])
+  })
+})
+
+describe('Test Cases for flattenPerspectiveGridData Utils', () => {
+  test('Test flattenObject', () => {
+    expect(flattenPerspectiveGridData({ key1: 'val1', key2: { nestedKey3: 'val3', nestedKey4: null } })).toMatchObject({
+      key1: 'val1',
+      nestedKey3: 'val3'
+    })
   })
 })

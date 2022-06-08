@@ -12,7 +12,7 @@ import { useModalHook } from '@harness/use-modal'
 import { defaultTo, get, isEmpty, merge, noop } from 'lodash-es'
 import { useParams } from 'react-router-dom'
 import type { FormikErrors } from 'formik'
-import { useStrings } from 'framework/strings'
+import { String, useStrings } from 'framework/strings'
 import type { ModulePathParams, TemplateStudioPathProps } from '@common/interfaces/RouteInterfaces'
 import { Fields, ModalProps, TemplateConfigModal } from 'framework/Templates/TemplateConfigModal/TemplateConfigModal'
 import { TemplateContext } from '@templates-library/components/TemplateStudio/TemplateContext/TemplateContext'
@@ -26,6 +26,7 @@ import { DefaultNewTemplateId } from 'framework/Templates/templates'
 import { AppStoreContext } from 'framework/AppStore/AppStoreContext'
 import useCommentModal from '@common/hooks/CommentModal/useCommentModal'
 import { TemplateType } from '@templates-library/utils/templatesUtils'
+import { getTemplateNameWithLabel } from '@pipeline/utils/templateUtils'
 import css from './SaveTemplatePopover.module.scss'
 
 export interface GetErrorResponse extends Omit<Failure, 'errors'> {
@@ -99,11 +100,18 @@ export function SaveTemplatePopover({ getErrors }: SaveTemplatePopoverProps): Re
         try {
           const comment = !isGitSyncEnabled
             ? await getComments(
-                getString('pipeline.commentModal.heading', {
-                  name: template.name,
-                  version: template.versionLabel
+                getString('templatesLibrary.commentModal.heading', {
+                  name: getTemplateNameWithLabel(template)
                 }),
-                getString('pipeline.commentModal.info')
+                isEdit ? (
+                  <String
+                    stringID="templatesLibrary.commentModal.info"
+                    vars={{
+                      name: getTemplateNameWithLabel(template)
+                    }}
+                    useRichText={true}
+                  />
+                ) : undefined
               )
             : ''
           await saveAndPublish(template, { isEdit, comment })

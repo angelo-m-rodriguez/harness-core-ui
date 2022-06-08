@@ -11,7 +11,7 @@ import { defaultTo } from 'lodash-es'
 import { GroupedVirtuosoHandle, Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 import { Button, ButtonSize, ButtonVariation, Color, Container, Layout, SelectOption, Text } from '@harness/uicore'
 import { useStrings, String as StrTemplate } from 'framework/strings'
-import { MultiLogLine } from '@pipeline/components/LogsContent/components/MultiLogLine/MultiLogLine'
+
 import LogContentHeader from '../LogContentHeader/LogContentHeader'
 import LogContentToolbar from '../LogContentToolbar/LogContentToolbar'
 import ExecutionLogSearch from './ExecutionLogSearch'
@@ -19,6 +19,7 @@ import { reducer, useActionCreator } from './ExecutionLogState'
 import { defaultReducerState } from './ExecutionLog.constants'
 import { isPositiveNumber, isTimeRangeChanged } from '../../useLogContentHook.utils'
 import { ExecutionAndAPICallLogProps, LogTypes, TimeRange } from '../../useLogContentHook.types'
+import { MultiLogLine } from '../MultiLogLine/MultiLogLine'
 import { convertLogDataToLogLineData } from './ExecutionLog.utils'
 import type { State, Action, ActionType } from './ExecutionLog.types'
 import css from './ExecutionLog.module.scss'
@@ -150,6 +151,7 @@ const ExecutionLog: React.FC<ExecutionAndAPICallLogProps> = ({
                   lineNumber={index}
                   searchText={state.searchData.text}
                   currentSearchIndex={currentIndex}
+                  isFullScreen={isFullScreen}
                 />
               )}
             />

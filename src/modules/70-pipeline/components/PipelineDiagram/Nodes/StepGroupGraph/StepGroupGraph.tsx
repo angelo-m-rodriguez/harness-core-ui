@@ -115,7 +115,7 @@ function StepGroupGraph(props: StepGroupGraphProps): React.ReactElement {
         })
       )
     }
-  }, [treeRectangle, props.data])
+  }, [treeRectangle, props.data, templateTypes])
 
   useLayoutEffect(() => {
     if (state?.length) {

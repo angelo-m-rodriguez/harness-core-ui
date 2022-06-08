@@ -29,13 +29,6 @@ jest.mock('@pipeline/components/PipelineStudio/RightBar/RightBar', () => ({
   }
 }))
 
-jest.mock('@templates-library/components/TemplateDrawer/TemplateDrawer', () => ({
-  ...jest.requireActual('@templates-library/components/TemplateDrawer/TemplateDrawer'),
-  TemplateDrawer: () => {
-    return <div className="template-drawer-mock" />
-  }
-}))
-
 jest.mock('@templates-library/components/TemplateStudio/RightDrawer/RightDrawer', () => ({
   ...jest.requireActual('@templates-library/components/TemplateStudio/RightDrawer/RightDrawer'),
   RightDrawer: () => {

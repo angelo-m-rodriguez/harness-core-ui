@@ -22,7 +22,6 @@ import {
 import type { DynamicPopoverHandlerBinding } from '@common/components/DynamicPopover/DynamicPopover'
 import { moveStageToFocusDelayed } from '@pipeline/components/ExecutionStageDiagram/ExecutionStageDiagramUtils'
 import { PipelineOrStageStatus } from '@pipeline/components/PipelineSteps/AdvancedSteps/ConditionalExecutionPanel/ConditionalExecutionPanelUtils'
-import type { GetTemplateProps, GetTemplateResponse } from '@pipeline/utils/useTemplateSelector'
 import { EmptyStageName } from '../PipelineConstants'
 import type { PipelineContextInterface } from '../PipelineContext/PipelineContext'
 import {
@@ -63,7 +62,7 @@ export const getNodeListenersOld = (
 
   updateMoveStageDetails: (moveStageDetails: MoveStageDetailsType) => void,
   confirmMoveStage: () => void,
-  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>,
+  getTemplate: PipelineContextInterface['getTemplate'],
   stageMap: Map<string, StageState>,
   engine: DiagramEngine
 ): NodeModelListener => {
@@ -348,7 +347,7 @@ export const getLinkListernersOld = (
   openSplitView: boolean,
   updateMoveStageDetails: (moveStageDetails: MoveStageDetailsType) => void,
   confirmMoveStage: () => void,
-  getTemplate: (data: GetTemplateProps) => Promise<GetTemplateResponse>,
+  getTemplate: PipelineContextInterface['getTemplate'],
   stageMap: Map<string, StageState>
 ): LinkModelListener => {
   const {

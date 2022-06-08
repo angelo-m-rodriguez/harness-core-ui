@@ -38,7 +38,7 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { useToaster } from '@common/exports'
 import { CopyText } from '@common/components/CopyText/CopyText'
 import routes from '@common/RouteDefinitions'
-import { InvitationStatus, handleInvitationResponse } from '@rbac/utils/utils'
+import { InvitationStatus, handleInvitationResponse, isAccountBasicRole } from '@rbac/utils/utils'
 import { getDefaultRole, getDetailsUrl } from '@projects-orgs/utils/utils'
 import { isCommunityPlan } from '@common/utils/utils'
 import { useMutateAsGet } from '@common/hooks'
@@ -132,13 +132,16 @@ const Collaborators: React.FC<CollaboratorModalData> = props => {
   )
 
   const roles: RoleOption[] = defaultTo(
-    roleData?.data?.content?.map(roleOption => {
-      return {
-        label: roleOption.role.name,
-        value: roleOption.role.identifier,
-        managed: defaultTo(roleOption.harnessManaged, false)
+    roleData?.data?.content?.reduce((acc: RoleOption[], response) => {
+      if (!isAccountBasicRole(response.role.identifier)) {
+        acc.push({
+          label: response.role.name,
+          value: response.role.identifier,
+          managed: defaultTo(response.harnessManaged, false)
+        })
       }
-    }),
+      return acc
+    }, []),
     []
   )
 

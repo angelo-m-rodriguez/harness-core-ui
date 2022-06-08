@@ -111,45 +111,17 @@ exports[`<NoResultsView> tests should match snapshot when has search params 1`] 
     style="height: 100%;"
   >
     <div
-      class="Layout--vertical Layout--layout-spacing-xlarge StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
+      class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--flex StyledProps--flex-align-center-center"
       style="height: 100%;"
     >
-      <span
-        class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey400"
-        data-icon="template-library"
-      >
-        <svg
-          height="50"
-          viewBox="0 0 12 13"
-          width="50"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-        >
-          <defs>
-            <path
-              d="M1.8 13c.2 0 .4-.3.4-.6V.6C2.2.3 2 0 1.8 0H.4C.2 0 0 .3 0 .6v11.7c0 .4.2.7.4.7h1.4zm8.8 0l.9-.3c.3-.1.5-.4.4-.8L8.9.6C8.8.3 8.5.1 8.1.2l-.9.3c-.4 0-.5.4-.5.7l3.1 11.3c.1.4.5.6.8.5zm-5 0c.2 0 .4-.3.4-.7V.6c0-.3-.2-.6-.4-.6H4.2c-.2 0-.4.3-.4.6v11.7c0 .4.2.7.4.7h1.4z"
-              id="template-library_svg__a"
-            />
-          </defs>
-          <clippath
-            id="template-library_svg__b"
-          >
-            <use
-              overflow="visible"
-              xlink:href="#template-library_svg__a"
-            />
-          </clippath>
-          <path
-            clip-path="url(#template-library_svg__b)"
-            d="M-5-5h22v23H-5z"
-            fill="#25a6f7"
-          />
-        </svg>
-      </span>
+      <img
+        src="test-file-stub"
+        width="275px"
+      />
       <p
-        class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--font-size-medium StyledProps--color StyledProps--color-grey400"
+        class="StyledProps--font StyledProps--main StyledProps--font-size-normal StyledProps--color StyledProps--color-grey400"
       >
-        common.filters.noMatchingFilterData
+        common.filters.noResultsFound
       </p>
       <button
         class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-link Button--size Button--large"

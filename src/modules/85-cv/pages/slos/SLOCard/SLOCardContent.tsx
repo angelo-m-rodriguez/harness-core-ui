@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useState } from 'react'
-import { Layout, Container, Heading, PillToggle, PillToggleProps, Text, Card } from '@harness/uicore'
+import { Layout, Container, Heading, PillToggle, PillToggleProps, Text, Card, Icon } from '@harness/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { PageSpinner } from '@common/components'
 import { useStrings } from 'framework/strings'
@@ -87,6 +87,7 @@ const SLOCardContent: React.FC<SLOCardContentProps> = props => {
                 />
               )}
             </Container>
+
             <Layout.Horizontal spacing="medium" margin={{ top: 'small' }}>
               <Layout.Vertical spacing="medium" margin={{ top: 'small' }}>
                 <Container background={Color.GREY_100} className={stylesSLOAndSLICard}>
@@ -107,6 +108,12 @@ const SLOCardContent: React.FC<SLOCardContentProps> = props => {
                 </Container>
               </Layout.Vertical>
               <Container style={{ overflow: 'auto' }} className={css.flexGrowOne}>
+                <Layout.Horizontal margin={{ top: 'small' }}>
+                  <Icon margin={{ right: 'small' }} name="main-issue" color={Color.PRIMARY_7} />
+                  <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }}>
+                    {getString('cv.sloGraphUserHint')}
+                  </Text>
+                </Layout.Horizontal>
                 <SLOTargetChartWithChangeTimeline
                   {...props}
                   type={SLOCardToggleViews.SLO}
@@ -155,6 +162,12 @@ const SLOCardContent: React.FC<SLOCardContentProps> = props => {
                   />
                 )}
               </Container>
+              <Layout.Horizontal margin={{ top: 'small' }}>
+                <Icon margin={{ right: 'small' }} name="main-issue" color={Color.PRIMARY_7} />
+                <Text color={Color.GREY_600} font={{ variation: FontVariation.SMALL }}>
+                  {getString('cv.sloGraphUserHint')}
+                </Text>
+              </Layout.Horizontal>
               <SLOTargetChartWithChangeTimeline
                 {...props}
                 type={SLOCardToggleViews.ERROR_BUDGET}

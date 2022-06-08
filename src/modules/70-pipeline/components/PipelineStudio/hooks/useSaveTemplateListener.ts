@@ -25,14 +25,12 @@ export function useSaveTemplateListener(): void {
     state,
     state: {
       selectionState: { selectedStageId = '' },
-      templateTypes,
       pipelineView: { drawerData }
     },
     updatePipeline,
     updateStage,
     updatePipelineView,
-    getStageFromPipeline,
-    setTemplateTypes
+    getStageFromPipeline
   } = usePipelineContext()
   const { stage: selectedStage } = getStageFromPipeline(selectedStageId)
   const { pipeline, pipelineView } = state
@@ -89,10 +87,6 @@ export function useSaveTemplateListener(): void {
         break
       default:
         break
-    }
-    if (savedTemplate?.identifier && savedTemplate?.childType) {
-      templateTypes[savedTemplate.identifier] = savedTemplate.childType
-      setTemplateTypes(templateTypes)
     }
   }
 

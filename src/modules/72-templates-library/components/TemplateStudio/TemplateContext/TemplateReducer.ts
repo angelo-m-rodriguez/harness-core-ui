@@ -8,7 +8,12 @@
 import { clone } from 'lodash-es'
 import type { IDrawerProps } from '@blueprintjs/core'
 import type { GetDataError } from 'restful-react'
-import type { EntityGitDetails, EntityValidityDetails, NGTemplateInfoConfig } from 'services/template-ng'
+import type {
+  EntityGitDetails,
+  EntityValidityDetails,
+  ErrorNodeSummary,
+  NGTemplateInfoConfig
+} from 'services/template-ng'
 import {
   ActionReturnType,
   DrawerTypes,
@@ -51,6 +56,7 @@ export interface TemplateReducerState {
   entityValidityDetails: EntityValidityDetails
   templateYaml: string
   templateError?: GetDataError<Failure | Error> | null
+  templateInputsErrorNodeSummary?: ErrorNodeSummary
 }
 
 export const initialState: TemplateReducerState = {

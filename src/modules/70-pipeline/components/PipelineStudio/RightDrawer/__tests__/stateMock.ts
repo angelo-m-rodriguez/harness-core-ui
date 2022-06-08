@@ -6,7 +6,6 @@
  */
 
 import { MultiTypeInputType } from '@wings-software/uicore'
-import { TemplateDrawerTypes } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
 import { Scope } from '@common/interfaces/SecretsInterface'
 import type { PipelineContextInterface } from '../../PipelineContext/PipelineContext'
 
@@ -165,18 +164,6 @@ const stateMock = {
       }
     }
   },
-  templateView: {
-    isTemplateDrawerOpened: true,
-    templateDrawerData: {
-      type: TemplateDrawerTypes.UseTemplate,
-      data: {
-        selectorData: {
-          templateType: 'Step',
-          childTypes: ['Http']
-        }
-      }
-    }
-  },
   schemaErrors: false,
   gitDetails: {},
   isLoading: false,
@@ -230,6 +217,7 @@ const pipelineContextMock: PipelineContextInterface = {
   view: 'VISUAL',
   scope: Scope.PROJECT,
   updateGitDetails: () => new Promise<void>(() => undefined),
+  updatePipelineStoreMetadata: () => new Promise<void>(() => undefined),
   updateEntityValidityDetails: () => new Promise<void>(() => undefined),
   setView: () => void 0,
   runPipeline: () => undefined,
@@ -237,7 +225,6 @@ const pipelineContextMock: PipelineContextInterface = {
   renderPipelineStage: jest.fn(),
   fetchPipeline: () => new Promise<void>(() => undefined),
   updatePipelineView: jest.fn(),
-  updateTemplateView: jest.fn(),
   updateStage: jest.fn().mockResolvedValue({}),
   getStageFromPipeline: () => ({ stage: stateMock.pipeline.stages[0] as any, parent: undefined }),
   setYamlHandler: () => undefined,
@@ -249,7 +236,8 @@ const pipelineContextMock: PipelineContextInterface = {
   setSelectedSectionId: (_selectedSectionId: string | undefined) => undefined,
   setSelection: jest.fn(),
   getStagePathFromPipeline: () => '',
-  setTemplateTypes: jest.fn()
+  setTemplateTypes: jest.fn(),
+  getTemplate: jest.fn()
 }
 
 export const updateStageFnArg1 = {

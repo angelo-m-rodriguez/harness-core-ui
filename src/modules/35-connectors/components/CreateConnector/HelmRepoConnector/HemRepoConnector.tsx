@@ -53,6 +53,7 @@ const HelmRepoConnector: React.FC<CreateHelmConnectorProps> = props => {
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
         mock={props.mock}
+        helpPanelReferenceId="HTTPHelmServerOverview"
       />
       <StepHelmAuth
         name={getString('details')}
@@ -72,6 +73,7 @@ const HelmRepoConnector: React.FC<CreateHelmConnectorProps> = props => {
         onConnectorCreated={props.onConnectorCreated}
         connectorInfo={props.connectorInfo}
         gitDetails={props.gitDetails}
+        helpPanelReferenceId="ConnectorDelegatesSetup"
       />
       <VerifyOutOfClusterDelegate
         name={getString('connectors.stepThreeName')}
@@ -81,6 +83,7 @@ const HelmRepoConnector: React.FC<CreateHelmConnectorProps> = props => {
         type={Connectors.HttpHelmRepo}
         onClose={props.onClose}
         stepIndex={TESTCONNECTION_STEP_INDEX}
+        helpPanelReferenceId="ConnectorTest"
       />
     </StepWizard>
   )

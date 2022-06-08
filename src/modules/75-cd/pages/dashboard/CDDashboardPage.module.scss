@@ -43,7 +43,7 @@ $header-height: 80px;
 }
 .healthCardTitle {
   font-size: 16px !important;
-  color: #000000 !important;
+  color: var(--grey-1000) !important;
   margin-left: var(--spacing-small);
   margin-bottom: var(--spacing-small) !important;
   font-weight: 600 !important;
@@ -52,7 +52,7 @@ $header-height: 80px;
 }
 
 .chartContainer {
-  background: #ffffff;
+  background: var(--grey-0);
   /* Light / Elevation 02 */
 
   box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.04), 0px 2px 4px rgba(96, 97, 112, 0.16);
@@ -71,10 +71,10 @@ $header-height: 80px;
     grid-row: 1/3;
   }
   .healthCard {
-    box-shadow: 0px 0.5px 2px 0px #60617029;
+    box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.04), 0px 2px 4px rgba(96, 97, 112, 0.16);
     padding: var(--spacing-medium) !important;
     border-radius: 4px;
-    background-color: white !important;
+    background-color: var(--grey-0) !important;
     min-width: 0;
     .cardHeader {
       margin-bottom: 12px !important;
@@ -112,7 +112,7 @@ $header-height: 80px;
 
 .cdCustomIcon {
   margin-bottom: var(--spacing-xsmall) !important;
-  border: 1px solid #d9dae5;
+  border: 1px solid var(--grey-200);
   border-radius: 4px;
 }
 
@@ -128,9 +128,9 @@ $header-height: 80px;
 }
 
 .emptyView {
-  width: 866px;
-  height: 92%;
-  background: #ffffff !important;
+  width: 100%;
+  height: 90%;
+  background: var(--grey-0) !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,7 +156,7 @@ $header-height: 80px;
   opacity: 0.6;
   /* Gray Scale / Gray Scale 200 */
 
-  border: 1px solid #d9dae6;
+  border: 1px solid var(--grey-200);
 }
 
 .totalDepCard {

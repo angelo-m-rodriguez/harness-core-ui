@@ -45,11 +45,13 @@ export const TargetSettings: FC<TargetSettingsProps> = ({ target }) => {
                 {getString('cf.targetDetail.attributes', { counter: Object.keys(target?.attributes || {}).length + 2 })}
               </Text>
             }
+            panelClassName={css.tabPanel}
             panel={<TargetAttributes target={target} />}
           />
           <Tab
             id="segments"
             title={<Text className={css.tabTitle}>{getString('cf.shared.segments')}</Text>}
+            panelClassName={css.tabPanel}
             panel={<TargetGroups target={target} />}
           />
         </Tabs>

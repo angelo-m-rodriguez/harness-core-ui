@@ -18,6 +18,10 @@
     //   margin-right: 1.7rem;
     // }
   }
+
+  .disableCursor {
+    cursor: not-allowed;
+  }
   .cardContent {
     margin-left: var(--spacing-medium) !important;
   }
@@ -50,7 +54,7 @@
 
     /* Gray Scale / Gray Scale 500 */
 
-    color: #6b6d85;
+    color: var(--grey-500);
   }
   :global {
     .bp3-card {

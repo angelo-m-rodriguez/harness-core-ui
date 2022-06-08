@@ -13,6 +13,7 @@ import { ManifestSourceBase, ManifestSourceRenderProps } from '@cd/factory/Manif
 import { useStrings } from 'framework/strings'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { FormMultiTypeCheckboxField } from '@common/components'
+import List from '@common/components/List/List'
 import { isFieldRuntime } from '../../K8sServiceSpecHelper'
 import { isFieldfromTriggerTabDisabled } from '../ManifestSourceUtils'
 import ManifestGitStoreRuntimeFields from '../ManifestSourceRuntimeFields/ManifestGitStoreRuntimeFields'
@@ -68,6 +69,20 @@ const Content = (props: ManifestSourceRenderProps): React.ReactElement => {
               allowableTypes
             }}
             label={getString('pluginPath')}
+          />
+        </div>
+      )}
+      {isFieldRuntime(`${manifestPath}.spec.patchesPaths`, template) && (
+        <div className={css.verticalSpacingInput}>
+          <List
+            labelClassName={css.listLabel}
+            label={getString('pipeline.manifestTypeLabels.KustomizePatches')}
+            name={`${path}.${manifestPath}.spec.patchesPaths`}
+            placeholder={getString('pipeline.manifestType.manifestPathPlaceholder')}
+            disabled={isFieldDisabled(`${manifestPath}.spec.patchesPaths`)}
+            style={{ marginBottom: 'var(--spacing-small)' }}
+            expressions={expressions}
+            isNameOfArrayType
           />
         </div>
       )}

@@ -65,6 +65,7 @@ export function ArtifactConnector(props: StepProps<ConnectorConfigDTO> & Artifac
   const { getString } = useStrings()
   const connectorType = ArtifactToConnectorMap[selectedArtifact as ArtifactType]
   const selectedConnectorLabel = ArtifactConnectorLabelMap[selectedArtifact as ArtifactType]
+  const selectedConnectorTooltip = ArtifactToConnectorMap[selectedArtifact as ArtifactType]
 
   const newConnectorLabel = `${getString('newLabel')} ${selectedConnectorLabel} ${getString('connector')}`
 
@@ -114,6 +115,7 @@ export function ArtifactConnector(props: StepProps<ConnectorConfigDTO> & Artifac
               >
                 <FormMultiTypeConnectorField
                   name="connectorId"
+                  tooltipProps={{ dataTooltipId: `connectorId_${selectedConnectorTooltip}` }}
                   label={`${selectedConnectorLabel} ${getString('connector')}`}
                   placeholder={`${getString('select')} ${selectedConnectorLabel} ${getString('connector')}`}
                   accountIdentifier={accountId}

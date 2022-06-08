@@ -129,7 +129,8 @@ export const ExecutionStatusIconMap: Record<ExecutionStatus, IconName> = {
   InterventionWaiting: 'waiting',
   ApprovalWaiting: 'waiting',
   Pausing: 'pause',
-  Waiting: 'waiting'
+  Waiting: 'waiting',
+  InputWaiting: 'waiting'
 }
 
 /**
@@ -702,6 +703,11 @@ export function getExecutionPipelineNodeType(stepType?: string): ExecutionPipeli
   return ExecutionPipelineNodeType.NORMAL
 }
 
+export const cloudFormationSteps: StepType[] = [
+  StepType.CloudFormationCreateStack,
+  StepType.CloudFormationDeleteStack,
+  StepType.CloudFormationRollbackStack
+]
 export function getIconDataBasedOnType(nodeData?: ExecutionNode): {
   icon: IconName
   iconSize: number
@@ -719,9 +725,10 @@ export function getIconDataBasedOnType(nodeData?: ExecutionNode): {
     const icon = StepTypeIconsMap[nodeData?.stepType as NodeType] || factory.getStepIcon(nodeData?.stepType || '')
     return {
       icon,
-      iconSize: 20
+      iconSize: cloudFormationSteps.includes(nodeData.stepType as StepType) ? 32 : 20
     }
   }
+
   return {
     icon: 'cross',
     iconSize: 20
@@ -791,22 +798,22 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
       const nextIds: string[] | undefined = nodeDetails?.edgeLayoutList?.nextIds
       if (nodeDetails?.nodeType === NodeTypes.Parallel && currentNodeChildren && currentNodeChildren.length > 1) {
         const firstParallelNode = layoutNodeMap[currentNodeChildren[0]]
-        const restChildNodes = currentNodeChildren.slice(1) // response?.children?.push({ parallel: currentNodeChildren.map(item => layoutNodeMap[item]) })
+        const restChildNodes = currentNodeChildren.slice(1)
         const parentNode = {
-          id: firstParallelNode?.nodeUuid as string, //string
-          identifier: firstParallelNode?.nodeIdentifier as string, //string
-          type: firstParallelNode?.nodeType as string, //string
-          name: firstParallelNode?.name as string, //string
-          icon: 'cross', //IconName
-          data: firstParallelNode as any, //StageElementWrapperConfig | ExecutionWrapperConfig
+          id: firstParallelNode?.nodeUuid as string,
+          identifier: firstParallelNode?.nodeIdentifier as string,
+          type: firstParallelNode?.nodeType as string,
+          name: firstParallelNode?.name as string,
+          icon: 'cross',
+          data: firstParallelNode as any,
           children: restChildNodes.map(item => {
             const nodeDataItem = layoutNodeMap[item]
             return {
-              id: nodeDataItem.nodeUuid as string, //string
-              identifier: nodeDataItem.nodeIdentifier as string, //string
-              type: nodeDataItem.nodeType as string, //string
-              name: nodeDataItem.name as string, //string
-              icon: 'cross', //IconName
+              id: nodeDataItem.nodeUuid as string,
+              identifier: nodeDataItem.nodeIdentifier as string,
+              type: nodeDataItem.nodeType as string,
+              name: nodeDataItem.name as string,
+              icon: 'cross',
               data: nodeDataItem as any,
               children: []
             }
@@ -820,17 +827,26 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         currentNodeChildren &&
         layoutNodeMap[currentNodeChildren[0]]
       ) {
-        ;(nodeDetails as any)?.children?.push({ stage: layoutNodeMap[currentNodeChildren[0]] })
+        const nodedata = layoutNodeMap[currentNodeChildren[0]]
+        response.push({
+          id: nodedata.nodeUuid as string,
+          identifier: nodedata.nodeIdentifier as string,
+          type: nodedata.nodeType as string,
+          name: nodedata.name as string,
+          icon: 'cross',
+          data: nodedata as any,
+          children: []
+        })
         nodeDetails = layoutNodeMap[nodeDetails.edgeLayoutList?.nextIds?.[0] || '']
       } else {
         response.push({
-          id: nodeDetails?.nodeUuid as string, //string
-          identifier: nodeDetails?.nodeIdentifier as string, //string
-          type: nodeDetails?.nodeType as string, //string
-          name: nodeDetails?.name as string, //string
-          icon: 'cross', //IconName
-          data: nodeDetails as any, //StageElementWrapperConfig | ExecutionWrapperConfig
-          children: [] //PipelineGraphState[]
+          id: nodeDetails?.nodeUuid as string,
+          identifier: nodeDetails?.nodeIdentifier as string,
+          type: nodeDetails?.nodeType as string,
+          name: nodeDetails?.name as string,
+          icon: 'cross',
+          data: nodeDetails as any,
+          children: []
         })
         if (nextIds && nextIds.length === 1) {
           nodeDetails = layoutNodeMap[nextIds[0]]

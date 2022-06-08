@@ -6,14 +6,22 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { Container, PageBody, PageHeader, Text } from '@wings-software/uicore'
+import { Container, PageBody, PageHeader, Text, getErrorInfoFromErrorObject } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import { useModalHook } from '@harness/use-modal'
 import { Drawer, Position } from '@blueprintjs/core'
+import { defaultTo } from 'lodash-es'
 import { useStrings } from 'framework/strings'
+import { useToaster } from '@common/exports'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { CcmMetaData, QlceViewTimeFilterOperator, useFetchCcmMetaDataQuery } from 'services/ce/services'
-import { AnomalyData, AnomalySummary, CCMStringFilter, useGetAnomalyWidgetsData, useListAnomalies } from 'services/ce'
+import {
+  AnomalyData,
+  AnomalyFilterProperties,
+  AnomalySummary,
+  useGetAnomalyWidgetsData,
+  useListAnomalies
+} from 'services/ce'
 import AnomaliesSummary from '@ce/components/AnomaliesSummary/AnomaliesSummary'
 import AnomalyFilters from '@ce/components/AnomaliesFilter/AnomaliesFilter'
 import AnomaliesListGridView from '@ce/components/AnomaliesListView/AnomaliesListView'
@@ -31,26 +39,6 @@ import type { TimeRangeFilterType } from '@ce/types'
 import AnomaliesSettings from '@ce/components/AnomaliesSettings/AnomaliesSettings'
 import { PAGE_NAMES } from '@ce/TrackingEventsConstants'
 import { useTelemetry } from '@common/hooks/useTelemetry'
-
-const getFilters = (filters: Record<string, Record<string, string>>, searchText: string) => {
-  const updatedFilters = Object.values(filters).map(item => {
-    return {
-      field: item.field,
-      operator: item.operator,
-      values: [item.value]
-    }
-  })
-
-  if (searchText) {
-    updatedFilters.push({
-      field: 'ALL',
-      operator: 'LIKE',
-      values: [searchText]
-    })
-  }
-
-  return updatedFilters
-}
 
 const getTimeFilters = (from: number, to: number) => {
   return [
@@ -72,6 +60,7 @@ interface SortByObjInterface {
 
 const AnomaliesOverviewPage: React.FC = () => {
   const { getString } = useStrings()
+  const { showError } = useToaster()
   const [searchText, setSearchText] = React.useState('')
   const { accountId } = useParams<AccountPathProps>()
   const [listData, setListData] = useState<AnomalyData[] | null>(null)
@@ -79,7 +68,7 @@ const AnomaliesOverviewPage: React.FC = () => {
   const [perspectiveAnomaliesData, setPerspectiveANomaliesData] = useState([])
   const [cloudProvidersWiseData, setCloudProvidersWiseData] = useState([])
   const [statusWiseData, setStatusWiseData] = useState([])
-  const [filters, setFilters] = useState({})
+  const [selectedFilterProperties, setSelectedFilterProperties] = useState<AnomalyFilterProperties>({})
   const { trackEvent } = useTelemetry()
 
   const [timeRange, setTimeRange] = useQueryParamsState<TimeRangeFilterType>('timeRange', {
@@ -126,36 +115,14 @@ const AnomaliesOverviewPage: React.FC = () => {
   const [ccmMetaResult] = useFetchCcmMetaDataQuery()
   const { data: ccmData, fetching: isFetchingCcmMetaData } = ccmMetaResult
 
-  /* istanbul ignore next */
-  const setAnomaliesFilters = (fieldName: string, operator: string, value: string) => {
-    if (value) {
-      setFilters(prevFilters => {
-        return {
-          ...prevFilters,
-          [fieldName]: {
-            field: fieldName,
-            operator,
-            value
-          }
-        }
-      })
-    } else {
-      setFilters(prevFilters => {
-        const updatedFilters = { ...prevFilters }
-        delete updatedFilters[fieldName as keyof typeof updatedFilters]
-        return updatedFilters
-      })
-    }
-  }
+  const ccmMetaData = defaultTo(ccmData?.ccmMetaData, {}) as CcmMetaData
 
   useEffect(() => {
     const getList = async () => {
       try {
         const response = await getAnomaliesList({
-          filter: {
-            stringFilters: getFilters(filters, searchText) as CCMStringFilter[],
-            timeFilters: getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to))
-          },
+          ...selectedFilterProperties,
+          timeFilters: getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to)),
           groupBy: [],
           orderBy: [
             {
@@ -163,42 +130,44 @@ const AnomaliesOverviewPage: React.FC = () => {
               order: sortByObj.order === 'ASC' ? 'ASCENDING' : 'DESCENDING'
             }
           ],
+          searchText: [searchText],
+          filterType: 'Anomaly',
           limit: 100,
           offset: 0
         })
         setListData(response?.data as AnomalyData[])
       } catch (error) {
-        // console.log('AnomaliesOverviewPage: Error in fetching the anomalies list', error)
+        showError(getErrorInfoFromErrorObject(error))
       }
     }
 
     getList()
-  }, [filters, sortByObj, getAnomaliesList, searchText, timeRange.from, timeRange.to])
+  }, [JSON.stringify(selectedFilterProperties), sortByObj, getAnomaliesList, searchText, timeRange.from, timeRange.to])
 
   useEffect(() => {
     const getSummary = async () => {
       try {
         const response = await getAnomalySummary({
-          filter: {
-            stringFilters: getFilters(filters, searchText) as CCMStringFilter[],
-            timeFilters: getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to))
-          }
+          ...selectedFilterProperties,
+          searchText: [searchText],
+          timeFilters: getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to)),
+          filterType: 'Anomaly'
         })
         const { data } = response
         parseSummaryData(data)
       } catch (error) {
-        // console.log('AnomaliesOverviewPage: Error in fetching summary data', error)
+        showError(getErrorInfoFromErrorObject(error))
       }
     }
     getSummary()
-  }, [filters, getAnomalySummary, searchText, timeRange.from, timeRange.to])
+  }, [JSON.stringify(selectedFilterProperties), getAnomalySummary, searchText, timeRange.from, timeRange.to])
 
   useEffect(() => {
     if (listData && costData) {
       trackEvent(PAGE_NAMES.ANOMALY_LANDING_PAGE, {
         count: listData.length,
         totalCostImpact: costData?.anomalousCost,
-        stringFilters: getFilters(filters, searchText) as CCMStringFilter[],
+        ...selectedFilterProperties,
         timeFilters: getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to))
       })
     }
@@ -255,12 +224,13 @@ const AnomaliesOverviewPage: React.FC = () => {
         breadcrumbs={<NGBreadcrumbs />}
       />
       <AnomalyFilters
-        filters={filters}
-        setFilters={setAnomaliesFilters}
-        timeRange={timeRange}
+        applyFilters={(properties: AnomalyFilterProperties) => {
+          setSelectedFilterProperties(properties)
+        }}
+        ccmMetaData={ccmMetaData}
         setTimeRange={setTimeRange}
+        timeRange={timeRange}
       />
-
       <PageBody loading={isListFetching || isFetchingCcmMetaData || isSummaryDataFetching}>
         <Container
           padding={{
@@ -276,7 +246,7 @@ const AnomaliesOverviewPage: React.FC = () => {
             perspectiveAnomaliesData={perspectiveAnomaliesData}
             cloudProvidersWiseData={cloudProvidersWiseData}
             statusWiseData={statusWiseData}
-            allDefaultProviders={(ccmData?.ccmMetaData || {}) as CcmMetaData}
+            allDefaultProviders={ccmMetaData}
             isAnomaliesSummaryError={Boolean(isAnomaliesSummaryError)}
           />
           <AnomaliesListGridView

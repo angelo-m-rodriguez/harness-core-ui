@@ -11,6 +11,9 @@ import { Container, Formik, FormikForm, Button, Layout, FormInput } from '@wings
 import { useStrings } from 'framework/strings'
 import type { ConnectorConfigDTO } from 'services/cd-ng'
 import { buildDynatracePayload } from '@connectors/pages/connectors/utils/ConnectorUtils'
+import { Connectors } from '@connectors/constants'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import type { ConnectionConfigProps } from '../CommonCVConnector/constants'
 import { StepDetailsHeader } from '../CommonCVConnector/components/CredentialsStepHeader/CredentialsStepHeader'
 import { cvConnectorHOC } from '../CommonCVConnector/CVConnectorHOC'
@@ -29,6 +32,12 @@ export function DynatraceConfigStep(props: ConnectionConfigProps): JSX.Element {
   })
   const secretValue = prevStepData?.apiTokenRef?.referenceString || prevStepData?.spec?.apiTokenRef
 
+  const { trackEvent } = useTelemetry()
+  useTrackEvent(ConnectorActions.CreateConnectorLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Dynatrace
+  })
+
   return (
     <Container className={css.credentials}>
       <StepDetailsHeader connectorTypeLabel={getString('connectors.dynatraceLabel')} />
@@ -39,7 +48,13 @@ export function DynatraceConfigStep(props: ConnectionConfigProps): JSX.Element {
           url: Yup.string().trim().required(getString('connectors.dynatrace.urlValidation')),
           apiTokenRef: Yup.string().trim().required(getString('connectors.dynatrace.apiTokenValidation'))
         })}
-        onSubmit={(formData: ConnectorConfigDTO) => nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })}
+        onSubmit={(formData: ConnectorConfigDTO) => {
+          trackEvent(ConnectorActions.CreateConnectorSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.Dynatrace
+          })
+          nextStep?.({ ...connectorInfo, ...prevStepData, ...formData })
+        }}
       >
         {formikProps => (
           <FormikForm className={css.form}>

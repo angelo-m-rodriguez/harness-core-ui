@@ -40,6 +40,7 @@
       "@ci/*": ["modules/75-ci/*"],
       "@cv/*": ["modules/85-cv/*"],
       "@ce/*": ["modules/75-ce/*"],
+      "@gitops/*": ["modules/90-gitops/*"],
       "@wings-software/*": ["../node_modules/@harness/*"]
     }
   },

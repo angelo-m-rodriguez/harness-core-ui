@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "key": "clustername",
+      "values": ["Cluster Name 1", "Cluster Name 2", "Cluster Name 3"]
+    },
+    {
+      "key": "namespace",
+      "values": ["del-play", "ce-prod-274307"]
+    },
+    {
+      "key": "workloadname",
+      "values": ["Network Packet Mirroring: Data Processing Charge in Americas", "Analysis", "Metri"]
+    },
+    {
+      "key": "gcpproject",
+      "values": ["uat-setup-261723", "pr10406a87045145c3"]
+    },
+    {
+      "key": "gcpproduct",
+      "values": ["Redis Labs Redis Enterprise Cloud", "BigQuery"]
+    },
+    {
+      "key": "gcpskudescription",
+      "values": ["Network Internet Egress from Americas to Americas", "Cache Egress to North America"]
+    },
+    {
+      "key": "awsaccount",
+      "values": ["1", "2", "3"]
+    },
+    {
+      "key": "awsservice",
+      "values": ["Amazon Elastic Compute Cloud"]
+    },
+    {
+      "key": "awsusagetype",
+      "values": ["BoxUsage:t3.xlarge"]
+    }
+  ]
+}

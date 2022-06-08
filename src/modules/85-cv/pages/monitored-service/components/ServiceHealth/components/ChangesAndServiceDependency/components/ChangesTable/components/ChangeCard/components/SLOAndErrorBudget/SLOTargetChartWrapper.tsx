@@ -6,7 +6,7 @@
  */
 
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { defaultTo, inRange } from 'lodash-es'
+import { defaultTo } from 'lodash-es'
 import { useParams } from 'react-router-dom'
 import { Color, Container, FontVariation, Heading, Icon, PageError, PageSpinner, Text } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
@@ -38,7 +38,7 @@ const SLOTargetChartWrapper: React.FC<SLOTargetChartWrapperProps> = ({
   const [markerPosition, setMarkerPosition] = useState<number>()
 
   const { data, loading, error, refetch } = useGetSLODetails({
-    identifier: selectedSLO.identifier,
+    identifier: selectedSLO.identifier ?? '',
     queryParams: {
       accountId,
       orgIdentifier,
@@ -67,26 +67,17 @@ const SLOTargetChartWrapper: React.FC<SLOTargetChartWrapperProps> = ({
     }
   }, [endTime, eventTime, loading, serviceLevelObjective, startTime])
 
-  const {
-    sloPerformanceTrend = [],
-    errorBudgetBurndown = [],
-    currentPeriodStartTime = 0,
-    currentPeriodEndTime = 0
-  } = serviceLevelObjective ?? {}
+  const { sloPerformanceTrend = [], errorBudgetBurndown = [] } = serviceLevelObjective ?? {}
 
   const { dataPoints, minXLimit, maxXLimit } = useMemo(
     () => getDataPointsWithMinMaxXLimit(type === SLOCardToggleViews.SLO ? sloPerformanceTrend : errorBudgetBurndown),
     [type, sloPerformanceTrend, errorBudgetBurndown]
   )
 
-  const isInRangeOfSLOCycle =
-    inRange(startTime, currentPeriodStartTime - 1, currentPeriodEndTime + 1) ||
-    inRange(endTime, currentPeriodStartTime - 1, currentPeriodEndTime + 1)
-
   return (
     <Container height={250}>
       <Heading level={2} font={{ variation: FontVariation.SMALL_SEMI }} color={Color.BLACK}>
-        {selectedSLO.title}
+        {selectedSLO.name}
       </Heading>
       {loading && (
         <Container height="100%" flex={{ justifyContent: 'center' }}>
@@ -97,14 +88,14 @@ const SLOTargetChartWrapper: React.FC<SLOTargetChartWrapperProps> = ({
       {!loading && !error && serviceLevelObjective && (
         <div>
           <div ref={mainRef} style={{ position: 'relative' }}>
-            {!isInRangeOfSLOCycle && (
+            {selectedSLO.outOfRange && (
               <Container className={css.noSloData}>
                 <Text font={{ variation: FontVariation.SMALL }} color={Color.GREY_600} className={css.text}>
                   {getString('cv.noDataAvailableForTheCurrentSLOCycle')}
                 </Text>
               </Container>
             )}
-            {isInRangeOfSLOCycle && serviceLevelObjective.recalculatingSLI && (
+            {!selectedSLO.outOfRange && serviceLevelObjective.recalculatingSLI && (
               <PageSpinner
                 className={cssCVSLOsListingPage.sloCardSpinner}
                 message={getString(
@@ -114,7 +105,7 @@ const SLOTargetChartWrapper: React.FC<SLOTargetChartWrapperProps> = ({
                 )}
               />
             )}
-            {isInRangeOfSLOCycle && !!markerPosition && (
+            {!selectedSLO.outOfRange && !!markerPosition && (
               <div style={{ position: 'absolute', top: 20 }}>
                 <ColumnChartEventMarker
                   columnHeight={110}

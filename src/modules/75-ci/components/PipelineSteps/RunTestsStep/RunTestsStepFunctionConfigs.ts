@@ -35,6 +35,14 @@ export const transformValuesFieldsConfig = [
     type: TransformValuesTypes.Language
   },
   {
+    name: 'spec.buildEnvironment',
+    type: TransformValuesTypes.BuildEnvironment
+  },
+  {
+    name: 'spec.frameworkVersion',
+    type: TransformValuesTypes.FrameworkVersion
+  },
+  {
     name: 'spec.buildTool',
     type: TransformValuesTypes.BuildTool
   },
@@ -44,6 +52,10 @@ export const transformValuesFieldsConfig = [
   },
   {
     name: 'spec.packages',
+    type: TransformValuesTypes.Text
+  },
+  {
+    name: 'spec.namespaces',
     type: TransformValuesTypes.Text
   },
   {
@@ -100,7 +112,10 @@ export const transformValuesFieldsConfig = [
   }
 ]
 
-export const getEditViewValidateFieldsConfig = (buildInfrastructureType: K8sDirectInfraYaml['type']) => [
+export const getEditViewValidateFieldsConfig = (
+  buildInfrastructureType: K8sDirectInfraYaml['type'],
+  isLanguageCsharp: boolean
+) => [
   {
     name: 'identifier',
     type: ValidationFieldTypes.Identifier,
@@ -132,6 +147,18 @@ export const getEditViewValidateFieldsConfig = (buildInfrastructureType: K8sDire
     isRequired: true
   },
   {
+    name: 'spec.buildEnvironment',
+    type: ValidationFieldTypes.Text,
+    label: 'ci.runTestsStep.buildEnvironment',
+    isRequired: isLanguageCsharp
+  },
+  {
+    name: 'spec.frameworkVersion',
+    type: ValidationFieldTypes.Text,
+    label: 'ci.runTestsStep.frameworkVersion',
+    isRequired: isLanguageCsharp
+  },
+  {
     name: 'spec.buildTool',
     type: ValidationFieldTypes.Text,
     label: 'buildToolLabel',
@@ -147,6 +174,12 @@ export const getEditViewValidateFieldsConfig = (buildInfrastructureType: K8sDire
     name: 'spec.packages',
     type: ValidationFieldTypes.Text,
     label: 'packagesLabel'
+  },
+  {
+    name: 'spec.namespaces',
+    type: ValidationFieldTypes.Text,
+    label: 'ci.runTestsStep.namespaces',
+    isRequired: isLanguageCsharp
   },
   {
     name: 'spec.reportPaths',
@@ -196,6 +229,24 @@ export function getInputSetViewValidateFieldsConfig(
       isRequired
     },
     {
+      name: 'spec.buildEnvironment',
+      type: ValidationFieldTypes.Text,
+      label: 'ci.runTestsStep.buildEnvironment',
+      isRequired
+    },
+    {
+      name: 'spec.frameworkVersion',
+      type: ValidationFieldTypes.Text,
+      label: 'ci.runTestsStep.frameworkVersion',
+      isRequired
+    },
+    {
+      name: 'spec.buildTool',
+      type: ValidationFieldTypes.Text,
+      label: 'buildToolLabel',
+      isRequired
+    },
+    {
       name: 'spec.args',
       type: ValidationFieldTypes.Text,
       label: 'argsLabel',
@@ -205,6 +256,12 @@ export function getInputSetViewValidateFieldsConfig(
       name: 'spec.packages',
       type: ValidationFieldTypes.Text,
       label: 'packagesLabel'
+    },
+    {
+      name: 'spec.namespaces',
+      type: ValidationFieldTypes.Text,
+      label: 'ci.runTestsStep.namespaces',
+      isRequired
     },
     {
       name: 'spec.reports.spec.paths',

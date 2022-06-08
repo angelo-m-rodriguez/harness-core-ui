@@ -156,14 +156,18 @@ const RenderInstances: Renderer<CellProps<TableRowData>> = ({
       {Array(Math.min(instanceCount, TOTAL_VISIBLE_INSTANCES))
         .fill(null)
         .map((_, index) => (
-          <Popover interactionKind={PopoverInteractionKind.CLICK} key={index}>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            key={index}
+            modifiers={{ preventOverflow: { escapeWithReference: true } }}
+          >
             <Container
               className={css.hex}
               width={18}
               height={18}
               background={Color.PRIMARY_3}
               margin={{ left: 'xsmall', right: 'xsmall', top: 'xsmall', bottom: 'xsmall' }}
-            ></Container>
+            />
             <ActiveServiceInstancePopover buildId={buildId} envId={envId} instanceNum={index} />
           </Popover>
         ))}

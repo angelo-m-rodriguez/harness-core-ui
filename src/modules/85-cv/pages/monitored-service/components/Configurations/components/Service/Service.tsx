@@ -188,7 +188,6 @@ function Service(
                 <MonitoredServiceOverview
                   formikProps={formik}
                   isEdit={isEdit}
-                  isTemplate={isTemplate}
                   onChangeMonitoredServiceType={type => {
                     if (type === formik.values.type) {
                       return
@@ -219,7 +218,7 @@ function Service(
                 <MonitoredServiceNotificationsContainer
                   setFieldValue={formik?.setFieldValue}
                   notificationRuleRefs={formik?.values?.notificationRuleRefs}
-                  identifier={formik?.values?.identifier}
+                  identifier={identifier}
                 />
               </>
             )}

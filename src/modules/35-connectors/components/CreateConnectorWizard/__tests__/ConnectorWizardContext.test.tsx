@@ -7,6 +7,7 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
+import { TestWrapper } from '@common/utils/testUtils'
 import { ConnectorWizardContextProvider, useConnectorWizard } from '../ConnectorWizardContext'
 
 jest.mock('@harness/help-panel', () => ({
@@ -24,16 +25,6 @@ const TestComponent: React.FC = () => {
   return <div />
 }
 
-const TestComponentWithExtraWidth: React.FC = () => {
-  useConnectorWizard({
-    helpPanel: {
-      referenceId: 'testRef',
-      contentWidth: 1200
-    }
-  })
-  return <div />
-}
-
 describe('connector wizard context test', () => {
   test('connector wizard context provider without help panel', () => {
     const { container } = render(<ConnectorWizardContextProvider>child</ConnectorWizardContextProvider>)
@@ -41,21 +32,30 @@ describe('connector wizard context test', () => {
     expect(element?.textContent).toEqual('child')
   })
 
-  test('connector wizard context provider with help panel', () => {
+  test('connector wizard context provider with help panel when feature flag is off', () => {
     const { container } = render(
       <ConnectorWizardContextProvider>
         <TestComponent />
       </ConnectorWizardContextProvider>
     )
-    expect(container.querySelector('[class*="helpPanelContainer"]')).toBeDefined()
+
+    expect(container.querySelector('[class*="helpPanelContainer"]')).toBeNull()
   })
 
-  test('connector wizard context provider with help panel', () => {
+  test('connector wizard context provider with help panel when feature flag is on', () => {
     const { container } = render(
-      <ConnectorWizardContextProvider>
-        <TestComponentWithExtraWidth />
-      </ConnectorWizardContextProvider>
+      <TestWrapper
+        defaultAppStoreValues={{
+          featureFlags: {
+            HELP_PANEL: true
+          }
+        }}
+      >
+        <ConnectorWizardContextProvider>
+          <TestComponent />
+        </ConnectorWizardContextProvider>
+      </TestWrapper>
     )
-    expect(container.querySelector('[class*="helpPanelContainer"]')).toBeDefined()
+    expect(container.querySelector('[class*="helpPanelContainer"]')).not.toBeNull()
   })
 })

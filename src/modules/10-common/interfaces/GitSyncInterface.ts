@@ -11,6 +11,8 @@ export interface Entity {
   [key: string]: GitSyncEntityDTO['entityType']
 }
 
+export const SCHEMA_VALIDATION_FAILED = 'SCHEMA_VALIDATION_FAILED'
+
 export const Entities: Entity = {
   APPROVAL_STAGE: 'ApprovalStage',
   CONNECTORS: 'Connectors',

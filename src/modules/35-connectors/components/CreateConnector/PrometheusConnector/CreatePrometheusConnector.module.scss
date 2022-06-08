@@ -10,3 +10,8 @@
     width: 60%;
   }
 }
+
+.keyValue {
+  max-height: 300px !important;
+  overflow-y: scroll;
+}

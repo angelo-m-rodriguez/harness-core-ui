@@ -20,6 +20,10 @@ import {
   VaultConfigFormData,
   HashiCorpVaultAccessTypes
 } from '@connectors/interfaces/ConnectorInterface'
+import { Connectors } from '@connectors/constants'
+import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
+import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import VaultConnectorFormFields from './VaultConnectorFormFields'
 
 const VaultConfigForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> = ({
@@ -50,6 +54,7 @@ const VaultConfigForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsPr
 
   const [initialValues, setInitialValues] = useState(defaultInitialFormData)
   const [loadingFormData, setLoadingFormData] = useState(isEditMode)
+  useConnectorWizard({ helpPanel: { referenceId: 'HashiCorpVaultDetails', contentWidth: 900 } })
 
   React.useEffect(() => {
     if (isEditMode && connectorInfo) {
@@ -60,10 +65,17 @@ const VaultConfigForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsPr
     }
   }, [isEditMode, connectorInfo])
 
+  const { trackEvent } = useTelemetry()
+
+  useTrackEvent(ConnectorActions.ConfigLoad, {
+    category: Category.CONNECTOR,
+    connector_type: Connectors.Vault
+  })
+
   return loadingFormData ? (
     <PageSpinner />
   ) : (
-    <Container padding={{ top: 'medium' }} width="64%">
+    <Container padding={{ top: 'medium' }}>
       <Text font={{ variation: FontVariation.H3 }} padding={{ bottom: 'xlarge' }}>
         {getString('connectors.hashiCorpVault.stepTwoName')}
       </Text>
@@ -145,6 +157,10 @@ const VaultConfigForm: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsPr
           })
         })}
         onSubmit={formData => {
+          trackEvent(ConnectorActions.ConfigSubmit, {
+            category: Category.CONNECTOR,
+            connector_type: Connectors.Vault
+          })
           nextStep?.({ ...connectorInfo, ...prevStepData, ...formData } as StepDetailsProps)
         }}
       >

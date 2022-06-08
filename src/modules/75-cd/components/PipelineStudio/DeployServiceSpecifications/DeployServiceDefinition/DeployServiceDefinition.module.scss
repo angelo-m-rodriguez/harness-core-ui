@@ -20,10 +20,10 @@
       margin-top: 0;
     }
   }
-  .editServiceModal {
-    padding: 0;
-  }
-  .nonModalView {
-    padding: var(--spacing-xxlarge) var(--spacing-huge) var(--spacing-13) var(--spacing-huge);
-  }
+}
+.editServiceModal {
+  margin-bottom: var(--spacing-medium);
+}
+.nonModalView {
+  padding: var(--spacing-medium) 0 var(--spacing-xxlarge) var(--spacing-large);
 }

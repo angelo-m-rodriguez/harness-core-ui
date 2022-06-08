@@ -480,5 +480,30 @@ describe('Auto stopping Rule creation Tests', () => {
 
       expect(container).toMatchSnapshot()
     })
+
+    test('toggle flags', () => {
+      const setGatewayDetails = jest.fn()
+      const { getByTestId } = render(
+        <TestWrapper>
+          <AdvancedConfiguration
+            allServices={mockedData.response}
+            gatewayDetails={initialGatewayDetails}
+            selectedResource={RESOURCES.ECS}
+            setGatewayDetails={setGatewayDetails}
+            totalStepsCount={4}
+          />
+        </TestWrapper>
+      )
+
+      const hideProgressPageToggle = getByTestId('progressPageViewToggle')
+      const dryRunToggle = getByTestId('dryRunToggle')
+      act(() => {
+        fireEvent.click(hideProgressPageToggle)
+      })
+      act(() => {
+        fireEvent.click(dryRunToggle)
+      })
+      expect(setGatewayDetails).toHaveBeenCalledTimes(3)
+    })
   })
 })

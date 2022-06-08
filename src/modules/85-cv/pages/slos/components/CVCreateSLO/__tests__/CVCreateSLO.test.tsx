@@ -7,7 +7,7 @@
 
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import { render, screen, waitFor, RenderResult } from '@testing-library/react'
+import { render, screen, waitFor, RenderResult, fireEvent } from '@testing-library/react'
 import * as cvServices from 'services/cv'
 import routes from '@common/RouteDefinitions'
 import { InputTypes, setFieldValue } from '@common/utils/JestFormHelper'
@@ -116,6 +116,19 @@ describe('CVCreateSLO', () => {
       expect(screen.getByText('connectors.cdng.validations.monitoringServiceRequired')).toBeInTheDocument()
     })
 
+    const selectCaret = document.body
+      .querySelector(`[name="${SLOFormFields.MONITORED_SERVICE_REF}"] + [class*="bp3-input-action"]`)
+      ?.querySelector('[data-icon="chevron-down"]')
+
+    expect(selectCaret).toBeTruthy()
+    if (selectCaret) {
+      fireEvent.click(selectCaret)
+
+      waitFor(() => {
+        fireEvent.click(screen.getByText('Service_1_Environment_1'))
+      })
+    }
+
     userEvent.click(screen.getByText('continue'))
 
     await waitFor(() => expect(screen.getByText('cv.slos.sli')).toHaveAttribute('aria-selected', 'true'))
@@ -128,6 +141,63 @@ describe('CVCreateSLO', () => {
       expect(screen.getByText('cv.slos.validations.healthSourceRequired')).toBeInTheDocument()
       expect(screen.getAllByText('cv.required')).toHaveLength(3)
       expect(screen.getAllByText('cv.metricIsRequired')).toHaveLength(2)
+    })
+  })
+
+  test('should show error message monitored service is not present', async () => {
+    const { container } = renderComponent()
+
+    expect(screen.getByText('name')).toHaveAttribute('aria-selected', 'true')
+
+    userEvent.click(screen.getByText('continue'))
+
+    await waitFor(() => {
+      expect(screen.getByText('cv.slos.validations.nameValidation')).toBeInTheDocument()
+      expect(screen.getByText('cv.slos.validations.userJourneyRequired')).toBeInTheDocument()
+    })
+
+    await setFieldValue({ container, type: InputTypes.TEXTFIELD, fieldId: SLOFormFields.NAME, value: 'Text SLO' })
+
+    userEvent.click(screen.getByPlaceholderText('cv.slos.userJourneyPlaceholder'))
+
+    await waitFor(() => {
+      expect(screen.getByText('User Journey 1')).toBeInTheDocument()
+      userEvent.click(screen.getByText('User Journey 1'))
+    })
+
+    await waitFor(() => {
+      expect(screen.queryByText('cv.slos.validations.nameValidation')).not.toBeInTheDocument()
+      expect(screen.queryByText('cv.slos.validations.userJourneyRequired')).not.toBeInTheDocument()
+      expect(screen.getByText('connectors.cdng.validations.monitoringServiceRequired')).toBeInTheDocument()
+    })
+
+    userEvent.click(screen.getByText('continue'))
+
+    await waitFor(() => {
+      expect(screen.queryByText('cv.slos.validations.nameValidation')).not.toBeInTheDocument()
+      expect(screen.queryByText('cv.slos.validations.userJourneyRequired')).not.toBeInTheDocument()
+      expect(screen.getByText('connectors.cdng.validations.monitoringServiceRequired')).toBeInTheDocument()
+    })
+  })
+
+  test('should show error when SLO name is invalid', async () => {
+    const { container } = renderComponent()
+
+    expect(screen.getByText('name')).toHaveAttribute('aria-selected', 'true')
+
+    userEvent.click(screen.getByText('continue'))
+
+    await waitFor(() => {
+      expect(screen.getByText('cv.slos.validations.nameValidation')).toBeInTheDocument()
+      expect(screen.getByText('cv.slos.validations.userJourneyRequired')).toBeInTheDocument()
+    })
+
+    await setFieldValue({ container, type: InputTypes.TEXTFIELD, fieldId: SLOFormFields.NAME, value: 'Text SLO!' })
+
+    userEvent.click(screen.getByText('continue'))
+
+    await waitFor(() => {
+      expect(screen.getByText('cv.slos.validations.specialCharacters')).toBeInTheDocument()
     })
   })
 
@@ -158,6 +228,19 @@ describe('CVCreateSLO', () => {
       userEvent.click(screen.getByText('User Journey 1'))
     })
 
+    const selectCaret = document.body
+      .querySelector(`[name="${SLOFormFields.MONITORED_SERVICE_REF}"] + [class*="bp3-input-action"]`)
+      ?.querySelector('[data-icon="chevron-down"]')
+
+    expect(selectCaret).toBeTruthy()
+    if (selectCaret) {
+      fireEvent.click(selectCaret)
+
+      waitFor(() => {
+        fireEvent.click(screen.getByText('Service_1_Environment_1'))
+      })
+    }
+
     userEvent.click(screen.getByText('cv.slos.sli'))
 
     expect(screen.getByText('cv.slos.sli')).toHaveAttribute('aria-selected', 'true')
@@ -182,6 +265,19 @@ describe('CVCreateSLO', () => {
       expect(screen.getByText('User Journey 1')).toBeInTheDocument()
       userEvent.click(screen.getByText('User Journey 1'))
     })
+
+    const selectCaret = document.body
+      .querySelector(`[name="${SLOFormFields.MONITORED_SERVICE_REF}"] + [class*="bp3-input-action"]`)
+      ?.querySelector('[data-icon="chevron-down"]')
+
+    expect(selectCaret).toBeTruthy()
+    if (selectCaret) {
+      fireEvent.click(selectCaret)
+
+      waitFor(() => {
+        fireEvent.click(screen.getByText('Service_1_Environment_1'))
+      })
+    }
 
     userEvent.click(screen.getByText('continue'))
 

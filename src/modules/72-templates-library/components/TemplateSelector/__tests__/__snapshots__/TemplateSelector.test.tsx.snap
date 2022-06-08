@@ -43,7 +43,7 @@ exports[`<TemplateSelector /> tests should match snapshot when selected template
                 <span
                   class="bp3-button-text"
                 >
-                  templatesLibrary.useTemplate
+                  templatesLibrary.useTemplateLabel
                 </span>
               </button>
               <button
@@ -53,7 +53,7 @@ exports[`<TemplateSelector /> tests should match snapshot when selected template
                 <span
                   class="bp3-button-text"
                 >
-                  templatesLibrary.copyToPipeline
+                  templatesLibrary.copyTemplateLabel
                 </span>
               </button>
             </div>

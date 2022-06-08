@@ -7,12 +7,13 @@
 
 import React from 'react'
 import cx from 'classnames'
-import { Button, ButtonVariation, Icon, Layout, Text } from '@wings-software/uicore'
+import { defaultTo, isEmpty } from 'lodash-es'
+import { Button, ButtonVariation, Container, Icon, Layout, Text } from '@wings-software/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import type { GetDataError } from 'restful-react'
-import { defaultTo } from 'lodash-es'
 import { useStrings } from 'framework/strings'
-import type { Failure, Error } from 'services/cd-ng'
+import type { Failure, Error } from 'services/pipeline-ng'
+import { ErrorHandler } from '@common/components/ErrorHandler/ErrorHandler'
 import css from './RunPipelineForm.module.scss'
 
 interface PipelineInvalidRequestContentProps {
@@ -55,9 +56,16 @@ export function PipelineInvalidRequestContent({
           {getErrorMessageTitleAndText().title}
         </Text>
       </Layout.Horizontal>
-      <Text padding={{ top: 'xlarge', bottom: 'xlarge' }} color={Color.BLACK}>
-        {getErrorMessageTitleAndText().message}
-      </Text>
+
+      {!isEmpty((getTemplateError?.data as Error)?.responseMessages) ? (
+        <Container padding={{ top: 'xlarge', bottom: 'xlarge' }}>
+          <ErrorHandler responseMessages={defaultTo((getTemplateError?.data as Error).responseMessages, [])} />
+        </Container>
+      ) : (
+        <Text padding={{ top: 'xlarge', bottom: 'xlarge' }} color={Color.BLACK}>
+          {getErrorMessageTitleAndText().message}
+        </Text>
+      )}
       <Layout.Horizontal className={cx(css.actionButtons)}>
         <Button
           data-testid="deletion-pipeline"

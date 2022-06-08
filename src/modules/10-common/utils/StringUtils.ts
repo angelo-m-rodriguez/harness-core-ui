@@ -72,6 +72,8 @@ export const folderPathName = /^[A-Za-z0-9_-][A-Za-z0-9 _-]*$/g
 
 export const yamlFileExtension = '.yaml'
 
+export const yamlPathRegex = /^\.harness\/([a-zA-Z0-9 _-]\/?)*[a-zA-Z0-9 _-]+\.(yaml|yml)$/
+
 export const UNIQUE_ID_MAX_LENGTH = 64
 export function toVariableStr(str: string): string {
   return `<+${str}>`

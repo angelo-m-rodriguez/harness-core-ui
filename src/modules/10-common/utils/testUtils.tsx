@@ -151,8 +151,7 @@ export const TestWrapper: React.FC<TestWrapperProps> = props => {
           value={{
             set: jest.fn(),
             get: jest.fn(),
-            clear: jest.fn(),
-            updatePreferenceStore: jest.fn()
+            clear: jest.fn()
           }}
         >
           <AppStoreContext.Provider

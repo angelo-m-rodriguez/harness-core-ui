@@ -10,14 +10,14 @@ import { cloneDeep, isEqual, noop } from 'lodash-es'
 import { MultiTypeInputType, VisualYamlSelectedView as SelectedView } from '@wings-software/uicore'
 import {
   PipelineContext,
+  PipelineContextInterface,
   PipelineContextType
 } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import {
   initialState,
   PipelineContextActions,
   PipelineReducer,
-  PipelineViewData,
-  TemplateViewData
+  PipelineViewData
 } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
 import { useLocalStorage } from '@common/hooks'
 import factory from '@pipeline/components/PipelineSteps/PipelineStepFactory'
@@ -38,12 +38,14 @@ export interface InfrastructurePipelineProviderProps {
   queryParams: GetPipelineQueryParams
   initialValue: PipelineInfoConfig
   isReadOnly: boolean
+  getTemplate: PipelineContextInterface['getTemplate']
 }
 
 export function InfrastructurePipelineProvider({
   queryParams,
   initialValue,
   isReadOnly,
+  getTemplate,
   children
 }: React.PropsWithChildren<InfrastructurePipelineProviderProps>): React.ReactElement {
   const allowableTypes = [MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME, MultiTypeInputType.EXPRESSION]
@@ -108,10 +110,6 @@ export function InfrastructurePipelineProvider({
     dispatch(PipelineContextActions.updatePipelineView({ pipelineView: data }))
   }, [])
 
-  const updateTemplateView = React.useCallback((data: TemplateViewData) => {
-    dispatch(PipelineContextActions.updateTemplateView({ templateView: data }))
-  }, [])
-
   const initalizePipeline = async () => {
     dispatch(
       PipelineContextActions.success({
@@ -168,11 +166,11 @@ export function InfrastructurePipelineProvider({
         renderPipelineStage,
         fetchPipeline: Promise.resolve,
         updateGitDetails: Promise.resolve,
+        updatePipelineStoreMetadata: Promise.resolve,
         updateEntityValidityDetails: Promise.resolve,
         updatePipeline,
         updateStage,
         updatePipelineView,
-        updateTemplateView,
         pipelineSaved: noop,
         deletePipelineCache: Promise.resolve,
         isReadonly: isReadOnly,
@@ -182,7 +180,8 @@ export function InfrastructurePipelineProvider({
         setSelectedSectionId: noop,
         setSelection,
         getStagePathFromPipeline,
-        setTemplateTypes: noop
+        setTemplateTypes: noop,
+        getTemplate
       }}
     >
       {children}

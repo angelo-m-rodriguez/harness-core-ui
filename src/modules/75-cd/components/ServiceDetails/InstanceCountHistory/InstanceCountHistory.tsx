@@ -106,12 +106,13 @@ export const InstanceCountHistory: React.FC = () => {
     envData.current = envMap
 
     return Object.values(envMap)
-      .slice(0, 49) // Todo - Jasmeet - Handle UX for more than 50 series
+      .slice(0, 49)
       .map((envSeries, index) => ({
         custom: Object.keys(envSeries)
+          .slice(0, -1)
           .map(envKey => ({ x: parseInt(envKey), y: envSeries[envKey] }))
           .sort((valA, valB) => valA.x - valB.x),
-        data: Object.values(envSeries),
+        data: Object.values(envSeries).slice(0, -1),
         color: instanceCountHistoryChartColors[index % instanceCountHistoryChartColors.length]
       }))
   }, [data])
