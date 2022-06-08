@@ -6,13 +6,13 @@
  */
 
 import React, { useEffect, useState, useRef, useContext } from 'react'
-import { Layout, FormInput, SelectOption, Formik, FormikForm, IconName, Text } from '@wings-software/uicore'
-import { Color } from '@harness/design-system'
+import { Layout, FormInput, SelectOption, Formik, FormikForm, IconName } from '@wings-software/uicore'
 import type { FormikProps, FormikErrors } from 'formik'
 import { useParams } from 'react-router-dom'
 import { debounce, noop, get, defaultTo, isEmpty } from 'lodash-es'
 import { parse } from 'yaml'
 import { CompletionItemKind } from 'vscode-languageserver-types'
+import { useToaster } from '@common/exports'
 import type { StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import {
@@ -68,21 +68,20 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
     orgIdentifier: string
     accountId: string
   }>()
+  const { showError } = useToaster()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
 
   const [subscriptions, setSubscriptions] = useState<SelectOption[]>([])
   const [isSubsLoading, setIsSubsLoading] = useState(false)
-  const [subsErrorMessage, setSubsErrorMessage] = useState('')
 
   const [resourceGroups, setResourceGroups] = useState<SelectOption[]>([])
   const [isResGroupLoading, setIsResGroupLoading] = useState(false)
-  const [resGroupErrorMessage, setResGroupErrorMessage] = useState('')
 
   const [clusters, setClusters] = useState<SelectOption[]>([])
   const [isClustersLoading, setIsClustersLoading] = useState(false)
-  const [clustersErrorMessage, setClustersErrorMessage] = useState('')
 
   const [azureTags, setAzureTags] = useState([])
+  const [isTagsLoading, setIsTagsLoading] = useState(false)
 
   const delayedOnUpdate = useRef(debounce(onUpdate || noop, 300)).current
   const { getString } = useStrings()
@@ -105,30 +104,40 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           projectIdentifier
         }
       })
-      const subs = get(response, 'data.subscriptions', []).map(sub => ({
-        label: `${sub.subscriptionName}: ${sub.subscriptionId}`,
-        value: sub.subscriptionId
-      }))
-      setSubscriptions(subs)
+      if (response.status === 'SUCCESS') {
+        const subs = get(response, 'data.subscriptions', []).map(sub => ({
+          label: `${sub.subscriptionName}: ${sub.subscriptionId}`,
+          value: sub.subscriptionId
+        }))
+        setSubscriptions(subs)
+      } else {
+        showError(get(response, 'message'))
+      }
     } catch (e) {
-      setSubsErrorMessage(e.message || e.responseMessage[0])
+      showError(e.message || e.responseMessage[0])
     } finally {
       setIsSubsLoading(false)
     }
   }
 
   const fetchSubscriptionTags = async (connectorRef: string, subscriptionId: string) => {
-    const response = await getSubscriptionTagsPromise({
-      subscriptionId,
-      queryParams: {
-        connectorRef,
-        accountIdentifier: accountId,
-        orgIdentifier,
-        projectIdentifier
-      }
-    })
-    console.log('getSubscriptionTagsPromise response: ', response)
-    setAzureTags(response.data?.tags || [])
+    setIsTagsLoading(true)
+    try {
+      const response = await getSubscriptionTagsPromise({
+        subscriptionId,
+        queryParams: {
+          connectorRef,
+          accountIdentifier: accountId,
+          orgIdentifier,
+          projectIdentifier
+        }
+      })
+      setAzureTags(response.data?.tags || [])
+    } catch (e) {
+      showError(e.message || e.errorMessage)
+    } finally {
+      setIsTagsLoading(false)
+    }
   }
 
   const fetchResourceGroups = async (connectorRef: string, subscriptionId: string) => {
@@ -143,11 +152,15 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         },
         subscriptionId: subscriptionId
       })
-      setResourceGroups(
-        (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
-      )
+      if (response.status === 'SUCCESS') {
+        setResourceGroups(
+          (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
+        )
+      } else {
+        showError(get(response, 'message'))
+      }
     } catch (e) {
-      setResGroupErrorMessage(e.message || e.responseMessage[0])
+      showError(e.message || e.errorMessage)
     } finally {
       setIsResGroupLoading(false)
     }
@@ -166,10 +179,14 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         subscriptionId: subscriptionId,
         resourceGroup: resourceGroup
       })
-      const clusterOptions = get(response, 'data.clusters', []).map(cl => ({ label: cl.cluster, value: cl.cluster }))
-      setClusters(clusterOptions)
+      if (response.status === 'SUCCESS') {
+        const clusterOptions = get(response, 'data.clusters', []).map(cl => ({ label: cl.cluster, value: cl.cluster }))
+        setClusters(clusterOptions)
+      } else {
+        showError(get(response, 'message'))
+      }
     } catch (e) {
-      setClustersErrorMessage(e.message || e.responseMessage[0])
+      showError(e.message || e.responseMessage[0])
     } finally {
       setIsClustersLoading(false)
     }
@@ -263,7 +280,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           formikRef.current = formik
           return (
             <FormikForm>
-              <Layout.Horizontal className={css.formRow} spacing="medium">
+              <Layout.Vertical className={css.formRow} spacing="medium">
                 <ConnectorReferenceField
                   name="connectorRef"
                   label={getString('connector')}
@@ -297,7 +314,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   }}
                   gitScope={{ repo: repoIdentifier || '', branch, getDefaultFromOtherRepo: true }}
                 />
-              </Layout.Horizontal>
+              </Layout.Vertical>
               <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="subscriptionId"
@@ -320,7 +337,6 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     }
                   }
                 />
-                {subsErrorMessage && <Text color={Color.RED_400}>{subsErrorMessage}</Text>}
               </Layout.Vertical>
               <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
@@ -342,7 +358,6 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   }}
                   label={getString(resourceGroupLabel)}
                 />
-                {resGroupErrorMessage && <Text color={Color.RED_400}>{resGroupErrorMessage}</Text>}
               </Layout.Vertical>
               <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
@@ -360,10 +375,14 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     formik.setFieldValue('cluster', value)
                   }}
                 />
-                {clustersErrorMessage && <Text color={Color.RED_400}>{clustersErrorMessage}</Text>}
               </Layout.Vertical>
               <Layout.Horizontal className={css.formRow} spacing="medium">
-                <FormInput.MultiSelect name="tags" label={getString('tagLabel')} items={azureTags} />
+                <FormInput.MultiSelect
+                  name="tags"
+                  label={getString('tagLabel')}
+                  items={azureTags}
+                  disabled={isTagsLoading || !formik.values.subscriptionId || readonly}
+                />
               </Layout.Horizontal>
               <Layout.Horizontal spacing="medium" style={{ alignItems: 'center' }} className={css.lastRow}>
                 <FormInput.CheckBox
