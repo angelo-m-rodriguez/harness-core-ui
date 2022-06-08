@@ -174,7 +174,7 @@ export const ConnectorWizard: React.FC<CreateConnectorWizardProps> = props => {
     case Connectors.ERROR_TRACKING:
       return ERROR_TRACKING_ENABLED ? <CreateErrorTrackingConnector {...commonProps} /> : null
     case Connectors.AZURE:
-      return true ? <CreateAzureConnector {...commonProps} /> : null
+      return NG_AZURE ? <CreateAzureConnector {...commonProps} /> : null
     default:
       return null
   }
