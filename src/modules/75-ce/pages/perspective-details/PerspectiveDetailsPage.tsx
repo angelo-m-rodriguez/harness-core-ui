@@ -421,6 +421,9 @@ const PerspectiveDetailsPage: React.FC = () => {
   const { licenseInformation } = useLicenseStore()
   const isFreeEdition = licenseInformation['CE']?.edition === ModuleLicenseType.FREE
 
+  const isClusterDatasource =
+    perspectiveData?.dataSources?.length === 1 && perspectiveData?.dataSources.includes('CLUSTER')
+
   return (
     <>
       <PerspectiveHeader title={persName} viewType={perspectiveData?.viewType || ViewType.Default} />
@@ -455,7 +458,13 @@ const PerspectiveDetailsPage: React.FC = () => {
               groupBy={groupBy}
               setGroupBy={setGroupBy}
               timeFilter={getTimeFilters(getGMTStartDateTime(timeRange.from), getGMTEndDateTime(timeRange.to))}
-              preferencesDropDown={<PreferencesDropDown preferences={preferences} setPreferences={setPreferences} />}
+              preferencesDropDown={
+                <PreferencesDropDown
+                  preferences={preferences}
+                  setPreferences={setPreferences}
+                  isClusterDatasource={isClusterDatasource}
+                />
+              }
             />
             {!isChartGridEmpty && (
               <CloudCostInsightChart
@@ -535,7 +544,8 @@ export default PerspectiveDetailsPage
 const PreferencesDropDown: React.FC<{
   preferences: QlceViewPreferencesInput
   setPreferences: React.Dispatch<React.SetStateAction<QlceViewPreferencesInput>>
-}> = ({ preferences, setPreferences }) => {
+  isClusterDatasource: boolean
+}> = ({ preferences, setPreferences, isClusterDatasource }) => {
   const { getString } = useStrings()
 
   return (
@@ -547,7 +557,7 @@ const PreferencesDropDown: React.FC<{
           <Switch
             large
             checked={Boolean(preferences.includeOthers)}
-            label={'Include Others'}
+            label={getString('ce.perspectives.createPerspective.preferences.includeOthers')}
             className={css.prefLabel}
             onChange={event => {
               setPreferences(prevPref => ({ ...prevPref, includeOthers: event.currentTarget.checked }))
@@ -556,7 +566,8 @@ const PreferencesDropDown: React.FC<{
           <Switch
             large
             checked={Boolean(preferences.includeUnallocatedCost)}
-            label={'Include Unallocated'}
+            label={getString('ce.perspectives.createPerspective.preferences.includeUnallocated')}
+            disabled={!isClusterDatasource}
             className={css.prefLabel}
             onChange={event => {
               setPreferences(prevPref => ({ ...prevPref, includeUnallocatedCost: event.currentTarget.checked }))
