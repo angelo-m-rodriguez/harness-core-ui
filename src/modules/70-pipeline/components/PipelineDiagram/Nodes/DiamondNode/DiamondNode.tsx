@@ -14,7 +14,7 @@ import { useStrings } from 'framework/strings'
 import { DiagramDrag, DiagramType, Event } from '@pipeline/components/Diagram'
 import { ExecutionPipelineNodeType } from '@pipeline/components/ExecutionStageDiagram/ExecutionPipelineModel'
 import { getStatusProps } from '@pipeline/components/ExecutionStageDiagram/ExecutionStageDiagramUtils'
-import type { ExecutionStatus } from '@pipeline/utils/statusHelpers'
+import { ExecutionStatus, ExecutionStatusEnum } from '@pipeline/utils/statusHelpers'
 import { PipelineGraphType, NodeType, BaseReactComponentProps } from '../../types'
 import SVGMarker from '../SVGMarker'
 import { getPositionOfAddIcon } from '../utils'
@@ -64,7 +64,14 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           'diamond-node',
           cssDefault.defaultCard,
           css.diamond,
-          { [cssDefault.selected]: isSelected },
+
+          {
+            [cssDefault.selected]: isSelected,
+            [cssDefault.failed]: stepStatus === ExecutionStatusEnum.Failed,
+            [cssDefault.runningNode]: stepStatus === ExecutionStatusEnum.Running,
+            [cssDefault.skipped]: stepStatus === ExecutionStatusEnum.Skipped,
+            [cssDefault.notStarted]: stepStatus === ExecutionStatusEnum.NotStarted
+          },
           { [css.top]: props?.data?.graphType === PipelineGraphType.STAGE_GRAPH }
         )}
         draggable={true}

@@ -437,6 +437,7 @@ const transformStageData = (
         type: type,
         nodeType: nodeType as string,
         icon: iconName,
+        ...stage.data,
         data: {
           graphType,
           ...stage,

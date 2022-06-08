@@ -149,7 +149,7 @@ export default function ExecutionLandingPage(props: React.PropsWithChildren<unkn
       stageNodeId: isEmpty(queryParams.stage || autoSelectedStageId)
         ? undefined
         : queryParams.stage || autoSelectedStageId,
-      stageExecutionId: isEmpty(queryParams?.stageId) ? undefined : queryParams?.stageId
+      stageNodeExecutionId: isEmpty(queryParams?.stageId) ? undefined : queryParams?.stageId
     },
     debounce: 500
   })

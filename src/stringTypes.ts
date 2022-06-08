@@ -2556,6 +2556,8 @@ export interface StringsMap {
   'pipeline.OverviewEmptyStates.createPipelineInfo': string
   'pipeline.OverviewEmptyStates.runPipelineHeaderMsg': string
   'pipeline.OverviewEmptyStates.runPipelineInfo': string
+  'pipeline.Jenkins.name': string
+  'pipeline.MatrixNode.maxParallelism': string
   'pipeline.aboutYourStage.stageNamePlaceholder': string
   'pipeline.addStage.description': string
   'pipeline.addStage.title': string

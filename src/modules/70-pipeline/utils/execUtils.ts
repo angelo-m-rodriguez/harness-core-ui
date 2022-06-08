@@ -6,7 +6,7 @@
  */
 
 import type { IconName } from '@harness/uicore'
-import { get, isEmpty } from 'lodash-es'
+import { defaultTo, get, isEmpty } from 'lodash-es'
 import { PipelineGraphState, PipelineGraphType } from '@pipeline/components/PipelineDiagram/types'
 import type { ExecutionGraph, ExecutionNode, NodeRunInfo } from 'services/pipeline-ng'
 import { getStatusProps } from '@pipeline/components/ExecutionStageDiagram/ExecutionStageDiagramUtils'
@@ -642,11 +642,14 @@ export const getExecutionStageDiagramListeners = ({
   const nodeListeners: { [key: string]: (event?: any) => void } = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [Event.ClickNode]: (event: any) => {
-      onStepSelect(event?.data?.id, event?.data?.data?.stageNodeId)
+      event?.data?.data?.stageNodeId
+        ? onStepSelect(event?.data?.data?.stageNodeId, event?.data?.id)
+        : onStepSelect(event?.data?.id)
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [Event.MouseEnterNode]: (event: any) => {
-      const stageData = allNodeMap[event?.data?.id]
+      const nodeID = defaultTo(event?.data?.nodeExecutionId, event?.data?.id)
+      const stageData = allNodeMap[nodeID]
       const target = document.querySelector(`[data-nodeid="${event?.data?.id}"]`)
       if (stageData) {
         onMouseEnter({ data: { ...stageData, ...getNodeConditions(stageData) }, event: { ...event, target } })

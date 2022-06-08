@@ -15,6 +15,8 @@ import { STATIC_SERVICE_GROUP_NAME } from '@pipeline/utils/executionUtils'
 import { useStrings } from 'framework/strings'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { useValidationErrors } from '@pipeline/components/PipelineStudio/PiplineHooks/useValidationErrors'
+import { useQueryParams } from '@common/hooks'
+import type { ExecutionPageQueryParams } from '@pipeline/utils/types'
 import { BaseReactComponentProps, NodeType, PipelineGraphState, PipelineGraphType } from '../../types'
 // import SVGMarker from '../SVGMarker'
 import { getPositionOfAddIcon } from '../utils'
@@ -27,26 +29,9 @@ interface LayoutStyles {
   width: string
   marginLeft?: string
 }
-const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 3): LayoutStyles => {
+const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number): LayoutStyles => {
   const maxChildLength = defaultTo(data.length, 0)
-  // let hasStepGroupNode = false
-  // data.forEach(node => {
-  //   if (node.type === 'STEP_GROUP') {
-  //     hasStepGroupNode = true
-  //   }
-  //   const childSteps = get(node, 'data.step.data.stepGroup.steps') || get(node, 'data.stepGroup.steps')
-  //   if (childSteps) {
-  //     const count = getNestedStepGroupHeight(childSteps)
-  //     maxChildLength = Math.max(maxChildLength, count)
-  //     width += childSteps.length * 170
-  //   }
-  //   if (node.children?.length && data.length > 1) {
-  //     width += 40
-  //   }
-  //   width += 150
-  //   maxChildLength = Math.max(maxChildLength, node?.children?.length || 0)
-  // })
-  const finalHeight = (maxChildLength / parallelism) * 100
+  const finalHeight = (maxChildLength / parallelism + (maxChildLength % parallelism)) * 100
   const finalWidth = 170 * parallelism
   return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
 }
@@ -68,7 +53,7 @@ export function MatrixNode(props: any): JSX.Element {
     const stepType = get(step, 'step.type')
     return stepType === 'STEP_GROUP'
   })
-
+  const queryParams = useQueryParams<ExecutionPageQueryParams>()
   const defaultNode = props.getDefaultNode()?.component
 
   const isNestedStepGroup = Boolean(get(props, 'data.step.data.isNestedGroup'))
@@ -116,9 +101,13 @@ export function MatrixNode(props: any): JSX.Element {
 
   React.useLayoutEffect(() => {
     if (state?.length) {
-      setLayoutStyles(getCalculatedStyles(state))
+      setLayoutStyles(getCalculatedStyles(state, props?.data?.maxParallelism))
     }
   }, [state, props?.isNodeCollapsed])
+
+  const isSelectedNode = React.useMemo(() => {
+    return state.some(node => node.id === queryParams?.stageId)
+  }, [queryParams?.stageId, isNodeCollapsed])
 
   return (
     <>
@@ -128,6 +117,7 @@ export function MatrixNode(props: any): JSX.Element {
             setNodeCollapsed(false)
           }}
           {...props}
+          isSelected={isSelectedNode}
           icon="step-group"
         />
       ) : (
@@ -245,11 +235,12 @@ export function MatrixNode(props: any): JSX.Element {
                   ) as React.FC<BaseReactComponentProps>
                   return (
                     <NodeComponent
+                      {...node}
                       parentIdentifier={node.parentIdentifier}
                       key={node.data?.identifier}
                       getNode={props.getNode}
                       fireEvent={props.fireEvent}
-                      getDefaultNode={props.getDefaultNode}
+                      getDefaultNode={props.getDxefaultNode}
                       className={cx(css.graphNode, node.className)}
                       isSelected={node.selectedNode === node.data?.identifier}
                       isParallelNode={node.isParallelNode}
@@ -262,10 +253,9 @@ export function MatrixNode(props: any): JSX.Element {
                       prevNode={node.prevNode}
                       nextNode={node.nextNode}
                       updateGraphLinks={node.updateGraphLinks}
-                      readonly={props.readOnly}
-                      selectedNodeId={node.selectedNode}
+                      readonly={props.readonly}
+                      selectedNodeId={queryParams?.stageId}
                       showMarkers={false}
-                      {...node}
                     />
                   )
                 })}
@@ -292,8 +282,8 @@ export function MatrixNode(props: any): JSX.Element {
               />
             )}
             <Layout.Horizontal className={css.matrixFooter}>
-              <Text font="normal" style={{ paddingRight: '5px' }}>
-                Max Parallelism: 3
+              <Text font="normal">
+                {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism}
               </Text>
             </Layout.Horizontal>
           </div>

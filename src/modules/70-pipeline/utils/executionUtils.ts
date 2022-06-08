@@ -161,10 +161,14 @@ export function getPipelineStagesMap(
   const map = new Map<string, GraphLayoutNode>()
 
   function recursiveSetInMap(node: GraphLayoutNode): void {
-    if (node.nodeType === NodeTypes.Parallel) {
+    if (node.nodeType === NodeTypes.Parallel || node.nodeType === NodeTypes.Matrix) {
       node.edgeLayoutList?.currentNodeChildren?.forEach(item => {
         if (item && layoutNodeMap?.[item]) {
-          map.set(layoutNodeMap[item].nodeUuid || '', layoutNodeMap[item])
+          const nodeId =
+            node.nodeType === NodeTypes.Matrix
+              ? defaultTo(layoutNodeMap[item]?.nodeExecutionId, layoutNodeMap[item].nodeUuid)
+              : layoutNodeMap[item].nodeUuid
+          map.set(nodeId || '', layoutNodeMap[item])
           return
         }
       })
@@ -830,8 +834,8 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         currentNodeChildren.forEach(item => {
           const nodeDataItem = layoutNodeMap[item]
           childData.push({
-            id: nodeDataItem?.nodeUuid,
-            stageNodeId: nodeDataItem?.nodeExecutionId as string,
+            id: nodeDataItem?.nodeExecutionId,
+            stageNodeId: nodeDataItem?.nodeUuid as string,
             identifier: nodeDataItem.nodeIdentifier as string,
             type: nodeDataItem.nodeType as string,
             name: nodeDataItem.name as string,
@@ -850,7 +854,8 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             ...(nodeDetails as any),
             children: childData,
             graphType: PipelineGraphType.STAGE_GRAPH,
-            id: nodeDetails?.nodeUuid
+            id: nodeDetails?.nodeUuid,
+            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.matrixConfig?.maxConcurrency
           }
         })
 

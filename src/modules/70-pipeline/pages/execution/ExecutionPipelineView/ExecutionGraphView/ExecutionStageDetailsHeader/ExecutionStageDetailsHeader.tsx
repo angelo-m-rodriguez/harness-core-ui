@@ -28,14 +28,18 @@ import RbacButton from '@rbac/components/Button/Button'
 import { useRunPipelineModal } from '@pipeline/components/RunPipelineModal/useRunPipelineModal'
 import { extractInfo } from '@common/components/ErrorHandler/ErrorHandler'
 import type { StoreType } from '@common/constants/GitSyncTypes'
+import { useQueryParams } from '@common/hooks'
+import type { ExecutionPageQueryParams } from '@pipeline/utils/types'
 import css from './ExecutionStageDetailsHeader.module.scss'
 
 export function ExecutionStageDetailsHeader(): React.ReactElement {
   const { selectedStageId, pipelineStagesMap, refetch, pipelineExecutionDetail, allNodeMap } = useExecutionContext()
   const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
+
+  const queryParams = useQueryParams<ExecutionPageQueryParams>()
   const { isGitSyncEnabled } = useAppStore()
-  const stage = pipelineStagesMap.get(selectedStageId)
+  const stage = pipelineStagesMap.get(queryParams?.stageId ? queryParams?.stageId : selectedStageId)
   const stageDetail = factory.getStageDetails(stage?.nodeType as StageType)
   const shouldShowError = isExecutionFailed(stage?.status)
   const responseMessages = defaultTo(
