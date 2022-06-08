@@ -16,12 +16,10 @@ import {
   FormInput
 } from '@harness/uicore'
 import * as Yup from 'yup'
-// import { useParams } from 'react-router-dom'
 
 import { NameIdDescriptionTags } from '@common/components/NameIdDescriptionTags/NameIdDescriptionTags'
 
 import { useToaster } from '@common/components'
-// import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 
 import { useStrings } from 'framework/strings'
 import { NameSchema, IdentifierSchema } from '@common/utils/Validation'

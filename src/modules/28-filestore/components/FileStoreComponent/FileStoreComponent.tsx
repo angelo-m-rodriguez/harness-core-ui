@@ -17,9 +17,9 @@ import { useStrings } from 'framework/strings'
 import { Scope } from '@common/interfaces/SecretsInterface'
 import type { StringKeys } from 'framework/strings'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
-import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import type { FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
-import FileStorePage from '../../pages/filestore/FileStorePage'
+import FileStorePage from '@filestore/pages/filestore/FileStorePage'
 
 import css from './FileStoreComponent.module.scss'
 
@@ -161,7 +161,7 @@ const useFileStoreModal = ({ applySelected }: UseFileStoreModalProps): UseFileSt
             variation={ButtonVariation.PRIMARY}
             text={getString('entityReference.apply')}
             onClick={handleApplySelectedFile}
-            disabled={selectedFile?.type !== FileStoreNodeTypes.FILE}
+            disabled={!!(selectedFile?.name && selectedFile.name === FILE_STORE_ROOT)}
             className={cx(Classes.POPOVER_DISMISS)}
           />
           {

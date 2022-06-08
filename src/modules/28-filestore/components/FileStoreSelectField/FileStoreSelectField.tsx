@@ -23,7 +23,10 @@ import { FormGroup, Intent } from '@blueprintjs/core'
 import { Scope } from '@common/interfaces/SecretsInterface'
 
 import { useStrings } from 'framework/strings'
-import useFileStoreModal from '../FileStoreComponent/FileStoreComponent'
+import useFileStoreModal from '@filestore/components/FileStoreComponent/FileStoreComponent'
+import { FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
+import folderImage from '@filestore/images/closed-folder.svg'
+
 import css from './FileStoreSelectField.module.scss'
 
 export interface FileStoreSelectProps {
@@ -91,9 +94,14 @@ const FileStoreInput: React.FC<FormikFileStoreInput> = (props: FormikFileStoreIn
           }}
         >
           {fileStoreValue?.name ? (
-            <Text lineClamp={1} color={Color.GREY_900} padding={{ left: 'xsmall' }}>
-              {fileStoreValue?.name}
-            </Text>
+            <Container flex>
+              {fileStoreValue?.type && fileStoreValue.type === FileStoreNodeTypes.FOLDER && (
+                <img alt="folder" src={folderImage} style={{ marginRight: 8, marginLeft: 4 }} />
+              )}
+              <Text lineClamp={1} color={Color.GREY_900} padding={{ left: 'xsmall' }}>
+                {fileStoreValue?.name}
+              </Text>
+            </Container>
           ) : (
             <Text color={Color.GREY_500} padding={{ left: 'xsmall' }}>
               - {placeholder_} -
