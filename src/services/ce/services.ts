@@ -1,10 +1,3 @@
-/*
- * Copyright 2022 Harness Inc. All rights reserved.
- * Use of this source code is governed by the PolyForm Shield 1.0.0 license
- * that can be found in the licenses directory at the root of this repository, also available at
- * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
- */
-
 import gql from 'graphql-tag'
 import * as Urql from 'urql'
 export type Maybe<T> = T | null
@@ -38,8 +31,8 @@ export function useCcmMetaDataQuery(options?: Omit<Urql.UseQueryArgs<CcmMetaData
   return Urql.useQuery<CcmMetaDataQuery>({ query: CcmMetaDataDocument, ...options })
 }
 export const FetchAllPerspectivesDocument = gql`
-  query FetchAllPerspectives($folderId: String) {
-    perspectives(folderId: $folderId) {
+  query FetchAllPerspectives($folderId: String, $sortCriteria: QLCEViewSortCriteriaInput = null) {
+    perspectives(folderId: $folderId, sortCriteria: $sortCriteria) {
       sampleViews {
         id
         name
@@ -1211,6 +1204,7 @@ export type CcmMetaDataQuery = {
 
 export type FetchAllPerspectivesQueryVariables = Exact<{
   folderId: InputMaybe<Scalars['String']>
+  sortCriteria?: InputMaybe<QlceViewSortCriteriaInput>
 }>
 
 export type FetchAllPerspectivesQuery = {
@@ -2848,6 +2842,7 @@ export type QlceViewSortCriteriaInput = {
 export enum QlceViewSortType {
   ClusterCost = 'CLUSTER_COST',
   Cost = 'COST',
+  Name = 'NAME',
   Time = 'TIME'
 }
 
@@ -3041,6 +3036,7 @@ export type QueryPerspectiveTrendStatsArgs = {
 /** Query root */
 export type QueryPerspectivesArgs = {
   folderId: InputMaybe<Scalars['String']>
+  sortCriteria: InputMaybe<QlceViewSortCriteriaInput>
 }
 
 /** Query root */
@@ -3255,7 +3251,6 @@ export enum ViewTimeRangeType {
 export enum ViewType {
   Customer = 'CUSTOMER',
   Default = 'DEFAULT',
-  DefaultAzure = 'DEFAULT_AZURE',
   Sample = 'SAMPLE'
 }
 

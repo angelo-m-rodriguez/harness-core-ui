@@ -17,6 +17,7 @@
 }
 
 .customFoldersNav {
+  position: relative;
   padding: var(--spacing-xlarge) var(--spacing-medium) 0 var(--spacing-xxlarge) !important;
 }
 
@@ -76,4 +77,12 @@
   padding: 0;
   margin: 0;
   overflow: 'scroll';
+}
+
+.searchInput {
+  height: initial;
+  position: absolute;
+  top: 10px;
+  right: var(--spacing-medium);
+  width: calc(100% - 16px);
 }

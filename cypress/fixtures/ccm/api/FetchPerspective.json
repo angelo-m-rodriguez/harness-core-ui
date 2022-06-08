@@ -13,6 +13,7 @@
       "groupBy": { "fieldId": "product", "fieldName": "Product", "identifier": "COMMON", "identifierName": "COMMON" },
       "chartType": "STACKED_LINE_CHART"
     },
+    "folderId": "",
     "viewType": "CUSTOMER",
     "viewState": "DRAFT",
     "totalCost": 0.0,

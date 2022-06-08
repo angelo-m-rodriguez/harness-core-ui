@@ -16,6 +16,7 @@ declare const styles: {
   readonly loader: string
   readonly perpectiveSearchWrapper: string
   readonly perspectiveListWrapper: string
+  readonly searchInput: string
   readonly sidenav: string
   readonly sidenavText: string
   readonly sidenavWrapper: string

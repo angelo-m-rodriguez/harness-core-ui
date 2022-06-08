@@ -29,7 +29,7 @@ import { defaultTo } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import { useCreatePerspectiveFolder } from 'services/ce'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
-import { QlceView, useFetchAllPerspectivesQuery } from 'services/ce/services'
+import { QlceSortOrder, QlceView, QlceViewSortType, useFetchAllPerspectivesQuery } from 'services/ce/services'
 import { searchList } from '@ce/utils/perspectiveUtils'
 import css from './PerspectiveFoldersSideNav.module.scss'
 
@@ -192,7 +192,8 @@ export const CreateModal: React.FC<CreateModalProps> = ({
 const useCreateFolderModal = (props: CreateFolderProps) => {
   const [result] = useFetchAllPerspectivesQuery({
     variables: {
-      folderId: props.defaultFolderId
+      folderId: props.defaultFolderId,
+      sortCriteria: { sortOrder: QlceSortOrder.Ascending, sortType: QlceViewSortType.Name }
     }
   })
   const { data } = result

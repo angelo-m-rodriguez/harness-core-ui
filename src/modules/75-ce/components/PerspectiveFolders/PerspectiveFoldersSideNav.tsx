@@ -10,6 +10,7 @@ import {
   Button,
   ButtonVariation,
   Container,
+  ExpandingSearchInput,
   Icon,
   IconName,
   Layout,
@@ -21,6 +22,7 @@ import cx from 'classnames'
 import { useStrings } from 'framework/strings'
 import type { CEViewFolder } from 'services/ce'
 import { folderViewType } from '@ce/constants'
+import { searchList } from '@ce/utils/perspectiveUtils'
 import useCreateFolderModal from './CreateFolderModal'
 import css from './PerspectiveFoldersSideNav.module.scss'
 
@@ -77,6 +79,7 @@ const SideNavItem: React.FC<SidebarLinkProps> = ({
           className={textClassName}
           lineClamp={1}
           style={{ maxWidth: 200 }}
+          iconProps={{ padding: { right: 'small' } }}
         >
           {label}
         </Text>
@@ -107,10 +110,17 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
     item => item.viewType === folderViewType.DEFAULT || item.viewType === folderViewType.SAMPLE
   )
   const customFolders: CEViewFolder[] = props.foldersList.filter(item => item.viewType === folderViewType.CUSTOMER)
+  const getCustomFolders = () => customFolders
+  const [customFoldersList, setCustomFolders] = useState(getCustomFolders)
 
   const onDelete = (folderId: string) => {
     setDeleteFolderId(folderId)
     openDeleteDialog()
+  }
+
+  const onFoldersSearch = (searchText: string) => {
+    const filteredList = searchList(searchText, customFolders)
+    setCustomFolders(filteredList)
   }
 
   const { openDialog: openDeleteDialog } = useConfirmationDialog({
@@ -173,6 +183,12 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
             >
               {getString('ce.perspectives.folders.customFolders')}
             </Text>
+            <ExpandingSearchInput
+              onChange={text => onFoldersSearch(text.trim())}
+              placeholder={getString('search')}
+              flip
+              className={css.searchInput}
+            />
             <Button
               icon="plus"
               onClick={openCreateFoldersModal}
@@ -182,7 +198,7 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
             />
           </Container>
           <ul className={css.foldersList}>
-            {customFolders.map(item => {
+            {customFoldersList.map(item => {
               return (
                 <SideNavItem
                   key={item.uuid}

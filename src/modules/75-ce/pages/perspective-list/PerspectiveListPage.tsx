@@ -17,7 +17,8 @@ import {
   FlexExpander,
   Page,
   Icon,
-  IconName
+  IconName,
+  ExpandingSearchInputHandle
 } from '@wings-software/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { defaultTo, pick } from 'lodash-es'
@@ -323,6 +324,7 @@ const PerspectiveListPage: React.FC = () => {
 
   const [isRefetchFolders, setRefetchFolders] = useState(false)
   const [refetchPerspectives, setRefetchPerspectives] = useState(false)
+  const searchRef = React.useRef<ExpandingSearchInputHandle>()
 
   useDocumentTitle(getString('ce.perspectives.sideNavText'), true)
 
@@ -356,6 +358,9 @@ const PerspectiveListPage: React.FC = () => {
     executeQuery({
       requestPolicy: 'network-only'
     })
+    if (searchParam) {
+      searchRef.current?.clear()
+    }
   }, [selectedFolderId])
 
   useEffect(() => {
@@ -633,6 +638,7 @@ const PerspectiveListPage: React.FC = () => {
                 onChange={text => {
                   setSearchParam(text.trim())
                 }}
+                ref={searchRef}
                 className={css.search}
               />
               <Layout.Horizontal>

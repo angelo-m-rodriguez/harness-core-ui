@@ -852,7 +852,7 @@ perspectives:
     folderSelectionRequired: Please select any folder to move.
     deletedConfirmationTitle: Delete Folder
     deletedConfirmationDesc: Deleting the folder will not delete the perspectives, all perspectives in the current folder will be moved to the default folder.
-  emptyStateTitle: You have not created any perspectives yet
+  emptyStateTitle: You have not created any perspectives yet in this folder
   emptyStateDesc: Create a new one or explore our Out of the box perspectives
 overview:
   title: '{{ $.overview }}'

@@ -1,8 +1,3 @@
-# Copyright 2022 Harness Inc. All rights reserved.
-# Use of this source code is governed by the PolyForm Shield 1.0.0 license
-# that can be found in the licenses directory at the root of this repository, also available at
-# https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
-
 "Directs the executor to include this field or fragment only when the `if` argument is true"
 directive @include("Included when true." if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
@@ -523,7 +518,7 @@ type Query {
     isClusterQuery: Boolean
   ): PerspectiveTrendStats
   "Fetch perspectives for account"
-  perspectives(folderId: String): PerspectiveData
+  perspectives(folderId: String, sortCriteria: QLCEViewSortCriteriaInput): PerspectiveData
   "recommendation details/drillDown"
   recommendationDetails(
     "defaults to Now()"
@@ -563,11 +558,6 @@ type RecommendClusterRequest {
 type RecommendNodePoolClusterRequest {
   recommendClusterRequest: RecommendClusterRequest
   totalResourceUsage: TotalResourceUsage
-}
-
-type ViewPreferences {
-  includeOthers: Boolean
-  includeUnallocatedCost: Boolean
 }
 
 type RecommendationItemDTO {
@@ -668,6 +658,11 @@ type TotalResourceUsage {
   summemory: Float!
 }
 
+type ViewPreferences {
+  includeOthers: Boolean
+  includeUnallocatedCost: Boolean
+}
+
 type VirtualMachine {
   allocatableCpusPerVm: Float
   allocatableMemPerVm: Float
@@ -763,6 +758,7 @@ enum QLCEViewFilterOperator {
 enum QLCEViewSortType {
   CLUSTER_COST
   COST
+  NAME
   TIME
 }
 
@@ -825,7 +821,6 @@ enum ViewTimeRangeType {
 enum ViewType {
   CUSTOMER
   DEFAULT
-  DEFAULT_AZURE
   SAMPLE
 }
 
