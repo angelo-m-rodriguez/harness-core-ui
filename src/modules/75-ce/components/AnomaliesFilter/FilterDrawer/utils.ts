@@ -29,6 +29,9 @@ export const getAnomalyFormValuesFromFilterProperties = (
     k8sClusterNames,
     k8sNamespaces,
     k8sWorkloadNames,
+    azureResourceGroups,
+    azureMeterCategories,
+    azureSubscriptionGuids,
     minActualAmount,
     minAnomalousSpend
   } = filterProperties
@@ -60,6 +63,15 @@ export const getAnomalyFormValuesFromFilterProperties = (
   if (k8sWorkloadNames) {
     formValues.k8sWorkloadNames = getMultiSelectOptions(k8sWorkloadNames)
   }
+  if (azureResourceGroups) {
+    formValues.azureResourceGroups = getMultiSelectOptions(azureResourceGroups)
+  }
+  if (azureMeterCategories) {
+    formValues.azureMeterCategories = getMultiSelectOptions(azureMeterCategories)
+  }
+  if (azureSubscriptionGuids) {
+    formValues.azureSubscriptionGuids = getMultiSelectOptions(azureSubscriptionGuids)
+  }
 
   if (minActualAmount) {
     formValues.minActualAmount = +minActualAmount
@@ -85,6 +97,9 @@ export const getAnomalyFilterPropertiesFromForm = (formData: AnomaliesFilterForm
     k8sClusterNames,
     k8sNamespaces,
     k8sWorkloadNames,
+    azureResourceGroups,
+    azureMeterCategories,
+    azureSubscriptionGuids,
     minActualAmount,
     minAnomalousSpend
   } = formData
@@ -115,6 +130,15 @@ export const getAnomalyFilterPropertiesFromForm = (formData: AnomaliesFilterForm
   }
   if (k8sWorkloadNames) {
     filterProperties.k8sWorkloadNames = getValueFromOption(k8sWorkloadNames)
+  }
+  if (azureResourceGroups) {
+    filterProperties.azureResourceGroups = getValueFromOption(azureResourceGroups)
+  }
+  if (azureMeterCategories) {
+    filterProperties.azureMeterCategories = getValueFromOption(azureMeterCategories)
+  }
+  if (azureSubscriptionGuids) {
+    filterProperties.azureSubscriptionGuids = getValueFromOption(azureSubscriptionGuids)
   }
 
   if (minActualAmount) {

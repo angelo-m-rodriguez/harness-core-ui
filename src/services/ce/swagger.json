@@ -3523,19 +3523,19 @@
             "type": "string"
           }
         },
-        "azureSubscriptions": {
+        "azureSubscriptionGuids": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "azureServiceNames": {
+        "azureResourceGroups": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "azureResources": {
+        "azureMeterCategories": {
           "type": "array",
           "items": {
             "type": "string"

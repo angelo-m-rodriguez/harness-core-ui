@@ -16,6 +16,7 @@ import type { FilterStatsDTO } from 'services/ce'
 import type { CcmMetaData } from 'services/ce/services'
 import {
   awsFilterKeys,
+  azureFilterKeys,
   filterKeyToKeyMapping,
   filterKeyToLabelMapping,
   gcpFilterKeys,
@@ -70,6 +71,7 @@ const RecommendationFilterForm: React.FC<RecommendationFilterFormProps> = ({
   const { state: isAwsCardVisible, toggle: toggleAwsCard } = useBooleanStatus()
   const { state: isGcpCardVisible, toggle: toggleGcpCard } = useBooleanStatus()
   const { state: isK8sCardVisible, toggle: toggleK8sCard } = useBooleanStatus()
+  const { state: isAzureCardVisible, toggle: toggleAzureCard } = useBooleanStatus()
 
   return (
     <Container className={css.anomalyFilterForm}>
@@ -116,6 +118,16 @@ const RecommendationFilterForm: React.FC<RecommendationFilterFormProps> = ({
           filterKeys={awsFilterKeys}
           getItemsFromFilterValues={getItemsFromFilterValues}
           header={getString('ce.anomalyDetection.filters.awsFilters')}
+          getSelectedFiltersCount={getSelectedFiltersCount}
+        />
+      ) : null}
+      {ccmMetaData.defaultAzurePerspectiveId ? (
+        <CloudProviderFilterCard
+          visible={isAzureCardVisible}
+          toggleCard={toggleAzureCard}
+          filterKeys={azureFilterKeys}
+          getItemsFromFilterValues={getItemsFromFilterValues}
+          header={getString('ce.anomalyDetection.filters.azureFilters')}
           getSelectedFiltersCount={getSelectedFiltersCount}
         />
       ) : null}

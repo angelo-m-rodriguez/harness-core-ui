@@ -30,7 +30,10 @@ export const anomalyFilterValueColumns = [
   'gcpskudescription',
   'awsaccount',
   'awsservice',
-  'awsusagetype'
+  'awsusagetype',
+  'azuresubscriptionguid',
+  'azureresourcegroup',
+  'azuremetercategory'
 ]
 
 export const filterKeyToKeyMapping: Record<string, string> = {
@@ -42,7 +45,10 @@ export const filterKeyToKeyMapping: Record<string, string> = {
   k8sWorkloadNames: 'workloadname',
   awsAccounts: 'awsaccount',
   awsServices: 'awsservice',
-  awsUsageTypes: 'awsusagetype'
+  awsUsageTypes: 'awsusagetype',
+  azureSubscriptionGuids: 'azuresubscriptionguid',
+  azureResourceGroups: 'azureresourcegroup',
+  azureMeterCategories: 'azuremetercategory'
 }
 
 export const filterKeyToLabelMapping: Record<string, string> = {
@@ -55,15 +61,15 @@ export const filterKeyToLabelMapping: Record<string, string> = {
   awsAccounts: 'AWS Account',
   awsServices: 'AWS Service',
   awsUsageTypes: 'AWS Usage Type',
-  azureSubscriptions: 'AZURE Subscription',
-  azureServiceNames: 'AZURE Service Name',
-  azureResources: 'AZURE Resource'
+  azureSubscriptionGuids: 'AZURE Subscription',
+  azureMeterCategories: 'AZURE Meter Categories',
+  azureResourceGroups: 'AZURE Resource'
 }
 
 export const k8sFilterKeys = ['k8sClusterNames', 'k8sNamespaces', 'k8sWorkloadNames']
 export const gcpFilterKeys = ['gcpProjects', 'gcpProducts', 'gcpSKUDescriptions']
 export const awsFilterKeys = ['awsAccounts', 'awsServices', 'awsUsageTypes']
-export const azureFilterKeys = ['azureSubscriptions', 'azureServiceNames', 'azureResources']
+export const azureFilterKeys = ['azureSubscriptionGuids', 'azureMeterCategories', 'azureResourceGroups']
 
 const fieldToFieldNameMapping: Record<string, string> = {
   gcpProduct: 'Product',

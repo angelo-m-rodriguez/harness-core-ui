@@ -42,6 +42,9 @@ export interface AnomaliesFilterFormType {
   awsAccounts?: MultiSelectOption[]
   awsServices?: MultiSelectOption[]
   awsUsageTypes?: MultiSelectOption[]
+  azureSubscriptionGuids?: MultiSelectOption[]
+  azureMeterCategories?: MultiSelectOption[]
+  azureResourceGroups?: MultiSelectOption[]
   minActualAmount?: number
   minAnomalousSpend?: number
 }

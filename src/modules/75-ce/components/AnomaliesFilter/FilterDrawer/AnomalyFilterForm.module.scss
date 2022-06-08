@@ -7,7 +7,7 @@
 
 .anomalyFilterForm {
   width: 350px;
-  height: 800px;
+  height: calc(100vh - 160px);
   overflow: scroll;
 
   .label {

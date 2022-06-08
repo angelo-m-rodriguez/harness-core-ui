@@ -51,9 +51,9 @@ export interface AnomalyFilterProperties {
   awsAccounts?: string[]
   awsServices?: string[]
   awsUsageTypes?: string[]
-  azureResources?: string[]
-  azureServiceNames?: string[]
-  azureSubscriptions?: string[]
+  azureMeterCategories?: string[]
+  azureResourceGroups?: string[]
+  azureSubscriptionGuids?: string[]
   filterType?:
     | 'Connector'
     | 'DelegateProfile'
