@@ -46,7 +46,6 @@ const FileStoreInput: React.FC<FormikFileStoreInput> = (props: FormikFileStoreIn
     applySelected: value => formik.setFieldValue(name, value)
   })
   const placeholder_ = defaultTo(placeholder, getString('select'))
-  const label_ = defaultTo(label, getString('select'))
 
   const getScope = (scopeType: string): string => {
     switch (scopeType) {
@@ -74,11 +73,12 @@ const FileStoreInput: React.FC<FormikFileStoreInput> = (props: FormikFileStoreIn
     <FormGroup
       helperText={errorCheck() ? get(formik?.errors, name) : null}
       intent={errorCheck() ? Intent.DANGER : Intent.NONE}
+      style={{ width: '100%' }}
     >
       <Layout.Vertical>
-        {label_ ? (
+        {label ? (
           <label className={'bp3-label'}>
-            <HarnessDocTooltip tooltipId={dataTooltipId} labelText={label_} />
+            <HarnessDocTooltip tooltipId={dataTooltipId} labelText={label} />
           </label>
         ) : null}
         <Container

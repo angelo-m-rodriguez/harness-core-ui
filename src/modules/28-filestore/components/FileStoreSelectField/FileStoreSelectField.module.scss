@@ -7,11 +7,12 @@
 
 .container {
   min-height: 32px;
-  border: 1px solid var(--bp3-intent-color);
+  border: 1px solid var(--grey-200);
   background-color: var(--white) !important;
   border-radius: 4px;
   overflow: hidden;
   position: relative;
   padding-left: var(--spacing-xsmall);
   cursor: pointer;
+  width: 100%;
 }

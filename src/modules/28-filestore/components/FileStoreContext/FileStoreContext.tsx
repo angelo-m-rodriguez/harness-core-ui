@@ -26,6 +26,7 @@ export interface FileStoreNodeDTO extends NodeDTO {
   description?: string
   tags?: NGTag[]
   parentName?: string
+  path?: string
 }
 
 export interface FileStoreContextState {
