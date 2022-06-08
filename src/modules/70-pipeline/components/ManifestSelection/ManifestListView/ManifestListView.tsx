@@ -90,6 +90,7 @@ import InheritFromManifest from '../ManifestWizardSteps/InheritFromManifest/Inhe
 import ConnectorField from './ConnectorField'
 import HelmWithOCI from '../ManifestWizardSteps/HelmWithOCI/HelmWithOCI'
 import { getConnectorPath } from '../ManifestWizardSteps/ManifestUtils'
+import HarnessFileStore from '../ManifestWizardSteps/HarnessFileStore/HarnessFileStore'
 import css from '../ManifestSelection.module.scss'
 
 const showAddManifestBtn = (isReadonly: boolean, allowOnlyOne: boolean, listOfManifests: Array<any>): boolean => {
@@ -369,6 +370,9 @@ function ManifestListView({
         selectedManifest as ManifestTypes
       ) && manifestStore === ManifestStoreMap.InheritFromManifest:
         manifestDetailStep = <InheritFromManifest {...lastStepProps()} />
+        break
+      case manifestStore === ManifestStoreMap.Harness:
+        manifestDetailStep = <HarnessFileStore {...lastStepProps()} />
         break
       case [ManifestDataType.K8sManifest, ManifestDataType.Values].includes(selectedManifest as ManifestTypes) &&
         [ManifestStoreMap.Git, ManifestStoreMap.Github, ManifestStoreMap.GitLab, ManifestStoreMap.Bitbucket].includes(

@@ -40,8 +40,12 @@ export type ManifestStores =
   | 'Gcs'
   | 'InheritFromManifest'
   | 'Inline'
-export type HelmVersionOptions = 'V2' | 'V3'
+  | 'Harness'
+
 export type HelmOCIVersionOptions = 'V380'
+export type HelmVersionOptions = 'V2' | 'V3'
+export type ManifestStoreWithoutConnector = Exclude<ManifestStores, 'InheritFromManifest' | 'Harness' | 'Inline'>
+
 export interface ManifestSelectionProps {
   isPropagating?: boolean
   deploymentType: ServiceDefinition['type']
@@ -188,4 +192,9 @@ export interface InheritFromManifestDataType {
 export interface InlineDataType {
   identifier: string
   content: string
+}
+export interface HarnessFileStoreDataType {
+  identifier: string
+  files: any
+  valuesPaths?: any
 }
