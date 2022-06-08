@@ -385,3 +385,44 @@ export const sourceCodeManage = {
   ],
   correlationId: '86eb32ff-8d35-478c-a5b8-bb3e373ad03f'
 }
+
+export const gitSimpplificationMockData = {
+  createInputSetCallFirstArg: `inputSet:
+  name: asd
+  identifier: asd
+  description: asd
+  pipeline:
+    identifier: testqqq
+    stages:
+      - stage:
+          identifier: asd
+          type: Deployment
+          spec:
+            infrastructure:
+              infrastructureDefinition:
+                type: KubernetesDirect
+                spec:
+                  connectorRef: org.tesa1
+                  namespace: asd
+                  releaseName: asd
+`,
+  createInputSetCallSecondArg: {
+    queryParams: {
+      accountIdentifier: 'testAcc',
+      branch: 'feature',
+      commitMsg: 'common.gitSync.createResource',
+      createPr: false,
+      filePath: '.harness/asd.yaml',
+      isNewBranch: false,
+      orgIdentifier: 'testOrg',
+      pipelineIdentifier: 'pipeline',
+      projectIdentifier: 'test',
+      repoIdentifier: 'identifier',
+      rootFolder: '',
+      targetBranch: '',
+      connectorRef: 'connectorRef',
+      repoName: 'identifier',
+      storeType: 'REMOTE'
+    }
+  }
+}

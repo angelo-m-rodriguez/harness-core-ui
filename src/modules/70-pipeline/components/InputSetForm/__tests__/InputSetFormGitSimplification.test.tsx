@@ -20,7 +20,6 @@ import { EnhancedInputSetForm } from '../InputSetForm'
 import {
   TemplateResponse,
   PipelineResponse,
-  ConnectorResponse,
   GetInputSetsResponse,
   GetInputSetEdit,
   MergeInputSetResponse,
@@ -28,34 +27,62 @@ import {
   createInputSetCallFirstArg,
   createInputSetCallSecondArg,
   updateInputSetCallSecondArgNewBranch,
-  updateInputSetCallSecondArg
+  gitSimpplificationMockData
 } from './InputSetMocks'
 import pipelineContextMock from '../../PipelineStudio/PipelineCanvas/__tests__/PipelineCanvasGitSyncTestHelper'
+import { StoreType } from '@common/constants/GitSyncTypes'
+import { gitHubMock } from '@gitsync/components/gitSyncRepoForm/__tests__/mockData'
 
 const successResponse = (): Promise<{ status: string }> => Promise.resolve({ status: 'SUCCESS' })
 
-jest.mock('@common/utils/YamlUtils', () => ({
-  validateJSONWithSchema: jest.fn(() => Promise.resolve(new Map())),
-  useValidationError: () => ({ errorMap: new Map() })
-}))
 jest.mock('@common/components/YAMLBuilder/YamlBuilder')
 
 const getListOfBranchesWithStatus = jest.fn(() => Promise.resolve(branchStatusMock))
 const getListGitSync = jest.fn(() => Promise.resolve(gitConfigs))
 
+const mockRepos = {
+  status: 'SUCCESS',
+  data: [{ name: 'repo1' }, { name: 'repo2' }, { name: 'repo3' }, { name: 'repotest1' }, { name: 'repotest2' }],
+  metaData: null,
+  correlationId: 'correlationId'
+}
+
+const mockBranches = {
+  status: 'SUCCESS',
+  data: {
+    branches: [{ name: 'main' }, { name: 'main-demo' }, { name: 'main-patch' }, { name: 'main-patch2' }],
+    defaultBranch: { name: 'main' }
+  },
+  metaData: null,
+  correlationId: 'correlationId'
+}
+
+const getGitConnector = jest.fn(() => Promise.resolve(gitHubMock))
+const fetchRepos = jest.fn(() => Promise.resolve(mockRepos))
+const fetchBranches = jest.fn(() => Promise.resolve(mockBranches))
+
 jest.mock('services/cd-ng', () => ({
-  useGetConnector: jest.fn(() => ConnectorResponse),
+  getConnectorListV2Promise: jest.fn(() => Promise.resolve(gitHubMock)),
+  useGetConnector: jest.fn().mockImplementation(() => {
+    return { data: gitHubMock.data.content[0], refetch: getGitConnector, loading: false }
+  }),
+  useGetListOfReposByRefConnector: jest.fn().mockImplementation(() => {
+    return { data: mockRepos, refetch: fetchRepos, loading: false }
+  }),
+  useGetListOfBranchesByRefConnectorV2: jest.fn().mockImplementation(() => {
+    return { data: mockBranches, refetch: fetchBranches }
+  }),
   useCreatePR: jest.fn(() => noop),
   useCreatePRV2: jest.fn(() => noop),
   useGetFileContent: jest.fn(() => noop),
-  useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => {
-    return { data: branchStatusMock, refetch: getListOfBranchesWithStatus, loading: false }
-  }),
   useListGitSync: jest.fn().mockImplementation(() => {
     return { data: gitSyncListResponse, refetch: getListGitSync, loading: false }
   }),
   useGetSourceCodeManagers: jest.fn().mockImplementation(() => {
     return { data: sourceCodeManagers, refetch: jest.fn() }
+  }),
+  useGetListOfBranchesWithStatus: jest.fn().mockImplementation(() => {
+    return { data: branchStatusMock, refetch: getListOfBranchesWithStatus, loading: false }
   })
 }))
 
@@ -93,9 +120,9 @@ const TEST_INPUT_SET_FORM_PATH = routes.toInputSetForm({
   ...pipelineModuleParams
 })
 
-describe('InputSetFrom testing - When GitSync is enabled', () => {
+describe('InputSetFrom testing - When Git Simplification is enabled', () => {
   describe('Edit InputSet', () => {
-    test('render Input Set Form view in edit mode', async () => {
+    test.only('render Input Set Form view in edit mode', async () => {
       const { container } = render(
         <PipelineContext.Provider value={pipelineContextMock}>
           <GitSyncTestWrapper
@@ -109,15 +136,18 @@ describe('InputSetFrom testing - When GitSync is enabled', () => {
               module: 'cd'
             }}
             queryParams={{
-              repoIdentifier: 'identifier',
-              branch: 'feature'
+              repoName: 'identifier',
+              branch: 'feature',
+              connectorRef: 'connectorRef',
+              storeType: StoreType.REMOTE
             }}
-            defaultAppStoreValues={{ ...defaultAppStoreValues, isGitSyncEnabled: true }}
+            defaultAppStoreValues={{ ...defaultAppStoreValues, isGitSimplificationEnabled: true }}
           >
             <EnhancedInputSetForm />
           </GitSyncTestWrapper>
         </PipelineContext.Provider>
       )
+      expect(container).toMatchSnapshot()
       const saveBtn = (await findByText(container, 'save')).parentElement
       expect(saveBtn).toBeInTheDocument()
       fireEvent.click(saveBtn!)
@@ -133,7 +163,10 @@ describe('InputSetFrom testing - When GitSync is enabled', () => {
       userEvent.click(saveToGitSaveBtn!)
       await waitFor(() => {
         expect(updateInputSet).toHaveBeenCalled()
-        expect(updateInputSet).toHaveBeenCalledWith(createInputSetCallFirstArg, updateInputSetCallSecondArg)
+        expect(updateInputSet).toHaveBeenCalledWith(
+          gitSimpplificationMockData.createInputSetCallFirstArg,
+          gitSimpplificationMockData.createInputSetCallSecondArg
+        )
       })
     })
 
@@ -160,6 +193,7 @@ describe('InputSetFrom testing - When GitSync is enabled', () => {
           </GitSyncTestWrapper>
         </PipelineContext.Provider>
       )
+      jest.runOnlyPendingTimers()
       const saveBtn = (await findByText(container, 'save')).parentElement
       expect(saveBtn).toBeInTheDocument()
       fireEvent.click(saveBtn!)
@@ -221,6 +255,7 @@ describe('InputSetFrom testing - When GitSync is enabled', () => {
           </GitSyncTestWrapper>
         </PipelineContext.Provider>
       )
+      jest.runOnlyPendingTimers()
       const saveBtn = (await findByText(container, 'save')).parentElement
       expect(saveBtn).toBeInTheDocument()
       fireEvent.click(saveBtn!)

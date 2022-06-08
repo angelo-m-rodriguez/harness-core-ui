@@ -122,8 +122,12 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
                 orgIdentifier,
                 pipelineIdentifier,
                 projectIdentifier,
-                pipelineRepoID: repoIdentifier,
-                pipelineBranch: branch,
+                ...(isGitSyncEnabled
+                  ? {
+                      pipelineRepoID: repoIdentifier,
+                      pipelineBranch: branch
+                    }
+                  : {}),
                 ...(initialStoreMetadata.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
                 ...updatedGitDetails
               }
@@ -138,8 +142,12 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
               orgIdentifier,
               pipelineIdentifier,
               projectIdentifier,
-              pipelineRepoID: repoIdentifier,
-              pipelineBranch: branch,
+              ...(isGitSyncEnabled
+                ? {
+                    pipelineRepoID: repoIdentifier,
+                    pipelineBranch: branch
+                  }
+                : {}),
               ...(initialStoreMetadata.storeType === StoreType.REMOTE ? initialStoreMetadata : {}),
               ...updatedGitDetails
             }

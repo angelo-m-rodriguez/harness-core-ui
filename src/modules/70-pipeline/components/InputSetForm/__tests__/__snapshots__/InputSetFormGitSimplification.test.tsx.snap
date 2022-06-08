@@ -1,0 +1,867 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputSetFrom testing - When Git Simplification is enabled Edit InputSet render Input Set Form view in edit mode 1`] = `
+<div>
+  <div
+    class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--standard pageHeaderStyles StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"
+  >
+    <div
+      class="Layout--vertical StyledProps--main"
+    >
+      <div
+        class="PageHeader--breadcrumbsDiv"
+      >
+        <div
+          class="Layout--horizontal StyledProps--main Breadcrumbs--breadcrumbs StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+        >
+          <div
+            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+          >
+            <a
+              class="Breadcrumbs--breadcrumb"
+              href="/account/testAcc/cd"
+            >
+              <span
+                class="bp3-icon StyledProps--main StyledProps--padding-right-xsmall"
+                data-icon="cd-main"
+              >
+                <svg
+                  height="16"
+                  viewBox="0 0 32 32"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    d="M26.427 7.06A5.073 5.073 0 0129 11.52l-.077 8.934a5.073 5.073 0 01-2.537 4.35l-8.002 4.618a5.073 5.073 0 01-5.035.021l-7.776-4.402A5.073 5.073 0 013 20.583l.077-8.935a5.073 5.073 0 012.537-4.35l8.002-4.619a5.073 5.073 0 015.035-.02l7.776 4.402zm-2.83 6.938c-.42 1.586-2.029 2.538-3.601 2.141l-7.489-2.026a4.696 4.696 0 00-3.62.48 4.773 4.773 0 00-2.222 2.925 4.835 4.835 0 00.479 3.664 4.757 4.757 0 002.905 2.251 4.696 4.696 0 003.62-.48 4.773 4.773 0 002.222-2.924l.26-1.047a.25.25 0 00-.177-.302l-1.258-.34a.25.25 0 00-.307.18l-.256 1.025c-.426 1.602-2.064 2.556-3.651 2.127-1.582-.428-2.523-2.073-2.1-3.67.421-1.586 2.03-2.538 3.602-2.142l7.489 2.027a4.696 4.696 0 003.62-.48 4.773 4.773 0 002.222-2.925 4.835 4.835 0 00-.479-3.664 4.757 4.757 0 00-2.905-2.251 4.696 4.696 0 00-3.62.48 4.773 4.773 0 00-2.222 2.924l-.247.828a.25.25 0 00.174.312l1.259.34a.25.25 0 00.304-.169l.248-.827c.426-1.602 2.064-2.557 3.651-2.127 1.582.428 2.523 2.073 2.1 3.67z"
+                    fill="url(#cd-main_svg__a)"
+                    fill-rule="evenodd"
+                  />
+                  <defs>
+                    <lineargradient
+                      gradientUnits="userSpaceOnUse"
+                      id="cd-main_svg__a"
+                      x1="6.774"
+                      x2="21.5"
+                      y1="2"
+                      y2="30"
+                    >
+                      <stop
+                        stop-color="#62F91F"
+                      />
+                      <stop
+                        offset="1"
+                        stop-color="#45BD35"
+                      />
+                    </lineargradient>
+                  </defs>
+                </svg>
+              </span>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+              >
+                test
+              </p>
+            </a>
+            <span
+              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+              data-icon="main-chevron-right"
+            >
+              <svg
+                height="8"
+                viewBox="0 0 8 14"
+                width="8"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                  fill="#4d5969"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+          >
+            <a
+              class="Breadcrumbs--breadcrumb"
+              href="/account/testAcc/cd/orgs/testOrg/projects/test/pipelines"
+            >
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+              >
+                pipelines
+              </p>
+            </a>
+            <span
+              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+              data-icon="main-chevron-right"
+            >
+              <svg
+                height="8"
+                viewBox="0 0 8 14"
+                width="8"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                  fill="#4d5969"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+          >
+            <a
+              class="Breadcrumbs--breadcrumb"
+              href="/account/testAcc/cd/orgs/testOrg/projects/test/pipelines/pipeline/input-sets?connectorRef=connectorRef&repoName=identifier&storeType=REMOTE"
+            >
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+              >
+                testsdfsdf
+              </p>
+            </a>
+            <span
+              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+              data-icon="main-chevron-right"
+            >
+              <svg
+                height="8"
+                viewBox="0 0 8 14"
+                width="8"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                  fill="#4d5969"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main"
+        style="width: 42%;"
+      >
+        <p
+          class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800 StyledProps--font-weight-bold StyledProps--font-variation-h4"
+          style="--text-line-clamp: 1;"
+        >
+          inputSets.editTitle
+        </p>
+        <span
+          class="bp3-popover-wrapper"
+        >
+          <span
+            class="bp3-popover-target"
+          >
+            <span
+              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey700 StyledProps--margin-left-small StyledProps--margin-top-xsmall"
+              data-icon="service-github"
+              data-testid="git-popover"
+              tabindex="0"
+            >
+              <svg
+                height="16"
+                viewBox="0 0 14 14"
+                width="16"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.6 6.4l-6-6C7.3.1 6.7.1 6.4.4L5.1 1.6l1.6 1.6c.4-.1.8 0 1.1.3s.4.7.2 1.1l1.5 1.5c.4-.1.8 0 1.1.2.4.4.4 1.1 0 1.5s-1.1.4-1.5 0c-.3-.3-.3-.7-.2-1.1L7.5 5.3V9c.1 0 .2.1.3.2.4.4.4 1.1 0 1.5s-1.1.4-1.5 0-.4-1.1 0-1.5c.1-.1.2-.2.3-.2V5.2c-.1-.1-.2-.1-.3-.2-.3-.4-.4-.8-.2-1.2L4.5 2.3.4 6.4c-.3.3-.3.9 0 1.2l6 6c.3.3.9.3 1.2 0l6-6c.3-.3.3-.9 0-1.2z"
+                  fill="#f42534"
+                />
+              </svg>
+            </span>
+          </span>
+        </span>
+        <div
+          class="optionBtns"
+        >
+          <div
+            class="PillToggle--optionBtns"
+          >
+            <div
+              class="PillToggle--item PillToggle--selected"
+              data-name="toggle-option-one"
+              role="button"
+              tabindex="0"
+            >
+              VISUAL
+            </div>
+            <div
+              class="PillToggle--item"
+              data-name="toggle-option-two"
+              role="button"
+              tabindex="0"
+            >
+              YAML
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main PageBody--pageBody"
+    data-name="page-body"
+  >
+    <div
+      class="StyledProps--font StyledProps--main inputSetForm"
+    >
+      <div
+        class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+      >
+        <div
+          class="OverlaySpinner--overlaySpinner"
+        >
+          <div
+            class="inputsetGrid"
+          >
+            <div>
+              <form
+                action="#"
+                class="FormikForm--main"
+              >
+                <div>
+                  <div
+                    class="Layout--vertical StyledProps--main content StyledProps--padding-xlarge"
+                  >
+                    <div
+                      class="StyledProps--font StyledProps--main main nameiddescription"
+                    >
+                      <div
+                        class="InputWithIdentifier--txtNameContainer TextInput--main"
+                      >
+                        <div
+                          class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main InputWithIdentifier--txtIdContainer"
+                        >
+                          <div
+                            class="Text--withDocsTooltip"
+                            data-tooltip-id="inputSetForm_identifier"
+                          >
+                            <p
+                              class="StyledProps--font StyledProps--main"
+                            >
+                              Id
+                            </p>
+                          </div>
+                          <p
+                            class="StyledProps--font StyledProps--main"
+                          >
+                            :
+                          </p>
+                          <span
+                            class="bp3-popover-wrapper"
+                          >
+                            <span
+                              class="bp3-popover-target"
+                            >
+                              <div
+                                class="bp3-editable-text bp3-disabled InputWithIdentifier--idValue"
+                              >
+                                <span
+                                  class="bp3-editable-text-content"
+                                  style="height: 1px; line-height: 1px; min-width: 0;"
+                                >
+                                  asd
+                                </span>
+                              </div>
+                            </span>
+                          </span>
+                        </div>
+                        <div
+                          class="bp3-form-group"
+                          data-id="name-0"
+                        >
+                          <label
+                            class="bp3-label"
+                            for="name"
+                          >
+                            <span
+                              class="Tooltip--acenter"
+                              data-tooltip-id="inputSetForm_name"
+                            >
+                              name
+                            </span>
+                             
+                            <span
+                              class="bp3-text-muted"
+                            />
+                          </label>
+                          <div
+                            class="bp3-form-content"
+                          >
+                            <div
+                              class="bp3-input-group"
+                            >
+                              <input
+                                autocomplete="off"
+                                class="bp3-input"
+                                name="name"
+                                type="text"
+                                value="asd"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="StyledProps--font StyledProps--main"
+                        style="margin-bottom: 0px;"
+                      >
+                        <label
+                          class="Label--main bp3-label descriptionLabel"
+                        >
+                          optionalField
+                        </label>
+                        <div
+                          class="bp3-form-group"
+                          data-id="description-1"
+                        >
+                          <div
+                            class="bp3-form-content"
+                          >
+                            <textarea
+                              autocomplete="off"
+                              class="bp3-input bp3-fill"
+                              maxlength="1024"
+                              name="description"
+                              placeholder="common.descriptionPlaceholder"
+                            >
+                              asd
+                            </textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="StyledProps--font StyledProps--main"
+                      >
+                        <label
+                          class="Label--main bp3-label descriptionLabel"
+                        >
+                          optionalField
+                          <span
+                            class="bp3-icon StyledProps--main editOpen"
+                            data-icon="Edit"
+                            data-name="edit"
+                            data-testid="tags-edit"
+                          >
+                            <svg
+                              height="12"
+                              viewBox="0 0 16 16"
+                              width="12"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                clip-rule="evenodd"
+                                d="M11.207.485a.5.5 0 01.354-.146 3.5 3.5 0 013.5 3.5.5.5 0 01-.146.353l-11 11a.5.5 0 01-.354.147h-3a.5.5 0 01-.5-.5v-3a.5.5 0 01.146-.354l11-11zm.553.862L1.061 12.046v2.293h2.293l10.7-10.7a2.5 2.5 0 00-2.294-2.292z"
+                                fill="currentColor"
+                                fill-rule="evenodd"
+                              />
+                              <path
+                                clip-rule="evenodd"
+                                d="M11.89 2.646a.5.5 0 010 .708L8.353 6.889a.5.5 0 01-.708-.707l3.536-3.536a.5.5 0 01.707 0z"
+                                fill="currentColor"
+                                fill-rule="evenodd"
+                                opacity="0.3"
+                              />
+                            </svg>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      class="StyledProps--font StyledProps--main gitContextForm StyledProps--border StyledProps--border-top StyledProps--padding-top-medium StyledProps--padding-bottom-medium"
+                      data-testid="GitContextForm"
+                    >
+                      <p
+                        class="StyledProps--font StyledProps--main StyledProps--margin-top-small StyledProps--margin-bottom-small"
+                      >
+                        COMMON.GITSYNC.GITREPOSITORYDETAILS
+                      </p>
+                      <div
+                        class="bp3-form-group bp3-disabled"
+                        data-id="repo-2"
+                      >
+                        <label
+                          class="bp3-label"
+                          for="repo"
+                        >
+                          <span
+                            class="Tooltip--acenter"
+                            data-tooltip-id="inputSetForm_repo"
+                          >
+                            common.git.selectRepoLabel
+                          </span>
+                           
+                          <span
+                            class="bp3-text-muted"
+                          />
+                        </label>
+                        <div
+                          class="bp3-form-content"
+                        >
+                          <div
+                            class="bp3-popover-wrapper Select--main bp3-fill"
+                          >
+                            <div
+                              class="bp3-popover-target"
+                            >
+                              <div
+                                class="bp3-input-group bp3-disabled"
+                              >
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  disabled=""
+                                  name="repo"
+                                  placeholder="- Select -"
+                                  style="padding-right: 0px;"
+                                  type="text"
+                                  value=""
+                                />
+                                <span
+                                  class="bp3-input-action"
+                                >
+                                  <span
+                                    class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                    icon="chevron-down"
+                                  >
+                                    <svg
+                                      data-icon="chevron-down"
+                                      height="14"
+                                      viewBox="0 0 16 16"
+                                      width="14"
+                                    >
+                                      <desc>
+                                        chevron-down
+                                      </desc>
+                                      <path
+                                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center"
+                      >
+                        <div
+                          class="bp3-form-group bp3-disabled selectBranchInput"
+                          data-id="branch-3"
+                        >
+                          <label
+                            class="bp3-label"
+                            for="branch"
+                          >
+                            <span
+                              class="Tooltip--acenter"
+                              data-tooltip-id="inputSetForm_branch"
+                            >
+                              common.gitSync.selectBranchLabel
+                            </span>
+                             
+                            <span
+                              class="bp3-text-muted"
+                            />
+                          </label>
+                          <div
+                            class="bp3-form-content"
+                          >
+                            <div
+                              class="bp3-popover-wrapper Select--main bp3-fill"
+                            >
+                              <div
+                                class="bp3-popover-target"
+                              >
+                                <div
+                                  class="bp3-input-group bp3-disabled"
+                                >
+                                  <input
+                                    autocomplete="off"
+                                    class="bp3-input"
+                                    disabled=""
+                                    name="branch"
+                                    placeholder="- Select -"
+                                    style="padding-right: 0px;"
+                                    type="text"
+                                    value="feature"
+                                  />
+                                  <span
+                                    class="bp3-input-action"
+                                  >
+                                    <span
+                                      class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                      icon="chevron-down"
+                                    >
+                                      <svg
+                                        data-icon="chevron-down"
+                                        height="14"
+                                        viewBox="0 0 16 16"
+                                        width="14"
+                                      >
+                                        <desc>
+                                          chevron-down
+                                        </desc>
+                                        <path
+                                          d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                          fill-rule="evenodd"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="StyledProps--font StyledProps--main"
+                          style="width: 16px;"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="StyledProps--font StyledProps--main gitRemoteDetailsForm"
+                    >
+                      <div
+                        class="StyledProps--font StyledProps--main gitSyncForm StyledProps--padding-top-large"
+                      >
+                        <div
+                          class="Layout--horizontal StyledProps--main"
+                        >
+                          <div
+                            class="Layout--vertical StyledProps--main"
+                          >
+                            <div
+                              class="bp3-form-group"
+                              data-id="null-4"
+                            >
+                              <label
+                                class="bp3-label"
+                              >
+                                <span
+                                  class="Tooltip--acenter"
+                                  data-tooltip-id="inputSetForm_connectorRef"
+                                >
+                                  Select Git Connector
+                                </span>
+                                 
+                                <span
+                                  class="bp3-text-muted"
+                                />
+                              </label>
+                              <div
+                                class="bp3-form-content"
+                              >
+                                <button
+                                  class="bp3-button bp3-disabled bp3-minimal Button--button StyledProps--font StyledProps--main container Button--iconOnly Button--without-shadow Button--withRightIcon"
+                                  data-testid="cr-field-connectorRef"
+                                  disabled=""
+                                  style="width: 350px;"
+                                  tabindex="-1"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp3-button-text"
+                                  >
+                                    <div
+                                      class="Layout--horizontal Layout--layout-spacing-small StyledProps--main selectWrapper StyledProps--flex StyledProps--flex-distribution-space-between"
+                                    >
+                                      <p
+                                        class="StyledProps--font StyledProps--main label StyledProps--color StyledProps--color-grey800"
+                                      />
+                                      <div
+                                        class="rightStatus"
+                                      >
+                                        <span
+                                          class="bp3-icon bp3-icon-full-circle StyledProps--main status redStatus"
+                                          data-testid="crf-status"
+                                          icon="full-circle"
+                                        >
+                                          <svg
+                                            data-icon="full-circle"
+                                            height="6"
+                                            viewBox="0 0 16 16"
+                                            width="6"
+                                          >
+                                            <desc>
+                                              full-circle
+                                            </desc>
+                                            <path
+                                              d="M8 0a8 8 0 100 16A8 8 0 108 0z"
+                                              fill-rule="evenodd"
+                                            />
+                                          </svg>
+                                        </span>
+                                        <span
+                                          class="Tag--main"
+                                        >
+                                          <span
+                                            class="bp3-tag bp3-minimal"
+                                            id="tag"
+                                          >
+                                            <span
+                                              class="bp3-text-overflow-ellipsis bp3-fill"
+                                            >
+                                              project
+                                            </span>
+                                          </span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </span>
+                                  <span
+                                    class="bp3-icon bp3-icon-chevron-down StyledProps--main"
+                                    icon="chevron-down"
+                                  >
+                                    <svg
+                                      data-icon="chevron-down"
+                                      height="14"
+                                      viewBox="0 0 16 16"
+                                      width="14"
+                                    >
+                                      <desc>
+                                        chevron-down
+                                      </desc>
+                                      <path
+                                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                            <div
+                              class="Layout--horizontal StyledProps--main"
+                            >
+                              <div
+                                class="bp3-form-group bp3-disabled"
+                                data-id="repo-5"
+                              >
+                                <label
+                                  class="bp3-label"
+                                  for="repo"
+                                >
+                                  <span
+                                    class="Tooltip--acenter"
+                                    data-tooltip-id="inputSetForm_repo"
+                                  >
+                                    repository
+                                  </span>
+                                   
+                                  <span
+                                    class="bp3-text-muted"
+                                  />
+                                </label>
+                                <div
+                                  class="bp3-form-content"
+                                >
+                                  <div
+                                    class="bp3-popover-wrapper Select--main bp3-fill"
+                                  >
+                                    <div
+                                      class="bp3-popover-target"
+                                    >
+                                      <div
+                                        class="bp3-input-group bp3-disabled"
+                                      >
+                                        <input
+                                          autocomplete="off"
+                                          class="bp3-input"
+                                          disabled=""
+                                          name="repo"
+                                          placeholder="- select -"
+                                          style="padding-right: 0px;"
+                                          type="text"
+                                          value="identifier"
+                                        />
+                                        <span
+                                          class="bp3-input-action"
+                                        >
+                                          <span
+                                            class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                            icon="chevron-down"
+                                          >
+                                            <svg
+                                              data-icon="chevron-down"
+                                              height="14"
+                                              viewBox="0 0 16 16"
+                                              width="14"
+                                            >
+                                              <desc>
+                                                chevron-down
+                                              </desc>
+                                              <path
+                                                d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                                fill-rule="evenodd"
+                                              />
+                                            </svg>
+                                          </span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="Layout--horizontal StyledProps--main"
+                            >
+                              <div
+                                class="bp3-form-group bp3-disabled branchSelector"
+                                data-id="branch-6"
+                              >
+                                <label
+                                  class="bp3-label"
+                                  for="branch"
+                                >
+                                  <span
+                                    class="Tooltip--acenter"
+                                    data-tooltip-id="inputSetForm_branch"
+                                  >
+                                    gitBranch
+                                  </span>
+                                   
+                                  <span
+                                    class="bp3-text-muted"
+                                  />
+                                </label>
+                                <div
+                                  class="bp3-form-content"
+                                >
+                                  <div
+                                    class="bp3-popover-wrapper Select--main bp3-fill"
+                                  >
+                                    <div
+                                      class="bp3-popover-target"
+                                    >
+                                      <div
+                                        class="bp3-input-group bp3-disabled"
+                                      >
+                                        <input
+                                          autocomplete="off"
+                                          class="bp3-input"
+                                          disabled=""
+                                          name="branch"
+                                          placeholder="- select -"
+                                          style="padding-right: 0px;"
+                                          type="text"
+                                          value="feature"
+                                        />
+                                        <span
+                                          class="bp3-input-action"
+                                        >
+                                          <span
+                                            class="bp3-icon bp3-icon-chevron-down StyledProps--main StyledProps--padding-small"
+                                            icon="chevron-down"
+                                          >
+                                            <svg
+                                              data-icon="chevron-down"
+                                              height="14"
+                                              viewBox="0 0 16 16"
+                                              width="14"
+                                            >
+                                              <desc>
+                                                chevron-down
+                                              </desc>
+                                              <path
+                                                d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z"
+                                                fill-rule="evenodd"
+                                              />
+                                            </svg>
+                                          </span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="bp3-form-group bp3-disabled"
+                              data-id="filePath-7"
+                            >
+                              <label
+                                class="bp3-label"
+                                for="filePath"
+                              >
+                                <span
+                                  class="Tooltip--acenter"
+                                  data-tooltip-id="inputSetForm_filePath"
+                                >
+                                  Yaml Path
+                                </span>
+                                 
+                                <span
+                                  class="bp3-text-muted"
+                                />
+                              </label>
+                              <div
+                                class="bp3-form-content"
+                              >
+                                <div
+                                  class="bp3-input-group bp3-disabled"
+                                >
+                                  <input
+                                    autocomplete="off"
+                                    class="bp3-input"
+                                    disabled=""
+                                    name="filePath"
+                                    placeholder="Enter Yaml path"
+                                    type="text"
+                                    value=".harness/asd.yaml"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="Layout--horizontal StyledProps--main footer StyledProps--padding-xlarge"
+                  >
+                    <button
+                      class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+                      type="submit"
+                    >
+                      <span
+                        class="bp3-button-text"
+                      >
+                        save
+                      </span>
+                    </button>
+                       
+                    <button
+                      class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-tertiary"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-button-text"
+                      >
+                        cancel
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
