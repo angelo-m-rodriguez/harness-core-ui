@@ -726,15 +726,12 @@ Array [
       <GovernanceRemoteComponentMounter
         spinner={
           <Container
-            style={
+            flex={
               Object {
-                "height": "100%",
-                "left": "290px",
-                "position": "fixed",
-                "top": 0,
-                "width": "calc(100% - 290px)",
+                "align": "center-center",
               }
             }
+            height="100%"
           >
             <ContainerSpinner />
           </Container>
