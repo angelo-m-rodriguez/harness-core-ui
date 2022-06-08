@@ -12,6 +12,7 @@ declare const styles: {
   readonly cardsWrapper: string
   readonly connectors: string
   readonly delegates: string
+  readonly filestore: string
   readonly gitOpsEntities: string
   readonly secrets: string
   readonly smtp: string

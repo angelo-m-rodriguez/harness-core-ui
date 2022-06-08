@@ -74,6 +74,7 @@ import { GovernanceRouteDestinations } from '@governance/RouteDestinations'
 import type { ResourceDTO } from 'services/audit'
 import GitSyncConfigTab from '@gitsync/pages/config/GitSyncConfigTab'
 import VariablesPage from '@variables/pages/variables/VariablesPage'
+import FileStorePage from '@filestore/pages/filestore/FileStorePage'
 import LandingDashboardPage from './pages/LandingDashboardPage/LandingDashboardPage'
 
 const ProjectDetailsSideNavProps: SidebarContext = {
@@ -444,6 +445,9 @@ export default (
       <SecretDetailsHomePage>
         <SecretReferences />
       </SecretDetailsHomePage>
+    </RouteWithLayout>
+    <RouteWithLayout sidebarProps={AccountSideNavProps} path={routes.toFileStore({ ...orgPathProps })} exact>
+      <FileStorePage />
     </RouteWithLayout>
     <RouteWithLayout sidebarProps={AccountSideNavProps} path={routes.toAuditTrail({ ...orgPathProps })} exact>
       <AuditTrailsPage />

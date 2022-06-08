@@ -38,7 +38,7 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
   const { accountId, orgIdentifier } = useParams<OrgPathProps>()
   const history = useHistory()
   const { getString } = useStrings()
-  const { NG_TEMPLATES, NG_VARIABLES } = useFeatureFlags()
+  const { NG_TEMPLATES, NG_VARIABLES, NG_FILE_STORE } = useFeatureFlags()
   const { isOpen: showGitOpsEntities, toggle: toggleShowGitOpsEntities } = useToggleOpen()
   const { loading, data, refetch } = useGetSmtpConfig({ queryParams: { accountId } })
   const refetchSmtpData = (): void => {
@@ -113,6 +113,15 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
       colorClass: css.secrets,
       route: routes.toSecrets({ accountId, orgIdentifier })
     },
+    ...(NG_FILE_STORE
+      ? [
+          {
+            label: <String stringID="resourcePage.fileStore" />,
+            colorClass: css.filestore,
+            route: routes.toFileStore({ accountId, orgIdentifier })
+          } as ResourceOption
+        ]
+      : []),
     ...(!orgIdentifier ? smtpResource : []),
     ...(NG_TEMPLATES
       ? [

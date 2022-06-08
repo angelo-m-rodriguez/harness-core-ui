@@ -118,6 +118,7 @@ import FullPageLogView from '@pipeline/pages/full-page-log-view/FullPageLogView'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import VariablesPage from '@variables/pages/variables/VariablesPage'
 import CIPipelineStudioWrapper from '@ci/pages/pipeline-studio/CIPipelineStudioWrapper'
+import FileStorePage from '@filestore/pages/filestore/FileStorePage'
 import CIHomePage from './pages/home/CIHomePage'
 import CIDashboardPage from './pages/dashboard/CIDashboardPage'
 import CISideNav from './components/CISideNav/CISideNav'
@@ -1078,5 +1079,15 @@ export default (
       sidebarProps: CISideNavProps,
       pathProps: { ...accountPathProps, ...projectPathProps, ...pipelineModuleParams }
     })}
+
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={CISideNavProps}
+      path={routes.toFileStore({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
+      pageName={PAGE_NAME.FileStorePage}
+    >
+      <FileStorePage />
+    </RouteWithLayout>
   </>
 )
