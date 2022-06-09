@@ -118,6 +118,7 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
           {
             label: <String stringID="resourcePage.fileStore" />,
             colorClass: css.filestore,
+            icon: 'filestore',
             route: routes.toFileStore({ accountId, orgIdentifier })
           } as ResourceOption
         ]
