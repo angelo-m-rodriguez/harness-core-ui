@@ -92,6 +92,7 @@ export interface InputSetFormProps {
   // @see src/modules/72-triggers/pages/triggers/views/modals/NewInputSetModal.tsx
   isNew?: boolean
   className?: string
+  onCancel?: () => void
 }
 
 const getInputSet = (
@@ -154,7 +155,7 @@ const getInputSet = (
 }
 
 export function InputSetForm(props: InputSetFormProps): React.ReactElement {
-  const { executionView, isNew, className } = props
+  const { executionView, isNew, className, onCancel } = props
   const { getString } = useStrings()
   const history = useHistory()
   const [isEdit, setIsEdit] = React.useState(false)
@@ -539,6 +540,7 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
         isGitSyncEnabled={isGitSyncEnabled}
         isGitSimplificationEnabled={isGitSimplificationEnabled}
         className={className}
+        onCancel={onCancel}
       />
     ),
     [

@@ -93,6 +93,7 @@ interface FormikInputSetFormProps {
   yamlHandler?: YamlBuilderHandlerBinding
   setYamlHandler: React.Dispatch<React.SetStateAction<YamlBuilderHandlerBinding | undefined>>
   className?: string
+  onCancel?: () => void
 }
 
 const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
@@ -212,7 +213,8 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
     isGitSimplificationEnabled,
     yamlHandler,
     setYamlHandler,
-    className
+    className,
+    onCancel
   } = props
   const { getString } = useStrings()
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier } = useParams<
@@ -406,7 +408,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                           &nbsp; &nbsp;
                           <Button
                             variation={ButtonVariation.TERTIARY}
-                            onClick={history.goBack}
+                            onClick={onCancel || history.goBack}
                             text={getString('cancel')}
                           />
                         </Layout.Horizontal>

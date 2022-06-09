@@ -26,7 +26,7 @@ export function NewInputSetModal({ isModalOpen, closeModal }: NewInputSetModalPr
         closeModal()
       }}
     >
-      <EnhancedInputSetForm isNew className={css.formInModal} />
+      <EnhancedInputSetForm isNew className={css.formInModal} onCancel={closeModal} />
     </Dialog>
   )
 }
