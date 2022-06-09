@@ -54,7 +54,7 @@ function FormContent({
   readonly,
   allowableTypes,
   stepViewType
-}: JenkinsFormContentInterface): JSX.Element {
+}: JenkinsFormContentInterface): React.ReactElement {
   const { getString } = useStrings()
   const lastOpenedJob = useRef<any>(null)
   const { expressions } = useVariablesExpression()
@@ -285,7 +285,7 @@ function FormContent({
           />
         )}
       </div>
-      <div className={stepCss.formGroup}>
+      {/* <div className={stepCss.formGroup}>
         <MultiTypeFieldSelector
           name="spec.jobParameter"
           label={getString('pipeline.jenkinsStep.jobParameter')}
@@ -354,7 +354,7 @@ function FormContent({
             }}
           />
         </MultiTypeFieldSelector>
-      </div>
+      </div> */}
 
       <div className={stepCss.noLookDivider} />
 
@@ -372,7 +372,7 @@ function FormContent({
 export const JenkinsStepBase = (
   { initialValues, onUpdate, isNewStep = true, readonly, allowableTypes, stepViewType, onChange }: JenkinsStepProps,
   formikRef: StepFormikFowardRef<JenkinsStepData>
-): JSX.Element => {
+): React.ReactElement => {
   return (
     <Formik
       initialValues={initialValues}

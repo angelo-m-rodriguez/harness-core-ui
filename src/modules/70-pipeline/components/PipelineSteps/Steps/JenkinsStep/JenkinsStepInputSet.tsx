@@ -22,7 +22,7 @@ import type { SubmenuSelectOption } from './types'
 import { getGenuineValue } from '../JiraApproval/helper'
 import css from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
-export const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
+const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
   const { initialValues, allowableTypes, template, path, readonly, formik } = formContentProps
   const prefix = isEmpty(path) ? '' : `${path}.`
   const { getString } = useStrings()
@@ -115,7 +115,7 @@ export const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
           />
         </div>
       )}
-      {getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME ? (
+      {/* {getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME ? (
         <FormMultiTypeConnectorField
           name={`${prefix}spec.connectorRef`}
           label={getString('pipeline.jiraApprovalStep.connectorRef')}
@@ -165,7 +165,7 @@ export const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
             }}
           />
         </div>
-      ) : null}
+      ) : null} */}
     </FormikForm>
   )
 }
