@@ -86,14 +86,20 @@ const PlanToggle = ({
   )
 }
 
-function getBodyByModule(
-  module: Module,
-  newPlan: Editions,
+function getBodyByModule({
+  module,
+  newPlan,
+  usageAndLimitInfo,
+  setQuantities
+}: {
+  module: Module
+  newPlan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
-): React.ReactElement {
+  setQuantities: (quantities: Record<string, number>) => void
+}): React.ReactElement {
   switch (module) {
     case 'cf': {
-      return <FFNewSubscription plan={newPlan} usageAndLimitInfo={usageAndLimitInfo} />
+      return <FFNewSubscription plan={newPlan} usageAndLimitInfo={usageAndLimitInfo} setQuantities={setQuantities} />
     }
     default:
       return <></>
@@ -104,15 +110,31 @@ interface NewSubscriptionProps {
   module: Module
   newPlan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
+  setQuantities: (quantities: Record<string, number>) => void
+  setNewPlan: (plan: Editions) => void
 }
 
-export const NewSubscription = ({ module, newPlan, usageAndLimitInfo }: NewSubscriptionProps): React.ReactElement => {
+export const NewSubscription = ({
+  module,
+  newPlan,
+  usageAndLimitInfo,
+  setQuantities,
+  setNewPlan
+}: NewSubscriptionProps): React.ReactElement => {
   const [plan, setPlan] = useState<Editions>(newPlan)
 
   return (
     <Layout.Vertical spacing={'large'} padding={{ bottom: 'large' }} className={css.newSubscription}>
-      <Header plan={plan} module={module} setPlan={setPlan} />
-      {getBodyByModule(module, plan, usageAndLimitInfo)}
+      <Header
+        plan={plan}
+        module={module}
+        setPlan={(value: Editions) => {
+          setPlan(value)
+          setNewPlan(value)
+          setQuantities({})
+        }}
+      />
+      {getBodyByModule({ module, newPlan: plan, usageAndLimitInfo, setQuantities })}
     </Layout.Vertical>
   )
 }

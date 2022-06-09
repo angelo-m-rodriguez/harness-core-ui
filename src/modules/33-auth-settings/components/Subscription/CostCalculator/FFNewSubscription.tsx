@@ -114,10 +114,12 @@ const SliderBar = ({
 
 export const FFNewSubscription = ({
   plan,
-  usageAndLimitInfo
+  usageAndLimitInfo,
+  setQuantities
 }: {
   plan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
+  setQuantities: (quantities: Record<string, number>) => void
 }): React.ReactElement => {
   const { getString } = useStrings()
 
@@ -225,7 +227,13 @@ export const FFNewSubscription = ({
         stepSize={licenseRange.stepSize}
         labelStepSize={licenseRange.labelStepSize}
         value={licenses}
-        setValue={setLicenses}
+        setValue={(value: number) => {
+          setLicenses(value)
+          setQuantities({
+            licenses: value,
+            maus
+          })
+        }}
       />
       <SliderBar
         title={mausTitle}
@@ -235,7 +243,13 @@ export const FFNewSubscription = ({
         labelStepSize={mausRange.labelStepSize}
         list={mausRange.list}
         value={maus}
-        setValue={setMaus}
+        setValue={(value: number) => {
+          setMaus(value)
+          setQuantities({
+            licenses,
+            maus: value
+          })
+        }}
         unit={mausRange.unit}
       />
     </Layout.Horizontal>

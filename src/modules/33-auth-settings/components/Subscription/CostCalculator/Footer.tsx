@@ -11,15 +11,17 @@ import { Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
 import { SubscribeViews } from '@common/constants/SubscriptionTypes'
 import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { getRenewDate } from '../subscriptionUtils'
 import css from '@auth-settings/modals/Subscription/useSubscriptionModal.module.scss'
 
 interface FooterProps {
   disabled?: boolean
   time: TIME_TYPE
   setView: (view: SubscribeViews) => void
+  dueToday: string
 }
 
-export const Footer = ({ disabled, time, setView }: FooterProps): React.ReactElement => {
+export const Footer = ({ disabled, time, setView, dueToday }: FooterProps): React.ReactElement => {
   const { getString } = useStrings()
   const timeDescr =
     time === TIME_TYPE.MONTHLY ? getString('common.monthly').toLowerCase() : getString('common.annually')
@@ -33,16 +35,14 @@ export const Footer = ({ disabled, time, setView }: FooterProps): React.ReactEle
       <Button disabled={disabled} onClick={handleNext} variation={ButtonVariation.PRIMARY} rightIcon="chevron-right">
         {getString('authSettings.costCalculator.next')}
       </Button>
-      <Layout.Horizontal>
+      <Layout.Horizontal flex={{ alignItems: 'baseline' }}>
         <Text padding={{ right: 'medium' }} color={Color.GREY_700}>
           {getString('authSettings.costCalculator.payingToday')}
+          {dueToday}
         </Text>
-        <Layout.Vertical>
-          <Text font={{ size: 'xsmall' }}>{getString('authSettings.plusTax')}</Text>
-          <Text color={Color.GREY_500} font={{ size: 'xsmall' }}>
-            {getString('authSettings.costCalculator.autoRenew', { time: timeDescr })}
-          </Text>
-        </Layout.Vertical>
+        <Text color={Color.GREY_500} font={{ size: 'xsmall' }}>
+          {getString('authSettings.costCalculator.autoRenew', { time: timeDescr, date: getRenewDate(time) })}
+        </Text>
       </Layout.Horizontal>
     </Layout.Horizontal>
   )

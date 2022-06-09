@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Layout } from '@harness/uicore'
 import type { Module, ModuleName } from 'framework/types/ModuleName'
 import { Editions, SubscribeViews } from '@common/constants/SubscriptionTypes'
@@ -23,24 +23,33 @@ import css from './CostCalculator.module.scss'
 interface CostCalculatorProps {
   module: Module
   setView: (view: SubscribeViews) => void
-  newPlan: Editions
+  initilalNewPlan: Editions
   time: TIME_TYPE
 }
 
-export const CostCalculator = ({ module, setView, newPlan, time }: CostCalculatorProps): React.ReactElement => {
+export const CostCalculator = ({ module, setView, initilalNewPlan, time }: CostCalculatorProps): React.ReactElement => {
   const { licenseInformation } = useLicenseStore()
   const currentPlan = (licenseInformation[module.toUpperCase()]?.edition || Editions.FREE) as Editions
   const { getString } = useStrings()
   const usageAndLimitInfo = useGetUsageAndLimit(module.toUpperCase() as ModuleName)
+  const [quantities, setQuantities] = useState<Record<string, number>>({})
+  const [newPlan, setNewPlan] = useState<Editions>(initilalNewPlan)
+  const [dueToday, setDueToday] = useState<string>('0')
   return (
     <Layout.Vertical>
       <Header module={module} stepDescription={getString('authSettings.costCalculator.step')} step={1} />
       <Layout.Vertical padding={{ top: 'large', bottom: 'large' }} className={css.body}>
         <CurrentSubscription module={module} currentPlan={currentPlan} usageAndLimitInfo={usageAndLimitInfo} />
-        <NewSubscription module={module} newPlan={newPlan} usageAndLimitInfo={usageAndLimitInfo} />
-        <Billing module={module} initialTime={time} />
+        <NewSubscription
+          module={module}
+          newPlan={newPlan}
+          usageAndLimitInfo={usageAndLimitInfo}
+          setQuantities={setQuantities}
+          setNewPlan={setNewPlan}
+        />
+        <Billing module={module} initialTime={time} quantities={quantities} plan={newPlan} setDueToday={setDueToday} />
       </Layout.Vertical>
-      <Footer setView={setView} time={time} />
+      <Footer setView={setView} time={time} dueToday={dueToday} />
     </Layout.Vertical>
   )
 }

@@ -6,17 +6,31 @@
  */
 
 import React, { useState } from 'react'
-import { Text, Layout, PillToggle } from '@harness/uicore'
+import { useParams } from 'react-router-dom'
+import { Text, Layout, PillToggle, PageError, Container } from '@harness/uicore'
 import { FontVariation, Color } from '@harness/design-system'
 import { capitalize } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import type { Module } from 'framework/types/ModuleName'
+import { useRetrieveProductPrices, PriceDTO } from 'services/cd-ng/index'
+import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
+import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import type { Editions, ProductPricesProp } from '@common/constants/SubscriptionTypes'
 import { FFEquation } from './FFEquation'
 import { PremiumSupport } from './PremiumSupport'
+import { getProductPrices } from '../subscriptionUtils'
 import css from './CostCalculator.module.scss'
 
-const Header = ({ time, setTime }: { time: TIME_TYPE; setTime: (time: TIME_TYPE) => void }): React.ReactElement => {
+const Header = ({
+  time,
+  setTime,
+  yearlySave
+}: {
+  time: TIME_TYPE
+  setTime: (time: TIME_TYPE) => void
+  yearlySave: string
+}): React.ReactElement => {
   const { getString } = useStrings()
   return (
     <Layout.Vertical className={css.billingHeader} padding={{ top: 'large', bottom: 'large' }}>
@@ -42,7 +56,7 @@ const Header = ({ time, setTime }: { time: TIME_TYPE; setTime: (time: TIME_TYPE)
             font={{ variation: FontVariation.SMALL }}
             padding={{ left: 'small' }}
           >
-            {getString('authSettings.costCalculator.yearlySave')}
+            {getString('authSettings.costCalculator.yearlySave', { money: yearlySave })}
           </Text>
         )}
       </Layout.Horizontal>
@@ -50,20 +64,105 @@ const Header = ({ time, setTime }: { time: TIME_TYPE; setTime: (time: TIME_TYPE)
   )
 }
 
-function getEquationByModule(module: Module): React.ReactElement {
+function getEquationByModule({
+  module,
+  productPrices,
+  quantities,
+  time,
+  setDueToday
+}: {
+  module: Module
+  productPrices: PriceDTO[]
+  quantities: Record<string, number>
+  time: TIME_TYPE
+  setDueToday: (value: string) => void
+}): React.ReactElement {
   switch (module) {
     case 'cf': {
-      return <FFEquation />
+      return <FFEquation productPrices={productPrices} quantities={quantities} setDueToday={setDueToday} time={time} />
     }
     default:
       return <></>
   }
 }
 
-export const Billing = ({ module, initialTime }: { module: Module; initialTime: TIME_TYPE }): React.ReactElement => {
+function calculateYearlySave(productPrices: ProductPricesProp, quantities: Record<string, number>): string {
+  let yearlySave = 0
+  const licenseMonthlyUnitPrice =
+    (productPrices.monthly.find(price => price.lookupKey?.includes('DEVELOPERS'))?.unitAmount || 0) / 100
+  const mauMonthlyUnitPrice =
+    (productPrices.monthly.find(price => price.lookupKey?.includes('MAU'))?.unitAmount || 0) / 100
+  const licenseYearlyUnitPrice =
+    (productPrices.yearly.find(price => price.lookupKey?.includes('DEVELOPERS'))?.unitAmount || 0) / 100
+  const mauYearlyUnitPrice =
+    (productPrices.yearly.find(price => price.lookupKey?.includes('MAU'))?.unitAmount || 0) / 100
+
+  yearlySave =
+    (licenseMonthlyUnitPrice * 12 - licenseYearlyUnitPrice) * (quantities['licenses'] || 0) +
+    (mauMonthlyUnitPrice * 12 - mauYearlyUnitPrice) * (quantities['maus'] || 0)
+
+  return yearlySave.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  })
+}
+
+export const Billing = ({
+  module,
+  initialTime,
+  quantities,
+  plan,
+  setDueToday
+}: {
+  module: Module
+  initialTime: TIME_TYPE
+  quantities: Record<string, number>
+  plan: Editions
+  setDueToday: (value: string) => void
+}): React.ReactElement => {
   const [time, setTime] = useState<TIME_TYPE>(initialTime)
   const [prem, setPrem] = useState<boolean>(false)
   const premDisabled = time === TIME_TYPE.MONTHLY
+  const { accountId } = useParams<AccountPathProps>()
+  const [productPrices, setProductPrices] = useState<ProductPricesProp>({ monthly: [], yearly: [] })
+
+  const equationProductPrices = getProductPrices(plan, time, productPrices)
+
+  const { data, loading, error, refetch } = useRetrieveProductPrices({
+    queryParams: {
+      accountIdentifier: accountId,
+      moduleType: module.toUpperCase()
+    }
+  })
+
+  const prices = data?.data?.prices
+  React.useMemo(() => {
+    const newProductPrices: ProductPricesProp = { monthly: [], yearly: [] }
+    if (prices) {
+      prices.forEach(price => {
+        if (price.lookupKey?.includes('MONTHLY')) {
+          newProductPrices.monthly.push(price)
+        }
+        if (price.lookupKey?.includes('YEARLY')) {
+          newProductPrices.yearly.push(price)
+        }
+      })
+      setProductPrices(newProductPrices)
+    }
+  }, [prices])
+
+  if (loading) {
+    return <ContainerSpinner />
+  }
+
+  if (error) {
+    return (
+      <Container width={300}>
+        <PageError message={error.message} onClick={() => refetch()} />
+      </Container>
+    )
+  }
+
   return (
     <Layout.Vertical spacing={'large'} padding={{ bottom: 'large' }}>
       <Header
@@ -74,8 +173,9 @@ export const Billing = ({ module, initialTime }: { module: Module; initialTime: 
             setPrem(false)
           }
         }}
+        yearlySave={calculateYearlySave(productPrices, quantities)}
       />
-      {getEquationByModule(module)}
+      {getEquationByModule({ module, productPrices: equationProductPrices, quantities, time, setDueToday })}
       <PremiumSupport disabled={premDisabled} onChange={setPrem} value={prem} time={time} setTime={setTime} />
     </Layout.Vertical>
   )

@@ -5,6 +5,8 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import type { PriceDTO } from 'services/cd-ng/index'
+
 export enum Editions {
   ENTERPRISE = 'ENTERPRISE',
   TEAM = 'TEAM',
@@ -42,4 +44,20 @@ export enum SubscribeViews {
   BILLINGINFO,
   FINALREVIEW,
   SUCCESS
+}
+
+export enum FFLookupKeys {
+  FF_ENTERPRISE_DEVELOPERS_MONTHLY,
+  FF_ENTERPRISE_DEVELOPERS_YEARLY,
+  FF_ENTERPRISE_MAU_MONTHLY,
+  FF_ENTERPRISE_MAU_YEARLY,
+  FF_TEAM_DEVELOPERS_MONTHLY,
+  FF_TEAM_DEVELOPERS_YEARLY,
+  FF_TEAM_MAU_MONTHLY,
+  FF_TEAM_MAU_YEARLY
+}
+
+export interface ProductPricesProp {
+  monthly: PriceDTO[]
+  yearly: PriceDTO[]
 }

@@ -47,7 +47,7 @@ const View = ({ module, plan, time }: UseSubscribeModalProps): React.ReactElemen
       return <Success module={module} />
     case SubscribeViews.CALCULATE:
     default:
-      return <CostCalculator module={module} setView={setView} newPlan={plan} time={time} />
+      return <CostCalculator module={module} setView={setView} initilalNewPlan={plan} time={time} />
   }
 }
 

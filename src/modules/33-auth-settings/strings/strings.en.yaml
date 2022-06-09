@@ -147,7 +147,7 @@ billedAnnually: Billed Annually
 billedMonthly: Billed Monthly
 plusTax: plus tax
 autoRenewal: Auto renewal on {{date}}
-unitPrice: 'x Unit Price: '
+unitPrice: ' x Unit Price: '
 firstIncludedFree: (first {{amount}} included free)
 costCalculator:
   step: 'Step one: Subscription'
