@@ -10,7 +10,7 @@ import { Text, Layout, Container, Checkbox, Popover } from '@harness/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { PopoverInteractionKind, Classes, Position } from '@blueprintjs/core'
 import { useStrings } from 'framework/strings'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import css from './CostCalculator.module.scss'
 
 const PremLabel = ({ time, setTime }: { time: TIME_TYPE; setTime: (time: TIME_TYPE) => void }): React.ReactElement => {

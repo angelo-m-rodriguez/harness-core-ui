@@ -8,8 +8,20 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { Editions } from '@common/constants/SubscriptionTypes'
+import { Editions, TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { FFNewSubscription } from '../FFNewSubscription'
+
+const subscriptionProps = {
+  edition: Editions.TEAM,
+  premiumSupport: false,
+  paymentFreq: TIME_TYPE.MONTHLY,
+  quantities: {
+    cf: {
+      numberOfDevelopers: 25,
+      numberOfMau: 12
+    }
+  }
+}
 
 describe('FFNewSubscription', () => {
   test('update licenses', async () => {
@@ -38,7 +50,11 @@ describe('FFNewSubscription', () => {
 
     const { container, getByRole } = render(
       <TestWrapper>
-        <FFNewSubscription plan={Editions.TEAM} usageAndLimitInfo={usageAndLimitInfo} />
+        <FFNewSubscription
+          setQuantities={jest.fn()}
+          usageAndLimitInfo={usageAndLimitInfo}
+          subscriptionProps={subscriptionProps}
+        />
       </TestWrapper>
     )
     await fireEvent.change(getByRole('textbox'), { target: { value: '35' } })
@@ -62,7 +78,11 @@ describe('FFNewSubscription', () => {
 
     const { container } = render(
       <TestWrapper>
-        <FFNewSubscription plan={Editions.TEAM} usageAndLimitInfo={usageAndLimitInfo} />
+        <FFNewSubscription
+          setQuantities={jest.fn()}
+          usageAndLimitInfo={usageAndLimitInfo}
+          subscriptionProps={subscriptionProps}
+        />
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
@@ -87,7 +107,11 @@ describe('FFNewSubscription', () => {
 
     const { container, getByText } = render(
       <TestWrapper>
-        <FFNewSubscription plan={Editions.TEAM} usageAndLimitInfo={usageAndLimitInfo} />
+        <FFNewSubscription
+          setQuantities={jest.fn()}
+          usageAndLimitInfo={usageAndLimitInfo}
+          subscriptionProps={subscriptionProps}
+        />
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
@@ -121,7 +145,11 @@ describe('FFNewSubscription', () => {
 
     const { container } = render(
       <TestWrapper>
-        <FFNewSubscription plan={Editions.TEAM} usageAndLimitInfo={usageAndLimitInfo} />
+        <FFNewSubscription
+          setQuantities={jest.fn()}
+          usageAndLimitInfo={usageAndLimitInfo}
+          subscriptionProps={subscriptionProps}
+        />
       </TestWrapper>
     )
 

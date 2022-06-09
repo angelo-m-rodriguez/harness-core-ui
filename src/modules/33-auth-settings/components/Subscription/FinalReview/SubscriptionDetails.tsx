@@ -9,11 +9,14 @@ import React from 'react'
 import { Layout, Text } from '@harness/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
-import type { Editions } from '@common/constants/SubscriptionTypes'
+import { Editions, TIME_TYPE } from '@common/constants/SubscriptionTypes'
+import type { Module } from 'framework/types/ModuleName'
+import type { InvoiceDetailDTO } from 'services/cd-ng'
+import { getSubscriptionDetailsByModule } from '../subscriptionUtils'
 import css from '../CostCalculator/CostCalculator.module.scss'
 import detailCss from './FinalReview.module.scss'
 
-const Line = ({
+export const Line = ({
   description,
   breakdown,
   price = 0
@@ -28,7 +31,7 @@ const Line = ({
         {description}
       </Text>
       <div className={detailCss.lineItem}> {breakdown}</div>
-      <Text font={{ weight: 'semi-bold' }} padding={{ right: 'xlarge' }}>
+      <Text font={{ weight: 'semi-bold' }} padding={{ right: 'xlarge' }} width={'10%'}>
         {price.toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD'
@@ -52,30 +55,33 @@ const PayingToday = ({ total = 0 }: { total?: number }): React.ReactElement => {
     </Layout.Horizontal>
   )
 }
-export const SubscriptionDetails = ({ plan }: { plan: Editions }): React.ReactElement => {
+
+export const SubscriptionDetails = ({
+  plan,
+  module,
+  invoiceData,
+  paymentFreq
+}: {
+  plan: Editions
+  module: Module
+  invoiceData?: InvoiceDetailDTO
+  paymentFreq: TIME_TYPE
+}): React.ReactElement => {
   const { getString } = useStrings()
-  const licenseBreakdown = (
-    <Text>
-      {getString('authSettings.unitPrice')}
-      {getString('common.perMonth')}
-    </Text>
-  )
-  const mausBreakdown = (
-    <Layout.Vertical>
-      <Text>
-        {getString('authSettings.unitPrice')}
-        {getString('common.perMonth')}
-      </Text>
-      <Text>{getString('authSettings.firstIncludedFree')}</Text>
-    </Layout.Vertical>
-  )
   const supportBreakdown = (
     <Layout.Horizontal>
       <Text>{getString('authSettings.finalReview.premiumSupport')}</Text>
       <Text>{getString('authSettings.finalReview.ofTotalSpend')}</Text>
     </Layout.Horizontal>
   )
-  const autoRenew = <Text>{getString('authSettings.costCalculator.autoRenew')}</Text>
+  const getAutoRenew = (date: string): React.ReactElement => (
+    <Text>
+      {getString('authSettings.costCalculator.autoRenew')}
+      {date}
+    </Text>
+  )
+
+  const premPrice = (invoiceData?.items?.find(item => item.price?.lookupKey === 'PREMIUM_SUPPORT')?.amount || 0) / 100
 
   return (
     <Layout.Vertical>
@@ -91,13 +97,24 @@ export const SubscriptionDetails = ({ plan }: { plan: Editions }): React.ReactEl
         </Text>
       </Layout.Horizontal>
       <Layout.Vertical spacing={'large'}>
-        <Line description={getString('authSettings.costCalculator.developerLicenses')} breakdown={licenseBreakdown} />
-        <Line description={getString('authSettings.costCalculator.maus')} breakdown={mausBreakdown} />
-        <Line description={getString('authSettings.costCalculator.support')} breakdown={supportBreakdown} />
+        {getSubscriptionDetailsByModule({ module, invoiceData, plan, paymentFreq })}
+        <Line
+          description={getString('authSettings.costCalculator.support')}
+          breakdown={supportBreakdown}
+          price={premPrice}
+        />
         <Line description={getString('authSettings.costCalculator.tax')} />
-        <Line description={getString('authSettings.yearlySubscriptionTotal')} breakdown={autoRenew} />
+        <Line
+          description={
+            paymentFreq === TIME_TYPE.YEARLY
+              ? getString('authSettings.yearlySubscriptionTotal')
+              : getString('authSettings.monthlySubscriptionTotal')
+          }
+          breakdown={getAutoRenew(new Date((invoiceData?.nextPaymentAttempt || 0) * 1000).toDateString())}
+          price={(invoiceData?.totalAmount || 0) / 100}
+        />
       </Layout.Vertical>
-      <PayingToday />
+      <PayingToday total={(invoiceData?.amountDue || 0) / 100} />
     </Layout.Vertical>
   )
 }

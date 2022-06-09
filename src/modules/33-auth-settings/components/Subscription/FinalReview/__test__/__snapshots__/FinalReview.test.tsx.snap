@@ -90,12 +90,9 @@ exports[`FinalReview render 1`] = `
             <div
               class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--fullBar"
             />
-            <div
-              class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--barSuccess MultiStepProgressIndicator--fullBar"
-            />
           </div>
           <div
-            class="MultiStepProgressIndicator--dot MultiStepProgressIndicator--dotSuccess MultiStepProgressIndicator--spacing"
+            class="MultiStepProgressIndicator--dot MultiStepProgressIndicator--dotOutLine MultiStepProgressIndicator--spacing"
           />
         </div>
       </div>
@@ -126,63 +123,73 @@ exports[`FinalReview render 1`] = `
         class="Layout--vertical Layout--layout-spacing-large StyledProps--main"
       >
         <div
-          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+          class="Layout--vertical Layout--layout-spacing-large StyledProps--main"
         >
-          <p
-            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
-          >
-            authSettings.costCalculator.developerLicenses
-          </p>
           <div
-            class="lineItem"
+            class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
           >
-             
             <p
-              class="StyledProps--font StyledProps--main"
+              class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
             >
-              authSettings.unitPrice
-              common.perMonth
+              authSettings.costCalculator.developerLicenses
             </p>
-          </div>
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
-          >
-            $0.00
-          </p>
-        </div>
-        <div
-          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
-        >
-          <p
-            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
-          >
-            authSettings.costCalculator.maus
-          </p>
-          <div
-            class="lineItem"
-          >
-             
             <div
-              class="Layout--vertical StyledProps--main"
+              class="lineItem"
             >
+               
               <p
                 class="StyledProps--font StyledProps--main"
               >
+                0
                 authSettings.unitPrice
+                0
                 common.perMonth
               </p>
-              <p
-                class="StyledProps--font StyledProps--main"
-              >
-                authSettings.firstIncludedFree
-              </p>
             </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+              style="width: 10%;"
+            >
+              $0.00
+            </p>
           </div>
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          <div
+            class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
           >
-            $0.00
-          </p>
+            <p
+              class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+            >
+              authSettings.costCalculator.maus
+            </p>
+            <div
+              class="lineItem"
+            >
+               
+              <div
+                class="Layout--vertical StyledProps--main"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main"
+                >
+                  0
+                  authSettings.unitPrice
+                  0
+                  common.perMonth
+                </p>
+                <p
+                  class="StyledProps--font StyledProps--main"
+                >
+                  authSettings.firstIncludedFree
+                </p>
+              </div>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+              style="width: 10%;"
+            >
+              $0.00
+            </p>
+          </div>
         </div>
         <div
           class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
@@ -213,6 +220,7 @@ exports[`FinalReview render 1`] = `
           </div>
           <p
             class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+            style="width: 10%;"
           >
             $0.00
           </p>
@@ -232,6 +240,7 @@ exports[`FinalReview render 1`] = `
           </div>
           <p
             class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+            style="width: 10%;"
           >
             $0.00
           </p>
@@ -242,7 +251,7 @@ exports[`FinalReview render 1`] = `
           <p
             class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
           >
-            authSettings.yearlySubscriptionTotal
+            authSettings.monthlySubscriptionTotal
           </p>
           <div
             class="lineItem"
@@ -252,10 +261,12 @@ exports[`FinalReview render 1`] = `
               class="StyledProps--font StyledProps--main"
             >
               authSettings.costCalculator.autoRenew
+              Thu Jan 01 1970
             </p>
           </div>
           <p
             class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+            style="width: 10%;"
           >
             $0.00
           </p>
@@ -318,7 +329,7 @@ exports[`FinalReview render 1`] = `
           <span
             class="bp3-button-text"
           >
-            authSettings.billing.subscribeNPay
+            authSettings.finalReview.next
           </span>
         </button>
       </div>

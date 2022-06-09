@@ -8,8 +8,7 @@
 import React from 'react'
 import { render, waitFor, fireEvent } from '@testing-library/react'
 import { TestWrapper, findDialogContainer } from '@common/utils/testUtils'
-import { Editions } from '@common/constants/SubscriptionTypes'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { Editions, TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import * as useGetUsageAndLimit from '@common/hooks/useGetUsageAndLimit'
 import { useSubscribeModal } from '../useSubscriptionModal'
 

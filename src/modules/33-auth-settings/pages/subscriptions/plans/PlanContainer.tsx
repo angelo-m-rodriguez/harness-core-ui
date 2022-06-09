@@ -33,6 +33,8 @@ import { ModuleLicenseType, Editions } from '@common/constants/SubscriptionTypes
 import type { FetchPlansQuery } from 'services/common/services'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { useSubscribeModal } from '@auth-settings/modals/Subscription/useSubscriptionModal'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { getBtnProps } from './planUtils'
 import type { TIME_TYPE, PlanData, PlanProp } from './planUtils'
 import Plan from './Plan'
@@ -182,7 +184,13 @@ const PlanContainer: React.FC<PlanProps> = ({ plans, timeType, moduleName }) => 
     expiryTime: licenseData.maxExpiryTime
   }
 
-  const { openSubscribeModal } = useSubscribeModal()
+  const { openSubscribeModal } = useSubscribeModal({
+    onClose: () => {
+      // refresh the page to update license
+      window.location.reload()
+    }
+  })
+  const isSelfServiceEnabled = useFeatureFlag(FeatureFlag.SELF_SERVICE_ENABLED)
 
   useEffect(() => {
     handleUpdateLicenseStore({ ...licenseInformation }, updateLicenseStore, module, updatedLicenseInfo)
@@ -262,7 +270,8 @@ const PlanContainer: React.FC<PlanProps> = ({ plans, timeType, moduleName }) => 
           _plan: planEdition || Editions.FREE
         }),
       btnLoading,
-      actions: actions?.data
+      actions: actions?.data,
+      isSelfServiceEnabled
     })
 
     return {

@@ -173,7 +173,7 @@ costCalculator:
   newSubscription: New subscription
   comparePlans: Compare plans
   payingToday: 'Paying Today: '
-  next: 'Next: Billing information'
+  next: 'Next: Final review'
   autoRenew: Auto renews {{time}} on {{date}}
   yearlySave: Save {{money}} with a yearly subscription
   switchToYearly: Switch to Yearly
@@ -185,15 +185,16 @@ costCalculator:
     line2: Another great selling point
     line3: Why this support level is spectacular
     includedByDefault: Standard included by default
+finalReview:
+  step: 'Step two: Final Review'
+  premiumSupport: Premium 24x7
+  ofTotalSpend: (20% of total spend)
+  next: 'Next: Billing information'
 billing:
   subscribeNPay: Subscribe and Pay
   totalDuetoday: 'Total due today: '
-  next: 'Next: Final review'
-  step: 'Step two: Billing Information'
-finalReview:
-  step: 'Step three: Final Review'
-  premiumSupport: Premium 24x7
-  ofTotalSpend: (20% of total spend)
+  step: 'Step three: Billing Information'
 success:
-  title: Congratulation! You’re all set.
+  woohoo: Woo-Hoo!
+  title: Bravo. You’re all set.
   msg: Your {{time}} {{module}} subscription is successfully set up.

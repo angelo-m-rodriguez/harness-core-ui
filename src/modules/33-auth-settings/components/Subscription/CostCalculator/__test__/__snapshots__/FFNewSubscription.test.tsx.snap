@@ -29,11 +29,11 @@ exports[`FFNewSubscription dropdown 1`] = `
             />
             <div
               class="bp3-slider-progress bp3-intent-primary"
-              style="left: 0.00%; right: 60.00%; top: 0px;"
+              style="left: 0.00%; right: 50.00%; top: 0px;"
             />
             <div
               class="bp3-slider-progress"
-              style="left: 40.00%; right: 0.00%; top: 0px;"
+              style="left: 50.00%; right: 0.00%; top: 0px;"
             />
           </div>
           <div
@@ -78,13 +78,13 @@ exports[`FFNewSubscription dropdown 1`] = `
           </div>
           <span
             class="bp3-slider-handle"
-            style="left: calc(40.00% - 0px);"
+            style="left: calc(50.00% - 0px);"
             tabindex="0"
           >
             <span
               class="bp3-slider-label"
             >
-              20
+              25
             </span>
           </span>
         </div>
@@ -97,7 +97,7 @@ exports[`FFNewSubscription dropdown 1`] = `
             <input
               class="bp3-input"
               type="text"
-              value="20"
+              value="25"
             />
           </div>
         </div>
@@ -140,11 +140,11 @@ exports[`FFNewSubscription dropdown 1`] = `
             />
             <div
               class="bp3-slider-progress bp3-intent-primary"
-              style="left: 0.00%; right: 80.00%; top: 0px;"
+              style="left: 0.00%; right: 97.60%; top: 0px;"
             />
             <div
               class="bp3-slider-progress"
-              style="left: 20.00%; right: 0.00%; top: 0px;"
+              style="left: 2.40%; right: 0.00%; top: 0px;"
             />
           </div>
           <div
@@ -189,13 +189,13 @@ exports[`FFNewSubscription dropdown 1`] = `
           </div>
           <span
             class="bp3-slider-handle"
-            style="left: calc(20.00% - 0px);"
+            style="left: calc(2.40% - 0px);"
             tabindex="0"
           >
             <span
               class="bp3-slider-label"
             >
-              100
+              12
             </span>
           </span>
         </div>
@@ -221,7 +221,7 @@ exports[`FFNewSubscription dropdown 1`] = `
                     data-testid="dropdown-value"
                     style="--text-line-clamp: 1;"
                   >
-                    100K
+                      K
                   </p>
                 </div>
                 <div
@@ -265,7 +265,7 @@ exports[`FFNewSubscription dropdown 1`] = `
                       class="bp3-menu"
                     >
                       <li
-                        class="DropDown--menuItem DropDown--active"
+                        class="DropDown--menuItem"
                       >
                         100K
                       </li>
@@ -469,11 +469,11 @@ exports[`FFNewSubscription update licenses 1`] = `
             />
             <div
               class="bp3-slider-progress bp3-intent-primary"
-              style="left: 0.00%; right: 30.00%; top: 0px;"
+              style="left: 0.00%; right: 50.00%; top: 0px;"
             />
             <div
               class="bp3-slider-progress"
-              style="left: 70.00%; right: 0.00%; top: 0px;"
+              style="left: 50.00%; right: 0.00%; top: 0px;"
             />
           </div>
           <div
@@ -518,13 +518,13 @@ exports[`FFNewSubscription update licenses 1`] = `
           </div>
           <span
             class="bp3-slider-handle"
-            style="left: calc(70.00% - 0px);"
+            style="left: calc(50.00% - 0px);"
             tabindex="0"
           >
             <span
               class="bp3-slider-label"
             >
-              35
+              25
             </span>
           </span>
         </div>
@@ -537,7 +537,7 @@ exports[`FFNewSubscription update licenses 1`] = `
             <input
               class="bp3-input"
               type="text"
-              value="35"
+              value="25"
             />
           </div>
         </div>
@@ -580,11 +580,11 @@ exports[`FFNewSubscription update licenses 1`] = `
             />
             <div
               class="bp3-slider-progress bp3-intent-primary"
-              style="left: 0.00%; right: 0.00%; top: 0px;"
+              style="left: 0.00%; right: 97.60%; top: 0px;"
             />
             <div
               class="bp3-slider-progress"
-              style="left: 100.00%; right: 0.00%; top: 0px;"
+              style="left: 2.40%; right: 0.00%; top: 0px;"
             />
           </div>
           <div
@@ -629,13 +629,13 @@ exports[`FFNewSubscription update licenses 1`] = `
           </div>
           <span
             class="bp3-slider-handle"
-            style="left: calc(2000.00% - 0px);"
+            style="left: calc(2.40% - 0px);"
             tabindex="0"
           >
             <span
               class="bp3-slider-label"
             >
-              10000
+              12
             </span>
           </span>
         </div>

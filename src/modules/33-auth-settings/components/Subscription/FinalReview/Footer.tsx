@@ -9,22 +9,20 @@ import React from 'react'
 import { Layout, Button, ButtonVariation } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import { SubscribeViews } from '@common/constants/SubscriptionTypes'
-import type { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
 import css from '@auth-settings/modals/Subscription/useSubscriptionModal.module.scss'
 
 interface FooterProps {
-  time?: TIME_TYPE
   setView: (view: SubscribeViews) => void
 }
 
 export const Footer = ({ setView }: FooterProps): React.ReactElement => {
   const { getString } = useStrings()
 
-  function handleNext(): void {
-    setView(SubscribeViews.SUCCESS)
+  function handleBack(): void {
+    setView(SubscribeViews.CALCULATE)
   }
 
-  function handleBack(): void {
+  function handleNext(): void {
     setView(SubscribeViews.BILLINGINFO)
   }
 
@@ -35,7 +33,7 @@ export const Footer = ({ setView }: FooterProps): React.ReactElement => {
           {getString('back')}
         </Button>
         <Button variation={ButtonVariation.PRIMARY} onClick={handleNext}>
-          {getString('authSettings.billing.subscribeNPay')}
+          {getString('authSettings.finalReview.next')}
         </Button>
       </Layout.Horizontal>
     </Layout.Horizontal>

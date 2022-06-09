@@ -9,7 +9,7 @@ import React, { useEffect } from 'react'
 import { Layout, Text } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import type { PriceDTO } from 'services/cd-ng'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { getRenewDate } from '../subscriptionUtils'
 import css from './CostCalculator.module.scss'
 
@@ -20,7 +20,7 @@ export const FFEquation = ({
   setDueToday
 }: {
   productPrices: PriceDTO[]
-  quantities: Record<string, number>
+  quantities?: Record<string, number>
   time: TIME_TYPE
   setDueToday: (value: string) => void
 }): React.ReactElement => {
@@ -42,8 +42,8 @@ export const FFEquation = ({
     style: 'currency',
     currency: 'USD'
   })
-  const licenseQuantity = quantities['licenses'] || 0
-  const mauQuantity = quantities['maus'] || 0
+  const licenseQuantity = quantities?.['numberOfDevelopers'] || 0
+  const mauQuantity = quantities?.['numberOfMau'] || 0
   const licenseSubtotalMonthly = (licenseQuantity * licenseUnitPrice).toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD'

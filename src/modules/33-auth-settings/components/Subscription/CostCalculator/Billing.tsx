@@ -12,11 +12,11 @@ import { FontVariation, Color } from '@harness/design-system'
 import { capitalize } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import type { Module } from 'framework/types/ModuleName'
-import { useRetrieveProductPrices, PriceDTO } from 'services/cd-ng/index'
+import { useRetrieveProductPrices, PriceDTO, RetrieveProductPricesQueryParams } from 'services/cd-ng/index'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
 import type { Editions, ProductPricesProp } from '@common/constants/SubscriptionTypes'
+import { TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { FFEquation } from './FFEquation'
 import { PremiumSupport } from './PremiumSupport'
 import { getProductPrices } from '../subscriptionUtils'
@@ -73,7 +73,7 @@ function getEquationByModule({
 }: {
   module: Module
   productPrices: PriceDTO[]
-  quantities: Record<string, number>
+  quantities?: Record<string, number>
   time: TIME_TYPE
   setDueToday: (value: string) => void
 }): React.ReactElement {
@@ -86,7 +86,7 @@ function getEquationByModule({
   }
 }
 
-function calculateYearlySave(productPrices: ProductPricesProp, quantities: Record<string, number>): string {
+function calculateYearlySave(productPrices: ProductPricesProp, quantities?: Record<string, number>): string {
   let yearlySave = 0
   const licenseMonthlyUnitPrice =
     (productPrices.monthly.find(price => price.lookupKey?.includes('DEVELOPERS'))?.unitAmount || 0) / 100
@@ -98,8 +98,8 @@ function calculateYearlySave(productPrices: ProductPricesProp, quantities: Recor
     (productPrices.yearly.find(price => price.lookupKey?.includes('MAU'))?.unitAmount || 0) / 100
 
   yearlySave =
-    (licenseMonthlyUnitPrice * 12 - licenseYearlyUnitPrice) * (quantities['licenses'] || 0) +
-    (mauMonthlyUnitPrice * 12 - mauYearlyUnitPrice) * (quantities['maus'] || 0)
+    (licenseMonthlyUnitPrice * 12 - licenseYearlyUnitPrice) * (quantities?.['numberOfDevelopers'] || 0) +
+    (mauMonthlyUnitPrice * 12 - mauYearlyUnitPrice) * (quantities?.['numberOfMau'] || 0)
 
   return yearlySave.toLocaleString('en-US', {
     style: 'currency',
@@ -109,29 +109,33 @@ function calculateYearlySave(productPrices: ProductPricesProp, quantities: Recor
 
 export const Billing = ({
   module,
-  initialTime,
+  paymentFreq,
   quantities,
   plan,
-  setDueToday
+  prem,
+  setPrem,
+  setDueToday,
+  setPaymentFreq
 }: {
   module: Module
-  initialTime: TIME_TYPE
-  quantities: Record<string, number>
+  paymentFreq: TIME_TYPE
+  quantities?: Record<string, number>
   plan: Editions
+  prem: boolean
+  setPrem: (value: boolean) => void
   setDueToday: (value: string) => void
+  setPaymentFreq: (value: TIME_TYPE) => void
 }): React.ReactElement => {
-  const [time, setTime] = useState<TIME_TYPE>(initialTime)
-  const [prem, setPrem] = useState<boolean>(false)
-  const premDisabled = time === TIME_TYPE.MONTHLY
+  const premDisabled = paymentFreq === TIME_TYPE.MONTHLY
   const { accountId } = useParams<AccountPathProps>()
   const [productPrices, setProductPrices] = useState<ProductPricesProp>({ monthly: [], yearly: [] })
 
-  const equationProductPrices = getProductPrices(plan, time, productPrices)
+  const equationProductPrices = getProductPrices(plan, paymentFreq, productPrices)
 
   const { data, loading, error, refetch } = useRetrieveProductPrices({
     queryParams: {
       accountIdentifier: accountId,
-      moduleType: module.toUpperCase()
+      moduleType: module.toUpperCase() as RetrieveProductPricesQueryParams['moduleType']
     }
   })
 
@@ -166,17 +170,29 @@ export const Billing = ({
   return (
     <Layout.Vertical spacing={'large'} padding={{ bottom: 'large' }}>
       <Header
-        time={time}
+        time={paymentFreq}
         setTime={(newTime: TIME_TYPE) => {
-          setTime(newTime)
+          setPaymentFreq(newTime)
           if (newTime === TIME_TYPE.MONTHLY) {
             setPrem(false)
           }
         }}
         yearlySave={calculateYearlySave(productPrices, quantities)}
       />
-      {getEquationByModule({ module, productPrices: equationProductPrices, quantities, time, setDueToday })}
-      <PremiumSupport disabled={premDisabled} onChange={setPrem} value={prem} time={time} setTime={setTime} />
+      {getEquationByModule({
+        module,
+        productPrices: equationProductPrices,
+        quantities,
+        time: paymentFreq,
+        setDueToday
+      })}
+      <PremiumSupport
+        disabled={premDisabled}
+        onChange={setPrem}
+        value={prem}
+        time={paymentFreq}
+        setTime={setPaymentFreq}
+      />
     </Layout.Vertical>
   )
 }

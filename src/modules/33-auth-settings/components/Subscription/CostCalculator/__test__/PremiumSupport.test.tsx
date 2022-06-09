@@ -8,7 +8,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { PremiumSupport } from '../PremiumSupport'
 
 describe('PremiumSupport', () => {

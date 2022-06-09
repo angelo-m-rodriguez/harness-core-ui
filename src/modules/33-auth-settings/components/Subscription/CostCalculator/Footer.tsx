@@ -9,8 +9,7 @@ import React from 'react'
 import { Layout, Text, Button, ButtonVariation } from '@harness/uicore'
 import { Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
-import { SubscribeViews } from '@common/constants/SubscriptionTypes'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { SubscribeViews, TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { getRenewDate } from '../subscriptionUtils'
 import css from '@auth-settings/modals/Subscription/useSubscriptionModal.module.scss'
 
@@ -19,15 +18,17 @@ interface FooterProps {
   time: TIME_TYPE
   setView: (view: SubscribeViews) => void
   dueToday: string
+  createSubscription: () => Promise<void>
 }
 
-export const Footer = ({ disabled, time, setView, dueToday }: FooterProps): React.ReactElement => {
+export const Footer = ({ disabled, time, setView, dueToday, createSubscription }: FooterProps): React.ReactElement => {
   const { getString } = useStrings()
   const timeDescr =
     time === TIME_TYPE.MONTHLY ? getString('common.monthly').toLowerCase() : getString('common.annually')
 
-  function handleNext(): void {
-    setView(SubscribeViews.BILLINGINFO)
+  async function handleNext(): Promise<void> {
+    await createSubscription()
+    setView(SubscribeViews.FINALREVIEW)
   }
 
   return (

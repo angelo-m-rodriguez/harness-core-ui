@@ -8,14 +8,14 @@
 import React from 'react'
 import { render, act, waitFor, fireEvent } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
-import { Editions, SubscribeViews } from '@common/constants/SubscriptionTypes'
+import { Editions, SubscribeViews, TIME_TYPE } from '@common/constants/SubscriptionTypes'
 import { FinalReview } from '../FinalReview'
 
 describe('FinalReview', () => {
   test('render', () => {
     const { container, getByText } = render(
       <TestWrapper>
-        <FinalReview module="cf" setView={jest.fn()} plan={Editions.ENTERPRISE} />
+        <FinalReview module="cf" setView={jest.fn()} plan={Editions.ENTERPRISE} paymentFreq={TIME_TYPE.MONTHLY} />
       </TestWrapper>
     )
     expect(getByText('authSettings.finalReview.step')).toBeInTheDocument()
@@ -26,20 +26,20 @@ describe('FinalReview', () => {
     const setViewMock = jest.fn()
     const { getByText } = render(
       <TestWrapper>
-        <FinalReview module="cf" setView={setViewMock} plan={Editions.TEAM} />
+        <FinalReview module="cf" setView={setViewMock} plan={Editions.TEAM} paymentFreq={TIME_TYPE.MONTHLY} />
       </TestWrapper>
     )
     act(() => {
       fireEvent.click(getByText('back'))
     })
     await waitFor(() => {
-      expect(setViewMock).toBeCalledWith(SubscribeViews.BILLINGINFO)
+      expect(setViewMock).toBeCalledWith(SubscribeViews.CALCULATE)
     })
     act(() => {
-      fireEvent.click(getByText('authSettings.billing.subscribeNPay'))
+      fireEvent.click(getByText('authSettings.finalReview.next'))
     })
     await waitFor(() => {
-      expect(setViewMock).toBeCalledWith(SubscribeViews.SUCCESS)
+      expect(setViewMock).toBeCalledWith(SubscribeViews.BILLINGINFO)
     })
   })
 })

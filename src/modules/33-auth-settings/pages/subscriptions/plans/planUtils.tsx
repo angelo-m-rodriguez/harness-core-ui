@@ -47,6 +47,7 @@ interface GetBtnPropsProps {
   actions?: {
     [key: string]: EditionActionDTO[]
   }
+  isSelfServiceEnabled: boolean
 }
 
 export function getBtnProps({
@@ -58,65 +59,68 @@ export function getBtnProps({
   handleManageSubscription,
   handleUpgrade,
   btnLoading,
-  actions
+  actions,
+  isSelfServiceEnabled
 }: GetBtnPropsProps): PlanCalculatedProps['btnProps'] {
   const btnProps: BtnProps[] = []
   const planEdition = plan?.title && (plan?.title?.toUpperCase() as Editions)
-  const planActions = (planEdition && actions?.[planEdition]) || []
+  let planActions = (planEdition && actions?.[planEdition]) || []
   // for March's launch, we hide manage subscription, upgrade, subscribe until the functions are fullfilled
-  planActions
-    ?.filter(action => action.action && !['MANAGE', 'SUBSCRIBE', 'UPGRADE'].includes(action.action))
-    .forEach(action => {
-      let onClick,
-        order,
-        planDisabledStr: string | undefined,
-        isContactSales: boolean | undefined,
-        isContactSupport: boolean | undefined
-      const buttonText =
-        action.action &&
-        PLAN_BTN_ACTIONS[action.action] &&
-        getString(PLAN_BTN_ACTIONS[action.action] as keyof StringsMap)
-      switch (action.action) {
-        case 'START_FREE':
-        case 'START_TRIAL':
-          order = 0
-          onClick = () => planEdition && handleStartPlan(planEdition)
-          break
-        case 'EXTEND_TRIAL':
-          order = 0
-          onClick = () => planEdition && handleExtendTrial(planEdition)
-          break
-        case 'MANAGE':
-          order = 0
-          onClick = handleManageSubscription
-          break
-        case 'SUBSCRIBE':
-        case 'UPGRADE':
-          order = 1
-          onClick = handleUpgrade
-          break
-        case 'CONTACT_SALES':
-          order = 2
-          onClick = handleContactSales
-          isContactSales = true
-          break
-        case 'CONTACT_SUPPORT':
-          order = 2
-          isContactSupport = true
-          break
-        case 'DISABLED_BY_ENTERPRISE':
-        case 'DISABLED_BY_TEAM':
-          order = 0
-          onClick = undefined
-          planDisabledStr = action.reason
-          break
-        default:
-          order = 0
-          onClick = undefined
-      }
+  if (!isSelfServiceEnabled) {
+    planActions = planActions.filter(
+      action => action.action && !['MANAGE', 'SUBSCRIBE', 'UPGRADE'].includes(action.action)
+    )
+  }
 
-      btnProps.push({ buttonText, onClick, btnLoading, order, planDisabledStr, isContactSales, isContactSupport })
-    })
+  planActions.forEach(action => {
+    let onClick,
+      order,
+      planDisabledStr: string | undefined,
+      isContactSales: boolean | undefined,
+      isContactSupport: boolean | undefined
+    const buttonText =
+      action.action && PLAN_BTN_ACTIONS[action.action] && getString(PLAN_BTN_ACTIONS[action.action] as keyof StringsMap)
+    switch (action.action) {
+      case 'START_FREE':
+      case 'START_TRIAL':
+        order = 0
+        onClick = () => planEdition && handleStartPlan(planEdition)
+        break
+      case 'EXTEND_TRIAL':
+        order = 0
+        onClick = () => planEdition && handleExtendTrial(planEdition)
+        break
+      case 'MANAGE':
+        order = 0
+        onClick = handleManageSubscription
+        break
+      case 'SUBSCRIBE':
+      case 'UPGRADE':
+        order = 1
+        onClick = handleUpgrade
+        break
+      case 'CONTACT_SALES':
+        order = 2
+        onClick = handleContactSales
+        isContactSales = true
+        break
+      case 'CONTACT_SUPPORT':
+        order = 2
+        isContactSupport = true
+        break
+      case 'DISABLED_BY_ENTERPRISE':
+      case 'DISABLED_BY_TEAM':
+        order = 0
+        onClick = undefined
+        planDisabledStr = action.reason
+        break
+      default:
+        order = 0
+        onClick = undefined
+    }
+
+    btnProps.push({ buttonText, onClick, btnLoading, order, planDisabledStr, isContactSales, isContactSupport })
+  })
 
   // sort btns for display order
   btnProps.sort((btn1, btn2) => btn1.order - btn2.order)

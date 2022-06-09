@@ -5,14 +5,14 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Text, Layout, PillToggle } from '@harness/uicore'
 import { Color, FontVariation } from '@harness/design-system'
 import { capitalize } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import type { Module } from 'framework/types/ModuleName'
-import { Editions, SUBSCRIPTION_TAB_NAMES } from '@common/constants/SubscriptionTypes'
+import { Editions, SUBSCRIPTION_TAB_NAMES, SubscriptionProps } from '@common/constants/SubscriptionTypes'
 import routes from '@common/RouteDefinitions'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import type { UsageAndLimitReturn } from '@common/hooks/useGetUsageAndLimit'
@@ -88,18 +88,24 @@ const PlanToggle = ({
 
 function getBodyByModule({
   module,
-  newPlan,
   usageAndLimitInfo,
-  setQuantities
+  setQuantities,
+  subscriptionProps
 }: {
   module: Module
-  newPlan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
   setQuantities: (quantities: Record<string, number>) => void
+  subscriptionProps: SubscriptionProps
 }): React.ReactElement {
   switch (module) {
     case 'cf': {
-      return <FFNewSubscription plan={newPlan} usageAndLimitInfo={usageAndLimitInfo} setQuantities={setQuantities} />
+      return (
+        <FFNewSubscription
+          usageAndLimitInfo={usageAndLimitInfo}
+          setQuantities={setQuantities}
+          subscriptionProps={subscriptionProps}
+        />
+      )
     }
     default:
       return <></>
@@ -108,33 +114,28 @@ function getBodyByModule({
 
 interface NewSubscriptionProps {
   module: Module
-  newPlan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
   setQuantities: (quantities: Record<string, number>) => void
-  setNewPlan: (plan: Editions) => void
+  setNewPlan: (value: Editions) => void
+  subscriptionProps: SubscriptionProps
 }
 
 export const NewSubscription = ({
   module,
-  newPlan,
   usageAndLimitInfo,
   setQuantities,
+  subscriptionProps,
   setNewPlan
 }: NewSubscriptionProps): React.ReactElement => {
-  const [plan, setPlan] = useState<Editions>(newPlan)
-
   return (
     <Layout.Vertical spacing={'large'} padding={{ bottom: 'large' }} className={css.newSubscription}>
-      <Header
-        plan={plan}
-        module={module}
-        setPlan={(value: Editions) => {
-          setPlan(value)
-          setNewPlan(value)
-          setQuantities({})
-        }}
-      />
-      {getBodyByModule({ module, newPlan: plan, usageAndLimitInfo, setQuantities })}
+      <Header plan={subscriptionProps.edition} module={module} setPlan={setNewPlan} />
+      {getBodyByModule({
+        module,
+        usageAndLimitInfo,
+        setQuantities,
+        subscriptionProps
+      })}
     </Layout.Vertical>
   )
 }

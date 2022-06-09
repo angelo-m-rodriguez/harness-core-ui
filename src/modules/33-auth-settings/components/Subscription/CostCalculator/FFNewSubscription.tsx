@@ -10,7 +10,7 @@ import { Slider } from '@blueprintjs/core'
 import { DropDown, Layout, Text, TextInput, SelectOption, PageError, Container } from '@harness/uicore'
 import { useStrings } from 'framework/strings'
 import type { UsageAndLimitReturn } from '@common/hooks/useGetUsageAndLimit'
-import { Editions } from '@common/constants/SubscriptionTypes'
+import { Editions, SubscriptionProps } from '@common/constants/SubscriptionTypes'
 import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import css from './CostCalculator.module.scss'
 
@@ -113,13 +113,13 @@ const SliderBar = ({
 }
 
 export const FFNewSubscription = ({
-  plan,
   usageAndLimitInfo,
-  setQuantities
+  setQuantities,
+  subscriptionProps
 }: {
-  plan: Editions
   usageAndLimitInfo: UsageAndLimitReturn
   setQuantities: (quantities: Record<string, number>) => void
+  subscriptionProps: SubscriptionProps
 }): React.ReactElement => {
   const { getString } = useStrings()
 
@@ -127,9 +127,8 @@ export const FFNewSubscription = ({
   const { usage } = usageData
   const activeLicenses = usage?.ff?.activeFeatureFlagUsers?.count || 0
   const activeMAUs = usage?.ff?.activeClientMAUs?.count || 0
-
-  const [licenses, setLicenses] = useState<number>(activeLicenses)
-  const [maus, setMaus] = useState<number>(activeMAUs)
+  const numberOfMau = subscriptionProps.quantities?.cf?.numberOfMau || activeMAUs
+  const numberOfDevelopers = subscriptionProps.quantities?.cf?.numberOfDevelopers || activeLicenses
 
   const [licenseRange, setLicensesRange] = useState<{
     min: number
@@ -157,7 +156,7 @@ export const FFNewSubscription = ({
 
   useEffect(() => {
     // TODO: get tier from prices api call
-    if (plan === Editions.TEAM) {
+    if (subscriptionProps.edition === Editions.TEAM) {
       setLicensesRange({
         min: 0,
         max: 50,
@@ -172,9 +171,6 @@ export const FFNewSubscription = ({
         list: [100, 200, 300, 400, 500],
         unit: 'K'
       })
-      // reset licenses and maus
-      setLicenses(Math.max(activeLicenses, 0))
-      setMaus(Math.max(activeMAUs, 0))
     } else {
       setLicensesRange({
         min: 25,
@@ -190,11 +186,8 @@ export const FFNewSubscription = ({
         list: [0, 5, 10, 15, 20, 25],
         unit: 'M'
       })
-      // reset licenses and maus
-      setLicenses(Math.max(activeLicenses, 25))
-      setMaus(Math.max(activeMAUs, 0))
     }
-  }, [plan, activeLicenses, activeMAUs])
+  }, [subscriptionProps.edition, activeLicenses, activeMAUs])
 
   if (loadingUsage) {
     return <ContainerSpinner />
@@ -226,12 +219,11 @@ export const FFNewSubscription = ({
         max={licenseRange.max}
         stepSize={licenseRange.stepSize}
         labelStepSize={licenseRange.labelStepSize}
-        value={licenses}
+        value={numberOfDevelopers}
         setValue={(value: number) => {
-          setLicenses(value)
           setQuantities({
-            licenses: value,
-            maus
+            numberOfDevelopers: value,
+            numberOfMau
           })
         }}
       />
@@ -242,12 +234,11 @@ export const FFNewSubscription = ({
         stepSize={mausRange.stepSize}
         labelStepSize={mausRange.labelStepSize}
         list={mausRange.list}
-        value={maus}
+        value={numberOfMau}
         setValue={(value: number) => {
-          setMaus(value)
           setQuantities({
-            licenses,
-            maus: value
+            numberOfDevelopers,
+            numberOfMau: value
           })
         }}
         unit={mausRange.unit}

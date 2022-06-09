@@ -14,8 +14,9 @@ import { FinalReview } from '@auth-settings/components/Subscription/FinalReview/
 import { Success } from '@auth-settings/components/Subscription/Success/Success'
 import { BillingInfo } from '@auth-settings/components/Subscription/BillingInfo/BillingInfo'
 import type { Module } from 'framework/types/ModuleName'
-import { Editions, SubscribeViews } from '@common/constants/SubscriptionTypes'
-import { TIME_TYPE } from '@auth-settings/pages/subscriptions/plans/planUtils'
+import { Editions, SubscribeViews, SubscriptionProps, TIME_TYPE } from '@common/constants/SubscriptionTypes'
+import { getSubscriptionPropsByModule } from '@auth-settings/components/Subscription/subscriptionUtils'
+import type { InvoiceDetailDTO } from 'services/cd-ng'
 import css from './useSubscriptionModal.module.scss'
 
 interface UseSubscribeModalReturns {
@@ -37,21 +38,51 @@ interface UseSubscribeModalProps {
 
 const View = ({ module, plan, time }: UseSubscribeModalProps): React.ReactElement => {
   const [view, setView] = useState(SubscribeViews.CALCULATE)
+  const [subscriptionProps, setSubscriptionProps] = useState<SubscriptionProps>({
+    edition: plan,
+    premiumSupport: false,
+    paymentFreq: time
+  })
+  const [invoiceData, setInvoiceData] = useState<InvoiceDetailDTO>()
 
   switch (view) {
-    case SubscribeViews.BILLINGINFO:
-      return <BillingInfo module={module} setView={setView} time={time} />
     case SubscribeViews.FINALREVIEW:
-      return <FinalReview module={module} setView={setView} plan={plan} />
+      return (
+        <FinalReview
+          module={module}
+          setView={setView}
+          plan={subscriptionProps.edition}
+          invoiceData={invoiceData}
+          paymentFreq={subscriptionProps.paymentFreq}
+        />
+      )
+    case SubscribeViews.BILLINGINFO:
+      return (
+        <BillingInfo
+          module={module}
+          setView={setView}
+          subscriptionProps={getSubscriptionPropsByModule(module, subscriptionProps)}
+          clientSecret={invoiceData?.clientSecret}
+          payToday={(invoiceData?.amountDue || 0) / 100}
+        />
+      )
     case SubscribeViews.SUCCESS:
       return <Success module={module} />
     case SubscribeViews.CALCULATE:
     default:
-      return <CostCalculator module={module} setView={setView} initilalNewPlan={plan} time={time} />
+      return (
+        <CostCalculator
+          module={module}
+          setView={setView}
+          subscriptionProps={subscriptionProps}
+          setSubscriptionProps={setSubscriptionProps}
+          setInvoiceData={setInvoiceData}
+        />
+      )
   }
 }
 
-export const useSubscribeModal = (): UseSubscribeModalReturns => {
+export const useSubscribeModal = ({ onClose }: { onClose?: () => void }): UseSubscribeModalReturns => {
   const [newPlan, setNewPlan] = useState<Editions>(Editions.FREE)
   const [time, setTime] = useState<TIME_TYPE>(TIME_TYPE.YEARLY)
   const [module, setModule] = useState<Module>('cd')
@@ -65,6 +96,7 @@ export const useSubscribeModal = (): UseSubscribeModalReturns => {
         className={cx(css.dialog, Classes.DIALOG)}
         title=""
         isCloseButtonShown
+        onClosed={onClose}
       >
         <View module={module} plan={newPlan} time={time} />
       </Dialog>

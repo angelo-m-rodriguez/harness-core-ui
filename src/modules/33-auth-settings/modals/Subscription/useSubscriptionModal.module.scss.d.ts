@@ -9,5 +9,6 @@
 declare const styles: {
   readonly dialog: string
   readonly footer: string
+  readonly powerByStripe: string
 }
 export default styles

@@ -1348,7 +1348,6 @@ export interface StringsMap {
   'authSettings.azure': string
   'authSettings.billedAnnually': string
   'authSettings.billedMonthly': string
-  'authSettings.billing.next': string
   'authSettings.billing.step': string
   'authSettings.billing.subscribeNPay': string
   'authSettings.billing.totalDuetoday': string
@@ -1446,6 +1445,7 @@ export interface StringsMap {
   'authSettings.existingMembersWillReceiveAnEmailWithQRCode': string
   'authSettings.failedLoginsBeforeLocked': string
   'authSettings.failedLoginsBeforeLockedAccount': string
+  'authSettings.finalReview.next': string
   'authSettings.finalReview.ofTotalSpend': string
   'authSettings.finalReview.premiumSupport': string
   'authSettings.finalReview.step': string

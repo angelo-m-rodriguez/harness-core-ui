@@ -390,27 +390,19 @@ exports[`CostCalculator not cf module 1`] = `
         </span>
       </button>
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--padding-right-medium StyledProps--color StyledProps--color-grey700"
         >
           authSettings.costCalculator.payingToday
+          0
         </p>
-        <div
-          class="Layout--vertical StyledProps--main"
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
         >
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-          >
-            authSettings.plusTax
-          </p>
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
-          >
-            authSettings.costCalculator.autoRenew
-          </p>
-        </div>
+          authSettings.costCalculator.autoRenew
+        </p>
       </div>
     </div>
   </div>
@@ -769,11 +761,11 @@ exports[`CostCalculator render 1`] = `
                   />
                   <div
                     class="bp3-slider-progress bp3-intent-primary"
-                    style="left: 0.00%; right: 60.00%; top: 0px;"
+                    style="left: 0.00%; right: 50.00%; top: 0px;"
                   />
                   <div
                     class="bp3-slider-progress"
-                    style="left: 40.00%; right: 0.00%; top: 0px;"
+                    style="left: 50.00%; right: 0.00%; top: 0px;"
                   />
                 </div>
                 <div
@@ -818,13 +810,13 @@ exports[`CostCalculator render 1`] = `
                 </div>
                 <span
                   class="bp3-slider-handle"
-                  style="left: calc(40.00% - 0px);"
+                  style="left: calc(50.00% - 0px);"
                   tabindex="0"
                 >
                   <span
                     class="bp3-slider-label"
                   >
-                    20
+                    25
                   </span>
                 </span>
               </div>
@@ -837,7 +829,7 @@ exports[`CostCalculator render 1`] = `
                   <input
                     class="bp3-input"
                     type="text"
-                    value="20"
+                    value="25"
                   />
                 </div>
               </div>
@@ -880,11 +872,11 @@ exports[`CostCalculator render 1`] = `
                   />
                   <div
                     class="bp3-slider-progress bp3-intent-primary"
-                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                    style="left: 0.00%; right: 97.60%; top: 0px;"
                   />
                   <div
                     class="bp3-slider-progress"
-                    style="left: 100.00%; right: 0.00%; top: 0px;"
+                    style="left: 2.40%; right: 0.00%; top: 0px;"
                   />
                 </div>
                 <div
@@ -929,13 +921,13 @@ exports[`CostCalculator render 1`] = `
                 </div>
                 <span
                   class="bp3-slider-handle"
-                  style="left: calc(2000.00% - 0px);"
+                  style="left: calc(2.40% - 0px);"
                   tabindex="0"
                 >
                   <span
                     class="bp3-slider-label"
                   >
-                    10000
+                    12
                   </span>
                 </span>
               </div>
@@ -1064,20 +1056,30 @@ exports[`CostCalculator render 1`] = `
             >
               authSettings.costCalculator.developerLicenses common.subtotal
             </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+            <div
+              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
             >
-              common.perMonth
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                $1,250.00
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                common.perMonth
+              </p>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
+            >
+              $15,000.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
-            </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-            >
-              authSettings.unitPrice common.perMonth
+              25
+              authSettings.unitPrice$50.00common.perMonth
             </p>
           </div>
           <p
@@ -1093,20 +1095,31 @@ exports[`CostCalculator render 1`] = `
             >
               authSettings.costCalculator.maus common.subtotal
             </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+            <div
+              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
             >
-              common.perMonth
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                $1,080.00
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                common.perMonth
+              </p>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
+            >
+               
+              $12,960.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
-            </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-            >
-              authSettings.unitPrice common.perMonth
+              12
+              authSettings.unitPrice$90.00common.perMonth
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
@@ -1127,24 +1140,16 @@ exports[`CostCalculator render 1`] = `
             >
               authSettings.yearlySubscriptionTotal
             </p>
-            <div
-              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
             >
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
-              >
-                common.perMonth
-              </p>
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-              >
-                authSettings.plusTax
-              </p>
-            </div>
+              $2,330.00
+              common.perMonth
+            </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
+              $27,960.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
@@ -1310,27 +1315,19 @@ exports[`CostCalculator render 1`] = `
         </span>
       </button>
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--padding-right-medium StyledProps--color StyledProps--color-grey700"
         >
           authSettings.costCalculator.payingToday
+          $2,330.00
         </p>
-        <div
-          class="Layout--vertical StyledProps--main"
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
         >
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-          >
-            authSettings.plusTax
-          </p>
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
-          >
-            authSettings.costCalculator.autoRenew
-          </p>
-        </div>
+          authSettings.costCalculator.autoRenew
+        </p>
       </div>
     </div>
   </div>
@@ -1788,11 +1785,11 @@ exports[`CostCalculator yearly and enterprise 1`] = `
                   />
                   <div
                     class="bp3-slider-progress bp3-intent-primary"
-                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                    style="left: 0.00%; right: 52.00%; top: 0px;"
                   />
                   <div
                     class="bp3-slider-progress"
-                    style="left: 100.00%; right: 0.00%; top: 0px;"
+                    style="left: 48.00%; right: 0.00%; top: 0px;"
                   />
                 </div>
                 <div
@@ -1837,13 +1834,13 @@ exports[`CostCalculator yearly and enterprise 1`] = `
                 </div>
                 <span
                   class="bp3-slider-handle"
-                  style="left: calc(40000.00% - 0px);"
+                  style="left: calc(48.00% - 0px);"
                   tabindex="0"
                 >
                   <span
                     class="bp3-slider-label"
                   >
-                    10000
+                    12
                   </span>
                 </span>
               </div>
@@ -1947,20 +1944,30 @@ exports[`CostCalculator yearly and enterprise 1`] = `
             >
               authSettings.costCalculator.developerLicenses common.subtotal
             </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+            <div
+              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
             >
-              common.perMonth
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                $1,875.00
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                common.perMonth
+              </p>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
+            >
+              $22,500.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
-            </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-            >
-              authSettings.unitPrice common.perMonth
+              25
+              authSettings.unitPrice$75.00common.perMonth
             </p>
           </div>
           <p
@@ -1976,20 +1983,31 @@ exports[`CostCalculator yearly and enterprise 1`] = `
             >
               authSettings.costCalculator.maus common.subtotal
             </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+            <div
+              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
             >
-              common.perMonth
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                $1,200.00
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
+              >
+                common.perMonth
+              </p>
+            </div>
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
+            >
+               
+              $14,400.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
-            </p>
-            <p
-              class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-            >
-              authSettings.unitPrice common.perMonth
+              12
+              authSettings.unitPrice$100.00common.perMonth
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
@@ -2010,24 +2028,16 @@ exports[`CostCalculator yearly and enterprise 1`] = `
             >
               authSettings.yearlySubscriptionTotal
             </p>
-            <div
-              class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--flex-alignItems-baseline"
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
             >
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--font-size-medium"
-              >
-                common.perMonth
-              </p>
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-              >
-                authSettings.plusTax
-              </p>
-            </div>
+              $3,075.00
+              common.perMonth
+            </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
             >
-              authSettings.billedAnnually
+              $36,900.00 authSettings.billedAnnually
             </p>
             <p
               class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
@@ -2158,27 +2168,19 @@ exports[`CostCalculator yearly and enterprise 1`] = `
         </span>
       </button>
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline"
       >
         <p
           class="StyledProps--font StyledProps--main StyledProps--padding-right-medium StyledProps--color StyledProps--color-grey700"
         >
           authSettings.costCalculator.payingToday
+          $36,900.00
         </p>
-        <div
-          class="Layout--vertical StyledProps--main"
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
         >
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--font-size-xsmall"
-          >
-            authSettings.plusTax
-          </p>
-          <p
-            class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-xsmall"
-          >
-            authSettings.costCalculator.autoRenew
-          </p>
-        </div>
+          authSettings.costCalculator.autoRenew
+        </p>
       </div>
     </div>
   </div>
