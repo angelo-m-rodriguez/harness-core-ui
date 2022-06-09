@@ -92,4 +92,38 @@ describe('useCache tests', () => {
       </div>
     `)
   })
+
+  test('can listen to updates for specific keys', async () => {
+    __danger_set_cache('foo', { a: 1, b: 2 })
+    __danger_set_cache('bar', { a: 1, b: 2 })
+    const TestComponent = (): React.ReactElement => {
+      const { get, set } = useCache(['foo'])
+      const onClick = () => set('bar', { a: 2, b: 3 })
+
+      return (
+        <div>
+          <button onClick={onClick}>update</button>
+          <div>{JSON.stringify(get('foo'))}</div>
+        </div>
+      )
+    }
+    const { container, findByText } = render(<TestComponent />)
+
+    const btn = await findByText('update')
+
+    fireEvent.click(btn)
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <button>
+            update
+          </button>
+          <div>
+            {"a":1,"b":2}
+          </div>
+        </div>
+      </div>
+    `)
+  })
 })
