@@ -103,7 +103,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
           showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
           getNode(getConfig, {
             setNewCurrentNode: true,
-            newNode: { ...createResponse.data } as FileStoreNodeDTO,
+            newNode: { ...createResponse.data, parentName: currentNode.name } as FileStoreNodeDTO,
             type: FileStoreNodeTypes.FOLDER
           })
         }

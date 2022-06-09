@@ -22,7 +22,7 @@ import { NameIdDescriptionTags } from '@common/components/NameIdDescriptionTags/
 import { useToaster } from '@common/components'
 
 import { useStrings } from 'framework/strings'
-import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
+import { IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import { NGTag, useCreate, useUpdate } from 'services/cd-ng'
 import { getFileUsageNameByType, getMimeTypeByName } from '@filestore/utils/FileStoreUtils'
@@ -160,7 +160,8 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
                 {
                   setNewCurrentNode: true,
                   type: FileStoreNodeTypes.FILE,
-                  identifier: values.identifier
+                  identifier: values.identifier,
+                  parentName: currentNode.name
                 }
               )
               showSuccess(getString('filestore.fileSuccessCreated', { name: values.name }))
@@ -190,7 +191,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
       formName="newFile"
       validationSchema={Yup.object().shape({
         identifier: IdentifierSchema(),
-        fileUsage: NameSchema({ requiredErrorMsg: 'File Usage is required' })
+        fileUsage: Yup.string().trim().required(getString('filestore.errors.fileUsage'))
       })}
       onSubmit={values => {
         modalErrorHandler?.hide()
@@ -227,7 +228,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
                 onCancel={close}
                 confirmText={editMode ? getString('save') : getString('create')}
                 cancelText={getString('cancel')}
-                loading={editMode ? updateLoading : createLoading}
+                loading={(editMode ? updateLoading : createLoading) || (tempNode && createLoading)}
               />
             </Layout.Vertical>
           </Form>

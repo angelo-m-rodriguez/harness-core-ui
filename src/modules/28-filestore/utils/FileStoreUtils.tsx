@@ -44,6 +44,7 @@ export const getMimeTypeByName = (name: string): string => {
 export const getLanguageType = (lang: string | undefined): string => {
   switch (lang) {
     case ExtensionType.YAML:
+    case ExtensionType.YML:
       return LanguageType.YAML
     case LanguageType.JSON:
       return ExtensionType.JSON

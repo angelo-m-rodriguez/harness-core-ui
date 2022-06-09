@@ -13,7 +13,8 @@ export enum ExtensionType {
   JSON = 'json',
   TEXT = 'txt',
   BASH = 'sh',
-  POWER_SHELL = 'ps'
+  POWER_SHELL = 'ps',
+  YML = 'yml'
 }
 
 export enum LanguageType {
@@ -21,7 +22,8 @@ export enum LanguageType {
   JSON = 'json',
   TEXT = 'plaintext',
   BASH = 'shell',
-  POWER_SHELL = 'powershell'
+  POWER_SHELL = 'powershell',
+  YML = 'yaml'
 }
 
 export enum FSErrosType {

@@ -56,6 +56,7 @@ export interface GetNodeConfig {
   newNode?: FileStoreNodeDTO
   identifier?: string
   type: FileStoreNodeTypes
+  parentName?: string
 }
 
 export const FileStoreContext = createContext({} as FileStoreContextState)
@@ -132,7 +133,13 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
         )
       }
       if (response?.data) {
-        updateCurrentNode(response?.data)
+        updateCurrentNode({
+          ...response.data,
+          children: response.data?.children?.map(node => ({
+            ...node,
+            parentName: response?.data?.name
+          }))
+        })
         if (config?.newNode && config.type === FileStoreNodeTypes.FOLDER) {
           setCurrentNode(config.newNode)
         }
@@ -142,7 +149,10 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
               (node: FileStoreNodeDTO) => node.identifier === config.identifier
             )
             if (newFile) {
-              setCurrentNode(newFile)
+              setCurrentNode({
+                ...newFile,
+                parentName: config?.parentName || ''
+              })
             }
           }
         }

@@ -76,7 +76,7 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
           const existNode = currentNode?.children && currentNode.children.find(node => node.identifier === name)
 
           if (typeof reader.result === 'string') {
-            const uniqID = `${name}_${uuid()}`
+            const uniqID = `${name}_${uuid().slice(0, 6)}`
             const node: FileStoreNodeDTO = {
               name,
               identifier: `${uniqID.replace(/[^A-Z0-9]+/gi, '_')}`,
@@ -135,7 +135,9 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
   }
 
   const handleClick = () => {
-    const node = document.getElementById('file-upload')
+    const node =
+      (document.getElementById('file-upload') as HTMLInputElement) ||
+      (document.getElementById('file-upload-modal') as HTMLInputElement)
     node?.addEventListener('change', handleChange, {
       capture: false,
       once: true
@@ -145,11 +147,13 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
       bubbles: false,
       cancelable: true
     })
+    node.value = ''
     node?.dispatchEvent(clickEvent)
 
-    return () => {
-      node?.removeEventListener('change', handleChange)
-    }
+    return () =>
+      node?.removeEventListener('change', handleChange, {
+        capture: false
+      })
   }
 
   return {

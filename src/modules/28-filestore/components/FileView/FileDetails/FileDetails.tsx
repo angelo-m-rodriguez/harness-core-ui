@@ -76,7 +76,7 @@ function FileDetails(): React.ReactElement {
       setValue('')
     }
     if (currentNode?.mimeType) {
-      if (!checkSupportedMime(currentNode.mimeType as ExtensionType)) {
+      if (!checkSupportedMime(currentNode.mimeType as ExtensionType) && !!isCachedNode(currentNode.identifier)) {
         setErrorMessage(FSErrosType.UNSUPPORTED_FORMAT)
         return
       } else {

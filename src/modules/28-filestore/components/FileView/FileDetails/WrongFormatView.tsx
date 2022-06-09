@@ -14,7 +14,7 @@ import useUploadFile, { UPLOAD_EVENTS } from '@filestore/common/useUpload/useUpl
 
 export default function WrongFormatView(): React.ReactElement {
   const { getString } = useStrings()
-  const { currentNode } = useContext(FileStoreContext)
+  const { currentNode, isModalView } = useContext(FileStoreContext)
 
   const uploadNewFile = useUploadFile({
     isBtn: true,
@@ -22,11 +22,17 @@ export default function WrongFormatView(): React.ReactElement {
   })
 
   return (
-    <Container width={'100%'} style={{ height: 'calc(100% - 69px)' }} background={Color.GREY_100}>
+    <Container
+      width={'100%'}
+      style={{ height: isModalView ? '100%' : 'calc(100% + 145px)' }}
+      background={Color.GREY_100}
+    >
       <Layout.Vertical spacing={'xxlarge'} height={'100%'} flex={{ align: 'center-center' }}>
-        <Container style={{ width: '220px', position: 'relative', minHeight: 300 }}>
+        <Container
+          style={{ width: isModalView ? '110px' : '220px', position: 'relative', minHeight: isModalView ? 150 : 300 }}
+        >
           <img
-            style={{ position: 'absolute', width: '220px', top: 0, left: 0 }}
+            style={{ position: 'absolute', width: isModalView ? '110px' : '220px', top: 0, left: 0 }}
             src={currentNode?.content ? currentNode.content : ''}
             alt={getString('filestore.view.noPreview')}
           />

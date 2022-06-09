@@ -20,7 +20,8 @@ import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constant
 const useDelete = (identifier: string, name: string, type: string): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
-  const { setActiveTab, setCurrentNode, getNode, queryParams } = useContext(FileStoreContext)
+  const { setActiveTab, setCurrentNode, getNode, queryParams, currentNode, isCachedNode, removeFromTempNodes } =
+    useContext(FileStoreContext)
 
   const getConfirmationDialogContent = (): JSX.Element => {
     return (
@@ -84,16 +85,30 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
     buttonIntent: Intent.DANGER,
     onCloseDialog: async (isConfirmed: boolean) => {
       if (isConfirmed) {
+        if (isCachedNode(currentNode.identifier)) {
+          removeFromTempNodes(currentNode.identifier)
+          try {
+            getNode({
+              identifier: currentNode.parentIdentifier || FILE_STORE_ROOT,
+              name: currentNode.parentName || FILE_STORE_ROOT,
+              type: FileStoreNodeTypes.FOLDER,
+              children: []
+            } as FileStoreNodeDTO)
+            showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
+          } catch (err) {
+            handleFileDeleteError(err?.data.code, _defaultTo(err?.data?.message, err?.message))
+          }
+          return
+        }
         try {
           const deleted = await deleteFile(identifier || '', {
             headers: { 'content-type': 'application/json' }
           })
-
           if (deleted) {
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
             getNode({
-              identifier: FILE_STORE_ROOT,
-              name: FILE_STORE_ROOT,
+              identifier: currentNode.parentIdentifier || FILE_STORE_ROOT,
+              name: currentNode.parentName || FILE_STORE_ROOT,
               type: FileStoreNodeTypes.FOLDER,
               children: []
             } as FileStoreNodeDTO)
