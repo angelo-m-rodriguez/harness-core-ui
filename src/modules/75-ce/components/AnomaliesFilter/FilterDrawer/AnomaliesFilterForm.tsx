@@ -26,17 +26,13 @@ import type { AnomaliesFilterFormType } from './FilterDrawer'
 
 import css from './AnomalyFilterForm.module.scss'
 
-interface RecommendationFilterFormProps {
+interface AnomaliesFilterFormProps {
   formikProps?: FormikProps<AnomaliesFilterFormType>
   fetchedFilterValues: FilterStatsDTO[]
   ccmMetaData: CcmMetaData
 }
 
-const RecommendationFilterForm: React.FC<RecommendationFilterFormProps> = ({
-  fetchedFilterValues,
-  formikProps,
-  ccmMetaData
-}) => {
+const AnomaliesFilterForm: React.FC<AnomaliesFilterFormProps> = ({ fetchedFilterValues, formikProps, ccmMetaData }) => {
   const { getString } = useStrings()
 
   const getItemsFromFilterValues = useCallback(
@@ -135,7 +131,7 @@ const RecommendationFilterForm: React.FC<RecommendationFilterFormProps> = ({
   )
 }
 
-export default RecommendationFilterForm
+export default AnomaliesFilterForm
 
 interface CloudProviderFilterCardProps {
   visible: boolean

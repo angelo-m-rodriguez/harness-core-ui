@@ -49,7 +49,7 @@ export interface AnomaliesFilterFormType {
   minAnomalousSpend?: number
 }
 
-const RecommendationFilterDrawer: React.FC<FilterDrawerProps> = ({
+const AnomaliesFilterDrawer: React.FC<FilterDrawerProps> = ({
   refetchSavedFilters,
   selectedFilter,
   savedFilters,
@@ -179,4 +179,4 @@ const RecommendationFilterDrawer: React.FC<FilterDrawerProps> = ({
   )
 }
 
-export default RecommendationFilterDrawer
+export default AnomaliesFilterDrawer
