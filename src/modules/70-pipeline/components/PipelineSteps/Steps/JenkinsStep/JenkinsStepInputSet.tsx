@@ -9,7 +9,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import cx from 'classnames'
 import { getMultiTypeFromValue, MultiTypeInputType, FormikForm, FormInput, SelectOption } from '@wings-software/uicore'
-import { get, isEmpty } from 'lodash-es'
+import { get, isEmpty, set } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import { PopoverInteractionKind } from '@blueprintjs/core'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
@@ -43,7 +43,8 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
   }
 
   const [jobDetails, setJobDetails] = useState<SubmenuSelectOption[]>([])
-  const connectorRefFixedValue = getGenuineValue(get(formik, `values.${prefix}spec?.connectorRef`))
+  const connectorRefFixedValue = getGenuineValue(get(formik, `values.${prefix}spec.connectorRef`))
+  console.log('formik input', formik, `values.${prefix}spec?.connectorRef`, connectorRefFixedValue)
   const getJobItems = (jobs: JobDetails[]): SubmenuSelectOption[] => {
     return jobs?.map(job => {
       return {
@@ -68,6 +69,18 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
   })
 
   useEffect(() => {
+    if (typeof get(formik, `values.${prefix}spec.jobName`) === 'string' && jobsResponse?.data?.jobDetails?.length) {
+      const job = jobsResponse?.data?.jobDetails?.find(job => job.url === formik.values?.spec?.jobName)
+      if (job) {
+        const jobObj = {
+          label: job?.jobName || '',
+          value: job?.url || '',
+          submenuItems: [],
+          hasSubItems: job?.folder
+        }
+        set(formik, `values.${prefix}spec.jobName`, jobObj as any)
+      }
+    }
     if (lastOpenedJob.current) {
       setJobDetails((prevState: SubmenuSelectOption[]) => {
         const parentJob = prevState.find(obj => obj.value === lastOpenedJob.current)
@@ -96,7 +109,7 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
         connectorRef: connectorRefFixedValue?.toString()
       }
     })
-  }, [get(formik.values, `${prefix}spec?.connectorRef`)])
+  }, [formik.values])
 
   return (
     <FormikForm className={css.removeBpPopoverWrapperTopMargin}>
@@ -115,7 +128,7 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
           />
         </div>
       )}
-      {/* {getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME ? (
+      {getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME ? (
         <FormMultiTypeConnectorField
           name={`${prefix}spec.connectorRef`}
           label={getString('pipeline.jiraApprovalStep.connectorRef')}
@@ -144,13 +157,9 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
             selectWithSubmenuTypeInputProps={{
               items: jobDetails,
               interactionKind: PopoverInteractionKind.CLICK,
-              onChange: (primaryValue, secondaryValue) => {
-                console.log('check', primaryValue, secondaryValue)
+              onChange: (primaryValue, secondaryValue, type) => {
                 const newJobName = secondaryValue ? secondaryValue : primaryValue
-                formik.setValues({
-                  ...formik.values,
-                  spec: { ...formik.values.spec, jobName: newJobName.value as any }
-                })
+                set(formik, `values.${prefix}spec.jobName`, newJobName as any)
               },
               onOpening: (item: SelectOption) => {
                 lastOpenedJob.current = item.value
@@ -165,7 +174,7 @@ const JenkinsStepInputSet = (formContentProps: any): JSX.Element => {
             }}
           />
         </div>
-      ) : null} */}
+      ) : null}
     </FormikForm>
   )
 }

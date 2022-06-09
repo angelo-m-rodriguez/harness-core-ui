@@ -115,9 +115,14 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
       spec: {
         ...data.spec,
         connectorRef:
-          typeof data?.spec?.connectorRef === 'string'
-            ? data?.spec?.connectorRef
-            : (data?.spec?.connectorRef as any)?.value,
+          getMultiTypeFromValue(data.spec.connectorRef as SelectOption) === MultiTypeInputType.FIXED
+            ? (data.spec.connectorRef as SelectOption)?.value?.toString()
+            : data.spec.connectorRef,
+
+        // connectorRef:
+        //   typeof data?.spec?.connectorRef === 'string'
+        //     ? data?.spec?.connectorRef
+        //     : (data?.spec?.connectorRef as any)?.value,
         jobName:
           ((data.spec.jobName as unknown as SelectOption).value as string) || (data.spec.jobName as unknown as string)
       }
@@ -143,11 +148,11 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
     return {
       ...initialValues,
       spec: {
-        ...initialValues.spec,
-        connectorRef:
-          typeof initialValues?.spec?.connectorRef === 'string'
-            ? initialValues?.spec?.connectorRef
-            : (initialValues?.spec?.connectorRef as any)?.value
+        ...initialValues.spec
+        // connectorRef:
+        //   typeof initialValues?.spec?.connectorRef === 'string'
+        //     ? initialValues?.spec?.connectorRef
+        //     : (initialValues?.spec?.connectorRef as any)?.value
       }
     }
   }

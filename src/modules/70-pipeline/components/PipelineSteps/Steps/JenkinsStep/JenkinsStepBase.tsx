@@ -26,7 +26,7 @@ import { StepFormikFowardRef, StepViewType } from '@pipeline/components/Abstract
 import { setFormikRef } from '@pipeline/components/AbstractSteps/Step'
 import { useStrings } from 'framework/strings'
 
-import type { JenkinsStepProps } from './JenkinsStep'
+import type { JenkinsStepDataUI, JenkinsStepProps } from './JenkinsStep'
 import { JobDetails, useGetJobDetailsForJenkins } from 'services/cd-ng'
 import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
@@ -47,6 +47,8 @@ import { resetForm, scriptInputType } from './helper'
 import OptionalConfiguration from './OptionalConfiguration'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './JenkinsStep.module.scss'
+import { getFormValuesInCorrectFormat, getInitialValuesInCorrectFormat } from '../StepsTransformValuesUtils'
+import { transformValuesFieldsConfig } from './JenkinsStepFunctionConfigs'
 
 function FormContent({
   formik,
@@ -84,6 +86,8 @@ function FormContent({
       connectorRef: ''
     }
   })
+
+  console.log('formik', formik)
 
   useEffect(() => {
     if (typeof formik.values.spec.jobName === 'string' && jobsResponse?.data?.jobDetails?.length) {
@@ -203,13 +207,7 @@ function FormContent({
           enableConfigureOptions={false}
           selected={formik?.values?.spec.connectorRef as string}
           onChange={(value: any, _unused, multiType) => {
-            if (multiType === MultiTypeInputType.RUNTIME) {
-              formik.setValues({
-                ...formik.values,
-                spec: { ...formik.values.spec, jobName: value as any, connectorRef: value }
-              })
-            }
-            // Clear dependent fields
+            console.log('check it', multiType, value)
             setConnectorValueType(multiType)
             if (value?.record?.identifier !== connectorRefFixedValue) {
               resetForm(formik, 'connectorRef')
@@ -285,7 +283,8 @@ function FormContent({
           />
         )}
       </div>
-      {/* <div className={stepCss.formGroup}>
+
+      <div className={stepCss.formGroup}>
         <MultiTypeFieldSelector
           name="spec.jobParameter"
           label={getString('pipeline.jenkinsStep.jobParameter')}
@@ -354,7 +353,7 @@ function FormContent({
             }}
           />
         </MultiTypeFieldSelector>
-      </div> */}
+      </div>
 
       <div className={stepCss.noLookDivider} />
 
@@ -383,6 +382,36 @@ export const JenkinsStepBase = (
       onSubmit={(_values: JenkinsStepData) => {
         onUpdate?.(_values)
       }}
+      // initialValues={getInitialValuesInCorrectFormat<JenkinsStepData, JenkinsStepDataUI>(
+      //   initialValues,
+      //   transformValuesFieldsConfig
+      // )}
+      // formName="JenkinsStep"
+      // validate={valuesToValidate => {
+      //   const schemaValues = getFormValuesInCorrectFormat<JenkinsStepDataUI, JenkinsStepData>(
+      //     valuesToValidate,
+      //     transformValuesFieldsConfig
+      //   )
+      //   onChange?.(schemaValues)
+      //   // return validate(
+      //   //   valuesToValidate,
+      //   //   editViewValidateFieldsConfig,
+      //   //   {
+      //   //     initialValues,
+      //   //     steps: currentStage?.stage?.spec?.execution?.steps || {},
+      //   //     serviceDependencies: currentStage?.stage?.spec?.serviceDependencies || {},
+      //   //     getString
+      //   //   },
+      //   //   stepViewType
+      //   // )
+      // }}
+      // onSubmit={(_values: JenkinsStepDataUI) => {
+      //   const schemaValues = getFormValuesInCorrectFormat<JenkinsStepDataUI, JenkinsStepData>(
+      //     _values,
+      //     transformValuesFieldsConfig
+      //   )
+      //   onUpdate?.(schemaValues)
+      // }}
     >
       {(formik: FormikProps<JenkinsStepData>) => {
         // This is required
