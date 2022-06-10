@@ -10,10 +10,13 @@ import { Form, Formik } from 'formik'
 import type { ObjectSchema } from 'yup'
 import * as yup from 'yup'
 import { ButtonVariation, ExpandingSearchInput, Page, Pagination } from '@harness/uicore'
+import { useModalHook } from '@harness/use-modal'
 import type { Feature, Segment, Target } from 'services/cf'
 import { useStrings } from 'framework/strings'
 import { CF_DEFAULT_PAGE_SIZE } from '@cf/utils/CFUtils'
+import { useFFGitSyncContext } from '@cf/contexts/ff-git-sync-context/FFGitSyncContext'
 import usePercentageRolloutValidationSchema from '@cf/hooks/usePercentageRolloutValidationSchema'
+import SaveFlagToGitModal from '../SaveFlagToGitModal/SaveFlagToGitModal'
 import TargetManagementFlagsListing from '../TargetManagementFlagsListing/TargetManagementFlagsListing'
 import NoSearchResults from '../NoData/NoSearchResults'
 import NoFlags, { NoFlagsProps } from './NoFlags'
@@ -57,6 +60,9 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
 
   const percentageRolloutValidationSchema = usePercentageRolloutValidationSchema()
 
+  const gitSync = useFFGitSyncContext()
+  const { gitSyncInitialValues, gitSyncValidationSchema } = gitSync.getGitSyncFormMeta()
+
   const validationSchema = useMemo(() => {
     if (!includePercentageRollout) {
       return undefined
@@ -98,6 +104,33 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
     },
     [onChange]
   )
+
+  const mockValues = {
+    flags: {
+      testflag: {
+        variation: 'false'
+      }
+    }
+  }
+
+  const [showGitModal, hideGitModal] = useModalHook(() => {
+    // console.log('values in useModalHook', values)
+    return (
+      <SaveFlagToGitModal
+        flagIdentifier=""
+        flagName=""
+        gitSyncInitialValues={gitSyncInitialValues}
+        gitSyncValidationSchema={gitSyncValidationSchema}
+        onSubmit={() =>
+          // passing mock values because unable to read values from line 187
+          onSubmit(mockValues)
+        }
+        onClose={() => {
+          hideGitModal()
+        }}
+      />
+    )
+  }, [])
 
   useEffect(() => {
     if (searchedFlags.length && !pagedFlags.length && pageNumber) {
@@ -148,8 +181,14 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
 
   return (
     <Formik<FormValues>
-      onSubmit={values => {
-        onSubmit(values)
+      onSubmit={async values => {
+        if (gitSync?.isGitSyncEnabled && !gitSync?.isAutoCommitEnabled) {
+          //unable to pass values into showGitModal like below
+          // await showGitModal(values)
+          await showGitModal()
+        } else {
+          onSubmit(values)
+        }
       }}
       onReset={() => setRemovedFlags([])}
       initialValues={initialValues}
