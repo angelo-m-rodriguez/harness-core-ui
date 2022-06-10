@@ -26,6 +26,7 @@ export const getValue = (item: { label?: string; value?: string } | string | any
 
 export function getValidationSchema(getString: UseStringsReturn['getString']): Yup.ObjectSchema {
   return Yup.object().shape({
+    sshKey: Yup.object().required(getString('validation.password')),
     connectorRef: getConnectorSchema(getString),
     subscriptionId: Yup.lazy((value): Yup.Schema<unknown> => {
       /* istanbul ignore else */ if (typeof value === 'string') {

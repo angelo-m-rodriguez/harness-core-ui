@@ -133,31 +133,16 @@ export const getInfrastructureDefaultValue = (
       }
     }
     case InfraDeploymentType.SshWinRmAzure: {
-      const releaseName = infrastructure?.spec?.releaseName ?? DEFAULT_RELEASE_NAME
-      const {
-        connectorRef,
+      const { credentialsRef, connectorRef, subscriptionId, resourceGroup, cluster, tags, usePublicDNS } =
+        infrastructure?.spec || {}
+      return {
         credentialsRef,
-        resourceGroup,
-        cloudProvider,
+        connectorRef,
         subscriptionId,
-        delegateSelectors,
+        resourceGroup,
         cluster,
-        namespace,
         tags,
         usePublicDNS
-      } = infrastructure?.spec || {}
-      return {
-        connectorRef,
-        credentialsRef,
-        resourceGroup,
-        cloudProvider,
-        subscriptionId,
-        delegateSelectors,
-        tags,
-        usePublicDNS,
-        cluster,
-        namespace,
-        releaseName
       }
     }
     default: {

@@ -29,6 +29,8 @@ import { ModuleName } from 'framework/types/ModuleName'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { Connectors } from '@connectors/constants'
 import { Scope } from '@common/interfaces/SecretsInterface'
+import SSHSecretInput from '@secrets/components/SSHSecretInput/SSHSecretInput'
+import { setSecretField } from '@secrets/utils/SecretField'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { getConnectorName, getConnectorValue } from '@pipeline/components/PipelineSteps/Steps/StepsHelper'
@@ -111,7 +113,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }))
         setSubscriptions(subs)
       } else {
-        showError(get(response, 'message'))
+        showError(get(response, 'message', response))
       }
     } catch (e) {
       showError(e.message || e.responseMessage[0])
@@ -132,7 +134,11 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           projectIdentifier
         }
       })
-      setAzureTags(response.data?.tags || [])
+      if (response.status === 'SUCCESS') {
+        setAzureTags(response.data?.tags || [])
+      } else {
+        showError(get(response, 'message', response))
+      }
     } catch (e) {
       showError(e.message || e.errorMessage)
     } finally {
@@ -157,7 +163,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
         )
       } else {
-        showError(get(response, 'message'))
+        showError(get(response, 'message', response))
       }
     } catch (e) {
       showError(e.message || e.errorMessage)
@@ -183,7 +189,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         const clusterOptions = get(response, 'data.clusters', []).map(cl => ({ label: cl.cluster, value: cl.cluster }))
         setClusters(clusterOptions)
       } else {
-        showError(get(response, 'message'))
+        showError(get(response, 'message', response))
       }
     } catch (e) {
       showError(e.message || e.responseMessage[0])
@@ -206,6 +212,22 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }
       }
     }
+    if (initialValues.credentialsRef) {
+      const setSecretInitial = async () => {
+        try {
+          const secretData = await setSecretField(initialValues.credentialsRef, {
+            accountIdentifier: accountId,
+            projectIdentifier,
+            orgIdentifier
+          })
+          formikRef?.current?.setFieldValue('sshKey', secretData)
+        } catch (e) {
+          /* istanbul ignore next */
+          showError(e.data?.message || e.message)
+        }
+      }
+      setSecretInitial()
+    }
   }, [])
 
   const getSubscription = (values: AzureInfrastructureUI): SelectOption | undefined => {
@@ -219,16 +241,14 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
   }
 
   const getInitialValues = (): AzureInfrastructureUI => {
+    debugger
     const currentValues: AzureInfrastructureUI = {
       ...initialValues,
-      tags: Object(initialValues.tags || {}).values
+      tags: Object.values(initialValues.tags || {})
     }
-    /* istanbul ignore else */
-    if (initialValues) {
-      currentValues.subscriptionId = getSubscription(initialValues)
-      currentValues.cluster = { label: initialValues.cluster, value: initialValues.cluster }
-      currentValues.resourceGroup = { label: initialValues.resourceGroup, value: initialValues.resourceGroup }
-    }
+    currentValues.subscriptionId = getSubscription(initialValues)
+    currentValues.cluster = { label: initialValues.cluster, value: initialValues.cluster }
+    currentValues.resourceGroup = { label: initialValues.resourceGroup, value: initialValues.resourceGroup }
     return currentValues
   }
 
@@ -254,7 +274,8 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         initialValues={getInitialValues()}
         validate={value => {
           const data: Partial<SshWinRmAzureInfrastructure> = {
-            connectorRef: undefined,
+            credentialsRef: getValue(value.sshKey) || value.sshKey,
+            connectorRef: getValue(value.connectorRef) || value.connectorRef,
             subscriptionId:
               getValue(value.subscriptionId) === ''
                 ? /* istanbul ignore next */ undefined
@@ -264,12 +285,9 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 ? /* istanbul ignore next */ undefined
                 : getValue(value.resourceGroup),
             cluster: getValue(value.cluster) === '' ? /* istanbul ignore next */ undefined : getValue(value.cluster),
-            allowSimultaneousDeployments: value.allowSimultaneousDeployments
+            usePublicDns: value.usePublicDns
           }
-          /* istanbul ignore else */ if (value.connectorRef) {
-            data.connectorRef = value.connectorRef?.value || /* istanbul ignore next */ value.connectorRef
-          }
-
+          debugger
           delayedOnUpdate(data)
         }}
         validationSchema={getValidationSchema(getString)}
@@ -280,6 +298,9 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           formikRef.current = formik
           return (
             <FormikForm>
+              <Layout.Vertical className={css.formRow}>
+                <SSHSecretInput name={'sshKey'} label={getString('cd.steps.common.specifyCredentials')} />
+              </Layout.Vertical>
               <Layout.Vertical className={css.formRow} spacing="medium">
                 <ConnectorReferenceField
                   name="connectorRef"
@@ -320,7 +341,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   name="subscriptionId"
                   className={css.inputWidth}
                   items={subscriptions}
-                  disabled={isSubsLoading || readonly}
+                  disabled={isSubsLoading || !formik.values.subscriptionId || readonly}
                   placeholder={
                     isSubsLoading ? getString('loading') : getString('cd.steps.azureInfraStep.subscriptionPlaceholder')
                   }
@@ -328,7 +349,10 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   onChange={
                     /* istanbul ignore next */ value => {
                       if (value) {
-                        fetchResourceGroups(formik.values?.connectorRef?.value, getValue(value))
+                        const connectorRefIdentifier = formik.values?.connectorRef?.value
+                        const subsId = getValue(value)
+                        fetchResourceGroups(connectorRefIdentifier, subsId)
+                        fetchSubscriptionTags(connectorRefIdentifier, subsId)
                         formik.setFieldValue('resourceGroup', '')
                         formik.setFieldValue('cluster', '')
                         setResourceGroups([])
@@ -343,7 +367,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   name="resourceGroup"
                   className={css.inputWidth}
                   items={resourceGroups}
-                  disabled={isResGroupLoading || !formik.values.resourceGroup || readonly}
+                  disabled={isResGroupLoading || !formik.values.subscriptionId || readonly}
                   placeholder={getString('cd.steps.azureInfraStep.resourceGroupPlaceholder')}
                   onChange={value => {
                     if (value) {
@@ -418,12 +442,13 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
   lastFetched: number
   protected type = StepType.SshWinRmAzure
   protected defaultValues: SshWinRmAzureInfrastructure = {
-    connectorRef: '',
     credentialsRef: '',
+    connectorRef: '',
     subscriptionId: '',
-    cluster: '',
     resourceGroup: '',
-    tags: {}
+    cluster: '',
+    tags: {},
+    usePublicDNS: false
   }
 
   protected stepIcon: IconName = 'microsoft-azure'
@@ -622,6 +647,9 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     getString
   }: ValidateInputSetProps<SshWinRmAzureInfrastructure>): FormikErrors<SshWinRmAzureInfrastructure> {
     const errors: Partial<SshWinRmAzureInfrastructureTemplate> = {}
+    if (isEmpty(data.sshKey)) {
+      errors.credentialsRef = getString?.('common.validation.fieldIsRequired', { name: getString('connector') })
+    }
     if (isEmpty(data.connectorRef)) {
       errors.connectorRef = getString?.('common.validation.fieldIsRequired', { name: getString('connector') })
     }

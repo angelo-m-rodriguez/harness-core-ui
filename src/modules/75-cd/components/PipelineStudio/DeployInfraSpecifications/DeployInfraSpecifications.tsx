@@ -494,14 +494,14 @@ export default function DeployInfraSpecifications(props: React.PropsWithChildren
             stepViewType={StepViewType.Edit}
             allowableTypes={allowableTypes}
             onUpdate={value => {
+              debugger
               onUpdateInfrastructureDefinition(
                 {
-                  connectorRef: value.connectorRef,
                   credentialsRef: value.credentialsRef,
-                  resourceGroup: value.resourceGroup,
-                  cloudProvider: value.cloudProvider,
+                  connectorRef: value.connectorRef,
                   subscriptionId: value.subscriptionId,
-                  delegateSelectors: value.delegateSelectors,
+                  resourceGroup: value.resourceGroup,
+                  cluster: value.cluster,
                   tags: value.tags,
                   usePublicDNS: value.usePublicDNS
                 },
