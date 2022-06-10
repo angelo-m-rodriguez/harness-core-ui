@@ -7,8 +7,12 @@
 
 import React from 'react'
 import COGatewayList from '@ce/components/COGatewayList/COGatewayList'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
+import { useStrings } from 'framework/strings'
 
 export const CECODashboardPage: React.FC = () => {
+  const { getString } = useStrings()
+  useDocumentTitle(getString('ce.co.breadCrumb.rules'), true)
   return <COGatewayList />
 }
 

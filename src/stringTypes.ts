@@ -4252,6 +4252,7 @@ export interface StringsMap {
   'ce.co.autoStoppingRule.setupAccess.selectLbHelpText': string
   'ce.co.breadCrumb.rules': string
   'ce.co.cloudProviders.aws': string
+  'ce.co.createAsRule': string
   'ce.co.deleteRuleSuccessMessage': string
   'ce.co.dnsSetup.autoURL': string
   'ce.co.dnsSetup.customURL': string
@@ -4259,6 +4260,7 @@ export interface StringsMap {
   'ce.co.dryRunLabel': string
   'ce.co.dryRunMode': string
   'ce.co.dryRunModeLabel': string
+  'ce.co.editAsRule': string
   'ce.co.emptyResultText': string
   'ce.co.gatewayAccess.accessDescription': string
   'ce.co.gatewayAccess.backgroundTasks': string

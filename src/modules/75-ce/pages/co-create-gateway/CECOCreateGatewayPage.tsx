@@ -6,10 +6,13 @@
  */
 
 import React from 'react'
-
 import COCreateGatewayContainer from '@ce/components/COCreateGateway/COCreateGateway'
+import { useStrings } from 'framework/strings'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 
 export const CECOCreateGatewayPage: React.FC = () => {
+  const { getString } = useStrings()
+  useDocumentTitle(getString('ce.co.createAsRule'), true)
   return <COCreateGatewayContainer />
 }
 

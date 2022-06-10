@@ -6,9 +6,13 @@
  */
 
 import React from 'react'
+import { useStrings } from 'framework/strings'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import COAccessPointList from '../../components/COAccessPointList/COAccessPointList'
 
 export const CECOAccessPointsPage: React.FC = () => {
+  const { getString } = useStrings()
+  useDocumentTitle(getString('ce.co.accessPoint.loadbalancers'), true)
   return <COAccessPointList />
 }
 
