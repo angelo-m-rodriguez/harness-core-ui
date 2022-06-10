@@ -22,7 +22,7 @@ import { FILE_STORE_ROOT } from '@filestore/utils/constants'
 import NodeMenuButton from '@filestore/common/NodeMenu/NodeMenuButton'
 import useNewNodeModal from '@filestore/common/useNewNodeModal/useNewNodeModal'
 import useUploadFile, { UPLOAD_EVENTS } from '@filestore/common/useUpload/useUpload'
-import { getMenuOptionItems } from '@filestore/utils/FileStoreUtils'
+import { getMenuOptionItems, FileStorePopoverOptionItem } from '@filestore/utils/FileStoreUtils'
 
 import useDelete from '@filestore/common/useDelete/useDelete'
 import css from './NavNodeList.module.scss'
@@ -153,10 +153,12 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
   })
   const deleteMenuItem = useDelete(identifier, props.name, type)
 
-  const optionsMenuItems = getMenuOptionItems(
-    [newFileMenuItem, newFolderMenuItem, uploadFile, '-', editMenuItem, deleteMenuItem],
-    nodeItem.type as FileStoreNodeTypes
-  )
+  const ACTIONS: FileStorePopoverOptionItem[] =
+    identifier !== FILE_STORE_ROOT
+      ? [newFileMenuItem, newFolderMenuItem, uploadFile, '-', editMenuItem, deleteMenuItem]
+      : [newFileMenuItem, newFolderMenuItem, uploadFile]
+
+  const optionsMenuItems = getMenuOptionItems(ACTIONS, nodeItem.type as FileStoreNodeTypes)
 
   const NodesList = React.useMemo(() => {
     return (

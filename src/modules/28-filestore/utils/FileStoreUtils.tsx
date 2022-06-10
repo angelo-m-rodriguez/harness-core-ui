@@ -81,7 +81,7 @@ export const existCachedNode = (
   return tempNodes.find((tempNode: FileStoreNodeDTO): boolean => tempNode.identifier === nodeIdentifier)
 }
 
-type FileStorePopoverOptionItem = FileStorePopoverItem | '-'
+export type FileStorePopoverOptionItem = FileStorePopoverItem | '-'
 
 export const getIconByActionType = (actionType: FileStoreActionTypes): IconName | MaybeElement => {
   const iconDefaults = {
