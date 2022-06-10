@@ -5,9 +5,9 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import cx from 'classnames'
-import { useToggleOpen, Popover, ButtonVariation, IconName } from '@harness/uicore'
+import { Popover, ButtonVariation, IconName } from '@harness/uicore'
 import { Menu, Position } from '@blueprintjs/core'
 import type { FileStoreActionTypes } from '@filestore/utils/constants'
 
@@ -41,16 +41,18 @@ export interface FileStoreActionPopoverProps {
 
 const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.ReactElement => {
   const { items = [], icon, className, portalClassName, btnText = '' } = props
-  const { isOpen, toggle } = useToggleOpen(false)
-
+  const [menuOpen, setMenuOpen] = useState(false)
   return (
     <Popover
-      isOpen={isOpen}
+      isOpen={menuOpen}
       position={Position.BOTTOM}
       className={cx(css.main, className)}
       portalClassName={cx(css.popover, portalClassName)}
       minimal={true}
       usePortal={false}
+      onInteraction={nextOpenState => {
+        setMenuOpen(nextOpenState)
+      }}
     >
       <RbacButton
         variation={ButtonVariation.PRIMARY}
@@ -61,7 +63,10 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
             resourceType: ResourceType.FILE
           }
         }}
-        onClick={toggle}
+        onClick={e => {
+          e.stopPropagation()
+          setMenuOpen(true)
+        }}
         rightIcon="chevron-down"
         disabled={false}
         icon={icon}
@@ -81,7 +86,7 @@ const FileStoreActionPopover = (props: FileStoreActionPopoverProps): React.React
                 onClick={e => {
                   e.stopPropagation()
                   onClick()
-                  toggle()
+                  setMenuOpen(false)
                 }}
               />
             )
