@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { getByText, render } from '@testing-library/react'
+import { findByText, render } from '@testing-library/react'
 import { findDialogContainer, TestWrapper } from '@common/utils/testUtils'
 import { defaultAppStoreValues } from '@common/utils/DefaultAppStoreData'
 import * as hooksMock from '@common/hooks'
@@ -122,7 +122,7 @@ describe('CDDashboardPage snapshot test', () => {
 
     // modal should open saying run pipeline
     const dailog = findDialogContainer()
-    expect(getByText(dailog!, 'pipeline.runAPipeline')).toBeDefined()
+    expect(findByText(dailog!, 'pipeline.runAPipeline')).toBeDefined()
 
     //bgImage should be applied
     expect(container.querySelector('div[style*="background-image: url(test-file-stub)"')).toBeDefined()
@@ -137,7 +137,7 @@ describe('CDDashboardPage snapshot test', () => {
         loading: true
       }
     })
-    const { container } = render(
+    const { getByText, container } = render(
       <TestWrapper defaultAppStoreValues={defaultAppStoreValues}>
         <CDDashboardPage />
       </TestWrapper>
@@ -145,6 +145,6 @@ describe('CDDashboardPage snapshot test', () => {
 
     //loading icon and text should be visible
     expect(container.querySelector('[data-icon="steps-spinner"]'))
-    expect(getByText(container, 'Loading, please wait...'))
+    expect(getByText('Loading, please wait...'))
   })
 })
