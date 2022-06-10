@@ -472,9 +472,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                       &nbsp; &nbsp;
                       <Button
                         variation={ButtonVariation.TERTIARY}
-                        onClick={() => {
-                          history.goBack()
-                        }}
+                        onClick={onCancel || history.goBack}
                         text={getString('cancel')}
                       />
                     </Layout.Horizontal>

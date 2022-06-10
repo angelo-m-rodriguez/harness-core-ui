@@ -19,6 +19,8 @@ export interface NewInputSetModalProps {
 export function NewInputSetModal({ isModalOpen, closeModal }: NewInputSetModalProps): React.ReactElement {
   return (
     <Dialog
+      title=""
+      isCloseButtonShown
       className={cx(css.inModal, 'padded-dialog')}
       isOpen={isModalOpen}
       enforceFocus={false}

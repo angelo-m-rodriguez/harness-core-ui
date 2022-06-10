@@ -114,6 +114,13 @@
 .inModal {
   min-width: 1000px;
   max-height: calc(100vh - 100px);
+  padding-top: var(--spacing-large) !important;
+
+  > div[class*='bp3-dialog-header'] {
+    width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+  }
 
   > div[class*='PageHeader--container'] {
     padding: 0 0 var(--spacing-xxlarge) 0 !important;
