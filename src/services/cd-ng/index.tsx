@@ -1599,22 +1599,6 @@ export interface CodeBase {
   sslVerify?: boolean
 }
 
-export type CommandStepInfo = StepSpecType & {
-  commandUnits?: CommandUnitWrapper[]
-  delegateSelectors?: string[]
-  environmentVariables?: NGVariable[]
-  metadata?: string
-  onDelegate: boolean
-}
-
-export interface CommandUnitBaseSpec {
-  type?: string
-}
-
-export interface CommandUnitWrapper {
-  commandUnit?: StepCommandUnit
-}
-
 export interface Condition {
   key: string
   operator: 'equals' | 'not equals' | 'in' | 'not in'
@@ -1715,6 +1699,7 @@ export interface ConnectorCatalogueItem {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   )[]
 }
 
@@ -1790,6 +1775,7 @@ export type ConnectorFilterProperties = FilterProperties & {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   )[]
 }
 
@@ -1842,6 +1828,7 @@ export interface ConnectorInfoDTO {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export interface ConnectorResponse {
@@ -1911,6 +1898,7 @@ export interface ConnectorTypeStatistics {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export interface ConnectorValidationResult {
@@ -1970,11 +1958,6 @@ export interface ContextElement {
     | 'RANCHER_K8S_CLUSTER_CRITERIA'
   name?: string
   uuid?: string
-}
-
-export type CopyCommandUnitSpec = CommandUnitBaseSpec & {
-  destinationPath: string
-  sourceType: 'Artifact' | 'Config'
 }
 
 export type CountInstanceSelection = InstanceSelectionBase & {
@@ -2694,7 +2677,6 @@ export interface EntityDetail {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export interface EntityGitDetails {
@@ -3683,7 +3665,6 @@ export interface FeatureRestrictionDetailListRequestDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
-    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3740,7 +3721,6 @@ export interface FeatureRestrictionDetailRequestDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
-    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3799,7 +3779,6 @@ export interface FeatureRestrictionDetailsDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
-    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3866,7 +3845,6 @@ export interface FeatureRestrictionMetadataDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
-    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -4222,7 +4200,6 @@ export interface GitEntityBranchFilterSummaryProperties {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   )[]
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
   searchTerm?: string
@@ -4309,7 +4286,6 @@ export interface GitEntityFilterProperties {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   )[]
   gitSyncConfigIdentifiers?: string[]
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
@@ -4429,7 +4405,6 @@ export interface GitFullSyncEntityInfoDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   errorMessage?: string
   filePath?: string
   identifier?: string
@@ -4524,7 +4499,6 @@ export interface GitFullSyncEntityInfoFilterKeys {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   )[]
   syncStatus?: 'QUEUED' | 'SUCCESS' | 'FAILED' | 'OVERRIDDEN'
 }
@@ -4697,7 +4671,6 @@ export interface GitSyncEntityDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   entityUrl?: string
   folderPath?: string
   gitConnectorId?: string
@@ -4786,7 +4759,6 @@ export interface GitSyncEntityListDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   gitSyncEntities?: GitSyncEntityDTO[]
 }
 
@@ -4892,7 +4864,6 @@ export interface GitSyncErrorDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   errorType?: 'GIT_TO_HARNESS' | 'CONNECTIVITY_ISSUE' | 'FULL_SYNC'
   failureReason?: string
   repoId?: string
@@ -6241,7 +6212,7 @@ export interface NGServiceOverrideConfig {
 export interface NGServiceOverrideInfoConfig {
   environmentRef: string
   serviceRef: string
-  variableOverrides?: NGVariable[]
+  variables?: NGVariable[]
 }
 
 export interface NGServiceV2InfoConfig {
@@ -6458,6 +6429,48 @@ export interface OAuthSignupDTO {
 export type OauthSettings = SSOSettings & {
   allowedProviders?: ('AZURE' | 'BITBUCKET' | 'GITHUB' | 'GITLAB' | 'GOOGLE' | 'LINKEDIN')[]
   filter?: string
+}
+
+export interface OciHelmAuthCredentialsDTO {
+  [key: string]: any
+}
+
+export interface OciHelmAuthenticationDTO {
+  spec?: OciHelmAuthCredentialsDTO
+  type: 'UsernamePassword' | 'Anonymous'
+}
+
+export type OciHelmChartConfig = StoreConfig & {
+  basePath?: string
+  config?: OciHelmChartStoreConfigWrapper
+  metadata?: string
+}
+
+export interface OciHelmChartStoreConfig {
+  [key: string]: any
+}
+
+export interface OciHelmChartStoreConfigWrapper {
+  metadata?: string
+  spec: OciHelmChartStoreConfig
+  type: 'Generic'
+}
+
+export type OciHelmChartStoreGenericConfig = OciHelmChartStoreConfig & {
+  connectorRef?: ParameterFieldString
+  metadata?: string
+}
+
+export type OciHelmConnectorDTO = ConnectorConfigDTO & {
+  auth?: OciHelmAuthenticationDTO
+  delegateSelectors?: string[]
+  helmRepoUrl: string
+}
+
+export type OciHelmUsernamePasswordDTO = OciHelmAuthCredentialsDTO & {
+  passwordRef: string
+  username?: string
+  usernameRef?: string
 }
 
 export type OktaAddOperation = PatchOperation & {
@@ -7448,7 +7461,6 @@ export interface ReferencedByDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export type ReleaseRepoManifest = ManifestAttributes & {
@@ -8268,7 +8280,6 @@ export interface ResponseListEntityType {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   )[]
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
@@ -10102,13 +10113,6 @@ export interface ScopingRuleDetailsNg {
   environmentTypeId?: string
 }
 
-export type ScriptCommandUnitSpec = CommandUnitBaseSpec & {
-  shell: 'Bash' | 'PowerShell'
-  source: ShellScriptSourceWrapper
-  tailFiles?: TailFilePattern[]
-  workingDirectory?: string
-}
-
 export type ScriptStateExecutionData = DelegateResponseData & {
   activityId?: string
   delegateMetaInfo?: DelegateMetaInfo
@@ -10881,12 +10885,6 @@ export interface StepCategory {
   stepsData?: StepData[]
 }
 
-export interface StepCommandUnit {
-  name: string
-  spec?: CommandUnitBaseSpec
-  type: string
-}
-
 export interface StepData {
   name?: string
   type?:
@@ -10918,7 +10916,6 @@ export interface StepData {
     | 'TEMPLATIZED_SECRET_MANAGER'
     | 'ServerlessAwsLambdaDeploy'
     | 'ServerlessAwsLambdaRollback'
-    | 'Command'
 }
 
 export interface StepElementConfig {
@@ -10974,6 +10971,7 @@ export interface StoreConfigWrapper {
     | 'S3Url'
     | 'InheritFromManifest'
     | 'Harness'
+    | 'OciHelmChart'
 }
 
 export interface StoreConfigWrapperParameters {
@@ -11043,11 +11041,6 @@ export type TGTPasswordSpecDTO = TGTGenerationSpecDTO & {
 
 export type TagBuildSpec = BuildSpec & {
   tag: string
-}
-
-export interface TailFilePattern {
-  tailFile?: ParameterFieldString
-  tailPattern?: ParameterFieldString
 }
 
 export interface TechStack {
@@ -11837,7 +11830,7 @@ export type GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody = string
 
 export type GetBuildDetailsForArtifactoryArtifactWithYamlBodyRequestBody = string
 
-export type SubscribeBodyRequestBody = string[]
+export type ProcessPollingResultNgBodyRequestBody = string[]
 
 export type UpdateWhitelistedDomainsBodyRequestBody = string[]
 
@@ -12397,7 +12390,6 @@ export interface ListActivitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   referredByEntityType?:
     | 'CreatePR'
     | 'Projects'
@@ -12478,7 +12470,6 @@ export interface ListActivitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export type ListActivitiesProps = Omit<GetProps<ResponsePageActivity, unknown, ListActivitiesQueryParams, void>, 'path'>
@@ -12663,7 +12654,6 @@ export interface GetActivitiesSummaryQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   referredByEntityType?:
     | 'CreatePR'
     | 'Projects'
@@ -12744,7 +12734,6 @@ export interface GetActivitiesSummaryQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export type GetActivitiesSummaryProps = Omit<
@@ -17675,6 +17664,7 @@ export interface GetConnectorListQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   category?:
     | 'CLOUD_PROVIDER'
     | 'SECRET_MANAGER'
@@ -17969,6 +17959,7 @@ export interface GetAllAllowedFieldValuesQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export type GetAllAllowedFieldValuesProps = Omit<
@@ -21652,7 +21643,6 @@ export interface FetchFeatureRestrictionMetadataPathParams {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
-    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -21779,7 +21769,6 @@ export const fetchFeatureRestrictionMetadataPromise = (
       | 'CREATE_STACK'
       | 'DELETE_STACK'
       | 'ROLLBACK_STACK'
-      | 'COMMAND'
       | 'SECURITY'
       | 'DEVELOPERS'
       | 'MONTHLY_ACTIVE_USERS'
@@ -21880,7 +21869,6 @@ export interface ListReferredByEntitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   searchTerm?: string
   branch?: string
   repoIdentifier?: string
@@ -23204,6 +23192,57 @@ export const getEnvironmentListV2Promise = (
     void
   >('POST', getConfig('ng/api'), `/environmentsV2/listV2`, props, signal)
 
+export interface GetEnvironmentInputsQueryParams {
+  environmentIdentifier: string
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+}
+
+export type GetEnvironmentInputsProps = Omit<
+  GetProps<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Environment inputs YAML
+ */
+export const GetEnvironmentInputs = (props: GetEnvironmentInputsProps) => (
+  <Get<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>
+    path={`/environmentsV2/runtimeInputs`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetEnvironmentInputsProps = Omit<
+  UseGetProps<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Environment inputs YAML
+ */
+export const useGetEnvironmentInputs = (props: UseGetEnvironmentInputsProps) =>
+  useGet<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>(`/environmentsV2/runtimeInputs`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * This api returns Environment inputs YAML
+ */
+export const getEnvironmentInputsPromise = (
+  props: GetUsingFetchProps<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseString, Failure | Error, GetEnvironmentInputsQueryParams, void>(
+    getConfig('ng/api'),
+    `/environmentsV2/runtimeInputs`,
+    props,
+    signal
+  )
+
 export interface DeleteServiceOverrideQueryParams {
   accountIdentifier: string
   orgIdentifier?: string
@@ -23395,6 +23434,58 @@ export const upsertServiceOverridePromise = (
     ServiceOverrideRequestDTO,
     void
   >('POST', getConfig('ng/api'), `/environmentsV2/serviceOverrides`, props, signal)
+
+export interface GetServiceOverrideInputsQueryParams {
+  environmentIdentifier: string
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+  serviceIdentifier: string
+}
+
+export type GetServiceOverrideInputsProps = Omit<
+  GetProps<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Service Override inputs YAML
+ */
+export const GetServiceOverrideInputs = (props: GetServiceOverrideInputsProps) => (
+  <Get<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>
+    path={`/environmentsV2/serviceOverrides/runtimeInputs`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetServiceOverrideInputsProps = Omit<
+  UseGetProps<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Service Override inputs YAML
+ */
+export const useGetServiceOverrideInputs = (props: UseGetServiceOverrideInputsProps) =>
+  useGet<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>(
+    `/environmentsV2/serviceOverrides/runtimeInputs`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * This api returns Service Override inputs YAML
+ */
+export const getServiceOverrideInputsPromise = (
+  props: GetUsingFetchProps<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseString, Failure | Error, GetServiceOverrideInputsQueryParams, void>(
+    getConfig('ng/api'),
+    `/environmentsV2/serviceOverrides/runtimeInputs`,
+    props,
+    signal
+  )
 
 export interface UpsertEnvironmentV2QueryParams {
   accountIdentifier: string
@@ -24550,7 +24641,6 @@ export interface GetReferencedByQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   searchTerm?: string
 }
 
@@ -25841,7 +25931,6 @@ export interface ListGitSyncEntitiesByTypePathParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export type ListGitSyncEntitiesByTypeProps = Omit<
@@ -25990,7 +26079,6 @@ export const listGitSyncEntitiesByTypePromise = (
       | 'CustomStage'
       | 'RollbackStack'
       | 'Infrastructure'
-      | 'Command'
   },
   signal?: RequestInit['signal']
 ) =>
@@ -27956,6 +28044,59 @@ export const dummyInfraConfigApiPromise = (
   getUsingFetch<ResponseInfrastructureConfig, Failure | Error, void, void>(
     getConfig('ng/api'),
     `/infrastructures/dummy-infraConfig-api`,
+    props,
+    signal
+  )
+
+export interface GetInfrastructureInputsQueryParams {
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+  environmentIdentifier: string
+  infraIdentifiers?: string[]
+  deployToAll?: boolean
+}
+
+export type GetInfrastructureInputsProps = Omit<
+  GetProps<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Infrastructure Definition inputs YAML
+ */
+export const GetInfrastructureInputs = (props: GetInfrastructureInputsProps) => (
+  <Get<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>
+    path={`/infrastructures/runtimeInputs`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetInfrastructureInputsProps = Omit<
+  UseGetProps<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>,
+  'path'
+>
+
+/**
+ * This api returns Infrastructure Definition inputs YAML
+ */
+export const useGetInfrastructureInputs = (props: UseGetInfrastructureInputsProps) =>
+  useGet<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>(`/infrastructures/runtimeInputs`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * This api returns Infrastructure Definition inputs YAML
+ */
+export const getInfrastructureInputsPromise = (
+  props: GetUsingFetchProps<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseString, Failure | Error, GetInfrastructureInputsQueryParams, void>(
+    getConfig('ng/api'),
+    `/infrastructures/runtimeInputs`,
     props,
     signal
   )
@@ -30455,7 +30596,6 @@ export interface GetStepYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   yamlGroup?: string
 }
 
@@ -30664,7 +30804,6 @@ export interface GetEntityYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
 }
 
 export type GetEntityYamlSchemaProps = Omit<
@@ -31111,7 +31250,7 @@ export type ProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -31123,7 +31262,7 @@ export const ProcessPollingResultNg = ({ perpetualTaskId, ...props }: ProcessPol
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   >
     verb="POST"
@@ -31138,7 +31277,7 @@ export type UseProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -31150,7 +31289,7 @@ export const useProcessPollingResultNg = ({ perpetualTaskId, ...props }: UseProc
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   >(
     'POST',
@@ -31166,7 +31305,7 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   > & { perpetualTaskId: string },
   signal?: RequestInit['signal']
@@ -31175,17 +31314,17 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    ProcessPollingResultNgBodyRequestBody,
     ProcessPollingResultNgPathParams
   >('POST', getConfig('ng/api'), `/polling/delegate-response/${perpetualTaskId}`, props, signal)
 
 export type SubscribeProps = Omit<
-  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Subscribe = (props: SubscribeProps) => (
-  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>
+  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>
     verb="POST"
     path={`/polling/subscribe`}
     base={getConfig('ng/api')}
@@ -31194,22 +31333,28 @@ export const Subscribe = (props: SubscribeProps) => (
 )
 
 export type UseSubscribeProps = Omit<
-  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useSubscribe = (props: UseSubscribeProps) =>
-  useMutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  useMutate<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
     'POST',
     `/polling/subscribe`,
     { base: getConfig('ng/api'), ...props }
   )
 
 export const subscribePromise = (
-  props: MutateUsingFetchProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  props: MutateUsingFetchProps<
+    ResponsePollingResponseDTO,
+    Failure | Error,
+    void,
+    ProcessPollingResultNgBodyRequestBody,
+    void
+  >,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/subscribe`,
@@ -31218,12 +31363,12 @@ export const subscribePromise = (
   )
 
 export type UnsubscribeProps = Omit<
-  MutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  MutateProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Unsubscribe = (props: UnsubscribeProps) => (
-  <Mutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>
+  <Mutate<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>
     verb="POST"
     path={`/polling/unsubscribe`}
     base={getConfig('ng/api')}
@@ -31232,21 +31377,22 @@ export const Unsubscribe = (props: UnsubscribeProps) => (
 )
 
 export type UseUnsubscribeProps = Omit<
-  UseMutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  UseMutateProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useUnsubscribe = (props: UseUnsubscribeProps) =>
-  useMutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>('POST', `/polling/unsubscribe`, {
-    base: getConfig('ng/api'),
-    ...props
-  })
+  useMutate<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
+    'POST',
+    `/polling/unsubscribe`,
+    { base: getConfig('ng/api'), ...props }
+  )
 
 export const unsubscribePromise = (
-  props: MutateUsingFetchProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  props: MutateUsingFetchProps<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  mutateUsingFetch<boolean, Failure | Error, void, ProcessPollingResultNgBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/unsubscribe`,
@@ -41685,7 +41831,6 @@ export interface GetYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
-    | 'Command'
   subtype?:
     | 'K8sCluster'
     | 'Git'
@@ -41725,6 +41870,7 @@ export interface GetYamlSchemaQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   projectIdentifier?: string
   orgIdentifier?: string
   scope?: 'account' | 'org' | 'project' | 'unknown'
@@ -41826,6 +41972,7 @@ export interface GetYamlSnippetMetadataQueryParams {
     | 'azure'
     | 'pdc'
     | 'azurerepo'
+    | 'ocihelmrepo'
   )[]
 }
 
