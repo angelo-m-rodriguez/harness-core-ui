@@ -139,6 +139,12 @@ function FileDetails({ handleError }: FileDetailsProps): React.ReactElement {
     formData.append('identifier', currentNode.identifier)
     formData.append('fileUsage', currentNode.fileUsage as string)
     formData.append('parentIdentifier', currentNode.parentIdentifier as string)
+    if (currentNode?.tags) {
+      formData.append('tags', JSON.stringify(currentNode.tags))
+    }
+    if (currentNode?.description) {
+      formData.append('description', currentNode.description)
+    }
     try {
       if (!currentNode.tempNode) {
         const responseUpdate = await updateNode(formData as any)
