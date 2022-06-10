@@ -6,6 +6,7 @@
  */
 
 import type { MultiSelectOption } from '@harness/uicore'
+import { omit } from 'lodash-es'
 import type { AnomalyFilterProperties } from 'services/ce'
 import type { AnomaliesFilterFormType } from './FilterDrawer'
 
@@ -19,67 +20,15 @@ export const getAnomalyFormValuesFromFilterProperties = (
 ): AnomaliesFilterFormType => {
   const formValues: AnomaliesFilterFormType = {}
 
-  const {
-    awsAccounts,
-    awsServices,
-    awsUsageTypes,
-    gcpProducts,
-    gcpProjects,
-    gcpSKUDescriptions,
-    k8sClusterNames,
-    k8sNamespaces,
-    k8sWorkloadNames,
-    azureResourceGroups,
-    azureMeterCategories,
-    azureSubscriptionGuids,
-    minActualAmount,
-    minAnomalousSpend
-  } = filterProperties
-
-  if (awsAccounts) {
-    formValues.awsAccounts = getMultiSelectOptions(awsAccounts)
-  }
-  if (awsServices) {
-    formValues.awsServices = getMultiSelectOptions(awsServices)
-  }
-  if (awsUsageTypes) {
-    formValues.awsUsageTypes = getMultiSelectOptions(awsUsageTypes)
-  }
-  if (gcpProducts) {
-    formValues.gcpProducts = getMultiSelectOptions(gcpProducts)
-  }
-  if (gcpProjects) {
-    formValues.gcpProjects = getMultiSelectOptions(gcpProjects)
-  }
-  if (gcpSKUDescriptions) {
-    formValues.gcpSKUDescriptions = getMultiSelectOptions(gcpSKUDescriptions)
-  }
-  if (k8sClusterNames) {
-    formValues.k8sClusterNames = getMultiSelectOptions(k8sClusterNames)
-  }
-  if (k8sNamespaces) {
-    formValues.k8sNamespaces = getMultiSelectOptions(k8sNamespaces)
-  }
-  if (k8sWorkloadNames) {
-    formValues.k8sWorkloadNames = getMultiSelectOptions(k8sWorkloadNames)
-  }
-  if (azureResourceGroups) {
-    formValues.azureResourceGroups = getMultiSelectOptions(azureResourceGroups)
-  }
-  if (azureMeterCategories) {
-    formValues.azureMeterCategories = getMultiSelectOptions(azureMeterCategories)
-  }
-  if (azureSubscriptionGuids) {
-    formValues.azureSubscriptionGuids = getMultiSelectOptions(azureSubscriptionGuids)
-  }
-
-  if (minActualAmount) {
-    formValues.minActualAmount = +minActualAmount
-  }
-
-  if (minAnomalousSpend) {
-    formValues.minAnomalousSpend = +minAnomalousSpend
-  }
+  Object.entries(omit(filterProperties, 'filterType')).forEach(([key, value]) => {
+    if (value) {
+      if (key === 'minActualAmount' || key === 'minAnomalousSpend') {
+        formValues[key] = +value
+      } else {
+        ;(formValues as any)[key] = getMultiSelectOptions(value as string[])
+      }
+    }
+  })
 
   return formValues
 }
@@ -87,67 +36,13 @@ export const getAnomalyFormValuesFromFilterProperties = (
 export const getAnomalyFilterPropertiesFromForm = (formData: AnomaliesFilterFormType): AnomalyFilterProperties => {
   const filterProperties: AnomalyFilterProperties = { filterType: 'Anomaly' }
 
-  const {
-    awsAccounts,
-    awsServices,
-    awsUsageTypes,
-    gcpProducts,
-    gcpProjects,
-    gcpSKUDescriptions,
-    k8sClusterNames,
-    k8sNamespaces,
-    k8sWorkloadNames,
-    azureResourceGroups,
-    azureMeterCategories,
-    azureSubscriptionGuids,
-    minActualAmount,
-    minAnomalousSpend
-  } = formData
-
-  if (awsAccounts) {
-    filterProperties.awsAccounts = getValueFromOption(awsAccounts)
-  }
-  if (awsServices) {
-    filterProperties.awsServices = getValueFromOption(awsServices)
-  }
-  if (awsUsageTypes) {
-    filterProperties.awsUsageTypes = getValueFromOption(awsUsageTypes)
-  }
-  if (gcpProducts) {
-    filterProperties.gcpProducts = getValueFromOption(gcpProducts)
-  }
-  if (gcpProjects) {
-    filterProperties.gcpProjects = getValueFromOption(gcpProjects)
-  }
-  if (gcpSKUDescriptions) {
-    filterProperties.gcpSKUDescriptions = getValueFromOption(gcpSKUDescriptions)
-  }
-  if (k8sClusterNames) {
-    filterProperties.k8sClusterNames = getValueFromOption(k8sClusterNames)
-  }
-  if (k8sNamespaces) {
-    filterProperties.k8sNamespaces = getValueFromOption(k8sNamespaces)
-  }
-  if (k8sWorkloadNames) {
-    filterProperties.k8sWorkloadNames = getValueFromOption(k8sWorkloadNames)
-  }
-  if (azureResourceGroups) {
-    filterProperties.azureResourceGroups = getValueFromOption(azureResourceGroups)
-  }
-  if (azureMeterCategories) {
-    filterProperties.azureMeterCategories = getValueFromOption(azureMeterCategories)
-  }
-  if (azureSubscriptionGuids) {
-    filterProperties.azureSubscriptionGuids = getValueFromOption(azureSubscriptionGuids)
-  }
-
-  if (minActualAmount) {
-    filterProperties.minActualAmount = +minActualAmount
-  }
-
-  if (minAnomalousSpend) {
-    filterProperties.minAnomalousSpend = +minAnomalousSpend
-  }
+  Object.entries(formData).forEach(([key, value]) => {
+    if (key === 'minActualAmount' || key === 'minAnomalousSpend') {
+      filterProperties[key] = +value
+    } else {
+      ;(filterProperties as any)[key] = getValueFromOption(value)
+    }
+  })
 
   return filterProperties
 }
