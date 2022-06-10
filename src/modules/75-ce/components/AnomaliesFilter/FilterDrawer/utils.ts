@@ -6,7 +6,6 @@
  */
 
 import type { MultiSelectOption } from '@harness/uicore'
-import { omit } from 'lodash-es'
 import type { AnomalyFilterProperties } from 'services/ce'
 import type { AnomaliesFilterFormType } from './FilterDrawer'
 
@@ -20,15 +19,67 @@ export const getAnomalyFormValuesFromFilterProperties = (
 ): AnomaliesFilterFormType => {
   const formValues: AnomaliesFilterFormType = {}
 
-  Object.entries(omit(filterProperties, 'filterType')).forEach(([key, value]) => {
-    if (value) {
-      if (key === 'minActualAmount' || key === 'minAnomalousSpend') {
-        formValues[key] = +value
-      } else {
-        ;(formValues as any)[key] = getMultiSelectOptions(value as string[])
-      }
-    }
-  })
+  const {
+    awsAccounts,
+    awsServices,
+    awsUsageTypes,
+    gcpProducts,
+    gcpProjects,
+    gcpSKUDescriptions,
+    k8sClusterNames,
+    k8sNamespaces,
+    k8sWorkloadNames,
+    azureResourceGroups,
+    azureMeterCategories,
+    azureSubscriptionGuids,
+    minActualAmount,
+    minAnomalousSpend
+  } = filterProperties
+
+  if (awsAccounts) {
+    formValues.awsAccounts = getMultiSelectOptions(awsAccounts)
+  }
+  if (awsServices) {
+    formValues.awsServices = getMultiSelectOptions(awsServices)
+  }
+  if (awsUsageTypes) {
+    formValues.awsUsageTypes = getMultiSelectOptions(awsUsageTypes)
+  }
+  if (gcpProducts) {
+    formValues.gcpProducts = getMultiSelectOptions(gcpProducts)
+  }
+  if (gcpProjects) {
+    formValues.gcpProjects = getMultiSelectOptions(gcpProjects)
+  }
+  if (gcpSKUDescriptions) {
+    formValues.gcpSKUDescriptions = getMultiSelectOptions(gcpSKUDescriptions)
+  }
+  if (k8sClusterNames) {
+    formValues.k8sClusterNames = getMultiSelectOptions(k8sClusterNames)
+  }
+  if (k8sNamespaces) {
+    formValues.k8sNamespaces = getMultiSelectOptions(k8sNamespaces)
+  }
+  if (k8sWorkloadNames) {
+    formValues.k8sWorkloadNames = getMultiSelectOptions(k8sWorkloadNames)
+  }
+  if (azureResourceGroups) {
+    formValues.azureResourceGroups = getMultiSelectOptions(azureResourceGroups)
+  }
+  if (azureMeterCategories) {
+    formValues.azureMeterCategories = getMultiSelectOptions(azureMeterCategories)
+  }
+  if (azureSubscriptionGuids) {
+    formValues.azureSubscriptionGuids = getMultiSelectOptions(azureSubscriptionGuids)
+  }
+
+  if (minActualAmount) {
+    formValues.minActualAmount = +minActualAmount
+  }
+
+  if (minAnomalousSpend) {
+    formValues.minAnomalousSpend = +minAnomalousSpend
+  }
 
   return formValues
 }
