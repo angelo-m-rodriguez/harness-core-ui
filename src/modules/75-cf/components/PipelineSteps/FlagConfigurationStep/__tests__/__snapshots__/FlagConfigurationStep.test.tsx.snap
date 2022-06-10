@@ -58,7 +58,7 @@ exports[`FlagConfigurationStep StepViewType.Edit it should render disabled in ed
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="FeatureFlagConfigurationForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -366,7 +366,7 @@ exports[`FlagConfigurationStep StepViewType.Edit it should render in edit mode 1
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="FeatureFlagConfigurationForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

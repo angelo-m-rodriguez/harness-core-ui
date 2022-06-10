@@ -896,7 +896,7 @@ exports[`RunTests Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunTests_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1858,7 +1858,7 @@ exports[`RunTests Step Edit View should render properly 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunTests_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

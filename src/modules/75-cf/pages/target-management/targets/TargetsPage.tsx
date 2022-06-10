@@ -86,9 +86,10 @@ export const TargetsPage: React.FC = () => {
   const onSearchInputChanged = useCallback(
     targetName => {
       setSearchTerm(targetName)
-      refetchTargets({ queryParams: { ...queryParams, targetName } })
+      setPageNumber(0)
+      refetchTargets({ queryParams: { ...queryParams, targetName, pageNumber: 0 } })
     },
-    [setSearchTerm, refetchTargets, queryParams]
+    [setSearchTerm, refetchTargets, queryParams, setPageNumber]
   )
   const loading = loadingEnvironments || loadingTargets
   const error = errEnvironments || errTargets

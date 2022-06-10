@@ -159,6 +159,7 @@ export interface StringsMap {
   'common.connectThroughPlatformInfo': string
   'common.connectivityErrors': string
   'common.contactSupport': string
+  'common.contentRequired': string
   'common.copy': string
   'common.copyFqn': string
   'common.copyVariableName': string
@@ -280,8 +281,13 @@ export interface StringsMap {
   'common.git.APIAuthentication': string
   'common.git.addUserCredentialLabel': string
   'common.git.applicationId': string
+  'common.git.azureReposPlaceholderRepoSSH': string
+  'common.git.azureReposPlaceholderSSH': string
+  'common.git.azureReposProjectUrl': string
+  'common.git.azureReposRepoUrl': string
+  'common.git.azureReposUrlPlaceholder': string
+  'common.git.azureReposUrlPlaceholderRepoHttp': string
   'common.git.bitbucketAccountUrl': string
-  'common.git.bitbucketOrgUrlPlaceholder': string
   'common.git.bitbucketPlaceholderSSH': string
   'common.git.bitbucketRepoUrl': string
   'common.git.bitbucketUrlPlaceholder': string
@@ -313,10 +319,12 @@ export interface StringsMap {
   'common.git.noUserLabel': string
   'common.git.onlyDefaultBranchFound': string
   'common.git.privateKey': string
+  'common.git.projectNamePlaceholder': string
   'common.git.remoteStoreLabel': string
   'common.git.saveResourceLabel': string
   'common.git.selectRepoLabel': string
   'common.git.startPRLabel': string
+  'common.git.testProjectAndRepositoryDescription': string
   'common.git.testRepository': string
   'common.git.testRepositoryDescription': string
   'common.git.urlType': string
@@ -328,8 +336,6 @@ export interface StringsMap {
   'common.git.validation.repoRequired': string
   'common.git.validation.sameBranches': string
   'common.git.validation.targetBranch': string
-  'common.git.validation.yamlPath': string
-  'common.git.validation.yamlPathInvalid': string
   'common.gitDetailsTitle': string
   'common.gitOps': string
   'common.gitSync.allRepositories': string
@@ -740,7 +746,6 @@ export interface StringsMap {
   'common.test.connectionSuccessful': string
   'common.test.inProgress': string
   'common.test.retest': string
-  'common.timePstLabel': string
   'common.tokens': string
   'common.totalLines': string
   'common.totalSelected': string
@@ -785,6 +790,7 @@ export interface StringsMap {
   'common.validation.testRepoIsRequired': string
   'common.validation.typeIsRequired': string
   'common.validation.urlIsRequired': string
+  'common.validation.validationProjectIsRequired': string
   'common.validation.valueIsRequired': string
   'common.validation.valueMustBeANumber': string
   'common.validation.valueMustBeGreaterThanOrEqualToN': string
@@ -2038,6 +2044,7 @@ export interface StringsMap {
   'connectors.name_labels.HttpHelmRepo': string
   'connectors.name_labels.Kubernetes': string
   'connectors.name_labels.Nexus': string
+  'connectors.name_labels.OCIHelm': string
   'connectors.name_labels.PDC': string
   'connectors.name_labels.SecretManager': string
   'connectors.name_labels.Splunk': string
@@ -2054,6 +2061,7 @@ export interface StringsMap {
   'connectors.newRelicLabel': string
   'connectors.nexus.nexusLabel': string
   'connectors.nexus.nexusServerUrl': string
+  'connectors.ociHelm.ociHelmUrl': string
   'connectors.optionalAuthentication': string
   'connectors.pagerDutyConnectorDetails': string
   'connectors.parameters': string
@@ -2074,6 +2082,7 @@ export interface StringsMap {
   'connectors.reportNameRequired': string
   'connectors.requestMethod': string
   'connectors.roleARN': string
+  'connectors.sameCredentialsAsAbove': string
   'connectors.scopeError': string
   'connectors.secretManagerDetails': string
   'connectors.selectConnectivityMode': string
@@ -2122,6 +2131,7 @@ export interface StringsMap {
   'connectors.testConnectionStep.validationText.awsSecretManager': string
   'connectors.testConnectionStep.validationText.azure': string
   'connectors.testConnectionStep.validationText.azureKeyVault': string
+  'connectors.testConnectionStep.validationText.azureRepos': string
   'connectors.testConnectionStep.validationText.bitbucket': string
   'connectors.testConnectionStep.validationText.datadog': string
   'connectors.testConnectionStep.validationText.docker': string
@@ -2151,6 +2161,7 @@ export interface StringsMap {
   'connectors.title.awsSecretManager': string
   'connectors.title.azure': string
   'connectors.title.azureKeyVault': string
+  'connectors.title.azureRepoConnector': string
   'connectors.title.bitbucketConnector': string
   'connectors.title.ceAws': string
   'connectors.title.ceAzureConnector': string
@@ -2168,6 +2179,7 @@ export interface StringsMap {
   'connectors.title.jira': string
   'connectors.title.k8sCluster': string
   'connectors.title.nexus': string
+  'connectors.title.ociHelmConnector': string
   'connectors.title.pdcConnector': string
   'connectors.title.secretManager': string
   'connectors.title.serviceNow': string
@@ -2253,6 +2265,12 @@ export interface StringsMap {
   'gitsync.fullSyncSubTitle': string
   'gitsync.fullSyncTitle': string
   'gitsync.gitEnabledBlockedTooltip': string
+  'gitsync.gitSyncForm.createNewYaml': string
+  'gitsync.gitSyncForm.enterYamlPath': string
+  'gitsync.gitSyncForm.useExistingYaml': string
+  'gitsync.gitSyncForm.yamlPathInvalid': string
+  'gitsync.gitSyncForm.yamlPathLabel': string
+  'gitsync.gitSyncForm.yamlPathRequired': string
   'gitsync.harnessFolderHeader': string
   'gitsync.harnessFolderText': string
   'gitsync.label': string
@@ -2956,6 +2974,8 @@ export interface StringsMap {
   'pipeline.manifestToConnectorLabelMap.AWSLabel': string
   'pipeline.manifestType.InheritFromManifest': string
   'pipeline.manifestType.attachPath': string
+  'pipeline.manifestType.basePath': string
+  'pipeline.manifestType.basePathPlaceholder': string
   'pipeline.manifestType.bitBucketLabel': string
   'pipeline.manifestType.branchPlaceholder': string
   'pipeline.manifestType.bucketName': string
@@ -2998,6 +3018,9 @@ export interface StringsMap {
   'pipeline.manifestType.manifestRepoType': string
   'pipeline.manifestType.manifestSource': string
   'pipeline.manifestType.manifestTyperequired': string
+  'pipeline.manifestType.oci.basePathRequired': string
+  'pipeline.manifestType.oci.chartVersionValidation': string
+  'pipeline.manifestType.ociHelmConnectorLabel': string
   'pipeline.manifestType.osTemplatePath': string
   'pipeline.manifestType.osTemplatePathPlaceHolder': string
   'pipeline.manifestType.osTemplatePathRequired': string
@@ -3190,6 +3213,7 @@ export interface StringsMap {
   'pipeline.serviceNowUpdateStep.fieldType.updateFields': string
   'pipeline.singleStageExecution': string
   'pipeline.sslVerify': string
+  'pipeline.stageDataDeleteWarningContent': string
   'pipeline.stageDataDeleteWarningText': string
   'pipeline.stageDataDeleteWarningTitle': string
   'pipeline.stageDependencyError': string
@@ -3632,6 +3656,7 @@ export interface StringsMap {
   'cd.cloudFormation.templateFileConnector': string
   'cd.cloudFormation.templateFileStore': string
   'cd.cloudFormation.urls': string
+  'cd.clustersSelected': string
   'cd.componentsInstalled': string
   'cd.configFileDetails': string
   'cd.configFilePlaceHolder': string
@@ -3647,7 +3672,6 @@ export interface StringsMap {
   'cd.confirmProviderDelete': string
   'cd.connectionIssueInfo': string
   'cd.connectionIssueSuggestion': string
-  'cd.contentRequired': string
   'cd.continuous': string
   'cd.createdGitOpsServerSuccessfully': string
   'cd.createdSuccessfully': string
@@ -3687,6 +3711,7 @@ export interface StringsMap {
   'cd.filePathRequired': string
   'cd.gitFetchTypeRequired': string
   'cd.gitOps': string
+  'cd.gitOpsCluster': string
   'cd.gitOpsWizardTitle': string
   'cd.harnessManagedGitOpsWizardTitle': string
   'cd.infrastructure.createNew': string
@@ -3703,6 +3728,7 @@ export interface StringsMap {
   'cd.launchArgo': string
   'cd.learnMore': string
   'cd.learnMoreAboutHarnessAdapter': string
+  'cd.manifestId': string
   'cd.manifestPathsCannotBeEmpty': string
   'cd.moreIssue': string
   'cd.moreIssues': string
@@ -3714,15 +3740,19 @@ export interface StringsMap {
   'cd.noEnvironment.message': string
   'cd.noEnvironment.title': string
   'cd.noGitOpsServerText': string
+  'cd.noLinkedClusters': string
   'cd.notReachable': string
   'cd.overrideType': string
   'cd.overrideValue': string
+  'cd.overrideYaml': string
   'cd.pathCannotBeEmpty': string
   'cd.pipelineSteps.environmentTab.environmentIsRequired': string
   'cd.pipelineSteps.environmentTab.newEnvironment': string
   'cd.pipelineSteps.environmentTab.plusNewEnvironment': string
   'cd.pipelineSteps.environmentTab.selectEnvironment': string
+  'cd.pipelineSteps.environmentTab.selectInfrastructure': string
   'cd.pipelineSteps.environmentTab.specifyYourEnvironment': string
+  'cd.pipelineSteps.environmentTab.specifyYourInfrastructure': string
   'cd.pipelineSteps.executionTab.stepsCount': string
   'cd.pipelineSteps.infraTab.clusterError': string
   'cd.pipelineSteps.infraTab.deploymentType': string
@@ -3747,7 +3777,10 @@ export interface StringsMap {
   'cd.searchPlaceholder': string
   'cd.secretManagerRequired': string
   'cd.selectArtifact': string
+  'cd.selectClusterLabel': string
+  'cd.selectGitopsCluster': string
   'cd.selectRepository': string
+  'cd.selectedLabel': string
   'cd.serverlessDeployCommandOptions': string
   'cd.serviceCreated': string
   'cd.serviceDashboard.6monthTrend': string
@@ -3820,10 +3853,13 @@ export interface StringsMap {
   'cd.steps.pdcStep.specifyHostsOption': string
   'cd.steps.serverless.regionPlaceholder': string
   'cd.steps.serverless.stagePlaceholder': string
+  'cd.successfullyLinkedClusters': string
   'cd.terraformVarFiles': string
   'cd.testConnectionStepName': string
   'cd.tfVarStore': string
   'cd.typeError': string
+  'cd.unLink': string
+  'cd.unLinkedCluster': string
   'cd.updatedGitOpsServerSuccessfully': string
   'cd.updatedSuccessfully': string
   'cd.updating': string
@@ -4578,6 +4614,7 @@ export interface StringsMap {
   'ce.perspectives.noOfRowsLessThan': string
   'ce.perspectives.nodeDetails.aggregation.average': string
   'ce.perspectives.nodeDetails.aggregation.maximum': string
+  'ce.perspectives.nodeDetails.header': string
   'ce.perspectives.nodeDetails.nodeDetailsText': string
   'ce.perspectives.perspectiveDeletedTxt': string
   'ce.perspectives.perspectiveReportsMoreTxt': string
@@ -4847,6 +4884,7 @@ export interface StringsMap {
   'cf.environments.apiKeys.deleteTitle': string
   'cf.environments.apiKeys.emptyName': string
   'cf.environments.apiKeys.keyType': string
+  'cf.environments.apiKeys.lastUsed': string
   'cf.environments.apiKeys.message': string
   'cf.environments.apiKeys.noKeysFoundMessage': string
   'cf.environments.apiKeys.noKeysFoundTitle': string
@@ -5374,6 +5412,9 @@ export interface StringsMap {
   'ci.getStartedWithCI.flexibleInfra': string
   'ci.getStartedWithCI.flexibleInfraHelpText': string
   'ci.getStartedWithCI.genericGit': string
+  'ci.getStartedWithCI.gitProviderURLs.bitbucket': string
+  'ci.getStartedWithCI.gitProviderURLs.github': string
+  'ci.getStartedWithCI.gitProviderURLs.gitlab': string
   'ci.getStartedWithCI.hostedByHarness': string
   'ci.getStartedWithCI.hostedByHarnessBuildLocation': string
   'ci.getStartedWithCI.hosting': string
@@ -6194,6 +6235,7 @@ export interface StringsMap {
   'cv.slos.validations.specialCharacters': string
   'cv.slos.validations.userJourneyRequired': string
   'cv.somethingWentWrongWhileParsingTheData': string
+  'cv.srmTitle': string
   'cv.statusCode': string
   'cv.sunday': string
   'cv.thanObjectiveValue': string

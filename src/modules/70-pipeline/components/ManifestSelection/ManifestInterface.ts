@@ -29,11 +29,23 @@ export type ManifestTypes =
 
 export type PrimaryManifestType = 'K8sManifest' | 'HelmChart' | 'OpenshiftTemplate' | 'Kustomize'
 
-export type ManifestStores = 'Git' | 'Github' | 'GitLab' | 'Bitbucket' | 'Http' | 'S3' | 'Gcs' | 'InheritFromManifest'
+export type ManifestStores =
+  | 'Git'
+  | 'Github'
+  | 'GitLab'
+  | 'Bitbucket'
+  | 'Http'
+  | 'OciHelmChart'
+  | 'S3'
+  | 'Gcs'
+  | 'InheritFromManifest'
+  | 'Inline'
 export type HelmVersionOptions = 'V2' | 'V3'
+export type HelmOCIVersionOptions = 'V380'
 export interface ManifestSelectionProps {
   isPropagating?: boolean
   deploymentType: ServiceDefinition['type']
+  isReadonlyServiceMode: boolean
   readonly: boolean
 }
 
@@ -106,6 +118,17 @@ export interface HelmWithHTTPDataType {
   commandFlags: Array<CommandFlags>
 }
 
+export interface HelmWithOCIDataType {
+  identifier: string
+  helmVersion: HelmOCIVersionOptions
+  skipResourceVersioning: boolean
+  basePath: string
+  chartName: string
+  chartVersion: string
+  valuesPaths?: any
+  commandFlags: Array<CommandFlags>
+}
+
 export interface HelmWithGcsDataType extends HelmWithHTTPDataType {
   bucketName: SelectOption | string
   folderPath: string
@@ -160,4 +183,9 @@ export interface ServerlessManifestDataType extends K8sValuesManifestDataType {
 export interface InheritFromManifestDataType {
   identifier: string
   paths: any
+}
+
+export interface InlineDataType {
+  identifier: string
+  content: string
 }

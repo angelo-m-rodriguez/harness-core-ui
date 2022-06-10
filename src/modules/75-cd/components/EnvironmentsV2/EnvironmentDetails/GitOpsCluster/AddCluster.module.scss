@@ -1,0 +1,272 @@
+/*
+ * Copyright 2022 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
+.addClusterDialog {
+  display: grid;
+  padding: 10px;
+}
+
+.crossIcon {
+  position: absolute;
+  right: var(--spacing-large);
+  top: var(--spacing-large);
+}
+
+.contentContainer {
+  border: 1px solid var(--grey-200);
+
+  margin-top: 10px !important;
+}
+
+.gitOpsSelectedClusters {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subChild {
+  display: flex;
+  padding: 16px;
+  width: 45% !important;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.separator {
+  width: 80%;
+  border: 1px solid var(--grey-200);
+}
+
+.clusterDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.cancelBtn {
+  margin-left: 5px !important;
+}
+
+.clusterName {
+  font-size: 13px;
+  color: var(--grey-900);
+}
+
+.clusterId {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+
+  color: var(--grey-600);
+}
+
+.footerStyle {
+  margin-top: 15px !important;
+  width: 28% !important;
+  justify-content: space-between !important;
+}
+
+.selected {
+  background-color: var(--primary-2) !important;
+}
+
+.selectedClusters {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+.selectedHeader {
+  font-weight: 400 !important;
+  font-size: 13px !important;
+}
+
+.selectedIdenfitier {
+  font-weight: 600 !important;
+}
+
+.listContainer {
+  height: 85%;
+  overflow: auto;
+}
+
+.listFooter {
+  width: 40% !important;
+  justify-content: space-between !important;
+  margin-top: 30px !important;
+  font-weight: 500;
+  font-size: var(--form-input-font-size);
+  line-height: 16px;
+  /* identical to box height, or 133% */
+
+  letter-spacing: 0.2px;
+
+  /* Gray Scale/Gray Scale 700 */
+
+  color: var(--grey-700);
+}
+
+.checkBox {
+  font-weight: 500 !important;
+  font-size: var(--form-input-font-size);
+  line-height: 16px !important;
+  /* identical to box height, or 133% */
+
+  letter-spacing: 0.2px !important;
+
+  /* Gray Scale/Gray Scale 700 */
+
+  color: var(--grey-700) !important;
+}
+
+.unlinkedCount {
+  align-self: center;
+}
+
+.clusterList {
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  border-right: 1px solid var(--grey-200);
+  padding-top: 10px;
+  padding-left: 10px;
+  .gitopsClusterCard {
+    &:hover {
+      background-color: var(--primary-1);
+      border-radius: 3px;
+    }
+    width: 296px;
+    height: 47px;
+    border-radius: 3px;
+    border-bottom: solid 1px var(--grey-100);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    cursor: pointer;
+
+    background: var(--grey-0);
+    box-shadow: 0px 0px 1px rgb(40 41 61 / 8%), 0px 0.5px 2px rgb(96 97 112 / 16%);
+    padding: 6px 8px;
+
+    .clusterDetails {
+      display: flex;
+      align-items: center;
+    }
+
+    .agentMeta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+  }
+
+  .gitopsClusterCard:not(:first-child) {
+    margin-top: 10px;
+  }
+}
+
+.newAgentButton {
+  &.hasError {
+    position: relative;
+    bottom: 11px;
+  }
+}
+
+.tabIcon {
+  margin-right: var(--spacing-xsmall) !important;
+  align-self: flex-start;
+  padding-top: 5px !important;
+}
+
+.tabTitleContainer {
+  max-width: 110px !important;
+  word-break: break-all !important;
+}
+
+.notHealthy {
+  background-color: var(--grey-50);
+  cursor: not-allowed !important;
+
+  .agentMeta {
+    opacity: 0.5;
+  }
+}
+
+.agentReferenceField {
+  input {
+    cursor: pointer;
+  }
+}
+
+.agentRefLabel {
+  color: var(--grey-600) !important;
+  font-size: var(--form-input-font-size) !important;
+  font-weight: 500 !important;
+}
+
+.paginationBlock {
+  min-height: 64px;
+}
+
+.agentRefContainer {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 320px 180px;
+
+  :global(.bp3-button-text) {
+    font-weight: normal;
+    outline: none;
+  }
+}
+
+.agentIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.tabTitle {
+  display: flex;
+  width: 100%;
+  padding: 16px 0;
+}
+
+.rightIcon {
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  color: var(--grey-400) !important;
+  transform: translate(-14px, 50%);
+}
+
+.right-status {
+  display: flex;
+  right: 35px;
+  position: absolute;
+
+  #tag {
+    text-transform: uppercase;
+    background-color: var(--grey-50) !important;
+    color: var(--primary-9) !important;
+  }
+}
+
+.status {
+  align-items: center;
+  display: flex;
+  align-content: center;
+
+  > svg {
+    margin: auto;
+  }
+
+  /* for increased specificity */
+  &.red-status:global(.bp3-icon) {
+    color: var(--red-500) !important;
+  }
+
+  /* for increased specificity */
+  &.green-status:global(.bp3-icon) {
+    color: var(--green-500) !important;
+  }
+}

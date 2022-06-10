@@ -1,4 +1,5 @@
 continuous: '{{$.common.purpose.cv.serviceReliability}}'
+srmTitle: SRM
 methodLabel: Method Label
 request: '{{ $.common.request }}'
 response: Response

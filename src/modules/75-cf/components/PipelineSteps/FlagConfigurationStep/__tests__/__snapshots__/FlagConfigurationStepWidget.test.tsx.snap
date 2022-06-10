@@ -16,7 +16,7 @@ exports[`FlagConfigurationStepWidget it should render the form 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="FeatureFlagConfigurationForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

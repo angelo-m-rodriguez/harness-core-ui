@@ -296,4 +296,22 @@ describe('Test ConfigureOptions', () => {
     await waitFor(() => expect(onChange).toBeCalledTimes(1))
     expect(onChange).toBeCalledWith(`${RUNTIME_INPUT_VALUE}.executionInput()`, '', true)
   })
+
+  test('default value via function', async () => {
+    onChange.mockReset()
+    const { container } = render(
+      <TestWrapper defaultFeatureFlagValues={{ NG_EXECUTION_INPUT: true }}>
+        <ConfigureOptions {...getProps(`${RUNTIME_INPUT_VALUE}.default(123)`, 'Number', 'var-test')} />
+      </TestWrapper>
+    )
+    const btn = container.querySelector('#configureOptions_var-test')
+    fireEvent.click(btn as Element)
+    const dialog = findDialogContainer() as HTMLElement
+    await waitFor(() => getByTextBody(dialog, 'var-test'))
+    expect(dialog).toMatchSnapshot()
+    const submitBtn = getByTextBody(dialog, 'submit')
+    fireEvent.click(submitBtn)
+    await waitFor(() => expect(onChange).toBeCalledTimes(1))
+    expect(onChange).toBeCalledWith(`${RUNTIME_INPUT_VALUE}.default(123)`, '123', true)
+  })
 })

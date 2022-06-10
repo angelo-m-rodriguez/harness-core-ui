@@ -82,7 +82,7 @@ export const useInfiniteScroll = (props: InfiniteScrollProps): InfiniteScrollRet
         const responseContent = response.data.content
         setItems((prevItems: any) => {
           if (offsetToFetch.current === 0) {
-            return [...responseContent]
+            return responseContent ? [...responseContent] : []
           } else {
             return [...prevItems, ...responseContent]
           }

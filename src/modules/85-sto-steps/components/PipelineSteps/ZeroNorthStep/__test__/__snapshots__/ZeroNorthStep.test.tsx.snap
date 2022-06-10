@@ -21,7 +21,7 @@ exports[`ZeroNorth Step Edit View edit mode works 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="zeroNorthStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1279,7 +1279,7 @@ exports[`ZeroNorth Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="zeroNorthStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -2261,7 +2261,7 @@ exports[`ZeroNorth Step Edit View should render properly 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="zeroNorthStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

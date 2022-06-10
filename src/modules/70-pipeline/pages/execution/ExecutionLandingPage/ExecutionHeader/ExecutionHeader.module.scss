@@ -10,6 +10,10 @@
   display: flex;
   flex-direction: column;
 
+  .gitRemoteDetailsWrapper {
+    margin-left: var(--spacing-xlarge) !important;
+  }
+
   & .headerTopRow {
     display: flex;
     align-items: center;

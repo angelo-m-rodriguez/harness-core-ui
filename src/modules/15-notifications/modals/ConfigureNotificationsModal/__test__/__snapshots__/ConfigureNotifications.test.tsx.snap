@@ -1028,7 +1028,7 @@ exports[`ConfigureNotifications Slack 1`] = `
                   class="Tooltip--acenter"
                   data-tooltip-id="configureSlackNotifications_webhookUrl"
                 >
-                  notifications.labelWebhookUrl
+                  notifications.slackwebhookUrl
                 </span>
                  
                 <span

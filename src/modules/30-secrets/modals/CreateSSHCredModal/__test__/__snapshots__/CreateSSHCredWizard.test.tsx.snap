@@ -150,7 +150,7 @@ exports[`Create SSH Cred Wizard should render form 1`] = `
                     >
                       <div
                         class="Text--withDocsTooltip"
-                        data-tooltip-id="sshStepDetailsForm_identifier"
+                        data-tooltip-id="universalInputNameWithId"
                       >
                         <p
                           class="StyledProps--font StyledProps--main"

@@ -21,6 +21,7 @@ import {
 } from '@wings-software/uicore'
 import { FontVariation, Color } from '@harness/design-system'
 import { useModalHook } from '@harness/use-modal'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import routes from '@common/RouteDefinitions'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -38,6 +39,9 @@ import type { SLOForm } from './CVCreateSLO.types'
 const CVCreateSLO: React.FC = () => {
   const history = useHistory()
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.slos.title')])
+
   const { showSuccess, showError } = useToaster()
   const { accountId, orgIdentifier, projectIdentifier, identifier } = useParams<
     ProjectPathProps & { identifier: string }

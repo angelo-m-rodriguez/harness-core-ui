@@ -51,7 +51,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -63,7 +63,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -75,7 +75,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -92,7 +92,12 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" isPropagating={true} />
+          <ArtifactsSelection
+            isReadonlyServiceMode={false}
+            readonly={false}
+            deploymentType="Kubernetes"
+            isPropagating={true}
+          />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -105,7 +110,12 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" isPropagating={false} />
+          <ArtifactsSelection
+            isReadonlyServiceMode={false}
+            readonly={false}
+            deploymentType="Kubernetes"
+            isPropagating={false}
+          />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -116,7 +126,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -136,7 +146,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -157,7 +167,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -336,7 +346,7 @@ describe('ArtifactsSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -356,7 +366,7 @@ describe('ArtifactsSelection tests', () => {
         }}
       >
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="Kubernetes" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -384,7 +394,7 @@ describe('ArtifactsSelection tests', () => {
         }}
       >
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="NativeHelm" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="NativeHelm" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -412,7 +422,7 @@ describe('ArtifactsSelection tests', () => {
         }}
       >
         <PipelineContext.Provider value={getContextValue()}>
-          <ArtifactsSelection readonly={false} deploymentType="NativeHelm" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="NativeHelm" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -445,7 +455,7 @@ describe('ArtifactsSelection tests', () => {
         }}
       >
         <PipelineContext.Provider value={context}>
-          <ArtifactsSelection readonly={false} deploymentType="ServerlessAwsLambda" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="ServerlessAwsLambda" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -481,7 +491,7 @@ describe('ArtifactsSelection tests', () => {
         }}
       >
         <PipelineContext.Provider value={context}>
-          <ArtifactsSelection readonly={false} deploymentType="ServerlessAwsLambda" />
+          <ArtifactsSelection isReadonlyServiceMode={false} readonly={false} deploymentType="ServerlessAwsLambda" />
         </PipelineContext.Provider>
       </TestWrapper>
     )

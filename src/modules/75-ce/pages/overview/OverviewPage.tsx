@@ -40,6 +40,7 @@ import SustainabilityCard from '@ce/components/OverviewPage/SustainabilityCard'
 import { getEmissionsValue } from '@ce/utils/formatResourceValue'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useStrings } from 'framework/strings'
 import bgImage from './images/CD/overviewBg.png'
 import css from './Overview.module.scss'
@@ -91,6 +92,8 @@ const OverviewPage: React.FC = () => {
     to: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[1].format(CE_DATE_FORMAT_INTERNAL),
     from: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[0].format(CE_DATE_FORMAT_INTERNAL)
   })
+
+  useDocumentTitle([getString('cloudCostsText'), getString('overview')], true)
 
   const [summaryResult] = useFetchPerspectiveDetailsSummaryQuery({
     variables: {

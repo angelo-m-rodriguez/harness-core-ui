@@ -33,13 +33,7 @@ const GitRemoteDetails = ({
   filePath,
   branch = '',
   onBranchChange,
-  flags: {
-    borderless = true,
-    showRepo = true,
-    normalInputStyle = false,
-    readOnly = false,
-    fallbackDefaultBranch = false
-  } = {}
+  flags: { borderless = true, showRepo = true, normalInputStyle = false, readOnly = false } = {}
 }: GitRemoteDetailsProps): React.ReactElement => {
   return (
     <div className={cx(css.wrapper, { [css.normalInputStyle]: normalInputStyle })}>
@@ -94,7 +88,6 @@ const GitRemoteDetails = ({
           branchSelectorClassName={css.branchSelector}
           selectProps={{ borderless, popoverClassName: '' }}
           showIcons={false}
-          fallbackDefaultBranch={fallbackDefaultBranch}
           showErrorInModal
         />
       )}

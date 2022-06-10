@@ -18,7 +18,7 @@ exports[`Audit trail list view render 1`] = `
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
         >
-          common.timePstLabel
+          timeLabel
         </p>
       </div>
       <div
@@ -2028,7 +2028,7 @@ exports[`Audit trail list view render in org scope 1`] = `
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
         >
-          common.timePstLabel
+          timeLabel
         </p>
       </div>
       <div

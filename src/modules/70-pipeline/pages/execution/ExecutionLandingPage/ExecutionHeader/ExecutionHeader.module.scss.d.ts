@@ -10,6 +10,7 @@ declare const styles: {
   readonly actionsBar: string
   readonly duration: string
   readonly git: string
+  readonly gitRemoteDetailsWrapper: string
   readonly header: string
   readonly headerTopRow: string
   readonly pipelineId: string

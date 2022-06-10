@@ -24,7 +24,7 @@ interface ExecutionInputsViewInterface {
 }
 
 export default function ExecutionInputsView(props: ExecutionInputsViewInterface): React.ReactElement {
-  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, module, executionIdentifier } =
+  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, module, executionIdentifier, source } =
     useParams<PipelineType<ExecutionPathProps>>()
 
   const { isGitSyncEnabled } = useAppStore()
@@ -70,6 +70,7 @@ export default function ExecutionInputsView(props: ExecutionInputsViewInterface)
         projectIdentifier={projectIdentifier}
         accountId={accountId}
         module={module}
+        source={source}
         inputSetYAML={inputSetYaml || ''}
         executionView
         branch={pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch}

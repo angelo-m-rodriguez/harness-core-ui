@@ -6,7 +6,7 @@ exports[`Deploy infra specifications test Should match snapshot 1`] = `
     class="deployStage"
   >
     <div
-      class="contentSection"
+      class="contentSection paddedSection"
     >
       <div
         class="tabHeading"
@@ -196,6 +196,9 @@ exports[`Deploy infra specifications test Should match snapshot 1`] = `
           </div>
         </div>
       </div>
+      <div
+        class="StyledProps--font StyledProps--main StyledProps--margin-top-xxlarge"
+      />
       <div
         class="StyledProps--font StyledProps--main StyledProps--margin-top-xxlarge"
       />

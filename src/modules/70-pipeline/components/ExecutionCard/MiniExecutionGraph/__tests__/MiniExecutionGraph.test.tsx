@@ -23,6 +23,7 @@ describe('<MiniExecutionGraph /> tests', () => {
         projectIdentifier="TEST_PROJECT"
         orgIdentifier="TEST_ORG"
         accountId="TEST_ACCOUNT"
+        source="executions"
         module="cd"
       />
     )

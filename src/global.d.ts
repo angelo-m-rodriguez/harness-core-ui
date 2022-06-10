@@ -74,6 +74,7 @@ declare interface Window {
 
 declare interface WindowEventMap {
   PROMISE_API_RESPONSE: CustomEvent
+  USE_CACHE_UPDATED: CustomEvent
 }
 
 declare interface Document {

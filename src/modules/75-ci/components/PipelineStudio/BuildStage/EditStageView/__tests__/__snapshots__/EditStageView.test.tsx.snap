@@ -69,7 +69,7 @@ exports[`EditStageView snapshot test should render properly 1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="ciEditStage_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -337,7 +337,7 @@ exports[`EditStageView snapshot test should render properly without data 1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="ciEditStage_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

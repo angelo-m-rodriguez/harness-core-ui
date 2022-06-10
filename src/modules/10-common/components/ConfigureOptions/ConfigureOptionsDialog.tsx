@@ -24,14 +24,7 @@ import { FormGroup } from '@blueprintjs/core'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { useStrings, String } from 'framework/strings'
 import AllowedValuesFields from './AllowedValuesField'
-import {
-  Validation,
-  ValidationSchema,
-  FormValues,
-  parseInput,
-  getInputStr,
-  getInputExpressionRegExp
-} from './ConfigureOptionsUtils'
+import { Validation, ValidationSchema, FormValues, parseInput, getInputStr } from './ConfigureOptionsUtils'
 
 import css from './ConfigureOptions.module.scss'
 
@@ -73,8 +66,7 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
   const [options, setOptions] = React.useState<SelectOption[] | MultiSelectOption[]>([])
   const { getString } = useStrings()
   const { NG_EXECUTION_INPUT } = useFeatureFlags()
-  const INPUT_EXPRESSION_REG_EXP = getInputExpressionRegExp()
-  const isValidExpression = INPUT_EXPRESSION_REG_EXP.test(input)
+  const parsedValues = parseInput(input)
 
   React.useEffect(
     () => {
@@ -86,19 +78,19 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
     []
   )
 
-  if (!isValidExpression) {
+  // is not a valid input
+  if (!parsedValues) {
     showError(getString('common.configureOptions.notValidExpression'))
     return null
   }
-  const parsedValues = parseInput(input)
-  const allowedValues = defaultTo(parsedValues?.allowedValues?.values, [])
-  const regExValues = defaultTo(parsedValues?.regex, '')
-  const isAdvanced = !!parsedValues?.allowedValues?.jexlExpression
-  const advancedValue = defaultTo(parsedValues?.allowedValues?.jexlExpression, '')
+  const allowedValues = defaultTo(parsedValues.allowedValues?.values, [])
+  const regExValues = defaultTo(parsedValues.regex, '')
+  const isAdvanced = !!parsedValues.allowedValues?.jexlExpression
+  const advancedValue = defaultTo(parsedValues.allowedValues?.jexlExpression, '')
 
   const inputValues: FormValues = {
     isRequired,
-    defaultValue,
+    defaultValue: parsedValues?.default ?? defaultValue,
     allowedValues,
     regExValues,
     isAdvanced,
@@ -118,7 +110,7 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
       formName="configureOptionsForm"
       validationSchema={Yup.object().shape(ValidationSchema(getString))}
       onSubmit={data => {
-        const inputStr = getInputStr(data)
+        const inputStr = getInputStr(data, !!NG_EXECUTION_INPUT)
         setInput(inputStr)
         closeModal(inputStr, data.defaultValue, data.isRequired)
       }}
@@ -180,8 +172,8 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
                 />
               ) : null}
             </div>
-            {showDefaultField &&
-              (fetchValues ? (
+            {showDefaultField || NG_EXECUTION_INPUT ? (
+              fetchValues ? (
                 <FormInput.Select
                   items={options}
                   label={getString('common.configureOptions.defaultValue')}
@@ -197,7 +189,8 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
                   isOptional
                   disabled={isReadonly}
                 />
-              ))}
+              )
+            ) : null}
           </div>
           <Layout.Horizontal spacing="small" margin={{ top: 'xxlarge' }}>
             <Button

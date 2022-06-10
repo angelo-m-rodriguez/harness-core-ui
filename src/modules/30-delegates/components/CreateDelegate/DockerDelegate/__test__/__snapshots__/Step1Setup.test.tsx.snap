@@ -45,7 +45,7 @@ exports[`Create Docker Step1Setup render step1 initial 1`] = `
                             >
                               <div
                                 class="Text--withDocsTooltip"
-                                data-tooltip-id="delegateSetupStepForm_identifier"
+                                data-tooltip-id="universalInputNameWithId"
                               >
                                 <p
                                   class="StyledProps--font StyledProps--main"

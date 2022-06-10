@@ -102,6 +102,7 @@ const RenderUrlInfo: React.FC<StepProps<VerifyOutOfClusterStepProps> & RenderUrl
       case 'Gcr':
         return getString('connectors.testConnectionStep.url.gcr')
       case Connectors.BITBUCKET:
+      case Connectors.AZURE_REPO:
       case Connectors.GITLAB:
       case Connectors.GITHUB:
       case Connectors.GIT:
@@ -115,6 +116,8 @@ const RenderUrlInfo: React.FC<StepProps<VerifyOutOfClusterStepProps> & RenderUrl
       case Connectors.KUBERNETES_CLUSTER:
         return props.prevStepData?.masterUrl
       case Connectors.HttpHelmRepo:
+        return props.prevStepData?.helmRepoUrl
+      case Connectors.OciHelmRepo:
         return props.prevStepData?.helmRepoUrl
       case Connectors.DOCKER:
         return props.prevStepData?.dockerRegistryUrl
@@ -133,6 +136,7 @@ const RenderUrlInfo: React.FC<StepProps<VerifyOutOfClusterStepProps> & RenderUrl
       case Connectors.VAULT:
         return props.prevStepData?.spec?.vaultUrl
       case Connectors.BITBUCKET:
+      case Connectors.AZURE_REPO:
       case Connectors.GITLAB:
       case Connectors.GITHUB:
       case Connectors.GIT:
@@ -219,11 +223,15 @@ const VerifyOutOfClusterDelegate: React.FC<StepProps<VerifyOutOfClusterStepProps
           return 'https://ngdocs.harness.io/article/5abnoghjgo-git-lab-connector-settings-reference'
         case Connectors.BITBUCKET:
           return 'https://ngdocs.harness.io/article/iz5tucdwyu-bitbucket-connector-settings-reference'
+        case Connectors.AZURE_REPO:
+          return '' // TODO
         case Connectors.Jira:
           return 'https://ngdocs.harness.io/article/e6s32ec7i7'
         case Connectors.SERVICE_NOW:
           return 'https://ngdocs.harness.io/article/illz8off8q'
         case Connectors.HttpHelmRepo:
+          return 'https://ngdocs.harness.io/article/a0jotsvsi7'
+        case Connectors.OciHelmRepo:
           return 'https://ngdocs.harness.io/article/a0jotsvsi7'
         case Connectors.DATADOG:
           return 'https://ngdocs.harness.io/article/g21fb5kfkg-connect-to-monitoring-and-logging-systems#step_add_datadog'

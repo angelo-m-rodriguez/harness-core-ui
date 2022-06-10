@@ -81,6 +81,7 @@ describe('CVCreateSLO', () => {
     expect(screen.getByText('cv.slos.title')).toBeInTheDocument()
     expect(screen.getByText('cv.slos.createSLO')).toBeInTheDocument()
     expect(screen.getByText('name')).toHaveAttribute('aria-selected', 'true')
+    expect(document.title).toBe('cv.srmTitle | cv.slos.title | harness')
   })
 
   test('it should not trigger the GET API for Service Level Objective)', () => {

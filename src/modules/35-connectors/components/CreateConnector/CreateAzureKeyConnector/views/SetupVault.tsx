@@ -41,11 +41,13 @@ import {
   setupAzureKeyVaultNameFormData
 } from '@connectors/pages/connectors/utils/ConnectorUtils'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
-import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { useConnectorWizard } from '@connectors/components/CreateConnectorWizard/ConnectorWizardContext'
 import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
 import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 
 export interface SetupVaultFormData {
   vaultName?: string
@@ -81,10 +83,9 @@ const SetupVault: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> 
   const { mutate: updateConnector, loading: updating } = useUpdateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   useEffect(() => {
     if (isEditMode && connectorInfo) {
       setupAzureKeyVaultNameFormData(connectorInfo).then(data => {
@@ -146,13 +147,17 @@ const SetupVault: React.FC<StepProps<StepDetailsProps> & ConnectorDetailsProps> 
 
       try {
         const response = isEditMode ? await updateConnector(data) : await createConnector(data)
-        const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-        if (canGoToNextStep) {
+        const onSuccessCreateOrUpdateNextSteps = () => {
           nextStep?.({ ...prevStepData, ...formData })
           onConnectorCreated?.(response.data)
           isEditMode
             ? showSuccess(getString('secretManager.editmessageSuccess'))
             : showSuccess(getString('secretManager.createmessageSuccess'))
+        }
+        if (opaFlagEnabled && response.data?.governanceMetadata) {
+          conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, onSuccessCreateOrUpdateNextSteps)
+        } else {
+          onSuccessCreateOrUpdateNextSteps()
         }
       } catch (err) {
         /* istanbul ignore next */

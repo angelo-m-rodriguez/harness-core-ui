@@ -110,7 +110,7 @@ const SelectRepositoryRef = (
 
   useEffect(() => {
     if (query) {
-      setRepositories((repoData?.data || []).filter(item => item.name?.includes(query)))
+      setRepositories((repoData?.data || []).filter(item => getFullRepoName(item).includes(query)))
     } else {
       setRepositories(repoData?.data)
     }

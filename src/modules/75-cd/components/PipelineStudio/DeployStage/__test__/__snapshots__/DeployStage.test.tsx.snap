@@ -72,7 +72,7 @@ exports[`Deploy stage test Should match snapshot 1`] = `
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="cdEditStage_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"

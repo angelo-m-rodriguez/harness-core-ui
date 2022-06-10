@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Expander } from '@blueprintjs/core'
 import type { FormikProps } from 'formik'
@@ -23,16 +23,12 @@ import {
   Tabs,
   Text,
   VisualYamlSelectedView as SelectedView,
-  VisualYamlToggle,
   Formik,
   useToaster,
-  getErrorInfoFromErrorObject,
-  ThumbnailSelect,
-  Card,
-  Accordion,
-  MultiTypeInputType
+  getErrorInfoFromErrorObject
 } from '@harness/uicore'
 import { Color } from '@harness/design-system'
+
 import { useStrings } from 'framework/strings'
 import {
   EnvironmentResponse,
@@ -40,40 +36,23 @@ import {
   NGEnvironmentConfig,
   NGEnvironmentInfoConfig,
   updateEnvironmentV2Promise,
-  useGetEnvironmentV2,
-  useGetYamlSchema
+  useGetEnvironmentV2
 } from 'services/cd-ng'
 
 import type { EnvironmentPathProps, EnvironmentQueryParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import YAMLBuilder from '@common/components/YAMLBuilder/YamlBuilder'
-import { NameIdDescriptionTags } from '@common/components'
-import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
-import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
+import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
 import { useQueryParams, useUpdateQueryParams } from '@common/hooks'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
 import { yamlParse, yamlStringify } from '@common/utils/YamlHelperMethods'
 
-import { CustomVariablesEditableStage } from '@pipeline/components/PipelineSteps/Steps/CustomVariables/CustomVariablesEditableStage'
-import type { AllNGVariables } from '@pipeline/utils/types'
-
 import { PageHeaderTitle, PageHeaderToolbar } from './EnvironmentDetailsPageHeader'
+import EnvironmentConfiguration from './EnvironmentConfiguration/EnvironmentConfiguration'
+import { ServiceOverrides } from './ServiceOverrides/ServiceOverrides'
 import InfrastructureDefinition from './InfrastructureDefinition/InfrastructureDefinition'
 import { EnvironmentDetailsTab } from '../utils'
+import GitOpsCluster from './GitOpsCluster/GitOpsCluster'
 
 import css from './EnvironmentDetails.module.scss'
-
-const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
-  fileName: `environment.yaml`,
-  entityType: 'Environment',
-  width: '100%',
-  height: 600,
-  showSnippetSection: false,
-  yamlSanityConfig: {
-    removeEmptyString: false,
-    removeEmptyObject: false,
-    removeEmptyArray: false
-  }
-}
 
 export default function EnvironmentDetails() {
   const { accountId, orgIdentifier, projectIdentifier, environmentIdentifier } = useParams<
@@ -91,10 +70,10 @@ export default function EnvironmentDetails() {
     EnvironmentDetailsTab[EnvironmentDetailsTab[defaultTo(sectionId, 'CONFIGURATION')]]
   )
   const [yamlHandler, setYamlHandler] = useState<YamlBuilderHandlerBinding | undefined>()
-  const [selectedView, setSelectedView] = useState<SelectedView>(SelectedView.VISUAL)
   const [updateLoading, setUpdateLoading] = useState(false)
   const [firstLoad, setFirstLoad] = useState(true)
   const [isModified, setIsModified] = useState(false)
+  const [selectedView, setSelectedView] = useState<SelectedView>(SelectedView.VISUAL)
 
   const { data, loading, error, refetch } = useGetEnvironmentV2({
     queryParams: {
@@ -111,36 +90,6 @@ export default function EnvironmentDetails() {
       setFirstLoad(false)
     }
   }, [loading])
-
-  const { data: environmentSchema } = useGetYamlSchema({
-    queryParams: {
-      entityType: 'Environment',
-      projectIdentifier,
-      orgIdentifier,
-      accountIdentifier: accountId,
-      scope: getScopeFromDTO({ accountIdentifier: accountId, orgIdentifier, projectIdentifier })
-    }
-  })
-
-  const handleModeSwitch = useCallback(
-    /* istanbul ignore next */ (view: SelectedView) => {
-      if (view === SelectedView.VISUAL) {
-        const yaml = defaultTo(yamlHandler?.getLatestYaml(), '{}')
-        const yamlVisual = parse(yaml).environment as NGEnvironmentInfoConfig
-        if (isModified && yamlHandler?.getYAMLValidationErrorMap()?.size) {
-          showError(getString('common.validation.invalidYamlText'))
-          return
-        }
-        if (yamlVisual) {
-          formikRef.current?.setValues({
-            ...yamlVisual
-          })
-        }
-      }
-      setSelectedView(view)
-    },
-    [yamlHandler?.getLatestYaml, data]
-  )
 
   const onUpdate = async (values: EnvironmentResponseDTO) => {
     setUpdateLoading(true)
@@ -204,17 +153,6 @@ export default function EnvironmentDetails() {
       setIsModified(true)
     }
   }
-
-  const typeList: { label: string; value: string }[] = [
-    {
-      label: getString('production'),
-      value: 'Production'
-    },
-    {
-      label: getString('cd.preProduction'),
-      value: 'PreProduction'
-    }
-  ]
 
   const parsedYamlEnvironment = useMemo(
     () => (yamlParse(defaultTo(yaml, '{}')) as NGEnvironmentConfig)?.environment,
@@ -280,150 +218,25 @@ export default function EnvironmentDetails() {
                           </Text>
                         ),
                         panel: (
-                          <Container padding={{ left: 'medium', right: 'medium' }}>
-                            <Layout.Horizontal
-                              margin={{ bottom: 'medium' }}
-                              flex={{
-                                justifyContent: 'center'
-                              }}
-                              width={'100%'}
-                            >
-                              <VisualYamlToggle
-                                selectedView={selectedView}
-                                onChange={nextMode => {
-                                  handleModeSwitch(nextMode)
-                                }}
-                              />
-                            </Layout.Horizontal>
-                            {selectedView === SelectedView.VISUAL ? (
-                              <>
-                                <Container
-                                  width={'80%'}
-                                  padding={'medium'}
-                                  background={Color.WHITE}
-                                  border={{ radius: 2 }}
-                                  className={css.configCard}
-                                  margin={{ bottom: 'large' }}
-                                >
-                                  <Container width={'40%'} padding={{ top: 'small' }}>
-                                    <NameIdDescriptionTags
-                                      formikProps={formikProps}
-                                      identifierProps={{ isIdentifierEditable: false }}
-                                    />
-                                  </Container>
-                                </Container>
-
-                                <Text
-                                  color={Color.GREY_700}
-                                  margin={{ bottom: 'small', left: 'small' }}
-                                  font={{ weight: 'bold' }}
-                                >
-                                  {getString('envType')}
-                                </Text>
-                                <Container
-                                  width={'80%'}
-                                  padding={'medium'}
-                                  background={Color.WHITE}
-                                  border={{ radius: 2 }}
-                                  className={css.configCard}
-                                >
-                                  <Container width={'40%'}>
-                                    <ThumbnailSelect className={css.thumbnailSelect} name={'type'} items={typeList} />
-                                  </Container>
-                                </Container>
-                                {/* #region Advanced section */}
-                                {data?.data && (
-                                  <Accordion
-                                    activeId={formikProps?.values?.variables?.length ? 'advanced' : ''}
-                                    className={css.accordion}
-                                  >
-                                    <Accordion.Panel
-                                      id="advanced"
-                                      addDomId={true}
-                                      summary={
-                                        <Text
-                                          color={Color.GREY_700}
-                                          font={{ weight: 'bold' }}
-                                          margin={{ left: 'small' }}
-                                        >
-                                          {getString('common.advanced')}
-                                          {getString('titleOptional')}
-                                        </Text>
-                                      }
-                                      details={
-                                        <Layout.Vertical width={'80%'} spacing="medium" margin={{ bottom: 'small' }}>
-                                          <Card className={css.sectionCard} id="variables">
-                                            <Text
-                                              color={Color.GREY_700}
-                                              margin={{ bottom: 'small' }}
-                                              font={{ weight: 'bold' }}
-                                            >
-                                              {getString('common.variables')}
-                                            </Text>
-                                            <CustomVariablesEditableStage
-                                              formName="editEnvironment"
-                                              initialValues={{
-                                                variables: defaultTo(
-                                                  formikProps.values.variables,
-                                                  []
-                                                ) as AllNGVariables[],
-                                                canAddVariable: true
-                                              }}
-                                              allowableTypes={[
-                                                MultiTypeInputType.FIXED,
-                                                MultiTypeInputType.RUNTIME,
-                                                MultiTypeInputType.EXPRESSION
-                                              ]}
-                                              readonly={false}
-                                              onUpdate={values => {
-                                                formikProps.setFieldValue('variables', values.variables)
-                                              }}
-                                            />
-                                          </Card>
-
-                                          {/* <Card className={css.sectionCard} id="serviceOverrides">
-                                            <ServiceOverride
-                                              formName="editEnvironment"
-                                              initialValues={{
-                                                serviceOverrides: defaultTo(formikProps.values.serviceOverrides, []),
-                                                canAddOverride: true
-                                              }}
-                                              allowableTypes={[
-                                                MultiTypeInputType.FIXED,
-                                                MultiTypeInputType.RUNTIME,
-                                                MultiTypeInputType.EXPRESSION
-                                              ]}
-                                              readonly={false}
-                                              onUpdate={values => {
-                                                formikProps.setFieldValue('serviceOverrides', values.serviceOverrides)
-                                              }}
-                                            />
-                                          </Card> */}
-                                        </Layout.Vertical>
-                                      }
-                                    />
-                                  </Accordion>
-                                )}
-                                {/* #endregion */}
-                              </>
-                            ) : (
-                              <YAMLBuilder
-                                {...yamlBuilderReadOnlyModeProps}
-                                existingJSON={{
-                                  environment: {
-                                    ...formikProps.values
-                                    // envIdentifiers: selectedEnvs.map(
-                                    //   /* istanbul ignore next */ item => item.environment?.identifier
-                                    // )
-                                  }
-                                }}
-                                schema={environmentSchema?.data}
-                                bind={setYamlHandler}
-                                showSnippetSection={false}
-                              />
-                            )}
-                          </Container>
+                          <EnvironmentConfiguration
+                            formikProps={formikProps}
+                            selectedView={selectedView}
+                            setSelectedView={setSelectedView}
+                            yamlHandler={yamlHandler}
+                            setYamlHandler={setYamlHandler}
+                            isModified={isModified}
+                            data={data}
+                          />
                         )
+                      },
+                      {
+                        id: EnvironmentDetailsTab.SERVICE_OVERRIDES,
+                        title: (
+                          <Text font={{ size: 'normal' }} color={Color.BLACK}>
+                            {getString('cd.serviceOverrides')}
+                          </Text>
+                        ),
+                        panel: <ServiceOverrides />
                       },
                       {
                         id: EnvironmentDetailsTab.INFRASTRUCTURE,
@@ -433,6 +246,15 @@ export default function EnvironmentDetails() {
                           </Text>
                         ),
                         panel: <InfrastructureDefinition />
+                      },
+                      {
+                        id: EnvironmentDetailsTab.GITOPS,
+                        title: (
+                          <Text font={{ size: 'normal' }} color={Color.BLACK}>
+                            {getString('cd.gitOpsCluster')}
+                          </Text>
+                        ),
+                        panel: <GitOpsCluster envRef={identifier} />
                       }
                     ]}
                   >

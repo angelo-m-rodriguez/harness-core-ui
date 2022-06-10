@@ -23,11 +23,16 @@ exports[`Test SLOName component should render SLOName component 1`] = `
               <div
                 class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main InputWithIdentifier--txtIdContainer"
               >
-                <p
-                  class="StyledProps--font StyledProps--main"
+                <div
+                  class="Text--withDocsTooltip"
+                  data-tooltip-id="universalInputNameWithId"
                 >
-                  Id
-                </p>
+                  <p
+                    class="StyledProps--font StyledProps--main"
+                  >
+                    Id
+                  </p>
+                </div>
                 <p
                   class="StyledProps--font StyledProps--main"
                 >

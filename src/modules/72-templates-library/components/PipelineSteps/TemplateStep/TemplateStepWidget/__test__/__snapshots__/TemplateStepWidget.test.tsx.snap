@@ -24,7 +24,7 @@ exports[`<TemplateStepWidgetWithRef /> tests snapshot test 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="templateStepWidget_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

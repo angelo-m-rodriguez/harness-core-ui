@@ -6,7 +6,7 @@
  */
 
 import React, { useContext, useMemo } from 'react'
-import { Container, Heading, Layout, Pagination, Text, Utils, PageError, TableV2 } from '@harness/uicore'
+import { Container, Layout, Text, Utils, PageError, TableV2 } from '@harness/uicore'
 import type { Column } from 'react-table'
 import { FontVariation, Color, Intent } from '@harness/design-system'
 import type { EnvironmentResponseDTO } from 'services/cd-ng'
@@ -14,7 +14,7 @@ import { ApiKey, ApiKeys, useDeleteAPIKey, UseGetAllAPIKeysProps } from 'service
 import { useToaster } from '@common/exports'
 import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import { useEnvStrings } from '@cf/hooks/environment'
-import { CF_DEFAULT_PAGE_SIZE, EnvironmentSDKKeyType, getErrorMessage, showToaster } from '@cf/utils/CFUtils'
+import { getErrorMessage, showToaster } from '@cf/utils/CFUtils'
 import { withTableData } from '@cf/utils/table-utils'
 import RbacButton from '@rbac/components/Button/Button'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
@@ -51,15 +51,24 @@ const RowContext = React.createContext<RowFunctions>(defaultContext)
 
 const withApiKey = withTableData<ApiKey, { apiKey: ApiKey }>(({ row }) => ({ apiKey: row.original }))
 
-const NameCell = withApiKey(({ apiKey }) => <Text font={{ weight: 'bold' }}>{apiKey.name}</Text>)
+const NameCell = withApiKey(({ apiKey }) => (
+  <Text font={{ variation: FontVariation.BODY2 }} color={Color.GREY_800}>
+    {apiKey.name}
+  </Text>
+))
+
 const TypeCell = withApiKey(({ apiKey }) => {
   const { getEnvString } = useEnvStrings()
 
-  return <Text>{getEnvString(`apiKeys.${apiKey.type.toLowerCase()}Type`)}</Text>
+  return (
+    <Text font={{ variation: FontVariation.BODY }} color={Color.GREY_800}>
+      {getEnvString(`apiKeys.${apiKey.type.toLowerCase()}Type`)}
+    </Text>
+  )
 })
 
 const ApiInfoCell = withApiKey(({ apiKey }) => {
-  const { environmentIdentifier, isNew, onDelete, getSecret } = useContext(RowContext) ?? defaultContext
+  const { isNew, getSecret } = useContext(RowContext) ?? defaultContext
   const { getString, getEnvString } = useEnvStrings()
   const { showSuccess, showError } = useToaster()
   const showCopy = isNew(apiKey.identifier)
@@ -72,6 +81,53 @@ const ApiInfoCell = withApiKey(({ apiKey }) => {
       .catch(() => showError(getString('clipboardCopyFail'), undefined, 'cf.copy.text.error'))
   }
 
+  return (
+    <>
+      <Layout.Horizontal spacing="medium" flex={{ alignItems: 'center' }} className={css.keyContainer}>
+        <Text font={{ variation: FontVariation.BODY2 }} color={Color.GREY_800} className={css.keyType}>
+          {getString('secretType')}:
+        </Text>
+        {showCopy ? (
+          <div className={css.keyCopyContainer}>
+            <Text
+              font={{ mono: true, variation: FontVariation.BODY2 }}
+              color={Color.GREY_800}
+              rightIcon="main-clone"
+              rightIconProps={{
+                onClick: handleCopy,
+                color: Color.GREY_350,
+                className: css.keyCopyIcon
+              }}
+              padding={{ left: 'small', right: 'small', top: 'xsmall', bottom: 'xsmall' }}
+              className={css.keyCopy}
+            >
+              {apiKeyText}
+            </Text>
+          </div>
+        ) : (
+          <Text font={{ variation: FontVariation.BODY2 }} color={Color.GREY_800}>
+            {apiKeyText}
+          </Text>
+        )}
+      </Layout.Horizontal>
+      {showCopy && (
+        <Text
+          padding={{ top: 'xsmall' }}
+          font={{ variation: FontVariation.TINY }}
+          color={Color.ORANGE_900}
+          icon="warning-icon"
+        >
+          {getEnvString('apiKeys.redactionWarning')}
+        </Text>
+      )}
+    </>
+  )
+})
+
+const DeleteCell = withApiKey(({ apiKey }) => {
+  const { environmentIdentifier, onDelete } = useContext(RowContext) ?? defaultContext
+  const { getString, getEnvString } = useEnvStrings()
+
   const deleteSDKKey = useConfirmAction({
     intent: Intent.DANGER,
     title: getEnvString('apiKeys.deleteTitle'),
@@ -83,50 +139,21 @@ const ApiInfoCell = withApiKey(({ apiKey }) => {
   })
 
   return (
-    <Layout.Horizontal flex={{ distribution: 'space-between' }}>
-      <Layout.Horizontal spacing="small" flex={{ alignItems: 'center' }} className={css.keyContainer}>
-        <Text font={{ weight: 'bold' }} className={css.keyType}>
-          {apiKey.type === EnvironmentSDKKeyType.CLIENT ? getString(`common.clientId`) : getString('secretType')}:
-        </Text>
-        {showCopy ? (
-          <div className={css.keyCopyContainer}>
-            <Text
-              font={{ mono: true }}
-              rightIcon="main-clone"
-              rightIconProps={{
-                onClick: handleCopy,
-                color: Color.GREY_350,
-                className: css.keyCopyIcon
-              }}
-              padding="small"
-              className={css.keyCopy}
-            >
-              {apiKeyText}
-            </Text>
-            <Text font={{ variation: FontVariation.TINY }} color={Color.ORANGE_900} className={css.keyRedactionWarning}>
-              {getEnvString('apiKeys.redactionWarning')}
-            </Text>
-          </div>
-        ) : (
-          <Text>{apiKeyText}</Text>
-        )}
-      </Layout.Horizontal>
-      <Container>
-        <RbacButton
-          minimal
-          icon="trash"
-          iconProps={{
-            size: 16
-          }}
-          className={css.keyDeleteButton}
-          onClick={deleteSDKKey}
-          permission={{
-            resource: { resourceType: ResourceType.ENVIRONMENT, resourceIdentifier: environmentIdentifier },
-            permission: PermissionIdentifier.EDIT_ENVIRONMENT
-          }}
-        />
-      </Container>
-    </Layout.Horizontal>
+    <div className={css.deleteBtnContainer}>
+      <RbacButton
+        minimal
+        icon="trash"
+        iconProps={{
+          size: 16
+        }}
+        className={css.keyDeleteButton}
+        onClick={deleteSDKKey}
+        permission={{
+          resource: { resourceType: ResourceType.ENVIRONMENT, resourceIdentifier: environmentIdentifier },
+          permission: PermissionIdentifier.EDIT_ENVIRONMENT
+        }}
+      />
+    </div>
   )
 })
 
@@ -159,12 +186,10 @@ const EnvironmentSDKKeys: React.FC<EnvironmentDetailsBodyProps> = ({
       .catch(deleteError => showError(getErrorMessage(deleteError), undefined, 'cf.delete.api.key.error'))
   }
 
-  const { apiKeys, ...pagination } = data ?? {
-    itemCount: 0,
-    pageCount: 0,
-    pageIndex: 0,
-    pageSize: CF_DEFAULT_PAGE_SIZE
+  const { apiKeys } = data ?? {
+    apiKeys: []
   }
+
   const hasData = !error && !loading && (apiKeys || []).length > 0
   const emptyData = !error && !loading && (apiKeys || []).length === 0
 
@@ -184,8 +209,19 @@ const EnvironmentSDKKeys: React.FC<EnvironmentDetailsBodyProps> = ({
       },
       {
         id: 'info',
-        width: '65%',
+        width: '40%',
         Cell: ApiInfoCell
+      },
+      {
+        // will display once BE is in
+        // Header: getString('cf.environments.apiKeys.lastUsed').toUpperCase(),
+        id: 'lastUsed',
+        width: '20%'
+      },
+      {
+        id: 'delete',
+        width: '5%',
+        Cell: DeleteCell
       }
     ],
     []
@@ -195,16 +231,19 @@ const EnvironmentSDKKeys: React.FC<EnvironmentDetailsBodyProps> = ({
     <Container width="100%" height="calc(100vh - 174px)">
       {hasData && (
         <Layout.Vertical
-          padding={{ top: 'xxxlarge', left: 'xxlarge' }}
-          height="100%"
+          padding={{ top: 'xlarge', left: 'xlarge', right: 'xlarge' }}
           flex={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}
         >
           <Layout.Horizontal width="100%" flex={{ distribution: 'space-between', alignItems: 'baseline' }}>
-            <Heading level={2} font={{ variation: FontVariation.H5 }}>
+            <Text font={{ variation: FontVariation.BODY1 }} color={Color.BLACK}>
               {getEnvString('apiKeys.title')}
-            </Heading>
+            </Text>
           </Layout.Horizontal>
-          <Text color={Color.GREY_800} padding={{ top: 'small', bottom: 'xxlarge' }}>
+          <Text
+            font={{ variation: FontVariation.BODY }}
+            color={Color.GREY_800}
+            padding={{ top: 'small', bottom: 'small' }}
+          >
             {getEnvString('apiKeys.message')}
           </Text>
           <Container className={css.content}>
@@ -221,17 +260,6 @@ const EnvironmentSDKKeys: React.FC<EnvironmentDetailsBodyProps> = ({
                 <TableV2<ApiKey> data={(apiKeys || []) as ApiKey[]} columns={columns} />
               </RowContext.Provider>
             </Container>
-            {!!pagination.itemCount && (
-              <Pagination
-                itemCount={pagination.itemCount}
-                pageCount={pagination.pageCount}
-                pageIndex={pagination.pageIndex}
-                pageSize={CF_DEFAULT_PAGE_SIZE}
-                gotoPage={(index: number) => {
-                  updatePageNumber(index)
-                }}
-              />
-            )}
           </Container>
         </Layout.Vertical>
       )}

@@ -75,7 +75,6 @@ export function CustomVariablesEditableStage(props: CustomVariableEditableProps)
   }
 
   const { subscribeForm, unSubscribeForm } = React.useContext(StageErrorContext)
-
   const formikRef = React.useRef<FormikProps<unknown> | null>(null)
 
   React.useEffect(() => {
@@ -86,6 +85,10 @@ export function CustomVariablesEditableStage(props: CustomVariableEditableProps)
       }
     }
   }, [enableValidation, subscribeForm, unSubscribeForm, tabName])
+
+  React.useEffect(() => {
+    formikRef.current?.setValues({ ...initialValues })
+  }, [initialValues])
 
   return (
     <Formik

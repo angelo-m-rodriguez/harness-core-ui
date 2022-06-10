@@ -25,6 +25,7 @@ import { useStrings } from 'framework/strings'
 import routes from '@common/RouteDefinitions'
 import { PageSpinner, useToaster } from '@common/components'
 import { useTelemetry } from '@common/hooks/useTelemetry'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import {
   useCreatePerspective,
@@ -322,6 +323,8 @@ const PerspectiveListPage: React.FC = () => {
 
   const [isRefetchFolders, setRefetchFolders] = useState(false)
   const [refetchPerspectives, setRefetchPerspectives] = useState(false)
+
+  useDocumentTitle(getString('ce.perspectives.sideNavText'), true)
 
   const [result, executeQuery] = useFetchAllPerspectivesQuery({
     variables: {

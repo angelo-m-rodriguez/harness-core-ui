@@ -20,8 +20,8 @@ import { String, useStrings } from 'framework/strings'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import routes from '@common/RouteDefinitions'
-import type { PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import type { StoreType } from '@common/constants/GitSyncTypes'
+import type { PipelineType, PipelinePathProps, ExecutionPathProps } from '@common/interfaces/RouteInterfaces'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import { usePermission } from '@rbac/hooks/usePermission'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -34,6 +34,8 @@ import { CardVariant } from '@pipeline/utils/constants'
 
 import type { ExecutionCardInfoProps } from '@pipeline/factories/ExecutionFactory/types'
 
+import { useAppStore } from 'framework/AppStore/AppStoreContext'
+import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetails'
 import MiniExecutionGraph from './MiniExecutionGraph/MiniExecutionGraph'
 import css from './ExecutionCard.module.scss'
 
@@ -42,6 +44,7 @@ export interface ExecutionCardProps {
   variant?: CardVariant
   staticCard?: boolean
   isPipelineInvalid?: boolean
+  showGitDetails?: boolean
 }
 
 function ExecutionCardFooter({ pipelineExecution, variant }: ExecutionCardProps): React.ReactElement {
@@ -108,8 +111,15 @@ function ExecutionCardFooter({ pipelineExecution, variant }: ExecutionCardProps)
 }
 
 export default function ExecutionCard(props: ExecutionCardProps): React.ReactElement {
-  const { pipelineExecution, variant = CardVariant.Default, staticCard = false, isPipelineInvalid } = props
-  const { orgIdentifier, projectIdentifier, accountId, module } = useParams<PipelineType<ProjectPathProps>>()
+  const {
+    pipelineExecution,
+    variant = CardVariant.Default,
+    staticCard = false,
+    isPipelineInvalid,
+    showGitDetails = false
+  } = props
+  const { orgIdentifier, projectIdentifier, accountId, module, pipelineIdentifier } =
+    useParams<PipelineType<PipelinePathProps>>()
   const history = useHistory()
   const { getString } = useStrings()
   const SECURITY = useFeatureFlag(FeatureFlag.SECURITY)
@@ -119,6 +129,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
   const cdInfo = executionFactory.getCardInfo(StageType.DEPLOY)
   const ciInfo = executionFactory.getCardInfo(StageType.BUILD)
   const stoInfo = executionFactory.getCardInfo(StageType.SECURITY)
+  const { isGitSimplificationEnabled } = useAppStore()
 
   const [canEdit, canExecute] = usePermission(
     {
@@ -136,19 +147,20 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
     [orgIdentifier, projectIdentifier, accountId, pipelineExecution.pipelineIdentifier]
   )
   const disabled = isExecutionNotStarted(pipelineExecution.status)
-
+  const source: ExecutionPathProps['source'] = pipelineIdentifier ? 'executions' : 'deployments'
   function handleClick(): void {
-    const { pipelineIdentifier, planExecutionId } = pipelineExecution
+    const { pipelineIdentifier: cardPipelineId, planExecutionId } = pipelineExecution
 
-    if (!disabled && pipelineIdentifier && planExecutionId) {
+    if (!disabled && cardPipelineId && planExecutionId) {
       history.push(
         routes.toExecutionPipelineView({
           orgIdentifier,
-          pipelineIdentifier,
+          pipelineIdentifier: cardPipelineId,
           executionIdentifier: planExecutionId,
           projectIdentifier,
           accountId,
-          module
+          module,
+          source
         })
       )
     }
@@ -187,13 +199,24 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                   }, {} as { [key: string]: string })}
                 />
               ) : null}
-              {pipelineExecution.gitDetails ? (
-                <GitPopover
-                  data={pipelineExecution.gitDetails}
-                  iconProps={{ size: 14 }}
-                  popoverProps={{ wrapperTagName: 'div', targetTagName: 'div' }}
-                />
-              ) : null}
+              {isGitSimplificationEnabled && pipelineExecution?.storeType === StoreType.REMOTE
+                ? showGitDetails && (
+                    <div className={css.gitRemoteDetailsWrapper}>
+                      <GitRemoteDetails
+                        repoName={pipelineExecution?.gitDetails?.repoName}
+                        branch={pipelineExecution?.gitDetails?.branch}
+                        filePath={pipelineExecution?.gitDetails?.filePath}
+                        flags={{ readOnly: true }}
+                      />
+                    </div>
+                  )
+                : pipelineExecution.gitDetails && (
+                    <GitPopover
+                      data={pipelineExecution.gitDetails}
+                      iconProps={{ size: 14 }}
+                      popoverProps={{ wrapperTagName: 'div', targetTagName: 'div' }}
+                    />
+                  )}
             </div>
             <div className={css.actions}>
               <div className={css.statusContainer}>
@@ -235,6 +258,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                   }}
                   isPipelineInvalid={isPipelineInvalid}
                   canEdit={canEdit}
+                  source={source}
                   canExecute={canExecute}
                   canRetry={pipelineExecution.canRetry}
                   modules={pipelineExecution.modules}
@@ -292,6 +316,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                 projectIdentifier={projectIdentifier}
                 orgIdentifier={orgIdentifier}
                 accountId={accountId}
+                source={source}
                 module={module}
               />
             ) : null}

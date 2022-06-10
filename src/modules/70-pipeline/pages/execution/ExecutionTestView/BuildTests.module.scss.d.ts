@@ -59,6 +59,7 @@ declare const styles: {
   readonly progress: string
   readonly progressBar: string
   readonly reportsOverview: string
+  readonly repositionWarning: string
   readonly rightContainer: string
   readonly row: string
   readonly rowSelected: string
@@ -69,9 +70,11 @@ declare const styles: {
   readonly selectionBreakdown: string
   readonly sortBySelect: string
   readonly sourceMethod: string
+  readonly stageOptions: string
   readonly stats: string
   readonly statsNumber: string
   readonly statsTitle: string
+  readonly stepOptions: string
   readonly subText: string
   readonly testCasesHeader: string
   readonly testCell: string

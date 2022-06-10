@@ -2,1065 +2,907 @@
 
 exports[`TargetDetailPage TargetDetailPage should render data correctly 1`] = `
 <div>
-  <div
-    class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--large StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"
+  <main
+    class="layout"
+    data-detail-page-container="true"
   >
     <div
-      class="Layout--vertical StyledProps--main"
+      class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--large header StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"
     >
       <div
-        class="PageHeader--breadcrumbsDiv"
+        class="Layout--vertical StyledProps--main"
       >
         <div
-          class="Layout--horizontal StyledProps--main Breadcrumbs--breadcrumbs StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+          class="PageHeader--breadcrumbsDiv"
         >
           <div
-            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+            class="Layout--horizontal StyledProps--main Breadcrumbs--breadcrumbs StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
           >
-            <a
-              class="Breadcrumbs--breadcrumb"
-              href="/account/dummy/cf/orgs/dummy/projects/dummy"
+            <div
+              class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
             >
+              <a
+                class="Breadcrumbs--breadcrumb"
+                href="/account/dummy/cf/orgs/dummy/projects/dummy"
+              >
+                <span
+                  class="bp3-icon StyledProps--main StyledProps--padding-right-xsmall"
+                  data-icon="cf-main"
+                >
+                  <svg
+                    height="16"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.632 2.08A5.19 5.19 0 004.62 6.29L2.08 20.697a5.19 5.19 0 004.21 6.012l7.464 1.316a.2.2 0 00.207-.298L6.882 15.656c-.296-.469-.292-1.382.05-1.6.08-.05.313-.259.313-.259l.398-.436.066-.072c.37-.406.704-.773 1.76-1.302l.227-.079c1.548-.484 2.41-.449 3.27-.414.862.035 1.724.07 3.274-.414 1.272-.397 2.43-1.178 3.074-1.667a.622.622 0 01.9.15l4.596 7.362a.53.53 0 01-.101.696 8.694 8.694 0 01-2.834 1.538c-1.549.484-2.432.463-3.316.442-.884-.021-1.768-.042-3.318.442-1.314.41-1.868.948-2.07 1.204-.048.061-.07.21-.032.279.4.724 2.295 4.06 3.794 6.693a.998.998 0 00.695.49l3.07.541a5.19 5.19 0 006.012-4.21l2.54-14.408a5.19 5.19 0 00-4.21-6.012L10.633 2.08z"
+                      fill="url(#cf-main_svg__a)"
+                    />
+                    <path
+                      d="M16.646 13.074c-1.303.34-2.093.316-2.882.29-.79-.024-1.58-.049-2.881.291-.744.216-1.178.592-1.587 1.072a.197.197 0 00-.018.23l2.482 4.069c.064.106.209.13.307.055.374-.283 1.28-.9 2.42-1.198 1.469-.383 2.348-.375 3.273-.366.717.007 1.462.014 2.53-.16a4.454 4.454 0 001.629-.635.347.347 0 00.094-.488L19.472 12.3a.421.421 0 00-.56-.128 9.57 9.57 0 01-2.266.902z"
+                      fill="url(#cf-main_svg__b)"
+                    />
+                    <defs>
+                      <lineargradient
+                        gradientUnits="userSpaceOnUse"
+                        id="cf-main_svg__a"
+                        x1="6.837"
+                        x2="23.78"
+                        y1="2"
+                        y2="28.227"
+                      >
+                        <stop
+                          stop-color="#FFC100"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#E66B35"
+                        />
+                      </lineargradient>
+                      <lineargradient
+                        gradientUnits="userSpaceOnUse"
+                        id="cf-main_svg__b"
+                        x1="6.837"
+                        x2="23.78"
+                        y1="2"
+                        y2="28.227"
+                      >
+                        <stop
+                          stop-color="#FFC100"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#E66B35"
+                        />
+                      </lineargradient>
+                    </defs>
+                  </svg>
+                </span>
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                >
+                  dummy
+                </p>
+              </a>
               <span
-                class="bp3-icon StyledProps--main StyledProps--padding-right-xsmall"
-                data-icon="cf-main"
+                class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+                data-icon="main-chevron-right"
               >
                 <svg
-                  height="16"
-                  viewBox="0 0 32 32"
-                  width="16"
+                  height="8"
+                  viewBox="0 0 8 14"
+                  width="8"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M10.632 2.08A5.19 5.19 0 004.62 6.29L2.08 20.697a5.19 5.19 0 004.21 6.012l7.464 1.316a.2.2 0 00.207-.298L6.882 15.656c-.296-.469-.292-1.382.05-1.6.08-.05.313-.259.313-.259l.398-.436.066-.072c.37-.406.704-.773 1.76-1.302l.227-.079c1.548-.484 2.41-.449 3.27-.414.862.035 1.724.07 3.274-.414 1.272-.397 2.43-1.178 3.074-1.667a.622.622 0 01.9.15l4.596 7.362a.53.53 0 01-.101.696 8.694 8.694 0 01-2.834 1.538c-1.549.484-2.432.463-3.316.442-.884-.021-1.768-.042-3.318.442-1.314.41-1.868.948-2.07 1.204-.048.061-.07.21-.032.279.4.724 2.295 4.06 3.794 6.693a.998.998 0 00.695.49l3.07.541a5.19 5.19 0 006.012-4.21l2.54-14.408a5.19 5.19 0 00-4.21-6.012L10.633 2.08z"
-                    fill="url(#cf-main_svg__a)"
+                    d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                    fill="#4d5969"
                   />
-                  <path
-                    d="M16.646 13.074c-1.303.34-2.093.316-2.882.29-.79-.024-1.58-.049-2.881.291-.744.216-1.178.592-1.587 1.072a.197.197 0 00-.018.23l2.482 4.069c.064.106.209.13.307.055.374-.283 1.28-.9 2.42-1.198 1.469-.383 2.348-.375 3.273-.366.717.007 1.462.014 2.53-.16a4.454 4.454 0 001.629-.635.347.347 0 00.094-.488L19.472 12.3a.421.421 0 00-.56-.128 9.57 9.57 0 01-2.266.902z"
-                    fill="url(#cf-main_svg__b)"
-                  />
-                  <defs>
-                    <lineargradient
-                      gradientUnits="userSpaceOnUse"
-                      id="cf-main_svg__a"
-                      x1="6.837"
-                      x2="23.78"
-                      y1="2"
-                      y2="28.227"
-                    >
-                      <stop
-                        stop-color="#FFC100"
-                      />
-                      <stop
-                        offset="1"
-                        stop-color="#E66B35"
-                      />
-                    </lineargradient>
-                    <lineargradient
-                      gradientUnits="userSpaceOnUse"
-                      id="cf-main_svg__b"
-                      x1="6.837"
-                      x2="23.78"
-                      y1="2"
-                      y2="28.227"
-                    >
-                      <stop
-                        stop-color="#FFC100"
-                      />
-                      <stop
-                        offset="1"
-                        stop-color="#E66B35"
-                      />
-                    </lineargradient>
-                  </defs>
                 </svg>
               </span>
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
-              >
-                dummy
-              </p>
-            </a>
-            <span
-              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
-              data-icon="main-chevron-right"
+            </div>
+            <div
+              class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
             >
-              <svg
-                height="8"
-                viewBox="0 0 8 14"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
+              <a
+                class="Breadcrumbs--breadcrumb"
+                href="/account/dummy/cf/orgs/dummy/projects/dummy/target-management/targets"
               >
-                <path
-                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
-                  fill="#4d5969"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
-          >
-            <a
-              class="Breadcrumbs--breadcrumb"
-              href="/account/dummy/cf/orgs/dummy/projects/dummy/target-management/targets"
-            >
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                >
+                  cf.shared.targetManagement: pipeline.targets.title
+                </p>
+              </a>
+              <span
+                class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+                data-icon="main-chevron-right"
               >
-                cf.shared.targetManagement: pipeline.targets.title
-              </p>
-            </a>
-            <span
-              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
-              data-icon="main-chevron-right"
-            >
-              <svg
-                height="8"
-                viewBox="0 0 8 14"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
-                  fill="#4d5969"
-                />
-              </svg>
-            </span>
+                <svg
+                  height="8"
+                  viewBox="0 0 8 14"
+                  width="8"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                    fill="#4d5969"
+                  />
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
-      >
-        <h3
-          class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--font-variation-h4"
-          level="3"
-        >
-          t1
-        </h3>
         <div
-          class="StyledProps--font StyledProps--main identifierContainer"
+          class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
         >
-          <span
-            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small StyledProps--margin-right-xsmall"
-          >
-            idLabel
-          </span>
-          <span
-            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small"
+          <h3
+            class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--font-variation-h4"
+            level="3"
           >
             t1
-          </span>
-          <button
-            class="copyButton"
-            title="clickToCopy"
+          </h3>
+          <div
+            class="StyledProps--font StyledProps--main identifierContainer"
           >
             <span
-              class="bp3-icon bp3-icon-duplicate StyledProps--main StyledProps--color StyledProps--color-grey350"
-              icon="duplicate"
+              class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small StyledProps--margin-right-xsmall"
             >
-              <svg
-                data-icon="duplicate"
-                height="12"
-                viewBox="0 0 16 16"
-                width="12"
-              >
-                <desc>
-                  duplicate
-                </desc>
-                <path
-                  d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z"
-                  fill-rule="evenodd"
-                />
-              </svg>
+              idLabel
             </span>
-          </button>
+            <span
+              class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small"
+            >
+              t1
+            </span>
+            <button
+              class="copyButton"
+              title="clickToCopy"
+            >
+              <span
+                class="bp3-icon bp3-icon-duplicate StyledProps--main StyledProps--color StyledProps--color-grey350"
+                icon="duplicate"
+              >
+                <svg
+                  data-icon="duplicate"
+                  height="12"
+                  viewBox="0 0 16 16"
+                  width="12"
+                >
+                  <desc>
+                    duplicate
+                  </desc>
+                  <path
+                    d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--font-variation-small StyledProps--color StyledProps--color-grey400 StyledProps--padding-top-xsmall"
+        >
+          cf.targetDetail.createdOnDate
+        </p>
       </div>
-      <p
-        class="StyledProps--font StyledProps--main StyledProps--font-variation-small StyledProps--color StyledProps--color-grey400 StyledProps--padding-top-xsmall"
-      >
-        cf.targetDetail.createdOnDate
-      </p>
-    </div>
-    <div
-      class="StyledProps--font StyledProps--main optionsMenu"
-    >
-      <span
-        class="bp3-popover-wrapper"
+      <div
+        class="StyledProps--font StyledProps--main optionsMenu"
       >
         <span
-          class="bp3-popover-target"
+          class="bp3-popover-wrapper"
         >
-          <button
-            class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--without-shadow Button--withLeftIcon"
-            type="button"
+          <span
+            class="bp3-popover-target"
           >
-            <span
-              class="bp3-icon StyledProps--main"
-              data-icon="Options"
-            >
-              <svg
-                fill="none"
-                height="16"
-                viewBox="0 0 4 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clip-rule="evenodd"
-                  d="M2 12.5a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zm2-12a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zM2 7a1 1 0 100 2 1 1 0 000-2zM0 8a2 2 0 114 0 2 2 0 01-4 0z"
-                  fill="currentColor"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
-          </button>
-        </span>
-      </span>
-    </div>
-    <dl
-      class="metaData"
-    >
-      <div
-        class="metaDataPair"
-      >
-        <dt>
-          environment
-        </dt>
-        <dd>
-          foobar
-        </dd>
-      </div>
-    </dl>
-  </div>
-  <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
-  >
-    <div
-      class="Layout--vertical StyledProps--main gitSyncContainer"
-      style="height: 100%;"
-    >
-      <div
-        class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-bottom StyledProps--border-color-grey200"
-      >
-        <div
-          class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-space-between StyledProps--flex-alignItems-center StyledProps--margin-left-xxlarge StyledProps--margin-top-large StyledProps--margin-bottom-large"
-          style="width: 230px;"
-        >
-          <div
-            class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
-            style="width: 400px;"
-          >
-            <div
-              class="StyledProps--font StyledProps--main gitRepoText"
+            <button
+              class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--without-shadow Button--withLeftIcon"
+              type="button"
             >
               <span
                 class="bp3-icon StyledProps--main"
-                data-icon="repository"
+                data-icon="Options"
               >
                 <svg
+                  fill="none"
                   height="16"
-                  viewBox="0 0 13 14"
+                  viewBox="0 0 4 16"
                   width="16"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M12.438 2.452l-.006-.017a.367.367 0 00-.067-.114l-.004-.007L10.409.125a.374.374 0 00-.28-.125H2.327a.376.376 0 00-.28.125L.095 2.314l-.005.008a.374.374 0 00-.066.113l-.006.017a.37.37 0 00-.018.11v11.064c0 .206.168.374.374.374h11.707a.375.375 0 00.375-.374V2.563a.369.369 0 00-.018-.111zm-7.91 7.86h3.4v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357zM.75 9.563V6.625h3.03v.357c0 .588.479 1.066 1.067 1.066H7.61c.588 0 1.066-.478 1.066-1.066v-.357h3.03v2.938H.75zm3.03-6.626v.357c0 .588.479 1.067 1.067 1.067H7.61c.589 0 1.067-.479 1.067-1.067v-.357h3.03v2.939H.75V2.937h3.03zm4.15 0v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357h3.4zm-3.4 3.688h3.4v.357a.318.318 0 01-.319.317H4.846a.317.317 0 01-.318-.317v-.357zM2.493.749h7.468l1.284 1.44H1.21L2.494.748zm9.213 12.502H.75v-2.939h3.03v.357c0 .589.479 1.067 1.067 1.067H7.61c.588 0 1.066-.478 1.066-1.067v-.357h3.03v2.94z"
+                    clip-rule="evenodd"
+                    d="M2 12.5a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zm2-12a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zM2 7a1 1 0 100 2 1 1 0 000-2zM0 8a2 2 0 114 0 2 2 0 01-4 0z"
                     fill="currentColor"
+                    fill-rule="evenodd"
                   />
                 </svg>
               </span>
-              <p
-                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-black"
-                style="--text-line-clamp: 1;"
-              />
-            </div>
-            <div
-              class="StyledProps--font StyledProps--main"
-            >
-              <div
-                class="bp3-popover-wrapper bp3-fill"
-              >
-                <div
-                  class="bp3-popover-target"
-                >
-                  <button
-                    class="branchActionButton"
-                  >
-                    <div
-                      class="StyledProps--font StyledProps--main branchActionButtonWrapper"
-                    >
-                      <span
-                        class="bp3-icon StyledProps--main"
-                        data-icon="git-new-branch"
-                      >
-                        <svg
-                          height="15"
-                          viewBox="0 0 13 16"
-                          width="15"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10.406.003a2.399 2.399 0 00-.8 4.658v.94a.8.8 0 01-.8.8H4.001a2.413 2.413 0 00-.8.14V4.66A2.399 2.399 0 002.402 0a2.399 2.399 0 00-.8 4.661v6.678a2.399 2.399 0 00.8 4.661 2.399 2.399 0 00.8-4.661v-2.54a.8.8 0 01.8-.799h4.803a2.4 2.4 0 002.402-2.4v-.939a2.399 2.399 0 00-.8-4.658z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      </span>
-                      <p
-                        class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey900"
-                      />
-                      <div
-                        class="StyledProps--font StyledProps--main gitStatusIcon"
-                      >
-                        <span
-                          class="bp3-popover-wrapper"
-                        >
-                          <span
-                            class="bp3-popover-target"
-                          >
-                            <span
-                              class="bp3-icon bp3-icon-full-circle StyledProps--main autoCommitDisabled"
-                              data-testid="auto-commit-status-icon"
-                              icon="full-circle"
-                              tabindex="0"
-                            >
-                              <svg
-                                data-icon="full-circle"
-                                height="10"
-                                viewBox="0 0 16 16"
-                                width="10"
-                              >
-                                <desc>
-                                  full-circle
-                                </desc>
-                                <path
-                                  d="M8 0a8 8 0 100 16A8 8 0 108 0z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </span>
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </button>
+          </span>
+        </span>
       </div>
+      <dl
+        class="metaData"
+      >
+        <div
+          class="metaDataPair"
+        >
+          <dt>
+            environment
+          </dt>
+          <dd>
+            foobar
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div
+      class="content"
+      data-name="page-body"
+    >
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--vertical StyledProps--main gitSyncContainer"
         style="height: 100%;"
       >
         <div
-          class="StyledProps--font StyledProps--main targetSettings StyledProps--background-primaryBG"
-          style="overflow: auto; min-width: 480px; width: 480px; height: 100%;"
+          class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-bottom StyledProps--border-color-grey200"
         >
-          <h3
-            class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
-            level="3"
-            style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; padding-bottom: 0px;"
-          >
-            <span
-              class="align"
-              data-tooltip-id="ff_targetTargetSettings_heading"
-            >
-              cf.targetDetail.targetSetting
-            </span>
-          </h3>
           <div
-            class="StyledProps--font StyledProps--main tabContainer"
+            class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-space-between StyledProps--flex-alignItems-center StyledProps--margin-left-xxlarge StyledProps--margin-top-large StyledProps--margin-bottom-large"
+            style="width: 230px;"
           >
             <div
-              class="bp3-tabs Tabs--main Tabs--horizontal"
+              class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
+              style="width: 400px;"
             >
               <div
-                class="bp3-tab-list"
-                role="tablist"
+                class="StyledProps--font StyledProps--main gitRepoText"
               >
-                <div
-                  class="bp3-tab-indicator-wrapper"
-                  style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
+                <span
+                  class="bp3-icon StyledProps--main"
+                  data-icon="repository"
                 >
-                  <div
-                    class="bp3-tab-indicator"
-                  />
-                </div>
-                <div
-                  aria-controls="bp3-tab-panel_targetSettings_attributes"
-                  aria-disabled="false"
-                  aria-expanded="true"
-                  aria-selected="true"
-                  class="bp3-tab"
-                  data-tab-id="attributes"
-                  id="bp3-tab-title_targetSettings_attributes"
-                  role="tab"
-                  tabindex="0"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main tabTitle"
+                  <svg
+                    height="16"
+                    viewBox="0 0 13 14"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    cf.targetDetail.attributes
-                  </p>
-                </div>
-                <div
-                  aria-controls="bp3-tab-panel_targetSettings_segments"
-                  aria-disabled="false"
-                  aria-expanded="false"
-                  aria-selected="false"
-                  class="bp3-tab"
-                  data-tab-id="segments"
-                  id="bp3-tab-title_targetSettings_segments"
-                  role="tab"
-                  tabindex="0"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main tabTitle"
-                  >
-                    cf.shared.segments
-                  </p>
-                </div>
+                    <path
+                      d="M12.438 2.452l-.006-.017a.367.367 0 00-.067-.114l-.004-.007L10.409.125a.374.374 0 00-.28-.125H2.327a.376.376 0 00-.28.125L.095 2.314l-.005.008a.374.374 0 00-.066.113l-.006.017a.37.37 0 00-.018.11v11.064c0 .206.168.374.374.374h11.707a.375.375 0 00.375-.374V2.563a.369.369 0 00-.018-.111zm-7.91 7.86h3.4v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357zM.75 9.563V6.625h3.03v.357c0 .588.479 1.066 1.067 1.066H7.61c.588 0 1.066-.478 1.066-1.066v-.357h3.03v2.938H.75zm3.03-6.626v.357c0 .588.479 1.067 1.067 1.067H7.61c.589 0 1.067-.479 1.067-1.067v-.357h3.03v2.939H.75V2.937h3.03zm4.15 0v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357h3.4zm-3.4 3.688h3.4v.357a.318.318 0 01-.319.317H4.846a.317.317 0 01-.318-.317v-.357zM2.493.749h7.468l1.284 1.44H1.21L2.494.748zm9.213 12.502H.75v-2.939h3.03v.357c0 .589.479 1.067 1.067 1.067H7.61c.588 0 1.066-.478 1.066-1.067v-.357h3.03v2.94z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-black"
+                  style="--text-line-clamp: 1;"
+                />
               </div>
               <div
-                aria-hidden="false"
-                aria-labelledby="bp3-tab-title_targetSettings_attributes"
-                class="bp3-tab-panel tabPanel"
-                id="bp3-tab-panel_targetSettings_attributes"
-                role="tabpanel"
+                class="StyledProps--font StyledProps--main"
               >
-                <dl
-                  class="list"
+                <div
+                  class="bp3-popover-wrapper bp3-fill"
                 >
                   <div
-                    class="StyledProps--font StyledProps--main StyledProps--padding-medium"
-                    style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
+                    class="bp3-popover-target"
                   >
-                    <dt
-                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
-                      style="--text-line-clamp: 1;"
+                    <button
+                      class="branchActionButton"
                     >
-                      identifier
-                    </dt>
-                    <dd
-                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
-                      style="--text-line-clamp: 2;"
-                    >
-                      t1
-                    </dd>
+                      <div
+                        class="StyledProps--font StyledProps--main branchActionButtonWrapper"
+                      >
+                        <span
+                          class="bp3-icon StyledProps--main"
+                          data-icon="git-new-branch"
+                        >
+                          <svg
+                            height="15"
+                            viewBox="0 0 13 16"
+                            width="15"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M10.406.003a2.399 2.399 0 00-.8 4.658v.94a.8.8 0 01-.8.8H4.001a2.413 2.413 0 00-.8.14V4.66A2.399 2.399 0 002.402 0a2.399 2.399 0 00-.8 4.661v6.678a2.399 2.399 0 00.8 4.661 2.399 2.399 0 00.8-4.661v-2.54a.8.8 0 01.8-.799h4.803a2.4 2.4 0 002.402-2.4v-.939a2.399 2.399 0 00-.8-4.658z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        </span>
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey900"
+                        />
+                        <div
+                          class="StyledProps--font StyledProps--main gitStatusIcon"
+                        >
+                          <span
+                            class="bp3-popover-wrapper"
+                          >
+                            <span
+                              class="bp3-popover-target"
+                            >
+                              <span
+                                class="bp3-icon bp3-icon-full-circle StyledProps--main autoCommitDisabled"
+                                data-testid="auto-commit-status-icon"
+                                icon="full-circle"
+                                tabindex="0"
+                              >
+                                <svg
+                                  data-icon="full-circle"
+                                  height="10"
+                                  viewBox="0 0 16 16"
+                                  width="10"
+                                >
+                                  <desc>
+                                    full-circle
+                                  </desc>
+                                  <path
+                                    d="M8 0a8 8 0 100 16A8 8 0 108 0z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </button>
                   </div>
-                  <div
-                    class="StyledProps--font StyledProps--main StyledProps--padding-medium"
-                    style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
-                  >
-                    <dt
-                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
-                      style="--text-line-clamp: 1;"
-                    >
-                      name
-                    </dt>
-                    <dd
-                      class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
-                      style="--text-line-clamp: 2;"
-                    >
-                      t1
-                    </dd>
-                  </div>
-                </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div
-          class="StyledProps--font StyledProps--main StyledProps--flex"
-          style="overflow: auto; flex-grow: 1; background: rgb(252, 253, 253); flex-direction: column; height: 100%;"
+          class="Layout--horizontal StyledProps--main"
+          style="height: 100%;"
         >
           <div
-            class="Layout--horizontal StyledProps--main"
-            style="width: 100%; position: sticky; top: 0px; z-index: 2; background: rgb(252, 253, 253);"
+            class="StyledProps--font StyledProps--main targetSettings StyledProps--background-primaryBG"
+            style="overflow: auto; min-width: 480px; width: 480px; height: 100%;"
           >
             <h3
               class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
               level="3"
-              style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; align-self: baseline;"
+              style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; padding-bottom: 0px;"
             >
               <span
                 class="align"
-                data-tooltip-id="ff_targetFlagSettings_heading"
+                data-tooltip-id="ff_targetTargetSettings_heading"
               >
-                cf.targetDetail.flagSetting
+                cf.targetDetail.targetSetting
               </span>
             </h3>
-            <span
-              style="flex-grow: 1;"
-            />
             <div
-              class="StyledProps--font StyledProps--main"
-              style="align-self: baseline; height: 35px;"
+              class="StyledProps--font StyledProps--main tabContainer"
             >
               <div
-                class="bp3-input-group ui-search-box ExpandingSearchInput--main    ExpandingSearchInput--light"
-                data-name=""
+                class="bp3-tabs Tabs--main Tabs--horizontal"
               >
-                <span
-                  class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
-                  data-icon="thinner-search"
+                <div
+                  class="bp3-tab-list"
+                  role="tablist"
                 >
-                  <svg
-                    fill="none"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    width="14"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="bp3-tab-indicator-wrapper"
+                    style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                   >
-                    <path
-                      d="M7.125 13.25c1.617 0 3.32-.695 4.375-1.75L15 15l-3.5-3.5c1.021-1.005 1.75-2.894 1.75-4.375a6.125 6.125 0 10-6.125 6.125z"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                    <div
+                      class="bp3-tab-indicator"
                     />
-                  </svg>
-                </span>
-                <input
-                  class="bp3-input  ExpandingSearchInput--filter"
-                  dir="auto"
-                  placeholder="cf.targetDetail.searchPlaceholder"
-                  style="padding-right: 0px;"
-                  type="search"
-                  value=""
-                />
+                  </div>
+                  <div
+                    aria-controls="bp3-tab-panel_targetSettings_attributes"
+                    aria-disabled="false"
+                    aria-expanded="true"
+                    aria-selected="true"
+                    class="bp3-tab"
+                    data-tab-id="attributes"
+                    id="bp3-tab-title_targetSettings_attributes"
+                    role="tab"
+                    tabindex="0"
+                  >
+                    <p
+                      class="StyledProps--font StyledProps--main tabTitle"
+                    >
+                      cf.targetDetail.attributes
+                    </p>
+                  </div>
+                  <div
+                    aria-controls="bp3-tab-panel_targetSettings_segments"
+                    aria-disabled="false"
+                    aria-expanded="false"
+                    aria-selected="false"
+                    class="bp3-tab"
+                    data-tab-id="segments"
+                    id="bp3-tab-title_targetSettings_segments"
+                    role="tab"
+                    tabindex="0"
+                  >
+                    <p
+                      class="StyledProps--font StyledProps--main tabTitle"
+                    >
+                      cf.shared.segments
+                    </p>
+                  </div>
+                </div>
+                <div
+                  aria-hidden="false"
+                  aria-labelledby="bp3-tab-title_targetSettings_attributes"
+                  class="bp3-tab-panel tabPanel"
+                  id="bp3-tab-panel_targetSettings_attributes"
+                  role="tabpanel"
+                >
+                  <dl
+                    class="list"
+                  >
+                    <div
+                      class="StyledProps--font StyledProps--main StyledProps--padding-medium"
+                      style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
+                    >
+                      <dt
+                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
+                        style="--text-line-clamp: 1;"
+                      >
+                        identifier
+                      </dt>
+                      <dd
+                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
+                        style="--text-line-clamp: 2;"
+                      >
+                        t1
+                      </dd>
+                    </div>
+                    <div
+                      class="StyledProps--font StyledProps--main StyledProps--padding-medium"
+                      style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
+                    >
+                      <dt
+                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--margin-bottom-xsmall StyledProps--font-variation-form-label"
+                        style="--text-line-clamp: 1;"
+                      >
+                        name
+                      </dt>
+                      <dd
+                        class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey800"
+                        style="--text-line-clamp: 2;"
+                      >
+                        t1
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
           <div
-            class="StyledProps--font StyledProps--main"
-            style="flex-grow: 1; width: 100%; display: flex; flex-direction: column; position: relative;"
-          />
+            class="StyledProps--font StyledProps--main StyledProps--flex"
+            style="overflow: auto; flex-grow: 1; background: rgb(252, 253, 253); flex-direction: column; height: 100%;"
+          >
+            <div
+              class="Layout--horizontal StyledProps--main"
+              style="width: 100%; position: sticky; top: 0px; z-index: 2; background: rgb(252, 253, 253);"
+            >
+              <h3
+                class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
+                level="3"
+                style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; align-self: baseline;"
+              >
+                <span
+                  class="align"
+                  data-tooltip-id="ff_targetFlagSettings_heading"
+                >
+                  cf.targetDetail.flagSetting
+                </span>
+              </h3>
+              <span
+                style="flex-grow: 1;"
+              />
+              <div
+                class="StyledProps--font StyledProps--main"
+                style="align-self: baseline; height: 35px;"
+              >
+                <div
+                  class="bp3-input-group ui-search-box ExpandingSearchInput--main    ExpandingSearchInput--light"
+                  data-name=""
+                >
+                  <span
+                    class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
+                    data-icon="thinner-search"
+                  >
+                    <svg
+                      fill="none"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      width="14"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.125 13.25c1.617 0 3.32-.695 4.375-1.75L15 15l-3.5-3.5c1.021-1.005 1.75-2.894 1.75-4.375a6.125 6.125 0 10-6.125 6.125z"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    class="bp3-input  ExpandingSearchInput--filter"
+                    dir="auto"
+                    placeholder="cf.targetDetail.searchPlaceholder"
+                    style="padding-right: 0px;"
+                    type="search"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main"
+              style="flex-grow: 1; width: 100%; display: flex; flex-direction: column; position: relative;"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 `;
 
 exports[`TargetDetailPage TargetDetailPage should render its segments 1`] = `
 <div>
-  <div
-    class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--large StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"
+  <main
+    class="layout"
+    data-detail-page-container="true"
   >
     <div
-      class="Layout--vertical StyledProps--main"
+      class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--large header StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"
     >
       <div
-        class="PageHeader--breadcrumbsDiv"
+        class="Layout--vertical StyledProps--main"
       >
         <div
-          class="Layout--horizontal StyledProps--main Breadcrumbs--breadcrumbs StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+          class="PageHeader--breadcrumbsDiv"
         >
           <div
-            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
+            class="Layout--horizontal StyledProps--main Breadcrumbs--breadcrumbs StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
           >
-            <a
-              class="Breadcrumbs--breadcrumb"
-              href="/account/dummy/cf/orgs/dummy/projects/dummy"
+            <div
+              class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
             >
+              <a
+                class="Breadcrumbs--breadcrumb"
+                href="/account/dummy/cf/orgs/dummy/projects/dummy"
+              >
+                <span
+                  class="bp3-icon StyledProps--main StyledProps--padding-right-xsmall"
+                  data-icon="cf-main"
+                >
+                  <svg
+                    height="16"
+                    viewBox="0 0 32 32"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.632 2.08A5.19 5.19 0 004.62 6.29L2.08 20.697a5.19 5.19 0 004.21 6.012l7.464 1.316a.2.2 0 00.207-.298L6.882 15.656c-.296-.469-.292-1.382.05-1.6.08-.05.313-.259.313-.259l.398-.436.066-.072c.37-.406.704-.773 1.76-1.302l.227-.079c1.548-.484 2.41-.449 3.27-.414.862.035 1.724.07 3.274-.414 1.272-.397 2.43-1.178 3.074-1.667a.622.622 0 01.9.15l4.596 7.362a.53.53 0 01-.101.696 8.694 8.694 0 01-2.834 1.538c-1.549.484-2.432.463-3.316.442-.884-.021-1.768-.042-3.318.442-1.314.41-1.868.948-2.07 1.204-.048.061-.07.21-.032.279.4.724 2.295 4.06 3.794 6.693a.998.998 0 00.695.49l3.07.541a5.19 5.19 0 006.012-4.21l2.54-14.408a5.19 5.19 0 00-4.21-6.012L10.633 2.08z"
+                      fill="url(#cf-main_svg__a)"
+                    />
+                    <path
+                      d="M16.646 13.074c-1.303.34-2.093.316-2.882.29-.79-.024-1.58-.049-2.881.291-.744.216-1.178.592-1.587 1.072a.197.197 0 00-.018.23l2.482 4.069c.064.106.209.13.307.055.374-.283 1.28-.9 2.42-1.198 1.469-.383 2.348-.375 3.273-.366.717.007 1.462.014 2.53-.16a4.454 4.454 0 001.629-.635.347.347 0 00.094-.488L19.472 12.3a.421.421 0 00-.56-.128 9.57 9.57 0 01-2.266.902z"
+                      fill="url(#cf-main_svg__b)"
+                    />
+                    <defs>
+                      <lineargradient
+                        gradientUnits="userSpaceOnUse"
+                        id="cf-main_svg__a"
+                        x1="6.837"
+                        x2="23.78"
+                        y1="2"
+                        y2="28.227"
+                      >
+                        <stop
+                          stop-color="#FFC100"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#E66B35"
+                        />
+                      </lineargradient>
+                      <lineargradient
+                        gradientUnits="userSpaceOnUse"
+                        id="cf-main_svg__b"
+                        x1="6.837"
+                        x2="23.78"
+                        y1="2"
+                        y2="28.227"
+                      >
+                        <stop
+                          stop-color="#FFC100"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#E66B35"
+                        />
+                      </lineargradient>
+                    </defs>
+                  </svg>
+                </span>
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                >
+                  dummy
+                </p>
+              </a>
               <span
-                class="bp3-icon StyledProps--main StyledProps--padding-right-xsmall"
-                data-icon="cf-main"
+                class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+                data-icon="main-chevron-right"
               >
                 <svg
-                  height="16"
-                  viewBox="0 0 32 32"
-                  width="16"
+                  height="8"
+                  viewBox="0 0 8 14"
+                  width="8"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M10.632 2.08A5.19 5.19 0 004.62 6.29L2.08 20.697a5.19 5.19 0 004.21 6.012l7.464 1.316a.2.2 0 00.207-.298L6.882 15.656c-.296-.469-.292-1.382.05-1.6.08-.05.313-.259.313-.259l.398-.436.066-.072c.37-.406.704-.773 1.76-1.302l.227-.079c1.548-.484 2.41-.449 3.27-.414.862.035 1.724.07 3.274-.414 1.272-.397 2.43-1.178 3.074-1.667a.622.622 0 01.9.15l4.596 7.362a.53.53 0 01-.101.696 8.694 8.694 0 01-2.834 1.538c-1.549.484-2.432.463-3.316.442-.884-.021-1.768-.042-3.318.442-1.314.41-1.868.948-2.07 1.204-.048.061-.07.21-.032.279.4.724 2.295 4.06 3.794 6.693a.998.998 0 00.695.49l3.07.541a5.19 5.19 0 006.012-4.21l2.54-14.408a5.19 5.19 0 00-4.21-6.012L10.633 2.08z"
-                    fill="url(#cf-main_svg__a)"
+                    d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                    fill="#4d5969"
                   />
-                  <path
-                    d="M16.646 13.074c-1.303.34-2.093.316-2.882.29-.79-.024-1.58-.049-2.881.291-.744.216-1.178.592-1.587 1.072a.197.197 0 00-.018.23l2.482 4.069c.064.106.209.13.307.055.374-.283 1.28-.9 2.42-1.198 1.469-.383 2.348-.375 3.273-.366.717.007 1.462.014 2.53-.16a4.454 4.454 0 001.629-.635.347.347 0 00.094-.488L19.472 12.3a.421.421 0 00-.56-.128 9.57 9.57 0 01-2.266.902z"
-                    fill="url(#cf-main_svg__b)"
-                  />
-                  <defs>
-                    <lineargradient
-                      gradientUnits="userSpaceOnUse"
-                      id="cf-main_svg__a"
-                      x1="6.837"
-                      x2="23.78"
-                      y1="2"
-                      y2="28.227"
-                    >
-                      <stop
-                        stop-color="#FFC100"
-                      />
-                      <stop
-                        offset="1"
-                        stop-color="#E66B35"
-                      />
-                    </lineargradient>
-                    <lineargradient
-                      gradientUnits="userSpaceOnUse"
-                      id="cf-main_svg__b"
-                      x1="6.837"
-                      x2="23.78"
-                      y1="2"
-                      y2="28.227"
-                    >
-                      <stop
-                        stop-color="#FFC100"
-                      />
-                      <stop
-                        offset="1"
-                        stop-color="#E66B35"
-                      />
-                    </lineargradient>
-                  </defs>
                 </svg>
               </span>
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
-              >
-                dummy
-              </p>
-            </a>
-            <span
-              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
-              data-icon="main-chevron-right"
+            </div>
+            <div
+              class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
             >
-              <svg
-                height="8"
-                viewBox="0 0 8 14"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
+              <a
+                class="Breadcrumbs--breadcrumb"
+                href="/account/dummy/cf/orgs/dummy/projects/dummy/target-management/targets"
               >
-                <path
-                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
-                  fill="#4d5969"
-                />
-              </svg>
-            </span>
-          </div>
-          <div
-            class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-align-center-center StyledProps--flex-justifyContent-flex-start"
-          >
-            <a
-              class="Breadcrumbs--breadcrumb"
-              href="/account/dummy/cf/orgs/dummy/projects/dummy/target-management/targets"
-            >
-              <p
-                class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--intent-primary StyledProps--font-size-small"
+                >
+                  cf.shared.targetManagement: pipeline.targets.title
+                </p>
+              </a>
+              <span
+                class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
+                data-icon="main-chevron-right"
               >
-                cf.shared.targetManagement: pipeline.targets.title
-              </p>
-            </a>
-            <span
-              class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--padding-right-xsmall StyledProps--padding-left-xsmall"
-              data-icon="main-chevron-right"
-            >
-              <svg
-                height="8"
-                viewBox="0 0 8 14"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
-                  fill="#4d5969"
-                />
-              </svg>
-            </span>
+                <svg
+                  height="8"
+                  viewBox="0 0 8 14"
+                  width="8"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.7 6.3l-6-6C1.5.1 1.3 0 1 0 .4 0 0 .4 0 1c0 .3.1.5.3.7L5.6 7 .3 12.3c-.2.2-.3.4-.3.7 0 .6.4 1 1 1 .3 0 .5-.1.7-.3l6-6c.2-.2.3-.4.3-.7s-.1-.5-.3-.7z"
+                    fill="#4d5969"
+                  />
+                </svg>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
-      >
-        <h3
-          class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--font-variation-h4"
-          level="3"
-        >
-          t1
-        </h3>
         <div
-          class="StyledProps--font StyledProps--main identifierContainer"
+          class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
         >
-          <span
-            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small StyledProps--margin-right-xsmall"
-          >
-            idLabel
-          </span>
-          <span
-            class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small"
+          <h3
+            class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--font-variation-h4"
+            level="3"
           >
             t1
-          </span>
-          <button
-            class="copyButton"
-            title="clickToCopy"
+          </h3>
+          <div
+            class="StyledProps--font StyledProps--main identifierContainer"
           >
             <span
-              class="bp3-icon bp3-icon-duplicate StyledProps--main StyledProps--color StyledProps--color-grey350"
-              icon="duplicate"
+              class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small StyledProps--margin-right-xsmall"
             >
-              <svg
-                data-icon="duplicate"
-                height="12"
-                viewBox="0 0 16 16"
-                width="12"
-              >
-                <desc>
-                  duplicate
-                </desc>
-                <path
-                  d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z"
-                  fill-rule="evenodd"
-                />
-              </svg>
+              idLabel
             </span>
-          </button>
+            <span
+              class="StyledProps--font StyledProps--main StyledProps--inline StyledProps--font-variation-small"
+            >
+              t1
+            </span>
+            <button
+              class="copyButton"
+              title="clickToCopy"
+            >
+              <span
+                class="bp3-icon bp3-icon-duplicate StyledProps--main StyledProps--color StyledProps--color-grey350"
+                icon="duplicate"
+              >
+                <svg
+                  data-icon="duplicate"
+                  height="12"
+                  viewBox="0 0 16 16"
+                  width="12"
+                >
+                  <desc>
+                    duplicate
+                  </desc>
+                  <path
+                    d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--font-variation-small StyledProps--color StyledProps--color-grey400 StyledProps--padding-top-xsmall"
+        >
+          cf.targetDetail.createdOnDate
+        </p>
       </div>
-      <p
-        class="StyledProps--font StyledProps--main StyledProps--font-variation-small StyledProps--color StyledProps--color-grey400 StyledProps--padding-top-xsmall"
-      >
-        cf.targetDetail.createdOnDate
-      </p>
-    </div>
-    <div
-      class="StyledProps--font StyledProps--main optionsMenu"
-    >
-      <span
-        class="bp3-popover-wrapper"
+      <div
+        class="StyledProps--font StyledProps--main optionsMenu"
       >
         <span
-          class="bp3-popover-target"
+          class="bp3-popover-wrapper"
         >
-          <button
-            class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--without-shadow Button--withLeftIcon"
-            type="button"
+          <span
+            class="bp3-popover-target"
           >
-            <span
-              class="bp3-icon StyledProps--main"
-              data-icon="Options"
-            >
-              <svg
-                fill="none"
-                height="16"
-                viewBox="0 0 4 16"
-                width="16"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clip-rule="evenodd"
-                  d="M2 12.5a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zm2-12a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zM2 7a1 1 0 100 2 1 1 0 000-2zM0 8a2 2 0 114 0 2 2 0 01-4 0z"
-                  fill="currentColor"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
-          </button>
-        </span>
-      </span>
-    </div>
-    <dl
-      class="metaData"
-    >
-      <div
-        class="metaDataPair"
-      >
-        <dt>
-          environment
-        </dt>
-        <dd>
-          foobar
-        </dd>
-      </div>
-    </dl>
-  </div>
-  <div
-    class="StyledProps--font StyledProps--main PageBody--pageBody"
-    data-name="page-body"
-  >
-    <div
-      class="Layout--vertical StyledProps--main gitSyncContainer"
-      style="height: 100%;"
-    >
-      <div
-        class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-bottom StyledProps--border-color-grey200"
-      >
-        <div
-          class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-space-between StyledProps--flex-alignItems-center StyledProps--margin-left-xxlarge StyledProps--margin-top-large StyledProps--margin-bottom-large"
-          style="width: 230px;"
-        >
-          <div
-            class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
-            style="width: 400px;"
-          >
-            <div
-              class="StyledProps--font StyledProps--main gitRepoText"
+            <button
+              class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--without-shadow Button--withLeftIcon"
+              type="button"
             >
               <span
                 class="bp3-icon StyledProps--main"
-                data-icon="repository"
+                data-icon="Options"
               >
                 <svg
+                  fill="none"
                   height="16"
-                  viewBox="0 0 13 14"
+                  viewBox="0 0 4 16"
                   width="16"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M12.438 2.452l-.006-.017a.367.367 0 00-.067-.114l-.004-.007L10.409.125a.374.374 0 00-.28-.125H2.327a.376.376 0 00-.28.125L.095 2.314l-.005.008a.374.374 0 00-.066.113l-.006.017a.37.37 0 00-.018.11v11.064c0 .206.168.374.374.374h11.707a.375.375 0 00.375-.374V2.563a.369.369 0 00-.018-.111zm-7.91 7.86h3.4v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357zM.75 9.563V6.625h3.03v.357c0 .588.479 1.066 1.067 1.066H7.61c.588 0 1.066-.478 1.066-1.066v-.357h3.03v2.938H.75zm3.03-6.626v.357c0 .588.479 1.067 1.067 1.067H7.61c.589 0 1.067-.479 1.067-1.067v-.357h3.03v2.939H.75V2.937h3.03zm4.15 0v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357h3.4zm-3.4 3.688h3.4v.357a.318.318 0 01-.319.317H4.846a.317.317 0 01-.318-.317v-.357zM2.493.749h7.468l1.284 1.44H1.21L2.494.748zm9.213 12.502H.75v-2.939h3.03v.357c0 .589.479 1.067 1.067 1.067H7.61c.588 0 1.066-.478 1.066-1.067v-.357h3.03v2.94z"
+                    clip-rule="evenodd"
+                    d="M2 12.5a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zm2-12a1 1 0 100 2 1 1 0 000-2zm-2 1a2 2 0 114 0 2 2 0 01-4 0zM2 7a1 1 0 100 2 1 1 0 000-2zM0 8a2 2 0 114 0 2 2 0 01-4 0z"
                     fill="currentColor"
+                    fill-rule="evenodd"
                   />
                 </svg>
               </span>
-              <p
-                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-black"
-                style="--text-line-clamp: 1;"
-              />
-            </div>
-            <div
-              class="StyledProps--font StyledProps--main"
-            >
-              <div
-                class="bp3-popover-wrapper bp3-fill"
-              >
-                <div
-                  class="bp3-popover-target"
-                >
-                  <button
-                    class="branchActionButton"
-                  >
-                    <div
-                      class="StyledProps--font StyledProps--main branchActionButtonWrapper"
-                    >
-                      <span
-                        class="bp3-icon StyledProps--main"
-                        data-icon="git-new-branch"
-                      >
-                        <svg
-                          height="15"
-                          viewBox="0 0 13 16"
-                          width="15"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M10.406.003a2.399 2.399 0 00-.8 4.658v.94a.8.8 0 01-.8.8H4.001a2.413 2.413 0 00-.8.14V4.66A2.399 2.399 0 002.402 0a2.399 2.399 0 00-.8 4.661v6.678a2.399 2.399 0 00.8 4.661 2.399 2.399 0 00.8-4.661v-2.54a.8.8 0 01.8-.799h4.803a2.4 2.4 0 002.402-2.4v-.939a2.399 2.399 0 00-.8-4.658z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                      </span>
-                      <p
-                        class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey900"
-                      />
-                      <div
-                        class="StyledProps--font StyledProps--main gitStatusIcon"
-                      >
-                        <span
-                          class="bp3-popover-wrapper"
-                        >
-                          <span
-                            class="bp3-popover-target"
-                          >
-                            <span
-                              class="bp3-icon bp3-icon-full-circle StyledProps--main autoCommitDisabled"
-                              data-testid="auto-commit-status-icon"
-                              icon="full-circle"
-                              tabindex="0"
-                            >
-                              <svg
-                                data-icon="full-circle"
-                                height="10"
-                                viewBox="0 0 16 16"
-                                width="10"
-                              >
-                                <desc>
-                                  full-circle
-                                </desc>
-                                <path
-                                  d="M8 0a8 8 0 100 16A8 8 0 108 0z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </span>
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </button>
+          </span>
+        </span>
       </div>
+      <dl
+        class="metaData"
+      >
+        <div
+          class="metaDataPair"
+        >
+          <dt>
+            environment
+          </dt>
+          <dd>
+            foobar
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div
+      class="content"
+      data-name="page-body"
+    >
       <div
-        class="Layout--horizontal StyledProps--main"
+        class="Layout--vertical StyledProps--main gitSyncContainer"
         style="height: 100%;"
       >
         <div
-          class="StyledProps--font StyledProps--main targetSettings StyledProps--background-primaryBG"
-          style="overflow: auto; min-width: 480px; width: 480px; height: 100%;"
+          class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-bottom StyledProps--border-color-grey200"
         >
-          <h3
-            class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
-            level="3"
-            style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; padding-bottom: 0px;"
-          >
-            <span
-              class="align"
-              data-tooltip-id="ff_targetTargetSettings_heading"
-            >
-              cf.targetDetail.targetSetting
-            </span>
-          </h3>
           <div
-            class="StyledProps--font StyledProps--main tabContainer"
+            class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-space-between StyledProps--flex-alignItems-center StyledProps--margin-left-xxlarge StyledProps--margin-top-large StyledProps--margin-bottom-large"
+            style="width: 230px;"
           >
             <div
-              class="bp3-tabs Tabs--main Tabs--horizontal"
+              class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
+              style="width: 400px;"
             >
               <div
-                class="bp3-tab-list"
-                role="tablist"
+                class="StyledProps--font StyledProps--main gitRepoText"
               >
-                <div
-                  class="bp3-tab-indicator-wrapper"
-                  style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
+                <span
+                  class="bp3-icon StyledProps--main"
+                  data-icon="repository"
                 >
-                  <div
-                    class="bp3-tab-indicator"
-                  />
-                </div>
-                <div
-                  aria-controls="bp3-tab-panel_targetSettings_attributes"
-                  aria-disabled="false"
-                  aria-expanded="false"
-                  aria-selected="false"
-                  class="bp3-tab"
-                  data-tab-id="attributes"
-                  id="bp3-tab-title_targetSettings_attributes"
-                  role="tab"
-                  tabindex="0"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main tabTitle"
+                  <svg
+                    height="16"
+                    viewBox="0 0 13 14"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    cf.targetDetail.attributes
-                  </p>
-                </div>
-                <div
-                  aria-controls="bp3-tab-panel_targetSettings_segments"
-                  aria-disabled="false"
-                  aria-expanded="true"
-                  aria-selected="true"
-                  class="bp3-tab"
-                  data-tab-id="segments"
-                  id="bp3-tab-title_targetSettings_segments"
-                  role="tab"
-                  tabindex="0"
-                >
-                  <p
-                    class="StyledProps--font StyledProps--main tabTitle"
-                  >
-                    cf.shared.segments
-                  </p>
-                </div>
+                    <path
+                      d="M12.438 2.452l-.006-.017a.367.367 0 00-.067-.114l-.004-.007L10.409.125a.374.374 0 00-.28-.125H2.327a.376.376 0 00-.28.125L.095 2.314l-.005.008a.374.374 0 00-.066.113l-.006.017a.37.37 0 00-.018.11v11.064c0 .206.168.374.374.374h11.707a.375.375 0 00.375-.374V2.563a.369.369 0 00-.018-.111zm-7.91 7.86h3.4v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357zM.75 9.563V6.625h3.03v.357c0 .588.479 1.066 1.067 1.066H7.61c.588 0 1.066-.478 1.066-1.066v-.357h3.03v2.938H.75zm3.03-6.626v.357c0 .588.479 1.067 1.067 1.067H7.61c.589 0 1.067-.479 1.067-1.067v-.357h3.03v2.939H.75V2.937h3.03zm4.15 0v.357a.318.318 0 01-.318.318H4.846a.318.318 0 01-.318-.318v-.357h3.4zm-3.4 3.688h3.4v.357a.318.318 0 01-.319.317H4.846a.317.317 0 01-.318-.317v-.357zM2.493.749h7.468l1.284 1.44H1.21L2.494.748zm9.213 12.502H.75v-2.939h3.03v.357c0 .589.479 1.067 1.067 1.067H7.61c.588 0 1.066-.478 1.066-1.067v-.357h3.03v2.94z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+                <p
+                  class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-black"
+                  style="--text-line-clamp: 1;"
+                />
               </div>
               <div
-                aria-hidden="false"
-                aria-labelledby="bp3-tab-title_targetSettings_segments"
-                class="bp3-tab-panel tabPanel"
-                id="bp3-tab-panel_targetSettings_segments"
-                role="tabpanel"
+                class="StyledProps--font StyledProps--main"
               >
                 <div
-                  class="Layout--vertical StyledProps--main"
-                  style="gap: var(--spacing-xlarge);"
+                  class="bp3-popover-wrapper bp3-fill"
                 >
                   <div
-                    class="Layout--vertical Layout--layout-spacing-xsmall StyledProps--main"
+                    class="bp3-popover-target"
                   >
-                    <div
-                      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-space-between StyledProps--padding-left-small StyledProps--padding-right-small"
+                    <button
+                      class="branchActionButton"
                     >
                       <div
-                        class="Text--withDocsTooltip"
-                        data-tooltip-id="ff_targetTargetGroups_manuallyAdded"
-                      >
-                        <p
-                          class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
-                        >
-                          cf.targetDetail.manuallyAdded
-                        </p>
-                      </div>
-                      <button
-                        class="bp3-button Button--button StyledProps--font StyledProps--main addBtn Button--with-current-color Button--variation Button--variation-link"
-                        type="button"
+                        class="StyledProps--font StyledProps--main branchActionButtonWrapper"
                       >
                         <span
-                          class="bp3-button-text"
+                          class="bp3-icon StyledProps--main"
+                          data-icon="git-new-branch"
                         >
-                          cf.targetDetail.addToSegment
+                          <svg
+                            height="15"
+                            viewBox="0 0 13 16"
+                            width="15"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M10.406.003a2.399 2.399 0 00-.8 4.658v.94a.8.8 0 01-.8.8H4.001a2.413 2.413 0 00-.8.14V4.66A2.399 2.399 0 002.402 0a2.399 2.399 0 00-.8 4.661v6.678a2.399 2.399 0 00.8 4.661 2.399 2.399 0 00.8-4.661v-2.54a.8.8 0 01.8-.799h4.803a2.4 2.4 0 002.402-2.4v-.939a2.399 2.399 0 00-.8-4.658z"
+                              fill="currentColor"
+                            />
+                          </svg>
                         </span>
-                      </button>
-                    </div>
-                    <div
-                      class="StyledProps--font StyledProps--main StyledProps--padding-medium"
-                      style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
-                    >
-                      <p
-                        class="StyledProps--font StyledProps--main StyledProps--background-white StyledProps--padding-xsmall StyledProps--color StyledProps--color-grey400"
-                        style="text-align: center;"
-                      >
-                        cf.targetDetail.noSegmentAdded
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    class="Layout--vertical Layout--layout-spacing-xsmall StyledProps--main"
-                  >
-                    <div
-                      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-space-between StyledProps--padding-left-small StyledProps--padding-right-small"
-                    >
-                      <div
-                        class="Text--withDocsTooltip"
-                        data-tooltip-id="ff_targetTargetGroups_exclusionList"
-                      >
                         <p
-                          class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
+                          class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey900"
+                        />
+                        <div
+                          class="StyledProps--font StyledProps--main gitStatusIcon"
                         >
-                          cf.targetDetail.exclusionList
-                        </p>
+                          <span
+                            class="bp3-popover-wrapper"
+                          >
+                            <span
+                              class="bp3-popover-target"
+                            >
+                              <span
+                                class="bp3-icon bp3-icon-full-circle StyledProps--main autoCommitDisabled"
+                                data-testid="auto-commit-status-icon"
+                                icon="full-circle"
+                                tabindex="0"
+                              >
+                                <svg
+                                  data-icon="full-circle"
+                                  height="10"
+                                  viewBox="0 0 16 16"
+                                  width="10"
+                                >
+                                  <desc>
+                                    full-circle
+                                  </desc>
+                                  <path
+                                    d="M8 0a8 8 0 100 16A8 8 0 108 0z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </span>
+                          </span>
+                        </div>
                       </div>
-                      <button
-                        class="bp3-button Button--button StyledProps--font StyledProps--main addBtn Button--with-current-color Button--variation Button--variation-link"
-                        type="button"
-                      >
-                        <span
-                          class="bp3-button-text"
-                        >
-                          cf.targetDetail.excludeFromSegment
-                        </span>
-                      </button>
-                    </div>
-                    <div
-                      class="StyledProps--font StyledProps--main StyledProps--padding-medium"
-                      style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
-                    >
-                      <p
-                        class="StyledProps--font StyledProps--main StyledProps--background-white StyledProps--padding-xsmall StyledProps--color StyledProps--color-grey400"
-                        style="text-align: center;"
-                      >
-                        cf.targetDetail.noSegmentExcluded
-                      </p>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1068,73 +910,241 @@ exports[`TargetDetailPage TargetDetailPage should render its segments 1`] = `
           </div>
         </div>
         <div
-          class="StyledProps--font StyledProps--main StyledProps--flex"
-          style="overflow: auto; flex-grow: 1; background: rgb(252, 253, 253); flex-direction: column; height: 100%;"
+          class="Layout--horizontal StyledProps--main"
+          style="height: 100%;"
         >
           <div
-            class="Layout--horizontal StyledProps--main"
-            style="width: 100%; position: sticky; top: 0px; z-index: 2; background: rgb(252, 253, 253);"
+            class="StyledProps--font StyledProps--main targetSettings StyledProps--background-primaryBG"
+            style="overflow: auto; min-width: 480px; width: 480px; height: 100%;"
           >
             <h3
               class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
               level="3"
-              style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; align-self: baseline;"
+              style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; padding-bottom: 0px;"
             >
               <span
                 class="align"
-                data-tooltip-id="ff_targetFlagSettings_heading"
+                data-tooltip-id="ff_targetTargetSettings_heading"
               >
-                cf.targetDetail.flagSetting
+                cf.targetDetail.targetSetting
               </span>
             </h3>
-            <span
-              style="flex-grow: 1;"
-            />
             <div
-              class="StyledProps--font StyledProps--main"
-              style="align-self: baseline; height: 35px;"
+              class="StyledProps--font StyledProps--main tabContainer"
             >
               <div
-                class="bp3-input-group ui-search-box ExpandingSearchInput--main    ExpandingSearchInput--light"
-                data-name=""
+                class="bp3-tabs Tabs--main Tabs--horizontal"
               >
-                <span
-                  class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
-                  data-icon="thinner-search"
+                <div
+                  class="bp3-tab-list"
+                  role="tablist"
                 >
-                  <svg
-                    fill="none"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    width="14"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="bp3-tab-indicator-wrapper"
+                    style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                   >
-                    <path
-                      d="M7.125 13.25c1.617 0 3.32-.695 4.375-1.75L15 15l-3.5-3.5c1.021-1.005 1.75-2.894 1.75-4.375a6.125 6.125 0 10-6.125 6.125z"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                    <div
+                      class="bp3-tab-indicator"
                     />
-                  </svg>
-                </span>
-                <input
-                  class="bp3-input  ExpandingSearchInput--filter"
-                  dir="auto"
-                  placeholder="cf.targetDetail.searchPlaceholder"
-                  style="padding-right: 0px;"
-                  type="search"
-                  value=""
-                />
+                  </div>
+                  <div
+                    aria-controls="bp3-tab-panel_targetSettings_attributes"
+                    aria-disabled="false"
+                    aria-expanded="false"
+                    aria-selected="false"
+                    class="bp3-tab"
+                    data-tab-id="attributes"
+                    id="bp3-tab-title_targetSettings_attributes"
+                    role="tab"
+                    tabindex="0"
+                  >
+                    <p
+                      class="StyledProps--font StyledProps--main tabTitle"
+                    >
+                      cf.targetDetail.attributes
+                    </p>
+                  </div>
+                  <div
+                    aria-controls="bp3-tab-panel_targetSettings_segments"
+                    aria-disabled="false"
+                    aria-expanded="true"
+                    aria-selected="true"
+                    class="bp3-tab"
+                    data-tab-id="segments"
+                    id="bp3-tab-title_targetSettings_segments"
+                    role="tab"
+                    tabindex="0"
+                  >
+                    <p
+                      class="StyledProps--font StyledProps--main tabTitle"
+                    >
+                      cf.shared.segments
+                    </p>
+                  </div>
+                </div>
+                <div
+                  aria-hidden="false"
+                  aria-labelledby="bp3-tab-title_targetSettings_segments"
+                  class="bp3-tab-panel tabPanel"
+                  id="bp3-tab-panel_targetSettings_segments"
+                  role="tabpanel"
+                >
+                  <div
+                    class="Layout--vertical StyledProps--main"
+                    style="gap: var(--spacing-xlarge);"
+                  >
+                    <div
+                      class="Layout--vertical Layout--layout-spacing-xsmall StyledProps--main"
+                    >
+                      <div
+                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-space-between StyledProps--padding-left-small StyledProps--padding-right-small"
+                      >
+                        <div
+                          class="Text--withDocsTooltip"
+                          data-tooltip-id="ff_targetTargetGroups_manuallyAdded"
+                        >
+                          <p
+                            class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
+                          >
+                            cf.targetDetail.manuallyAdded
+                          </p>
+                        </div>
+                        <button
+                          class="bp3-button Button--button StyledProps--font StyledProps--main addBtn Button--with-current-color Button--variation Button--variation-link"
+                          type="button"
+                        >
+                          <span
+                            class="bp3-button-text"
+                          >
+                            cf.targetDetail.addToSegment
+                          </span>
+                        </button>
+                      </div>
+                      <div
+                        class="StyledProps--font StyledProps--main StyledProps--padding-medium"
+                        style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
+                      >
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--background-white StyledProps--padding-xsmall StyledProps--color StyledProps--color-grey400"
+                          style="text-align: center;"
+                        >
+                          cf.targetDetail.noSegmentAdded
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="Layout--vertical Layout--layout-spacing-xsmall StyledProps--main"
+                    >
+                      <div
+                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-space-between StyledProps--padding-left-small StyledProps--padding-right-small"
+                      >
+                        <div
+                          class="Text--withDocsTooltip"
+                          data-tooltip-id="ff_targetTargetGroups_exclusionList"
+                        >
+                          <p
+                            class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
+                          >
+                            cf.targetDetail.exclusionList
+                          </p>
+                        </div>
+                        <button
+                          class="bp3-button Button--button StyledProps--font StyledProps--main addBtn Button--with-current-color Button--variation Button--variation-link"
+                          type="button"
+                        >
+                          <span
+                            class="bp3-button-text"
+                          >
+                            cf.targetDetail.excludeFromSegment
+                          </span>
+                        </button>
+                      </div>
+                      <div
+                        class="StyledProps--font StyledProps--main StyledProps--padding-medium"
+                        style="box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.08), 0px 0.5px 2px rgba(96, 97, 112, 0.16); border-radius: 8px;"
+                      >
+                        <p
+                          class="StyledProps--font StyledProps--main StyledProps--background-white StyledProps--padding-xsmall StyledProps--color StyledProps--color-grey400"
+                          style="text-align: center;"
+                        >
+                          cf.targetDetail.noSegmentExcluded
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div
-            class="StyledProps--font StyledProps--main"
-            style="flex-grow: 1; width: 100%; display: flex; flex-direction: column; position: relative;"
-          />
+            class="StyledProps--font StyledProps--main StyledProps--flex"
+            style="overflow: auto; flex-grow: 1; background: rgb(252, 253, 253); flex-direction: column; height: 100%;"
+          >
+            <div
+              class="Layout--horizontal StyledProps--main"
+              style="width: 100%; position: sticky; top: 0px; z-index: 2; background: rgb(252, 253, 253);"
+            >
+              <h3
+                class="StyledProps--font StyledProps--font-h3 StyledProps--main StyledProps--padding-xxlarge"
+                level="3"
+                style="font-size: 14px; color: rgb(34, 39, 45); font-weight: 600; align-self: baseline;"
+              >
+                <span
+                  class="align"
+                  data-tooltip-id="ff_targetFlagSettings_heading"
+                >
+                  cf.targetDetail.flagSetting
+                </span>
+              </h3>
+              <span
+                style="flex-grow: 1;"
+              />
+              <div
+                class="StyledProps--font StyledProps--main"
+                style="align-self: baseline; height: 35px;"
+              >
+                <div
+                  class="bp3-input-group ui-search-box ExpandingSearchInput--main    ExpandingSearchInput--light"
+                  data-name=""
+                >
+                  <span
+                    class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
+                    data-icon="thinner-search"
+                  >
+                    <svg
+                      fill="none"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      width="14"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.125 13.25c1.617 0 3.32-.695 4.375-1.75L15 15l-3.5-3.5c1.021-1.005 1.75-2.894 1.75-4.375a6.125 6.125 0 10-6.125 6.125z"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    class="bp3-input  ExpandingSearchInput--filter"
+                    dir="auto"
+                    placeholder="cf.targetDetail.searchPlaceholder"
+                    style="padding-right: 0px;"
+                    type="search"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main"
+              style="flex-grow: 1; width: 100%; display: flex; flex-direction: column; position: relative;"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 `;

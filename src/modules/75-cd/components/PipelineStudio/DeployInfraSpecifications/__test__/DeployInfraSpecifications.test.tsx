@@ -6,8 +6,7 @@
  */
 
 import React from 'react'
-import { act, fireEvent, render, waitFor } from '@testing-library/react'
-import { RUNTIME_INPUT_VALUE } from '@harness/uicore'
+import { render } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
 import {
   PipelineContextInterface,
@@ -16,100 +15,11 @@ import {
 import { StageType } from '@pipeline/utils/stageHelpers'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import * as useValidationErrors from '@pipeline/components/PipelineStudio/PiplineHooks/useValidationErrors'
-import { InfraDeploymentType } from '@cd/components/PipelineSteps/PipelineStepsUtil'
 import { envs } from './mocks'
 import overridePipelineContext from './overrideSetPipeline.json'
-import provisionerInfo from './provisionerInfo.json'
 import DeployInfraSpecifications from '../DeployInfraSpecifications'
 
-const getSpec = (type: string) => {
-  switch (type) {
-    case InfraDeploymentType.KubernetesDirect:
-      return {
-        serviceConfig: {
-          serviceDefinition: {
-            type: 'Kubernetes'
-          }
-        },
-        infrastructure: {
-          infrastructureDefinition: {
-            type: 'KubernetesDirect',
-            ...provisionerInfo
-          }
-        }
-      }
-    case InfraDeploymentType.KubernetesGcp:
-      return {
-        serviceConfig: {
-          serviceDefinition: {
-            type: 'Kubernetes'
-          }
-        },
-        infrastructure: {
-          infrastructureDefinition: {
-            type: 'KubernetesGcp'
-          }
-        }
-      }
-    case InfraDeploymentType.ServerlessAwsLambda:
-      return {
-        serviceConfig: {
-          serviceDefinition: {
-            type: 'ServerlessAwsLambda'
-          }
-        },
-        infrastructure: {
-          infrastructureDefinition: {
-            type: 'ServerlessAwsLambda',
-            spec: {
-              connectorRef: RUNTIME_INPUT_VALUE,
-              region: RUNTIME_INPUT_VALUE,
-              stage: RUNTIME_INPUT_VALUE
-            }
-          }
-        }
-      }
-    case InfraDeploymentType.ServerlessAzureFunctions:
-      return {
-        serviceConfig: {
-          serviceDefinition: {
-            type: 'ServerlessAzureFunctions'
-          }
-        },
-        infrastructure: {
-          infrastructureDefinition: {
-            type: 'ServerlessAzureFunctions',
-            spec: {
-              connectorRef: RUNTIME_INPUT_VALUE,
-              stage: RUNTIME_INPUT_VALUE
-            }
-          }
-        }
-      }
-
-    case InfraDeploymentType.ServerlessGoogleFunctions:
-      return {
-        serviceConfig: {
-          serviceDefinition: {
-            type: 'ServerlessGoogleFunctions'
-          }
-        },
-        infrastructure: {
-          infrastructureDefinition: {
-            type: 'ServerlessGoogleFunctions',
-            spec: {
-              connectorRef: RUNTIME_INPUT_VALUE,
-              stage: RUNTIME_INPUT_VALUE
-            }
-          }
-        }
-      }
-    default:
-      return {}
-  }
-}
-
-const getOverrideContextValue = (type?: string): PipelineContextInterface => {
+const getOverrideContextValue = (): PipelineContextInterface => {
   return {
     ...overridePipelineContext,
     getStageFromPipeline: jest.fn().mockReturnValue({
@@ -118,8 +28,7 @@ const getOverrideContextValue = (type?: string): PipelineContextInterface => {
           name: 'Stage 3',
           identifier: 's3',
           type: StageType.DEPLOY,
-          description: '',
-          spec: getSpec(type || '')
+          description: ''
         }
       }
     }),
@@ -181,30 +90,6 @@ describe('Deploy infra specifications test', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test(`Should Environment section be present`, () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={getOverrideContextValue()}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    expect(getByText('environment')).toBeTruthy()
-  })
-
-  test(`Should Infrastructure definition section be present`, () => {
-    const { getByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={getOverrideContextValue()}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    expect(getByText('pipelineSteps.deploy.infrastructure.infraDefinition')).toBeTruthy()
-  })
-
   test('Should call submitFormsForTab when errorMap is not empty', async () => {
     const errorContextProvider = {
       state: {} as any,
@@ -227,198 +112,5 @@ describe('Deploy infra specifications test', () => {
     )
 
     expect(errorContextProvider.submitFormsForTab).toBeCalled()
-  })
-
-  test(`Should updateEnvStep be called upon StepWidget change`, async () => {
-    const context = getOverrideContextValue()
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[0])
-
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test(`Aws card should be rendering properly`, async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.ServerlessAwsLambda)
-    const { findByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    const awsCard = await waitFor(() => findByText('common.aws'))
-    expect(awsCard).toBeTruthy()
-  })
-
-  test(`KubernetesGcp card should be rendering properly`, async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesGcp)
-    const { findByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const changeButton = await waitFor(() => findByText('Change'))
-    expect(changeButton).toBeTruthy()
-    act(() => {
-      fireEvent.click(changeButton)
-    })
-    const awsCard = await waitFor(() => findByText('pipelineSteps.deploymentTypes.kubernetes'))
-    expect(awsCard).toBeTruthy()
-  })
-
-  test(`KubernetesDirect card should be rendering properly`, async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesDirect)
-    const { findByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    const awsCard = await waitFor(() => findByText('pipelineSteps.deploymentTypes.kubernetes'))
-    expect(awsCard).toBeTruthy()
-  })
-
-  test(`Azure card should be rendering properly`, async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.ServerlessAzureFunctions)
-    const { findByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-
-    const awsCard = await waitFor(() => findByText('common.azure'))
-    expect(awsCard).toBeTruthy()
-  })
-
-  test(`cleanUpEmptyProvisioner is getting called properly`, async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesDirect)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[1])
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test('Should Accordion be shown when non-serverless deployment type is selected', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesDirect)
-    const { container } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    expect(container.getElementsByClassName('accordion')[0]).toBeInTheDocument()
-    expect(container.getElementsByClassName('tabHeading')[0]).toBeInTheDocument()
-  })
-
-  test('Should call resetInfrastructureDefinition upon selecting new infrastructureType', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesDirect)
-    const { findByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const changeButton = await waitFor(() => findByText('Change'))
-    expect(changeButton).toBeTruthy()
-    act(() => {
-      fireEvent.click(changeButton)
-    })
-    const kubernetesGcp = await waitFor(() => findByText('pipelineSteps.deploymentTypes.gk8engine'))
-    act(() => {
-      fireEvent.click(kubernetesGcp)
-    })
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test('Should call onUpdateInfrastructureDefinition upon typing something on region field for Aws', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.ServerlessAwsLambda)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[1])
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test('Should call onUpdateInfrastructureDefinition upon typing something on region field for KubernetesDirect', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesDirect)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[2])
-    expect(context.updateStage).toBeCalled()
-  })
-  test('Should call onUpdateInfrastructureDefinition upon typing something on region field for KubernetesGcp', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.KubernetesGcp)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[2])
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test('Should call onUpdateInfrastructureDefinition upon typing something on region field for ServerlessGoogleFunctions', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.ServerlessGoogleFunctions)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[1])
-    expect(context.updateStage).toBeCalled()
-  })
-
-  test('Should call onUpdateInfrastructureDefinition upon typing something on region field for ServerlessAzureFunctions', async () => {
-    const context = getOverrideContextValue(InfraDeploymentType.ServerlessAzureFunctions)
-    const { findAllByText } = render(
-      <TestWrapper>
-        <PipelineContext.Provider value={context}>
-          <DeployInfraSpecifications />
-        </PipelineContext.Provider>
-      </TestWrapper>
-    )
-    const button = await waitFor(() => findAllByText('Step Widget button'))
-    fireEvent.click(button[1])
-    expect(context.updateStage).toBeCalled()
   })
 })

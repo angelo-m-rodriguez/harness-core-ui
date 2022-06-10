@@ -35,6 +35,7 @@ import {
   getTextWithSearchMarkers,
   usePipelineVariables
 } from '@pipeline/components/PipelineVariablesContext/PipelineVariablesContext'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import AddEditCustomVariable from './AddEditCustomVariable'
 import type { VariableState } from './AddEditCustomVariable'
 import { VariableType } from './CustomVariableUtils'
@@ -103,6 +104,7 @@ export function CustomVariableEditable(props: CustomVariableEditableProps): Reac
   const updatedPath = path?.replace('pipeline.', '')
   const tableRef = React.useRef()
   const { openNestedPath } = useNestedAccordion()
+  const { NG_EXECUTION_INPUT } = useFeatureFlags()
 
   React.useLayoutEffect(() => {
     if (tableRef.current) {
@@ -280,7 +282,10 @@ export function CustomVariableEditable(props: CustomVariableEditableProps): Reac
                                 variableName={variable.name || /* istanbul ignore next */ ''}
                                 onChange={(value, defaultValue) => {
                                   setFieldValue(`variables[${index}].value`, value)
-                                  setFieldValue(`variables[${index}].default`, defaultValue)
+                                  setFieldValue(
+                                    `variables[${index}].default`,
+                                    NG_EXECUTION_INPUT ? undefined : defaultValue
+                                  )
                                 }}
                                 isReadonly={readonly}
                               />

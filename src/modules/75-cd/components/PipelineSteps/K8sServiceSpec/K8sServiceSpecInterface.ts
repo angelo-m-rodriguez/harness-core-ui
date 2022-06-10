@@ -25,6 +25,7 @@ export interface K8SDirectServiceStep extends ServiceSpec {
   handleTabChange?: (tab: string) => void
   customStepProps?: Record<string, any>
   deploymentType?: ServiceDefinition['type']
+  isReadonlyServiceMode?: boolean
 }
 export interface KubernetesServiceInputFormProps {
   initialValues: K8SDirectServiceStep

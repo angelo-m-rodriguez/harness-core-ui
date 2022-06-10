@@ -46,9 +46,12 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           return
         }
         props?.fireEvent?.({
-          ...props,
-          entityType: DiagramType.Default,
-          type: Event.ClickNode
+          type: Event.ClickNode,
+          target: event.target,
+          data: {
+            entityType: DiagramType.Default,
+            ...props
+          }
         })
       }}
       onMouseDown={e => e.stopPropagation()}

@@ -364,7 +364,7 @@ export default function PipelineDeploymentList(props: PipelineDeploymentListProp
   const { isCDOverview } = props
   const { isGitSyncEnabled } = useAppStore()
 
-  const { page, filterIdentifier, myDeployments, status, repoIdentifier, repoName, branch, searchTerm } = queryParams
+  const { page, filterIdentifier, myDeployments, status, repoIdentifier, branch, searchTerm } = queryParams
 
   const hasFilters = getHasFilters({
     queryParams,
@@ -413,9 +413,9 @@ export default function PipelineDeploymentList(props: PipelineDeploymentListProp
       filterIdentifier: hasFilterIdentifier ? filterIdentifier : undefined,
       myDeployments,
       status,
-      repoIdentifier: isGitSyncEnabled ? repoIdentifier : repoName,
       branch,
-      searchTerm
+      searchTerm,
+      ...(isGitSyncEnabled ? { repoIdentifier } : {})
     },
     queryParamStringifyOptions: {
       arrayFormat: 'repeat'

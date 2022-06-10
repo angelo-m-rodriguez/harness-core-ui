@@ -34,6 +34,7 @@ import { RecommendationOverviewStats, ResourceType, useFetchRecommendationQuery 
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { PAGE_NAMES, USER_JOURNEY_EVENTS } from '@ce/TrackingEventsConstants'
 import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import CustomizeRecommendationsImg from './images/custom-recommendations.gif'
 
 import RecommendationDetails from '../../components/RecommendationDetails/RecommendationDetails'
@@ -199,6 +200,8 @@ const RecommendationDetailsPage: React.FC = () => {
     value: TimeRangeType.LAST_7,
     label: TimeRange.LAST_7
   })
+
+  useDocumentTitle([getString('ce.recommendation.sideNavText'), recommendationName], true)
 
   const [qualityOfService, setQualityOfService] = useQueryParamsState<QualityOfService>(
     'QoS',

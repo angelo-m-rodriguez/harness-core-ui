@@ -13,6 +13,7 @@ import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useGetMonitoredService } from 'services/cv'
 import routes from '@common/RouteDefinitions'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { getCVMonitoringServicesSearchParam, getErrorMessage } from '@cv/utils/CommonUtils'
 import DetailsBreadcrumb from '@cv/pages/monitored-service/views/DetailsBreadcrumb'
 import DetailsHeaderTitle from '@cv/pages/monitored-service/views/DetailsHeaderTitle'
@@ -175,6 +176,9 @@ const ServiceHealthAndConfiguration: React.FC = () => {
 
 const CVMonitoredServiceDetails: React.FC = () => {
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.monitoredServices.title')])
+
   const { identifier } = useParams<{ identifier?: string }>()
 
   if (identifier) {

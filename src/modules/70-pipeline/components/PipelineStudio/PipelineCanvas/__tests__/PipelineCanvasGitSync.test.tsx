@@ -373,7 +373,7 @@ describe('PipelineCanvas tests', () => {
           const portalDiv = document.getElementsByClassName('bp3-portal')[0] as HTMLElement
           expect(getByText(portalDiv, 'common.gitSync.pushingChangestoBranch')).toBeInTheDocument()
           expect(getByText(portalDiv, 'common.updating')).toBeInTheDocument()
-          expect(getByText(portalDiv, 'Invalid Request: Error while saving pipeline')).toBeDefined()
+          expect(getByText(portalDiv, 'Cannot update file as it has conflicts with remote')).toBeDefined()
         })
       })
     })

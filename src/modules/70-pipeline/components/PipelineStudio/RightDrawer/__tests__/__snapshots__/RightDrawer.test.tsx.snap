@@ -130,7 +130,7 @@ exports[`Right Drawer tests StepConfig tests Step save succeeds with allowed key
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

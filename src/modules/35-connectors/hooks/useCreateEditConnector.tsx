@@ -17,7 +17,6 @@ import {
   ConnectorInfoDTO,
   CreateConnectorQueryParams,
   EntityGitDetails,
-  GovernanceMetadata,
   useCreateConnector,
   useUpdateConnector
 } from 'services/cd-ng'
@@ -25,8 +24,11 @@ import type { ConnectorCreateEditProps } from '@connectors/constants'
 import { Entities } from '@common/interfaces/GitSyncInterface'
 import { useStrings } from 'framework/strings'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
 import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from './useConnectorGovernanceModal'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { doesGovernanceHasErrorOrWarning } from '@governance/utils'
 export interface BuildPayloadProps {
   projectIdentifier?: string
   orgIdentifier?: string
@@ -41,9 +43,6 @@ interface UseCreateEditConnector {
   afterSuccessHandler: (data: UseSaveSuccessResponse) => void
   gitDetails?: EntityGitDetails
 }
-interface HandleCreateOrEditConnectorRtn extends UseSaveSuccessResponse {
-  governanceMetaData?: GovernanceMetadata
-}
 interface OnInitiateConnectorCreateEditProps<T> {
   buildPayload: (data: T & BuildPayloadProps) => Connector
   connectorFormData: T & BuildPayloadProps
@@ -55,10 +54,9 @@ export default function useCreateEditConnector<T>(props: UseCreateEditConnector)
   const { showError, showSuccess } = useToaster()
   const { getString } = useStrings()
   const { getRBACErrorMessage } = useRBACError()
-  const { hideOrShowGovernanceErrorModal, doesGovernanceHasError } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   const [connectorPayload, setConnectorPayload] = useState<Connector>({})
   const [connectorResponse, setConnectorResponse] = useState<UseSaveSuccessResponse>()
   const [connectorData, setConnectorData] = useState<T & BuildPayloadProps>({} as T & BuildPayloadProps)
@@ -96,7 +94,7 @@ export default function useCreateEditConnector<T>(props: UseCreateEditConnector)
     connectorFormData: T & BuildPayloadProps,
     payload: ConnectorCreateEditProps,
     objectId?: EntityGitDetails['objectId']
-  ): Promise<HandleCreateOrEditConnectorRtn> => {
+  ): Promise<UseSaveSuccessResponse> => {
     const { gitData } = payload
     const data = payload.payload || connectorPayload
     let queryParams: CreateConnectorQueryParams = {}
@@ -119,12 +117,23 @@ export default function useCreateEditConnector<T>(props: UseCreateEditConnector)
         })
       : await createConnector(data, { queryParams: queryParams })
     setConnectorResponse(response)
-    const hasGovernanceError = doesGovernanceHasError(response)
-    const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-    const returnVal: HandleCreateOrEditConnectorRtn = {
-      status: !hasGovernanceError ? response.status : 'FAILURE',
+    let { governanceMetaDataHasError, governanceMetaDataHasWarning } = doesGovernanceHasErrorOrWarning(
+      response.data?.governanceMetadata
+    )
+    if (!opaFlagEnabled) {
+      governanceMetaDataHasError = false
+      governanceMetaDataHasWarning = false
+    }
+    const onSuccessGovernanceCall = () => {
+      props.afterSuccessHandler(response)
+    }
+    if (opaFlagEnabled && response.data?.governanceMetadata) {
+      conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, onSuccessGovernanceCall)
+    }
+    const returnVal: UseSaveSuccessResponse = {
+      status: !governanceMetaDataHasError ? response.status : 'FAILURE',
       nextCallback: () => {
-        if (canGoToNextStep) {
+        if (!governanceMetaDataHasError && !governanceMetaDataHasWarning) {
           props.afterSuccessHandler(response)
         }
       },
@@ -166,12 +175,10 @@ export default function useCreateEditConnector<T>(props: UseCreateEditConnector)
           } else {
             handleCreateOrEdit(connectorFormData, { payload: payload }) /* Handling non-git flow */
               .then(res => {
-                if (res && res.status?.toString().toLowerCase() === 'success') {
-                  if (!(res.governanceMetaData && res.governanceMetaData?.status === 'error')) {
-                    props.isEditMode
-                      ? showSuccess(getString('connectors.updatedSuccessfully'))
-                      : showSuccess(getString('connectors.createdSuccessfully'))
-                  }
+                if (res.status === 'SUCCESS') {
+                  props.isEditMode
+                    ? showSuccess(getString('connectors.updatedSuccessfully'))
+                    : showSuccess(getString('connectors.createdSuccessfully'))
                   res.nextCallback?.()
                 }
               })

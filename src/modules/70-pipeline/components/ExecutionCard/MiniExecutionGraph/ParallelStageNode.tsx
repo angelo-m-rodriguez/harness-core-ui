@@ -9,7 +9,7 @@ import React from 'react'
 import { sortBy } from 'lodash-es'
 import { Popover } from '@blueprintjs/core'
 
-import type { ModulePathParams, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
+import type { ExecutionPathProps, ModulePathParams, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
 import type { GraphLayoutNode } from 'services/pipeline-ng'
 import type { ExecutionStatus } from '@pipeline/utils/statusHelpers'
 
@@ -47,10 +47,12 @@ const STEP_DETAILS_LIMIT = 4
 export interface ParallelNodeProps extends PipelinePathProps, ModulePathParams {
   stages: GraphLayoutNode[]
   planExecutionId: string
+  source: ExecutionPathProps['source']
 }
 
 export function ParallelStageNode(props: ParallelNodeProps): React.ReactElement {
-  const { stages, accountId, orgIdentifier, projectIdentifier, pipelineIdentifier, planExecutionId, module } = props
+  const { stages, accountId, orgIdentifier, projectIdentifier, pipelineIdentifier, planExecutionId, module, source } =
+    props
   const sortedStages = sortBy(stages, stage => 100 - StagePriority[stage.status as ExecutionStatus])
 
   return (
@@ -71,6 +73,7 @@ export function ParallelStageNode(props: ParallelNodeProps): React.ReactElement 
     >
       <StageNode
         stage={sortedStages[0]}
+        source={source}
         {...{ accountId, orgIdentifier, projectIdentifier, module, pipelineIdentifier, planExecutionId }}
       />
       <React.Fragment>
@@ -78,6 +81,7 @@ export function ParallelStageNode(props: ParallelNodeProps): React.ReactElement 
           <StageNode
             key={i}
             stage={stage}
+            source={source}
             {...{ accountId, orgIdentifier, projectIdentifier, module, pipelineIdentifier, planExecutionId }}
           />
         ))}

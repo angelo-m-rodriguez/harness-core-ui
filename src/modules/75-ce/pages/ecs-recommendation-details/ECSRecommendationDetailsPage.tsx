@@ -18,6 +18,7 @@ import { ViewTimeRange } from '@ce/components/RecommendationDetails/constants'
 import { ResourceType, useFetchRecommendationQuery, RecommendationOverviewStats } from 'services/ce/services'
 import { GET_DATE_RANGE } from '@ce/utils/momentUtils'
 import routes from '@common/RouteDefinitions'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useStrings } from 'framework/strings'
 import ECSRecommendationDetails, {
   EcsRecommendationDtoWithCurrentResources
@@ -35,6 +36,9 @@ const ECSRecommendationDetailsPage: React.FC = () => {
     recommendationName: string
     accountId: string
   }>()
+
+  useDocumentTitle([getString('ce.recommendation.sideNavText'), recommendationName], true)
+
   const [timeRange, setTimeRange] = useQueryParamsState<TimeRangeValue>('timeRange', {
     value: TimeRangeType.LAST_7,
     label: TimeRange.LAST_7

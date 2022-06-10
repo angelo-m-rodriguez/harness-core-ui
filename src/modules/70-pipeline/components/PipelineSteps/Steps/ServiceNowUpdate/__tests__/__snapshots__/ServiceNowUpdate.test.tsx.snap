@@ -266,6 +266,75 @@ exports[`ServiceNow Update tests Basic snapshot - deploymentform mode: serviceNo
         </div>
       </div>
     </div>
+    <div>
+      <div
+        class="bp3-form-group deploymentViewMedium"
+      >
+        <label
+          class="bp3-label"
+          for="spec.fields[0].value"
+        >
+          <span
+            class="Tooltip--acenter"
+            data-tooltip-id="stepTestUtilForm_spec.fields[0].value"
+          >
+            Description
+          </span>
+           
+          <span
+            class="bp3-text-muted"
+          />
+        </label>
+        <div
+          class="bp3-form-content"
+        >
+          <div
+            class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+          >
+            <div
+              class="bp3-input-group MultiTypeInput--input"
+            >
+              <input
+                autocomplete="off"
+                class="bp3-input"
+                name="spec.fields[0].value"
+                placeholder="common.valuePlaceholder"
+                type="text"
+                value=""
+              />
+            </div>
+            <span
+              class="bp3-popover-wrapper MultiTypeInput--wrapper"
+            >
+              <span
+                class="bp3-popover-target"
+              >
+                <button
+                  class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                >
+                  <span
+                    class="bp3-icon StyledProps--main"
+                    data-icon="fixed-input"
+                  >
+                    <svg
+                      height="12"
+                      viewBox="0 0 9 9"
+                      width="12"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
     <p
       class="StyledProps--font StyledProps--main"
     >
@@ -657,7 +726,7 @@ exports[`ServiceNow Update tests Basic snapshot - inputset mode: input set with 
       </div>
     </div>
     <div
-      class="bp3-form-group deploymentViewMedium"
+      class="bp3-form-group bp3-intent-danger deploymentViewMedium"
     >
       <label
         class="bp3-label"
@@ -720,6 +789,106 @@ exports[`ServiceNow Update tests Basic snapshot - inputset mode: input set with 
             </span>
           </span>
         </div>
+        <div
+          class="bp3-form-helper-text"
+        >
+          <div
+            class="FormError--errorDiv"
+            data-name="spec.ticketNumber"
+          >
+            <span
+              class="bp3-icon StyledProps--main FormError--errorTextIcon StyledProps--intent-danger"
+              data-icon="circle-cross"
+            >
+              <svg
+                height="12"
+                viewBox="0 0 13 13"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M.167 6.501a6.333 6.333 0 1012.666 0 6.333 6.333 0 00-12.666 0zm4.071-3.003l2.26 2.263 2.264-2.263c.495-.495 1.236.248.741.743L7.24 6.504l2.254 2.258c.495.495-.247 1.238-.742.743L6.497 7.246 4.238 9.505c-.495.495-1.236-.249-.741-.744l2.258-2.258-2.259-2.262c-.494-.495.248-1.238.742-.743z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="FormError--error"
+            >
+              pipeline.serviceNowApprovalStep.validations.issueNumber
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div
+        class="bp3-form-group deploymentViewMedium"
+      >
+        <label
+          class="bp3-label"
+          for="spec.fields[0].value"
+        >
+          <span
+            class="Tooltip--acenter"
+            data-tooltip-id="stepTestUtilForm_spec.fields[0].value"
+          >
+            Description
+          </span>
+           
+          <span
+            class="bp3-text-muted"
+          />
+        </label>
+        <div
+          class="bp3-form-content"
+        >
+          <div
+            class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+          >
+            <div
+              class="bp3-input-group MultiTypeInput--input"
+            >
+              <input
+                autocomplete="off"
+                class="bp3-input"
+                name="spec.fields[0].value"
+                placeholder="common.valuePlaceholder"
+                type="text"
+                value=""
+              />
+            </div>
+            <span
+              class="bp3-popover-wrapper MultiTypeInput--wrapper"
+            >
+              <span
+                class="bp3-popover-target"
+              >
+                <button
+                  class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                >
+                  <span
+                    class="bp3-icon StyledProps--main"
+                    data-icon="fixed-input"
+                  >
+                    <svg
+                      height="12"
+                      viewBox="0 0 9 9"
+                      width="12"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <p
@@ -731,7 +900,8 @@ exports[`ServiceNow Update tests Basic snapshot - inputset mode: input set with 
       {
   "spec": {
     "connectorRef": "pipeline.serviceNowApprovalStep.validations.connectorRef",
-    "ticketType": "pipeline.serviceNowApprovalStep.validations.ticketType"
+    "ticketType": "pipeline.serviceNowApprovalStep.validations.ticketType",
+    "ticketNumber": "pipeline.serviceNowApprovalStep.validations.issueNumber"
   }
 }
     </pre>
@@ -932,7 +1102,7 @@ exports[`ServiceNow Update tests Edit Stage - readonly view for Template type: e
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1594,7 +1764,7 @@ exports[`ServiceNow Update tests Edit stage - readony view: editstage-readonly 1
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -2613,6 +2783,75 @@ exports[`ServiceNow Update tests deploymentform readonly mode: serviceNow-update
               </button>
             </span>
           </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div
+        class="bp3-form-group deploymentViewMedium"
+      >
+        <label
+          class="bp3-label"
+          for="spec.fields[0].value"
+        >
+          <span
+            class="Tooltip--acenter"
+            data-tooltip-id="stepTestUtilForm_spec.fields[0].value"
+          >
+            Description
+          </span>
+           
+          <span
+            class="bp3-text-muted"
+          />
+        </label>
+        <div
+          class="bp3-form-content"
+        >
+          <div
+            class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+          >
+            <div
+              class="bp3-input-group MultiTypeInput--input"
+            >
+              <input
+                autocomplete="off"
+                class="bp3-input"
+                name="spec.fields[0].value"
+                placeholder="common.valuePlaceholder"
+                type="text"
+                value=""
+              />
+            </div>
+            <span
+              class="bp3-popover-wrapper MultiTypeInput--wrapper"
+            >
+              <span
+                class="bp3-popover-target"
+              >
+                <button
+                  class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                >
+                  <span
+                    class="bp3-icon StyledProps--main"
+                    data-icon="fixed-input"
+                  >
+                    <svg
+                      height="12"
+                      viewBox="0 0 9 9"
+                      width="12"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </div>

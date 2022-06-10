@@ -86,7 +86,7 @@ const InlineVarFile = (props: InlineVarFileProps) => {
             varFile: Yup.object().shape({
               identifier: Yup.string().required(getString('common.validation.identifierIsRequired')),
               spec: Yup.object().shape({
-                content: Yup.string().required(getString('cd.contentRequired'))
+                content: Yup.string().required(getString('common.contentRequired'))
               })
             })
           })}

@@ -36,7 +36,7 @@ const getArtifactsHeaderTooltipId = (selectedDeploymentType: ServiceDefinition['
 }
 
 const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> = ({
-  initialValues: { stageIndex = 0, setupModeType, deploymentType },
+  initialValues: { stageIndex = 0, setupModeType, deploymentType, isReadonlyServiceMode },
   factory,
   readonly
 }) => {
@@ -72,6 +72,7 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
             <ManifestSelection
               isPropagating={isPropagating}
               deploymentType={selectedDeploymentType}
+              isReadonlyServiceMode={isReadonlyServiceMode as boolean}
               readonly={!!readonly}
             />
           </Card>
@@ -90,6 +91,7 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
             <ArtifactsSelection
               isPropagating={isPropagating}
               deploymentType={selectedDeploymentType}
+              isReadonlyServiceMode={isReadonlyServiceMode as boolean}
               readonly={!!readonly}
             />
           </Card>
@@ -107,6 +109,7 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
             formName={'addEditServiceCustomVariableForm'}
             factory={factory as any}
             isPropagating={isPropagating}
+            isReadonlyServiceMode={isReadonlyServiceMode as boolean}
             readonly={!!readonly}
           />
         </Card>

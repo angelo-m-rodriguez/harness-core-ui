@@ -10,12 +10,7 @@ import { cloneDeep } from 'lodash-es'
 import type { ConnectionConfigProps } from '@connectors/components/CreateConnector/CommonCVConnector/constants'
 import { ValueType } from '@secrets/components/TextReference/TextReference'
 import { setSecretField } from '@secrets/utils/SecretField'
-import type {
-  CustomHealthConnectorDTO,
-  GetSecretV2QueryParams,
-  CustomHealthKeyAndValue,
-  SecretRefData
-} from 'services/cd-ng'
+import type { CustomHealthConnectorDTO, GetSecretV2QueryParams, CustomHealthKeyAndValue } from 'services/cd-ng'
 import type { UseStringsReturn } from 'framework/strings'
 import type { BaseCompFields, PlainEntity, EncryptedEntity } from './CustomHealthHeadersAndParams.types'
 import { DefaultHeadersAndParamsInitialValues } from './CustomHealthHeadersAndParams.constants'
@@ -102,7 +97,7 @@ function getSpecHeaderAndEntity(entity: PlainEntity | EncryptedEntity): CustomHe
   if (entity?.value?.fieldType === ValueType.ENCRYPTED && entity.key && entity.value.secretField?.referenceString) {
     return {
       valueEncrypted: true,
-      encryptedValueRef: entity.value.secretField.referenceString as SecretRefData,
+      encryptedValueRef: entity.value.secretField.referenceString,
       key: entity.key
     }
   } else if (entity?.value?.fieldType === ValueType.TEXT && entity.key && entity.value.textField) {

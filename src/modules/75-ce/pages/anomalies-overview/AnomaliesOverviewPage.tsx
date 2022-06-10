@@ -39,6 +39,7 @@ import type { TimeRangeFilterType } from '@ce/types'
 import AnomaliesSettings from '@ce/components/AnomaliesSettings/AnomaliesSettings'
 import { PAGE_NAMES } from '@ce/TrackingEventsConstants'
 import { useTelemetry } from '@common/hooks/useTelemetry'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 
 const getTimeFilters = (from: number, to: number) => {
   return [
@@ -75,6 +76,8 @@ const AnomaliesOverviewPage: React.FC = () => {
     to: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[1].format(CE_DATE_FORMAT_INTERNAL),
     from: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[0].format(CE_DATE_FORMAT_INTERNAL)
   })
+
+  useDocumentTitle(getString('ce.anomalyDetection.sideNavText'), true)
 
   const [sortByObj, setSortByObj] = useState<SortByObjInterface>({})
 

@@ -720,3 +720,33 @@
     }
   }
 }
+
+.stageOptions {
+  width: 250px;
+  margin-left: var(--spacing-5);
+
+  input {
+    padding-left: var(--spacing-small) !important;
+    padding-right: 40px !important;
+  }
+
+  [icon='warning-sign'] {
+    color: var(--red-800) !important;
+    position: absolute;
+    left: 200px;
+  }
+
+  p {
+    width: 205px;
+  }
+}
+
+.repositionWarning [icon='warning-sign'] {
+  position: absolute;
+  left: 216px;
+}
+
+.stepOptions {
+  width: 250px;
+  margin-left: var(--spacing-5);
+}

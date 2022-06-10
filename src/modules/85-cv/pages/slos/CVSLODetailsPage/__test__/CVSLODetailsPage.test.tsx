@@ -69,7 +69,7 @@ const renderComponent = (): RenderResult => {
 }
 
 describe('Test cases for CVSLODetailsPage', () => {
-  test('it should render the component and take a snapshot', () => {
+  test('it should render the component with correct title and take a snapshot', () => {
     jest
       .spyOn(cvServices, 'useGetSLODetails')
       .mockReturnValue({ data: responseSLODashboardDetail, loading: false } as any)
@@ -77,6 +77,8 @@ describe('Test cases for CVSLODetailsPage', () => {
     const { container } = renderComponent()
 
     expect(container).toMatchSnapshot()
+
+    expect(document.title).toBe('cv.srmTitle | cv.slos.title | harness')
   })
 
   test('it should handle the loading state', () => {

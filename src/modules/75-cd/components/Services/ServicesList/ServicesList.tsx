@@ -31,7 +31,8 @@ import { DeploymentTypeIcons } from '@cd/components/DeploymentTypeIcons/Deployme
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { NewEditServiceModal } from '@cd/components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
 import { ServiceTabs } from '../utils/ServiceUtils'
 import css from '@cd/components/Services/ServicesList/ServiceList.module.scss'
@@ -298,7 +299,7 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
   const { getRBACErrorMessage } = useRBACError()
   const { getString } = useStrings()
   const history = useHistory()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
 
   const { mutate: deleteService } = useDeleteServiceV2({
     queryParams: {
@@ -390,7 +391,7 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
   const handleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     e.stopPropagation()
     setMenuOpen(false)
-    if (NG_SVC_ENV_REDESIGN) {
+    if (isSvcEnvEntityEnabled) {
       history.push({
         pathname: routes.toServiceStudio({
           accountId,

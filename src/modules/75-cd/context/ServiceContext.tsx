@@ -16,6 +16,7 @@ export interface ServiceContextValues {
   isServiceEntityModalView: boolean
   isServiceEntityPage: boolean
   isServiceCreateModalView: boolean
+  serviceCacheKey: string
 }
 
 export const ServiceContext = React.createContext<ServiceContextValues>({
@@ -24,7 +25,8 @@ export const ServiceContext = React.createContext<ServiceContextValues>({
   onServiceCreate: () => noop,
   isServiceEntityModalView: false,
   isServiceEntityPage: false,
-  isServiceCreateModalView: false
+  isServiceCreateModalView: false,
+  serviceCacheKey: ''
 })
 
 export interface ServiceContextProviderProps extends ServiceContextValues {

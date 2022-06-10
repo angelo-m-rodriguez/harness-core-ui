@@ -369,6 +369,7 @@ environments:
     noKeysFoundTitle: There are no SDK keys for this environment
     noKeysFoundMessage: Create an <a href="https://ngdocs.harness.io/article/1j7pdkqh7j-create-a-feature-flag#step_3_create_an_sdk_key" target="_blank" rel="noreferrer"> SDK key</a> for this environment so that your application can connect to our FF client. We support SDK keys for multiple programming languages.
     redactionWarning: Your secret will be redacted once you leave the page. Please make sure to copy and store your secret.
+    lastUsed: 'Last Used'
 auditLogs:
   title: Audit Logs
   summaryHeading: 'Module: Feature Flags • Project: {{project}} • Environment: {{environment}}'

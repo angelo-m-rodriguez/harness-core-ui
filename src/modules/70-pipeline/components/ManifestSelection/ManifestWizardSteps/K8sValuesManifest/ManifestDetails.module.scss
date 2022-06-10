@@ -80,12 +80,9 @@
 }
 .drag {
   cursor: move;
+  margin-top: var(--spacing-small) !important;
 }
-
-.dragging {
-  background-color: var(--yellow-450) !important;
-}
-
-.dragOver {
-  border-top: 2px solid var(--primary-7);
+.text {
+  width: 12px;
+  margin-top: var(--spacing-small) !important;
 }

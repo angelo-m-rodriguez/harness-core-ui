@@ -38,7 +38,7 @@ exports[`Artifact Trigger Config Panel  tests Renders/snapshots edit render 1`] 
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="artifactTriggerConfigPanel_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -455,7 +455,7 @@ exports[`Artifact Trigger Config Panel  tests Renders/snapshots inital Render 1`
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="artifactTriggerConfigPanel_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

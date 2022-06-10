@@ -251,7 +251,7 @@ exports[`<NewProviderModal /> tests snapshot test for new provider modal 1`] = `
                               >
                                 <div
                                   class="Text--withDocsTooltip"
-                                  data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                                  data-tooltip-id="universalInputNameWithId"
                                 >
                                   <p
                                     class="StyledProps--font StyledProps--main"

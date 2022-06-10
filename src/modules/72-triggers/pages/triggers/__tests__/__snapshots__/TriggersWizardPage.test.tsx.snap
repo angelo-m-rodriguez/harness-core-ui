@@ -1515,7 +1515,7 @@ exports[`TriggersWizardPage Triggers tests Renders/snapshots OnEdit Render - Git
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_webhook_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -2538,7 +2538,7 @@ exports[`TriggersWizardPage Triggers tests Renders/snapshots OnEdit Render - Git
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_webhook_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -3518,7 +3518,7 @@ exports[`TriggersWizardPage Triggers tests Renders/snapshots OnEdit Render - Sch
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_scheduled_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

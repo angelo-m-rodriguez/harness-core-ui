@@ -1,0 +1,75 @@
+/*
+ * Copyright 2022 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
+.k8VarMargin {
+  margin-bottom: 10px;
+}
+
+.addManifest {
+  padding: 0px !important;
+}
+
+.modal {
+  [class*='bp3-dialog-header'] button {
+    z-index: 2;
+  }
+}
+
+.deleteBtn {
+  margin-top: var(--spacing-small) !important;
+}
+
+.drag {
+  cursor: move;
+  padding: 10px;
+  margin-top: 15px !important;
+  margin-right: 15px !important;
+}
+.text {
+  color: var(--grey-1000);
+  padding: 10px;
+  margin-top: var(--spacing-medium) !important;
+  margin-right: 15px !important;
+}
+.crossIcon {
+  position: absolute;
+  right: var(--spacing-large);
+  top: var(--spacing-large);
+}
+
+.createConnectorWizard {
+  flex-grow: 1;
+  display: flex;
+}
+
+.addMarginTop {
+  margin-top: var(--spacing-medium) !important;
+}
+.configField {
+  display: flex;
+  justify-content: space-between;
+  width: 60% !important;
+  height: 32px;
+  background: var(--grey-0);
+  border: 1px solid rgb(228, 228, 235);
+  align-items: center;
+  padding: 10px;
+  margin-top: 10px !important;
+}
+
+.manifestId {
+  font-weight: normal;
+  width: 180px;
+}
+
+.k8ValLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--grey-600) !important;
+  font-family: sans-serif, inter !important;
+}

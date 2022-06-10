@@ -40,7 +40,7 @@ interface RetryHistoryProps {
 
 function RetryHistory({ canExecute, showRetryHistory, canRetry }: RetryHistoryProps): React.ReactElement {
   const { getString } = useStrings()
-  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module } =
+  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
   const history = useHistory()
   const { clear, showPrimary } = useToaster()
@@ -65,7 +65,8 @@ function RetryHistory({ canExecute, showRetryHistory, canRetry }: RetryHistoryPr
           projectIdentifier,
           executionIdentifier: latestExecutionId.data.latestExecutionId || '',
           accountId,
-          module
+          module,
+          source
         })
       )
     }
@@ -117,7 +118,8 @@ function RetryHistory({ canExecute, showRetryHistory, canRetry }: RetryHistoryPr
           projectIdentifier,
           executionIdentifier: planExecutionId || '',
           accountId,
-          module
+          module,
+          source
         })
       )
     }

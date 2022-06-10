@@ -21,7 +21,7 @@ exports[`Save Cache S3 Step Edit View edit mode works 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="savedS3Cache_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -740,7 +740,7 @@ exports[`Save Cache S3 Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="savedS3Cache_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1487,7 +1487,7 @@ exports[`Save Cache S3 Step Edit View should render properly 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="savedS3Cache_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

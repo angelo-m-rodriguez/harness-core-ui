@@ -377,7 +377,7 @@ exports[`HealthSource table Should Render all the componetns in edit mode for cl
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="defineHealthsource_healthSourceIdentifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"
@@ -1015,7 +1015,7 @@ exports[`HealthSource table Should Render all the componetns in edit mode for lo
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="defineHealthsource_healthSourceIdentifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"
@@ -1629,7 +1629,7 @@ exports[`HealthSource table should matchsnapshot 1`] = `
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="defineHealthsource_healthSourceIdentifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"

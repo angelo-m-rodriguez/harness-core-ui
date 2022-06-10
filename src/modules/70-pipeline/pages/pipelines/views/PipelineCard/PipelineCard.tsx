@@ -262,7 +262,8 @@ export function PipelineCard({
           projectIdentifier,
           executionIdentifier: executionId,
           accountId,
-          module
+          module,
+          source: 'executions'
         })
       )
     }

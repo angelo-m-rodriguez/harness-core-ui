@@ -42,6 +42,7 @@ function ServiceStudio(): React.ReactElement | null {
         onServiceCreate={noop}
         isServiceEntityPage={true}
         isServiceCreateModalView={false}
+        serviceCacheKey={''}
       >
         <ServiceConfigurationWrapper
           summaryPanel={<ServiceDetailsSummary />}

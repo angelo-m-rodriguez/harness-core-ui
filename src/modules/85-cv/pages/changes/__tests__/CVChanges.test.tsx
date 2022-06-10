@@ -165,7 +165,7 @@ jest.mock('services/cv', () => ({
 }))
 
 describe('Unit tests for CVChanges', () => {
-  test('Verify if all the fields are rendered correctly CVChanges', async () => {
+  test('Verify if all the fields are rendered correctly CVChanges with correct document title', async () => {
     const { container, getByText } = render(<WrapperComponent />)
     expect(container).toMatchSnapshot()
     expect(getByText('services: all')).toBeDefined()
@@ -173,6 +173,7 @@ describe('Unit tests for CVChanges', () => {
     expect(getByText('cv.cvChanges.sourceFilterDefault: all')).toBeDefined()
     expect(getByText('cv.cvChanges.changeTypeFilterDefault: all')).toBeDefined()
     expect(mockFetch).toHaveBeenCalledTimes(2)
+    expect(document.title).toBe('cv.srmTitle | changes | harness')
   })
 
   test('change a time period', async () => {

@@ -16,7 +16,7 @@ exports[`Test Cloudformation rollback stack should error on submit 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -306,7 +306,7 @@ exports[`Test Cloudformation rollback stack should render edit view as new step 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -563,7 +563,7 @@ exports[`Test Cloudformation rollback stack should render rollback stack view 1`
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -857,7 +857,7 @@ exports[`Test Cloudformation rollback stack should show runtime component 1`] = 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1160,7 +1160,7 @@ exports[`Test Cloudformation rollback stack should submit rollback form 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1419,7 +1419,7 @@ exports[`Test Cloudformation rollback stack should update field values 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

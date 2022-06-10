@@ -53,3 +53,10 @@ resyncButtonText: Resync
 editConfigButtonText: Edit config
 configSaveToaster: Full sync config is saved
 newGitExperienceMessage: The new Git Experience has been enabled on this Project. You do not need to enable Git Management for a Project manually. Now you can store Pipelines in Git or in Harness when you create them. For Git, select the **Remote** option. For Harness, select **Inline** option.
+gitSyncForm:
+  yamlPathLabel: YAML Path
+  yamlPathRequired: YAML path is required
+  yamlPathInvalid: YAML path should begin with .harness/ and have a valid file/folder name and yaml extension
+  enterYamlPath: Enter YAML path
+  useExistingYaml: Use Existing YAML
+  createNewYaml: Create New YAML

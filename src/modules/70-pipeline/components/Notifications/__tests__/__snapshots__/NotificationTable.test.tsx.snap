@@ -819,7 +819,7 @@ exports[`testing notification method selecting slack as notification method from
                       class="Tooltip--acenter"
                       data-tooltip-id="configureSlackNotifications_webhookUrl"
                     >
-                      notifications.labelWebhookUrl
+                      notifications.slackwebhookUrl
                     </span>
                      
                     <span
@@ -851,7 +851,9 @@ exports[`testing notification method selecting slack as notification method from
                     data-tooltip-id="testSlackConfigButton"
                   >
                     <button
-                      class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color"
+                      class="bp3-button bp3-disabled Button--button StyledProps--font StyledProps--main Button--with-current-color"
+                      disabled=""
+                      tabindex="-1"
                       type="button"
                     >
                       <span
@@ -912,7 +914,9 @@ exports[`testing notification method selecting slack as notification method from
                     </span>
                   </button>
                   <button
-                    class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+                    class="bp3-button bp3-disabled Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-primary"
+                    disabled=""
+                    tabindex="-1"
                     type="submit"
                   >
                     <span

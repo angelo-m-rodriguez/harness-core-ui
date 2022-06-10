@@ -7,6 +7,7 @@
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import cx from 'classnames'
 import {
   Card,
   Checkbox,
@@ -75,13 +76,16 @@ import {
 } from '@common/components/EntityReference/EntityReference'
 import { useGetTemplate } from 'services/template-ng'
 import { Page } from '@common/exports'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { yamlParse } from '@common/utils/YamlHelperMethods'
+import type { DeployServiceData } from '@cd/components/PipelineSteps/DeployServiceStep/DeployServiceInterface'
+import { useCache } from '@common/hooks/useCache'
+import { FeatureFlag } from '@common/featureFlags'
 import stageCss from '../DeployStageSetupShell/DeployStage.module.scss'
 
 export default function DeployServiceSpecifications(props: React.PropsWithChildren<unknown>): JSX.Element {
   const { getString } = useStrings()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
   const queryParams = useParams<ProjectPathProps & ServicePathProps>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
 
@@ -131,6 +135,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   const { stages } = getFlattenedStages(pipeline)
   const { submitFormsForTab } = useContext(StageErrorContext)
   const { errorMap } = useValidationErrors()
+  const { setCache } = useCache()
 
   const memoizedQueryParam = useMemo(
     () => ({
@@ -161,7 +166,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
         !stage?.stage?.spec?.serviceConfig?.serviceDefinition &&
         !stage?.stage?.spec?.serviceConfig?.useFromStage?.stage &&
         stage?.stage?.type === StageType.DEPLOY &&
-        !NG_SVC_ENV_REDESIGN
+        !isSvcEnvEntityEnabled
       ) {
         setDefaultServiceSchema()
       } else if (
@@ -191,6 +196,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
         const stageData = produce(stage, draft => {
           if (draft) {
             set(draft, 'stage.spec', {
+              ...draft.stage?.spec,
               deploymentType: serviceInfo?.type,
               service: {
                 serviceRef: parsedYaml.service?.identifier
@@ -201,6 +207,10 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
         if (stageData?.stage) {
           debounceUpdateStage(stageData?.stage)
         }
+        //setting service data in cache to reuse it in manifests, artifacts, variables
+        const serviceCacheId = `${pipeline.identifier}-${selectedStageId}-service`
+        setCache(serviceCacheId, serviceInfo)
+
         setSelectedDeploymentType(serviceInfo.type as ServiceDeploymentType)
         setIsReadOnlyView(true)
       }
@@ -242,7 +252,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       stages.forEach((item, index) => {
         if (index < stageIndex) {
           //If the new stage or stage template has new service entity(stage.spec.service.serviceRef), propogate from stage is not allowed.
-          if (NG_SVC_ENV_REDESIGN) {
+          if (isSvcEnvEntityEnabled) {
             /* istanbul ignore else */
             if (
               (item.stage?.spec as any)?.service?.serviceRef ||
@@ -415,7 +425,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       })
       await debounceUpdateStage(stageData?.stage)
 
-      if (NG_SVC_ENV_REDESIGN && value.serviceRef) {
+      if (isSvcEnvEntityEnabled && value.serviceRef) {
         refetchServiceData({
           pathParams: {
             serviceIdentifier: value.serviceRef
@@ -544,8 +554,21 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
     return ''
   }, [stage])
 
+  const getDeployServiceWidgetInitValues = React.useCallback((): DeployServiceData => {
+    const initValues: DeployServiceData = {
+      service: getServiceEntityBasedService(),
+      isNewServiceEntity: isNewServiceEntity(),
+      serviceRef: scope === Scope.PROJECT ? getServiceEntityBasedServiceRef() : RUNTIME_INPUT_VALUE
+    }
+    if (isNewServiceEntity()) {
+      initValues.deploymentType = (stage?.stage?.spec as any).deploymentType
+    }
+    return initValues
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const isNewServiceEntity = (): boolean => {
-    return (NG_SVC_ENV_REDESIGN as boolean) && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
+    return (isSvcEnvEntityEnabled as boolean) && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
   }
 
   const shouldRenderDeployServiceStep = (): boolean => {
@@ -559,7 +582,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   return (
     <div className={stageCss.deployStage} ref={scrollRef}>
       <DeployServiceErrors domRef={scrollRef as React.MutableRefObject<HTMLElement | undefined>} />
-      <div className={stageCss.contentSection}>
+      <div className={cx(stageCss.contentSection, stageCss.paddedSection)}>
         {previousStageList.length > 0 && (
           <Container margin={{ bottom: 'xlarge', left: 'xlarge' }}>
             <PropagateWidget
@@ -598,11 +621,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
                 <StepWidget
                   type={StepType.DeployService}
                   readonly={isReadonly || scope !== Scope.PROJECT}
-                  initialValues={{
-                    service: getServiceEntityBasedService(),
-                    isNewServiceEntity: isNewServiceEntity(),
-                    serviceRef: scope === Scope.PROJECT ? getServiceEntityBasedServiceRef() : RUNTIME_INPUT_VALUE
-                  }}
+                  initialValues={getDeployServiceWidgetInitValues()}
                   allowableTypes={allowableTypes}
                   onUpdate={data => updateService(data)}
                   factory={factory}
@@ -618,7 +637,8 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
                 </div>
                 <SelectDeploymentType
                   selectedDeploymentType={selectedDeploymentType}
-                  isReadonly={isReadonly}
+                  viewContext="setup"
+                  isReadonly={isReadonly || isReadonlyView}
                   handleDeploymentTypeChange={handleDeploymentTypeChange}
                 />
                 <Layout.Horizontal>
@@ -628,7 +648,8 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
                     initialValues={{
                       stageIndex,
                       setupModeType,
-                      deploymentType: selectedDeploymentType as ServiceDefinition['type']
+                      deploymentType: selectedDeploymentType as ServiceDefinition['type'],
+                      isReadonlyServiceMode: isReadonlyView
                     }}
                     allowableTypes={allowableTypes}
                     type={getStepTypeByDeploymentType(defaultTo(selectedDeploymentType, ''))}

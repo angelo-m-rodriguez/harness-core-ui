@@ -8,24 +8,24 @@
 import React, { useState } from 'react'
 import { Dialog, Divider, Intent } from '@blueprintjs/core'
 import * as yup from 'yup'
-import { isEqual, zip, orderBy, clone } from 'lodash-es'
+import { clone, isEqual } from 'lodash-es'
 import {
   Button,
-  ButtonVariation,
-  Text,
   ButtonProps,
+  ButtonVariation,
   Container,
-  Layout,
   FlexExpander,
   Formik,
   FormikForm as Form,
   FormInput,
-  SelectOption,
   Heading,
-  Icon
-} from '@wings-software/uicore'
+  Icon,
+  Layout,
+  SelectOption,
+  Text
+} from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
-import { FontVariation, Color } from '@harness/design-system'
+import { Color, FontVariation } from '@harness/design-system'
 import { getErrorMessage, useValidateVariationValues } from '@cf/utils/CFUtils'
 import { useStrings } from 'framework/strings'
 import { useToaster } from '@common/exports'
@@ -42,6 +42,7 @@ import { useGovernance } from '@cf/hooks/useGovernance'
 import usePlanEnforcement from '@cf/hooks/usePlanEnforcement'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import patch from '../../utils/instructions'
+import { getVariationInstructions } from './getVariationInstructions'
 
 import SaveFlagToGitSubForm from '../SaveFlagToGitSubForm/SaveFlagToGitSubForm'
 
@@ -126,34 +127,10 @@ export const EditVariationsModal: React.FC<EditVariationsModalProps> = ({
     const onSubmit = (values: typeof initialValues): void => {
       const { defaultOffVariation, defaultOnVariation, variations } = values
 
-      if (!isEqual(variations, initialValues.variations) && initialValues.variations.length > variations.length) {
-        const _variations = orderBy(variations, 'name', 'asc')
-        const initialVariations = orderBy(initialValues.variations, 'name', 'asc')
-        const _missing = initialVariations.map(initial => {
-          const isVariantAvailable = _variations.filter(el => el.identifier === initial.identifier)
-          if (isVariantAvailable && isVariantAvailable.length === 0) {
-            return initial?.identifier
-          }
-        })
+      if (!isEqual(variations, initialValues.variations)) {
+        patch.feature.addAllInstructions(getVariationInstructions(initialValues.variations, variations))
+      }
 
-        patch.feature.addAllInstructions(_missing.filter(x => x !== undefined).map(patch.creators.deleteVariant))
-      }
-      if (!isEqual(variations, initialValues.variations) && initialValues.variations.length < variations.length) {
-        patch.feature.addAllInstructions(
-          zip(variations, initialValues.variations)
-            .filter(([cur, prev]) => !isEqual(cur, prev))
-            .map(tuple => tuple[0] as NonNullable<Variation>)
-            .map(patch.creators.addVariation)
-        )
-      }
-      if (!isEqual(variations, initialValues.variations) && initialValues.variations.length === variations.length) {
-        patch.feature.addAllInstructions(
-          zip(variations, initialValues.variations)
-            .filter(([cur, prev]) => !isEqual(cur, prev))
-            .map(tuple => tuple[0] as NonNullable<Variation>)
-            .map(patch.creators.updateVariation)
-        )
-      }
       if (!isEqual(defaultOffVariation, initialValues.defaultOffVariation)) {
         patch.feature.addInstruction(patch.creators.setDefaultOffVariation(defaultOffVariation as string))
       }

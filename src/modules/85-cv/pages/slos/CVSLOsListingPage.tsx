@@ -43,6 +43,7 @@ import {
 } from 'services/cv'
 import RbacButton from '@rbac/components/Button/Button'
 import { getErrorMessage } from '@cv/utils/CommonUtils'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import SLOCardSelect from './components/SLOCardSelect/SLOCardSelect'
 import type { CVSLOsListingPageProps, SLORiskFilter } from './CVSLOsListingPage.types'
 import {
@@ -70,6 +71,12 @@ import css from './CVSLOsListingPage.module.scss'
 const CVSLOsListingPage: React.FC<CVSLOsListingPageProps> = ({ monitoredService }) => {
   const history = useHistory()
   const { getString } = useStrings()
+
+  useDocumentTitle([
+    getString('cv.srmTitle'),
+    monitoredService?.identifier ? getString('cv.monitoredServices.title') : getString('cv.slos.title')
+  ])
+
   const { showError, showSuccess } = useToaster()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
 

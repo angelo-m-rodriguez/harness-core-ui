@@ -127,7 +127,7 @@ describe('Unit tests for createting monitored source', () => {
     } as any)
   })
 
-  test('Health source table and environment services compoenet renders ', async () => {
+  test('Health source table and environment services compoenet renders with correct document title', async () => {
     jest.spyOn(cvServices, 'useGetMonitoredService').mockImplementation(
       () =>
         ({
@@ -157,6 +157,7 @@ describe('Unit tests for createting monitored source', () => {
 
     // Table cv.healthSource.defineYourSource
     expect(getByText('cv.healthSource.defineYourSource')).toBeDefined()
+    expect(document.title).toBe('cv.srmTitle | cv.monitoredServices.title | harness')
   })
 
   test('should render loading state', () => {

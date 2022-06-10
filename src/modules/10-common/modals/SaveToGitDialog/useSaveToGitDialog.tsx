@@ -107,7 +107,9 @@ export function useSaveToGitDialog<T = Record<string, string>>(
       />
     ),
     finalLabel: getErrorInfoFromErrorObject(error),
-    error: error?.data
+    error: error?.data || error
+    // ErrorHandling intergrated APIs do not have data, errors are as hints, explanations in responsemessages[]
+    // So, for better handling passing error and ProgressOverlay takes care of responsemessages[]
   }
   const fromBranch = defaultTo(prMetaData?.branch, '')
   const toBranch = defaultTo(prMetaData?.targetBranch, '')

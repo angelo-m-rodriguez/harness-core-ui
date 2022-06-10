@@ -33,10 +33,12 @@ import { CE_AWS_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import ConnectorInstructionList from '@connectors/common/ConnectorCreationInstructionList/ConnectorCreationInstructionList'
 import { connectorHelperUrls } from '@connectors/constants'
-import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
 import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import type { FeaturesString } from './CrossAccountRoleStep1'
 import type { CEAwsConnectorDTO } from './OverviewStep'
 import css from '../CreateCeAwsConnector.module.scss'
@@ -57,10 +59,9 @@ const CrossAccountRoleStep2: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
   const { mutate: updateConnector } = useUpdateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   const { data: awsUrlTemplateData, loading: awsUrlTemplateLoading } = useAwsaccountconnectiondetail({
     queryParams: { accountIdentifier: accountId }
   })
@@ -116,8 +117,11 @@ const CrossAccountRoleStep2: React.FC<StepProps<CEAwsConnectorDTO>> = props => {
         if (response.status != 'SUCCESS') {
           throw response as Failure
         }
-        const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-        if (canGoToNextStep) {
+        if (opaFlagEnabled && response.data?.governanceMetadata) {
+          conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+            nextStep?.(prevStepData)
+          })
+        } else {
           nextStep?.(prevStepData)
         }
       }

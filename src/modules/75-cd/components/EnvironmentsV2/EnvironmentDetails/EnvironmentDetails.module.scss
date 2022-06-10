@@ -13,6 +13,22 @@
   }
 }
 
+.clusterDataTable {
+  padding-top: var(--spacing-small);
+  width: 100%;
+
+  :global(.TableV2--header) {
+    padding: var(--spacing-xlarge) var(--spacing-xxxlarge) !important;
+  }
+
+  :global(.TableV2--body) {
+    padding: 0 var(--spacing-xlarge);
+    max-height: calc(100% - 128px);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
 .environmentDetailsBody {
   :global {
     .bp3-tab-list {
@@ -69,7 +85,7 @@
   margin-top: var(--spacing-3);
   display: block;
   padding: var(--spacing-7);
-  width: 100%;
+  width: 80%;
 
   .thumbnailSelect {
     &:global(.bp3-form-group) {

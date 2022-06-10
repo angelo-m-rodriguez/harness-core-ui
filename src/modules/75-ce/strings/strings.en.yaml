@@ -687,6 +687,7 @@ perspectives:
       memoryUnitPrice: 'Memory Unit Price'
       podCapacity: 'Pod Capacity'
   nodeDetails:
+    header: Node Details
     nodeDetailsText: 'NODE DETAILS'
     aggregation:
       average: Average

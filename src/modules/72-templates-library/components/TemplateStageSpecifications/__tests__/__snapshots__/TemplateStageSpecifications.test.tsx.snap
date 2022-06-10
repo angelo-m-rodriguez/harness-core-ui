@@ -31,7 +31,7 @@ exports[`<TemplateStageSpecifications /> tests snapshot test with error 1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="templateStageOverview_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -192,7 +192,7 @@ exports[`<TemplateStageSpecifications /> tests snapshot test with no template in
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="templateStageOverview_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -303,7 +303,7 @@ exports[`<TemplateStageSpecifications /> tests snapshot test with template input
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="templateStageOverview_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

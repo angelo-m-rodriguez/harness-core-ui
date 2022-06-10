@@ -296,7 +296,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
             connectorRef: defaultTo(connectorRef, ''),
             repoName: defaultTo(repoName, ''),
             storeType: defaultTo(storeType, StoreType.INLINE),
-            filePath: inputSet.gitDetails?.filePath
+            filePath: defaultTo(inputSet.gitDetails?.filePath, formikRef.current?.values.filePath)
           }}
           enableReinitialize={true}
           formName="inputSetForm"

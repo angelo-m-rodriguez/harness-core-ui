@@ -36,9 +36,10 @@ export function getServiceDeploymentTypeSchema(
 }
 
 interface SelectServiceDeploymentTypeProps {
-  selectedDeploymentType?: ServiceDeploymentType
   isReadonly: boolean
   handleDeploymentTypeChange: (deploymentType: ServiceDeploymentType) => void
+  selectedDeploymentType?: ServiceDeploymentType
+  viewContext?: string
 }
 
 interface CardListProps {
@@ -298,7 +299,7 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
       )
       return (
         <Layout.Horizontal margin={{ top: 'medium' }}>
-          <Layout.Vertical border={{ right: true }} margin={{ right: 'huge' }} padding={{ right: 'huge' }}>
+          <Layout.Vertical padding={props.viewContext ? { right: 'huge' } : { right: 'small' }}>
             <div className={cx(stageCss.tabSubHeading, 'ng-tooltip-native')}>
               {getString('common.currentlyAvailable')}
             </div>
@@ -309,56 +310,59 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
               selectedValue={selectedDeploymentType}
             />
           </Layout.Vertical>
-
-          <Layout.Vertical>
-            <Layout.Horizontal>
-              <div className={deployServiceCsss.comingSoonBanner}>{getString('common.comingSoon')}</div>
-              <div
-                className={cx(stageCss.tabSubHeading, deployServiceCsss.currentGenSupported, 'ng-tooltip-native')}
-                data-tooltip-id="supportedInFirstGeneration"
-              >
-                {getString('common.currentlySupportedOn')}
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => {
-                    setSelectedDeploymentTypeInCG('')
-                    showCurrentGenSwitcherModal()
-                  }}
-                  style={{ paddingLeft: '4px' }}
+          {!!props.viewContext && (
+            <Layout.Vertical border={{ left: true }} padding={{ left: 'huge' }}>
+              <Layout.Horizontal>
+                <div className={deployServiceCsss.comingSoonBanner}>{getString('common.comingSoon')}</div>
+                <div
+                  className={cx(stageCss.tabSubHeading, 'ng-tooltip-native')}
+                  data-tooltip-id="supportedInFirstGeneration"
                 >
-                  {getString('common.firstGeneration')}
-                </a>
-                <HarnessDocTooltip tooltipId="supportedInFirstGeneration" useStandAlone={true} />
-              </div>
-              <Popover
-                position="auto"
-                interactionKind={PopoverInteractionKind.HOVER}
-                content={tooltipContent}
-                className={Classes.DARK}
-              >
-                <span className={deployServiceCsss.tooltipIcon}>
-                  <Icon size={12} name="tooltip-icon" color={Color.PRIMARY_7} />
-                </span>
-              </Popover>
-            </Layout.Horizontal>
-            <CardList
-              items={cgDeploymentTypes}
-              isReadonly={isReadonly}
-              onChange={(deploymentType: string) => {
-                setSelectedDeploymentTypeInCG(deploymentType)
-                showCurrentGenSwitcherModal()
-              }}
-              selectedValue={selectedDeploymentType}
-              allowDisabledItemClick={true}
-            />
-          </Layout.Vertical>
+                  {getString('common.currentlySupportedOn')}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => {
+                      setSelectedDeploymentTypeInCG('')
+                      showCurrentGenSwitcherModal()
+                    }}
+                    style={{ paddingLeft: '4px' }}
+                  >
+                    {getString('common.firstGeneration')}
+                  </a>
+                  <HarnessDocTooltip tooltipId="supportedInFirstGeneration" useStandAlone={true} />
+                </div>
+                <Popover
+                  position="auto"
+                  interactionKind={PopoverInteractionKind.HOVER}
+                  content={tooltipContent}
+                  className={Classes.DARK}
+                >
+                  <span className={deployServiceCsss.tooltipIcon}>
+                    <Icon size={12} name="tooltip-icon" color={Color.PRIMARY_7} />
+                  </span>
+                </Popover>
+              </Layout.Horizontal>
+              <CardList
+                items={cgDeploymentTypes}
+                isReadonly={isReadonly}
+                onChange={(deploymentType: string) => {
+                  setSelectedDeploymentTypeInCG(deploymentType)
+                  showCurrentGenSwitcherModal()
+                }}
+                selectedValue={selectedDeploymentType}
+                allowDisabledItemClick={true}
+              />
+            </Layout.Vertical>
+          )}
         </Layout.Horizontal>
       )
     }
     return (
       <CardList
-        items={[...ngSupportedDeploymentTypes, ...cgDeploymentTypes]}
+        items={
+          props.viewContext ? [...ngSupportedDeploymentTypes, ...cgDeploymentTypes] : [...ngSupportedDeploymentTypes]
+        }
         isReadonly={isReadonly}
         onChange={props.handleDeploymentTypeChange}
         selectedValue={selectedDeploymentType}
@@ -378,18 +382,33 @@ export default function SelectDeploymentType(props: SelectServiceDeploymentTypeP
       {formik => {
         window.dispatchEvent(new CustomEvent('UPDATE_ERRORS_STRIP', { detail: DeployTabs.SERVICE }))
         formikRef.current = formik as FormikProps<unknown> | null
-        return (
-          <Card className={stageCss.sectionCard}>
-            <div
-              className={cx(stageCss.tabSubHeading, 'ng-tooltip-native')}
-              data-tooltip-id="stageOverviewDeploymentType"
-            >
-              {getString('deploymentTypeText')}
-              <HarnessDocTooltip tooltipId="stageOverviewDeploymentType" useStandAlone={true} />
+        if (props.viewContext) {
+          return (
+            <Card className={stageCss.sectionCard}>
+              <div
+                className={cx(stageCss.tabSubHeading, 'ng-tooltip-native')}
+                data-tooltip-id="stageOverviewDeploymentType"
+              >
+                {getString('deploymentTypeText')}
+                <HarnessDocTooltip tooltipId="stageOverviewDeploymentType" useStandAlone={true} />
+              </div>
+              {renderDeploymentTypes()}
+            </Card>
+          )
+        } else {
+          return (
+            <div className={stageCss.stageView}>
+              <div
+                className={cx(stageCss.deploymentTypeHeading, 'ng-tooltip-native')}
+                data-tooltip-id="stageOverviewDeploymentType"
+              >
+                {getString('deploymentTypeText')}
+                <HarnessDocTooltip tooltipId="stageOverviewDeploymentType" useStandAlone={true} />
+              </div>
+              {renderDeploymentTypes()}
             </div>
-            {renderDeploymentTypes()}
-          </Card>
-        )
+          )
+        }
       }}
     </Formik>
   )

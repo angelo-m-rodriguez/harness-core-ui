@@ -27,6 +27,7 @@ import { PipelineActions } from '@pipeline/factories/PubSubPipelineAction/types'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { useDeepCompareEffect } from '@common/hooks'
 import { TEMPLATE_INPUT_PATH } from '@pipeline/utils/templateUtils'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { isCodebaseFieldsRuntimeInputs } from '@pipeline/utils/CIUtils'
 import { StageInputSetForm } from './StageInputSetForm'
 import { StageAdvancedInputSetForm } from './StageAdvancedInputSetForm'
@@ -55,7 +56,7 @@ export interface PipelineInputSetFormProps {
   isRunPipelineForm?: boolean
   listOfSelectedStages?: string[]
   isRetryFormStageSelected?: boolean
-  allowableTypes?: MultiTypeInputType[]
+  allowableTypes: MultiTypeInputType[]
   viewTypeMetadata?: Record<string, boolean>
   gitAwareForTriggerEnabled?: boolean
 }
@@ -207,7 +208,7 @@ export function PipelineInputSetFormInternal(props: PipelineInputSetFormProps): 
     maybeContainerClass = '',
     executionIdentifier,
     viewTypeMetadata,
-    allowableTypes = [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+    allowableTypes
   } = props
   const { getString } = useStrings()
   const isTemplatePipeline = !!template.template
@@ -371,9 +372,11 @@ export function PipelineInputSetFormInternal(props: PipelineInputSetFormProps): 
     </Layout.Vertical>
   )
 }
-export function PipelineInputSetForm(props: PipelineInputSetFormProps): React.ReactElement {
+export function PipelineInputSetForm(props: Omit<PipelineInputSetFormProps, 'allowableTypes'>): React.ReactElement {
   const [template, setTemplate] = React.useState(props.template)
   const accountPathProps = useParams<AccountPathProps>()
+  const { NG_EXECUTION_INPUT } = useFeatureFlags()
+
   useDeepCompareEffect(() => {
     if (props.isRunPipelineForm) {
       PubSubPipelineActions.publish(PipelineActions.RunPipeline, {
@@ -388,5 +391,15 @@ export function PipelineInputSetForm(props: PipelineInputSetFormProps): React.Re
     }
   }, [props?.template])
 
-  return <PipelineInputSetFormInternal {...props} template={template} />
+  return (
+    <PipelineInputSetFormInternal
+      {...props}
+      template={template}
+      allowableTypes={
+        NG_EXECUTION_INPUT
+          ? [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION, MultiTypeInputType.RUNTIME]
+          : [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+      }
+    />
+  )
 }

@@ -107,5 +107,6 @@ export const pathParams = {
   pipelineIdentifier: 'TEST_VERIFY_PIPELINE',
   executionIdentifier: 'TEST_VERIFY_EXECUTION',
   module: 'cd',
+  source: 'executions',
   stageId: 'selectedStageId'
 }

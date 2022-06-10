@@ -15,16 +15,20 @@ export interface UseDocumentTitleReturn {
   updateTitle: (newTitle: Title) => void
 }
 
-export function useDocumentTitle(title: Title): UseDocumentTitleReturn {
+export function useDocumentTitle(title: Title, accountLevel = false): UseDocumentTitleReturn {
   const { getString } = useStrings()
   const { selectedProject } = useAppStore()
 
   const getStringFromTitle = (str: Title): string => (Array.isArray(str) ? str.filter(s => s).join(' | ') : str)
 
   const updateTitle = (newTitle: Title): void => {
-    document.title = [getStringFromTitle(newTitle), selectedProject?.name, getString('harness')]
-      .filter(s => s)
-      .join(' | ')
+    const titleArray = [getStringFromTitle(newTitle), getString('harness')]
+
+    if (!accountLevel && selectedProject?.name) {
+      titleArray.splice(1, 0, selectedProject.name)
+    }
+
+    document.title = titleArray.filter(s => s).join(' | ')
   }
 
   useDeepCompareEffect(() => {

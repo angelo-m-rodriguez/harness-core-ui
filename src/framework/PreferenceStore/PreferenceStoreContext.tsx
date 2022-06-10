@@ -67,9 +67,26 @@ export function usePreferenceStore<T>(scope: PreferenceScope, entity: string): P
   return { preference, setPreference, clearPreference }
 }
 
-const checkAccess = (scope: PreferenceScope, contextArr: (string | undefined)[]): void => {
+const checkAccess = (
+  scope: PreferenceScope,
+  contextArr: (string | undefined)[],
+  accountId: string,
+  entityToPersist: string
+): void => {
   if (!contextArr || /* istanbul ignore next */ contextArr?.some(val => val === undefined)) {
-    throw new Error(`Access to "${scope}" scope is not available in the current context.`)
+    const error = new Error(`PreferenceStore: Access to "${scope}" scope is not available in the current context.`)
+    if (__DEV__) {
+      throw error
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      window.bugsnagClient?.notify?.(error, function (event: any) {
+        event.severity = 'error'
+        event.addMetadata('PreferenceStore Info', {
+          accountId,
+          entityToPersist
+        })
+      })
+    }
   }
 }
 
@@ -116,7 +133,7 @@ export const PreferenceStoreProvider: React.FC = (props: React.PropsWithChildren
   }
 
   const set = (scope: PreferenceScope, entityToPersist: string, value: unknown): void => {
-    checkAccess(scope, scopeToKeyMap[scope])
+    checkAccess(scope, scopeToKeyMap[scope], accountId, entityToPersist)
     const key = getKey(scopeToKeyMap[scope], entityToPersist)
     setPreference(key, value)
   }

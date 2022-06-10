@@ -41,7 +41,7 @@ describe('ManifestSelection tests', () => {
   test(`renders without crashing`, () => {
     const { container } = render(
       <TestWrapper>
-        <ManifestSelection readonly={false} deploymentType="Kubernetes" />
+        <ManifestSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
       </TestWrapper>
     )
     expect(container).toMatchSnapshot()
@@ -51,7 +51,7 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" />
+          <ManifestSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -72,7 +72,7 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" />
+          <ManifestSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -97,7 +97,7 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" />
+          <ManifestSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -115,7 +115,7 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" />
+          <ManifestSelection isReadonlyServiceMode={false} readonly={false} deploymentType="Kubernetes" />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -133,7 +133,12 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" isPropagating={false} />
+          <ManifestSelection
+            isReadonlyServiceMode={false}
+            readonly={false}
+            deploymentType="Kubernetes"
+            isPropagating={false}
+          />
         </PipelineContext.Provider>
       </TestWrapper>
     )
@@ -144,7 +149,12 @@ describe('ManifestSelection tests', () => {
     const { container } = render(
       <TestWrapper>
         <PipelineContext.Provider value={getContextValue()}>
-          <ManifestSelection readonly={false} deploymentType="Kubernetes" isPropagating={true} />
+          <ManifestSelection
+            isReadonlyServiceMode={false}
+            readonly={false}
+            deploymentType="Kubernetes"
+            isPropagating={true}
+          />
         </PipelineContext.Provider>
       </TestWrapper>
     )

@@ -37,7 +37,7 @@ exports[`RepoBranchSelectV2 test default rendering RepoBranchSelectV2 1`] = `
                 placeholder="- select -"
                 style="padding-right: 0px;"
                 type="text"
-                value=""
+                value="main"
               />
               <span
                 class="bp3-input-action"

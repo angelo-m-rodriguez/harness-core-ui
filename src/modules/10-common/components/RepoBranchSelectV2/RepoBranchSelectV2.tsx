@@ -41,6 +41,13 @@ export interface RepoBranchSelectProps {
   fallbackDefaultBranch?: boolean
 }
 
+const getDefaultBranchOption = (defaultBranch: string): SelectOption => {
+  return {
+    label: defaultTo(defaultBranch, ''),
+    value: defaultTo(defaultBranch, '')
+  }
+}
+
 export const getBranchSelectOptions = (data: GitBranchDetailsDTO[] = []): SelectOption[] => {
   return data.map((branch: GitBranchDetailsDTO) => {
     return {
@@ -84,7 +91,7 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
     selectProps,
     showIcons = true,
     showErrorInModal = false,
-    fallbackDefaultBranch = false
+    fallbackDefaultBranch = true
   } = props
   const { getString } = useStrings()
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
@@ -129,7 +136,10 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
 
     if (response?.status === 'SUCCESS') {
       if (!isEmpty(response?.data)) {
-        setBranchSelectOptions(getBranchSelectOptions(response.data?.branches))
+        const branchOptions = getBranchSelectOptions(response.data?.branches)
+        setBranchSelectOptions(branchOptions)
+        // If used in Formik, onChange will set branch after default selection to overcome form validation
+        !disabled && defaultToBranch && props.onChange?.(getDefaultBranchOption(defaultToBranch), branchOptions)
       }
     }
 

@@ -52,6 +52,7 @@ const TEST_PARAMS: PipelineType<PipelineLogsPathProps> = {
   executionIdentifier: 'TEST_EXEC',
   stageIdentifier: 'TEST_STAGE',
   stepIndentifier: 'TEST_STEP',
+  source: 'executions',
   module: 'cd'
 }
 

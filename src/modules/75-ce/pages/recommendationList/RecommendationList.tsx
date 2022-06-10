@@ -54,6 +54,7 @@ import grayLeafImg from '@ce/common/images/gray-leaf.svg'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { removeNullAndEmpty } from '@common/components/Filter/utils/FilterUtils'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import type { StringsMap } from 'stringTypes'
 import RecommendationSavingsCard from '../../components/RecommendationSavingsCard/RecommendationSavingsCard'
 import RecommendationFilters from '../../components/RecommendationFilters'
@@ -419,6 +420,8 @@ const RecommendationListPage: React.FC = () => {
   })
 
   const { getString } = useStrings()
+
+  useDocumentTitle(getString('ce.recommendation.sideNavText'), true)
 
   const totalMonthlyCost = defaultTo(recommendationStats?.totalMonthlyCost, 0)
   const totalSavings = defaultTo(recommendationStats?.totalMonthlySaving, 0)

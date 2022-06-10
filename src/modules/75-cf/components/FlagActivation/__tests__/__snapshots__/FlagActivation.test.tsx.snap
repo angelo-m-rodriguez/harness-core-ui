@@ -355,7 +355,7 @@ exports[`FlagActivation it should render form correctly 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="flagActivation_flagIdentifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

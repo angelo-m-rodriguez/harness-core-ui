@@ -21,7 +21,7 @@ import {
 } from '@wings-software/uicore'
 import { Color, Intent } from '@harness/design-system'
 import { parse } from 'yaml'
-import { isEmpty, isUndefined, merge, cloneDeep, defaultTo, noop, get } from 'lodash-es'
+import { isEmpty, isUndefined, merge, cloneDeep, defaultTo, noop, get, omitBy, omit } from 'lodash-es'
 import { CompletionItemKind } from 'vscode-languageserver-types'
 import { Page, useToaster } from '@common/exports'
 import Wizard from '@common/components/Wizard/Wizard'
@@ -1358,8 +1358,8 @@ const TriggersWizardPage: React.FC = (): JSX.Element => {
     })
   }
 
-  const [pipelineBranchNameError, setPipelineBranchNameError] = useState('')
-  const [inputSetRefsError, setInputSetRefsError] = useState('')
+  // const [pipelineBranchNameError, setPipelineBranchNameError] = useState('')
+  // const [inputSetRefsError, setInputSetRefsError] = useState('')
   const [formErrors, setFormErrors] = useState<FormikErrors<FlatValidFormikValuesInterface>>({})
   const formikRef = useRef<FormikProps<any>>()
 
@@ -1367,15 +1367,15 @@ const TriggersWizardPage: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (Object.keys(formErrors || {}).length > 0) {
       Object.entries({
-        ...flattenKeys(formErrors),
-        ...(pipelineBranchNameError ? { pipelineBranchName: pipelineBranchNameError } : {}),
-        ...(inputSetRefsError ? { inputSetRefs: inputSetRefsError } : {})
+        ...flattenKeys(omit(formErrors, ['pipelineBranchName', 'inputSetRefs'])),
+        pipelineBranchName: get(formErrors, 'pipelineBranchName'),
+        inputSetRefs: get(formErrors, 'inputSetRefs')
       }).forEach(([fieldName, fieldError]) => {
         formikRef?.current?.setFieldTouched(fieldName, true, true)
         setTimeout(() => formikRef?.current?.setFieldError(fieldName, fieldError), 0)
       })
     }
-  }, [formErrors, formikRef, pipelineBranchNameError, inputSetRefsError])
+  }, [formErrors, formikRef])
 
   const yamlTemplate = useMemo(() => {
     return parse(defaultTo(template?.data?.inputSetTemplateYaml, ''))?.pipeline
@@ -1716,8 +1716,13 @@ const TriggersWizardPage: React.FC = (): JSX.Element => {
     lazy: true
   })
 
-  const onFormikEffect: FormikEffectProps['onChange'] = ({ formik }) => {
+  const onFormikEffect: FormikEffectProps['onChange'] = ({ formik, nextValues }) => {
     formikRef.current = formik
+
+    // Clear Errors Trip when Input Set Refs is changed
+    if (formErrors && Object.keys(formErrors).length && nextValues.inputSetRefs?.length) {
+      setFormErrors({})
+    }
   }
 
   useEffect(() => {
@@ -1938,21 +1943,22 @@ const TriggersWizardPage: React.FC = (): JSX.Element => {
     latestYaml?: any // validate from YAML view
   }): Promise<FormikErrors<FlatValidWebhookFormikValuesInterface>> => {
     if (!formikProps) return {}
-    setPipelineBranchNameError('')
-    setInputSetRefsError('')
+    let _pipelineBranchNameError = ''
+    let _inputSetRefsError = ''
 
-    // Custom validation when pipeline Reference Branch Name is an expression for non-webhook triggers
     if (gitAwareForTriggerEnabled) {
+      // Custom validation when pipeline Reference Branch Name is an expression for non-webhook triggers
       if (formikProps?.values?.triggerType !== TriggerTypes.WEBHOOK) {
         const pipelineBranchName = (formikProps?.values?.pipelineBranchName || '').trim()
 
         if (pipelineBranchName.startsWith('<+') && pipelineBranchName.endsWith('>')) {
-          setPipelineBranchNameError(getString('triggers.branchNameCantBeExpression'))
+          _pipelineBranchNameError = getString('triggers.branchNameCantBeExpression')
         }
       }
 
+      // inputSetRefs is required if Input Set is required to run pipeline
       if (template?.data?.inputSetTemplateYaml && !formikProps?.values?.inputSetRefs?.length) {
-        setInputSetRefsError(getString('triggers.inputSetIsRequired'))
+        _inputSetRefsError = getString('triggers.inputSetIsRequired')
       }
     }
 
@@ -1973,9 +1979,19 @@ const TriggersWizardPage: React.FC = (): JSX.Element => {
       orgPipeline: values.pipeline,
       setSubmitting
     })
+    const gitXErrors = gitAwareForTriggerEnabled
+      ? omitBy({ pipelineBranchName: _pipelineBranchNameError, inputSetRefs: _inputSetRefsError }, value => !value)
+      : undefined
     // https://github.com/formium/formik/issues/1392
-    const errors: any = await { ...runPipelineFormErrors }
-    if (!isEmpty(runPipelineFormErrors)) {
+    const errors: any = await {
+      ...runPipelineFormErrors
+    }
+
+    if (gitXErrors) {
+      setErrors(gitXErrors)
+      setFormErrors(gitXErrors)
+      return gitXErrors
+    } else if (!isEmpty(runPipelineFormErrors)) {
       setErrors(runPipelineFormErrors)
       // To do: have errors outlines display
       return runPipelineFormErrors

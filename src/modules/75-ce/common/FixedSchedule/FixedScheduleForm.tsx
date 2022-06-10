@@ -148,18 +148,18 @@ const FixedScheduleForm: React.FC<FixedScheduleFormProps> = props => {
         enableReinitialize
         onSubmit={handleSubmit}
         formName={'newScheduleForm'}
+        validateOnMount={true}
         validationSchema={Yup.object().shape({
-          name: Yup.string().max(25).required(),
+          name: Yup.string().min(1).max(25).required(),
           type: Yup.string().required(),
-          repeats: Yup.array()
-            .when('beginsOn', {
-              is: val => !val,
-              then: Yup.array().min(1).required()
-            })
-            .when('everyday', {
+          repeats: Yup.array().when('beginsOn', {
+            is: val => !val,
+            then: Yup.array().when('everyday', {
               is: false,
-              then: Yup.array().min(1).required()
+              then: Yup.array().min(1).required(),
+              otherwise: Yup.array().notRequired()
             })
+          })
         })}
       >
         {_formikProps => (
@@ -206,9 +206,7 @@ const FixedScheduleForm: React.FC<FixedScheduleFormProps> = props => {
               <PeriodSelection formikProps={_formikProps} />
               <DaysAndTimeSelector formikProps={_formikProps} />
             </Layout.Vertical>
-            {(_formikProps.values.beginsOn || !_isEmpty(_formikProps.values.repeats)) && (
-              <ScheduleDescription schedule={getUpdatedScheduleData(_formikProps.values)} />
-            )}
+            {_formikProps.isValid && <ScheduleDescription schedule={getUpdatedScheduleData(_formikProps.values)} />}
             <Layout.Horizontal className={css.ctaContainer} spacing="medium">
               <Button
                 text={getString('common.apply')}
@@ -338,6 +336,7 @@ const DaysAndTimeSelector = ({ formikProps }: DaysAndTimeSelectorProps) => {
             onChange={_ => {
               formikProps.setFieldValue('everyday', true)
               formikProps.setFieldValue('repeats', [])
+              formikProps.validateForm()
             }}
           />
           <Layout.Horizontal flex={{ alignItems: 'center', justifyContent: 'start' }}>

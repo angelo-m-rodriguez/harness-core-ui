@@ -459,6 +459,10 @@ function WebhookPipelineInputPanelForm({
     [selectedInputSets]
   )
 
+  useEffect(() => {
+    setInputSetError(formikProps?.errors?.inputSetRefs)
+  }, [setInputSetError, formikProps?.errors?.inputSetRefs])
+
   // Don't show spinner when fetching is triggered by typing from
   // Pipeline Reference. Giving users a better experience
   const isPipelineBranchNameInFocus = (): boolean =>
@@ -491,7 +495,8 @@ function WebhookPipelineInputPanelForm({
                       if (gitAwareForTriggerEnabled) {
                         formikProps.setValues({
                           ...formikProps.values,
-                          inputSetRefs: (value || []).map(v => v.value)
+                          inputSetRefs: (value || []).map(v => v.value),
+                          inputSetSelected: value
                         })
                       }
                     }}
@@ -501,9 +506,7 @@ function WebhookPipelineInputPanelForm({
                     selectedBranch={inputSetSelectedBranch}
                   />
                 </GitSyncStoreProvider>
-                {inputSetError || formikProps?.errors?.inputSetRefs ? (
-                  <Text intent="danger">{inputSetError || formikProps?.errors?.inputSetRefs}</Text>
-                ) : null}
+                {inputSetError ? <Text intent="danger">{inputSetError}</Text> : null}
                 <div className={css.divider} />
               </div>
             ) : null}

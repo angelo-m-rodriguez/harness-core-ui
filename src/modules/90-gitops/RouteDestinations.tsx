@@ -13,7 +13,7 @@ import CDSideNav from '@cd/components/CDSideNav/CDSideNav'
 import ChildAppMounter from 'microfrontends/ChildAppMounter'
 import type { SidebarContext } from '@common/navigation/SidebarProvider'
 import { AccountSideNavProps } from '@common/RouteDestinations'
-import { accountPathProps, orgPathProps, projectPathProps } from '@common/utils/routeUtils'
+import { accountPathProps, projectPathProps } from '@common/utils/routeUtils'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import {
   DeployEnvironmentWidget,
@@ -80,7 +80,39 @@ export default (
 
     <RouteWithLayout
       sidebarProps={AccountSideNavProps}
-      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, ...orgPathProps, ...projectPathProps })]}
+      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, entity: 'agents' })]}
+      pageName={PAGE_NAME.GitOpsPage}
+    >
+      <GitOpsPage />
+    </RouteWithLayout>
+
+    <RouteWithLayout
+      sidebarProps={AccountSideNavProps}
+      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, entity: 'repositories' })]}
+      pageName={PAGE_NAME.GitOpsPage}
+    >
+      <GitOpsPage />
+    </RouteWithLayout>
+
+    <RouteWithLayout
+      sidebarProps={AccountSideNavProps}
+      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, entity: 'repoCertificates' })]}
+      pageName={PAGE_NAME.GitOpsPage}
+    >
+      <GitOpsPage />
+    </RouteWithLayout>
+
+    <RouteWithLayout
+      sidebarProps={AccountSideNavProps}
+      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, entity: 'clusters' })]}
+      pageName={PAGE_NAME.GitOpsPage}
+    >
+      <GitOpsPage />
+    </RouteWithLayout>
+
+    <RouteWithLayout
+      sidebarProps={AccountSideNavProps}
+      path={[routes.toAccountResourcesGitOps({ ...accountPathProps, entity: 'gnuPGKeys' })]}
       pageName={PAGE_NAME.GitOpsPage}
     >
       <GitOpsPage />

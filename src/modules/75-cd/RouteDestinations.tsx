@@ -8,7 +8,7 @@
 import React from 'react'
 import { Route, useParams, Redirect } from 'react-router-dom'
 import { useQueryParams } from '@common/hooks'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { RouteWithLayout } from '@common/router'
 import { EmptyLayout, MinimalLayout } from '@common/layouts'
 import type { SidebarContext } from '@common/navigation/SidebarProvider'
@@ -121,6 +121,7 @@ import FullPageLogView from '@pipeline/pages/full-page-log-view/FullPageLogView'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import type { ModuleListCardProps } from '@projects-orgs/components/ModuleListCard/ModuleListCard'
 import VariablesPage from '@variables/pages/variables/VariablesPage'
+import { FeatureFlag } from '@common/featureFlags'
 import { Environments } from './components/Environments/Environments'
 import { Environments as EnvironmentsV2 } from './components/EnvironmentsV2/Environments'
 import EnvironmentDetails from './components/EnvironmentsV2/EnvironmentDetails/EnvironmentDetails'
@@ -350,9 +351,9 @@ const RedirectToSubscriptions = (): React.ReactElement => {
 }
 
 const EnvironmentsPage = (): React.ReactElement | null => {
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
 
-  if (NG_SVC_ENV_REDESIGN) {
+  if (isSvcEnvEntityEnabled) {
     return <EnvironmentsV2 />
   } else {
     return <Environments />

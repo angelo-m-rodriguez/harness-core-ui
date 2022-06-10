@@ -729,7 +729,7 @@ exports[`ServiceNow Create tests Basic snapshot - inputset mode: input set with 
       </div>
     </div>
     <div
-      class="bp3-form-group deploymentViewMedium"
+      class="bp3-form-group bp3-intent-danger deploymentViewMedium"
     >
       <label
         class="bp3-label"
@@ -795,10 +795,41 @@ exports[`ServiceNow Create tests Basic snapshot - inputset mode: input set with 
             </div>
           </div>
         </div>
+        <div
+          class="bp3-form-helper-text"
+        >
+          <div
+            class="FormError--errorDiv"
+            data-name="spec.fields[0].value"
+          >
+            <span
+              class="bp3-icon StyledProps--main FormError--errorTextIcon StyledProps--intent-danger"
+              data-icon="circle-cross"
+            >
+              <svg
+                height="12"
+                viewBox="0 0 13 13"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M.167 6.501a6.333 6.333 0 1012.666 0 6.333 6.333 0 00-12.666 0zm4.071-3.003l2.26 2.263 2.264-2.263c.495-.495 1.236.248.741.743L7.24 6.504l2.254 2.258c.495.495-.247 1.238-.742.743L6.497 7.246 4.238 9.505c-.495.495-1.236-.249-.741-.744l2.258-2.258-2.259-2.262c-.494-.495.248-1.238.742-.743z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="FormError--error"
+            >
+              pipeline.serviceNowCreateStep.validations.description
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <div
-      class="bp3-form-group deploymentViewMedium"
+      class="bp3-form-group bp3-intent-danger deploymentViewMedium"
     >
       <label
         class="bp3-label"
@@ -864,6 +895,37 @@ exports[`ServiceNow Create tests Basic snapshot - inputset mode: input set with 
             </div>
           </div>
         </div>
+        <div
+          class="bp3-form-helper-text"
+        >
+          <div
+            class="FormError--errorDiv"
+            data-name="spec.fields[1].value"
+          >
+            <span
+              class="bp3-icon StyledProps--main FormError--errorTextIcon StyledProps--intent-danger"
+              data-icon="circle-cross"
+            >
+              <svg
+                height="12"
+                viewBox="0 0 13 13"
+                width="12"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M.167 6.501a6.333 6.333 0 1012.666 0 6.333 6.333 0 00-12.666 0zm4.071-3.003l2.26 2.263 2.264-2.263c.495-.495 1.236.248.741.743L7.24 6.504l2.254 2.258c.495.495-.247 1.238-.742.743L6.497 7.246 4.238 9.505c-.495.495-1.236-.249-.741-.744l2.258-2.258-2.259-2.262c-.494-.495.248-1.238.742-.743z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="FormError--error"
+            >
+              pipeline.serviceNowCreateStep.validations.shortDescription
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <p
@@ -875,7 +937,15 @@ exports[`ServiceNow Create tests Basic snapshot - inputset mode: input set with 
       {
   "spec": {
     "connectorRef": "pipeline.serviceNowApprovalStep.validations.connectorRef",
-    "ticketType": "pipeline.serviceNowApprovalStep.validations.ticketType"
+    "ticketType": "pipeline.serviceNowApprovalStep.validations.ticketType",
+    "fields": [
+      {
+        "value": "pipeline.serviceNowCreateStep.validations.description"
+      },
+      {
+        "value": "pipeline.serviceNowCreateStep.validations.shortDescription"
+      }
+    ]
   }
 }
     </pre>
@@ -1508,7 +1578,7 @@ exports[`ServiceNow Create tests Edit Stage - readonly view for Template type: e
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -2104,7 +2174,7 @@ exports[`ServiceNow Create tests Edit Stage - readonly view: edit-stage-readonly
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

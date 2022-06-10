@@ -66,6 +66,8 @@ const getLabelByType = (type: string): string => {
       return 'connectors.name_labels.Kubernetes'
     case Connectors.HttpHelmRepo:
       return 'connectors.name_labels.HttpHelmRepo'
+    case Connectors.OciHelmRepo:
+      return 'connectors.name_labels.OCIHelm'
     case Connectors.GIT:
       return 'connectors.name_labels.Git'
     case Connectors.GITHUB:
@@ -338,6 +340,27 @@ const getHelmHttpSchema = (connector: ConnectorInfoDTO): Array<ActivityDetailsRo
   return [
     {
       label: 'connectors.httpHelm.httpHelmRepoUrl',
+      value: connector?.spec?.helmRepoUrl
+    },
+    {
+      label: 'credType',
+      value: getLabelForAuthType(connector?.spec?.auth?.type)
+    },
+    {
+      label: 'username',
+      value: connector?.spec?.auth?.spec?.username || connector?.spec?.auth?.spec?.usernameRef
+    },
+    {
+      label: 'password',
+      value: connector?.spec?.auth?.spec?.passwordRef
+    }
+  ]
+}
+//todoOci
+const getOCIHelmSchema = (connector: ConnectorInfoDTO): Array<ActivityDetailsRowInterface> => {
+  return [
+    {
+      label: 'connectors.ociHelm.ociHelmUrl',
       value: connector?.spec?.helmRepoUrl
     },
     {
@@ -762,11 +785,14 @@ const getSchemaByType = (
     case Connectors.GITHUB:
     case Connectors.GITLAB:
     case Connectors.BITBUCKET:
-      return getGithubSchema(connector) // GitHub schema will work for GitLab, Bitbucket too
+    case Connectors.AZURE_REPO:
+      return getGithubSchema(connector) // GitHub schema will work for GitLab, Bitbucket and AzureRepos too
     case Connectors.DOCKER:
       return getDockerSchema(connector)
     case Connectors.HttpHelmRepo:
       return getHelmHttpSchema(connector)
+    case Connectors.OciHelmRepo:
+      return getOCIHelmSchema(connector)
     case Connectors.GCP:
       return getGCPSchema(connector)
     case Connectors.PDC:

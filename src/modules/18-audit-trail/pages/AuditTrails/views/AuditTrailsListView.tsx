@@ -174,7 +174,7 @@ const AuditTrailsListView: React.FC<AuditTrailsListViewProps> = ({ data, setPage
 
   const columns: Column<AuditEventDTO>[] = [
     {
-      Header: getString('common.timePstLabel'),
+      Header: getString('timeLabel'),
       id: 'time',
       accessor: row => row.timestamp,
       width: '8%',

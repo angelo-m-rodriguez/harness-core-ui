@@ -7,7 +7,17 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly projectPanel: string
-  readonly sideNavTabs: string
+  readonly addManifest: string
+  readonly addMarginTop: string
+  readonly configField: string
+  readonly createConnectorWizard: string
+  readonly crossIcon: string
+  readonly deleteBtn: string
+  readonly drag: string
+  readonly k8ValLabel: string
+  readonly k8VarMargin: string
+  readonly manifestId: string
+  readonly modal: string
+  readonly text: string
 }
 export default styles

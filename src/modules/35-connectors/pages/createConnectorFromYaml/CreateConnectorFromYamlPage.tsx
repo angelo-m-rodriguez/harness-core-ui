@@ -45,8 +45,11 @@ import { Entities } from '@common/interfaces/GitSyncInterface'
 import type { PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { doesGovernanceHasErrorOrWarning } from '@governance/utils'
 import { isSMConnector } from '../connectors/utils/ConnectorUtils'
 import css from './CreateConnectorFromYamlPage.module.scss'
 
@@ -59,10 +62,9 @@ const CreateConnectorFromYamlPage: React.FC = () => {
   const { mutate: createConnector, loading: creating } = useCreateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal, doesGovernanceHasError } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   const [editorContent, setEditorContent] = React.useState<Record<string, any>>()
   const { getString } = useStrings()
   const [hasConnectorChanged, setHasConnectorChanged] = useState<boolean>(false)
@@ -117,14 +119,23 @@ const CreateConnectorFromYamlPage: React.FC = () => {
       ? { accountIdentifier: accountId, ...gitData, baseBranch: gitResourceDetails.gitDetails?.branch }
       : {}
     const response = await createConnector(connectorJSON, { queryParams })
-    const hasAnyGovernnanceError = doesGovernanceHasError(response)
-
-    const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
+    let { governanceMetaDataHasError, governanceMetaDataHasWarning } = doesGovernanceHasErrorOrWarning(
+      response.data?.governanceMetadata
+    )
+    if (!opaFlagEnabled) {
+      governanceMetaDataHasError = false
+      governanceMetaDataHasWarning = false
+    }
+    if (opaFlagEnabled && response.data?.governanceMetadata) {
+      conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+        rerouteBasedOnContext()
+      })
+    }
     return {
-      status: !hasAnyGovernnanceError ? response.status : 'FAILURE',
+      status: !governanceMetaDataHasError ? response.status : 'FAILURE',
       governanceMetaData: response.data?.governanceMetadata,
       nextCallback: async () => {
-        if (canGoToNextStep) {
+        if (!governanceMetaDataHasError && !governanceMetaDataHasWarning) {
           rerouteBasedOnContext()
         }
       }
@@ -320,10 +331,8 @@ const CreateConnectorFromYamlPage: React.FC = () => {
                     : handleCreate() /* Handling non-git flow */
                         .then(res => {
                           if (res.status === 'SUCCESS') {
-                            if (!(res.governanceMetaData && res.governanceMetaData.status === 'error')) {
-                              showSuccess(getString('connectors.createdSuccessfully'))
-                              res.nextCallback?.()
-                            }
+                            showSuccess(getString('connectors.createdSuccessfully'))
+                            res.nextCallback?.()
                           } else {
                             /* TODO handle error with API status 200 */
                           }

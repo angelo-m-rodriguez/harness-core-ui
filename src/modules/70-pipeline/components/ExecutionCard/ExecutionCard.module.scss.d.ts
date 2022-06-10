@@ -14,6 +14,7 @@ declare const styles: {
   readonly duration: string
   readonly executionId: string
   readonly footer: string
+  readonly gitRemoteDetailsWrapper: string
   readonly header: string
   readonly hoverCard: string
   readonly ignoreFailedPopover: string

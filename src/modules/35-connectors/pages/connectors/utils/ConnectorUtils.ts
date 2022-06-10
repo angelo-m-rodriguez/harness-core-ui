@@ -334,6 +334,46 @@ export const buildBitbucketPayload = (formData: FormData) => {
   return { connector: savedData }
 }
 
+export const buildAzureRepoPayload = (formData: FormData) => {
+  const savedData: any = {
+    name: formData.name,
+    description: formData?.description,
+    projectIdentifier: formData?.projectIdentifier,
+    orgIdentifier: formData?.orgIdentifier,
+    identifier: formData.identifier,
+    tags: formData?.tags,
+    type: Connectors.AZURE_REPO,
+    spec: {
+      ...(formData?.delegateSelectors ? { delegateSelectors: formData.delegateSelectors } : {}),
+      type: formData.urlType,
+      url: formData.url,
+      ...(formData.validationRepo ? { validationRepo: formData.validationRepo } : {}),
+      ...(formData.validationProject ? { validationProject: formData.validationProject } : {}),
+      authentication: {
+        type: formData.connectionType,
+        spec:
+          formData.connectionType === GitConnectionType.SSH
+            ? { sshKeyRef: formData.sshKey.referenceString }
+            : {
+                type: formData.authType,
+                spec: getGitAuthSpec(formData)
+              }
+      },
+      apiAccess: { type: formData.apiAuthType, spec: {} }
+    }
+  }
+
+  if (formData.enableAPIAccess) {
+    savedData.spec.apiAccess.spec = {
+      tokenRef: formData.apiAccessToken.referenceString
+    }
+  } else {
+    delete savedData.spec.apiAccess
+  }
+
+  return { connector: savedData }
+}
+
 export const setupGitFormData = async (connectorInfo: ConnectorInfoDTO, accountId: string): Promise<FormData> => {
   const scopeQueryParams: GetSecretV2QueryParams = {
     accountIdentifier: accountId,
@@ -427,6 +467,36 @@ export const setupBitbucketFormData = async (connectorInfo: ConnectorInfoDTO, ac
     accessToken: await setSecretField(connectorInfo?.spec?.apiAccess?.spec?.tokenRef, scopeQueryParams)
   }
 
+  return formData
+}
+
+export const setupAzureRepoFormData = async (connectorInfo: ConnectorInfoDTO, accountId: string): Promise<FormData> => {
+  const scopeQueryParams: GetSecretV2QueryParams = {
+    accountIdentifier: accountId,
+    projectIdentifier: connectorInfo.projectIdentifier,
+    orgIdentifier: connectorInfo.orgIdentifier
+  }
+
+  const authData = connectorInfo?.spec?.authentication
+  const formData = {
+    sshKey: await setSecretField(authData?.spec?.sshKeyRef, scopeQueryParams),
+    authType: authData?.spec?.type,
+    username:
+      authData?.spec?.spec?.username || authData?.spec?.spec?.usernameRef
+        ? {
+            value: authData?.spec?.spec?.username || authData?.spec?.spec?.usernameRef,
+            type: authData?.spec?.spec?.usernameRef ? ValueType.ENCRYPTED : ValueType.TEXT
+          }
+        : undefined,
+    password: await setSecretField(authData?.spec?.spec?.passwordRef, scopeQueryParams),
+    accessToken: await setSecretField(
+      authData?.spec?.spec?.tokenRef || connectorInfo?.spec?.apiAccess?.spec?.tokenRef,
+      scopeQueryParams
+    ),
+    enableAPIAccess: !!connectorInfo?.spec?.apiAccess,
+    apiAuthType: connectorInfo?.spec?.apiAccess?.type,
+    apiAccessToken: await setSecretField(connectorInfo?.spec?.apiAccess?.spec?.tokenRef, scopeQueryParams)
+  }
   return formData
 }
 
@@ -1063,6 +1133,36 @@ export const buildHelmPayload = (formData: FormData) => {
     orgIdentifier: formData.orgIdentifier,
     tags: formData.tags,
     type: Connectors.HttpHelmRepo,
+    spec: {
+      ...(formData?.delegateSelectors ? { delegateSelectors: formData.delegateSelectors } : {}),
+      helmRepoUrl: formData.helmRepoUrl,
+      auth:
+        formData.authType === AuthTypes.USER_PASSWORD
+          ? {
+              type: formData.authType,
+              spec: {
+                username: formData.username.type === ValueType.TEXT ? formData.username.value : undefined,
+                usernameRef: formData.username.type === ValueType.ENCRYPTED ? formData.username.value : undefined,
+                passwordRef: formData.password.referenceString
+              }
+            }
+          : {
+              type: formData.authType
+            }
+    }
+  }
+  return { connector: savedData }
+}
+
+export const buildOCIHelmPayload = (formData: FormData) => {
+  const savedData = {
+    name: formData.name,
+    description: formData.description,
+    identifier: formData.identifier,
+    projectIdentifier: formData.projectIdentifier,
+    orgIdentifier: formData.orgIdentifier,
+    tags: formData.tags,
+    type: Connectors.OciHelmRepo,
     spec: {
       ...(formData?.delegateSelectors ? { delegateSelectors: formData.delegateSelectors } : {}),
       helmRepoUrl: formData.helmRepoUrl,
@@ -1775,12 +1875,16 @@ export const getIconByType = (type: ConnectorInfoDTO['type'] | undefined): IconN
       return 'service-github'
     case Connectors.HttpHelmRepo:
       return 'service-helm'
+    case Connectors.OciHelmRepo:
+      return 'service-helm'
     case Connectors.GITHUB:
       return 'github'
     case Connectors.GITLAB:
       return 'service-gotlab'
     case Connectors.BITBUCKET:
       return 'bitbucket-selected'
+    case Connectors.AZURE_REPO:
+      return 'service-azure'
     case Connectors.VAULT: // TODO: use enum when backend fixes it
       return 'hashiCorpVault'
     case Connectors.LOCAL: // TODO: use enum when backend fixes it
@@ -1859,6 +1963,8 @@ export const getConnectorDisplayName = (type: string) => {
       return 'GitLab'
     case Connectors.BITBUCKET:
       return 'Bitbucket'
+    case Connectors.AZURE_REPO:
+      return 'Azure Repos'
     case Connectors.DOCKER:
       return 'Docker Registry'
     case Connectors.GCP:
@@ -1891,6 +1997,8 @@ export const getConnectorDisplayName = (type: string) => {
       return 'Azure Vault'
     case Connectors.HttpHelmRepo:
       return 'HTTP Helm Repo'
+    case Connectors.OciHelmRepo:
+      return 'OCI Helm Registry'
     case Connectors.AWSSM:
       return 'AWS Secret Manager'
     case Connectors.AWS_KMS:
@@ -1984,6 +2092,8 @@ export function GetTestConnectionValidationTextByType(type: ConnectorConfigDTO['
       return getString('connectors.testConnectionStep.validationText.gcpKms')
     case Connectors.BITBUCKET:
       return getString('connectors.testConnectionStep.validationText.bitbucket')
+    case Connectors.AZURE_REPO:
+      return getString('connectors.testConnectionStep.validationText.azureRepos')
     case Connectors.GITLAB:
       return getString('connectors.testConnectionStep.validationText.gitlab')
     case Connectors.GITHUB:

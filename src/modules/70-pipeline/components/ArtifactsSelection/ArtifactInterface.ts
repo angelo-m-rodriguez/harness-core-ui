@@ -39,6 +39,7 @@ export interface ArtifactListViewProps {
 export interface ArtifactsSelectionProps {
   isPropagating?: boolean
   deploymentType: ServiceDefinition['type']
+  isReadonlyServiceMode: boolean
   readonly: boolean
 }
 

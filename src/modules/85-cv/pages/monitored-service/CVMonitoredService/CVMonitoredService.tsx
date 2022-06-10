@@ -28,6 +28,7 @@ import routes from '@common/RouteDefinitions'
 import { useQueryParams } from '@common/hooks'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import RbacButton from '@rbac/components/Button/Button'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { getCVMonitoringServicesSearchParam, getErrorMessage, getEnvironmentOptions } from '@cv/utils/CommonUtils'
 import ServiceDependencyGraph from '@cv/pages/monitored-service/CVMonitoredService/components/MonitoredServiceGraphView/MonitoredServiceGraphView'
@@ -38,6 +39,9 @@ import css from './CVMonitoredService.module.scss'
 
 const MonitoredService: React.FC = () => {
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.monitoredServices.title')])
+
   const history = useHistory()
   const { view } = useQueryParams<{ view?: Views.GRID }>()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()

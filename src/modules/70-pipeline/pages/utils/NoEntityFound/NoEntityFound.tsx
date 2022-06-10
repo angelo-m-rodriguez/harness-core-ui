@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, isEmpty } from 'lodash-es'
 import { Layout, Text } from '@wings-software/uicore'
 import { String, useStrings } from 'framework/strings'
 import routes from '@common/RouteDefinitions'
@@ -22,12 +22,15 @@ import type {
 import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetails'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { StoreType } from '@common/constants/GitSyncTypes'
+import { ErrorHandler } from '@common/components/ErrorHandler/ErrorHandler'
+import type { Error, ResponseMessage } from 'services/pipeline-ng'
 import noEntityFoundImage from './images/no-entity-found.svg'
 import css from './NoEntityFound.module.scss'
 
 interface NoEntityFoundProps {
   identifier: string
   entityType: 'pipeline' | 'inputSet' | 'template'
+  errorObj?: Error
 }
 
 const entityTypeLabelMapping = {
@@ -37,7 +40,7 @@ const entityTypeLabelMapping = {
 }
 
 function NoEntityFound(props: NoEntityFoundProps): JSX.Element {
-  const { identifier, entityType } = props
+  const { identifier, entityType, errorObj } = props
   const { repoIdentifier, branch, versionLabel, connectorRef, storeType, repoName } =
     useQueryParams<TemplateStudioQueryParams>()
 
@@ -121,8 +124,13 @@ function NoEntityFound(props: NoEntityFoundProps): JSX.Element {
   return (
     <div className={css.noPipelineFoundContainer}>
       <Layout.Vertical spacing="small" flex={{ justifyContent: 'center', alignItems: 'center' }}>
+        {!isEmpty(errorObj?.responseMessages) && (
+          <ErrorHandler
+            responseMessages={errorObj?.responseMessages as ResponseMessage[]}
+            className={css.errorHandler}
+          />
+        )}
         <img src={noEntityFoundImage} className={css.noPipelineFoundImage} />
-
         <Text className={css.noPipelineFound} margin={{ top: 'medium', bottom: 'small' }}>
           <String
             stringID={'pipeline.gitExperience.noEntityFound'}
@@ -137,7 +145,7 @@ function NoEntityFound(props: NoEntityFoundProps): JSX.Element {
             connectorRef={connectorRef}
             repoName={repoName}
             branch={branch}
-            flags={{ borderless: false, showRepo: false, normalInputStyle: true, fallbackDefaultBranch: true }}
+            flags={{ borderless: false, showRepo: false, normalInputStyle: true }}
             onBranchChange={onGitBranchChange}
           />
         )}

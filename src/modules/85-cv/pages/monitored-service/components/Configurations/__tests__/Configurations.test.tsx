@@ -101,6 +101,7 @@ describe('Unit tests for Configuration', () => {
     await waitFor(() => expect(container.querySelector('[class*="menuItemLabel"]')).not.toBeNull())
     fireEvent.click(getByText('Infrastructure'))
     await waitFor(() => expect(getByText('cv.healthSource.noData')).not.toBeNull())
+    expect(document.title).toBe('cv.srmTitle | cv.monitoredServices.title | harness')
   })
 
   test('Ensure that error message is displayeed when api throws error', async () => {

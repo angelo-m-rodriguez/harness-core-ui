@@ -18,7 +18,7 @@ import set from 'lodash-es/set'
 
 import { Dialog, IDialogProps, Classes } from '@blueprintjs/core'
 import type { IconProps } from '@harness/icons'
-import { defaultTo, isEmpty, merge } from 'lodash-es'
+import { merge } from 'lodash-es'
 import {
   useGetConnectorListV2,
   PageConnectorResponse,
@@ -28,9 +28,7 @@ import {
   StageElementConfig,
   ArtifactConfig,
   SidecarArtifact,
-  useGetServiceV2,
-  ServiceResponseDTO,
-  NGServiceConfig
+  ServiceDefinition
 } from 'services/cd-ng'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { CONNECTOR_CREDENTIALS_STEP_IDENTIFIER } from '@connectors/constants'
@@ -63,7 +61,7 @@ import StepNexusAuthentication from '@connectors/components/CreateConnector/Nexu
 import StepArtifactoryAuthentication from '@connectors/components/CreateConnector/ArtifactoryConnector/StepAuth/StepArtifactoryAuthentication'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import AzureAuthentication from '@connectors/components/CreateConnector/AzureConnector/StepAuth/AzureAuthentication'
-import { yamlParse } from '@common/utils/YamlHelperMethods'
+import { useCache } from '@common/hooks/useCache'
 import ArtifactWizard from './ArtifactWizard/ArtifactWizard'
 import { DockerRegistryArtifact } from './ArtifactRepository/ArtifactLastSteps/DockerRegistryArtifact/DockerRegistryArtifact'
 import { ECRArtifact } from './ArtifactRepository/ArtifactLastSteps/ECRArtifact/ECRArtifact'
@@ -95,13 +93,14 @@ import css from './ArtifactsSelection.module.scss'
 export default function ArtifactsSelection({
   isPropagating = false,
   deploymentType,
-  readonly: isReadOnlyServiceMode
+  isReadonlyServiceMode,
+  readonly
 }: ArtifactsSelectionProps): React.ReactElement | null {
   const {
     state: {
+      pipeline,
       selectionState: { selectedStageId }
     },
-    isReadonly,
     getStageFromPipeline,
     updateStage,
     allowableTypes
@@ -123,6 +122,8 @@ export default function ArtifactsSelection({
   const stepWizardTitle = getString('connectors.createNewConnector')
   const { NG_NEXUS_ARTIFACTORY, CUSTOM_ARTIFACT_NG, NG_AZURE } = useFeatureFlags()
   const { stage } = getStageFromPipeline<DeploymentStageElementConfig>(selectedStageId || '')
+  const getServiceCacheId = `${pipeline.identifier}-${selectedStageId}-service`
+  const { getCache } = useCache([getServiceCacheId])
 
   useEffect(() => {
     if (
@@ -175,37 +176,9 @@ export default function ArtifactsSelection({
     queryParams: defaultQueryParams
   })
 
-  /*************************************Service Entity Related code********************************************************/
-  // This is temporary code to fetch the artifact data from service api. It will be replaced once caching is implemented for service entity
-  const {
-    data: selectedServiceResponse,
-    refetch: refetchServiceData,
-    loading: serviceLoading
-  } = useGetServiceV2({
-    serviceIdentifier: (stage?.stage?.spec as any)?.service?.serviceRef,
-    queryParams: { accountIdentifier: accountId, orgIdentifier: orgIdentifier, projectIdentifier: projectIdentifier },
-    lazy: true
-  })
-
-  useEffect(() => {
-    if (!isReadonly && isReadOnlyServiceMode) {
-      refetchServiceData()
-    }
-  }, [isReadOnlyServiceMode, (stage?.stage?.spec as any)?.service?.serviceRef])
-
-  /*************************************Service Entity Related code********************************************************/
-
-  const getServiceData = useCallback(() => {
-    const serviceData = selectedServiceResponse?.data?.service as ServiceResponseDTO
-    if (!isEmpty(serviceData?.yaml)) {
-      const parsedYaml = yamlParse<NGServiceConfig>(defaultTo(serviceData.yaml, ''))
-      return parsedYaml.service?.serviceDefinition
-    }
-  }, [selectedServiceResponse?.data?.service])
-
   const getArtifactsPath = useCallback((): any => {
-    if (!isReadonly && isReadOnlyServiceMode) {
-      const serviceData = getServiceData()
+    if (isReadonlyServiceMode) {
+      const serviceData = getCache(getServiceCacheId) as ServiceDefinition
       return serviceData?.spec?.artifacts
     }
 
@@ -213,11 +186,11 @@ export default function ArtifactsSelection({
       return get(stage, 'stage.spec.serviceConfig.stageOverrides.artifacts', [])
     }
     return get(stage, 'stage.spec.serviceConfig.serviceDefinition.spec.artifacts', {})
-  }, [getServiceData, isPropagating, isReadOnlyServiceMode, isReadonly, stage])
+  }, [isPropagating, isReadonlyServiceMode, stage])
 
   const getPrimaryArtifactPath = useCallback((): PrimaryArtifact => {
-    if (!isReadonly && isReadOnlyServiceMode) {
-      const serviceData = getServiceData()
+    if (isReadonlyServiceMode) {
+      const serviceData = getCache(getServiceCacheId)
       return get(serviceData, 'spec.artifacts.primary', null)
     }
     if (isPropagating) {
@@ -225,18 +198,18 @@ export default function ArtifactsSelection({
     }
 
     return get(stage, 'stage.spec.serviceConfig.serviceDefinition.spec.artifacts.primary', null)
-  }, [getServiceData, isPropagating, isReadonly, isReadOnlyServiceMode, stage])
+  }, [isPropagating, isReadonlyServiceMode, stage])
 
   const getSidecarPath = useCallback((): SidecarArtifactWrapper[] => {
-    if (!isReadonly && isReadOnlyServiceMode) {
-      const serviceData = getServiceData()
+    if (isReadonlyServiceMode) {
+      const serviceData = getCache(getServiceCacheId)
       return get(serviceData, 'spec.artifacts.sidecars', null) || []
     }
     if (isPropagating) {
       return get(stage, 'stage.spec.serviceConfig.stageOverrides.artifacts.sidecars', [])
     }
     return get(stage, 'stage.spec.serviceConfig.serviceDefinition.spec.artifacts.sidecars', [])
-  }, [getServiceData, isPropagating, isReadonly, isReadOnlyServiceMode, stage])
+  }, [isPropagating, isReadonlyServiceMode, stage])
 
   const artifacts = getArtifactsPath()
 
@@ -509,7 +482,7 @@ export default function ArtifactsSelection({
         addArtifact(data)
       },
       artifactIdentifiers: sideCarArtifact?.map((item: SidecarArtifactWrapper) => item.sidecar?.identifier as string),
-      isReadonly: isReadOnlyServiceMode,
+      isReadonly: readonly,
       selectedArtifact,
       selectedDeploymentType: deploymentType
     }
@@ -519,7 +492,7 @@ export default function ArtifactsSelection({
     context,
     expressions,
     getLastStepInitialData,
-    isReadOnlyServiceMode,
+    readonly,
     selectedArtifact,
     sideCarArtifact,
     getString
@@ -677,7 +650,7 @@ export default function ArtifactsSelection({
           allowableTypes={allowableTypes}
           lastSteps={getLastSteps()}
           labels={getLabels()}
-          isReadonly={isReadOnlyServiceMode}
+          isReadonly={readonly}
           selectedArtifact={selectedArtifact}
           changeArtifactType={changeArtifactType}
           newConnectorView={connectorView}
@@ -687,10 +660,6 @@ export default function ArtifactsSelection({
         />
       </div>
     )
-  }
-
-  if (serviceLoading) {
-    return null
   }
 
   return (
@@ -705,7 +674,7 @@ export default function ArtifactsSelection({
       fetchedConnectorResponse={fetchedConnectorResponse}
       accountId={accountId}
       refetchConnectors={refetchConnectorList}
-      isReadonly={isReadOnlyServiceMode}
+      isReadonly={readonly}
       allowSidecar={!isServerlessDeploymentType(deploymentType)}
     />
   )

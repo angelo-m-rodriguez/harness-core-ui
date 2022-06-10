@@ -11,7 +11,15 @@ import { getScopeFromValue } from '@common/components/EntityReference/EntityRefe
 import { Scope } from '@common/interfaces/SecretsInterface'
 import type { ManifestConfig, ManifestConfigWrapper } from 'services/cd-ng'
 import { GitRepoName, ManifestStoreMap } from '../Manifesthelper'
-import type { CommandFlags, HelmWithGcsDataType, HelmWithGITDataType, HelmWithHTTPDataType } from '../ManifestInterface'
+import type {
+  CommandFlags,
+  HelmWithGcsDataType,
+  HelmWithGITDataType,
+  HelmWithHTTPDataType,
+  HelmWithOCIDataType
+} from '../ManifestInterface'
+
+type formDataType = HelmWithGcsDataType | HelmWithGITDataType | HelmWithHTTPDataType | HelmWithOCIDataType
 
 const getRepoNameBasedonScope = (initialValues: ManifestConfig, prevStepData: any): string => {
   const connectorScope = getScopeFromValue(initialValues?.spec.store?.spec.connectorRef)
@@ -57,7 +65,7 @@ export const getRepositoryName = (prevStepData: any, initialValues: ManifestConf
 
 export const handleCommandFlagsSubmitData = (
   manifestObj: ManifestConfigWrapper,
-  formData: (HelmWithGcsDataType | HelmWithGITDataType | HelmWithHTTPDataType) & {
+  formData: formDataType & {
     store?: string
     connectorRef?: string
   }
@@ -78,5 +86,14 @@ export const handleCommandFlagsSubmitData = (
     if (filteredCommandFlags.length === 0 && manifestObj?.manifest?.spec) {
       delete manifestObj.manifest.spec.commandFlags
     }
+  }
+}
+
+export const getConnectorPath = (type: string, data: any): string => {
+  switch (type) {
+    case ManifestStoreMap.OciHelmChart:
+      return data?.spec?.store?.spec?.config?.spec?.connectorRef
+    default:
+      return data?.spec?.store?.spec?.connectorRef
   }
 }

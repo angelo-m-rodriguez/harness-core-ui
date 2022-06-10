@@ -27,6 +27,7 @@ export const getVariableTypeOptions = (getString: (key: StringKeys) => string): 
     value: type
   }))
 
+// TODO: TO be removed
 export interface NGServiceOverrides {
   serviceRef: string
   variables: NGVariable[]

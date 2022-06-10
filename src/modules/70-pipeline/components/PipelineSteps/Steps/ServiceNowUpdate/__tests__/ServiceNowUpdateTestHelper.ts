@@ -150,7 +150,7 @@ export const getServiceNowUpdateDeploymentModeProps = (): ServiceNowUpdateDeploy
         ticketType: RUNTIME_INPUT_VALUE,
         ticketNumber: RUNTIME_INPUT_VALUE,
         fieldType: FieldType.ConfigureFields,
-        fields: [],
+        fields: [{ name: 'Description', value: RUNTIME_INPUT_VALUE }],
         useServiceNowTemplate: false
       }
     }

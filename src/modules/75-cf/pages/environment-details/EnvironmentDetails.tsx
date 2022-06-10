@@ -7,7 +7,7 @@
 
 import React, { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import { PageError } from '@harness/uicore'
+import { PageError, Pagination } from '@harness/uicore'
 import routes from '@common/RouteDefinitions'
 import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
@@ -104,6 +104,19 @@ const EnvironmentDetails: React.FC = () => {
                   setRecents([...recents, newKey])
                   onNewKeyCreated()
                   hideModal()
+                }}
+              />
+            )
+          }
+          footer={
+            !!keys?.itemCount && (
+              <Pagination
+                itemCount={keys?.itemCount ?? 0}
+                pageCount={keys?.pageCount ?? 0}
+                pageIndex={keys?.pageIndex ?? 0}
+                pageSize={CF_DEFAULT_PAGE_SIZE}
+                gotoPage={(index: number) => {
+                  setPage(index)
                 }}
               />
             )

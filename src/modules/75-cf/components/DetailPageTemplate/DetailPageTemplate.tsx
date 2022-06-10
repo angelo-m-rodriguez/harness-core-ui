@@ -30,6 +30,7 @@ export interface DetailPageTemplateProps {
   menuItems?: RbacOptionsMenuButtonProps['items']
   metaData?: Record<string, string>
   toolbar?: React.ReactNode
+  footer?: React.ReactNode
 }
 
 export const DetailPageTemplate: React.FC<DetailPageTemplateProps> = ({
@@ -40,13 +41,15 @@ export const DetailPageTemplate: React.FC<DetailPageTemplateProps> = ({
   children,
   menuItems = [],
   metaData = {},
-  toolbar
+  toolbar,
+  footer
 }) => {
   const { getString } = useStrings()
 
   return (
-    <>
+    <main data-detail-page-container className={css.layout}>
       <Page.Header
+        className={css.header}
         size="large"
         breadcrumbs={<NGBreadcrumbs customPathParams={{ module: 'cf' }} links={breadcrumbs} />}
         title={
@@ -84,8 +87,11 @@ export const DetailPageTemplate: React.FC<DetailPageTemplateProps> = ({
           </>
         }
       />
-      {toolbar && <Page.SubHeader>{toolbar}</Page.SubHeader>}
-      <Page.Body>{children}</Page.Body>
-    </>
+      {toolbar && <Page.SubHeader className={css.toolbar}>{toolbar}</Page.SubHeader>}
+      <div data-name="page-body" className={css.content}>
+        {children}
+      </div>
+      {footer && <footer className={css.footer}>{footer}</footer>}
+    </main>
   )
 }

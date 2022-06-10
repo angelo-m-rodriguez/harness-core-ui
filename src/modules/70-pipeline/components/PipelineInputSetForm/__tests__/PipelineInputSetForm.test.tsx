@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { Formik, RUNTIME_INPUT_VALUE } from '@wings-software/uicore'
+import { Formik, RUNTIME_INPUT_VALUE, MultiTypeInputType } from '@harness/uicore'
 import { InputTypes, setFieldValue } from '@common/utils/JestFormHelper'
 import { findPopoverContainer, TestWrapper } from '@common/utils/testUtils'
 import connector from '@connectors/pages/connectors/__tests__/mocks/get-connector-mock.json'
@@ -38,11 +38,12 @@ const getCommonProps = ({
   path
 }: {
   path?: string
-}): { path?: string; readonly?: boolean; viewType: StepViewType; maybeContainerClass?: string } => ({
+}): Pick<PipelineInputSetFormProps, 'path' | 'readonly' | 'viewType' | 'maybeContainerClass' | 'allowableTypes'> => ({
   path: path ?? '/dummypath',
   readonly: false,
   viewType: StepViewType.InputSet,
-  maybeContainerClass: ''
+  maybeContainerClass: '',
+  allowableTypes: [MultiTypeInputType.EXPRESSION, MultiTypeInputType.FIXED]
 })
 
 const getPropsForVariables = (): PipelineInputSetFormProps => ({

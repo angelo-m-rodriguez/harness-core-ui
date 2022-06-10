@@ -43,8 +43,14 @@ export const useRunPipelineModal = (
     executionId,
     stagesExecuted
   } = runPipelineModaParams
-  const { projectIdentifier, orgIdentifier, accountId, module, executionIdentifier } =
-    useParams<PipelineType<ExecutionPathProps>>()
+  const {
+    projectIdentifier,
+    orgIdentifier,
+    accountId,
+    module,
+    executionIdentifier,
+    source = 'executions'
+  } = useParams<PipelineType<ExecutionPathProps>>()
 
   const planExecutionId: string | undefined = executionIdentifier ?? executionId
 
@@ -120,6 +126,7 @@ export const useRunPipelineModal = (
               module={module}
               inputSetYAML={inputSetYaml || ''}
               repoIdentifier={repoIdentifier}
+              source={source}
               branch={branch}
               connectorRef={connectorRef}
               storeType={storeType}

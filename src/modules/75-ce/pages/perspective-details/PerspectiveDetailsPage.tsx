@@ -65,6 +65,7 @@ import { useDownloadPerspectiveGridAsCsv } from '@ce/components/PerspectiveGrid/
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useDeepCompareEffect, useQueryParams, useUpdateQueryParams } from '@common/hooks'
 import type { PerspectiveQueryParams, TimeRangeFilterType } from '@ce/types'
 import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
@@ -350,6 +351,8 @@ const PerspectiveDetailsPage: React.FC = () => {
   const { data: { perspectiveTotalCount } = {} } = perspectiveTotalCountResult
 
   const persName = perspectiveData?.name || perspectiveName
+
+  useDocumentTitle([getString('ce.perspectives.sideNavText'), persName], true)
 
   const [openDownloadCSVModal] = useDownloadPerspectiveGridAsCsv({
     perspectiveName: persName,

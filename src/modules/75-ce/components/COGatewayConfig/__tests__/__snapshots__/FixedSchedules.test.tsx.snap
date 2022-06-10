@@ -587,6 +587,11 @@ exports[`Static Schedule form tests form renders successfully 1`] = `
               </div>
             </div>
           </div>
+          <p
+            class="StyledProps--font StyledProps--main description StyledProps--font-size-small"
+          >
+            Resources will be up on every day (all day) 
+          </p>
           <div
             class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main ctaContainer"
           >

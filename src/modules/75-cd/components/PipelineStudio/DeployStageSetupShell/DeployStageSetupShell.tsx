@@ -32,8 +32,7 @@ import { useStrings } from 'framework/strings'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { useQueryParams } from '@common/hooks'
-import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
-import { FeatureFlag } from '@common/featureFlags'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { SaveTemplateButton } from '@pipeline/components/PipelineStudio/SaveTemplateButton/SaveTemplateButton'
 import { useAddStepTemplate } from '@pipeline/hooks/useAddStepTemplate'
 import {
@@ -49,6 +48,7 @@ import DeployInfraSpecifications from '../DeployInfraSpecifications/DeployInfraS
 import DeployServiceSpecifications from '../DeployServiceSpecifications/DeployServiceSpecifications'
 import DeployStageSpecifications from '../DeployStageSpecifications/DeployStageSpecifications'
 import DeployAdvancedSpecifications from '../DeployAdvancedSpecifications/DeployAdvancedSpecifications'
+import DeployEnvSpecifications from '../DeployEnvSpecifications/DeployEnvSpecifications'
 import css from './DeployStageSetupShell.module.scss'
 
 export const MapStepTypeToIcon: { [key: string]: HarnessIconName } = {
@@ -71,7 +71,7 @@ const iconNames = { tick: 'tick' as IconName }
 
 export default function DeployStageSetupShell(): JSX.Element {
   const { getString } = useStrings()
-  const isTemplatesEnabled = useFeatureFlag(FeatureFlag.NG_TEMPLATES)
+  const { NG_TEMPLATES, NG_SVC_ENV_REDESIGN } = useFeatureFlags()
   const layoutRef = React.useRef<HTMLDivElement>(null)
   const pipelineContext = usePipelineContext()
   const {
@@ -104,7 +104,7 @@ export default function DeployStageSetupShell(): JSX.Element {
 
   React.useEffect(() => {
     const sectionId = (query as any).sectionId || ''
-    if (sectionId?.length && TabsOrder.includes(sectionId)) {
+    if (sectionId?.length && (TabsOrder.includes(sectionId) || sectionId === DeployTabs.ENVIRONMENT)) {
       setSelectedTabId(sectionId)
     } else {
       setSelectedSectionId(DeployTabs.SERVICE)
@@ -120,6 +120,13 @@ export default function DeployStageSetupShell(): JSX.Element {
   const { checkErrorsForTab } = React.useContext(StageErrorContext)
 
   const handleTabChange = (nextTab: DeployTabs): void => {
+    if (
+      NG_SVC_ENV_REDESIGN &&
+      isEmpty(selectedStage?.stage?.spec?.infrastructure) &&
+      nextTab === DeployTabs.INFRASTRUCTURE
+    ) {
+      nextTab = DeployTabs.ENVIRONMENT
+    }
     checkErrorsForTab(selectedTabId).then(_ => {
       setSelectedTabId(nextTab)
       setSelectedSectionId(nextTab)
@@ -196,10 +203,13 @@ export default function DeployStageSetupShell(): JSX.Element {
 
   const validate = React.useCallback(() => {
     try {
-      getCDStageValidationSchema(getString, selectedDeploymentType, contextType).validateSync(selectedStage?.stage, {
-        abortEarly: false,
-        context: selectedStage?.stage
-      })
+      getCDStageValidationSchema(getString, selectedDeploymentType, contextType, NG_SVC_ENV_REDESIGN).validateSync(
+        selectedStage?.stage,
+        {
+          abortEarly: false,
+          context: selectedStage?.stage
+        }
+      )
       setIncompleteTabs({})
     } catch (error) {
       if (error.name !== 'ValidationError') {
@@ -215,6 +225,9 @@ export default function DeployStageSetupShell(): JSX.Element {
       }
       if (!isEmpty(get(response.spec, 'serviceConfig'))) {
         newIncompleteTabs[DeployTabs.SERVICE] = true
+      }
+      if (!isEmpty(get(response.spec, 'environment'))) {
+        newIncompleteTabs[DeployTabs.ENVIRONMENT] = true
       }
       if (!isEmpty(get(response.spec, 'infrastructure'))) {
         newIncompleteTabs[DeployTabs.INFRASTRUCTURE] = true
@@ -300,6 +313,8 @@ export default function DeployStageSetupShell(): JSX.Element {
           onClick={() => {
             if (selectedTabId === DeployTabs.EXECUTION) {
               updatePipelineView({ ...pipelineView, isSplitViewOpen: false, splitViewData: {} })
+            } else if (selectedTabId === DeployTabs.ENVIRONMENT) {
+              handleTabChange(DeployTabs.EXECUTION)
             } else {
               handleTabChange(TabsOrder[Math.min(TabsOrder.length, TabsOrder.indexOf(selectedTabId) + 1)])
             }
@@ -334,17 +349,32 @@ export default function DeployStageSetupShell(): JSX.Element {
           panel={<DeployServiceSpecifications>{navBtns}</DeployServiceSpecifications>}
           data-testid="service"
         />
-        <Tab
-          id={DeployTabs.INFRASTRUCTURE}
-          title={
-            <span className={css.title} data-completed={!incompleteTabs[DeployTabs.INFRASTRUCTURE]}>
-              <Icon name={incompleteTabs[DeployTabs.INFRASTRUCTURE] ? 'infrastructure' : iconNames.tick} size={16} />
-              {getString('infrastructureText')}
-            </span>
-          }
-          panel={<DeployInfraSpecifications>{navBtns}</DeployInfraSpecifications>}
-          data-testid="infrastructure"
-        />
+        {NG_SVC_ENV_REDESIGN && isEmpty(selectedStage?.stage?.spec?.infrastructure) && (
+          <Tab
+            id={DeployTabs.ENVIRONMENT}
+            title={
+              <span className={css.title} data-completed={!incompleteTabs[DeployTabs.ENVIRONMENT]}>
+                <Icon name={incompleteTabs[DeployTabs.ENVIRONMENT] ? 'environment' : iconNames.tick} size={16} />
+                {getString('environment')}
+              </span>
+            }
+            panel={<DeployEnvSpecifications>{navBtns}</DeployEnvSpecifications>}
+            data-testid="environment"
+          />
+        )}
+        {(!NG_SVC_ENV_REDESIGN || (NG_SVC_ENV_REDESIGN && !isEmpty(selectedStage?.stage?.spec?.infrastructure))) && (
+          <Tab
+            id={DeployTabs.INFRASTRUCTURE}
+            title={
+              <span className={css.title} data-completed={!incompleteTabs[DeployTabs.INFRASTRUCTURE]}>
+                <Icon name={incompleteTabs[DeployTabs.INFRASTRUCTURE] ? 'infrastructure' : iconNames.tick} size={16} />
+                {getString('infrastructureText')}
+              </span>
+            }
+            panel={<DeployInfraSpecifications>{navBtns}</DeployInfraSpecifications>}
+            data-testid="infrastructure"
+          />
+        )}
         <Tab
           id={DeployTabs.EXECUTION}
           title={
@@ -434,7 +464,7 @@ export default function DeployStageSetupShell(): JSX.Element {
           panel={<DeployAdvancedSpecifications>{navBtns}</DeployAdvancedSpecifications>}
           data-testid="advanced"
         />
-        {isTemplatesEnabled && isContextTypeNotStageTemplate(contextType) && selectedStage?.stage && (
+        {NG_TEMPLATES && isContextTypeNotStageTemplate(contextType) && selectedStage?.stage && (
           <>
             <Expander />
             <SaveTemplateButton

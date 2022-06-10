@@ -787,7 +787,7 @@ exports[`ServiceNow Approval tests Edit stage - readonly: edit stage view readon
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1408,7 +1408,7 @@ exports[`ServiceNow Approval tests Open a saved serviceNow approval step - edit 
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

@@ -29,6 +29,7 @@ import {
 import type { NGTemplateInfoConfig } from 'services/template-ng'
 import { PageSpinner, useToaster, NavigationCheck } from '@common/components'
 import type { TemplateFormRef } from '@templates-library/components/TemplateStudio/TemplateStudio'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { MonitoredServiceEnum } from '@cv/pages/monitored-service/MonitoredServicePage.constants'
 import { ChangeSourceCategoryName } from '@cv/pages/ChangeSource/ChangeSourceDrawer/ChangeSourceDrawer.constants'
 import { useStrings } from 'framework/strings'
@@ -51,6 +52,9 @@ export default function Configurations(
   formikRef: TemplateFormRef
 ): JSX.Element {
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.monitoredServices.title')])
+
   const { showWarning, showError, showSuccess } = useToaster()
   const history = useHistory()
   const { isTemplate } = useMonitoredServiceContext()

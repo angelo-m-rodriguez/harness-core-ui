@@ -88,6 +88,10 @@ export function URLValidationSchema(): Yup.Schema<string | undefined> {
     .required(getString('common.validation.urlIsRequired'))
     .url(getString('validation.urlIsNotValid'))
 }
+export function URLValidationSchemaWithoutRequired(): Yup.Schema<string | undefined> {
+  const { getString } = useStrings()
+  return Yup.string().trim().url(getString('validation.urlIsNotValid'))
+}
 
 export const isEmail = (email: string): boolean => {
   return regexEmail.test(String(email).toLowerCase())

@@ -34,7 +34,15 @@ import { StepType as StepsStepType } from '@pipeline/components/PipelineSteps/Pi
 import { AdvancedPanels } from '@pipeline/components/PipelineStudio/StepCommands/StepCommandTypes'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import type { BuildStageElementConfig } from '@pipeline/utils/pipelineTypes'
-import type { Infrastructure, K8sDirectInfraYaml, UseFromStageInfraYaml, VmInfraYaml, VmPoolYaml } from 'services/ci'
+import type {
+  Infrastructure,
+  K8sDirectInfraYaml,
+  K8sHostedInfraYaml,
+  K8sHostedInfraYamlSpec,
+  UseFromStageInfraYaml,
+  VmInfraYaml,
+  VmPoolYaml
+} from 'services/ci'
 import { FeatureFlag } from '@common/featureFlags'
 import { SaveTemplateButton } from '@pipeline/components/PipelineStudio/SaveTemplateButton/SaveTemplateButton'
 import { useAddStepTemplate } from '@pipeline/hooks/useAddStepTemplate'
@@ -117,7 +125,7 @@ const BuildStageSetupShell: React.FC<BuildStageSetupShellProps> = ({ moduleIcon 
       (stageData?.spec?.infrastructure as UseFromStageInfraYaml)?.useFromStage ||
       ((stageData?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.poolName ||
       ((stageData?.spec?.infrastructure as VmInfraYaml)?.spec as VmPoolYaml)?.spec?.identifier ||
-      (stageData?.spec?.infrastructure as Infrastructure)?.type === CIBuildInfrastructureType.KubernetesHosted
+      ((stageData?.spec?.infrastructure as K8sHostedInfraYaml)?.spec as K8sHostedInfraYamlSpec)?.identifier
     )
     const execution = !!stageData?.spec?.execution?.steps?.length
     setFilledUpStages({ specifications, infra, execution })
@@ -132,6 +140,7 @@ const BuildStageSetupShell: React.FC<BuildStageSetupShellProps> = ({ moduleIcon 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     (stageData?.spec?.infrastructure as UseFromStageInfraYaml)?.useFromStage,
     poolName,
+    (stageData?.spec?.infrastructure as K8sHostedInfraYaml)?.spec,
     stageData?.spec?.execution?.steps?.length
   ])
 
@@ -237,6 +246,11 @@ const BuildStageSetupShell: React.FC<BuildStageSetupShellProps> = ({ moduleIcon 
             }
           }}
           variation={ButtonVariation.PRIMARY}
+          disabled={
+            selectedTabId === BuildTabs.INFRASTRUCTURE &&
+            (stageData?.spec?.infrastructure as Infrastructure)?.type === CIBuildInfrastructureType.KubernetesHosted &&
+            !((stageData?.spec?.infrastructure as K8sHostedInfraYaml)?.spec as K8sHostedInfraYamlSpec)?.identifier
+          }
         />
       )}
     </Layout.Horizontal>

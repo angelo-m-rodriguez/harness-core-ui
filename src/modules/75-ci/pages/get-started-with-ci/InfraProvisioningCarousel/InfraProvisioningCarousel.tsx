@@ -144,7 +144,7 @@ export const InfraProvisioningCarousel: React.FC<InfraProvisioningCarouselProps>
               </Text>
             </Layout.Vertical>
             <Layout.Vertical padding="xxlarge" style={{ flex: 1 }} className={cx(css.bg, css.centerAlign)}>
-              <Layout.Vertical spacing="medium">
+              <Layout.Vertical spacing="medium" className={css.centerAlign}>
                 <Container padding={{ top: 'large' }}>
                   <Container
                     style={{ background: `transparent url(${samplePipelineImg}) no-repeat` }}

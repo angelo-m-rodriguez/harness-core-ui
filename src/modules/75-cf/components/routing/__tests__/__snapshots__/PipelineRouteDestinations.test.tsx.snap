@@ -186,7 +186,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
         "startTrialRedirect": [Function],
       }
     }
-    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/executions/:executionIdentifier"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/:source(deployments|executions|builds)/:executionIdentifier"
     sidebarProps={
       Object {
         "icon": "cf-main",
@@ -207,7 +207,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
         "startTrialRedirect": [Function],
       }
     }
-    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/executions/:executionIdentifier/pipeline"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/:source(deployments|executions|builds)/:executionIdentifier/pipeline"
     sidebarProps={
       Object {
         "icon": "cf-main",
@@ -230,7 +230,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
         "startTrialRedirect": [Function],
       }
     }
-    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/executions/:executionIdentifier/inputs"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/:source(deployments|executions|builds)/:executionIdentifier/inputs"
     sidebarProps={
       Object {
         "icon": "cf-main",
@@ -253,7 +253,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
         "startTrialRedirect": [Function],
       }
     }
-    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/executions/:executionIdentifier/artifacts"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/:source(deployments|executions|builds)/:executionIdentifier/artifacts"
     sidebarProps={
       Object {
         "icon": "cf-main",
@@ -298,7 +298,7 @@ exports[`PipelineRouteDestinations it should return the pipeline routes 1`] = `
       }
     }
     pageName="ExecutionPolicyEvaluationsView"
-    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/executions/:executionIdentifier/policy-evaluations"
+    path="/account/:accountId/:module/orgs/:orgIdentifier/projects/:projectIdentifier/pipelines/:pipelineIdentifier/:source(deployments|executions|builds)/:executionIdentifier/policy-evaluations"
     sidebarProps={
       Object {
         "icon": "cf-main",

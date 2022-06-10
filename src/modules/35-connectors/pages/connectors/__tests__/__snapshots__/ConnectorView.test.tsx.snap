@@ -100,7 +100,7 @@ exports[`Connector Details Page Edit and save connector via YAML for a git-sync 
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="saveToGitForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

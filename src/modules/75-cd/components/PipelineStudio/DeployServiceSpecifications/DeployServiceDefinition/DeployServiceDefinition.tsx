@@ -111,6 +111,7 @@ function DeployServiceDefinition(): React.ReactElement {
         {getString('pipelineSteps.deploy.serviceSpecifications.serviceDefinition')}
       </div>
       <SelectDeploymentType
+        viewContext="setup"
         selectedDeploymentType={selectedDeploymentType}
         isReadonly={isReadonly}
         handleDeploymentTypeChange={handleDeploymentTypeChange}

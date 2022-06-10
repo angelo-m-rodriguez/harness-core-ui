@@ -1,0 +1,43 @@
+{
+  "id": "90321",
+  "deny": false,
+  "details": [
+    {
+      "policySetId": "",
+      "deny": false,
+      "policyMetadata": [
+        {
+          "policyId": "",
+          "policyName": "connector",
+          "severity": "warning",
+          "denyMessages": ["true"],
+          "status": "warning",
+          "identifier": "connector",
+          "accountId": "abcd",
+          "orgId": "",
+          "projectId": "",
+          "created": "1653379527676",
+          "updated": "1653379527676",
+          "error": ""
+        }
+      ],
+      "policySetName": "terer",
+      "status": "warning",
+      "identifier": "terer",
+      "created": "1653379413444",
+      "accountId": "abcd",
+      "orgId": "",
+      "projectId": ""
+    }
+  ],
+  "message": "",
+  "timestamp": "1653475109078",
+  "status": "warning",
+  "accountId": "abcd",
+  "orgId": "",
+  "projectId": "",
+  "entity": "accountIdentifier%3Aabcdqg%2ForgIdentifier%3Anull%2FprojectIdentifier%3Anull%2Fidentifier%3Asrewerewr",
+  "type": "connector",
+  "action": "onsave",
+  "created": "1653475109052"
+}

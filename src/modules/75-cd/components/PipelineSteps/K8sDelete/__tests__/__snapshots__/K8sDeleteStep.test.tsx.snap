@@ -120,7 +120,7 @@ exports[`Test K8sDeleteStep should render edit view -with ManifestPaths selected
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8DeleteData_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -393,7 +393,7 @@ exports[`Test K8sDeleteStep should render edit view -with ReleaseName selected 1
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8DeleteData_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -701,7 +701,7 @@ exports[`Test K8sDeleteStep should render edit view -with ResourceName selected 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8DeleteData_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -974,7 +974,7 @@ exports[`Test K8sDeleteStep should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8DeleteData_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

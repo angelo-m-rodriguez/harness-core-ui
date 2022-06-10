@@ -334,6 +334,7 @@ export interface AccessControlCheckError {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   detailedMessage?: string
   failedPermissionChecks?: PermissionCheck[]
@@ -1210,6 +1211,15 @@ export type AzureUserAssignedMSIAuth = AzureAuthCredentialDTO & {
   clientId: string
 }
 
+export type AzureWebAppInfrastructure = Infrastructure & {
+  appService: string
+  connectorRef: string
+  deploymentSlot: string
+  resourceGroup: string
+  subscriptionId: string
+  targetSlot: string
+}
+
 export interface AzureWebAppNamesDTO {
   webAppNames?: string[]
 }
@@ -1522,6 +1532,7 @@ export interface CloudformationTemplateFileSpec {
 
 export interface Cluster {
   identifier?: string
+  name?: string
 }
 
 export interface ClusterBasicDTO {
@@ -1532,8 +1543,10 @@ export interface ClusterBasicDTO {
 export interface ClusterBatchRequest {
   clusters?: ClusterBasicDTO[]
   envRef?: string
+  linkAllClusters?: boolean
   orgIdentifier?: string
   projectIdentifier?: string
+  searchTerm?: string
 }
 
 export interface ClusterRequest {
@@ -1555,12 +1568,12 @@ export interface ClusterYaml {
   metadata?: string
   ref: string
 }
-
 export interface CodeBase {
   build: Build
   connectorRef: string
   depth?: number
   prCloneStrategy?: 'MergeCommit' | 'SourceBranch'
+  projectName?: string
   repoName?: string
   resources?: ContainerResource
   sslVerify?: boolean
@@ -1668,6 +1681,7 @@ export interface ConnectorCatalogueItem {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   )[]
 }
 
@@ -1743,6 +1757,7 @@ export type ConnectorFilterProperties = FilterProperties & {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   )[]
 }
 
@@ -1795,6 +1810,7 @@ export interface ConnectorInfoDTO {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export interface ConnectorResponse {
@@ -1864,6 +1880,7 @@ export interface ConnectorTypeStatistics {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export interface ConnectorValidationResult {
@@ -1958,10 +1975,26 @@ export type CreatePRStepInfo = StepSpecType & {
   commitMessage?: string
   delegateSelectors?: string[]
   isNewBranch?: boolean
+  overrideConfig: boolean
   prTitle?: string
+  shell: 'Bash' | 'PowerShell'
+  source: CreatePRStepUpdateConfigScriptWrapper
   store?: StoreConfigWrapper
   stringMap?: ParameterFieldMapStringString
   targetBranch?: string
+}
+
+export interface CreatePRStepUpdateConfigScriptBaseSource {
+  type?: string
+}
+
+export type CreatePRStepUpdateConfigScriptInlineSource = CreatePRStepUpdateConfigScriptBaseSource & {
+  updateConfigScript?: string
+}
+
+export interface CreatePRStepUpdateConfigScriptWrapper {
+  spec: CreatePRStepUpdateConfigScriptBaseSource
+  type: string
 }
 
 export interface CriteriaSpec {
@@ -1993,7 +2026,7 @@ export type CustomHealthConnectorDTO = ConnectorConfigDTO & {
 }
 
 export interface CustomHealthKeyAndValue {
-  encryptedValueRef?: SecretRefData
+  encryptedValueRef?: string
   key: string
   value?: string
   valueEncrypted?: boolean
@@ -2043,6 +2076,7 @@ export type DatadogConnectorDTO = ConnectorConfigDTO & {
 export interface DelegateConfiguration {
   action?: 'SELF_DESTRUCT'
   delegateVersions?: string[]
+  validTillNextRelease?: boolean
   validUntil?: number
 }
 
@@ -2051,6 +2085,16 @@ export interface DelegateConnectionDetails {
   lastHeartbeat?: number
   uuid?: string
   version?: string
+}
+
+export interface DelegateDownloadRequest {
+  clusterPermissionType?: 'CLUSTER_ADMIN' | 'CLUSTER_VIEWER' | 'NAMESPACE_ADMIN'
+  customClusterNamespace?: string
+  description?: string
+  name: string
+  size?: 'EXTRA_SMALL' | 'LAPTOP' | 'SMALL' | 'MEDIUM' | 'LARGE'
+  tags?: string[]
+  tokenName?: string
 }
 
 export interface DelegateEntityOwner {
@@ -2098,7 +2142,6 @@ export interface DelegateGroupDetails {
   delegateConfigurationId?: string
   delegateDescription?: string
   delegateGroupIdentifier?: string
-  delegateInsightsDetails?: DelegateInsightsDetails
   delegateInstanceDetails?: DelegateInner[]
   delegateType?: string
   groupCustomSelectors?: string[]
@@ -2133,15 +2176,6 @@ export interface DelegateInner {
   lastHeartbeat?: number
   tokenActive?: boolean
   uuid?: string
-}
-
-export interface DelegateInsightsBarDetails {
-  counts?: PairDelegateInsightsTypeLong[]
-  timeStamp?: number
-}
-
-export interface DelegateInsightsDetails {
-  insights?: DelegateInsightsBarDetails[]
 }
 
 export interface DelegateMetaInfo {
@@ -2287,6 +2321,7 @@ export type DeploymentStageConfig = StageInfoConfig & {
   environment?: EnvironmentYamlV2
   environmentGroup?: EnvironmentGroupYaml
   execution: ExecutionElementConfig
+  gitOpsEnabled?: boolean
   infrastructure?: PipelineInfrastructure
   service?: ServiceYamlV2
   serviceConfig?: ServiceConfig
@@ -2825,14 +2860,16 @@ export interface EnvironmentYaml {
 }
 
 export interface EnvironmentYamlV2 {
-  deployToAll?: boolean
+  deployToAll: boolean
   environmentInputs?: {
     [key: string]: { [key: string]: any }
   }
   environmentRef: string
   gitOpsClusters?: ClusterYaml[]
   infrastructureDefinitions?: InfraStructureDefinitionYaml[]
-  metadata?: string
+  serviceOverrideInputs?: {
+    [key: string]: { [key: string]: any }
+  }
 }
 
 export interface Error {
@@ -3155,6 +3192,7 @@ export interface Error {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   detailedMessage?: string
   message?: string
@@ -3555,6 +3593,7 @@ export interface Failure {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   errors?: ValidationError[]
   message?: string
@@ -3836,6 +3875,7 @@ export interface FileDTO {
   name: string
   orgIdentifier?: string
   parentIdentifier: string
+  path?: string
   projectIdentifier?: string
   tags?: NGTag[]
   type: 'FILE' | 'FOLDER'
@@ -3855,6 +3895,7 @@ export interface FileStoreNodeDTO {
   lastModifiedBy?: EmbeddedUserDetailsDTO
   name: string
   parentIdentifier?: string
+  path?: string
   type: 'FILE' | 'FOLDER'
 }
 
@@ -3865,7 +3906,7 @@ export interface FileStoreRequest {
 export type FilesFilterProperties = FilterProperties & {
   createdBy?: EmbeddedUserDetailsDTO
   fileUsage?: 'MANIFEST_FILE' | 'CONFIG' | 'SCRIPT'
-  referencedBy?: EntityDetail
+  referencedBy?: ReferencedByDTO
 }
 
 export interface Filter {
@@ -3918,6 +3959,7 @@ export interface FolderNodeDTO {
   lastModifiedBy?: EmbeddedUserDetailsDTO
   name: string
   parentIdentifier?: string
+  path?: string
   type: 'FILE' | 'FOLDER'
 }
 
@@ -5243,7 +5285,14 @@ export interface InfrastructureConfig {
 export interface InfrastructureDef {
   provisioner?: ExecutionElementConfig
   spec: Infrastructure
-  type: 'KubernetesDirect' | 'KubernetesGcp' | 'KubernetesAzure' | 'Pdc' | 'SshWinRmAzure' | 'ServerlessAwsLambda'
+  type:
+    | 'KubernetesDirect'
+    | 'KubernetesGcp'
+    | 'KubernetesAzure'
+    | 'Pdc'
+    | 'SshWinRmAzure'
+    | 'ServerlessAwsLambda'
+    | 'AzureWebApp'
 }
 
 export interface InfrastructureDefinitionConfig {
@@ -5258,7 +5307,14 @@ export interface InfrastructureDefinitionConfig {
   tags?: {
     [key: string]: string
   }
-  type: 'KubernetesDirect' | 'KubernetesGcp' | 'KubernetesAzure' | 'Pdc' | 'SshWinRmAzure' | 'ServerlessAwsLambda'
+  type:
+    | 'KubernetesDirect'
+    | 'KubernetesGcp'
+    | 'KubernetesAzure'
+    | 'Pdc'
+    | 'SshWinRmAzure'
+    | 'ServerlessAwsLambda'
+    | 'AzureWebApp'
 }
 
 export interface InfrastructureDetails {
@@ -5275,7 +5331,14 @@ export interface InfrastructureRequestDTO {
   tags?: {
     [key: string]: string
   }
-  type?: 'KubernetesDirect' | 'KubernetesGcp' | 'KubernetesAzure' | 'Pdc' | 'SshWinRmAzure' | 'ServerlessAwsLambda'
+  type?:
+    | 'KubernetesDirect'
+    | 'KubernetesGcp'
+    | 'KubernetesAzure'
+    | 'Pdc'
+    | 'SshWinRmAzure'
+    | 'ServerlessAwsLambda'
+    | 'AzureWebApp'
   yaml?: string
 }
 
@@ -5296,7 +5359,14 @@ export interface InfrastructureResponseDTO {
   tags?: {
     [key: string]: string
   }
-  type?: 'KubernetesDirect' | 'KubernetesGcp' | 'KubernetesAzure' | 'Pdc' | 'SshWinRmAzure' | 'ServerlessAwsLambda'
+  type?:
+    | 'KubernetesDirect'
+    | 'KubernetesGcp'
+    | 'KubernetesAzure'
+    | 'Pdc'
+    | 'SshWinRmAzure'
+    | 'ServerlessAwsLambda'
+    | 'AzureWebApp'
   yaml?: string
 }
 
@@ -6003,6 +6073,7 @@ export interface ManifestConfig {
     | 'OpenshiftTemplate'
     | 'Values'
     | 'ServerlessAwsLambda'
+    | 'ReleaseRepo'
 }
 
 export interface ManifestConfigWrapper {
@@ -6095,6 +6166,16 @@ export interface NGProperties {
 
 export interface NGServiceConfig {
   service?: NGServiceV2InfoConfig
+}
+
+export interface NGServiceOverrideConfig {
+  serviceOverrides?: NGServiceOverrideInfoConfig
+}
+
+export interface NGServiceOverrideInfoConfig {
+  environmentRef: string
+  serviceRef: string
+  variableOverrides?: NGVariable[]
 }
 
 export interface NGServiceV2InfoConfig {
@@ -6304,6 +6385,49 @@ export interface OAuthSignupDTO {
 export type OauthSettings = SSOSettings & {
   allowedProviders?: ('AZURE' | 'BITBUCKET' | 'GITHUB' | 'GITLAB' | 'GOOGLE' | 'LINKEDIN')[]
   filter?: string
+}
+
+export interface OciHelmAuthCredentialsDTO {
+  [key: string]: any
+}
+
+export interface OciHelmAuthenticationDTO {
+  spec?: OciHelmAuthCredentialsDTO
+  type: 'UsernamePassword' | 'Anonymous'
+}
+
+export type OciHelmChartConfig = StoreConfig & {
+  basePath?: string
+  config?: OciHelmChartStoreConfigWrapper
+  identifier?: string
+  metadata?: string
+}
+
+export interface OciHelmChartStoreConfig {
+  [key: string]: any
+}
+
+export interface OciHelmChartStoreConfigWrapper {
+  metadata?: string
+  spec: OciHelmChartStoreConfig
+  type: 'Generic'
+}
+
+export type OciHelmChartStoreGenericConfig = OciHelmChartStoreConfig & {
+  connectorRef?: string
+  metadata?: string
+}
+
+export type OciHelmConnectorDTO = ConnectorConfigDTO & {
+  auth?: OciHelmAuthenticationDTO
+  delegateSelectors?: string[]
+  helmRepoUrl: string
+}
+
+export type OciHelmUsernamePasswordDTO = OciHelmAuthCredentialsDTO & {
+  passwordRef: string
+  username?: string
+  usernameRef?: string
 }
 
 export type OktaAddOperation = PatchOperation & {
@@ -6709,6 +6833,16 @@ export interface PageServiceAccountAggregateDTO {
   totalPages?: number
 }
 
+export interface PageServiceOverrideResponseDTO {
+  content?: ServiceOverrideResponseDTO[]
+  empty?: boolean
+  pageIndex?: number
+  pageItemCount?: number
+  pageSize?: number
+  totalItems?: number
+  totalPages?: number
+}
+
 export interface PageServiceResponse {
   content?: ServiceResponse[]
   empty?: boolean
@@ -6811,25 +6945,13 @@ export type PagerDutyConnectorDTO = ConnectorConfigDTO & {
   delegateSelectors?: string[]
 }
 
-export interface Pair {
-  key?: { [key: string]: any }
-  left?: { [key: string]: any }
-  right?: { [key: string]: any }
-  value?: { [key: string]: any }
-}
-
-export interface PairDelegateInsightsTypeLong {
-  key?: 'SUCCESSFUL' | 'FAILED' | 'IN_PROGRESS' | 'PERPETUAL_TASK_ASSIGNED'
-  left?: 'SUCCESSFUL' | 'FAILED' | 'IN_PROGRESS' | 'PERPETUAL_TASK_ASSIGNED'
-  right?: number
-  value?: number
-}
-
 export type ParallelStageElementConfig = StageElementWrapperConfig[]
 
 export type ParallelStepElementConfig = ExecutionWrapperConfig[]
 
 export interface ParameterField {
+  defaultValue?: { [key: string]: any }
+  executionInput?: boolean
   expression?: boolean
   expressionValue?: string
   inputSetValidator?: InputSetValidator
@@ -6840,6 +6962,8 @@ export interface ParameterField {
 }
 
 export interface ParameterFieldBoolean {
+  defaultValue?: boolean
+  executionInput?: boolean
   expression?: boolean
   expressionValue?: string
   inputSetValidator?: InputSetValidator
@@ -6850,6 +6974,10 @@ export interface ParameterFieldBoolean {
 }
 
 export interface ParameterFieldMapStringString {
+  defaultValue?: {
+    [key: string]: string
+  }
+  executionInput?: boolean
   expression?: boolean
   expressionValue?: string
   inputSetValidator?: InputSetValidator
@@ -6862,6 +6990,8 @@ export interface ParameterFieldMapStringString {
 }
 
 export interface ParameterFieldString {
+  defaultValue?: string
+  executionInput?: boolean
   expression?: boolean
   expressionValue?: string
   inputSetValidator?: InputSetValidator
@@ -7134,7 +7264,10 @@ export interface ProjectsDashboardInfo {
 
 export type PrometheusConnectorDTO = ConnectorConfigDTO & {
   delegateSelectors?: string[]
+  headers?: CustomHealthKeyAndValue[]
+  passwordRef?: string
   url: string
+  username?: string
 }
 
 export interface RateLimitProtection {
@@ -7168,6 +7301,95 @@ export interface ReferenceDTO {
 export type ReferenceInstanceInfoDTO = InstanceInfoDTO & {
   namespace?: string
   releaseName?: string
+}
+
+export interface ReferencedByDTO {
+  name?: string
+  type?:
+    | 'CreatePR'
+    | 'Projects'
+    | 'Pipelines'
+    | 'PipelineSteps'
+    | 'Http'
+    | 'JiraCreate'
+    | 'JiraUpdate'
+    | 'JiraApproval'
+    | 'HarnessApproval'
+    | 'Barrier'
+    | 'FlagConfiguration'
+    | 'ShellScript'
+    | 'K8sCanaryDeploy'
+    | 'K8sApply'
+    | 'K8sBlueGreenDeploy'
+    | 'K8sRollingDeploy'
+    | 'K8sRollingRollback'
+    | 'K8sScale'
+    | 'K8sDelete'
+    | 'K8sBGSwapServices'
+    | 'K8sCanaryDelete'
+    | 'TerraformApply'
+    | 'TerraformPlan'
+    | 'TerraformDestroy'
+    | 'TerraformRollback'
+    | 'HelmDeploy'
+    | 'HelmRollback'
+    | 'Connectors'
+    | 'Secrets'
+    | 'Files'
+    | 'Service'
+    | 'Environment'
+    | 'EnvironmentGroup'
+    | 'InputSets'
+    | 'CvConfig'
+    | 'Verify'
+    | 'Delegates'
+    | 'DelegateConfigurations'
+    | 'CvVerificationJob'
+    | 'IntegrationStage'
+    | 'IntegrationSteps'
+    | 'SecurityStage'
+    | 'SecuritySteps'
+    | 'CvKubernetesActivitySource'
+    | 'DeploymentSteps'
+    | 'DeploymentStage'
+    | 'ApprovalStage'
+    | 'FeatureFlagStage'
+    | 'Template'
+    | 'Triggers'
+    | 'MonitoredService'
+    | 'GitRepositories'
+    | 'FeatureFlags'
+    | 'ServiceNowApproval'
+    | 'ServiceNowCreate'
+    | 'ServiceNowUpdate'
+    | 'GovernancePolicies'
+    | 'Policy'
+    | 'Run'
+    | 'RunTests'
+    | 'Plugin'
+    | 'RestoreCacheGCS'
+    | 'RestoreCacheS3'
+    | 'SaveCacheGCS'
+    | 'SaveCacheS3'
+    | 'Security'
+    | 'ArtifactoryUpload'
+    | 'GCSUpload'
+    | 'S3Upload'
+    | 'BuildAndPushGCR'
+    | 'BuildAndPushECR'
+    | 'BuildAndPushDockerRegistry'
+    | 'CreateStack'
+    | 'DeleteStack'
+    | 'ServerlessAwsLambdaDeploy'
+    | 'ServerlessAwsLambdaRollback'
+    | 'CustomStage'
+    | 'RollbackStack'
+    | 'Infrastructure'
+}
+
+export type ReleaseRepoManifest = ManifestAttributes & {
+  metadata?: string
+  store?: StoreConfigWrapper
 }
 
 export type RemoteCloudformationTagsFileSpec = CloudformationTagsFileSpec & {
@@ -7254,6 +7476,7 @@ export interface ResourceDTO {
     | 'CHAOS_HUB'
     | 'MONITORED_SERVICE'
     | 'CHAOS_AGENT'
+    | 'CHAOS_WORKFLOW'
 }
 
 export interface ResourceGroup {
@@ -8539,6 +8762,7 @@ export interface ResponseMessage {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   exception?: Throwable
   failureTypes?: (
     | 'EXPIRED'
@@ -8572,6 +8796,13 @@ export interface ResponseNGEnvironmentConfig {
 export interface ResponseNGServiceConfig {
   correlationId?: string
   data?: NGServiceConfig
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseNGServiceOverrideConfig {
+  correlationId?: string
+  data?: NGServiceOverrideConfig
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -8817,6 +9048,13 @@ export interface ResponsePageSecretResponseWrapper {
 export interface ResponsePageServiceAccountAggregateDTO {
   correlationId?: string
   data?: PageServiceAccountAggregateDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponsePageServiceOverrideResponseDTO {
+  correlationId?: string
+  data?: PageServiceOverrideResponseDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -10615,6 +10853,7 @@ export interface StoreConfigWrapper {
     | 'S3Url'
     | 'InheritFromManifest'
     | 'Harness'
+    | 'OciHelmChart'
 }
 
 export interface StoreConfigWrapperParameters {
@@ -11365,6 +11604,8 @@ export type ClusterRequestRequestBody = ClusterRequest
 
 export type ConnectorRequestBody = Connector
 
+export type DelegateDownloadRequestRequestBody = DelegateDownloadRequest
+
 export type DelegateGroupTagsRequestBody = DelegateGroupTags
 
 export type DelegateProfileDetailsNgRequestBody = DelegateProfileDetailsNg
@@ -11411,9 +11652,9 @@ export type ScimUserRequestBody = ScimUser
 
 export type ScopingRuleDetailsNgArrayRequestBody = ScopingRuleDetailsNg[]
 
-export type SecretRequestWrapperRequestBody = void
+export type SecretRequestWrapperRequestBody = SecretRequestWrapper
 
-export type SecretRequestWrapper2RequestBody = SecretRequestWrapper
+export type SecretRequestWrapper2RequestBody = void
 
 export type ServiceAccountDTORequestBody = ServiceAccountDTO
 
@@ -11441,7 +11682,7 @@ export type GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody = string
 
 export type GetBuildDetailsForArtifactoryArtifactWithYamlBodyRequestBody = string
 
-export type SubscribeBodyRequestBody = string[]
+export type UnsubscribeBodyRequestBody = string[]
 
 export type UpdateWhitelistedDomainsBodyRequestBody = string[]
 
@@ -17274,6 +17515,7 @@ export interface GetConnectorListQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   category?:
     | 'CLOUD_PROVIDER'
     | 'SECRET_MANAGER'
@@ -17568,6 +17810,7 @@ export interface GetAllAllowedFieldValuesQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export type GetAllAllowedFieldValuesProps = Omit<
@@ -20788,6 +21031,124 @@ export const getDelegateGroupsUsingTokenPromise = (
     signal
   )
 
+export interface DownloadDockerDelegateYamlQueryParams {
+  accountIdentifier?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+}
+
+export type DownloadDockerDelegateYamlProps = Omit<
+  MutateProps<void, void, DownloadDockerDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Downloads a docker delegate yaml file.
+ */
+export const DownloadDockerDelegateYaml = (props: DownloadDockerDelegateYamlProps) => (
+  <Mutate<void, void, DownloadDockerDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>
+    verb="POST"
+    path={`/download-delegates/docker`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseDownloadDockerDelegateYamlProps = Omit<
+  UseMutateProps<void, void, DownloadDockerDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Downloads a docker delegate yaml file.
+ */
+export const useDownloadDockerDelegateYaml = (props: UseDownloadDockerDelegateYamlProps) =>
+  useMutate<void, void, DownloadDockerDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>(
+    'POST',
+    `/download-delegates/docker`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Downloads a docker delegate yaml file.
+ */
+export const downloadDockerDelegateYamlPromise = (
+  props: MutateUsingFetchProps<
+    void,
+    void,
+    DownloadDockerDelegateYamlQueryParams,
+    DelegateDownloadRequestRequestBody,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<void, void, DownloadDockerDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/download-delegates/docker`,
+    props,
+    signal
+  )
+
+export interface DownloadKubernetesDelegateYamlQueryParams {
+  accountIdentifier?: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+}
+
+export type DownloadKubernetesDelegateYamlProps = Omit<
+  MutateProps<void, void, DownloadKubernetesDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Downloads a kubernetes delegate yaml file.
+ */
+export const DownloadKubernetesDelegateYaml = (props: DownloadKubernetesDelegateYamlProps) => (
+  <Mutate<void, void, DownloadKubernetesDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>
+    verb="POST"
+    path={`/download-delegates/kubernetes`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseDownloadKubernetesDelegateYamlProps = Omit<
+  UseMutateProps<void, void, DownloadKubernetesDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Downloads a kubernetes delegate yaml file.
+ */
+export const useDownloadKubernetesDelegateYaml = (props: UseDownloadKubernetesDelegateYamlProps) =>
+  useMutate<void, void, DownloadKubernetesDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>(
+    'POST',
+    `/download-delegates/kubernetes`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Downloads a kubernetes delegate yaml file.
+ */
+export const downloadKubernetesDelegateYamlPromise = (
+  props: MutateUsingFetchProps<
+    void,
+    void,
+    DownloadKubernetesDelegateYamlQueryParams,
+    DelegateDownloadRequestRequestBody,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<void, void, DownloadKubernetesDelegateYamlQueryParams, DelegateDownloadRequestRequestBody, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/download-delegates/kubernetes`,
+    props,
+    signal
+  )
+
 export interface GetFeatureRestrictionDetailQueryParams {
   accountIdentifier: string
 }
@@ -22493,6 +22854,50 @@ export const dummyNGEnvironmentConfigApiPromise = (
     signal
   )
 
+export type DummyNGServiceOverrideConfigProps = Omit<
+  GetProps<ResponseNGServiceOverrideConfig, Failure | Error, void, void>,
+  'path'
+>
+
+/**
+ * This is dummy api to expose NGServiceOverrideConfig
+ */
+export const DummyNGServiceOverrideConfig = (props: DummyNGServiceOverrideConfigProps) => (
+  <Get<ResponseNGServiceOverrideConfig, Failure | Error, void, void>
+    path={`/environmentsV2/dummy-serviceoverride-api`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseDummyNGServiceOverrideConfigProps = Omit<
+  UseGetProps<ResponseNGServiceOverrideConfig, Failure | Error, void, void>,
+  'path'
+>
+
+/**
+ * This is dummy api to expose NGServiceOverrideConfig
+ */
+export const useDummyNGServiceOverrideConfig = (props: UseDummyNGServiceOverrideConfigProps) =>
+  useGet<ResponseNGServiceOverrideConfig, Failure | Error, void, void>(`/environmentsV2/dummy-serviceoverride-api`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * This is dummy api to expose NGServiceOverrideConfig
+ */
+export const dummyNGServiceOverrideConfigPromise = (
+  props: GetUsingFetchProps<ResponseNGServiceOverrideConfig, Failure | Error, void, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseNGServiceOverrideConfig, Failure | Error, void, void>(
+    getConfig('ng/api'),
+    `/environmentsV2/dummy-serviceoverride-api`,
+    props,
+    signal
+  )
+
 export interface GetEnvironmentAccessListQueryParams {
   page?: number
   size?: number
@@ -22687,6 +23092,66 @@ export const deleteServiceOverridePromise = (
 ) =>
   mutateUsingFetch<ResponseBoolean, Failure | Error, DeleteServiceOverrideQueryParams, void, void>(
     'DELETE',
+    getConfig('ng/api'),
+    `/environmentsV2/serviceOverrides`,
+    props,
+    signal
+  )
+
+export interface GetServiceOverridesListQueryParams {
+  page?: number
+  size?: number
+  accountIdentifier: string
+  orgIdentifier: string
+  projectIdentifier: string
+  environmentIdentifier: string
+  serviceIdentifier?: string
+  sort?: string[]
+}
+
+export type GetServiceOverridesListProps = Omit<
+  GetProps<ResponsePageServiceOverrideResponseDTO, Failure | Error, GetServiceOverridesListQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets Service Overrides list
+ */
+export const GetServiceOverridesList = (props: GetServiceOverridesListProps) => (
+  <Get<ResponsePageServiceOverrideResponseDTO, Failure | Error, GetServiceOverridesListQueryParams, void>
+    path={`/environmentsV2/serviceOverrides`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseGetServiceOverridesListProps = Omit<
+  UseGetProps<ResponsePageServiceOverrideResponseDTO, Failure | Error, GetServiceOverridesListQueryParams, void>,
+  'path'
+>
+
+/**
+ * Gets Service Overrides list
+ */
+export const useGetServiceOverridesList = (props: UseGetServiceOverridesListProps) =>
+  useGet<ResponsePageServiceOverrideResponseDTO, Failure | Error, GetServiceOverridesListQueryParams, void>(
+    `/environmentsV2/serviceOverrides`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Gets Service Overrides list
+ */
+export const getServiceOverridesListPromise = (
+  props: GetUsingFetchProps<
+    ResponsePageServiceOverrideResponseDTO,
+    Failure | Error,
+    GetServiceOverridesListQueryParams,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponsePageServiceOverrideResponseDTO, Failure | Error, GetServiceOverridesListQueryParams, void>(
     getConfig('ng/api'),
     `/environmentsV2/serviceOverrides`,
     props,
@@ -23519,138 +23984,6 @@ export const getFolderNodesPromise = (
     'POST',
     getConfig('ng/api'),
     `/file-store/folder`,
-    props,
-    signal
-  )
-
-export interface GetReferencedByInScopeQueryParams {
-  pageIndex?: number
-  pageSize?: number
-  accountIdentifier?: string
-  orgIdentifier?: string
-  projectIdentifier?: string
-  entityType?:
-    | 'CreatePR'
-    | 'Projects'
-    | 'Pipelines'
-    | 'PipelineSteps'
-    | 'Http'
-    | 'JiraCreate'
-    | 'JiraUpdate'
-    | 'JiraApproval'
-    | 'HarnessApproval'
-    | 'Barrier'
-    | 'FlagConfiguration'
-    | 'ShellScript'
-    | 'K8sCanaryDeploy'
-    | 'K8sApply'
-    | 'K8sBlueGreenDeploy'
-    | 'K8sRollingDeploy'
-    | 'K8sRollingRollback'
-    | 'K8sScale'
-    | 'K8sDelete'
-    | 'K8sBGSwapServices'
-    | 'K8sCanaryDelete'
-    | 'TerraformApply'
-    | 'TerraformPlan'
-    | 'TerraformDestroy'
-    | 'TerraformRollback'
-    | 'HelmDeploy'
-    | 'HelmRollback'
-    | 'Connectors'
-    | 'Secrets'
-    | 'Files'
-    | 'Service'
-    | 'Environment'
-    | 'EnvironmentGroup'
-    | 'InputSets'
-    | 'CvConfig'
-    | 'Verify'
-    | 'Delegates'
-    | 'DelegateConfigurations'
-    | 'CvVerificationJob'
-    | 'IntegrationStage'
-    | 'IntegrationSteps'
-    | 'SecurityStage'
-    | 'SecuritySteps'
-    | 'CvKubernetesActivitySource'
-    | 'DeploymentSteps'
-    | 'DeploymentStage'
-    | 'ApprovalStage'
-    | 'FeatureFlagStage'
-    | 'Template'
-    | 'Triggers'
-    | 'MonitoredService'
-    | 'GitRepositories'
-    | 'FeatureFlags'
-    | 'ServiceNowApproval'
-    | 'ServiceNowCreate'
-    | 'ServiceNowUpdate'
-    | 'GovernancePolicies'
-    | 'Policy'
-    | 'Run'
-    | 'RunTests'
-    | 'Plugin'
-    | 'RestoreCacheGCS'
-    | 'RestoreCacheS3'
-    | 'SaveCacheGCS'
-    | 'SaveCacheS3'
-    | 'Security'
-    | 'ArtifactoryUpload'
-    | 'GCSUpload'
-    | 'S3Upload'
-    | 'BuildAndPushGCR'
-    | 'BuildAndPushECR'
-    | 'BuildAndPushDockerRegistry'
-    | 'CreateStack'
-    | 'DeleteStack'
-    | 'ServerlessAwsLambdaDeploy'
-    | 'ServerlessAwsLambdaRollback'
-    | 'CustomStage'
-    | 'RollbackStack'
-    | 'Infrastructure'
-}
-
-export type GetReferencedByInScopeProps = Omit<
-  GetProps<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>,
-  'path'
->
-
-/**
- * Get referenced by entities in scope
- */
-export const GetReferencedByInScope = (props: GetReferencedByInScopeProps) => (
-  <Get<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>
-    path={`/file-store/referenced-by-entity-scope`}
-    base={getConfig('ng/api')}
-    {...props}
-  />
-)
-
-export type UseGetReferencedByInScopeProps = Omit<
-  UseGetProps<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>,
-  'path'
->
-
-/**
- * Get referenced by entities in scope
- */
-export const useGetReferencedByInScope = (props: UseGetReferencedByInScopeProps) =>
-  useGet<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>(
-    `/file-store/referenced-by-entity-scope`,
-    { base: getConfig('ng/api'), ...props }
-  )
-
-/**
- * Get referenced by entities in scope
- */
-export const getReferencedByInScopePromise = (
-  props: GetUsingFetchProps<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>,
-  signal?: RequestInit['signal']
-) =>
-  getUsingFetch<ResponsePageEntitySetupUsageDTO, Failure | Error, GetReferencedByInScopeQueryParams, void>(
-    getConfig('ng/api'),
-    `/file-store/referenced-by-entity-scope`,
     props,
     signal
   )
@@ -26236,20 +26569,20 @@ export const getClusterListPromise = (
     signal
   )
 
-export interface CreateClusterQueryParams {
+export interface LinkClusterQueryParams {
   accountIdentifier: string
 }
 
-export type CreateClusterProps = Omit<
-  MutateProps<ResponseClusterResponse, Failure | Error, CreateClusterQueryParams, ClusterRequestRequestBody, void>,
+export type LinkClusterProps = Omit<
+  MutateProps<ResponseClusterResponse, Failure | Error, LinkClusterQueryParams, ClusterRequestRequestBody, void>,
   'path' | 'verb'
 >
 
 /**
- * Create a Cluster
+ * Link a gitops cluster to an environment
  */
-export const CreateCluster = (props: CreateClusterProps) => (
-  <Mutate<ResponseClusterResponse, Failure | Error, CreateClusterQueryParams, ClusterRequestRequestBody, void>
+export const LinkCluster = (props: LinkClusterProps) => (
+  <Mutate<ResponseClusterResponse, Failure | Error, LinkClusterQueryParams, ClusterRequestRequestBody, void>
     verb="POST"
     path={`/gitops/clusters`}
     base={getConfig('ng/api')}
@@ -26257,35 +26590,35 @@ export const CreateCluster = (props: CreateClusterProps) => (
   />
 )
 
-export type UseCreateClusterProps = Omit<
-  UseMutateProps<ResponseClusterResponse, Failure | Error, CreateClusterQueryParams, ClusterRequestRequestBody, void>,
+export type UseLinkClusterProps = Omit<
+  UseMutateProps<ResponseClusterResponse, Failure | Error, LinkClusterQueryParams, ClusterRequestRequestBody, void>,
   'path' | 'verb'
 >
 
 /**
- * Create a Cluster
+ * Link a gitops cluster to an environment
  */
-export const useCreateCluster = (props: UseCreateClusterProps) =>
-  useMutate<ResponseClusterResponse, Failure | Error, CreateClusterQueryParams, ClusterRequestRequestBody, void>(
+export const useLinkCluster = (props: UseLinkClusterProps) =>
+  useMutate<ResponseClusterResponse, Failure | Error, LinkClusterQueryParams, ClusterRequestRequestBody, void>(
     'POST',
     `/gitops/clusters`,
     { base: getConfig('ng/api'), ...props }
   )
 
 /**
- * Create a Cluster
+ * Link a gitops cluster to an environment
  */
-export const createClusterPromise = (
+export const linkClusterPromise = (
   props: MutateUsingFetchProps<
     ResponseClusterResponse,
     Failure | Error,
-    CreateClusterQueryParams,
+    LinkClusterQueryParams,
     ClusterRequestRequestBody,
     void
   >,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<ResponseClusterResponse, Failure | Error, CreateClusterQueryParams, ClusterRequestRequestBody, void>(
+  mutateUsingFetch<ResponseClusterResponse, Failure | Error, LinkClusterQueryParams, ClusterRequestRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/gitops/clusters`,
@@ -26350,20 +26683,20 @@ export const updateClusterPromise = (
     signal
   )
 
-export interface CreateClustersQueryParams {
+export interface LinkClustersQueryParams {
   accountIdentifier: string
 }
 
-export type CreateClustersProps = Omit<
-  MutateProps<ResponsePageClusterResponse, Failure | Error, CreateClustersQueryParams, ClusterBatchRequest, void>,
+export type LinkClustersProps = Omit<
+  MutateProps<ResponsePageClusterResponse, Failure | Error, LinkClustersQueryParams, ClusterBatchRequest, void>,
   'path' | 'verb'
 >
 
 /**
- * Create Clusters
+ * Link gitops clusters to an environment
  */
-export const CreateClusters = (props: CreateClustersProps) => (
-  <Mutate<ResponsePageClusterResponse, Failure | Error, CreateClustersQueryParams, ClusterBatchRequest, void>
+export const LinkClusters = (props: LinkClustersProps) => (
+  <Mutate<ResponsePageClusterResponse, Failure | Error, LinkClustersQueryParams, ClusterBatchRequest, void>
     verb="POST"
     path={`/gitops/clusters/batch`}
     base={getConfig('ng/api')}
@@ -26371,35 +26704,35 @@ export const CreateClusters = (props: CreateClustersProps) => (
   />
 )
 
-export type UseCreateClustersProps = Omit<
-  UseMutateProps<ResponsePageClusterResponse, Failure | Error, CreateClustersQueryParams, ClusterBatchRequest, void>,
+export type UseLinkClustersProps = Omit<
+  UseMutateProps<ResponsePageClusterResponse, Failure | Error, LinkClustersQueryParams, ClusterBatchRequest, void>,
   'path' | 'verb'
 >
 
 /**
- * Create Clusters
+ * Link gitops clusters to an environment
  */
-export const useCreateClusters = (props: UseCreateClustersProps) =>
-  useMutate<ResponsePageClusterResponse, Failure | Error, CreateClustersQueryParams, ClusterBatchRequest, void>(
+export const useLinkClusters = (props: UseLinkClustersProps) =>
+  useMutate<ResponsePageClusterResponse, Failure | Error, LinkClustersQueryParams, ClusterBatchRequest, void>(
     'POST',
     `/gitops/clusters/batch`,
     { base: getConfig('ng/api'), ...props }
   )
 
 /**
- * Create Clusters
+ * Link gitops clusters to an environment
  */
-export const createClustersPromise = (
+export const linkClustersPromise = (
   props: MutateUsingFetchProps<
     ResponsePageClusterResponse,
     Failure | Error,
-    CreateClustersQueryParams,
+    LinkClustersQueryParams,
     ClusterBatchRequest,
     void
   >,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<ResponsePageClusterResponse, Failure | Error, CreateClustersQueryParams, ClusterBatchRequest, void>(
+  mutateUsingFetch<ResponsePageClusterResponse, Failure | Error, LinkClustersQueryParams, ClusterBatchRequest, void>(
     'POST',
     getConfig('ng/api'),
     `/gitops/clusters/batch`,
@@ -30612,7 +30945,7 @@ export type ProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -30624,7 +30957,7 @@ export const ProcessPollingResultNg = ({ perpetualTaskId, ...props }: ProcessPol
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >
     verb="POST"
@@ -30639,7 +30972,7 @@ export type UseProcessPollingResultNgProps = Omit<
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >,
   'path' | 'verb'
@@ -30651,7 +30984,7 @@ export const useProcessPollingResultNg = ({ perpetualTaskId, ...props }: UseProc
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >(
     'POST',
@@ -30667,7 +31000,7 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   > & { perpetualTaskId: string },
   signal?: RequestInit['signal']
@@ -30676,17 +31009,17 @@ export const processPollingResultNgPromise = (
     void,
     Failure | Error,
     ProcessPollingResultNgQueryParams,
-    SubscribeBodyRequestBody,
+    UnsubscribeBodyRequestBody,
     ProcessPollingResultNgPathParams
   >('POST', getConfig('ng/api'), `/polling/delegate-response/${perpetualTaskId}`, props, signal)
 
 export type SubscribeProps = Omit<
-  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  MutateProps<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Subscribe = (props: SubscribeProps) => (
-  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>
+  <Mutate<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>
     verb="POST"
     path={`/polling/subscribe`}
     base={getConfig('ng/api')}
@@ -30695,22 +31028,22 @@ export const Subscribe = (props: SubscribeProps) => (
 )
 
 export type UseSubscribeProps = Omit<
-  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  UseMutateProps<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useSubscribe = (props: UseSubscribeProps) =>
-  useMutate<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  useMutate<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>(
     'POST',
     `/polling/subscribe`,
     { base: getConfig('ng/api'), ...props }
   )
 
 export const subscribePromise = (
-  props: MutateUsingFetchProps<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  props: MutateUsingFetchProps<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  mutateUsingFetch<ResponsePollingResponseDTO, Failure | Error, void, UnsubscribeBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/subscribe`,
@@ -30719,12 +31052,12 @@ export const subscribePromise = (
   )
 
 export type UnsubscribeProps = Omit<
-  MutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  MutateProps<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const Unsubscribe = (props: UnsubscribeProps) => (
-  <Mutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>
+  <Mutate<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>
     verb="POST"
     path={`/polling/unsubscribe`}
     base={getConfig('ng/api')}
@@ -30733,21 +31066,21 @@ export const Unsubscribe = (props: UnsubscribeProps) => (
 )
 
 export type UseUnsubscribeProps = Omit<
-  UseMutateProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  UseMutateProps<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   'path' | 'verb'
 >
 
 export const useUnsubscribe = (props: UseUnsubscribeProps) =>
-  useMutate<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>('POST', `/polling/unsubscribe`, {
+  useMutate<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>('POST', `/polling/unsubscribe`, {
     base: getConfig('ng/api'),
     ...props
   })
 
 export const unsubscribePromise = (
-  props: MutateUsingFetchProps<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>,
+  props: MutateUsingFetchProps<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>,
   signal?: RequestInit['signal']
 ) =>
-  mutateUsingFetch<boolean, Failure | Error, void, SubscribeBodyRequestBody, void>(
+  mutateUsingFetch<boolean, Failure | Error, void, UnsubscribeBodyRequestBody, void>(
     'POST',
     getConfig('ng/api'),
     `/polling/unsubscribe`,
@@ -33930,6 +34263,7 @@ export interface GetServiceListQueryParams {
   searchTerm?: string
   serviceIdentifiers?: string[]
   sort?: string[]
+  type?: 'Kubernetes' | 'NativeHelm' | 'Ssh' | 'WinRm' | 'ServerlessAwsLambda'
 }
 
 export type GetServiceListProps = Omit<
@@ -38986,7 +39320,7 @@ export type PostSecretProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     void
   >,
   'path' | 'verb'
@@ -38996,7 +39330,7 @@ export type PostSecretProps = Omit<
  * Create a secret
  */
 export const PostSecret = (props: PostSecretProps) => (
-  <Mutate<ResponseSecretResponseWrapper, Failure | Error, PostSecretQueryParams, SecretRequestWrapper2RequestBody, void>
+  <Mutate<ResponseSecretResponseWrapper, Failure | Error, PostSecretQueryParams, SecretRequestWrapperRequestBody, void>
     verb="POST"
     path={`/v2/secrets`}
     base={getConfig('ng/api')}
@@ -39009,7 +39343,7 @@ export type UsePostSecretProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     void
   >,
   'path' | 'verb'
@@ -39023,7 +39357,7 @@ export const usePostSecret = (props: UsePostSecretProps) =>
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     void
   >('POST', `/v2/secrets`, { base: getConfig('ng/api'), ...props })
 
@@ -39035,7 +39369,7 @@ export const postSecretPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     void
   >,
   signal?: RequestInit['signal']
@@ -39044,7 +39378,7 @@ export const postSecretPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     void
   >('POST', getConfig('ng/api'), `/v2/secrets`, props, signal)
 
@@ -39437,7 +39771,7 @@ export type PostSecretViaYamlProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >,
   'path' | 'verb'
@@ -39451,7 +39785,7 @@ export const PostSecretViaYaml = (props: PostSecretViaYamlProps) => (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >
     verb="POST"
@@ -39466,7 +39800,7 @@ export type UsePostSecretViaYamlProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >,
   'path' | 'verb'
@@ -39480,7 +39814,7 @@ export const usePostSecretViaYaml = (props: UsePostSecretViaYamlProps) =>
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >('POST', `/v2/secrets/yaml`, { base: getConfig('ng/api'), ...props })
 
@@ -39492,7 +39826,7 @@ export const postSecretViaYamlPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >,
   signal?: RequestInit['signal']
@@ -39501,7 +39835,7 @@ export const postSecretViaYamlPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PostSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     void
   >('POST', getConfig('ng/api'), `/v2/secrets/yaml`, props, signal)
 
@@ -39636,7 +39970,7 @@ export type PutSecretProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   >,
   'path' | 'verb'
@@ -39651,7 +39985,7 @@ export const PutSecret = ({ identifier, ...props }: PutSecretProps) => (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   >
     verb="PUT"
@@ -39666,7 +40000,7 @@ export type UsePutSecretProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   >,
   'path' | 'verb'
@@ -39681,7 +40015,7 @@ export const usePutSecret = ({ identifier, ...props }: UsePutSecretProps) =>
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   >('PUT', (paramsInPath: PutSecretPathParams) => `/v2/secrets/${paramsInPath.identifier}`, {
     base: getConfig('ng/api'),
@@ -39700,7 +40034,7 @@ export const putSecretPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   > & { identifier: string },
   signal?: RequestInit['signal']
@@ -39709,7 +40043,7 @@ export const putSecretPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretQueryParams,
-    SecretRequestWrapper2RequestBody,
+    SecretRequestWrapperRequestBody,
     PutSecretPathParams
   >('PUT', getConfig('ng/api'), `/v2/secrets/${identifier}`, props, signal)
 
@@ -39728,7 +40062,7 @@ export type PutSecretViaYamlProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   >,
   'path' | 'verb'
@@ -39743,7 +40077,7 @@ export const PutSecretViaYaml = ({ identifier, ...props }: PutSecretViaYamlProps
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   >
     verb="PUT"
@@ -39758,7 +40092,7 @@ export type UsePutSecretViaYamlProps = Omit<
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   >,
   'path' | 'verb'
@@ -39773,7 +40107,7 @@ export const usePutSecretViaYaml = ({ identifier, ...props }: UsePutSecretViaYam
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   >('PUT', (paramsInPath: PutSecretViaYamlPathParams) => `/v2/secrets/${paramsInPath.identifier}/yaml`, {
     base: getConfig('ng/api'),
@@ -39792,7 +40126,7 @@ export const putSecretViaYamlPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   > & { identifier: string },
   signal?: RequestInit['signal']
@@ -39801,7 +40135,7 @@ export const putSecretViaYamlPromise = (
     ResponseSecretResponseWrapper,
     Failure | Error,
     PutSecretViaYamlQueryParams,
-    SecretRequestWrapperRequestBody,
+    SecretRequestWrapper2RequestBody,
     PutSecretViaYamlPathParams
   >('PUT', getConfig('ng/api'), `/v2/secrets/${identifier}/yaml`, props, signal)
 
@@ -40433,6 +40767,7 @@ export interface GetYamlSchemaQueryParams {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   projectIdentifier?: string
   orgIdentifier?: string
   scope?: 'account' | 'org' | 'project' | 'unknown'
@@ -40534,6 +40869,7 @@ export interface GetYamlSnippetMetadataQueryParams {
     | 'azure'
     | 'pdc'
     | 'azurerepo'
+    | 'ocihelmrepo'
   )[]
 }
 

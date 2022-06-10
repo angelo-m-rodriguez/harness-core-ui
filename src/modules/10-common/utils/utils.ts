@@ -93,3 +93,13 @@ export const suppressHotJarRecording = (elements: Element[] | null | undefined):
 // Utility to generate { 'data-hj-suppress': true } attribute if HotJar is available
 export const addHotJarSuppressionAttribute = (): { [HOTJAR_SUPPRESSION_ATTR]: boolean } | undefined =>
   window.hj ? { [HOTJAR_SUPPRESSION_ATTR]: true } : undefined
+
+// Utility to check if environment is a PR environment
+export const isPR = (): boolean => {
+  return location.hostname === 'pr.harness.io'
+}
+
+// Utility to check if environment is a local develop environment
+export const isLocalHost = (): boolean => {
+  return location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+}

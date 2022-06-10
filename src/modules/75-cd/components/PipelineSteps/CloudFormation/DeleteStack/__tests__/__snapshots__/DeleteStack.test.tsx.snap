@@ -16,7 +16,7 @@ exports[`Test Cloudformation delete stack should be able to edit inline config 1
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -674,7 +674,7 @@ exports[`Test Cloudformation delete stack should error form for inline config 1`
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1470,7 +1470,7 @@ exports[`Test Cloudformation delete stack should render all runtime inputs 1`] =
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1800,7 +1800,7 @@ exports[`Test Cloudformation delete stack should render all runtime inputs and e
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2195,7 +2195,7 @@ exports[`Test Cloudformation delete stack should render delete stack view - inli
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2853,7 +2853,7 @@ exports[`Test Cloudformation delete stack should render edit view as new step 1`
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -3216,7 +3216,7 @@ exports[`Test Cloudformation delete stack should render when inherit from create
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -3546,7 +3546,7 @@ exports[`Test Cloudformation delete stack should show error when inherited from 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -3907,7 +3907,7 @@ exports[`Test Cloudformation delete stack should submit form for inherited from 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4237,7 +4237,7 @@ exports[`Test Cloudformation delete stack should submit form for inline config 1
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationDeleteStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

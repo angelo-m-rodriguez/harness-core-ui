@@ -8,13 +8,13 @@
 // this is an auto-generated file, do not update this manually
 declare const styles: {
   readonly content: string
+  readonly deleteBtnContainer: string
   readonly envTabs: string
   readonly keyContainer: string
   readonly keyCopy: string
   readonly keyCopyContainer: string
   readonly keyCopyIcon: string
   readonly keyDeleteButton: string
-  readonly keyRedactionWarning: string
   readonly keyType: string
   readonly table: string
 }

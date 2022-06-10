@@ -13,11 +13,13 @@ describe('ConfigureOptionsUtils tests', () => {
       test('handles invalid Input', () => {
         expect(parseInput('<+pipeline.foo>')).toEqual(null)
       })
+
       test('works with executionInput', () => {
         expect(parseInput('<+input>.executionInput()')).toEqual({
           allowedValues: null,
           executionInput: true,
-          regex: null
+          regex: null,
+          default: null
         })
       })
 
@@ -25,13 +27,15 @@ describe('ConfigureOptionsUtils tests', () => {
         expect(parseInput('<+input>.regex(^123$)')).toEqual({
           allowedValues: null,
           executionInput: false,
-          regex: '^123$'
+          regex: '^123$',
+          default: null
         })
 
         expect(parseInput('<+input>.regex(^(123)*$)')).toEqual({
           allowedValues: null,
           executionInput: false,
-          regex: '^(123)*$'
+          regex: '^(123)*$',
+          default: null
         })
       })
 
@@ -39,7 +43,8 @@ describe('ConfigureOptionsUtils tests', () => {
         expect(parseInput('<+input>.allowedValues(1,2,3)')).toEqual({
           allowedValues: { values: ['1', '2', '3'], jexlExpression: null },
           executionInput: false,
-          regex: null
+          regex: null,
+          default: null
         })
       })
 
@@ -50,7 +55,17 @@ describe('ConfigureOptionsUtils tests', () => {
             jexlExpression: '${env.type} == “prod” ? aws1, aws2 : aws3, aws4'
           },
           executionInput: false,
-          regex: null
+          regex: null,
+          default: null
+        })
+      })
+
+      test('works with default', () => {
+        expect(parseInput('<+input>.default(myDefaultValue)')).toEqual({
+          allowedValues: null,
+          executionInput: false,
+          regex: null,
+          default: 'myDefaultValue'
         })
       })
     })
@@ -59,25 +74,36 @@ describe('ConfigureOptionsUtils tests', () => {
       expect(parseInput('<+input>.executionInput().allowedValues(1,2,3)')).toEqual({
         allowedValues: { values: ['1', '2', '3'], jexlExpression: null },
         executionInput: true,
-        regex: null
+        regex: null,
+        default: null
       })
 
       expect(parseInput('<+input>.allowedValues(1,2,3).executionInput()')).toEqual({
         allowedValues: { values: ['1', '2', '3'], jexlExpression: null },
         executionInput: true,
-        regex: null
+        regex: null,
+        default: null
       })
 
       expect(parseInput('<+input>.regex(^abc$).executionInput()')).toEqual({
         allowedValues: null,
         executionInput: true,
-        regex: '^abc$'
+        regex: '^abc$',
+        default: null
       })
 
       expect(parseInput('<+input>.executionInput().regex(^(abc)+$)')).toEqual({
         allowedValues: null,
         executionInput: true,
-        regex: '^(abc)+$'
+        regex: '^(abc)+$',
+        default: null
+      })
+
+      expect(parseInput('<+input>.executionInput().regex(^(abc)+$).default(myDefaultValue)')).toEqual({
+        allowedValues: null,
+        executionInput: true,
+        regex: '^(abc)+$',
+        default: 'myDefaultValue'
       })
     })
   })

@@ -5,100 +5,9 @@ exports[`STO side nav tests renders account path 1`] = `
   <div
     class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
   >
-    <div
-      class="bp3-tabs sideNavTabs"
-    >
-      <div
-        class="bp3-tab-list"
-        role="tablist"
-      >
-        <div
-          class="bp3-tab-indicator-wrapper"
-          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
-        >
-          <div
-            class="bp3-tab-indicator"
-          />
-        </div>
-        <div
-          aria-controls="bp3-tab-panel_navTab_account"
-          aria-disabled="false"
-          aria-expanded="true"
-          aria-selected="true"
-          class="bp3-tab"
-          data-tab-id="account"
-          id="bp3-tab-title_navTab_account"
-          role="tab"
-          tabindex="0"
-        >
-          account
-        </div>
-        <div
-          class="bp3-flex-expander"
-        />
-        <div
-          aria-controls="bp3-tab-panel_navTab_project"
-          aria-disabled="false"
-          aria-expanded="false"
-          aria-selected="false"
-          class="bp3-tab"
-          data-tab-id="project"
-          id="bp3-tab-title_navTab_project"
-          role="tab"
-          tabindex="0"
-        >
-          projectLabel
-        </div>
-      </div>
-      <div
-        aria-hidden="false"
-        aria-labelledby="bp3-tab-title_navTab_account"
-        class="bp3-tab-panel"
-        id="bp3-tab-panel_navTab_account"
-        role="tabpanel"
-      >
-        <div
-          class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
-        >
-          <a
-            aria-current="page"
-            class="link selected"
-            href="/account/accountId/sto/overview"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              overview
-            </p>
-          </a>
-          <a
-            class="link"
-            href="/account/accountId/sto/targets"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              stoSteps.targets.testTargets
-            </p>
-          </a>
-        </div>
-      </div>
-      <div
-        aria-hidden="true"
-        aria-labelledby="bp3-tab-title_navTab_project"
-        class="bp3-tab-panel"
-        id="bp3-tab-panel_navTab_project"
-        role="tabpanel"
-      >
-        <div
-          class="Layout--vertical Layout--layout-spacing-small StyledProps--main projectPanel"
-        >
-          <button
-            id="projectSelector"
-          />
-        </div>
-      </div>
-    </div>
+    <button
+      id="projectSelector"
+    />
   </div>
 </div>
 `;
@@ -108,140 +17,50 @@ exports[`STO side nav tests renders project path 1`] = `
   <div
     class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
   >
-    <div
-      class="bp3-tabs sideNavTabs"
+    <button
+      id="projectSelector"
+    />
+    <a
+      aria-current="page"
+      class="link selected"
+      href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/overview"
     >
-      <div
-        class="bp3-tab-list"
-        role="tablist"
+      <p
+        class="StyledProps--font StyledProps--main text"
       >
-        <div
-          class="bp3-tab-indicator-wrapper"
-          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
-        >
-          <div
-            class="bp3-tab-indicator"
-          />
-        </div>
-        <div
-          aria-controls="bp3-tab-panel_navTab_account"
-          aria-disabled="false"
-          aria-expanded="false"
-          aria-selected="false"
-          class="bp3-tab"
-          data-tab-id="account"
-          id="bp3-tab-title_navTab_account"
-          role="tab"
-          tabindex="0"
-        >
-          account
-        </div>
-        <div
-          class="bp3-flex-expander"
-        />
-        <div
-          aria-controls="bp3-tab-panel_navTab_project"
-          aria-disabled="false"
-          aria-expanded="true"
-          aria-selected="true"
-          class="bp3-tab"
-          data-tab-id="project"
-          id="bp3-tab-title_navTab_project"
-          role="tab"
-          tabindex="0"
-        >
-          projectLabel
-        </div>
-      </div>
-      <div
-        aria-hidden="true"
-        aria-labelledby="bp3-tab-title_navTab_account"
-        class="bp3-tab-panel"
-        id="bp3-tab-panel_navTab_account"
-        role="tabpanel"
+        overview
+      </p>
+    </a>
+    <a
+      class="link"
+      href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/deployments"
+    >
+      <p
+        class="StyledProps--font StyledProps--main text"
       >
-        <div
-          class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
-        >
-          <a
-            class="link"
-            href="/account/accountId/sto/overview"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              overview
-            </p>
-          </a>
-          <a
-            class="link"
-            href="/account/accountId/sto/targets"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              stoSteps.targets.testTargets
-            </p>
-          </a>
-        </div>
-      </div>
-      <div
-        aria-hidden="false"
-        aria-labelledby="bp3-tab-title_navTab_project"
-        class="bp3-tab-panel"
-        id="bp3-tab-panel_navTab_project"
-        role="tabpanel"
+        common.purpose.sto.continuous
+      </p>
+    </a>
+    <a
+      class="link"
+      href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/pipelines"
+    >
+      <p
+        class="StyledProps--font StyledProps--main text"
       >
-        <div
-          class="Layout--vertical Layout--layout-spacing-small StyledProps--main projectPanel"
-        >
-          <button
-            id="projectSelector"
-          />
-          <a
-            aria-current="page"
-            class="link selected"
-            href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/overview"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              overview
-            </p>
-          </a>
-          <a
-            class="link"
-            href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/deployments"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              common.purpose.sto.continuous
-            </p>
-          </a>
-          <a
-            class="link"
-            href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/pipelines"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              pipelines
-            </p>
-          </a>
-          <a
-            class="link"
-            href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/targets"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              stoSteps.targets.testTargets
-            </p>
-          </a>
-        </div>
-      </div>
-    </div>
+        pipelines
+      </p>
+    </a>
+    <a
+      class="link"
+      href="/account/accountId/sto/orgs/orgIdentifier/projects/projectIdentifier/targets"
+    >
+      <p
+        class="StyledProps--font StyledProps--main text"
+      >
+        stoSteps.targets.testTargets
+      </p>
+    </a>
   </div>
 </div>
 `;

@@ -16,14 +16,13 @@ declare const styles: {
   readonly configureOptions: string
   readonly connectorContainer: string
   readonly drag: string
-  readonly dragOver: string
-  readonly dragging: string
   readonly halfWidth: string
   readonly manifestForm: string
   readonly manifestStepWidth: string
   readonly optionsViewContainer: string
   readonly runtimeInput: string
   readonly saveBtn: string
+  readonly text: string
   readonly tooltip: string
   readonly tooltipCls: string
   readonly tooltipContent: string

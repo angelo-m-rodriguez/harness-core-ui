@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test cases for CVSLODetailsPage it should render the component and take a snapshot 1`] = `
+exports[`Test cases for CVSLODetailsPage it should render the component with correct title and take a snapshot 1`] = `
 <div>
   <div
     class="Layout--horizontal StyledProps--main PageHeader--container PageHeader--large StyledProps--flex StyledProps--padding-left-xlarge StyledProps--padding-right-xlarge StyledProps--background-white"

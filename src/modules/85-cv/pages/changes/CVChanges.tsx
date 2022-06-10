@@ -31,6 +31,7 @@ import { getStartAndEndTime } from '@cv/components/ChangeTimeline/ChangeTimeline
 import { TimeLine } from '@cv/components/Timeline/TimeLine'
 import type { StringsMap } from 'stringTypes'
 import { prepareFilterInfo } from '@cv/utils/CommonUtils'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import {
   ChangeSourceCategoryName,
   ChangeSourceTypes
@@ -56,6 +57,9 @@ export const CVChanges = ({ updateTime }: { updateTime?: Date }): JSX.Element =>
   const { serviceOptions } = useGetHarnessServices()
   const { environmentOptions } = useGetHarnessEnvironments()
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('changes')])
+
   const sourceTypes = useMemo(() => {
     return getChangeSourceOptions(getString).map((changeSourceOption: SelectOption) => {
       if (changeSourceOption?.value === ChangeSourceCategoryName.ALERT) {

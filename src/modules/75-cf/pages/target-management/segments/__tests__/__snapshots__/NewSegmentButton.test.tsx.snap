@@ -69,7 +69,7 @@ exports[`NewSegmentButton NewSegmentButton should render initial state correctly
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="newSegmentButton_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

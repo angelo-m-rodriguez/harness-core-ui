@@ -107,7 +107,7 @@ function RetryPipeline({
   const { getRBACErrorMessage } = useRBACError()
   const history = useHistory()
 
-  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module } =
+  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
 
   const { pipelineExecutionDetail } = useExecutionContext()
@@ -465,7 +465,8 @@ function RetryPipeline({
                 projectIdentifier,
                 executionIdentifier: retryPipelineData?.planExecution?.uuid || '',
                 accountId,
-                module
+                module,
+                source
               })
             )
           }

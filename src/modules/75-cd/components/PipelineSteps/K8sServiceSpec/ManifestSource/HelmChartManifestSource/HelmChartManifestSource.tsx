@@ -227,18 +227,24 @@ const Content = ({
     })
   }
 
+  // this OR condition is for OCI helm connector
+  const connectorRefPath =
+    manifest?.spec?.store?.type === 'OciHelmChart'
+      ? `${manifestPath}.spec.store.spec.config.spec.connectorRef`
+      : `${manifestPath}.spec.store.spec.connectorRef`
+
   return (
     <Layout.Vertical
       data-name="manifest"
       key={manifest?.identifier}
       className={cx(css.inputWidth, css.layoutVerticalSpacing)}
     >
-      {isFieldRuntime(`${manifestPath}.spec.store.spec.connectorRef`, template) && (
+      {isFieldRuntime(connectorRefPath, template) && (
         <div data-name="connectorRefContainer" className={css.verticalSpacingInput}>
           <FormMultiTypeConnectorField
-            disabled={isFieldDisabled(`${manifestPath}.spec.store.spec.connectorRef`)}
-            name={`${path}.${manifestPath}.spec.store.spec.connectorRef`}
-            selected={get(initialValues, `${manifestPath}.spec.store.spec.connectorRef`, '')}
+            disabled={isFieldDisabled(connectorRefPath)}
+            name={`${path}.${connectorRefPath}`}
+            selected={get(initialValues, connectorRefPath, '')}
             label={getString('connector')}
             placeholder={''}
             setRefValue
@@ -346,6 +352,20 @@ const Content = ({
             }}
             label={getString('pipeline.manifestType.bucketName')}
             placeholder={getString('pipeline.manifestType.bucketNamePlaceholder')}
+          />
+        </div>
+      )}
+
+      {isFieldRuntime(`${manifestPath}.spec.store.spec.basePath`, template) && (
+        <div className={css.verticalSpacingInput}>
+          <FormInput.MultiTextInput
+            disabled={isFieldDisabled(`${manifestPath}.spec.store.spec.basePath`)}
+            name={`${path}.${manifestPath}.spec.store.spec.basePath`}
+            multiTextInputProps={{
+              expressions,
+              allowableTypes
+            }}
+            label={getString('pipeline.manifestType.basePath')}
           />
         </div>
       )}

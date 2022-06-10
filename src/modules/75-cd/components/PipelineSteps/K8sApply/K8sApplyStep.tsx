@@ -13,9 +13,12 @@ import {
   FormInput,
   getMultiTypeFromValue,
   IconName,
+  Label,
   Layout,
-  MultiTypeInputType
-} from '@wings-software/uicore'
+  MultiTypeInputType,
+  Text
+} from '@harness/uicore'
+import { Color } from '@harness/design-system'
 import cx from 'classnames'
 import { FieldArray, FormikErrors, FormikProps, yupToFormErrors } from 'formik'
 import * as Yup from 'yup'
@@ -30,9 +33,8 @@ import {
   StepViewType,
   ValidateInputSetProps
 } from '@pipeline/components/AbstractSteps/Step'
-import type { K8sApplyStepInfo, StepElementConfig } from 'services/cd-ng'
+import type { ManifestConfigWrapper } from 'services/cd-ng'
 
-import type { VariableMergeServiceResponse } from 'services/pipeline-ng'
 import { VariablesListTable } from '@pipeline/components/VariablesListTable/VariablesListTable'
 import { FormMultiTypeCheckboxField } from '@common/components'
 import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
@@ -49,50 +51,20 @@ import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterfa
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import List from '@common/components/List/List'
 import type { StringsMap } from 'stringTypes'
+import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
+import { getSelectedDeploymentType } from '@pipeline/utils/stageHelpers'
+import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
+import { K8sOverrideValuesRuntimeFields } from './K8sOverrideValuesRuntimeFields'
+import K8sOverrideValuesManifest from './K8sOverrideValuesManifest'
+import type {
+  FilePathConfig,
+  K8sApplyData,
+  K8sApplyFormData,
+  K8sApplyProps,
+  K8sApplyVariableStepProps
+} from './K8sInterface'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import pipelineVariableCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
-
-export interface K8sApplyData extends StepElementConfig {
-  spec: Omit<K8sApplyStepInfo, 'skipDryRun' | 'skipSteadyStateCheck'> & {
-    skipDryRun: boolean
-    skipSteadyStateCheck?: boolean
-  }
-}
-
-export interface K8sApplyVariableStepProps {
-  initialValues: K8sApplyData
-  stageIdentifier: string
-  onUpdate?(data: K8sApplyFormData): void
-  metadataMap: Required<VariableMergeServiceResponse>['metadataMap']
-  variablesData: K8sApplyData
-}
-
-interface FilePathConfig {
-  value: string
-  id: string
-}
-interface K8sApplyFormData extends StepElementConfig {
-  spec: {
-    skipDryRun: boolean
-    skipSteadyStateCheck?: boolean
-    filePaths?: FilePathConfig[] | string
-  }
-}
-
-interface K8sApplyProps {
-  initialValues: K8sApplyData
-  onUpdate?: (data: K8sApplyData) => void
-  onChange?: (data: K8sApplyData) => void
-  allowableTypes: MultiTypeInputType[]
-  stepViewType?: StepViewType
-  isNewStep?: boolean
-  isDisabled?: boolean
-  inputSetData?: {
-    template?: K8sApplyData
-    path?: string
-  }
-  readonly?: boolean
-}
 
 const formatData = (data: K8sApplyFormData): K8sApplyData => {
   return {
@@ -104,7 +76,8 @@ const formatData = (data: K8sApplyFormData): K8sApplyData => {
       filePaths:
         getMultiTypeFromValue(data?.spec?.filePaths as string) === MultiTypeInputType.RUNTIME
           ? data?.spec?.filePaths
-          : ((data?.spec?.filePaths || []) as FilePathConfig[])?.map((item: FilePathConfig) => item.value)
+          : ((data?.spec?.filePaths || []) as FilePathConfig[])?.map((item: FilePathConfig) => item.value),
+      overrides: data?.spec?.overrides
     }
   }
 }
@@ -113,6 +86,15 @@ function K8sApplyDeployWidget(props: K8sApplyProps, formikRef: StepFormikFowardR
   const { initialValues, onUpdate, isNewStep = true, isDisabled, allowableTypes, onChange, stepViewType } = props
   const { getString } = useStrings()
   const defaultValueToReset = [{ value: '', id: uuid() }]
+  const {
+    state: {
+      selectionState: { selectedStageId }
+    },
+    getStageFromPipeline
+  } = usePipelineContext()
+
+  const { stage } = getStageFromPipeline<DeploymentStageElementConfig>(selectedStageId || '')
+  const selectedDeploymentType = getSelectedDeploymentType(stage, getStageFromPipeline)
 
   const { expressions } = useVariablesExpression()
 
@@ -127,7 +109,8 @@ function K8sApplyDeployWidget(props: K8sApplyProps, formikRef: StepFormikFowardR
               ...values.spec,
               skipDryRun: defaultTo(values?.spec?.skipDryRun, false),
               skipSteadyStateCheck: defaultTo(values?.spec?.skipSteadyStateCheck, false),
-              filePaths: values?.spec?.filePaths
+              filePaths: values?.spec?.filePaths,
+              overrides: values?.spec?.overrides
             }
           }
           onUpdate?.(formData)
@@ -139,7 +122,8 @@ function K8sApplyDeployWidget(props: K8sApplyProps, formikRef: StepFormikFowardR
               ...values.spec,
               skipDryRun: defaultTo(values?.spec?.skipDryRun, false),
               skipSteadyStateCheck: defaultTo(values?.spec?.skipSteadyStateCheck, false),
-              filePaths: values?.spec?.filePaths
+              filePaths: values?.spec?.filePaths,
+              overrides: values?.spec?.overrides
             }
           }
           onChange?.(formData)
@@ -298,6 +282,10 @@ function K8sApplyDeployWidget(props: K8sApplyProps, formikRef: StepFormikFowardR
                   />
                 )}
               </div>
+              <div className={stepCss.divider} />
+              <div>
+                <K8sOverrideValuesManifest deploymentType={selectedDeploymentType} formik={formik} />
+              </div>
             </>
           )
         }}
@@ -306,7 +294,7 @@ function K8sApplyDeployWidget(props: K8sApplyProps, formikRef: StepFormikFowardR
   )
 }
 
-const K8sApplyInputStep: React.FC<K8sApplyProps> = ({ inputSetData, readonly, allowableTypes }) => {
+const K8sApplyInputStep: React.FC<K8sApplyProps> = ({ inputSetData, readonly, allowableTypes, ...props }) => {
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
   return (
@@ -372,6 +360,22 @@ const K8sApplyInputStep: React.FC<K8sApplyProps> = ({ inputSetData, readonly, al
           />
         </div>
       )}
+      {inputSetData?.template?.spec?.overrides?.length && (
+        <Label style={{ color: Color.GREY_900, paddingBottom: 'var(--spacing-small)' }}>
+          <Text> {getString('cd.overrideYaml')}</Text>
+        </Label>
+      )}
+      {inputSetData?.template?.spec?.overrides?.map((overrideValue: ManifestConfigWrapper, index: number) => {
+        return (
+          <K8sOverrideValuesRuntimeFields
+            allowableTypes={allowableTypes}
+            overrideValue={overrideValue}
+            index={index}
+            {...props}
+            key={overrideValue?.manifest?.identifier}
+          />
+        )
+      })}
     </>
   )
 }
@@ -517,7 +521,8 @@ export class K8sApplyStep extends PipelineStep<K8sApplyData> {
                 value: item,
                 id: uuid()
               }))
-            : [{ value: '', id: uuid() }]
+            : [{ value: '', id: uuid() }],
+        overrides: initialValues?.spec?.overrides
       }
     }
   }
@@ -532,7 +537,8 @@ export class K8sApplyStep extends PipelineStep<K8sApplyData> {
         filePaths:
           getMultiTypeFromValue(data?.spec?.filePaths) === MultiTypeInputType.RUNTIME
             ? data?.spec?.filePaths
-            : (data?.spec?.filePaths || [])?.map((item: FilePathConfig) => item.value)
+            : (data?.spec?.filePaths || [])?.map((item: FilePathConfig) => item.value),
+        overrides: data?.spec?.overrides
       }
     }
   }
@@ -550,7 +556,8 @@ export class K8sApplyStep extends PipelineStep<K8sApplyData> {
     spec: {
       filePaths: [],
       skipDryRun: false,
-      skipSteadyStateCheck: false
+      skipSteadyStateCheck: false,
+      overrides: []
     }
   }
 }

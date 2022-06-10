@@ -108,9 +108,10 @@ const renderHeader = ({
         {getString('pipeline.testsReports.testExecutions')}
       </Heading>
       {stageIdOptions && selectedStageId && (
-        <div style={{ width: '222px', marginLeft: 'var(--spacing-5)' }}>
+        <div className={css.stageOptions}>
           <Select
             fill
+            popoverClassName={css.repositionWarning}
             value={selectedStageId}
             items={stageIdOptions}
             onChange={option => {
@@ -142,7 +143,7 @@ const renderHeader = ({
         </div>
       )}
       {stepIdOptions && selectedStepId && (
-        <div style={{ width: '222px', marginLeft: 'var(--spacing-5)' }}>
+        <div className={css.stepOptions}>
           <Select
             fill
             value={selectedStepId}

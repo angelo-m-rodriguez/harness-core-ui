@@ -431,7 +431,7 @@ const FlagActivation: React.FC<FlagActivationProps> = props => {
 
   useEffect(() => {
     if (tab !== activeTabId) {
-      history.replace(withActiveEnvironment(routes.toCFFeatureFlagsDetail(pathParams) + `?tab=${activeTabId}`))
+      history.replace(withActiveEnvironment(routes.toCFFeatureFlagsDetail(pathParams) + `&tab=${activeTabId}`))
     }
   }, [activeTabId, history, pathParams, tab, withActiveEnvironment])
 

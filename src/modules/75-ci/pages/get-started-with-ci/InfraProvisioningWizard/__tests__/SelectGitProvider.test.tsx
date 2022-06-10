@@ -16,6 +16,36 @@ import { AllBuildLocationsForSaaS, Hosting, InfraProvisiongWizardStepId } from '
 
 const pathParams = { accountId: 'accountId', orgIdentifier: 'orgId', projectIdentifier: 'projectId' }
 
+jest.mock('services/cd-ng', () => ({
+  useCreateDefaultScmConnector: jest.fn().mockImplementation(() => {
+    return {
+      mutate: () =>
+        Promise.resolve({
+          status: 'ERROR',
+          code: 'HINT',
+          message: 'Please ensure that the api access credentials are correct.',
+          responseMessages: [
+            {
+              code: 'HINT',
+              level: 'INFO',
+              message: 'Please ensure that the api access credentials are correct.'
+            },
+            {
+              code: 'EXPLANATION',
+              level: 'INFO',
+              message: 'Provided api access credentials are not authorized.'
+            },
+            {
+              code: 'INVALID_REQUEST',
+              level: 'ERROR',
+              message: 'Invalid request: Bad credentials'
+            }
+          ]
+        })
+    }
+  })
+}))
+
 describe('Test SelectGitProvider component', () => {
   test('Initial render', async () => {
     const { container } = render(
@@ -60,16 +90,13 @@ describe('Test SelectGitProvider component', () => {
     })
     expect(gitProviderCards[0].classList.contains('Card--selected')).toBe(true)
 
-    // All other git provider cards should be disabled
-    gitProviderCards.map(card => expect(card.className).not.toContain('Card--disabled'))
-
     expect(getByText('ci.getStartedWithCI.oAuthLabel')).toBeInTheDocument()
     expect(getByText('ci.getStartedWithCI.accessTokenLabel')).toBeInTheDocument()
   })
 
   test('User selects Github provider and Access Token authentication method', async () => {
     window.open = jest.fn()
-    const { container, getByText } = render(
+    const { container, getByText, getAllByText } = render(
       <TestWrapper
         path={routes.toGetStartedWithCI({
           ...pathParams,
@@ -138,6 +165,12 @@ describe('Test SelectGitProvider component', () => {
     // validation error goes away once Access Token is provided
     expect(container.querySelector('input[name="accessToken"]')).toHaveValue('sample-access-token')
     expect(accessTokenValidationError).not.toBeInTheDocument()
+
+    await act(async () => {
+      fireEvent.click(testConnectionBtn)
+    })
+    // should show correct error messages once test connection is done
+    expect(getAllByText('ci.getStartedWithCI.fieldIsMissing').length).toBe(2)
   })
 
   test('User selects Gitlab provider and Access Key authentication method', async () => {
@@ -301,7 +334,7 @@ describe('Test SelectGitProvider component', () => {
     expect(applicationPasswordValidationError).not.toBeInTheDocument()
   })
 
-  test.only('Render SelectGitProvider inside InfraProvisioningWizard', async () => {
+  test('Render SelectGitProvider inside InfraProvisioningWizard', async () => {
     const { container, getByText } = render(
       <TestWrapper path={routes.toGetStartedWithCI({ ...pathParams, module: 'ci' })} pathParams={pathParams}>
         <InfraProvisioningWizard lastConfiguredWizardStepId={InfraProvisiongWizardStepId.SelectGitProvider} />

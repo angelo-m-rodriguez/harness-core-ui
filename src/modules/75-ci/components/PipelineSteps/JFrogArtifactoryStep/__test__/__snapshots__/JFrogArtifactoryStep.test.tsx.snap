@@ -21,7 +21,7 @@ exports[`JFrogArtifactory Step Edit View edit mode works 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jfrogArt_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -560,7 +560,7 @@ exports[`JFrogArtifactory Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jfrogArt_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1188,7 +1188,7 @@ exports[`JFrogArtifactory Step Edit View should render properly 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jfrogArt_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

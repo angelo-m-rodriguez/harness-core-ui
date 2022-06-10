@@ -222,7 +222,7 @@ exports[`Create Secret Manager Wizard should render form 1`] = `
                             >
                               <div
                                 class="Text--withDocsTooltip"
-                                data-tooltip-id="ceGcpOverview_identifier"
+                                data-tooltip-id="universalInputNameWithId"
                               >
                                 <p
                                   class="StyledProps--font StyledProps--main"
@@ -3017,7 +3017,7 @@ exports[`Create Secret Manager Wizard should throw an error when connectors alre
                             >
                               <div
                                 class="Text--withDocsTooltip"
-                                data-tooltip-id="ceGcpOverview_identifier"
+                                data-tooltip-id="universalInputNameWithId"
                               >
                                 <p
                                   class="StyledProps--font StyledProps--main"

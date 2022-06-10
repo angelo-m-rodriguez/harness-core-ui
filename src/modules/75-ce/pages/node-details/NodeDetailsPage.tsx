@@ -42,6 +42,7 @@ import WorkloadSummary from '@ce/components/WorkloadSummary/WorkloadSummary'
 import EmptyView from '@ce/images/empty-state.svg'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { Aggregation, AggregationFunctionMapping } from './constants'
 import css from './NodeDetailsPage.module.scss'
 
@@ -188,6 +189,8 @@ const NodeDetailsPage: () => JSX.Element = () => {
   const infoData = summaryData?.perspectiveGrid?.data?.length
     ? (summaryData.perspectiveGrid.data[0]?.instanceDetails as InstanceDetails)
     : ({} as InstanceDetails)
+
+  useDocumentTitle([getString('ce.perspectives.nodeDetails.header'), infoData.name || nodeId], true)
 
   const breadcrumbsLinks = useMemo(
     () => [

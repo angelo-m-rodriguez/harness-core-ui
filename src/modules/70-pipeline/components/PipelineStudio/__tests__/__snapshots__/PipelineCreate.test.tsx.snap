@@ -24,7 +24,7 @@ exports[`PipelineCreate test initializes ok edit pipeline 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="pipelineCreate_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -216,7 +216,7 @@ exports[`PipelineCreate test initializes ok for CD module 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="pipelineCreate_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -441,7 +441,7 @@ exports[`PipelineCreate test initializes ok for CI module 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="pipelineCreate_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -666,7 +666,7 @@ exports[`PipelineCreate test initializes ok new pipeline 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="pipelineCreate_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

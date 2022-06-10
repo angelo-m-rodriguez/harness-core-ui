@@ -13,6 +13,7 @@ import { useDeleteSLOData, useGetSLODetails, useResetErrorBudget } from 'service
 import routes from '@common/RouteDefinitions'
 import { useQueryParams } from '@common/hooks'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { getErrorMessage, getSearchString } from '@cv/utils/CommonUtils'
 import CVCreateSLO from '@cv/pages/slos/components/CVCreateSLO/CVCreateSLO'
@@ -26,6 +27,9 @@ import css from './CVSLODetailsPage.module.scss'
 const CVSLODetailsPage: React.FC = () => {
   const history = useHistory()
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.slos.title')])
+
   const { accountId, orgIdentifier, projectIdentifier, identifier } = useParams<
     ProjectPathProps & { identifier: string }
   >()

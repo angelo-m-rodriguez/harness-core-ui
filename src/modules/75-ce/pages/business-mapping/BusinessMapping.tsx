@@ -26,6 +26,7 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import BusinessMappingBuilder from '@ce/components/BusinessMappingBuilder/BusinessMappingBuilder'
 import BusinessMappingList from '@ce/components/BusinessMappingList/BusinessMappingList'
 import EmptyPage from '@ce/common/EmptyPage/EmptyPage'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 
 const BusinessMappingPage: () => React.ReactElement = () => {
   const { accountId } = useParams<AccountPathProps>()
@@ -37,6 +38,8 @@ const BusinessMappingPage: () => React.ReactElement = () => {
   })
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const { showError, showSuccess } = useToaster()
+
+  useDocumentTitle(getString('ce.businessMapping.sideNavText'), true)
 
   const businessMappingData = data?.resource || []
 

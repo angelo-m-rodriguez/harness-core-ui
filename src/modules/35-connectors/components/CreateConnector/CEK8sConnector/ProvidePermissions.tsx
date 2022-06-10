@@ -30,10 +30,12 @@ import { CE_K8S_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import { useMutateAsGet } from '@common/hooks'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
-import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import CopyCodeSection from './components/CopyCodeSection'
 import PermissionYAMLPreview from './PermissionYAMLPreview'
 import css from './CEK8sConnector.module.scss'
@@ -68,10 +70,9 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
   const { mutate: updateConnector } = useUpdateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   const { data: permissionsYaml } = useMutateAsGet(useCloudCostK8sClusterSetup, {
     queryParams: {
       accountIdentifier: accountId
@@ -110,10 +111,14 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
         } as ConnectorInfoDTO
       }
       const response = props.isEditMode ? await updateConnector(connector) : await createConnector(connector)
-      const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-      if (canGoToNextStep) {
+      const nextSteps = () => {
         props.onSuccess?.(response?.data as ConnectorRequestBody)
         props.nextStep?.({ ...props.prevStepData } as ConnectorInfoDTO)
+      }
+      if (opaFlagEnabled && response.data?.governanceMetadata) {
+        conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, nextSteps)
+      } else {
+        nextSteps()
       }
     } catch (e) {
       modalErrorHandler?.showDanger(getRBACErrorMessage(e))

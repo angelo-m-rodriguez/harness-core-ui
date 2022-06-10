@@ -7,8 +7,13 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
+  readonly content: string
+  readonly footer: string
+  readonly header: string
+  readonly layout: string
   readonly metaData: string
   readonly metaDataPair: string
   readonly optionsMenu: string
+  readonly toolbar: string
 }
 export default styles

@@ -475,7 +475,7 @@ exports[`ServicesListPage Should open Add-ServiceModal, grid and list view on cl
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="deployService_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

@@ -30,7 +30,7 @@ import { useStrings } from 'framework/strings'
 import type { StringKeys } from 'framework/strings'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 
-import type { GitQueryParams, PipelineType } from '@common/interfaces/RouteInterfaces'
+import type { ExecutionPathProps, GitQueryParams, PipelineType } from '@common/interfaces/RouteInterfaces'
 import RetryPipeline from '../RetryPipeline/RetryPipeline'
 import { useRunPipelineModal } from '../RunPipelineModal/useRunPipelineModal'
 import css from './ExecutionActions.module.scss'
@@ -65,6 +65,7 @@ export interface ExecutionActionsProps {
   modules?: string[]
   showEditButton?: boolean
   isPipelineInvalid?: boolean
+  source: ExecutionPathProps['source']
 }
 
 function getValidExecutionActions(canExecute: boolean, executionStatus?: ExecutionStatus) {
@@ -136,6 +137,7 @@ export default function ExecutionActions(props: ExecutionActionsProps): React.Re
     stageName,
     canRetry = false,
     modules,
+    source,
     showEditButton = true,
     isPipelineInvalid
   } = props
@@ -186,6 +188,7 @@ export default function ExecutionActions(props: ExecutionActionsProps): React.Re
   const interruptMethod = stageId ? stageInterrupt : interrupt
 
   const executionPipelineViewRoute = routes.toExecutionPipelineView({
+    source,
     orgIdentifier,
     pipelineIdentifier,
     executionIdentifier,

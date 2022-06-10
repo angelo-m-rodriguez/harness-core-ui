@@ -22,7 +22,7 @@ exports[`test should validate edit mode snapshot 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployEnv_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -378,7 +378,7 @@ exports[`test should validate save 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployEnv_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -698,7 +698,7 @@ exports[`test validation are present if submited with empty value  1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployEnv_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

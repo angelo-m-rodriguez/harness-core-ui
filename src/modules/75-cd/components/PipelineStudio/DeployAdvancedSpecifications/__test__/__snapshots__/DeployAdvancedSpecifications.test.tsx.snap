@@ -6,7 +6,7 @@ exports[`Deploy advanced specifications test Should match snapshot 1`] = `
     class="deployStage"
   >
     <div
-      class="contentSection"
+      class="contentSection paddedSection"
     >
       <div
         class="tabHeading"

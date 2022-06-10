@@ -5,11 +5,10 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Layout } from '@wings-software/uicore'
 import { defaultTo, get, isEmpty, isEqual, set } from 'lodash-es'
 import produce from 'immer'
-import { useParams } from 'react-router-dom'
 import type { AllNGVariables as Variable } from '@pipeline/utils/types'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
@@ -20,15 +19,8 @@ import type {
 } from '@pipeline/components/PipelineSteps/Steps/CustomVariables/CustomVariableEditable'
 
 import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
-import {
-  NGServiceConfig,
-  ServiceResponseDTO,
-  StageElementConfig,
-  StageElementWrapperConfig,
-  useGetServiceV2
-} from 'services/cd-ng'
-import type { PipelineType } from '@common/interfaces/RouteInterfaces'
-import { yamlParse } from '@common/utils/YamlHelperMethods'
+import { useCache } from '@common/hooks/useCache'
+import type { ServiceDefinition, StageElementConfig, StageElementWrapperConfig } from 'services/cd-ng'
 import type { AbstractStepFactory } from '../AbstractSteps/AbstractStepFactory'
 import { getFlattenedStages, getStageIndexFromPipeline } from '../PipelineStudio/StageBuilder/StageBuilderUtil'
 import { StepViewType } from '../AbstractSteps/Step'
@@ -40,6 +32,7 @@ export interface WorkflowVariablesProps {
   formName?: string
   factory: AbstractStepFactory
   readonly?: boolean
+  isReadonlyServiceMode: boolean
 }
 
 export default function WorkflowVariables({
@@ -47,7 +40,8 @@ export default function WorkflowVariables({
   tabName,
   formName,
   factory,
-  readonly: isReadOnlyServiceMode
+  isReadonlyServiceMode,
+  readonly
 }: WorkflowVariablesProps): JSX.Element | null {
   const {
     state: {
@@ -56,42 +50,17 @@ export default function WorkflowVariables({
     },
     allowableTypes,
     getStageFromPipeline,
-    updateStage,
-    isReadonly
+    updateStage
   } = usePipelineContext()
 
-  const { accountId, orgIdentifier, projectIdentifier } = useParams<
-    PipelineType<{
-      orgIdentifier: string
-      projectIdentifier: string
-      accountId: string
-    }>
-  >()
   const { stage } = getStageFromPipeline<DeploymentStageElementConfig>(selectedStageId || '')
   const serviceConfig = stage?.stage?.spec?.serviceConfig || {}
   const parentStage = serviceConfig.useFromStage?.stage
   const { metadataMap } = usePipelineVariables()
   const [parentStageData, setParentStageData] = React.useState<StageElementWrapperConfig>()
-
-  /*************************************Service Entity Related code********************************************************/
-  //This is temporary code to fetch the WORKFLOW data from service api. It will be replaced once caching is implemented for service entity
-  const {
-    data: selectedServiceResponse,
-    refetch: refetchServiceData,
-    loading: serviceLoading
-  } = useGetServiceV2({
-    serviceIdentifier: (stage?.stage?.spec as any)?.service?.serviceRef,
-    queryParams: { accountIdentifier: accountId, orgIdentifier: orgIdentifier, projectIdentifier: projectIdentifier },
-    lazy: true
-  })
-
-  useEffect(() => {
-    if (!isReadonly && isReadOnlyServiceMode) {
-      refetchServiceData()
-    }
-  }, [isReadOnlyServiceMode, (stage?.stage?.spec as any)?.service?.serviceRef])
-
-  /*************************************Service Entity Related code********************************************************/
+  const getServiceCacheId = `${pipeline.identifier}-${selectedStageId}-service`
+  const { getCache } = useCache([getServiceCacheId])
+  const serviceInfo = getCache<ServiceDefinition>(getServiceCacheId)
 
   React.useEffect(() => {
     if (isEmpty(parentStageData) && parentStage) {
@@ -129,32 +98,21 @@ export default function WorkflowVariables({
   }
 
   const getInitialValues = useCallback((): Variable[] => {
-    //This is temporary code to fetch the WORKFLOW data from service api. It will be replaced once caching is implemented for service entity
-    if (!isReadonly && isReadOnlyServiceMode) {
-      const serviceData = selectedServiceResponse?.data?.service as ServiceResponseDTO
-      if (!isEmpty(serviceData?.yaml)) {
-        const parsedYaml = yamlParse<NGServiceConfig>(defaultTo(serviceData.yaml, ''))
-        const serviceInfo = parsedYaml.service?.serviceDefinition
-        return defaultTo(serviceInfo?.spec.variables, []) as Variable[]
-      }
-      return []
+    if (isReadonlyServiceMode && !isEmpty(serviceInfo)) {
+      return defaultTo(serviceInfo?.spec.variables, []) as Variable[]
     }
 
     if (isPropagating) {
       return (predefinedSetsPath?.variables || []) as Variable[]
     }
     return (stageSpec?.variables || []) as Variable[]
-  }, [isPropagating, predefinedSetsPath, stageSpec?.variables])
+  }, [isReadonlyServiceMode, serviceInfo, isPropagating, stageSpec?.variables, predefinedSetsPath?.variables])
 
   const getYamlPropertiesForVariables = (): Variable[] => {
     if (isPropagating) {
       return get(predefinedSetsPath, 'variables', []) as Variable[]
     }
     return []
-  }
-
-  if (serviceLoading) {
-    return null
   }
 
   return (
@@ -169,7 +127,7 @@ export default function WorkflowVariables({
             canAddVariable: true
           }}
           allowableTypes={allowableTypes}
-          readonly={isReadOnlyServiceMode}
+          readonly={readonly}
           type={StepType.CustomVariable}
           onUpdate={({ variables }: { variables: Variable[] }) => {
             if (!isEqual(getInitialValues(), variables)) {

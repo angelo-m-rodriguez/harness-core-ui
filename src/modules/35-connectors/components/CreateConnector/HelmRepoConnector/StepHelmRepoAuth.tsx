@@ -48,6 +48,7 @@ interface AuthenticationProps {
   accountId: string
   orgIdentifier: string
   projectIdentifier: string
+  isOCIHelm?: boolean
 }
 
 interface HelmFormInterface {
@@ -68,7 +69,7 @@ const defaultInitialFormData: HelmFormInterface = {
 const StepHelmAuthentication: React.FC<StepProps<StepHelmRepoAuthenticationProps> & AuthenticationProps> = props => {
   const { getString } = useStrings()
 
-  const { prevStepData, nextStep, accountId } = props
+  const { prevStepData, nextStep, accountId, isOCIHelm = false } = props
 
   const [, setModalErrorHandler] = useState<ModalErrorHandlerBinding | undefined>()
   const [loadConnector] = useState(false)
@@ -174,12 +175,16 @@ const StepHelmAuthentication: React.FC<StepProps<StepHelmRepoAuthenticationProps
                 >
                   {getString('authentication')}
                 </Text>
-                <FormInput.Select
-                  name="authType"
-                  items={authOptions}
-                  disabled={false}
-                  className={commonStyles.authTypeSelectLarge}
-                />
+                {isOCIHelm ? (
+                  <Text lineClamp={1}>{getString('usernamePassword')}</Text>
+                ) : (
+                  <FormInput.Select
+                    name="authType"
+                    items={authOptions}
+                    disabled={false}
+                    className={commonStyles.authTypeSelectLarge}
+                  />
+                )}
               </Container>
               {formikProps.values.authType === AuthTypes.USER_PASSWORD ? (
                 <>

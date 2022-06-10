@@ -43,6 +43,7 @@ import WorkloadSummary from '@ce/components/WorkloadSummary/WorkloadSummary'
 import EmptyView from '@ce/images/empty-state.svg'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { Aggregation, AggregationFunctionMapping } from './constants'
 import css from './WorkloadDetailsPage.module.scss'
 
@@ -70,6 +71,8 @@ const WorkloadDetailsPage: () => JSX.Element = () => {
   const { getString } = useStrings()
   const [timeRange, setTimeRange] = useQueryParamsState<TimeRangeFilterType>('timeRange', DEFAULT_TIME_RANGE)
   const [chartDataAggregation, setChartDataAggregation] = useState<Aggregation>(Aggregation.TimeWeighted)
+
+  useDocumentTitle([getString('ce.perspectives.workloadDetails.workloadDetailsText'), workloadName], true)
 
   const isDateRangeInLast7Days = useMemo(() => {
     const last7DaysRange = DATE_RANGE_SHORTCUTS['LAST_7_DAYS']

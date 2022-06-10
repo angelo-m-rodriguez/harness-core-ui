@@ -34,6 +34,7 @@ import BudgetDetailsChart from '@ce/components/BudgetDetailsChart/BudgetDetailsC
 import EmptyView from '@ce/images/empty-state.svg'
 import useBudgetModal from '@ce/components/PerspectiveReportsAndBudget/PerspectiveCreateBudget'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { PAGE_NAMES } from '@ce/TrackingEventsConstants'
 import css from './BudgetDetails.module.scss'
 
@@ -42,6 +43,8 @@ const BudgetDetails: () => JSX.Element | null = () => {
   const { getString } = useStrings()
   const { showError, showSuccess } = useToaster()
   const history = useHistory()
+
+  useDocumentTitle([getString('ce.budgets.sideNavText'), budgetName], true)
 
   const { mutate: deleteBudget, loading } = useDeleteBudget({ queryParams: { accountIdentifier: accountId } })
 

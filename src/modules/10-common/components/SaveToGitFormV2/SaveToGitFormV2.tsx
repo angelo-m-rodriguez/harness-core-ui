@@ -127,6 +127,7 @@ const SaveToGitFormV2: React.FC<ModalConfigureProps & SaveToGitFormV2Props> = pr
           }}
           selectedValue={targetBranch}
           showErrorInModal
+          fallbackDefaultBranch={false}
         />
       </Layout.Horizontal>
     )

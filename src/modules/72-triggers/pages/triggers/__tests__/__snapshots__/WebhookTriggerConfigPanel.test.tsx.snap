@@ -34,7 +34,7 @@ exports[`WebhookTriggerConfigPanel Triggers tests Renders/snapshots Initial Rend
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="wrapperComponentTestForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -327,7 +327,7 @@ exports[`WebhookTriggerConfigPanel Triggers tests Renders/snapshots Initial Rend
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="wrapperComponentTestForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

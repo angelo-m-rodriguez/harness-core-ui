@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OverrideYamlValues List View tests delete manifest list works correctly 1`] = `
+<div>
+  <div>
+    <div
+      class="Layout--vertical StyledProps--main"
+      style="width: 100%;"
+    >
+      <label
+        class="bp3-label k8ValLabel"
+      >
+        optionalField
+      </label>
+      <div
+        class="formGroup k8VarMargin"
+      >
+        <div />
+      </div>
+    </div>
+    <button
+      class="bp3-button Button--button StyledProps--font StyledProps--main addManifest Button--with-current-color Button--variation Button--variation-link Button--size Button--small"
+      data-testid="addManifest"
+      id="add-manifest"
+      type="button"
+    >
+      <span
+        class="bp3-button-text"
+      >
+        pipelineSteps.serviceTab.manifestList.addManifest
+      </span>
+    </button>
+  </div>
+</div>
+`;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Unit tests for CVChanges Verify if all the fields are rendered correctly CVChanges 1`] = `
+exports[`Unit tests for CVChanges Verify if all the fields are rendered correctly CVChanges with correct document title 1`] = `
 <div>
   <div
     class="css-1rivvhq"

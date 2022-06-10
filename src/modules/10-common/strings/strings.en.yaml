@@ -170,6 +170,7 @@ validation:
   identifierIsRequired: '{{$.validation.identifierRequired}}'
   urlIsRequired: URL is required
   testRepoIsRequired: Test Repository is required
+  validationProjectIsRequired: Project Name is required
   email:
     required: Email is required
     format: Please input valid email address
@@ -325,20 +326,26 @@ git:
   gitHubAccountUrl: 'GitHub Account URL'
   gitLabAccountUrl: 'GitLab Account URL'
   bitbucketAccountUrl: 'Bitbucket Account URL'
+  azureReposProjectUrl: 'Azure Repos Project URL'
   gitRepoUrl: 'Git Repository URL'
   gitHubRepoUrl: 'GitHub Repository URL'
   gitLabRepoUrl: 'GitLab Repository URL'
   bitbucketRepoUrl: 'Bitbucket Repository URL'
+  azureReposRepoUrl: 'Azure Repos Repository URL'
   gitHubUrlPlaceholder: 'https://www.github.com/account/'
   gitHubUrlPlaceholderSSH: 'git@github.com:account/'
   gitLabUrlPlaceholder: 'https://www.gitlab.com/account/'
   gitLabUrlPlaceholderSSH: 'git@gitlab.com:account/'
   bitbucketUrlPlaceholder: 'https://www.bitbucket.com/account/'
-  bitbucketOrgUrlPlaceholder: 'https://www.bitbucket.org/'
   bitbucketPlaceholderSSH: 'git@bitbucket.com:account/'
+  azureReposUrlPlaceholder: 'https://dev.azure.com/<organisationName>'
+  azureReposUrlPlaceholderRepoHttp: 'https://dev.azure.com/<organisationName>/<projectName>/<repositoryName>'
+  azureReposPlaceholderSSH: 'git@ssh.dev.azure.com:v3/<organisationName>'
+  azureReposPlaceholderRepoSSH: 'git@ssh.dev.azure.com:v3/<organisationName>/<projectName>/<repositoryName>'
   enableAPIAccess: 'Enable API access (recommended)'
   APIAccessDescription: 'API Access is required for using “Git Experience”, for creation of Git based triggers, Webhooks management and updating Git statuses'
   testRepositoryDescription: Please provide a repository to test the credentials. This is required just for checking connectivity. The connector will still be created at account level.
+  testProjectAndRepositoryDescription: Please provide a project and a repository to test the credentials. This is required just for checking connectivity. The connector will still be created at account level.
   APIAuthentication: 'API Authentication'
   gitHubApp: 'GitHub App'
   installationId: 'GitHub Installation Id'
@@ -349,6 +356,7 @@ git:
   addUserCredentialLabel: Update in user profile
   saveResourceLabel: 'Save {{resource}} to Git'
   selectRepoLabel: Repository Display Name
+  projectNamePlaceholder: 'Example: MyProject'
   filePath: File Path
   folderPath: Folder Path
   commitMessage: Commit message
@@ -363,8 +371,6 @@ git:
   remoteStoreLabel: Pipeline content is stored in a Git repository
   validation:
     filePath: '{{$.common.git.filePath}} is required'
-    yamlPath: 'Yaml path is required'
-    yamlPathInvalid: 'Yaml path should begin with .harness/ and have a valid file/folder name and yaml extension'
     commitMessage: '{{$.common.git.commitMessage}} is required'
     sameBranches: 'Source and target branches cannot be same for a pull request'
     repoRequired: '{{ $.common.validation.repository }}'
@@ -793,7 +799,6 @@ userLabel: User
 resourceLabel: Resource
 resourceTypeLabel: Resource Type
 moduleLabel: 'Module'
-timePstLabel: Time (PST)
 resourceGroupLabel: Resource Group
 roleAssignmentLabel: Role Assignment
 triggerLabel: Trigger
@@ -884,6 +889,7 @@ fetchingBranches: Fetching branches
 download: Download
 gitOps: GitOps
 showHarnessManagedError: Harness Managed Resource cannot be edited
+contentRequired: Content is required
 
 # Chaos Module
 chaosText: Chaos

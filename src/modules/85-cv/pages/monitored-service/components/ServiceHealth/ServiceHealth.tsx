@@ -14,6 +14,7 @@ import ChangeTimeline from '@cv/components/ChangeTimeline/ChangeTimeline'
 import TimelineSlider from '@cv/components/ChangeTimeline/components/TimelineSlider/TimelineSlider'
 import type { RiskData } from 'services/cv'
 import type { ChangesInfoCardData } from '@cv/components/ChangeTimeline/ChangeTimeline.types'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import ServiceDependencyGraph from '@cv/pages/monitored-service/CVMonitoredService/components/MonitoredServiceGraphView/MonitoredServiceGraphView'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
@@ -42,6 +43,9 @@ export default function ServiceHealth({
   hasChangeSource
 }: ServiceHealthProps): JSX.Element {
   const { getString } = useStrings()
+
+  useDocumentTitle([getString('cv.srmTitle'), getString('cv.monitoredServices.title')])
+
   const [selectedTimePeriod, setSelectedTimePeriod] = useState<SelectOption>({
     value: TimePeriodEnum.TWENTY_FOUR_HOURS,
     label: getString('cv.monitoredServices.serviceHealth.last24Hrs')

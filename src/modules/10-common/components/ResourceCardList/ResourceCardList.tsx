@@ -17,6 +17,7 @@ import routes from '@common/RouteDefinitions'
 import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import useCreateSmtpModal from '@common/components/Smtp/useCreateSmtpModal'
 import { useGetSmtpConfig } from 'services/cd-ng'
+import { isPR, isLocalHost } from '@common/utils/utils'
 import css from './ResourceCardList.module.scss'
 
 export interface ResourceOption {
@@ -46,7 +47,7 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
   const { openCreateSmtpModal } = useCreateSmtpModal({ onCloseModal: refetchSmtpData })
   // showGitOpsCard defaults to false for now while the feature is being developed
   const showGitOpsCard = useMemo(
-    () => history?.location?.pathname.includes('resources') && false,
+    () => history?.location?.pathname.includes('resources') && (isPR() || isLocalHost()),
     [history?.location?.pathname]
   )
   const smtpResource: ResourceOption[] = [
@@ -140,7 +141,27 @@ const ResourceCardList: React.FC<ResourceCardListProps> = ({ items }) => {
     {
       label: <String stringID="common.agents" />,
       icon: 'gitops-agent-blue',
-      route: routes.toAccountResourcesGitOps({ accountId })
+      route: routes.toAccountResourcesGitOps({ accountId, entity: 'agents' })
+    } as ResourceOption,
+    {
+      label: <String stringID="repositories" />,
+      icon: 'gitops-repository-blue',
+      route: routes.toAccountResourcesGitOps({ accountId, entity: 'repositories' })
+    } as ResourceOption,
+    {
+      label: <String stringID="common.repositoryCertificates" />,
+      icon: 'gitops-repo-cert-blue',
+      route: routes.toAccountResourcesGitOps({ accountId, entity: 'repoCertificates' })
+    } as ResourceOption,
+    {
+      label: <String stringID="common.clusters" />,
+      icon: 'gitops-clusters-blue',
+      route: routes.toAccountResourcesGitOps({ accountId, entity: 'clusters' })
+    } as ResourceOption,
+    {
+      label: <String stringID="common.gnupgKeys" />,
+      icon: 'gitops-gnupg-key-blue',
+      route: routes.toAccountResourcesGitOps({ accountId, entity: 'gnuPGKeys' })
     } as ResourceOption
   ]
 

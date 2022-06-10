@@ -16,7 +16,7 @@ exports[`Test Cloudformation create stack should be able to open and close inlin
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1419,7 +1419,7 @@ exports[`Test Cloudformation create stack should be able to open optional dropdo
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2714,7 +2714,7 @@ exports[`Test Cloudformation create stack should be able to open remote param mo
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4117,7 +4117,7 @@ exports[`Test Cloudformation create stack should be able to submit 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4788,7 +4788,7 @@ exports[`Test Cloudformation create stack should open and close remote template 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -5444,7 +5444,7 @@ exports[`Test Cloudformation create stack should render edit view as new step 1`
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -6098,7 +6098,7 @@ exports[`Test Cloudformation create stack should render edit view as new step wi
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -6823,7 +6823,7 @@ exports[`Test Cloudformation create stack should render runtime components 1`] =
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -7548,7 +7548,7 @@ exports[`Test Cloudformation create stack should show api aws statues loading st
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -8252,7 +8252,7 @@ exports[`Test Cloudformation create stack should show api capabilities loading s
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -8956,7 +8956,7 @@ exports[`Test Cloudformation create stack should show api regions loading state 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="cloudFormationCreateStack_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

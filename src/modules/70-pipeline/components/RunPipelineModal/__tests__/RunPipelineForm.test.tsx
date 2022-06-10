@@ -106,7 +106,7 @@ describe('STUDIO MODE', () => {
   test('should toggle visual and yaml mode', async () => {
     const { container, getByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -121,7 +121,7 @@ describe('STUDIO MODE', () => {
   test('should display the help text on hover', async () => {
     const { findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -134,7 +134,7 @@ describe('STUDIO MODE', () => {
   test('should not allow submit if form is incomplete', async () => {
     const { container, findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -159,7 +159,7 @@ describe('STUDIO MODE', () => {
   test('should not allow submit if form is incomplete and enter key pressed', async () => {
     const { container, findByText, queryByText, getByTestId } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
     const provideValues = await findByText('pipeline.pipelineInputPanel.provide')
@@ -182,7 +182,7 @@ describe('STUDIO MODE', () => {
   test('should submit and call the run pipeine method if form is valid', async () => {
     const { container, findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -217,7 +217,7 @@ describe('STUDIO MODE', () => {
   test('if SAVE_AS_INPUT_SET works', async () => {
     const { container, getByText, findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -258,7 +258,7 @@ describe('STUDIO MODE', () => {
     const onCloseMocked = jest.fn()
     const { findByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} onClose={onCloseMocked} />
+        <RunPipelineForm {...commonProps} onClose={onCloseMocked} source="executions" />
       </TestWrapper>
     )
 
@@ -272,7 +272,7 @@ describe('STUDIO MODE', () => {
   test('should accept values from input sets and submit the form', async () => {
     const { container, getByText, queryByText, queryAllByTestId } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -334,7 +334,7 @@ describe('STUDIO MODE', () => {
   test('invalid input sets should not be applied', async () => {
     const { container, getByText, queryByText, queryAllByTestId } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -404,7 +404,7 @@ describe('STUDIO MODE', () => {
 
     const { container, getByText, findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -489,7 +489,7 @@ describe('STUDIO MODE - template API error', () => {
 
     const { queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -501,7 +501,7 @@ describe('RERUN MODE', () => {
   test('preflight api getting called if skipPreflight is unchecked', async () => {
     const { container, getByText, findByText, queryByText } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} />
+        <RunPipelineForm {...commonProps} source="executions" />
       </TestWrapper>
     )
 
@@ -542,7 +542,12 @@ describe('RERUN MODE', () => {
     value: "variablevalue"`
     const { container, queryByText, queryByDisplayValue } = render(
       <TestWrapper>
-        <RunPipelineForm {...commonProps} inputSetYAML={inputSetYaml} executionIdentifier={'execId'} />
+        <RunPipelineForm
+          {...commonProps}
+          inputSetYAML={inputSetYaml}
+          executionIdentifier={'execId'}
+          source="executions"
+        />
       </TestWrapper>
     )
 
@@ -586,6 +591,7 @@ describe('EXECUTION VIEW', () => {
           inputSetYAML={inputSetYaml}
           executionView={true}
           executionInputSetTemplateYaml={executionInputSetTemplateYaml}
+          source="executions"
         />
       </TestWrapper>
     )

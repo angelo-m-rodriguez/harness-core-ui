@@ -16,7 +16,7 @@ exports[`Test TerraformDestroy with inline var file and expand the varfiles sect
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformDestroy-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

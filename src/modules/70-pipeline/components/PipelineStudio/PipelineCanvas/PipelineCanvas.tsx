@@ -88,6 +88,7 @@ interface PipelineWithGitContextFormProps extends PipelineInfoConfig {
   branch?: string
   connectorRef?: string
   filePath?: string
+  remoteType?: string
 }
 
 interface InputSetValue extends SelectOption {
@@ -430,6 +431,7 @@ export function PipelineCanvas({
       delete (pipeline as PipelineWithGitContextFormProps).branch
       delete (pipeline as PipelineWithGitContextFormProps).connectorRef
       delete (pipeline as PipelineWithGitContextFormProps).filePath
+      delete (pipeline as PipelineWithGitContextFormProps).remoteType
       updatePipeline(pipeline)
       if (currStoreMetadata?.storeType) {
         updatePipelineStoreMetadata(currStoreMetadata, gitDetails)
@@ -586,6 +588,7 @@ export function PipelineCanvas({
               connectorRef={connectorRef}
               repoIdentifier={isPipelineRemote ? repoName : repoIdentifier}
               branch={branch}
+              source="executions"
               onClose={() => {
                 onCloseRunPipelineModal()
               }}

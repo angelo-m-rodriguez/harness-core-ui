@@ -49,7 +49,7 @@ exports[`SeviceModal  should render Services modal 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployService_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -391,7 +391,7 @@ exports[`SeviceModal  should validate edit mode snapshot 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployService_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -644,7 +644,7 @@ exports[`Test DeployService Step Should be able save even if there is 63 charact
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="deployService_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -954,7 +954,7 @@ exports[`Test DeployService Step should render edit service view (service), then
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="deployService_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -1264,7 +1264,7 @@ exports[`Test DeployService Step should render service view and save 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="deployService_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

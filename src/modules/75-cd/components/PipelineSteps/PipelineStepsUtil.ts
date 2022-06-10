@@ -127,7 +127,7 @@ export function getInfraDeploymentTypeSchema(
     .required(getString('cd.pipelineSteps.infraTab.deploymentType'))
 }
 
-const getInfrastructureDefinitionValidationSchema = (
+export const getInfrastructureDefinitionValidationSchema = (
   deploymentType: GetExecutionStrategyYamlQueryParams['serviceDefinitionType'],
   getString: UseStringsReturn['getString']
 ) => {
@@ -166,21 +166,37 @@ const getInfrastructureDefinitionValidationSchema = (
   }
 }
 
+function getServiceSchema(
+  getString: UseStringsReturn['getString'],
+  isNewServiceEnvEntity?: boolean
+): Record<string, Yup.Schema<unknown>> {
+  return isNewServiceEnvEntity
+    ? {
+        service: Yup.object().shape({
+          serviceRef: getServiceRefSchema(getString)
+        })
+      }
+    : {
+        serviceConfig: Yup.object().shape({
+          serviceRef: getServiceRefSchema(getString),
+          serviceDefinition: Yup.object().shape({
+            type: getServiceDeploymentTypeSchema(getString),
+            spec: Yup.object().shape(getVariablesValidationField(getString))
+          })
+        })
+      }
+}
+
 export function getCDStageValidationSchema(
   getString: UseStringsReturn['getString'],
   deploymentType: GetExecutionStrategyYamlQueryParams['serviceDefinitionType'],
-  contextType?: string
+  contextType?: string,
+  isNewServiceEnvEntity?: boolean
 ): Yup.Schema<unknown> {
   return Yup.object().shape({
     ...getNameAndIdentifierSchema(getString, contextType),
     spec: Yup.object().shape({
-      serviceConfig: Yup.object().shape({
-        serviceRef: getServiceRefSchema(getString),
-        serviceDefinition: Yup.object().shape({
-          type: getServiceDeploymentTypeSchema(getString),
-          spec: Yup.object().shape(getVariablesValidationField(getString))
-        })
-      }),
+      ...getServiceSchema(getString, isNewServiceEnvEntity),
       infrastructure: Yup.object().shape({
         environmentRef: getEnvironmentRefSchema(getString),
         infrastructureDefinition: Yup.object().shape({

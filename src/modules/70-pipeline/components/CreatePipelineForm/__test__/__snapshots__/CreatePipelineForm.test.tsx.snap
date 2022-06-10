@@ -33,7 +33,7 @@ exports[`CreatePipelineForm Rendering should closeModal when click Setup Later 1
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="createPipeline_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -292,7 +292,7 @@ exports[`CreatePipelineForm Rendering should render CreatePipelineForm 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="createPipeline_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -551,7 +551,7 @@ exports[`CreatePipelineForm Rendering should validate inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="createPipeline_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

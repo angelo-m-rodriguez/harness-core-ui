@@ -45,7 +45,7 @@ exports[`Create DelegateSetup Step render data 1`] = `
                             >
                               <div
                                 class="Text--withDocsTooltip"
-                                data-tooltip-id="delegateSetupStepForm_identifier"
+                                data-tooltip-id="universalInputNameWithId"
                               >
                                 <p
                                   class="StyledProps--font StyledProps--main"

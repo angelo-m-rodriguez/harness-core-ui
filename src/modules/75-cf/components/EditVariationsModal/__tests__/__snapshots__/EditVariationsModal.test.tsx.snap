@@ -36,7 +36,7 @@ exports[`EditVariationsModal it should render correctly 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="editVariations_variations.0.identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -237,7 +237,7 @@ exports[`EditVariationsModal it should render correctly 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="editVariations_variations.1.identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

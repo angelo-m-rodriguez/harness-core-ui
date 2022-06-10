@@ -123,9 +123,10 @@ describe('Unit tests for ServiceHealth', () => {
     environmentIdentifier: 'env-identifier',
     hasChangeSource: true
   }
-  test('Verify if all the fields are rendered correctly inside ServiceHealth', async () => {
+  test('Verify if all the fields are rendered correctly inside ServiceHealth and with correct document title', async () => {
     const { container } = render(<WrapperComponent {...props} />)
     expect(container).toMatchSnapshot()
+    expect(document.title).toBe('cv.srmTitle | cv.monitoredServices.title | harness')
   })
 
   test('Verify if reset functionality works correctly', async () => {

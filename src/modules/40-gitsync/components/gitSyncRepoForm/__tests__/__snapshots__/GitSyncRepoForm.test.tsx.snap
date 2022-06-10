@@ -850,7 +850,7 @@ exports[`Git Sync - repo tab Filling gitSync repo form: gitSync repo form 1`] = 
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1571,7 +1571,7 @@ exports[`Git Sync - repo tab Repo type card should be enabled only for Github 1`
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -2981,7 +2981,7 @@ exports[`Git Sync - repo tab rendering form to create gitSync repo 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -3625,7 +3625,7 @@ exports[`Git Sync - repo tab rendering form to create gitSync repo 2`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

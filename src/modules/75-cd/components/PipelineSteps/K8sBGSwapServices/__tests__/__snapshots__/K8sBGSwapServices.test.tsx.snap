@@ -27,7 +27,7 @@ exports[`Test K8sBlueGreenDeployStep should render edit view  1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="k8BgSwap_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -255,7 +255,7 @@ exports[`Test K8sBlueGreenDeployStep should render edit view as new step 1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="k8BgSwap_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"

@@ -46,10 +46,6 @@ import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { getConnectorName, getConnectorValue } from '@pipeline/components/PipelineSteps/Steps/StepsHelper'
-import {
-  PipelineContextType,
-  usePipelineContext
-} from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import { getIconByType } from '@connectors/pages/connectors/utils/ConnectorUtils'
@@ -95,7 +91,6 @@ const KubernetesInfraSpecEditable: React.FC<KubernetesInfraSpecEditableProps> = 
   })
 
   const { subscribeForm, unSubscribeForm } = React.useContext(StageErrorContext)
-  const { contextType } = usePipelineContext()
 
   const formikRef = React.useRef<FormikProps<unknown> | null>(null)
 
@@ -238,19 +233,17 @@ const KubernetesInfraSpecEditable: React.FC<KubernetesInfraSpecEditableProps> = 
                 />
               </Accordion>
 
-              {contextType !== PipelineContextType.Standalone && (
-                <Layout.Horizontal spacing="medium" style={{ alignItems: 'center' }} className={css.lastRow}>
-                  <FormInput.CheckBox
-                    className={css.simultaneousDeployment}
-                    name={'allowSimultaneousDeployments'}
-                    label={getString('cd.allowSimultaneousDeployments')}
-                    tooltipProps={{
-                      dataTooltipId: 'k8InfraAllowSimultaneousDeployments'
-                    }}
-                    disabled={readonly}
-                  />
-                </Layout.Horizontal>
-              )}
+              <Layout.Horizontal spacing="medium" style={{ alignItems: 'center' }} className={css.lastRow}>
+                <FormInput.CheckBox
+                  className={css.simultaneousDeployment}
+                  name={'allowSimultaneousDeployments'}
+                  label={getString('cd.allowSimultaneousDeployments')}
+                  tooltipProps={{
+                    dataTooltipId: 'k8InfraAllowSimultaneousDeployments'
+                  }}
+                  disabled={readonly}
+                />
+              </Layout.Horizontal>
             </FormikForm>
           )
         }}

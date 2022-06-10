@@ -282,7 +282,7 @@ exports[`Manifest Details tests expand advanced section - when type is k8smanife
                     >
                       <div
                         aria-describedby="rbd-hidden-text-13-hidden-text-37"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="13"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="13"
@@ -292,62 +292,56 @@ exports[`Manifest Details tests expand advanced section - when type is k8smanife
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value=""
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value=""
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -820,7 +814,7 @@ exports[`Manifest Details tests initial rendering 1`] = `
                     >
                       <div
                         aria-describedby="rbd-hidden-text-0-hidden-text-0"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="0"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="0"
@@ -830,62 +824,56 @@ exports[`Manifest Details tests initial rendering 1`] = `
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value=""
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value=""
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1280,7 +1268,7 @@ exports[`Manifest Details tests renders form in edit mode - when gitfetchtype is
                     >
                       <div
                         aria-describedby="rbd-hidden-text-8-hidden-text-22"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="8"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="8"
@@ -1290,62 +1278,56 @@ exports[`Manifest Details tests renders form in edit mode - when gitfetchtype is
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1740,7 +1722,7 @@ exports[`Manifest Details tests renders form in edit mode 1`] = `
                     >
                       <div
                         aria-describedby="rbd-hidden-text-4-hidden-text-10"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="4"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="4"
@@ -1750,62 +1732,56 @@ exports[`Manifest Details tests renders form in edit mode 1`] = `
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -2200,7 +2176,7 @@ exports[`Manifest Details tests runtime value for connector should make runtime 
                     >
                       <div
                         aria-describedby="rbd-hidden-text-10-hidden-text-28"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="10"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="10"
@@ -2210,62 +2186,56 @@ exports[`Manifest Details tests runtime value for connector should make runtime 
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -3117,7 +3087,7 @@ exports[`Manifest Details tests when connectionType is of repo 1`] = `
                     >
                       <div
                         aria-describedby="rbd-hidden-text-11-hidden-text-31"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="11"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="11"
@@ -3127,62 +3097,56 @@ exports[`Manifest Details tests when connectionType is of repo 1`] = `
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -3615,7 +3579,7 @@ exports[`Manifest Details tests when gitfetchtype is Commit and commitId is Runt
                     >
                       <div
                         aria-describedby="rbd-hidden-text-9-hidden-text-25"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="9"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="9"
@@ -3625,62 +3589,56 @@ exports[`Manifest Details tests when gitfetchtype is Commit and commitId is Runt
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -4075,7 +4033,7 @@ exports[`Manifest Details tests when prevStepData is not passed in props 1`] = `
                     >
                       <div
                         aria-describedby="rbd-hidden-text-5-hidden-text-13"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="5"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="5"
@@ -4085,62 +4043,56 @@ exports[`Manifest Details tests when prevStepData is not passed in props 1`] = `
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -4535,7 +4487,7 @@ exports[`Manifest Details tests when prevStepData is passed with connectorRef as
                     >
                       <div
                         aria-describedby="rbd-hidden-text-6-hidden-text-16"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="6"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="6"
@@ -4545,62 +4497,56 @@ exports[`Manifest Details tests when prevStepData is passed with connectorRef as
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -4995,7 +4941,7 @@ exports[`Manifest Details tests when scope is of account 1`] = `
                     >
                       <div
                         aria-describedby="rbd-hidden-text-12-hidden-text-34"
-                        class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
+                        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-distribution-space-between StyledProps--flex-alignItems-flex-start"
                         data-rbd-drag-handle-context-id="12"
                         data-rbd-drag-handle-draggable-id="MockedUUID"
                         data-rbd-draggable-context-id="12"
@@ -5005,62 +4951,56 @@ exports[`Manifest Details tests when scope is of account 1`] = `
                         tabindex="0"
                       >
                         <div
-                          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main"
-                          draggable="true"
-                          style="align-items: baseline;"
+                          class="bp3-form-group"
+                          style="width: 275px;"
                         >
+                          
                           <div
-                            class="bp3-form-group"
-                            style="width: 275px;"
+                            class="bp3-form-content"
                           >
-                            
                             <div
-                              class="bp3-form-content"
+                              class="Layout--horizontal StyledProps--main MultiTypeInput--main"
                             >
                               <div
-                                class="Layout--horizontal StyledProps--main MultiTypeInput--main"
+                                class="bp3-input-group MultiTypeInput--input"
                               >
-                                <div
-                                  class="bp3-input-group MultiTypeInput--input"
-                                >
-                                  <input
-                                    autocomplete="off"
-                                    class="bp3-input"
-                                    name="paths[0].path"
-                                    placeholder="pipeline.manifestType.folderPathPlaceholder"
-                                    type="text"
-                                    value="test-path"
-                                  />
-                                </div>
-                                <span
-                                  class="bp3-popover-wrapper MultiTypeInput--wrapper"
-                                >
-                                  <span
-                                    class="bp3-popover-target"
-                                  >
-                                    <button
-                                      class="MultiTypeInput--btn MultiTypeInput--FIXED"
-                                    >
-                                      <span
-                                        class="bp3-icon StyledProps--main"
-                                        data-icon="fixed-input"
-                                      >
-                                        <svg
-                                          height="12"
-                                          viewBox="0 0 9 9"
-                                          width="12"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
-                                            fill="currentColor"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </span>
-                                </span>
+                                <input
+                                  autocomplete="off"
+                                  class="bp3-input"
+                                  name="paths[0].path"
+                                  placeholder="pipeline.manifestType.folderPathPlaceholder"
+                                  type="text"
+                                  value="test-path"
+                                />
                               </div>
+                              <span
+                                class="bp3-popover-wrapper MultiTypeInput--wrapper"
+                              >
+                                <span
+                                  class="bp3-popover-target"
+                                >
+                                  <button
+                                    class="MultiTypeInput--btn MultiTypeInput--FIXED"
+                                  >
+                                    <span
+                                      class="bp3-icon StyledProps--main"
+                                      data-icon="fixed-input"
+                                    >
+                                      <svg
+                                        height="12"
+                                        viewBox="0 0 9 9"
+                                        width="12"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M5.61 7.55c.62-.7.3-1.42.18-2.35a.32.32 0 01.1-.29l1.43-1.42a.76.76 0 01.28-.15c.39-.1 1 0 1.28-.29a.34.34 0 000-.51L6.46.12a.33.33 0 00-.52 0c-.28.29-.2.9-.28 1.3a.53.53 0 01-.13.23L4.09 3.12a.29.29 0 01-.28.09c-.89-.11-1.6-.49-2.27.11-.29.26-.29.43 0 .7l1.31 1.34.15.16-.15.15-2.7 2.69a.36.36 0 000 .54.36.36 0 00.54-.05l2.63-2.68.17-.17.17.16c.45.46.9.91 1.36 1.36.21.21.42.22.59.03z"
+                                          fill="currentColor"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </span>
+                              </span>
                             </div>
                           </div>
                         </div>

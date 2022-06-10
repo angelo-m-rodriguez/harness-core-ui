@@ -34,6 +34,7 @@ import useBudgetModal from '@ce/components/PerspectiveReportsAndBudget/Perspecti
 import EmptyView from '@ce/images/empty-state.svg'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useTelemetry } from '@common/hooks/useTelemetry'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { PAGE_NAMES, USER_JOURNEY_EVENTS } from '@ce/TrackingEventsConstants'
 import css from './Budgets.module.scss'
 
@@ -317,6 +318,8 @@ const Budgets: () => JSX.Element = () => {
   })
 
   const HeaderComponent = <Page.Header title={getString('ce.budgets.listPage.title')} breadcrumbs={<NGBreadcrumbs />} />
+
+  useDocumentTitle(getString('ce.budgets.sideNavText'), true)
 
   const openNewBudgetModal = () => {
     trackEvent(USER_JOURNEY_EVENTS.CREATE_NEW_BUDGET, { pageName: PAGE_NAMES.BUDGET_LANDING_PAGE, isEditMode: false })

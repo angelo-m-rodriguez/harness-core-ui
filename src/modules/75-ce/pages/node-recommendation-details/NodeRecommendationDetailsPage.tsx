@@ -27,6 +27,7 @@ import {
 import routes from '@common/RouteDefinitions'
 import { useStrings } from 'framework/strings'
 import { getProviderIcon } from '@ce/utils/recommendationUtils'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { ViewNodepoolTimeRange } from '@ce/components/RecommendationDetails/constants'
 import NodeRecommendationDetails from '@ce/components/NodeRecommendation/NodeRecommendation'
@@ -41,6 +42,9 @@ interface Params {
 const NodeRecommendationDetailsPage = () => {
   const { getString } = useStrings()
   const { recommendation, accountId, recommendationName } = useParams<Params>()
+
+  useDocumentTitle([getString('ce.recommendation.sideNavText'), recommendationName], true)
+
   const [timeRange, setTimeRange] = useState<NodepoolTimeRangeValue>({
     value: NodepoolTimeRangeType.LAST_7,
     label: NodepoolTimeRange.LAST_7

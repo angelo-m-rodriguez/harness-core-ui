@@ -73,7 +73,7 @@ exports[`Save to git form rendering form to git save form without git credential
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="saveToGitForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -610,7 +610,7 @@ exports[`Save to git form rendering form to save resouces 1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="saveToGitForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -1145,7 +1145,7 @@ exports[`Save to git form rendering form to save resouces 2`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="saveToGitForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deploy infra specifications test Should match snapshot 1`] = `
+<div>
+  <div
+    class="tabHeading"
+    id="environment"
+  >
+    environment
+  </div>
+  <div
+    class="bp3-card bp3-elevation-0 Card--card sectionCard"
+  >
+    <div
+      class="step-widget-mock"
+    >
+      <button
+        name="updateStepWidget"
+      >
+        Step Widget button
+      </button>
+    </div>
+  </div>
+  <div
+    class="tabHeading"
+    id="infrastructureDefinition"
+  >
+    <span
+      class="align"
+      data-tooltip-id="pipelineStep.infrastructureDefinition"
+    >
+      pipelineSteps.deploy.infrastructure.infraDefinition
+    </span>
+  </div>
+  <div
+    class="bp3-card bp3-elevation-0 Card--card sectionCard"
+  >
+    <p
+      class="StyledProps--font StyledProps--main info StyledProps--margin-bottom-medium"
+    >
+      <span
+        class="align"
+        data-tooltip-id="pipelineStep.infrastructureDefinitionMethod"
+      >
+        pipelineSteps.deploy.infrastructure.selectMethod
+      </span>
+    </p>
+    <div
+      class="bp3-form-group GroupedThumbnailSelect--mainContainer thumbnailSelect"
+    >
+      <div
+        class="bp3-form-content"
+      >
+        <div
+          class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main GroupedThumbnailSelect--container"
+        >
+          <div
+            class="StyledProps--font StyledProps--main"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-small StyledProps--font-weight-semi-bold StyledProps--color StyledProps--color-black"
+            >
+              pipelineSteps.deploy.infrastructure.directConnection
+            </p>
+            <div
+              class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main GroupedThumbnailSelect--thumbnailsRow"
+            >
+              <label
+                class="Thumbnail--squareCardContainer"
+              >
+                <div
+                  class="bp3-card bp3-interactive bp3-elevation-0 Card--card Thumbnail--squareCard Card--interactive"
+                  tabindex="0"
+                >
+                  <span
+                    class="bp3-icon StyledProps--main"
+                    data-icon="service-kubernetes"
+                  >
+                    <svg
+                      height="26"
+                      viewBox="0 0 14 14"
+                      width="26"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7 .4c-.1 0-.2 0-.3.1L2 2.7c-.2.1-.4.3-.5.6l-1.2 5c-.1.2 0 .5.1.7l.1.1 3.2 4c.2.2.4.3.7.3h5.2c.3 0 .5-.1.7-.3l3.2-4c.2-.2.2-.5.2-.7l-1.2-5c-.1-.3-.2-.5-.5-.6L7.3.6c0-.1-.2-.2-.3-.2z"
+                        fill="#326ce5"
+                      />
+                      <path
+                        d="M7 2.1c-.2 0-.3.1-.3.3v.9c0 .1-.1.1-.1.1v.1c-.2 0-.3 0-.5.1-.7.2-1.4.5-1.8 1l-.1-.1H4c-.1-.1-.2-.2-.4-.3L3.4 4h-.1c-.1 0-.1-.1-.2-.1s-.2 0-.2.1c-.1.1-.1.3.1.4h.1c.1.1.2.1.2.1.2.1.3.2.4.3 0 0 .1.1.1.2l.1.1c-.5.7-.7 1.6-.6 2.5h-.1l-.1.1c-.1 0-.3.1-.5.1h-.4c-.2 0-.3.2-.2.3 0 .1.2.2.4.2h.1c.1 0 .2-.1.3-.1.2-.1.3-.1.5-.1.1 0 .1 0 .2.1h.1c.3.9.9 1.6 1.6 2l-.1.1v.2c-.1.1-.1.3-.3.5-.1.1-.1.1-.1.2v.1c-.1.2 0 .3.1.4s.3 0 .4-.2v-.1c0-.1.1-.2.1-.3.1-.2.1-.4.2-.5 0 0 .1 0 .1-.1l.1-.1c.6.2 1.4.3 2.1.2.2 0 .3-.1.5-.1l.1.1s.1 0 .1.1c.1.1.1.3.2.5 0 .1 0 .2.1.3v.1c.1.2.2.2.4.2.1-.1.2-.2.1-.4v-.1c0-.1-.1-.1-.1-.2-.1-.2-.2-.3-.2-.4V10.4c.8-.5 1.3-1.2 1.6-2h.1s.1-.1.2-.1.3.1.5.1c.1 0 .2.1.3.1h.1c.2 0 .3-.1.4-.2 0-.1-.1-.3-.2-.3h-.4c-.2 0-.4 0-.5-.1-.1 0-.1-.1-.1-.1h-.1c.1-.4 0-.9-.1-1.3s-.3-.9-.5-1.2l.1-.1c0-.1 0-.1.1-.2s.2-.2.4-.3c.1 0 .2-.1.2-.1h.1c.1-.1.2-.3.1-.4s-.3-.1-.4 0h-.1l-.2.2c-.1.1-.3.3-.4.3H10l-.1.1c-.6-.6-1.4-1-2.3-1.1v-.1l-.1-.1V3v-.4c-.2-.3-.3-.5-.5-.5zm-.3 2.2l-.1 1.5c0 .1-.1.2-.2.2h-.1l-1.2-.9c.4-.4.8-.6 1.4-.8zm.7 0c.6.1 1.2.4 1.7.8l-1.2.8c-.1.1-.3.1-.3 0l-.1-.1zM4.6 5.7l1.1 1c.1.1.1.2 0 .3l-.1.1-1.4.4c-.1-.7 0-1.3.4-1.8zm4.9 0c.2.3.3.6.4.9s.1.6.1.9l-1.4-.4c-.1 0-.2-.2-.2-.3s0-.1.1-.1zm-2.7 1h.4l.3.3-.1.4-.4.2-.4-.2-.1-.4zm1.4 1.2c.1 0 .1 0 0 0l1.5.2c-.2.6-.6 1.1-1.2 1.5l-.6-1.4c.1-.1.1-.2.3-.3zm-2.4 0c.1 0 .2.1.2.2v.2l-.6 1.4c-.5-.3-.9-.8-1.2-1.5zm1.2.6l.2.1.7 1.3c-.1 0-.2.1-.3.1-.5.1-1.1.1-1.6-.1l.7-1.3c.2 0 .2-.1.3-.1z"
+                        fill="#fff"
+                        stroke="#fff"
+                        stroke-width="0.25"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <p
+                  class="StyledProps--font StyledProps--main Thumbnail--label StyledProps--font-weight-semi-bold StyledProps--color StyledProps--color-grey600 StyledProps--margin-top-small"
+                >
+                  pipelineSteps.deploymentTypes.kubernetes
+                </p>
+                <input
+                  name="deploymentType"
+                  type="checkbox"
+                  value="KubernetesDirect"
+                />
+              </label>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-size-small StyledProps--font-weight-semi-bold StyledProps--color StyledProps--color-black"
+            >
+              pipelineSteps.deploy.infrastructure.viaCloudProvider
+            </p>
+            <div
+              class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main GroupedThumbnailSelect--thumbnailsRow"
+            >
+              <label
+                class="Thumbnail--squareCardContainer"
+              >
+                <div
+                  class="bp3-card bp3-interactive bp3-elevation-0 Card--card Thumbnail--squareCard Card--interactive"
+                  tabindex="0"
+                >
+                  <span
+                    class="bp3-icon StyledProps--main"
+                    data-icon="google-kubernetes-engine"
+                  >
+                    <svg
+                      height="26"
+                      viewBox="0 0 128 115"
+                      width="26"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g
+                        fill="none"
+                        fill-rule="evenodd"
+                      >
+                        <path
+                          d="M126.474 51.62L100.169 5.878A11.555 11.555 0 0090.306 0h-52.61a11.549 11.549 0 00-9.864 5.876L1.527 51.526a11.475 11.475 0 00-.002 11.437l26.305 45.95A11.773 11.773 0 0037.694 115h52.608a11.726 11.726 0 009.866-6.06l26.303-45.745a11.728 11.728 0 00.003-11.575z"
+                          fill="#4285F4"
+                          fill-rule="nonzero"
+                        />
+                        <path
+                          d="M92.375 36.7L63.91 22.761 35.441 36.822l-2.947 36.361L78 114.488h12.31a11.724 11.724 0 009.864-6.06l23.34-40.59L92.374 36.7z"
+                          fill="#000"
+                          fill-rule="nonzero"
+                          opacity="0.07"
+                        />
+                        <path
+                          d="M68.99 24.334l21 12.089A10 10 0 0195 45.089v24.13a10 10 0 01-5.01 8.666l-21 12.09a10 10 0 01-9.98 0l-21-12.09A10 10 0 0133 69.218V45.09a10 10 0 015.01-8.666l21-12.09a10 10 0 019.98 0zm-4.897 35.672L41.56 72.972a9.99 9.99 0 001.852 1.477l.278.166 15.32 8.82a10 10 0 009.688.162l.291-.162 15.32-8.82a9.992 9.992 0 002.197-1.711L64.093 60.006zm-4.79-29.295l-.292.162-15.32 8.82a10 10 0 00-5.006 8.342l-.006.324v17.59c0 1.528.35 3.007.99 4.338l21.923-12.615.352-.608h-.016V29.757a9.988 9.988 0 00-2.626.955zm6-1.087l-.001 27.305 23.069 13.274a9.99 9.99 0 00.944-3.93l.006-.324v-17.59a10 10 0 00-4.733-8.5l-.278-.166-15.32-8.82a9.99 9.99 0 00-3.688-1.249z"
+                          fill="#FFF"
+                        />
+                        <path
+                          d="M63.708 57.648l-14.756-7.826v12.011c0 .86.46 1.654 1.207 2.088l6.649 3.864c.37.215 1.255.533 1.255.957l4.494 2.979c0 .19-.377-10.29.208-14.313.198-1.362-.61 0-.409 0s3.291-.312 2.608-.312c0 0-.17 14.721 0 14.625l11.757-7.805a2.416 2.416 0 001.231-2.101V49.724l-14.244 7.924z"
+                          fill="#FFF"
+                          fill-rule="nonzero"
+                        />
+                        <path
+                          d="M55.616 52.075l14.793-.315-3.508 4.228-1.949.307v15.429h-3V57.073z"
+                          fill="#3D7BE2"
+                        />
+                        <path
+                          d="M63.231 54.724l13.721-7.558-12.436-7.045a3.073 3.073 0 00-3.023 0l-12.54 7.104 14.278 7.499z"
+                          fill="#FFF"
+                          fill-rule="nonzero"
+                        />
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+                <p
+                  class="StyledProps--font StyledProps--main Thumbnail--label StyledProps--font-weight-semi-bold StyledProps--color StyledProps--color-grey600 StyledProps--margin-top-small"
+                >
+                  pipelineSteps.deploymentTypes.gk8engine
+                </p>
+                <input
+                  name="deploymentType"
+                  type="checkbox"
+                  value="KubernetesGcp"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="StyledProps--font StyledProps--main StyledProps--margin-top-xxlarge"
+  />
+</div>
+`;

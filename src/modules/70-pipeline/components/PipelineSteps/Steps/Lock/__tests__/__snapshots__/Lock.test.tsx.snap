@@ -315,7 +315,7 @@ exports[`Lock Step it should render as new step - stepViewType Edit: Create Case
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="lockStep_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -676,7 +676,7 @@ exports[`Lock Step renders RunTime Inputs: Edit Case - with runtime inputs 1`] =
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="lockStep_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

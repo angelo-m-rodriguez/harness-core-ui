@@ -102,6 +102,7 @@ const RepositorySelect: React.FC<RepositorySelectProps<any>> = props => {
         items={repoSelectOptions}
         value={{ label: defaultTo(selectedValue, ''), value: defaultTo(selectedValue, '') }}
         onChange={(selected: SelectOption, event: React.SyntheticEvent<HTMLElement, Event> | undefined) => {
+          setErrorResponse?.([])
           props.onChange?.(selected, repoSelectOptions)
           event?.stopPropagation()
         }}

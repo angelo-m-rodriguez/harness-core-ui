@@ -135,7 +135,7 @@ const UserRoleAssignment: React.FC<UserRoleAssignmentData> = props => {
 
   const assignments: Assignment[] = defaultTo(
     roleBindings?.reduce((acc: Assignment[], roleAssignment) => {
-      if (!isAccountBasicRole(roleAssignment.identifier)) {
+      if (!isAccountBasicRole(roleAssignment.roleIdentifier)) {
         acc.push({
           role: {
             label: roleAssignment.roleName,

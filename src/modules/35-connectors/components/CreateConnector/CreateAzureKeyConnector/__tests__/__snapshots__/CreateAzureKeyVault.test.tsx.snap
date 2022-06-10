@@ -253,7 +253,7 @@ exports[`Create Secret Manager Wizard should be able to render first step form 1
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormAzureKeyVault_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

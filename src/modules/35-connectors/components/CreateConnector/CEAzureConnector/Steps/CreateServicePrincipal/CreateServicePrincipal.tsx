@@ -25,10 +25,12 @@ import CopyToClipboard from '@common/components/CopyToClipBoard/CopyToClipBoard'
 import { CE_AZURE_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
-import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
 import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
+import { FeatureFlag } from '@common/featureFlags'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import type { CEAzureDTO } from '../Overview/AzureConnectorOverview'
 import css from '../../CreateCeAzureConnector_new.module.scss'
 
@@ -49,10 +51,9 @@ const CreateServicePrincipal: React.FC<StepProps<CEAzureDTO>> = (props): JSX.Ele
 
   const { mutate: createConnector } = useCreateConnector({ queryParams: { accountIdentifier: accountId } })
   const { mutate: updateConnector } = useUpdateConnector({ queryParams: { accountIdentifier: accountId } })
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   useStepLoadTelemetry(CE_AZURE_CONNECTOR_CREATION_EVENTS.LOAD_SERVICE_PRINCIPAL)
 
   const saveAndContinue = async () => {
@@ -81,8 +82,11 @@ const CreateServicePrincipal: React.FC<StepProps<CEAzureDTO>> = (props): JSX.Ele
         if ('SUCCESS' !== response.status) {
           throw response as Failure
         }
-        const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-        if (canGoToNextStep) {
+        if (opaFlagEnabled && response.data?.governanceMetadata) {
+          conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+            nextStep?.(prevStepData)
+          })
+        } else {
           nextStep?.(prevStepData)
         }
       }

@@ -39,7 +39,7 @@ exports[`About Project test create project  1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="projectsForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -454,7 +454,7 @@ exports[`About Project test create project  2`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="projectsForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -971,7 +971,7 @@ exports[`About Project test edit project  1`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="projectsForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -1307,7 +1307,7 @@ exports[`About Project test edit project  2`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="projectsForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

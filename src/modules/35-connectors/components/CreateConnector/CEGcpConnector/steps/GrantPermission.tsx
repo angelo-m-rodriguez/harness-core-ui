@@ -24,12 +24,13 @@ import { useCreateConnector, useUpdateConnector, Failure } from 'services/cd-ng'
 import CopyToClipboard from '@common/components/CopyToClipBoard/CopyToClipBoard'
 import { CE_GCP_CONNECTOR_CREATION_EVENTS } from '@connectors/trackingConstants'
 import { useStepLoadTelemetry } from '@connectors/common/useTrackStepLoad/useStepLoadTelemetry'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
-import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useFeatureFlag, useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { useTelemetry, useTrackEvent } from '@common/hooks/useTelemetry'
 import { Category, ConnectorActions } from '@common/constants/TrackingConstants'
 import { Connectors } from '@connectors/constants'
+import { FeatureFlag } from '@common/featureFlags'
 import type { CEGcpConnectorDTO } from './OverviewStep'
 import css from '../CreateCeGcpConnector.module.scss'
 
@@ -53,10 +54,8 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
     queryParams: { accountIdentifier: accountId }
   })
 
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
   const {
     data,
     loading: loadingServiceAccount,
@@ -96,8 +95,11 @@ const GrantPermission: React.FC<StepProps<CEGcpConnectorDTO>> = props => {
         if (response.status !== 'SUCCESS') {
           throw response as Failure
         }
-        const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-        if (canGoToNextStep) {
+        if (opaFlagEnabled && response.data?.governanceMetadata) {
+          conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+            nextStep?.({ ...prevStepData, serviceAccount })
+          })
+        } else {
           nextStep?.({ ...prevStepData, serviceAccount })
         }
       }

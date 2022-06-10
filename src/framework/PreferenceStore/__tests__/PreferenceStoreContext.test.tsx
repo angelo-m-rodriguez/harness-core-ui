@@ -81,6 +81,27 @@ describe('Preference Store context tests', () => {
     expect(textElement.textContent).toBe('test')
   })
 
+  test('test check Access with __DEV__ set to false (in jest.config)', async () => {
+    let notifiedCalled = false
+    const bugsnagClient = {
+      notify: (_e: any) => {
+        notifiedCalled = true
+      }
+    }
+    window['bugsnagClient'] = bugsnagClient
+
+    const { getByTestId } = render(
+      <ProvidersWrapper>
+        <MyComponent scope={PreferenceScope.USER} />
+      </ProvidersWrapper>
+    )
+    const btn = getByTestId('btnToChangeSavedVal')
+    await act(async () => {
+      fireEvent.click(btn!)
+    })
+    expect(notifiedCalled).toBeTruthy()
+  })
+
   test('clear preference', async () => {
     const { getByTestId } = render(
       <ProvidersWrapper>

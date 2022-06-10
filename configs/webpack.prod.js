@@ -44,7 +44,7 @@ const config = {
     filename: '[name].[contenthash:6].js',
     chunkFilename: '[name].[id].[contenthash:6].js',
     pathinfo: false,
-    assetModuleFilename: 'images/[hash:6][ext][query]'
+    assetModuleFilename: 'images/[hash:7][ext][query]'
   },
   plugins: [
     new webpack.DefinePlugin({

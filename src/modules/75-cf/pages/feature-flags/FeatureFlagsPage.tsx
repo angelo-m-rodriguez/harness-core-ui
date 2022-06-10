@@ -575,9 +575,10 @@ const FeatureFlagsPage: React.FC = () => {
   const onSearchInputChanged = useCallback(
     name => {
       setSearchTerm(name)
-      refetch({ queryParams: { ...queryParams, name } })
+      setPageNumber(0)
+      refetch({ queryParams: { ...queryParams, name, pageNumber: 0 } })
     },
-    [setSearchTerm, refetch, queryParams]
+    [setSearchTerm, refetch, queryParams, setPageNumber]
   )
 
   const onUpdateFilter = (filter: FilterProps): void => {

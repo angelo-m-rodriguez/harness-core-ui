@@ -21,7 +21,8 @@ import {
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import cx from 'classnames'
-
+import { isEmpty } from 'lodash-es'
+import { URLValidationSchema, URLValidationSchemaWithoutRequired } from '@common/utils/Validation'
 import { useToaster } from '@common/components'
 import UserGroupsInput from '@common/components/UserGroupsInput/UserGroupsInput'
 import { useTestNotificationSetting, SlackSettingDTO } from 'services/notifications'
@@ -82,11 +83,11 @@ export const TestSlackNotifications: React.FC<{
       setTestStatus(TestStatus.ERROR)
     }
   }
-
   return (
     <>
       <Button
         text={getString('test')}
+        disabled={!data.webhookUrl?.length}
         tooltipProps={{ dataTooltipId: 'testSlackConfigButton' }}
         onClick={() => handleTest(data)}
         {...buttonProps}
@@ -129,14 +130,11 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
           onSubmit={handleSubmit}
           formName="configureSlackNotifications"
           validationSchema={Yup.object().shape({
-            webhookUrl: Yup.string().test('isValidUrl', getString('validation.urlIsNotValid'), _webhookUrl => {
-              // TODO: Create global validation function for url validation
-              try {
-                const url = new URL(_webhookUrl)
-                return url.protocol === 'http:' || url.protocol === 'https:'
-              } catch (_) {
-                return false
-              }
+            // TODO: Create global validation function for url validation
+            webhookUrl: Yup.string().when('userGroups', {
+              is: val => isEmpty(val),
+              then: URLValidationSchema(),
+              otherwise: URLValidationSchemaWithoutRequired()
             })
           })}
           initialValues={{
@@ -148,7 +146,7 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
           {formik => {
             return (
               <FormikForm>
-                <FormInput.Text name={'webhookUrl'} label={getString('notifications.labelWebhookUrl')} />
+                <FormInput.Text name={'webhookUrl'} label={getString('notifications.slackwebhookUrl')} />
                 <Layout.Horizontal margin={{ bottom: 'xxlarge' }} style={{ alignItems: 'center' }}>
                   <TestSlackNotifications data={formik.values} />
                 </Layout.Horizontal>
@@ -164,6 +162,7 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
                     />
                     <Button
                       text={props.submitButtonText || getString('next')}
+                      disabled={!(formik.values.userGroups.length || formik.values.webhookUrl.length)}
                       variation={ButtonVariation.PRIMARY}
                       type="submit"
                     />

@@ -702,7 +702,7 @@ exports[`Test ContinousVerificationStep Step should render editView when a new s
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="cvData_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1193,7 +1193,7 @@ exports[`Test ContinousVerificationStep Step should render editView when current
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="cvData_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1998,7 +1998,7 @@ exports[`Test ContinousVerificationStep Step should render editView when current
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="cvData_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

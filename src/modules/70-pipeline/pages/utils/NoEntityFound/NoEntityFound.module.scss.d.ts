@@ -9,6 +9,7 @@
 declare const styles: {
   readonly backButton: string
   readonly branchSelector: string
+  readonly errorHandler: string
   readonly noPipelineFound: string
   readonly noPipelineFoundContainer: string
   readonly noPipelineFoundImage: string

@@ -163,8 +163,8 @@ export default function CreatePipelines({
               connectorRef: Yup.string().trim().required(getString('validation.sshConnectorRequired')),
               filePath: Yup.string()
                 .trim()
-                .required(getString('common.git.validation.yamlPath'))
-                .matches(yamlPathRegex, getString('common.git.validation.yamlPathInvalid'))
+                .required(getString('gitsync.gitSyncForm.yamlPathRequired'))
+                .matches(yamlPathRegex, getString('gitsync.gitSyncForm.yamlPathInvalid'))
             }
           : isGitSyncEnabled
           ? {

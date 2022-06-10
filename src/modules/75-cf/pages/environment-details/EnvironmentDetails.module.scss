@@ -46,7 +46,6 @@
   .table {
     width: 100%;
     height: calc(100% - 150px);
-    padding: 0 var(--spacing-medium) 0 0 !important;
     overflow: auto;
   }
 }
@@ -63,22 +62,22 @@
 .keyCopyContainer {
   display: flex;
   align-items: center;
+  background: var(--grey-100);
+  border-radius: var(--spacing-2);
 }
 
 .keyCopy {
-  border-radius: var(--spacing-2);
-  background-color: var(--grey-100);
   flex-shrink: 0;
   margin-right: var(--spacing-5);
-}
-
-.keyRedactionWarning {
-  max-width: 350px;
 }
 
 .keyCopyIcon {
   cursor: pointer;
   margin-left: var(--spacing-small);
+}
+
+.deleteBtnContainer {
+  text-align: right;
 }
 
 .keyDeleteButton {

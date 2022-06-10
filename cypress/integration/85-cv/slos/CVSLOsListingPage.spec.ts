@@ -43,7 +43,7 @@ describe('CVSLOsListingPage', () => {
     cy.visitChangeIntelligence()
   })
 
-  it('it should ensure SLO card features are working fine', () => {
+  it.skip('it should ensure SLO card features are working fine', () => {
     cy.intercept('GET', listSLOsCall, errorResponse)
     cy.intercept('DELETE', deleteSLOData, errorResponse).as('deleteSLOData')
     cy.intercept('GET', getUserJourneysCall, listUserJourneysCallResponse)

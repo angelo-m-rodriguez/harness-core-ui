@@ -86,10 +86,12 @@ title:
   gcpConnector: 'Google Cloud Provider'
   pdcConnector: 'Physical Data Center'
   helmConnector: 'HTTP Helm Repo'
+  ociHelmConnector: 'OCI Helm Registry'
   gitConnector: 'Git Connector'
   githubConnector: 'GitHub Connector'
   gitlabConnector: 'GitLab Connector'
   bitbucketConnector: 'Bitbucket Connector'
+  azureRepoConnector: 'Azure Repos Connector'
   hashicorpVault: 'HashiCorp Vault'
   jira: 'Jira'
   serviceNow: 'ServiceNow'
@@ -117,6 +119,7 @@ placeholder:
 name_labels:
   Kubernetes: 'Kubernetes Connector Name'
   HttpHelmRepo: 'Helm Http Connector Name'
+  OCIHelm: 'Helm OCI Connector Name'
   Git: 'Git Connector Name'
   Github: 'GitHub Connector Name'
   Gitlab: 'GitLab Connector Name'
@@ -164,6 +167,7 @@ testConnectionStep:
     vault: Validating HashiCorp Vault authentication and permissions
     awsSecretManager: Validating AWS Secret Manager authentication and permissions
     bitbucket: Validating Bitbucket authentication and permissions
+    azureRepos: Validating Azure Repos authentication and permissions
     gitlab: Validating GitLab authentication and permissions
     github: Validating GitHub authentication and permissions
     git: Validating Git authentication and permissions
@@ -181,6 +185,8 @@ validation:
   personalAccessToken: Personal Access Token is required
 httpHelm:
   httpHelmRepoUrl: 'Helm Repo URL'
+ociHelm:
+  ociHelmUrl: 'OCI Helm URL'
 jira:
   jiraUrl: 'Jira URL'
 serviceNow:
@@ -855,3 +861,4 @@ cantDeleteConnector: "Can't Delete Connector"
 policyEvaluations:
   failedToSave: Connector cannot be saved due to the policy evaluation failures
   warning: Connector saved with policy warnings
+sameCredentialsAsAbove: Same credentials as above
