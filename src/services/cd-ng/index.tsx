@@ -1441,6 +1441,23 @@ export type CVLicenseSummaryDTO = LicensesWithSummaryDTO & {}
 
 export type CVModuleLicenseDTO = ModuleLicenseDTO & {}
 
+export interface CardDTO {
+  addressCity?: string
+  addressCountry?: string
+  addressLine1?: string
+  addressLine2?: string
+  addressState?: string
+  addressZip?: string
+  brand?: string
+  cvcCheck?: string
+  expireMonth?: number
+  expireYear?: number
+  funding?: string
+  id?: string
+  last4?: string
+  name?: string
+}
+
 export interface CcmConnectorFilter {
   awsAccountId?: string
   azureSubscriptionId?: string
@@ -1580,6 +1597,22 @@ export interface CodeBase {
   repoName?: string
   resources?: ContainerResource
   sslVerify?: boolean
+}
+
+export type CommandStepInfo = StepSpecType & {
+  commandUnits?: CommandUnitWrapper[]
+  delegateSelectors?: string[]
+  environmentVariables?: NGVariable[]
+  metadata?: string
+  onDelegate: boolean
+}
+
+export interface CommandUnitBaseSpec {
+  type?: string
+}
+
+export interface CommandUnitWrapper {
+  commandUnit?: StepCommandUnit
 }
 
 export interface Condition {
@@ -1939,6 +1972,11 @@ export interface ContextElement {
   uuid?: string
 }
 
+export type CopyCommandUnitSpec = CommandUnitBaseSpec & {
+  destinationPath: string
+  sourceType: 'Artifact' | 'Config'
+}
+
 export type CountInstanceSelection = InstanceSelectionBase & {
   count?: ParameterFieldString
 }
@@ -2039,6 +2077,18 @@ export type CustomRestrictionMetadataDTO = RestrictionMetadataDTO & {}
 
 export type CustomStageConfig = StageInfoConfig & {
   execution: ExecutionElementConfig
+}
+
+export interface CustomerDTO {
+  billingEmail?: string
+  companyName?: string
+}
+
+export interface CustomerDetailDTO {
+  billingEmail?: string
+  companyName?: string
+  customerId?: string
+  defaultSource?: string
 }
 
 export interface DOMConfiguration {
@@ -2644,6 +2694,7 @@ export interface EntityDetail {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export interface EntityGitDetails {
@@ -3632,6 +3683,7 @@ export interface FeatureRestrictionDetailListRequestDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
+    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3688,6 +3740,7 @@ export interface FeatureRestrictionDetailRequestDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
+    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3746,6 +3799,7 @@ export interface FeatureRestrictionDetailsDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
+    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3812,6 +3866,7 @@ export interface FeatureRestrictionMetadataDTO {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
+    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -3826,6 +3881,15 @@ export interface FeedbackFormDTO {
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
   score?: number
   suggestion?: string
+}
+
+export interface FfSubscriptionDTO {
+  accountId?: string
+  edition?: string
+  numberOfDevelopers?: number
+  numberOfMau?: number
+  paymentFreq?: string
+  premiumSupport?: boolean
 }
 
 export interface FieldValues {
@@ -4158,6 +4222,7 @@ export interface GitEntityBranchFilterSummaryProperties {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   )[]
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
   searchTerm?: string
@@ -4244,6 +4309,7 @@ export interface GitEntityFilterProperties {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   )[]
   gitSyncConfigIdentifiers?: string[]
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
@@ -4363,6 +4429,7 @@ export interface GitFullSyncEntityInfoDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   errorMessage?: string
   filePath?: string
   identifier?: string
@@ -4457,6 +4524,7 @@ export interface GitFullSyncEntityInfoFilterKeys {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   )[]
   syncStatus?: 'QUEUED' | 'SUCCESS' | 'FAILED' | 'OVERRIDDEN'
 }
@@ -4629,6 +4697,7 @@ export interface GitSyncEntityDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   entityUrl?: string
   folderPath?: string
   gitConnectorId?: string
@@ -4717,6 +4786,7 @@ export interface GitSyncEntityListDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   gitSyncEntities?: GitSyncEntityDTO[]
 }
 
@@ -4822,6 +4892,7 @@ export interface GitSyncErrorDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   errorType?: 'GIT_TO_HARNESS' | 'CONNECTIVITY_ISSUE' | 'FULL_SYNC'
   failureReason?: string
   repoId?: string
@@ -5439,6 +5510,33 @@ export interface Invite {
   projectIdentifier?: string
   roleBindings?: RoleBinding[]
   userGroups?: string[]
+}
+
+export interface InvoiceDetailDTO {
+  amountDue?: number
+  clientSecret?: string
+  invoiceId?: string
+  items?: ItemDTO[]
+  nextPaymentAttempt?: number
+  paymentIntent?: PaymentIntentDetailDTO
+  periodEnd?: number
+  periodStart?: number
+  subscriptionId?: string
+  totalAmount?: number
+}
+
+export interface ItemDTO {
+  amount?: number
+  description?: string
+  price?: PriceDTO
+  proration?: boolean
+  quantity?: number
+}
+
+export interface ItemParams {
+  lookupKey?: string
+  priceId?: string
+  quantity?: number
 }
 
 export interface JenkinsAuthCredentialsDTO {
@@ -6096,6 +6194,8 @@ export interface ModuleLicenseDTO {
   lastModifiedAt?: number
   licenseType?: 'TRIAL' | 'PAID'
   moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
+  premiumSupport?: boolean
+  selfService?: boolean
   startTime?: number
   status?: 'ACTIVE' | 'DELETED' | 'EXPIRED'
   trialExtended?: boolean
@@ -6206,6 +6306,13 @@ export type NewRelicConnectorDTO = ConnectorConfigDTO & {
   delegateSelectors?: string[]
   newRelicAccountId: string
   url: string
+}
+
+export interface NextActionDetailDTO {
+  type?: string
+  useStripeSdk?: {
+    [key: string]: { [key: string]: any }
+  }
 }
 
 export interface NexusAuthCredentials {
@@ -6979,6 +7086,17 @@ export interface PatchRequest {
   schemas: string[]
 }
 
+export interface PaymentIntentDetailDTO {
+  clientSecret?: string
+  id?: string
+  nextAction?: NextActionDetailDTO
+  status?: string
+}
+
+export interface PaymentMethodCollectionDTO {
+  paymentMethods?: CardDTO[]
+}
+
 export type PdcInfrastructure = Infrastructure & {
   attributeFilters?: {
     [key: string]: string
@@ -6988,6 +7106,10 @@ export type PdcInfrastructure = Infrastructure & {
   delegateSelectors?: string[]
   hostFilters?: string[]
   hosts?: string[]
+}
+
+export interface PendingUpdateDetailDTO {
+  expiresAt?: number
 }
 
 export type PercentageInstanceSelection = InstanceSelectionBase & {
@@ -7118,6 +7240,24 @@ export type PolicyStepInfo = StepSpecType & {
 
 export interface PollingResponseDTO {
   pollingResponse?: string[]
+}
+
+export interface PriceCollectionDTO {
+  prices?: PriceDTO[]
+}
+
+export interface PriceDTO {
+  active?: boolean
+  currency?: string
+  lookupKey?: string
+  metaData?: {
+    [key: string]: string
+  }
+  priceId?: string
+  productId?: string
+  tierMode?: 'volume' | 'graduated'
+  tiersDTO?: TiersDTO[]
+  unitAmount?: number
 }
 
 export interface PrimaryArtifact {
@@ -7308,6 +7448,7 @@ export interface ReferencedByDTO {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export type ReleaseRepoManifest = ManifestAttributes & {
@@ -7653,6 +7794,13 @@ export interface ResponseCreatePRResponse {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseCustomerDetailDTO {
+  correlationId?: string
+  data?: CustomerDetailDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseDashboardExecutionStatusInfo {
   correlationId?: string
   data?: DashboardExecutionStatusInfo
@@ -7947,6 +8095,13 @@ export interface ResponseInvite {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseInvoiceDetailDTO {
+  correlationId?: string
+  data?: InvoiceDetailDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseJenkinsJobDetailsDTO {
   correlationId?: string
   data?: JenkinsJobDetailsDTO
@@ -8113,6 +8268,7 @@ export interface ResponseListEntityType {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   )[]
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
@@ -8312,6 +8468,13 @@ export interface ResponseListSourceCodeManagerDTO {
 export interface ResponseListString {
   correlationId?: string
   data?: string[]
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseListSubscriptionDetailDTO {
+  correlationId?: string
+  data?: SubscriptionDetailDTO[]
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -9046,6 +9209,13 @@ export interface ResponsePasswordChangeResponse {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponsePaymentMethodCollectionDTO {
+  correlationId?: string
+  data?: PaymentMethodCollectionDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponsePipelineConfig {
   correlationId?: string
   data?: PipelineConfig
@@ -9063,6 +9233,13 @@ export interface ResponsePipelinesExecutionDashboardInfo {
 export interface ResponsePollingResponseDTO {
   correlationId?: string
   data?: PollingResponseDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponsePriceCollectionDTO {
+  correlationId?: string
+  data?: PriceCollectionDTO
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -9293,6 +9470,13 @@ export interface ResponseString {
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
 
+export interface ResponseSubscriptionDetailDTO {
+  correlationId?: string
+  data?: SubscriptionDetailDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
 export interface ResponseTimeValuePairListDTOEnvIdCountPair {
   correlationId?: string
   data?: TimeValuePairListDTOEnvIdCountPair
@@ -9366,6 +9550,13 @@ export interface ResponseValidationResultDTO {
 export interface ResponseVariableResponseDTO {
   correlationId?: string
   data?: VariableResponseDTO
+  metaData?: { [key: string]: any }
+  status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
+}
+
+export interface ResponseVoid {
+  correlationId?: string
+  data?: Void
   metaData?: { [key: string]: any }
   status?: 'SUCCESS' | 'FAILURE' | 'ERROR'
 }
@@ -9909,6 +10100,13 @@ export interface ScopingRuleDetailsNg {
   description?: string
   environmentIds?: string[]
   environmentTypeId?: string
+}
+
+export type ScriptCommandUnitSpec = CommandUnitBaseSpec & {
+  shell: 'Bash' | 'PowerShell'
+  source: ShellScriptSourceWrapper
+  tailFiles?: TailFilePattern[]
+  workingDirectory?: string
 }
 
 export type ScriptStateExecutionData = DelegateResponseData & {
@@ -10683,6 +10881,12 @@ export interface StepCategory {
   stepsData?: StepData[]
 }
 
+export interface StepCommandUnit {
+  name: string
+  spec?: CommandUnitBaseSpec
+  type: string
+}
+
 export interface StepData {
   name?: string
   type?:
@@ -10714,6 +10918,7 @@ export interface StepData {
     | 'TEMPLATIZED_SECRET_MANAGER'
     | 'ServerlessAwsLambdaDeploy'
     | 'ServerlessAwsLambdaRollback'
+    | 'Command'
 }
 
 export interface StepElementConfig {
@@ -10796,6 +11001,27 @@ export type StringVariableConfigDTO = VariableConfigDTO & {
   regex?: string
 }
 
+export interface SubscriptionDTO {
+  customerId?: string
+  items?: ItemParams[]
+  moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
+  paymentMethodId?: string
+}
+
+export interface SubscriptionDetailDTO {
+  accountIdentifier?: string
+  cancelAt?: number
+  canceledAt?: number
+  clientSecret?: string
+  customerId?: string
+  latestInvoice?: string
+  latestInvoiceDetail?: InvoiceDetailDTO
+  moduletype?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
+  pendingUpdate?: PendingUpdateDetailDTO
+  status?: string
+  subscriptionId?: string
+}
+
 export type SumoLogicConnectorDTO = ConnectorConfigDTO & {
   accessIdRef: string
   accessKeyRef: string
@@ -10817,6 +11043,11 @@ export type TGTPasswordSpecDTO = TGTGenerationSpecDTO & {
 
 export type TagBuildSpec = BuildSpec & {
   tag: string
+}
+
+export interface TailFilePattern {
+  tailFile?: ParameterFieldString
+  tailPattern?: ParameterFieldString
 }
 
 export interface TechStack {
@@ -10936,6 +11167,11 @@ export interface Throwable {
   message?: string
   stackTrace?: StackTraceElement[]
   suppressed?: Throwable[]
+}
+
+export interface TiersDTO {
+  unitAmount?: number
+  upTo?: number
 }
 
 export interface TimeBasedDeploymentInfo {
@@ -11519,6 +11755,8 @@ export type ClusterRequestRequestBody = ClusterRequest
 
 export type ConnectorRequestBody = Connector
 
+export type CustomerDTORequestBody = CustomerDTO
+
 export type DelegateDownloadRequestRequestBody = DelegateDownloadRequest
 
 export type DelegateGroupTagsRequestBody = DelegateGroupTags
@@ -11582,6 +11820,8 @@ export type SignupDTORequestBody = SignupDTO
 export type SourceCodeManagerDTORequestBody = SourceCodeManagerDTO
 
 export type StartTrialDTORequestBody = StartTrialDTO
+
+export type SubscriptionDTORequestBody = SubscriptionDTO
 
 export type TokenDTORequestBody = TokenDTO
 
@@ -12157,6 +12397,7 @@ export interface ListActivitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   referredByEntityType?:
     | 'CreatePR'
     | 'Projects'
@@ -12237,6 +12478,7 @@ export interface ListActivitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export type ListActivitiesProps = Omit<GetProps<ResponsePageActivity, unknown, ListActivitiesQueryParams, void>, 'path'>
@@ -12421,6 +12663,7 @@ export interface GetActivitiesSummaryQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   referredByEntityType?:
     | 'CreatePR'
     | 'Projects'
@@ -12501,6 +12744,7 @@ export interface GetActivitiesSummaryQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export type GetActivitiesSummaryProps = Omit<
@@ -16617,6 +16861,7 @@ export interface CFParametersForAwsQueryParams {
   commitId?: string
   awsConnectorRef: string
   gitConnectorRef?: string
+  repoName?: string
   accountIdentifier: string
   orgIdentifier: string
   projectIdentifier: string
@@ -21407,6 +21652,7 @@ export interface FetchFeatureRestrictionMetadataPathParams {
     | 'CREATE_STACK'
     | 'DELETE_STACK'
     | 'ROLLBACK_STACK'
+    | 'COMMAND'
     | 'SECURITY'
     | 'DEVELOPERS'
     | 'MONTHLY_ACTIVE_USERS'
@@ -21533,6 +21779,7 @@ export const fetchFeatureRestrictionMetadataPromise = (
       | 'CREATE_STACK'
       | 'DELETE_STACK'
       | 'ROLLBACK_STACK'
+      | 'COMMAND'
       | 'SECURITY'
       | 'DEVELOPERS'
       | 'MONTHLY_ACTIVE_USERS'
@@ -21633,6 +21880,7 @@ export interface ListReferredByEntitiesQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   searchTerm?: string
   branch?: string
   repoIdentifier?: string
@@ -24302,6 +24550,7 @@ export interface GetReferencedByQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   searchTerm?: string
 }
 
@@ -25592,6 +25841,7 @@ export interface ListGitSyncEntitiesByTypePathParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export type ListGitSyncEntitiesByTypeProps = Omit<
@@ -25740,6 +25990,7 @@ export const listGitSyncEntitiesByTypePromise = (
       | 'CustomStage'
       | 'RollbackStack'
       | 'Infrastructure'
+      | 'Command'
   },
   signal?: RequestInit['signal']
 ) =>
@@ -30204,6 +30455,7 @@ export interface GetStepYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   yamlGroup?: string
 }
 
@@ -30412,6 +30664,7 @@ export interface GetEntityYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
 }
 
 export type GetEntityYamlSchemaProps = Omit<
@@ -35519,6 +35772,797 @@ export const updateSourceCodeManagersPromise = (
     SourceCodeManagerDTORequestBody,
     UpdateSourceCodeManagersPathParams
   >('PUT', getConfig('ng/api'), `/source-code-manager/${identifier}`, props, signal)
+
+export interface ListSubscriptionsQueryParams {
+  accountIdentifier: string
+  moduleType?: 'CD' | 'CI' | 'CV' | 'CF' | 'CE' | 'STO' | 'CORE' | 'PMS' | 'TEMPLATESERVICE' | 'GOVERNANCE'
+}
+
+export type ListSubscriptionsProps = Omit<
+  GetProps<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>,
+  'path'
+>
+
+/**
+ * Lists the subscriptions
+ */
+export const ListSubscriptions = (props: ListSubscriptionsProps) => (
+  <Get<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>
+    path={`/subscriptions`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseListSubscriptionsProps = Omit<
+  UseGetProps<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>,
+  'path'
+>
+
+/**
+ * Lists the subscriptions
+ */
+export const useListSubscriptions = (props: UseListSubscriptionsProps) =>
+  useGet<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>(`/subscriptions`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * Lists the subscriptions
+ */
+export const listSubscriptionsPromise = (
+  props: GetUsingFetchProps<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseListSubscriptionDetailDTO, Failure | Error, ListSubscriptionsQueryParams, void>(
+    getConfig('ng/api'),
+    `/subscriptions`,
+    props,
+    signal
+  )
+
+export interface CreateFfSubscriptionQueryParams {
+  accountIdentifier: string
+}
+
+export type CreateFfSubscriptionProps = Omit<
+  MutateProps<ResponseInvoiceDetailDTO, Failure | Error, CreateFfSubscriptionQueryParams, FfSubscriptionDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Creates a feature flag subscription
+ */
+export const CreateFfSubscription = (props: CreateFfSubscriptionProps) => (
+  <Mutate<ResponseInvoiceDetailDTO, Failure | Error, CreateFfSubscriptionQueryParams, FfSubscriptionDTO, void>
+    verb="POST"
+    path={`/subscriptions`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCreateFfSubscriptionProps = Omit<
+  UseMutateProps<ResponseInvoiceDetailDTO, Failure | Error, CreateFfSubscriptionQueryParams, FfSubscriptionDTO, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Creates a feature flag subscription
+ */
+export const useCreateFfSubscription = (props: UseCreateFfSubscriptionProps) =>
+  useMutate<ResponseInvoiceDetailDTO, Failure | Error, CreateFfSubscriptionQueryParams, FfSubscriptionDTO, void>(
+    'POST',
+    `/subscriptions`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Creates a feature flag subscription
+ */
+export const createFfSubscriptionPromise = (
+  props: MutateUsingFetchProps<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    CreateFfSubscriptionQueryParams,
+    FfSubscriptionDTO,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<ResponseInvoiceDetailDTO, Failure | Error, CreateFfSubscriptionQueryParams, FfSubscriptionDTO, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/subscriptions`,
+    props,
+    signal
+  )
+
+export interface CreateCustomerQueryParams {
+  accountIdentifier: string
+}
+
+export type CreateCustomerProps = Omit<
+  MutateProps<ResponseCustomerDetailDTO, Failure | Error, CreateCustomerQueryParams, CustomerDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Creates the customer
+ */
+export const CreateCustomer = (props: CreateCustomerProps) => (
+  <Mutate<ResponseCustomerDetailDTO, Failure | Error, CreateCustomerQueryParams, CustomerDTORequestBody, void>
+    verb="POST"
+    path={`/subscriptions/customers`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCreateCustomerProps = Omit<
+  UseMutateProps<ResponseCustomerDetailDTO, Failure | Error, CreateCustomerQueryParams, CustomerDTORequestBody, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Creates the customer
+ */
+export const useCreateCustomer = (props: UseCreateCustomerProps) =>
+  useMutate<ResponseCustomerDetailDTO, Failure | Error, CreateCustomerQueryParams, CustomerDTORequestBody, void>(
+    'POST',
+    `/subscriptions/customers`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Creates the customer
+ */
+export const createCustomerPromise = (
+  props: MutateUsingFetchProps<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    CreateCustomerQueryParams,
+    CustomerDTORequestBody,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<ResponseCustomerDetailDTO, Failure | Error, CreateCustomerQueryParams, CustomerDTORequestBody, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/subscriptions/customers`,
+    props,
+    signal
+  )
+
+export interface RetrieveCustomerQueryParams {
+  accountIdentifier: string
+}
+
+export interface RetrieveCustomerPathParams {
+  customerId: string
+}
+
+export type RetrieveCustomerProps = Omit<
+  GetProps<ResponseCustomerDetailDTO, Failure | Error, RetrieveCustomerQueryParams, RetrieveCustomerPathParams>,
+  'path'
+> &
+  RetrieveCustomerPathParams
+
+/**
+ * Retrieves the customer
+ */
+export const RetrieveCustomer = ({ customerId, ...props }: RetrieveCustomerProps) => (
+  <Get<ResponseCustomerDetailDTO, Failure | Error, RetrieveCustomerQueryParams, RetrieveCustomerPathParams>
+    path={`/subscriptions/customers/${customerId}`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseRetrieveCustomerProps = Omit<
+  UseGetProps<ResponseCustomerDetailDTO, Failure | Error, RetrieveCustomerQueryParams, RetrieveCustomerPathParams>,
+  'path'
+> &
+  RetrieveCustomerPathParams
+
+/**
+ * Retrieves the customer
+ */
+export const useRetrieveCustomer = ({ customerId, ...props }: UseRetrieveCustomerProps) =>
+  useGet<ResponseCustomerDetailDTO, Failure | Error, RetrieveCustomerQueryParams, RetrieveCustomerPathParams>(
+    (paramsInPath: RetrieveCustomerPathParams) => `/subscriptions/customers/${paramsInPath.customerId}`,
+    { base: getConfig('ng/api'), pathParams: { customerId }, ...props }
+  )
+
+/**
+ * Retrieves the customer
+ */
+export const retrieveCustomerPromise = (
+  {
+    customerId,
+    ...props
+  }: GetUsingFetchProps<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    RetrieveCustomerQueryParams,
+    RetrieveCustomerPathParams
+  > & { customerId: string },
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponseCustomerDetailDTO, Failure | Error, RetrieveCustomerQueryParams, RetrieveCustomerPathParams>(
+    getConfig('ng/api'),
+    `/subscriptions/customers/${customerId}`,
+    props,
+    signal
+  )
+
+export interface UpdateCustomerQueryParams {
+  accountIdentifier: string
+}
+
+export interface UpdateCustomerPathParams {
+  customerId: string
+}
+
+export type UpdateCustomerProps = Omit<
+  MutateProps<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateCustomerPathParams
+
+/**
+ * Updates the customer
+ */
+export const UpdateCustomer = ({ customerId, ...props }: UpdateCustomerProps) => (
+  <Mutate<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  >
+    verb="PUT"
+    path={`/subscriptions/customers/${customerId}`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateCustomerProps = Omit<
+  UseMutateProps<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateCustomerPathParams
+
+/**
+ * Updates the customer
+ */
+export const useUpdateCustomer = ({ customerId, ...props }: UseUpdateCustomerProps) =>
+  useMutate<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  >('PUT', (paramsInPath: UpdateCustomerPathParams) => `/subscriptions/customers/${paramsInPath.customerId}`, {
+    base: getConfig('ng/api'),
+    pathParams: { customerId },
+    ...props
+  })
+
+/**
+ * Updates the customer
+ */
+export const updateCustomerPromise = (
+  {
+    customerId,
+    ...props
+  }: MutateUsingFetchProps<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  > & { customerId: string },
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<
+    ResponseCustomerDetailDTO,
+    Failure | Error,
+    UpdateCustomerQueryParams,
+    CustomerDTORequestBody,
+    UpdateCustomerPathParams
+  >('PUT', getConfig('ng/api'), `/subscriptions/customers/${customerId}`, props, signal)
+
+export interface CheckSubscriptionExistsQueryParams {
+  subscriptionId: string
+}
+
+export type CheckSubscriptionExistsProps = Omit<
+  GetProps<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>,
+  'path'
+>
+
+export const CheckSubscriptionExists = (props: CheckSubscriptionExistsProps) => (
+  <Get<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>
+    path={`/subscriptions/exists`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCheckSubscriptionExistsProps = Omit<
+  UseGetProps<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>,
+  'path'
+>
+
+export const useCheckSubscriptionExists = (props: UseCheckSubscriptionExistsProps) =>
+  useGet<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>(`/subscriptions/exists`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+export const checkSubscriptionExistsPromise = (
+  props: GetUsingFetchProps<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<RestResponseBoolean, Failure | Error, CheckSubscriptionExistsQueryParams, void>(
+    getConfig('ng/api'),
+    `/subscriptions/exists`,
+    props,
+    signal
+  )
+
+export interface RetrieveUpcomingInvoiceQueryParams {
+  accountIdentifier: string
+}
+
+export type RetrieveUpcomingInvoiceProps = Omit<
+  MutateProps<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >,
+  'path' | 'verb'
+>
+
+/**
+ * Retrieves the upcoming Invoice details
+ */
+export const RetrieveUpcomingInvoice = (props: RetrieveUpcomingInvoiceProps) => (
+  <Mutate<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >
+    verb="POST"
+    path={`/subscriptions/invoices/preview`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseRetrieveUpcomingInvoiceProps = Omit<
+  UseMutateProps<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >,
+  'path' | 'verb'
+>
+
+/**
+ * Retrieves the upcoming Invoice details
+ */
+export const useRetrieveUpcomingInvoice = (props: UseRetrieveUpcomingInvoiceProps) =>
+  useMutate<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >('POST', `/subscriptions/invoices/preview`, { base: getConfig('ng/api'), ...props })
+
+/**
+ * Retrieves the upcoming Invoice details
+ */
+export const retrieveUpcomingInvoicePromise = (
+  props: MutateUsingFetchProps<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<
+    ResponseInvoiceDetailDTO,
+    Failure | Error,
+    RetrieveUpcomingInvoiceQueryParams,
+    SubscriptionDTORequestBody,
+    void
+  >('POST', getConfig('ng/api'), `/subscriptions/invoices/preview`, props, signal)
+
+export interface ListPaymentMethodsQueryParams {
+  accountIdentifier: string
+  customerId: string
+}
+
+export type ListPaymentMethodsProps = Omit<
+  GetProps<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>,
+  'path'
+>
+
+/**
+ * Lists all payment methods for the customer
+ */
+export const ListPaymentMethods = (props: ListPaymentMethodsProps) => (
+  <Get<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>
+    path={`/subscriptions/payment_methods`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseListPaymentMethodsProps = Omit<
+  UseGetProps<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>,
+  'path'
+>
+
+/**
+ * Lists all payment methods for the customer
+ */
+export const useListPaymentMethods = (props: UseListPaymentMethodsProps) =>
+  useGet<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>(
+    `/subscriptions/payment_methods`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+/**
+ * Lists all payment methods for the customer
+ */
+export const listPaymentMethodsPromise = (
+  props: GetUsingFetchProps<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponsePaymentMethodCollectionDTO, Failure | Error, ListPaymentMethodsQueryParams, void>(
+    getConfig('ng/api'),
+    `/subscriptions/payment_methods`,
+    props,
+    signal
+  )
+
+export interface RetrieveProductPricesQueryParams {
+  accountIdentifier: string
+  moduleType: string
+}
+
+export type RetrieveProductPricesProps = Omit<
+  GetProps<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Retrieves product prices
+ */
+export const RetrieveProductPrices = (props: RetrieveProductPricesProps) => (
+  <Get<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>
+    path={`/subscriptions/prices`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseRetrieveProductPricesProps = Omit<
+  UseGetProps<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>,
+  'path'
+>
+
+/**
+ * Retrieves product prices
+ */
+export const useRetrieveProductPrices = (props: UseRetrieveProductPricesProps) =>
+  useGet<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>(`/subscriptions/prices`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * Retrieves product prices
+ */
+export const retrieveProductPricesPromise = (
+  props: GetUsingFetchProps<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<ResponsePriceCollectionDTO, Failure | Error, RetrieveProductPricesQueryParams, void>(
+    getConfig('ng/api'),
+    `/subscriptions/prices`,
+    props,
+    signal
+  )
+
+export type SyncStripeEventProps = Omit<
+  MutateProps<RestResponseVoid, Failure | Error, void, GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody, void>,
+  'path' | 'verb'
+>
+
+export const SyncStripeEvent = (props: SyncStripeEventProps) => (
+  <Mutate<RestResponseVoid, Failure | Error, void, GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody, void>
+    verb="POST"
+    path={`/subscriptions/sync_event`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseSyncStripeEventProps = Omit<
+  UseMutateProps<RestResponseVoid, Failure | Error, void, GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody, void>,
+  'path' | 'verb'
+>
+
+export const useSyncStripeEvent = (props: UseSyncStripeEventProps) =>
+  useMutate<RestResponseVoid, Failure | Error, void, GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody, void>(
+    'POST',
+    `/subscriptions/sync_event`,
+    { base: getConfig('ng/api'), ...props }
+  )
+
+export const syncStripeEventPromise = (
+  props: MutateUsingFetchProps<
+    RestResponseVoid,
+    Failure | Error,
+    void,
+    GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<RestResponseVoid, Failure | Error, void, GetBuildDetailsForAcrArtifactWithYamlBodyRequestBody, void>(
+    'POST',
+    getConfig('ng/api'),
+    `/subscriptions/sync_event`,
+    props,
+    signal
+  )
+
+export interface CancelSubscriptionQueryParams {
+  accountIdentifier: string
+}
+
+export type CancelSubscriptionProps = Omit<
+  MutateProps<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Cancel a subscription
+ */
+export const CancelSubscription = (props: CancelSubscriptionProps) => (
+  <Mutate<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>
+    verb="DELETE"
+    path={`/subscriptions`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseCancelSubscriptionProps = Omit<
+  UseMutateProps<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>,
+  'path' | 'verb'
+>
+
+/**
+ * Cancel a subscription
+ */
+export const useCancelSubscription = (props: UseCancelSubscriptionProps) =>
+  useMutate<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>('DELETE', `/subscriptions`, {
+    base: getConfig('ng/api'),
+    ...props
+  })
+
+/**
+ * Cancel a subscription
+ */
+export const cancelSubscriptionPromise = (
+  props: MutateUsingFetchProps<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>,
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<ResponseVoid, Failure | Error, CancelSubscriptionQueryParams, string, void>(
+    'DELETE',
+    getConfig('ng/api'),
+    `/subscriptions`,
+    props,
+    signal
+  )
+
+export interface RetrieveSubscriptionQueryParams {
+  accountIdentifier: string
+}
+
+export interface RetrieveSubscriptionPathParams {
+  subscriptionId: string
+}
+
+export type RetrieveSubscriptionProps = Omit<
+  GetProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    RetrieveSubscriptionQueryParams,
+    RetrieveSubscriptionPathParams
+  >,
+  'path'
+> &
+  RetrieveSubscriptionPathParams
+
+/**
+ * Retrieves a subscription
+ */
+export const RetrieveSubscription = ({ subscriptionId, ...props }: RetrieveSubscriptionProps) => (
+  <Get<ResponseSubscriptionDetailDTO, Failure | Error, RetrieveSubscriptionQueryParams, RetrieveSubscriptionPathParams>
+    path={`/subscriptions/${subscriptionId}`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseRetrieveSubscriptionProps = Omit<
+  UseGetProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    RetrieveSubscriptionQueryParams,
+    RetrieveSubscriptionPathParams
+  >,
+  'path'
+> &
+  RetrieveSubscriptionPathParams
+
+/**
+ * Retrieves a subscription
+ */
+export const useRetrieveSubscription = ({ subscriptionId, ...props }: UseRetrieveSubscriptionProps) =>
+  useGet<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    RetrieveSubscriptionQueryParams,
+    RetrieveSubscriptionPathParams
+  >((paramsInPath: RetrieveSubscriptionPathParams) => `/subscriptions/${paramsInPath.subscriptionId}`, {
+    base: getConfig('ng/api'),
+    pathParams: { subscriptionId },
+    ...props
+  })
+
+/**
+ * Retrieves a subscription
+ */
+export const retrieveSubscriptionPromise = (
+  {
+    subscriptionId,
+    ...props
+  }: GetUsingFetchProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    RetrieveSubscriptionQueryParams,
+    RetrieveSubscriptionPathParams
+  > & { subscriptionId: string },
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    RetrieveSubscriptionQueryParams,
+    RetrieveSubscriptionPathParams
+  >(getConfig('ng/api'), `/subscriptions/${subscriptionId}`, props, signal)
+
+export interface UpdateSubscriptionQueryParams {
+  accountIdentifier: string
+}
+
+export interface UpdateSubscriptionPathParams {
+  subscriptionId: string
+}
+
+export type UpdateSubscriptionProps = Omit<
+  MutateProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateSubscriptionPathParams
+
+/**
+ * Updates a subscription
+ */
+export const UpdateSubscription = ({ subscriptionId, ...props }: UpdateSubscriptionProps) => (
+  <Mutate<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  >
+    verb="PUT"
+    path={`/subscriptions/${subscriptionId}`}
+    base={getConfig('ng/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateSubscriptionProps = Omit<
+  UseMutateProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateSubscriptionPathParams
+
+/**
+ * Updates a subscription
+ */
+export const useUpdateSubscription = ({ subscriptionId, ...props }: UseUpdateSubscriptionProps) =>
+  useMutate<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  >('PUT', (paramsInPath: UpdateSubscriptionPathParams) => `/subscriptions/${paramsInPath.subscriptionId}`, {
+    base: getConfig('ng/api'),
+    pathParams: { subscriptionId },
+    ...props
+  })
+
+/**
+ * Updates a subscription
+ */
+export const updateSubscriptionPromise = (
+  {
+    subscriptionId,
+    ...props
+  }: MutateUsingFetchProps<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  > & { subscriptionId: string },
+  signal?: RequestInit['signal']
+) =>
+  mutateUsingFetch<
+    ResponseSubscriptionDetailDTO,
+    Failure | Error,
+    UpdateSubscriptionQueryParams,
+    SubscriptionDTORequestBody,
+    UpdateSubscriptionPathParams
+  >('PUT', getConfig('ng/api'), `/subscriptions/${subscriptionId}`, props, signal)
 
 export interface GetTokenQueryParams {
   tokenId?: string
@@ -40641,6 +41685,7 @@ export interface GetYamlSchemaQueryParams {
     | 'CustomStage'
     | 'RollbackStack'
     | 'Infrastructure'
+    | 'Command'
   subtype?:
     | 'K8sCluster'
     | 'Git'
