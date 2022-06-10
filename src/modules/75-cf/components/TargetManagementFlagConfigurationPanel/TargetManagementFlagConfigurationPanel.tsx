@@ -117,6 +117,7 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
     // console.log('values in useModalHook', values)
     return (
       <SaveFlagToGitModal
+        hideNameField
         flagIdentifier=""
         flagName=""
         gitSyncInitialValues={gitSyncInitialValues}

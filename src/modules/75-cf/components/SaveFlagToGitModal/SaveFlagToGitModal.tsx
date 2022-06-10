@@ -18,6 +18,7 @@ export interface SaveFlagToGitModalProps {
   flagIdentifier: string
   gitSyncInitialValues: GitSyncFormValues
   gitSyncValidationSchema: ObjectSchema<Record<string, unknown> | undefined>
+  hideNameField?: boolean
   onSubmit: (formValues: GitSyncFormValues) => void
   onClose: () => void
 }
@@ -27,6 +28,7 @@ const SaveFlagToGitModal = ({
   flagIdentifier,
   gitSyncInitialValues,
   gitSyncValidationSchema,
+  hideNameField,
   onSubmit,
   onClose
 }: SaveFlagToGitModalProps): ReactElement => {
@@ -58,6 +60,7 @@ const SaveFlagToGitModal = ({
               title={getString('cf.gitSync.saveFlagToGit', {
                 flagName: flagName
               })}
+              hideNameField={hideNameField}
             />
           </FormikForm>
         )
