@@ -38,7 +38,7 @@ export const getMimeTypeByName = (name: string): string => {
   if (splitedFileName.length <= 1) {
     return ExtensionType.TEXT
   }
-  return splitedFileName[splitedFileName.length - 1]
+  return splitedFileName[splitedFileName.length - 1].trim()
 }
 
 export const getLanguageType = (lang: string | undefined): string => {

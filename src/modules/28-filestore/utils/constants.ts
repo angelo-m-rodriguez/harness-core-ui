@@ -28,7 +28,8 @@ export enum LanguageType {
 
 export enum FSErrosType {
   UNSUPPORTED_FORMAT = 'UNSUPPORTED_FORMAT',
-  FILE_USAGE = 'FILE_USAGE'
+  FILE_USAGE = 'FILE_USAGE',
+  DELETED_NODE = 'DELETED_NODE'
 }
 
 export enum FileStoreActionTypes {

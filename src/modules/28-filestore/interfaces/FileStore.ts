@@ -56,4 +56,5 @@ export interface NewNodeModal extends NewNodeConfig {
   editMode?: boolean
   currentNode?: FileStoreNodeDTO
   fileStoreContext?: FileStoreContextState
+  notCurrentNode?: boolean
 }

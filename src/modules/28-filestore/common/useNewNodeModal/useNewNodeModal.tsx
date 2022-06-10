@@ -28,7 +28,8 @@ const useNewNodeModal = ({
   editMode = false,
   tempNode,
   currentNode,
-  fileStoreContext
+  fileStoreContext,
+  notCurrentNode = false
 }: NewNodeModal): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showError } = useToaster()
@@ -73,6 +74,7 @@ const useNewNodeModal = ({
           tempNode={tempNode}
           currentNode={currentNode}
           fileStoreContext={fileStoreContext}
+          notCurrentNode={notCurrentNode}
         />
       </Dialog>
     ),

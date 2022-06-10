@@ -34,7 +34,11 @@ import { usePermission } from '@rbac/hooks/usePermission'
 import WrongFormatView from './WrongFormatView'
 import css from '../FileView.module.scss'
 
-function FileDetails(): React.ReactElement {
+interface FileDetailsProps {
+  handleError: (error: string) => void
+}
+
+function FileDetails({ handleError }: FileDetailsProps): React.ReactElement {
   const fileStoreContext = useContext(FileStoreContext)
   const { currentNode, updateCurrentNode, isCachedNode, queryParams, isModalView } = fileStoreContext
 
@@ -44,6 +48,7 @@ function FileDetails(): React.ReactElement {
   const [isUnsupported, setIsUnsupported] = useState<boolean>(false)
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
+  const [initialContent, setInitialContent] = useState(currentNode.content)
 
   const nodeFormModal = useNewNodeModal({
     type: FileStoreNodeTypes.FILE,
@@ -90,10 +95,20 @@ function FileDetails(): React.ReactElement {
     queryParams
   })
 
-  const { data, loading: downloadLoading } = useDownloadFile({
+  const {
+    data,
+    loading: downloadLoading,
+    error
+  } = useDownloadFile({
     identifier: currentNode.identifier,
     queryParams
   })
+
+  React.useEffect(() => {
+    if (error?.status) {
+      handleError(FSErrosType.DELETED_NODE)
+    }
+  }, [error])
 
   const { mutate: updateNode, loading: saveLoading } = useUpdate({
     identifier: currentNode.identifier,
@@ -137,6 +152,7 @@ function FileDetails(): React.ReactElement {
           showSuccess(getString('filestore.fileSuccessCreated', { name: currentNode.name }))
         }
       }
+      setInitialContent(values.fileEditor)
     } catch (e) {
       showError(e.data.message)
     }
@@ -147,7 +163,10 @@ function FileDetails(): React.ReactElement {
       ;(data as unknown as Response)
         .clone()
         .text()
-        .then((content: string) => setValue(content))
+        .then((content: string) => {
+          setValue(content)
+          setInitialContent(content)
+        })
     }
   }, [data, isCachedNode, currentNode.identifier])
 
@@ -253,7 +272,9 @@ function FileDetails(): React.ReactElement {
                               resourceType: ResourceType.FILE
                             }
                           }}
-                          onClick={() => updateCurrentNode({ ...currentNode, content: '' })}
+                          onClick={() => {
+                            formikProps.setFieldValue('fileEditor', initialContent)
+                          }}
                           disabled={saveLoading}
                         />
                       </>

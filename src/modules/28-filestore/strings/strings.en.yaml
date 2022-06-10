@@ -25,6 +25,6 @@ referenceButtonText: 'Go view references'
 errors:
   fileUsage: 'File Usage is required'
   cannotRender: 'File format not support, so it can only be previewed'
+  deleted: 'Node is deleted'
 filter:
   fileUsagePlaceholder: 'Type to view suggestions'
-

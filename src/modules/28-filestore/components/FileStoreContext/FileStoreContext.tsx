@@ -57,6 +57,7 @@ export interface GetNodeConfig {
   identifier?: string
   type: FileStoreNodeTypes
   parentName?: string
+  switchNode?: string
 }
 
 export const FileStoreContext = createContext({} as FileStoreContextState)
@@ -133,15 +134,26 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
         )
       }
       if (response?.data) {
-        updateCurrentNode({
-          ...response.data,
-          children: response.data?.children?.map(node => ({
-            ...node,
-            parentName: response?.data?.name
-          }))
-        })
+        if (!config?.switchNode) {
+          updateCurrentNode({
+            ...response.data,
+            children: response.data?.children?.map(node => ({
+              ...node,
+              parentName: response?.data?.name
+            }))
+          })
+        }
         if (config?.newNode && config.type === FileStoreNodeTypes.FOLDER) {
           setCurrentNode(config.newNode)
+        }
+        if (config?.switchNode && config.type === FileStoreNodeTypes.FOLDER) {
+          setCurrentNode({
+            ...response.data,
+            children: response.data?.children?.map(node => ({
+              ...node,
+              parentName: response?.data?.name
+            }))
+          })
         }
         if (config) {
           if (config.type === FileStoreNodeTypes.FILE && config?.identifier && response.data?.children) {

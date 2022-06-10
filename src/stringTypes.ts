@@ -1120,6 +1120,7 @@ export interface StringsMap {
   'filestore.editFileDetails': string
   'filestore.editFolderDetails': string
   'filestore.errors.cannotRender': string
+  'filestore.errors.deleted': string
   'filestore.errors.fileUsage': string
   'filestore.fileReferenceText': string
   'filestore.fileSuccessCreated': string

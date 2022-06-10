@@ -25,6 +25,7 @@ import { NameSchema, IdentifierSchema } from '@common/utils/Validation'
 import { FooterRenderer } from '@filestore/common/ModalComponents/ModalComponents'
 import { useCreate, useUpdate } from 'services/cd-ng'
 import { FileStoreNodeTypes, NewFolderDTO } from '@filestore/interfaces/FileStore'
+import { SEARCH_FILES, FILE_STORE_ROOT } from '@filestore/utils/constants'
 import type { FileStoreContextState, FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
 
 interface NewFolderModalData {
@@ -34,11 +35,13 @@ interface NewFolderModalData {
   close: () => void
   parentIdentifier: string
   fileStoreContext: FileStoreContextState
+  currentNode: FileStoreNodeDTO
+  notCurrentNode?: boolean
 }
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
-  const { close, fileStoreContext, editMode } = props
-  const { currentNode, getNode, queryParams } = fileStoreContext
+  const { close, fileStoreContext, editMode, currentNode } = props
+  const { getNode, queryParams } = fileStoreContext
   const [initialValues, setInitialValues] = useState<NewFolderDTO>({
     name: '',
     identifier: '',
@@ -75,8 +78,8 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
   const handleSubmit = async (values: NewFolderDTO): Promise<void> => {
     const { identifier, name, type } = values
     const getConfig: FileStoreNodeDTO = {
-      identifier: currentNode?.identifier,
-      name: editMode ? name : currentNode.name,
+      identifier: currentNode?.identifier !== SEARCH_FILES ? currentNode.identifier : FILE_STORE_ROOT,
+      name: currentNode.name === SEARCH_FILES ? FILE_STORE_ROOT : editMode ? name : currentNode.name,
       type: FileStoreNodeTypes.FOLDER
     }
     try {
@@ -87,7 +90,11 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
       if (editMode && currentNode?.parentIdentifier) {
         data.append('parentIdentifier', currentNode.parentIdentifier)
       } else {
-        data.append('parentIdentifier', currentNode.identifier)
+        if (currentNode.identifier === SEARCH_FILES) {
+          data.append('parentIdentifier', FILE_STORE_ROOT)
+        } else {
+          data.append('parentIdentifier', currentNode.identifier)
+        }
       }
 
       if (editMode) {

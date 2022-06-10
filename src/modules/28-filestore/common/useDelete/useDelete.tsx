@@ -17,7 +17,7 @@ import { FileStoreContext } from '@filestore/components/FileStoreContext/FileSto
 import { FILE_VIEW_TAB, FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
 import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
 
-const useDelete = (identifier: string, name: string, type: string): FileStorePopoverItem => {
+const useDelete = (identifier: string, name: string, type: string, notCurrentNode?: boolean): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
   const { setActiveTab, setCurrentNode, getNode, queryParams, currentNode, isCachedNode, removeFromTempNodes } =
@@ -76,6 +76,29 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
     }
   }
 
+  const createParams = () => {
+    const params = {
+      identifier: '',
+      name: '',
+      type: FileStoreNodeTypes.FOLDER,
+      children: []
+    }
+    if (notCurrentNode) {
+      if (currentNode.identifier === 'SEARCH') {
+        params.identifier = FILE_STORE_ROOT
+        params.name = FILE_STORE_ROOT
+      } else {
+        params.identifier = currentNode.identifier
+        params.name = currentNode.name
+      }
+    } else {
+      params.identifier = currentNode.parentIdentifier || FILE_STORE_ROOT
+      params.name = currentNode.parentName || FILE_STORE_ROOT
+    }
+    return params
+  }
+  const nodeParams = createParams()
+
   const { openDialog } = useConfirmationDialog({
     contentText: getConfirmationDialogContent(),
     titleText: `${getString('delete')} ${_capitalize(type)}?`,
@@ -88,12 +111,7 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
         if (isCachedNode(currentNode.identifier)) {
           removeFromTempNodes(currentNode.identifier)
           try {
-            getNode({
-              identifier: currentNode.parentIdentifier || FILE_STORE_ROOT,
-              name: currentNode.parentName || FILE_STORE_ROOT,
-              type: FileStoreNodeTypes.FOLDER,
-              children: []
-            } as FileStoreNodeDTO)
+            getNode(nodeParams as FileStoreNodeDTO)
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
           } catch (err) {
             handleFileDeleteError(err?.data.code, _defaultTo(err?.data?.message, err?.message))
@@ -106,12 +124,7 @@ const useDelete = (identifier: string, name: string, type: string): FileStorePop
           })
           if (deleted) {
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
-            getNode({
-              identifier: currentNode.parentIdentifier || FILE_STORE_ROOT,
-              name: currentNode.parentName || FILE_STORE_ROOT,
-              type: FileStoreNodeTypes.FOLDER,
-              children: []
-            } as FileStoreNodeDTO)
+            getNode(nodeParams as FileStoreNodeDTO)
           }
         } catch (err) {
           handleFileDeleteError(err?.data.code, _defaultTo(err?.data?.message, err?.message))

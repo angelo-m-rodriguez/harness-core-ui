@@ -92,20 +92,22 @@ const RenderColumnLastModifiedBy: Renderer<CellProps<FileStoreNodeRenderDTO>> = 
 const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
   const context = useContext(FileStoreContext)
   const { original } = row
-
+  const NOT_CURRENT_NODE = true
   const editMenuItem = useNewNodeModal({
-    parentIdentifier: original.identifier || '',
+    parentIdentifier: original.parentIdentifier || '',
     currentNode: {
       name: original.name,
       identifier: original.identifier,
       type: original.type,
-      fileUsage: original.fileUsage
+      fileUsage: original.fileUsage,
+      parentIdentifier: original.parentIdentifier
     },
     fileStoreContext: context,
     type: original.type as FileStoreNodeTypes,
-    editMode: true
+    editMode: true,
+    notCurrentNode: NOT_CURRENT_NODE
   })
-  const deleteMenuItem = useDelete(original.identifier, original.name, original.type)
+  const deleteMenuItem = useDelete(original.identifier, original.name, original.type, NOT_CURRENT_NODE)
   const optionsMenuItems = getMenuOptionItems([editMenuItem, deleteMenuItem])
 
   return <NodeMenuButton items={optionsMenuItems} position={Position.RIGHT_TOP} />

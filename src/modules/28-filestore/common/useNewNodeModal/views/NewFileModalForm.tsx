@@ -28,7 +28,7 @@ import { NGTag, useCreate, useUpdate } from 'services/cd-ng'
 import { getFileUsageNameByType, getMimeTypeByName } from '@filestore/utils/FileStoreUtils'
 import { FileStoreNodeTypes, FileUsage, NewFileDTO, NewFileFormDTO } from '@filestore/interfaces/FileStore'
 import type { FileStoreContextState, FileStoreNodeDTO } from '@filestore/components/FileStoreContext/FileStoreContext'
-import { FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { FILE_STORE_ROOT, SEARCH_FILES } from '@filestore/utils/constants'
 
 interface NewFileModalData {
   data?: NewFileDTO
@@ -39,6 +39,7 @@ interface NewFileModalData {
   tempNode?: FileStoreNodeDTO | undefined
   currentNode: FileStoreNodeDTO
   fileStoreContext: FileStoreContextState
+  notCurrentNode?: boolean
 }
 
 export const getTags = (tags?: NGTag[]) => {
@@ -56,7 +57,7 @@ export const getTags = (tags?: NGTag[]) => {
 }
 
 const NewFileForm: React.FC<NewFileModalData> = props => {
-  const { close, editMode = false, tempNode, fileStoreContext, currentNode } = props
+  const { close, editMode = false, tempNode, fileStoreContext, currentNode, notCurrentNode } = props
   const { updateCurrentNode, removeFromTempNodes, getNode, queryParams } = fileStoreContext
   const [initialValues, setInitialValues] = useState<Omit<NewFileDTO, 'type'>>({
     name: '',
@@ -74,7 +75,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
         description: currentNode?.description || '',
         identifier: currentNode.identifier,
         fileUsage: currentNode.fileUsage as string,
-        content: currentNode.content,
+        content: currentNode?.content || '',
         tags: getTags(currentNode.tags)
       })
     }
@@ -107,6 +108,9 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
         )
         return
       }
+      if (notCurrentNode && prop === 'content') {
+        return
+      }
       data.append(prop, values[prop])
     })
     data.append('type', FileStoreNodeTypes.FILE)
@@ -114,7 +118,11 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
     if (currentNode?.parentIdentifier && currentNode.type !== FileStoreNodeTypes.FOLDER) {
       data.append('parentIdentifier', currentNode.parentIdentifier)
     } else {
-      data.append('parentIdentifier', currentNode.identifier)
+      if (currentNode.identifier === SEARCH_FILES) {
+        data.append('parentIdentifier', FILE_STORE_ROOT)
+      } else {
+        data.append('parentIdentifier', currentNode.identifier)
+      }
     }
 
     data.append('mimeType', getMimeTypeByName(values.name))
@@ -153,8 +161,8 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
             try {
               getNode(
                 {
-                  identifier: currentNode.identifier || FILE_STORE_ROOT,
-                  name: currentNode.name,
+                  identifier: currentNode.identifier !== SEARCH_FILES ? currentNode.identifier : FILE_STORE_ROOT,
+                  name: currentNode.name !== SEARCH_FILES ? currentNode.name : FILE_STORE_ROOT,
                   type: FileStoreNodeTypes.FOLDER
                 },
                 {
