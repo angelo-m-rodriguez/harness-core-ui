@@ -7,10 +7,8 @@
  **/
 // this is an auto-generated file, do not update this manually
 declare const styles: {
-  readonly custom: string
-  readonly deleteButton: string
-  readonly main: string
-  readonly orgSelection: string
-  readonly projectSelection: string
+  readonly colorbox: string
+  readonly project: string
+  readonly verticalCenter: string
 }
 export default styles

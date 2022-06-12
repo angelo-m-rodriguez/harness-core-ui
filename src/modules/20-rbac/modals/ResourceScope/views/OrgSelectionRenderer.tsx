@@ -6,12 +6,12 @@
  */
 
 import React, { useState } from 'react'
-import { MultiSelectOption, Layout, Checkbox, MultiSelect, Radio } from '@harness/uicore'
-import { defaultTo } from 'lodash-es'
+import { Layout, Checkbox, Radio, Button, ButtonVariation } from '@harness/uicore'
 import { SelectionType } from '@rbac/utils/utils'
 import { useStrings } from 'framework/strings'
-import { useGetProjectList } from 'services/cd-ng'
 import type { ScopeSelector } from 'services/resourcegroups'
+import { useProjectSelectionModal } from '@rbac/modals/ProjectSelectionRenderer/useProjectSelection'
+import AccountProjectSelectionRenderer from './AccountProjectSelectionRenderer'
 
 interface OrgSelectionRendererProps {
   accountIdentifier: string
@@ -20,44 +20,42 @@ interface OrgSelectionRendererProps {
   includeProjects?: boolean
   projects?: string[]
 }
+
 const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
   accountIdentifier,
   orgIdentifier,
   includeProjects,
-  projects,
+  projects = [],
   onChange
 }) => {
   const { getString } = useStrings()
-  const [searchTerm, setSearchTerm] = useState('')
-  const { data } = useGetProjectList({
-    queryParams: {
-      accountIdentifier,
-      orgIdentifier,
-      searchTerm
-    },
-    debounce: 300
-  })
   const [includeProjectResources, setIncludeProjectResources] = useState(includeProjects)
   const [projectSelection, setProjectSelection] = useState<SelectionType>(
     projects?.length ? SelectionType.SPECIFIED : SelectionType.ALL
   )
-  const projectOpts: MultiSelectOption[] = defaultTo(
-    /* istanbul ignore next */ data?.data?.content?.map(res => ({
-      label: res.project.name,
-      value: res.project.identifier
-    })),
-    []
-  )
 
-  /* istanbul ignore next */ const selectedScopes = data?.data?.content?.reduce((acc: MultiSelectOption[], curr) => {
-    if (projects?.includes(curr.project.identifier)) {
-      acc.push({
-        label: curr.project.name,
-        value: curr.project.identifier
-      })
-    }
-    return acc
-  }, [])
+  const onProjectChange = (items: string[]): void => {
+    onChange(
+      items.length === 0
+        ? [including_child_scopes]
+        : [
+            excluding_child_scopes,
+            ...items.map(
+              item =>
+                ({
+                  accountIdentifier,
+                  orgIdentifier,
+                  projectIdentifier: item,
+                  filter: 'EXCLUDING_CHILD_SCOPES'
+                } as ScopeSelector)
+            )
+          ]
+    )
+  }
+
+  const { openProjectSelectionModal } = useProjectSelectionModal({
+    onSuccess: onProjectChange
+  })
 
   const excluding_child_scopes: ScopeSelector = {
     accountIdentifier,
@@ -89,7 +87,12 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
       />
       {includeProjectResources && (
         <Layout.Vertical spacing="small" padding={{ top: 'xsmall' }}>
-          <Layout.Horizontal spacing="huge" margin={{ left: 'xxlarge' }}>
+          <Layout.Horizontal
+            spacing="huge"
+            margin={{ left: 'xxlarge' }}
+            padding={{ left: 'large' }}
+            flex={{ justifyContent: 'flex-start' }}
+          >
             <Radio
               label={getString('rbac.resourceGroup.all')}
               data-testid={`${orgIdentifier}-INCLUDE-ALL-PROJECTS`}
@@ -112,42 +115,24 @@ const OrgSelectionRenderer: React.FC<OrgSelectionRendererProps> = ({
                 setProjectSelection(e.currentTarget.value as SelectionType)
               }}
             />
+            {projectSelection === SelectionType.SPECIFIED && (
+              <Button
+                text={getString('plusNumber', { number: getString('add') })}
+                variation={ButtonVariation.LINK}
+                onClick={() => {
+                  openProjectSelectionModal(projects, { accountIdentifier, orgIdentifier })
+                }}
+              />
+            )}
           </Layout.Horizontal>
-          {projectSelection === SelectionType.SPECIFIED && (
-            <MultiSelect
-              fill
-              items={projectOpts}
-              value={selectedScopes}
-              onQueryChange={
-                /* istanbul ignore next */ item => {
-                  setSearchTerm(item)
-                }
-              }
-              allowCreatingNewItems={false}
-              onChange={
-                /* istanbul ignore next */ items => {
-                  onChange(
-                    items.length === 0
-                      ? [including_child_scopes]
-                      : [
-                          excluding_child_scopes,
-                          ...items.map(
-                            item =>
-                              ({
-                                accountIdentifier,
-                                orgIdentifier,
-                                projectIdentifier: item.value.toString(),
-                                filter: 'EXCLUDING_CHILD_SCOPES'
-                              } as ScopeSelector)
-                          )
-                        ]
-                  )
-                }
-              }
-            />
-          )}
         </Layout.Vertical>
       )}
+      <AccountProjectSelectionRenderer
+        projects={projects}
+        onDelete={project => {
+          onProjectChange(projects.filter(id => id !== project))
+        }}
+      />
     </Layout.Vertical>
   )
 }

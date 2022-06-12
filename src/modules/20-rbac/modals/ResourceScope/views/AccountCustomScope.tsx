@@ -6,6 +6,7 @@
  */
 
 import {
+  Text,
   Button,
   Card,
   Checkbox,
@@ -14,7 +15,10 @@ import {
   Layout,
   SelectOption,
   ButtonVariation,
-  PageSpinner
+  PageSpinner,
+  Color,
+  FontVariation,
+  ButtonSize
 } from '@harness/uicore'
 import React from 'react'
 import { useParams } from 'react-router-dom'
@@ -62,7 +66,7 @@ const AccountCustomScope: React.FC<AccountCustomScopeProps> = ({
   )
 
   return (
-    <Layout.Vertical spacing="small" padding={{ top: 'large' }}>
+    <Layout.Vertical spacing="small">
       {loading && /* istanbul ignore next */ <PageSpinner />}
       <Checkbox
         label={getString('rbac.resourceScope.includeAccResources')}
@@ -73,6 +77,24 @@ const AccountCustomScope: React.FC<AccountCustomScopeProps> = ({
         }}
       />
       <Layout.Vertical spacing="medium" className={css.orgSelection}>
+        <Layout.Horizontal flex>
+          <Text color={Color.BLACK} font={{ variation: FontVariation.H6 }}>
+            {getString('rbac.scopeItems.orgsAndProjects')}
+          </Text>
+          <Button
+            text={getString('rbac.resourceScope.selectOrgsandProjects')}
+            variation={ButtonVariation.SECONDARY}
+            size={ButtonSize.SMALL}
+            onClick={() => {
+              setSelectedScopes(
+                produce(selectedScopes, draft => {
+                  draft.push([])
+                })
+              )
+            }}
+          />
+        </Layout.Horizontal>
+
         {selectedScopes.map((scope, index) => {
           const org = scope?.[0]?.orgIdentifier
           return includesCurrentScope(scope, Scope.ACCOUNT) ? null : (
@@ -129,21 +151,6 @@ const AccountCustomScope: React.FC<AccountCustomScopeProps> = ({
           )
         })}
       </Layout.Vertical>
-
-      <Layout.Horizontal>
-        <Button
-          text={getString('rbac.resourceScope.selectOrgsandProjects')}
-          variation={ButtonVariation.LINK}
-          onClick={() => {
-            setSelectedScopes(
-              produce(selectedScopes, draft => {
-                draft.push([])
-              })
-            )
-          }}
-          className={css.addOrgs}
-        />
-      </Layout.Horizontal>
     </Layout.Vertical>
   )
 }

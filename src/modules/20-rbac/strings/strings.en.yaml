@@ -237,6 +237,7 @@ scopeItems:
   projectOnly: Project only
   accountAll: All (including all Organizations and Projects)
   orgAll: All (including all Projects)
+  orgsAndProjects: Organizations (and its Projects)
   specificOrgsAndProjects: Specified Organizations (and their Projects)
   specificProjects: Specified Projects
   allProjects: All Projects
@@ -244,7 +245,9 @@ resourceScope:
   label: Resource Scope
   select: Select Resource Scope
   selectOrg: Select Organization
-  selectOrgsandProjects: + Add Organization (and its Projects)
+  selectOrgsandProjects: + Select Organization (and its Projects)
+  numberOfOrgsAndProjects: Organizations ({{organizations}}) and their Projects
+  accountResourcesIncluded: Account-level resources also included.
   includeAccResources: Include Account-level Resources
   includeOrgResources: Include Organization-level Resources
   includeProjResources: Include Project-level Resources
