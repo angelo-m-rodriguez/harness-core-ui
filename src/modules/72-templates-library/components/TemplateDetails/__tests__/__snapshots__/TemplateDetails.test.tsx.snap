@@ -97,6 +97,7 @@ exports[`<TemplateDetails /> tests should match snapshot 1`] = `
               >
                 <div
                   class="Layout--vertical StyledProps--main"
+                  style="height: 100%;"
                 >
                   <div
                     class="StyledProps--font StyledProps--main"
@@ -374,13 +375,14 @@ exports[`<TemplateDetails /> tests should match snapshot 1`] = `
                         </div>
                         <div
                           aria-controls="bp3-tab-panel_template-details_REFERENCEDBY"
-                          aria-disabled="true"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp3-tab"
+                          class="bp3-tab referencedByTab"
                           data-tab-id="REFERENCEDBY"
                           id="bp3-tab-title_template-details_REFERENCEDBY"
                           role="tab"
+                          tabindex="0"
                         >
                           templatesLibrary.referencedBy
                         </div>

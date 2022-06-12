@@ -9,15 +9,37 @@ import React, { useMemo } from 'react'
 import type { Column, Renderer, CellProps } from 'react-table'
 import { Text, Layout, Icon, TableV2 } from '@wings-software/uicore'
 import { Color } from '@harness/design-system'
-import type { EntitySetupUsageDTO, ResponsePageEntitySetupUsageDTO } from 'services/cd-ng'
+import type {
+  EntityDetail,
+  EntityReference,
+  EntitySetupUsageDTO,
+  ResponsePageEntitySetupUsageDTO
+} from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import ResourceDetailFactory from '@common/factories/ResourceDetailFactory'
+import { EntityType } from '@common/pages/entityUsage/EntityConstants'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import css from './EntityUsageList.module.scss'
 
 interface EntityUsageListProps {
   entityData: ResponsePageEntitySetupUsageDTO | null
   gotoPage: (pageNumber: number) => void
+}
+
+interface ReferredByEntity extends EntityDetail {
+  entityRef?: EntityReference & { versionLabel?: string }
+}
+
+const getReferredByEntityName = (referredByEntity?: ReferredByEntity) => {
+  if (!referredByEntity) {
+    return ''
+  }
+
+  if (referredByEntity.type === EntityType.Template && referredByEntity.entityRef?.versionLabel) {
+    return `${referredByEntity.name} (${referredByEntity.entityRef.versionLabel})`
+  }
+
+  return referredByEntity.name
 }
 
 const RenderColumnEntity: Renderer<CellProps<EntitySetupUsageDTO>> = ({ row }) => {
@@ -32,7 +54,7 @@ const RenderColumnEntity: Renderer<CellProps<EntitySetupUsageDTO>> = ({ row }) =
       <Layout.Vertical>
         <Layout.Horizontal>
           <Text color={Color.BLACK} lineClamp={1} className={css.overflow}>
-            {data.referredByEntity?.name}
+            {getReferredByEntityName(data.referredByEntity)}
           </Text>
         </Layout.Horizontal>
         <Text color={Color.GREY_400} lineClamp={1} className={css.overflow}>

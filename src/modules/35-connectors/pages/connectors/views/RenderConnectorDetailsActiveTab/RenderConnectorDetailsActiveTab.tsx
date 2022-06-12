@@ -10,6 +10,7 @@ import { NoDataCard } from '@wings-software/uicore'
 import { useStrings } from 'framework/strings'
 import type { ConnectorResponse } from 'services/cd-ng'
 import EntitySetupUsage from '@common/pages/entityUsage/EntityUsage'
+import { EntityType } from '@common/pages/entityUsage/EntityConstants'
 import ActivityHistory from '@connectors/components/activityHistory/ActivityHistory/ActivityHistory'
 import ConnectorView from '../../ConnectorView'
 import { ConnectorDetailsView } from '../../utils/ConnectorHelper'
@@ -39,7 +40,7 @@ const RenderConnectorDetailsActiveTab: React.FC<RenderConnectorDetailsActiveTabP
       )
     case ConnectorDetailsView.referencedBy:
       return data.connector?.identifier ? (
-        <EntitySetupUsage entityType={'Connectors'} entityIdentifier={data.connector.identifier} />
+        <EntitySetupUsage entityType={EntityType.Connectors} entityIdentifier={data.connector.identifier} />
       ) : (
         <></>
       )

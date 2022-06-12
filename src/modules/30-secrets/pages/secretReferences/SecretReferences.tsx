@@ -12,6 +12,7 @@ import { useStrings } from 'framework/strings'
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import type { SecretsPathProps } from '@common/interfaces/RouteInterfaces'
 import EntitySetupUsage from '@common/pages/entityUsage/EntityUsage'
+import { EntityType } from '@common/pages/entityUsage/EntityConstants'
 
 interface ReferencedByProps {
   secretData?: ResponseSecretResponseWrapper
@@ -28,7 +29,7 @@ const SecretReferences: React.FC<ReferencedByProps> = props => {
 
   return (
     <>
-      <EntitySetupUsage entityType={'Secrets'} entityIdentifier={secretId} />
+      <EntitySetupUsage entityType={EntityType.Secrets} entityIdentifier={secretId} />
     </>
   )
 }

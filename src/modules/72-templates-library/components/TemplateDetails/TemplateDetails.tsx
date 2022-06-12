@@ -44,6 +44,8 @@ import templateDoesNotExistSvg from '@templates-library/pages/TemplatesPage/imag
 import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { getVersionLabelText } from '@templates-library/utils/templatesUtils'
 import { TemplateInputs } from '@templates-library/components/TemplateInputs/TemplateInputs'
+import EntitySetupUsage from '@common/pages/entityUsage/EntityUsage'
+import { EntityType } from '@common/pages/entityUsage/EntityConstants'
 import { TemplateContext } from '../TemplateStudio/TemplateContext/TemplateContext'
 import { TemplateActivityLog } from '../TemplateActivityLog/TemplateActivityLog'
 import css from './TemplateDetails.module.scss'
@@ -237,7 +239,7 @@ export const TemplateDetails: React.FC<TemplateDetailsProps> = props => {
                     id={ParentTemplateTabs.BASIC}
                     title={getString('details')}
                     panel={
-                      <Layout.Vertical>
+                      <Layout.Vertical height={'100%'}>
                         <Container>
                           <Layout.Vertical
                             className={css.topContainer}
@@ -314,8 +316,20 @@ export const TemplateDetails: React.FC<TemplateDetailsProps> = props => {
                             />
                             <Tab
                               id={TemplateTabs.REFERENCEDBY}
-                              disabled={true}
                               title={getString('templatesLibrary.referencedBy')}
+                              className={css.referencedByTab}
+                              panel={
+                                <EntitySetupUsage
+                                  pageSize={4}
+                                  pageHeaderClassName={css.referencedByHeader}
+                                  pageBodyClassName={css.referencedByBody}
+                                  entityType={EntityType.Template}
+                                  entityIdentifier={`${defaultTo(selectedTemplate.identifier, '')}/${defaultTo(
+                                    selectedTemplate.versionLabel,
+                                    ''
+                                  )}/`}
+                                />
+                              }
                             />
                           </Tabs>
                         </Container>

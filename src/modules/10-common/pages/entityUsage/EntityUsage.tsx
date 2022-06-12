@@ -7,11 +7,13 @@
 
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { defaultTo } from 'lodash-es'
+import cx from 'classnames'
 import { Layout, Container, ExpandingSearchInput, PageHeader, PageBody } from '@wings-software/uicore'
 import {
-  useListReferredByEntities,
   ResponsePageEntitySetupUsageDTO,
-  ListReferredByEntitiesQueryParams
+  ListReferredByEntitiesQueryParams,
+  useListAllEntityUsageByFqn
 } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
@@ -23,32 +25,58 @@ interface EntityUsageProps {
   entityIdentifier: string
   entityType: ListReferredByEntitiesQueryParams['referredEntityType']
   mockData?: UseGetMockData<ResponsePageEntitySetupUsageDTO>
+  pageSize?: number
+  pageHeaderClassName?: string
+  pageBodyClassName?: string
 }
+
+const DEFAULT_PAGE_SIZE = 10
+
+interface Params {
+  accountId: string
+  orgIdentifier?: string
+  projectIdentifier?: string
+  entityIdentifier: string
+}
+
+const getReferredEntityFQN = (params: Params) => {
+  const { accountId, orgIdentifier, projectIdentifier, entityIdentifier } = params
+  let referredEntityFQN = `${accountId}/`
+  if (orgIdentifier) {
+    referredEntityFQN += `${orgIdentifier}/`
+  }
+  if (projectIdentifier) {
+    referredEntityFQN += `${projectIdentifier}/`
+  }
+  referredEntityFQN += `${entityIdentifier}`
+
+  return referredEntityFQN
+}
+
 const EntityUsage: React.FC<EntityUsageProps> = props => {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const { getString } = useStrings()
   const [searchTerm, setSearchTerm] = useState<string | undefined>()
   const [page, setPage] = useState(0)
+  const { entityIdentifier, entityType, mockData, pageSize, pageHeaderClassName, pageBodyClassName } = props
 
-  const { data, loading, refetch, error } = useListReferredByEntities({
+  const { data, loading, refetch, error } = useListAllEntityUsageByFqn({
     queryParams: {
       accountIdentifier: accountId,
-      projectIdentifier: projectIdentifier,
-      orgIdentifier: orgIdentifier,
-      identifier: props.entityIdentifier,
-      referredEntityType: props.entityType,
+      referredEntityFQN: getReferredEntityFQN({ accountId, orgIdentifier, projectIdentifier, entityIdentifier }),
+      referredEntityType: entityType,
       searchTerm: searchTerm,
       pageIndex: page,
-      pageSize: 10
+      pageSize: pageSize || DEFAULT_PAGE_SIZE
     },
     debounce: 300,
-    mock: props.mockData
+    mock: mockData
   })
 
   return (
     <>
       <PageHeader
-        className={css.secondHeader}
+        className={cx(css.secondHeader, defaultTo(pageHeaderClassName, ''))}
         size="standard"
         title={undefined}
         toolbar={
@@ -70,6 +98,7 @@ const EntityUsage: React.FC<EntityUsageProps> = props => {
       <PageBody
         loading={loading}
         retryOnError={() => refetch()}
+        className={pageBodyClassName}
         error={(error?.data as Error)?.message || error?.message}
         noData={
           !searchTerm

@@ -11,6 +11,9 @@ declare const styles: {
   readonly dropdown: string
   readonly innerTabsContainer: string
   readonly openInStudio: string
+  readonly referencedByBody: string
+  readonly referencedByHeader: string
+  readonly referencedByTab: string
   readonly shrink: string
   readonly tabsContainer: string
   readonly topContainer: string

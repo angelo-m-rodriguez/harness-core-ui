@@ -54,6 +54,7 @@
     }
   }
   .innerTabsContainer {
+    flex-grow: 1;
     :global {
       .bp3-tab-panel {
         overflow: unset;
@@ -71,4 +72,33 @@
       width: 300px !important;
     }
   }
+}
+
+.referencedByHeader {
+  justify-content: flex-start !important;
+}
+
+.referencedByBody {
+  height: unset;
+  min-height: unset;
+  display: flex;
+  flex-grow: 1;
+  padding-bottom: var(--spacing-4) !important;
+
+  :global(.NoDataCard--noDataCard) {
+    height: unset !important;
+    padding: var(--spacing-10) var(--spacing-8) 0 var(--spacing-8) !important;
+  }
+  :global(.NoDataCard--buttonContainer) {
+    padding: 0 !important;
+  }
+  :global(.TableV2--table) {
+    flex-grow: 1;
+  }
+}
+
+.referencedByTab {
+  height: calc(100% - 44px) !important;
+  display: flex;
+  flex-direction: column;
 }
