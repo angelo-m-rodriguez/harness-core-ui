@@ -69,6 +69,12 @@ export enum ParentTemplateTabs {
 
 const DefaultStableVersionValue = '-1'
 
+const getTemplateEntityIdentifier = (selectedTemplate: TemplateSummaryResponse) => {
+  const { identifier, versionLabel } = selectedTemplate
+
+  return `${identifier}${versionLabel ? `/${versionLabel}/` : ''}`
+}
+
 export const TemplateDetails: React.FC<TemplateDetailsProps> = props => {
   const { template, allowStableSelection = false, setTemplate } = props
   const { getString } = useStrings()
@@ -324,10 +330,7 @@ export const TemplateDetails: React.FC<TemplateDetailsProps> = props => {
                                   pageHeaderClassName={css.referencedByHeader}
                                   pageBodyClassName={css.referencedByBody}
                                   entityType={EntityType.Template}
-                                  entityIdentifier={`${defaultTo(selectedTemplate.identifier, '')}/${defaultTo(
-                                    selectedTemplate.versionLabel,
-                                    ''
-                                  )}/`}
+                                  entityIdentifier={getTemplateEntityIdentifier(selectedTemplate)}
                                 />
                               }
                             />
