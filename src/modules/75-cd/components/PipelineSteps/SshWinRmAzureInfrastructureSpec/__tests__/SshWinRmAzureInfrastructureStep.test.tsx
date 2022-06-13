@@ -12,7 +12,13 @@ import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterfa
 import type { SshWinRmAzureInfrastructure } from 'services/cd-ng'
 import * as CDNG from 'services/cd-ng'
 import { factory, TestStepWidget } from '@pipeline/components/PipelineSteps/Steps/__tests__/StepTestUtil'
-import { SshWinRmAzureInfrastructureSpec, AzureConnectorRegex } from '../SshWinRmAzureInfrastructureSpec'
+import {
+  SshWinRmAzureInfrastructureSpec,
+  AzureConnectorRegex,
+  AzureSubscriptionRegex,
+  AzureResourceGroupRegex,
+  AzureClusterRegex
+} from '../SshWinRmAzureInfrastructureSpec'
 import {
   connectorsResponse,
   connectorResponse,
@@ -48,7 +54,7 @@ const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   subscriptionId: 'subscriptionId',
   resourceGroup: 'resourceGroup',
   cluster: 'cluster',
-  namespace: 'namespace'
+  tags: {}
 })
 
 const submitForm = async (getByText: any) =>
@@ -129,6 +135,12 @@ describe('invocation map test', () => {
     const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
     invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getConnectorListV2Promise).not.toBeCalled()
+    invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
+    invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
 
   test('invocation map, wrong yaml', () => {
@@ -136,6 +148,12 @@ describe('invocation map test', () => {
     const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
     invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getConnectorListV2Promise).not.toBeCalled()
+    invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
+    invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
 
   test('invocation map should call template list', () => {
@@ -149,5 +167,11 @@ describe('invocation map test', () => {
     const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
     invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getConnectorListV2Promise).toBeCalled()
+    invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
+    invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
 })
