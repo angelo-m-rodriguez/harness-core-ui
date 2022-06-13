@@ -42,6 +42,16 @@ export function CustomApprovalVariablesView(props: CustomApprovalVariablesViewPr
     })
   }
 
+  // istanbul ignore else
+  if (variablesData.spec?.retryInterval) {
+    data['retryInterval'] = variablesData.spec?.retryInterval
+  }
+
+  // istanbul ignore else
+  if (variablesData.spec?.scriptTimeout) {
+    data['scriptTimeout'] = variablesData.spec?.scriptTimeout
+  }
+
   return (
     <VariablesListTable
       className={pipelineVariableCss.variablePaddingL3}
