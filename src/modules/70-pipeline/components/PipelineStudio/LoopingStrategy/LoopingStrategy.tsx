@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   ButtonVariation,
@@ -17,10 +17,11 @@ import {
   Link,
   Text
 } from '@wings-software/uicore'
-import { get, isEmpty, noop, set } from 'lodash-es'
+import { debounce, get, noop, set } from 'lodash-es'
 import type { FormikProps } from 'formik'
 import { Color, FontVariation } from '@wings-software/design-system'
 import cx from 'classnames'
+import { parse } from 'yaml'
 import type { StrategyConfig } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import {
@@ -28,8 +29,8 @@ import {
   LoopingStrategyEnum,
   Strategy
 } from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategyUtils'
-import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
-import { MonacoTextField } from '@common/components/MonacoTextField/MonacoTextField'
+import YAMLBuilder from '@common/components/YAMLBuilder/YamlBuilder'
+import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
 import css from './LoopingStrategy.module.scss'
 
 export interface LoopingStrategyProps {
@@ -46,8 +47,27 @@ export function LoopingStrategy({
   onUpdateStrategy
 }: LoopingStrategyProps): React.ReactElement {
   const { getString } = useStrings()
-  const [isEdit, setIsEdit] = React.useState<boolean>(isEmpty(strategy))
-  const { expressions } = useVariablesExpression()
+  const [yamlHandler, setYamlHandler] = useState<YamlBuilderHandlerBinding | undefined>()
+
+  const debouncedUpdate = React.useCallback(
+    debounce((strategyConfig: StrategyConfig): void => {
+      onUpdateStrategy(strategyConfig)
+    }, 300),
+    [onUpdateStrategy]
+  )
+
+  const onStrategyChange = (
+    _isEditorDirty: boolean,
+    formikProps: FormikProps<StrategyConfig>,
+    selectedStrategy: LoopingStrategyEnum
+  ): void => {
+    try {
+      const newValues: StrategyConfig = set({}, selectedStrategy, parse(yamlHandler?.getLatestYaml() || ''))
+      formikProps.setValues(newValues)
+    } catch {
+      // this catch intentionally left empty
+    }
+  }
 
   const getAllStrategies = (
     selectedStrategy: StrategyConfig
@@ -61,48 +81,28 @@ export function LoopingStrategy({
       label: item.label,
       value: item.value,
       selected: !!get(selectedStrategy, item.value),
-      disabled: !isEmpty(selectedStrategy) && !isEdit && !isReadonly
+      disabled: isReadonly
     }))
 
   const getSelectedStrategyMetaData = (selectedStrategy: StrategyConfig): Strategy | undefined =>
     AvailableStrategies.find(item => !!get(selectedStrategy, item.value))
 
   const changeStrategy = (newStrategy: LoopingStrategyEnum, formikProps: FormikProps<StrategyConfig>) => {
-    setIsEdit(true)
     const newValues: StrategyConfig = set({}, newStrategy, {})
     formikProps.setValues(newValues)
   }
 
-  const enableEditing = React.useCallback(() => {
-    setIsEdit(true)
-  }, [setIsEdit])
-
-  const onCancelEditing = React.useCallback(
-    (formikProps: FormikProps<StrategyConfig>) => {
-      setIsEdit(false)
-      formikProps.setValues(strategy)
-    },
-    [setIsEdit]
-  )
-
   const onDelete = React.useCallback(
-    (formikProps: FormikProps<StrategyConfig>) => {
+    async (formikProps: FormikProps<StrategyConfig>) => {
       formikProps.setValues({})
-      onUpdateStrategy({})
     },
     [onUpdateStrategy]
   )
 
-  const onSubmit = React.useCallback(
-    (values: StrategyConfig) => {
-      setIsEdit(false)
-      onUpdateStrategy(values)
-    },
-    [onUpdateStrategy]
-  )
+  const renderCustomHeader = (): JSX.Element => <Container></Container>
 
   return (
-    <Formik initialValues={strategy} formName="loopingStrategy" onSubmit={onSubmit}>
+    <Formik initialValues={strategy} formName="loopingStrategy" onSubmit={noop} validate={debouncedUpdate}>
       {(formikProps: FormikProps<StrategyConfig>) => {
         const selectedStrategyMetaData = getSelectedStrategyMetaData(formikProps.values)
         return (
@@ -171,31 +171,35 @@ export function LoopingStrategy({
                             </Layout.Vertical>
                           </Container>
                           <Container>
-                            <Layout.Horizontal>
-                              {!isEdit && (
-                                <Button variation={ButtonVariation.ICON} icon={'edit'} onClick={enableEditing} />
-                              )}
-                              <Button
-                                variation={ButtonVariation.ICON}
-                                icon={'main-trash'}
-                                onClick={() => onDelete(formikProps)}
-                              />
-                            </Layout.Horizontal>
+                            <Button
+                              variation={ButtonVariation.ICON}
+                              icon={'main-trash'}
+                              onClick={() => onDelete(formikProps)}
+                            />
                           </Container>
                         </Layout.Horizontal>
                       </Container>
                       <Container>
-                        <MonacoTextField name={'random'} expressions={expressions} disabled={isReadonly} />
+                        <YAMLBuilder
+                          showSnippetSection={false}
+                          fileName={''}
+                          entityType={'Pipelines'}
+                          bind={setYamlHandler}
+                          height="200px"
+                          width="100%"
+                          existingJSON={get(formikProps.values, selectedStrategyMetaData?.value)}
+                          renderCustomHeader={renderCustomHeader}
+                          yamlSanityConfig={{
+                            removeEmptyObject: false,
+                            removeEmptyString: false,
+                            removeEmptyArray: false
+                          }}
+                          onChange={(isEditorDirty: boolean) =>
+                            onStrategyChange(isEditorDirty, formikProps, selectedStrategyMetaData?.value)
+                          }
+                        />
                       </Container>
                     </Layout.Vertical>
-                  </Container>
-                )}
-                {isEdit && selectedStrategyMetaData && (
-                  <Container>
-                    <Layout.Horizontal spacing="xlarge">
-                      <Button intent="primary" type="submit" text={getString('filters.apply')} />
-                      <Button text={getString('cancel')} onClick={() => onCancelEditing(formikProps)} />
-                    </Layout.Horizontal>
                   </Container>
                 )}
               </Layout.Vertical>

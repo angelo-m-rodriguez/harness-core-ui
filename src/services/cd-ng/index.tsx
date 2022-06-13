@@ -10900,7 +10900,6 @@ export interface StageElementConfig {
   tags?: {
     [key: string]: string
   }
-  strategy?: StrategyConfig
   template?: TemplateLinkConfig
   type?: string
   variables?: NGVariable[]

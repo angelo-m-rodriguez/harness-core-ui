@@ -18,17 +18,20 @@ import { StepActions } from '@common/constants/TrackingConstants'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { useStrings } from 'framework/strings'
 import type { ApprovalStageElementConfig } from '@pipeline/utils/pipelineTypes'
+import { LoopingStrategy } from '@pipeline/components/PipelineStudio/LoopingStrategy/LoopingStrategy'
 import css from './ApprovalAdvancedSpecifications.module.scss'
 
 export interface AdvancedSpecifications {
   context?: string
   conditionalExecutionTooltipId?: string
   failureStrategyTooltipId?: string
+  loopingStrategyTooltipId?: string
 }
 function ApprovalAdvancedSpecifications({
   children,
   conditionalExecutionTooltipId = 'conditionalExecutionApprovalStage',
-  failureStrategyTooltipId = 'failureStrategyApprovalStage'
+  failureStrategyTooltipId = 'failureStrategyApprovalStage',
+  loopingStrategyTooltipId = 'loopingStrategyApprovalStage'
 }: React.PropsWithChildren<AdvancedSpecifications>): React.ReactElement {
   const { getString } = useStrings()
   const { trackEvent } = useTelemetry()
@@ -79,6 +82,35 @@ function ApprovalAdvancedSpecifications({
             </Layout.Horizontal>
           </Card>
         )}
+
+        <div className={css.tabHeading}>
+          <span data-tooltip-id={loopingStrategyTooltipId}>
+            {getString('pipeline.loopingStrategy.title')}
+            <HarnessDocTooltip tooltipId={loopingStrategyTooltipId} useStandAlone={true} />
+          </span>
+        </div>
+        <Card className={css.sectionCard} id="loopingStrategy">
+          <Layout.Horizontal>
+            <div className={css.stageSection}>
+              <div className={cx(css.stageCreate, css.stageDetails)}>
+                <LoopingStrategy
+                  strategy={stage?.stage?.strategy}
+                  isReadonly={isReadonly}
+                  onUpdateStrategy={strategy => {
+                    const { stage: pipelineStage } = getStageFromPipeline(selectedStageId || '')
+                    if (pipelineStage && pipelineStage.stage) {
+                      const stageData = produce(pipelineStage, draft => {
+                        set(draft, 'stage.strategy', strategy)
+                      })
+                      if (stageData.stage) updateStage(stageData.stage)
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </Layout.Horizontal>
+        </Card>
+
         <div className={css.tabHeading}>
           <span data-tooltip-id={failureStrategyTooltipId}>
             {getString('pipeline.failureStrategies.title')}
