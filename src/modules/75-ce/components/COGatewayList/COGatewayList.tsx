@@ -26,9 +26,7 @@ import {
   PillToggle
 } from '@harness/uicore'
 import { FontVariation, Color } from '@harness/design-system'
-import { isEmpty as _isEmpty, defaultTo as _defaultTo } from 'lodash-es'
-import HighchartsReact from 'highcharts-react-official'
-import Highcharts from 'highcharts'
+import { isEmpty as _isEmpty, defaultTo as _defaultTo, get } from 'lodash-es'
 import { useHistory, useParams } from 'react-router-dom'
 import { Classes, Drawer, Menu, Position } from '@blueprintjs/core'
 import routes from '@common/RouteDefinitions'
@@ -71,16 +69,11 @@ import { UNSAVED_FILTER } from '@common/components/Filter/utils/FilterUtils'
 import COGatewayAnalytics from './COGatewayAnalytics'
 import COGatewayCumulativeAnalytics from './COGatewayCumulativeAnalytics'
 import ComputeType from './components/ComputeType'
-import {
-  getInstancesLink,
-  getRelativeTime,
-  getStateTag,
-  getRiskGaugeChartOptions,
-  getFilterBodyFromFilterData
-} from './Utils'
+import { getInstancesLink, getRelativeTime, getStateTag, getFilterBodyFromFilterData } from './Utils'
 import useToggleRuleState from './useToggleRuleState'
 import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
 import GatewayListFilters from './GatewayListFilters'
+import RuleSavingsPieChart from './charts/RuleSavingsPieChart'
 import landingPageSVG from './images/AutostoppingRuleIllustration.svg'
 import refreshIcon from './images/refresh.svg'
 import NoDataImage from './images/NoData.svg'
@@ -165,16 +158,9 @@ function SavingsCell(tableProps: CellProps<Service>): JSX.Element {
   })
   return (
     <Layout.Horizontal spacing="large">
-      <HighchartsReact
-        highchart={Highcharts}
-        options={
-          !savingsLoading && data?.response != null
-            ? getRiskGaugeChartOptions(
-                (data?.response as ServiceSavings).savings_percentage as number,
-                tableProps.row.original.disabled
-              )
-            : getRiskGaugeChartOptions(0)
-        }
+      <RuleSavingsPieChart
+        savings={get(data, 'response.savings_percentage', 0)}
+        disable={tableProps.row.original.disabled}
       />
       <Text className={css.savingsAmount}>
         {savingsLoading ? (

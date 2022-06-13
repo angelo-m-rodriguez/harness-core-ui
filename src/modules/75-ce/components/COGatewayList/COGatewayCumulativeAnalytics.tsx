@@ -28,8 +28,8 @@ import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import { useDeepCompareEffect } from '@common/hooks'
 import { Utils } from '@ce/common/Utils'
 import { getFilterBodyFromFilterData } from './Utils'
-import SpendVsSavingsChart from './SpendVsSavingsChart'
-import SavingsPieChart from './SavingsPieChart'
+import SpendVsSavingsChart from './charts/SpendVsSavingsChart'
+import SavingsPieChart from './charts/SavingsPieChart'
 import css from './COGatewayCumulativeAnalytics.module.scss'
 
 interface COGatewayCumulativeAnalyticsProps {
