@@ -27,7 +27,7 @@ import { setFormikRef } from '@pipeline/components/AbstractSteps/Step'
 import { useStrings } from 'framework/strings'
 
 import type { JenkinsStepDataUI, JenkinsStepProps } from './JenkinsStep'
-import { JobDetails, useGetJobDetailsForJenkins } from 'services/cd-ng'
+import { JobDetails, useGetJobDetailsForJenkins, useGetJobParametersForJenkins } from 'services/cd-ng'
 import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { useParams } from 'react-router'
@@ -66,6 +66,7 @@ function FormContent({
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
   const [connectorValueType, setConnectorValueType] = useState<MultiTypeInputType>(MultiTypeInputType.FIXED)
   const [jobDetails, setJobDetails] = useState<SubmenuSelectOption[]>([])
+  const [jobParamerter, setJobParameters] = useState<jobParameterInterface[]>([])
   const commonParams = {
     accountIdentifier: accountId,
     projectIdentifier,
@@ -76,9 +77,9 @@ function FormContent({
 
   const {
     refetch: refetchJobs,
-    data: jobsResponse
-    // error: jobDetailsFetchError,
-    // loading: fetchingJobDetails
+    data: jobsResponse,
+    error: jobDetailsFetchError,
+    loading: fetchingJobDetails
   } = useGetJobDetailsForJenkins({
     lazy: true,
     queryParams: {
@@ -87,7 +88,36 @@ function FormContent({
     }
   })
 
-  console.log('formik', formik)
+  const {
+    refetch: refetchJobParameters,
+    data: jobParamterResponse
+    // error: jobDetailsFetchError,
+    // loading: fetchingJobDetails
+  } = useGetJobParametersForJenkins({
+    lazy: true,
+    jobName: ''
+  })
+
+  useEffect(() => {
+    if (jobParamterResponse?.data) {
+      const parameterData: jobParameterInterface[] =
+        jobParamterResponse?.data?.map(item => {
+          return {
+            name: item.name,
+            value: item.defaultValue,
+            type: 'String',
+            id: uuid()
+          } as any
+        }) || ([] as jobParameterInterface[])
+      formik.setValues({
+        ...formik.values,
+        spec: {
+          ...formik.values.spec,
+          jobParameter: parameterData
+        }
+      })
+    }
+  }, [jobParamterResponse])
 
   useEffect(() => {
     if (typeof formik.values.spec.jobName === 'string' && jobsResponse?.data?.jobDetails?.length) {
@@ -150,6 +180,8 @@ function FormContent({
       }
     })
   }
+
+  console.log('jobDetailsFetchError', jobDetailsFetchError)
 
   return (
     <React.Fragment>
@@ -236,7 +268,7 @@ function FormContent({
         <FormInput.SelectWithSubmenuTypeInput
           label={'Job Name'}
           name={'spec.jobName'}
-          // disabled={!jobDetails.length}
+          disabled={jobDetailsFetchError !== null || fetchingJobDetails}
           placeholder={formik.values.spec.jobName || 'Select a job'}
           selectWithSubmenuTypeInputProps={{
             value:
@@ -246,7 +278,6 @@ function FormContent({
             items: jobDetails,
             interactionKind: PopoverInteractionKind.CLICK,
             onChange: (primaryValue, secondaryValue, type) => {
-              console.log('check', primaryValue, secondaryValue, type)
               const newJobName = secondaryValue ? secondaryValue : primaryValue
               formik.setValues({
                 ...formik.values,
@@ -255,6 +286,15 @@ function FormContent({
                   jobName: type === MultiTypeInputType.RUNTIME ? primaryValue : (newJobName as any)
                 }
               })
+              if (type !== MultiTypeInputType.RUNTIME) {
+                refetchJobParameters({
+                  pathParams: { jobName: newJobName.label },
+                  queryParams: {
+                    ...commonParams,
+                    connectorRef: connectorRefFixedValue?.toString()
+                  }
+                })
+              }
             },
             onOpening: (item: SelectOption) => {
               lastOpenedJob.current = item.value
