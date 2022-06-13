@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import type { SshWinRmAzureInfrastructure } from 'services/cd-ng'
@@ -39,6 +39,7 @@ jest.mock('services/cd-ng', () => ({
 
 const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   credentialsRef: 'credentialsRef1',
+  sshKey: { identifier: 'credentialsRef1' },
   connectorRef: 'connectorRef',
   subscriptionId: 'subscriptionId',
   resourceGroup: 'resourceGroup',
@@ -84,7 +85,7 @@ describe('Test Azure Infrastructure Spec behavior', () => {
 
   test('Should call onUpdate if valid values entered - inputset', async () => {
     const onUpdateHandler = jest.fn()
-    const { container, getByText } = render(
+    const { getByText } = render(
       <TestStepWidget
         initialValues={getInitialValues()}
         template={getInitialValues()}
@@ -96,7 +97,9 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     )
 
     await submitForm(getByText)
-    expect(onUpdateHandler).toHaveBeenCalledWith(getInitialValues())
+    await waitFor(() => {
+      expect(onUpdateHandler).toHaveBeenCalledWith(getInitialValues())
+    })
   })
 
   test('Should not call onUpdate if invalid values entered - inputset', async () => {
@@ -113,7 +116,6 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     )
 
     await submitForm(getByText)
-
     expect(onUpdateHandler).not.toHaveBeenCalled()
   })
 })
