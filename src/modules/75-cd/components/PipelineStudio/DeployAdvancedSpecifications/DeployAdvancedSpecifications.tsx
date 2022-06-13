@@ -122,12 +122,12 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
         )}
 
         <div className={stageCss.tabHeading}>
-          <span data-tooltip-id="failureStrategyDeployStage">
+          <span data-tooltip-id="loopingStrategyDeployStage">
             {getString('pipeline.loopingStrategy.title')}
             <HarnessDocTooltip tooltipId="loopingStrategyDeployStage" useStandAlone={true} />
           </span>
         </div>
-        <Card className={stageCss.sectionCard} id="executionStrategy">
+        <Card className={stageCss.sectionCard} id="loopingStrategy">
           <Layout.Horizontal>
             <LoopingStrategy
               strategy={stage?.stage?.strategy}

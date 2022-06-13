@@ -157,6 +157,102 @@ exports[`Deploy advanced specifications test Should match snapshot 1`] = `
         class="tabHeading"
       >
         <span
+          data-tooltip-id="loopingStrategyDeployStage"
+        >
+          pipeline.loopingStrategy.title
+        </span>
+      </div>
+      <div
+        class="bp3-card bp3-elevation-0 Card--card sectionCard"
+        id="loopingStrategy"
+      >
+        <div
+          class="Layout--horizontal StyledProps--main"
+        >
+          <div
+            class="OverlaySpinner--overlaySpinner"
+          >
+            <form
+              action="#"
+              class="FormikForm--main"
+            >
+              <div>
+                <div
+                  class="StyledProps--font StyledProps--main mainContainer"
+                  style="width: 846px;"
+                >
+                  <div
+                    class="Layout--vertical Layout--layout-spacing-medium StyledProps--main"
+                  >
+                    <p
+                      class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-grey700 StyledProps--font-size-small"
+                    >
+                      pipeline.loopingStrategy.subTitle
+                       
+                      <a
+                        class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--color StyledProps--color-blue400 StyledProps--font StyledProps--font-size-small Button--with-current-color Button--link"
+                        href="https://ngdocs.harness.io/article/i36ibenkq2-step-skip-condition-settings"
+                        rel="noreferrer noopener"
+                        role="button"
+                        tabindex="0"
+                        target="_blank"
+                      >
+                        <span
+                          class="bp3-button-text"
+                        >
+                          pipeline.loopingStrategy.learnMore
+                        </span>
+                      </a>
+                    </p>
+                    <div
+                      class="StyledProps--font StyledProps--main"
+                    >
+                      <div
+                        class="Layout--horizontal Layout--layout-spacing-medium StyledProps--main StyledProps--padding-top-large StyledProps--border StyledProps--border-top StyledProps--border-color-grey200"
+                      >
+                        <div
+                          class="bp3-card bp3-interactive bp3-elevation-0 Card--card strategyAnchor Card--interactive"
+                          tabindex="0"
+                        >
+                          <p
+                            class="StyledProps--font StyledProps--main StyledProps--font-variation-body StyledProps--color StyledProps--color-primary7"
+                          >
+                            Matrix
+                          </p>
+                        </div>
+                        <div
+                          class="bp3-card bp3-interactive bp3-elevation-0 Card--card strategyAnchor Card--interactive"
+                          tabindex="0"
+                        >
+                          <p
+                            class="StyledProps--font StyledProps--main StyledProps--font-variation-body StyledProps--color StyledProps--color-primary7"
+                          >
+                            For Loop
+                          </p>
+                        </div>
+                        <div
+                          class="bp3-card bp3-interactive bp3-elevation-0 Card--card strategyAnchor Card--interactive"
+                          tabindex="0"
+                        >
+                          <p
+                            class="StyledProps--font StyledProps--main StyledProps--font-variation-body StyledProps--color StyledProps--color-primary7"
+                          >
+                            Parallelism
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tabHeading"
+      >
+        <span
           data-tooltip-id="failureStrategyDeployStage"
         >
           pipeline.failureStrategies.title
