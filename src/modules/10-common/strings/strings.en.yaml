@@ -883,4 +883,4 @@ getStarted:
   selectWorkload: Select Workload
   selectArtifact: Select Artifact
   selectInfra: Select Infrastructure
-
+serviceName: Service Name
