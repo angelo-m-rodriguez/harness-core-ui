@@ -109,9 +109,11 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }))
         setSubscriptions(subs)
       } else {
+        /* istanbul ignore next */
         showError(get(response, 'message', response))
       }
     } catch (e) {
+      /* istanbul ignore next */
       showError(e.message || e.responseMessage[0])
     } finally {
       setIsSubsLoading(false)
@@ -135,9 +137,11 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           get(response, 'data.tags', []).map((azureTag: AzureTagDTO) => ({ label: azureTag.tag, value: azureTag.tag }))
         )
       } else {
+        /* istanbul ignore next */
         showError(get(response, 'message', response))
       }
     } catch (e) {
+      /* istanbul ignore next */
       showError(e.message || e.errorMessage)
     } finally {
       setIsTagsLoading(false)
@@ -161,9 +165,11 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
         )
       } else {
+        /* istanbul ignore next */
         showError(get(response, 'message', response))
       }
     } catch (e) {
+      /* istanbul ignore next */
       showError(e.message || e.errorMessage)
     } finally {
       setIsResGroupLoading(false)
@@ -190,9 +196,11 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }))
         setClusters(clusterOptions)
       } else {
+        /* istanbul ignore next */
         showError(get(response, 'message', response))
       }
     } catch (e) {
+      /* istanbul ignore next */
       showError(e.message || e.responseMessage[0])
     } finally {
       setIsClustersLoading(false)
@@ -438,11 +446,11 @@ interface AzureInfrastructureSpecStep extends SshWinRmAzureInfrastructure {
   identifier?: string
 }
 
-const AzureConnectorRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.connectorRef$/
-const AzureSubscriptionRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.subscriptionId$/
-const AzureResourceGroupRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.resourceGroup$/
-const AzureClusterRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.cluster$/
-const SshWinRmAzureType = StepType.SshWinRmAzure
+export const AzureConnectorRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.connectorRef$/
+export const AzureSubscriptionRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.subscriptionId$/
+export const AzureResourceGroupRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.resourceGroup$/
+export const AzureClusterRegex = /^.+infrastructure\.infrastructureDefinition\.spec\.cluster$/
+export const SshWinRmAzureType = StepType.SshWinRmAzure
 
 export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastructureSpecStep> {
   lastFetched: number

@@ -10,8 +10,9 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import type { SshWinRmAzureInfrastructure } from 'services/cd-ng'
+import * as CDNG from 'services/cd-ng'
 import { factory, TestStepWidget } from '@pipeline/components/PipelineSteps/Steps/__tests__/StepTestUtil'
-import { SshWinRmAzureInfrastructureSpec } from '../SshWinRmAzureInfrastructureSpec'
+import { SshWinRmAzureInfrastructureSpec, AzureConnectorRegex } from '../SshWinRmAzureInfrastructureSpec'
 import {
   connectorsResponse,
   connectorResponse,
@@ -37,6 +38,9 @@ jest.mock('services/cd-ng', () => ({
   listSecretsV2Promise: jest.fn().mockImplementation(() => Promise.resolve(mockListSecrets))
 }))
 
+const infraDefPath = 'pipeline.stages[0].stage.spec.infrastructure.infrastructureDefinition'
+const accountIdParams = { accountId: 'accountId1' }
+
 const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   credentialsRef: 'credentialsRef1',
   sshKey: { identifier: 'credentialsRef1' },
@@ -47,16 +51,15 @@ const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   namespace: 'namespace'
 })
 
-const submitForm = async (getByText: any) => {
+const submitForm = async (getByText: any) =>
   await act(async () => {
     fireEvent.click(getByText('Submit'))
   })
-}
 
 /*const getInvalidYaml = (): string => `p ipe<>line:
 sta ges:
    - st<>[]age:
-              s pe<> c: <> sad-~`
+              s pe<> c: <> sad-~`*/
 
 const getYaml = (): string => `pipeline:
     stages:
@@ -73,7 +76,7 @@ const getYaml = (): string => `pipeline:
                               namespace: namespace
                               releaseName: releaseName`
 
-const connectorRefPath = 'pipeline.stages.0.stage.spec.infrastructure.infrastructureDefinition.spec.connectorRef'
+/*const connectorRefPath = 'pipeline.stages.0.stage.spec.infrastructure.infrastructureDefinition.spec.connectorRef'
 const subscriptionPath = 'pipeline.stages.0.stage.spec.infrastructure.infrastructureDefinition.spec.subscriptionId'
 const resourceGroupPath = 'pipeline.stages.0.stage.spec.infrastructure.infrastructureDefinition.spec.resourceGroup'
 const clusterPath = 'pipeline.stages.0.stage.spec.infrastructure.infrastructureDefinition.spec.cluster'*/
@@ -117,5 +120,34 @@ describe('Test Azure Infrastructure Spec behavior', () => {
 
     await submitForm(getByText)
     expect(onUpdateHandler).not.toHaveBeenCalled()
+  })
+})
+
+describe('invocation map test', () => {
+  test('invocation map, empty yaml', () => {
+    const yaml = ''
+    const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
+    invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getConnectorListV2Promise).not.toBeCalled()
+  })
+
+  test('invocation map, wrong yaml', () => {
+    const yaml = {} as string
+    const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
+    invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getConnectorListV2Promise).not.toBeCalled()
+  })
+
+  test('invocation map should call template list', () => {
+    jest.spyOn(CDNG, 'listSecretsV2Promise').mockImplementationOnce(() => Promise.resolve(mockListSecrets as any))
+    jest
+      .spyOn(CDNG, 'getConnectorListV2Promise')
+      .mockImplementationOnce(() => Promise.resolve(connectorsResponse.data as any))
+
+    const yaml = getYaml()
+
+    const invocationMap = factory.getStep(StepType.SshWinRmAzure)?.getInvocationMap?.()
+    invocationMap?.get(AzureConnectorRegex)?.(infraDefPath, yaml, accountIdParams)
+    expect(CDNG.getConnectorListV2Promise).toBeCalled()
   })
 })
