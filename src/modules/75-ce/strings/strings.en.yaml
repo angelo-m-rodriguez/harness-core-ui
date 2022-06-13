@@ -833,14 +833,14 @@ perspectives:
       percent: '% of Budget'
       createAlert: '+ add new alert'
   folders:
-    heading: '{{ $.dashboards.homePage.folders }}'
-    customFolders: My Folders
+    customFolders: '{{ $.dashboards.homePage.folders }}'
     newFolder: New folder
     createNewFolderHeading: Create new Folder for Perspectives
     folderNamePlaceholder: Enter folder name
     selectPerspectiveLabel: Include perspectives
     folderCreated: Perspective Folder created successfully!!
     folderDeleted: Folder deleted successfully!!
+    folderUpdated: Folder updated successfully!!
     moveFolderTitle: Move to folder
     currentFolderLabel: Current Folder
     moveExistingFolder: Move to an existing folder

@@ -4685,7 +4685,7 @@ export interface StringsMap {
   'ce.perspectives.folders.folderNamePlaceholder': string
   'ce.perspectives.folders.folderNameRequired': string
   'ce.perspectives.folders.folderSelectionRequired': string
-  'ce.perspectives.folders.heading': string
+  'ce.perspectives.folders.folderUpdated': string
   'ce.perspectives.folders.moveExistingFolder': string
   'ce.perspectives.folders.moveFolderTitle': string
   'ce.perspectives.folders.moveToLabel': string

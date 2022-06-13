@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   ButtonVariation,
@@ -15,6 +15,7 @@ import {
   IconName,
   Layout,
   Text,
+  TextInput,
   useConfirmationDialog
 } from '@harness/uicore'
 import { Color, FontVariation, Intent } from '@harness/design-system'
@@ -34,18 +35,19 @@ interface SideNavProps {
   foldersLoading: boolean
   defaultFolderId: string
   deleteFolder: (id: string) => void
+  updateFolder: (id: string, name: string, isPinned: boolean) => void
 }
 
 interface SidebarLinkProps {
-  label: string | undefined
+  folderData: CEViewFolder
   icon?: IconName
   className?: string
   textClassName?: string
-  folderId: string | undefined
   showIcons?: boolean
   selectedFolderId: string
   setSelectedFolder: (newState: string) => void
   onDelete: (id: string) => void
+  updateFolder: (id: string, name: string, isPinned: boolean) => void
 }
 
 const renderLoader = (): JSX.Element => {
@@ -56,46 +58,102 @@ const renderLoader = (): JSX.Element => {
   )
 }
 
-const SideNavItem: React.FC<SidebarLinkProps> = ({
+export const SideNavItem: React.FC<SidebarLinkProps> = ({
+  folderData,
   selectedFolderId,
   setSelectedFolder,
   icon,
   textClassName,
   onDelete,
-  folderId = '',
-  label = '',
+  updateFolder,
   showIcons = true
 }) => {
+  /* istanbul ignore next */
+  const { uuid: folderId = '', name = '', pinned = false } = folderData
+  const [isEdit, setEditEnable] = useState(false)
+
+  const onPinClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void = e => {
+    e.stopPropagation()
+    updateFolder(folderId, name, !pinned)
+  }
+
+  const onEditClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void = e => {
+    e.stopPropagation()
+    setEditEnable(true)
+  }
+
+  /* istanbul ignore next */
+  const editFlow = (folderName: string) => {
+    if (folderName && folderName !== name) {
+      updateFolder(folderId, folderName, pinned)
+    }
+    setEditEnable(false)
+  }
+
   return (
     <li
       className={cx(css.link, selectedFolderId === folderId ? css.active : '')}
       onClick={() => setSelectedFolder(folderId)}
     >
       <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
-        <Text
-          icon={icon}
-          font={{ variation: FontVariation.BODY }}
-          color={Color.GREY_700}
-          className={textClassName}
-          lineClamp={1}
-          style={{ maxWidth: 200 }}
-          iconProps={{ padding: { right: 'small' } }}
-        >
-          {label}
-        </Text>
-        {showIcons && (
-          <Icon
-            name="main-trash"
-            size={16}
-            color={Color.PRIMARY_6}
-            onClick={() => onDelete(folderId)}
-            className={css.icon}
-            data-testid={'deleteFolder'}
+        {isEdit ? (
+          <TextInput
+            defaultValue={name}
+            wrapperClassName={css.folderNameField}
+            onBlur={e => {
+              editFlow(e.target.value)
+            }}
+            autoFocus
+            data-testid={'folderNameField'}
           />
+        ) : (
+          <Text
+            icon={icon}
+            font={{ variation: FontVariation.BODY }}
+            color={Color.GREY_700}
+            className={textClassName}
+            lineClamp={1}
+            style={{ maxWidth: 200 }}
+            iconProps={{ padding: { right: 'small' } }}
+          >
+            {name}
+          </Text>
+        )}
+        {showIcons && (
+          <Layout.Horizontal spacing="small" flex={{ alignItems: 'center' }}>
+            <Icon
+              name="Edit"
+              size={14}
+              color={Color.PRIMARY_6}
+              onClick={onEditClick}
+              className={css.icon}
+              data-testid={'editFolder'}
+            />
+            <Icon
+              name="main-trash"
+              size={16}
+              color={Color.PRIMARY_6}
+              onClick={() => onDelete(folderId)}
+              className={css.icon}
+              data-testid={'deleteFolder'}
+            />
+            <Icon
+              name={pinned ? /* istanbul ignore next */ 'unpin' : 'pin'}
+              size={16}
+              color={Color.PRIMARY_6}
+              onClick={onPinClick}
+              className={css.icon}
+              data-testid={'pinFolder'}
+            />
+          </Layout.Horizontal>
         )}
       </Layout.Horizontal>
     </li>
   )
+}
+
+const getCustomFolder = (foldersList: CEViewFolder[]) => {
+  return foldersList.filter(item => item.viewType === folderViewType.CUSTOMER)
 }
 
 const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
@@ -109,9 +167,13 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
   const defaultFolders: CEViewFolder[] = props.foldersList.filter(
     item => item.viewType === folderViewType.DEFAULT || item.viewType === folderViewType.SAMPLE
   )
-  const customFolders: CEViewFolder[] = props.foldersList.filter(item => item.viewType === folderViewType.CUSTOMER)
-  const getCustomFolders = () => customFolders
-  const [customFoldersList, setCustomFolders] = useState(getCustomFolders)
+  const customFolders: CEViewFolder[] = getCustomFolder(props.foldersList)
+  const [customFoldersList, setCustomFolders] = useState(customFolders)
+
+  useEffect(() => {
+    const updateFolders: CEViewFolder[] = getCustomFolder(props.foldersList)
+    setCustomFolders(updateFolders)
+  }, [props.foldersList])
 
   const onDelete = (folderId: string) => {
     setDeleteFolderId(folderId)
@@ -143,19 +205,12 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
         renderLoader()
       ) : (
         <>
-          <Text
-            color={Color.GREY_800}
-            font={{ variation: FontVariation.H6 }}
-            padding={{ top: 'xlarge', left: 'xxlarge' }}
-          >
-            {getString('ce.perspectives.folders.heading')}
-          </Text>
-          <ul className={css.foldersList}>
+          <ul className={css.foldersList} style={{ paddingTop: 'var(--spacing-medium)' }}>
             {defaultFolders.map(item => {
               return (
                 <SideNavItem
                   key={item.uuid}
-                  label={item.name}
+                  folderData={item}
                   icon={
                     item.viewType === folderViewType.SAMPLE
                       ? 'harness-with-color'
@@ -165,11 +220,11 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
                   }
                   className={css.sidenav}
                   textClassName={css.sidenavText}
-                  folderId={item.uuid}
                   showIcons={false}
                   selectedFolderId={props.selectedFolderId}
                   setSelectedFolder={props.setSelectedFolder}
                   onDelete={onDelete}
+                  updateFolder={props.updateFolder}
                 />
               )
             })}
@@ -202,16 +257,16 @@ const PerspectiveFoldersSideNav: React.FC<SideNavProps> = props => {
               return (
                 <SideNavItem
                   key={item.uuid}
-                  label={item.name}
+                  folderData={item}
                   icon={
                     props.selectedFolderId === item.uuid ? /* istanbul ignore next */ 'main-folder-open' : 'main-folder'
                   }
                   className={css.sidenav}
                   textClassName={css.sidenavText}
-                  folderId={item.uuid}
                   selectedFolderId={props.selectedFolderId}
                   setSelectedFolder={props.setSelectedFolder}
                   onDelete={onDelete}
+                  updateFolder={props.updateFolder}
                 />
               )
             })}

@@ -60,6 +60,14 @@ jest.mock('services/ce', () => ({
         data: {}
       }
     }
+  })),
+  useUpdateFolder: jest.fn().mockImplementation(() => ({
+    mutate: async () => {
+      return {
+        status: 'SUCCESS',
+        data: {}
+      }
+    }
   }))
 }))
 

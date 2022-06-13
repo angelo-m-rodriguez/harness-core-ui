@@ -11,7 +11,7 @@ import { act, fireEvent, render } from '@testing-library/react'
 import { fromValue } from 'wonka'
 import { TestWrapper } from '@common/utils/testUtils'
 import type { CEViewFolder } from 'services/ce'
-import PerspectiveFoldersSideNav from '../PerspectiveFoldersSideNav'
+import PerspectiveFoldersSideNav, { SideNavItem } from '../PerspectiveFoldersSideNav'
 import FoldersList from './FoldersList.json'
 
 const responseState = {
@@ -21,6 +21,8 @@ const responseState = {
 }
 
 const deleteFolder = jest.fn()
+const updateFolder = jest.fn()
+const setSelectedFolder = jest.fn()
 
 describe('Test cases for perspective folder side nav', () => {
   test('Should render the folders list as side nav', async () => {
@@ -28,13 +30,14 @@ describe('Test cases for perspective folder side nav', () => {
       <TestWrapper>
         <Provider value={responseState as any}>
           <PerspectiveFoldersSideNav
-            setSelectedFolder={jest.fn()}
+            setSelectedFolder={setSelectedFolder}
             selectedFolderId={''}
             foldersList={FoldersList.data as unknown as CEViewFolder[]}
             setRefetchFolders={jest.fn()}
             foldersLoading={false}
             defaultFolderId={''}
             deleteFolder={jest.fn()}
+            updateFolder={jest.fn()}
           />
         </Provider>
       </TestWrapper>
@@ -48,13 +51,14 @@ describe('Test cases for perspective folder side nav', () => {
       <TestWrapper>
         <Provider value={responseState as any}>
           <PerspectiveFoldersSideNav
-            setSelectedFolder={jest.fn()}
+            setSelectedFolder={setSelectedFolder}
             selectedFolderId={''}
             foldersList={[]}
             setRefetchFolders={jest.fn()}
             foldersLoading={true}
             defaultFolderId={''}
             deleteFolder={jest.fn()}
+            updateFolder={jest.fn()}
           />
         </Provider>
       </TestWrapper>
@@ -69,13 +73,14 @@ describe('Test cases for perspective folder side nav', () => {
       <TestWrapper>
         <Provider value={responseState as any}>
           <PerspectiveFoldersSideNav
-            setSelectedFolder={jest.fn()}
+            setSelectedFolder={setSelectedFolder}
             selectedFolderId={''}
             foldersList={FoldersList.data as unknown as CEViewFolder[]}
             setRefetchFolders={jest.fn()}
             foldersLoading={false}
             defaultFolderId={''}
             deleteFolder={deleteFolder}
+            updateFolder={updateFolder}
           />
         </Provider>
       </TestWrapper>
@@ -95,5 +100,95 @@ describe('Test cases for perspective folder side nav', () => {
       fireEvent.click(deleteButton)
     })
     expect(deleteFolder).toBeCalledWith('yVi1Q8cgQnaq-y1YqmELFQ')
+  })
+
+  test('Should pin folder on click of pin icon', async () => {
+    const { container } = render(
+      <TestWrapper>
+        <Provider value={responseState as any}>
+          <PerspectiveFoldersSideNav
+            setSelectedFolder={setSelectedFolder}
+            selectedFolderId={''}
+            foldersList={FoldersList.data as unknown as CEViewFolder[]}
+            setRefetchFolders={jest.fn()}
+            foldersLoading={false}
+            defaultFolderId={''}
+            deleteFolder={deleteFolder}
+            updateFolder={updateFolder}
+          />
+        </Provider>
+      </TestWrapper>
+    )
+
+    const pinFolderIcon = container.querySelector('[data-testid="pinFolder"]')
+    expect(pinFolderIcon).toBeDefined()
+    act(() => {
+      fireEvent.click(pinFolderIcon!)
+    })
+    expect(updateFolder).toBeCalledWith('yVi1Q8cgQnaq-y1YqmELFQ', 'Abhijeet-Test', true)
+  })
+
+  test('Edit flow should work', async () => {
+    const { container } = render(
+      <TestWrapper>
+        <Provider value={responseState as any}>
+          <PerspectiveFoldersSideNav
+            setSelectedFolder={setSelectedFolder}
+            selectedFolderId={''}
+            foldersList={FoldersList.data as unknown as CEViewFolder[]}
+            setRefetchFolders={jest.fn()}
+            foldersLoading={false}
+            defaultFolderId={''}
+            deleteFolder={deleteFolder}
+            updateFolder={updateFolder}
+          />
+        </Provider>
+      </TestWrapper>
+    )
+
+    const editFolderIcon = container.querySelector('[data-testid="editFolder"]')
+    expect(editFolderIcon).toBeDefined()
+    act(() => {
+      fireEvent.click(editFolderIcon!)
+    })
+    const folderNameField = container.querySelector('[data-testid="folderNameField"]')
+    expect(folderNameField).toBeDefined()
+
+    act(() => {
+      fireEvent.blur(folderNameField!)
+    })
+    expect(updateFolder).toBeCalledWith('yVi1Q8cgQnaq-y1YqmELFQ', 'Abhijeet-Test', true)
+  })
+
+  test('Should render side nav item', () => {
+    const { container } = render(
+      <TestWrapper>
+        <SideNavItem
+          folderData={{
+            uuid: 'yVi1Q8cgQnaq-y1YqmELFQ',
+            name: '',
+            pinned: false
+          }}
+          icon={'main-folder'}
+          className={'css.sidenav'}
+          textClassName={'css.sidenavText'}
+          showIcons={false}
+          selectedFolderId={'yVi1Q8cgQnaq-y1YqmELFQ'}
+          setSelectedFolder={setSelectedFolder}
+          onDelete={deleteFolder}
+          updateFolder={updateFolder}
+        />
+      </TestWrapper>
+    )
+
+    const liElm = container.querySelector('.link')
+    expect(liElm).toBeDefined()
+    act(() => {
+      fireEvent.click(liElm!)
+    })
+
+    expect(setSelectedFolder).toBeCalledWith('yVi1Q8cgQnaq-y1YqmELFQ')
+
+    expect(container).toMatchSnapshot()
   })
 })

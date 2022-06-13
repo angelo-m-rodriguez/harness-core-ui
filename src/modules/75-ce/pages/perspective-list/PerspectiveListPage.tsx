@@ -34,7 +34,8 @@ import {
   CEView,
   useClonePerspective,
   useGetFolders,
-  useDeleteFolder
+  useDeleteFolder,
+  useUpdateFolder
 } from 'services/ce'
 import {
   CcmMetaData,
@@ -320,8 +321,8 @@ const PerspectiveListPage: React.FC = () => {
   const [quickFilters, setQuickFilters] = useState<Record<string, boolean>>({})
   const { trackPage, trackEvent } = useTelemetry()
   const [defaultFolderId, setDefaultFolderId] = useState('')
+  const [sampleFolderId, setSampleFolderId] = useState('')
   const [selectedFolderId, setSelectedFolder] = useQueryParamsState<string | undefined>('folderId', defaultFolderId)
-
   const [isRefetchFolders, setRefetchFolders] = useState(false)
   const [refetchPerspectives, setRefetchPerspectives] = useState(false)
   const searchRef = React.useRef<ExpandingSearchInputHandle>()
@@ -375,7 +376,9 @@ const PerspectiveListPage: React.FC = () => {
   useEffect(() => {
     if (foldersList) {
       const defaultFolder = foldersList.filter(folders => folders.viewType === folderViewType.DEFAULT)
+      const sampleFolder = foldersList.filter(folders => folders.viewType === folderViewType.SAMPLE)
       setDefaultFolderId(defaultFolder[0]?.uuid || '')
+      setSampleFolderId(sampleFolder[0]?.uuid || '')
       if (!selectedFolderId) {
         setSelectedFolder(defaultFolderId)
       }
@@ -404,6 +407,12 @@ const PerspectiveListPage: React.FC = () => {
   })
 
   const { mutate: deletePerspectiveFolder } = useDeleteFolder({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
+  const { mutate: updatePerspectiveFolder } = useUpdateFolder({
     queryParams: {
       accountIdentifier: accountId
     }
@@ -523,6 +532,21 @@ const PerspectiveListPage: React.FC = () => {
     }
   }
 
+  const updateFolder = async (folderId: string, folderName: string, isPinned: boolean) => {
+    try {
+      await updatePerspectiveFolder({
+        uuid: folderId,
+        name: folderName,
+        pinned: isPinned
+      })
+      showSuccess(getString('ce.perspectives.folders.folderUpdated'))
+      fetchFoldersList()
+    } catch (e) {
+      const errMessage = e.data.message
+      showError(errMessage)
+    }
+  }
+
   const navigateToPerspectiveDetailsPage: (
     perspectiveId: string,
     viewState: ViewState,
@@ -610,6 +634,7 @@ const PerspectiveListPage: React.FC = () => {
           foldersLoading={foldersLoading}
           defaultFolderId={defaultFolderId}
           deleteFolder={deleteFolder}
+          updateFolder={updateFolder}
         />
         <div style={{ flex: 1 }}>
           {pespectiveList.length ? (
@@ -624,6 +649,7 @@ const PerspectiveListPage: React.FC = () => {
                       featureNames: [FeatureIdentifier.PERSPECTIVES]
                     }
                   }}
+                  disabled={sampleFolderId === selectedFolderId}
                   onClick={() => {
                     trackEvent(USER_JOURNEY_EVENTS.CREATE_NEW_PERSPECTIVE, {})
                     createNewPerspective({})

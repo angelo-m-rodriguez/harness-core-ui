@@ -10,6 +10,7 @@ declare const styles: {
   readonly active: string
   readonly checkbox: string
   readonly customFoldersNav: string
+  readonly folderNameField: string
   readonly foldersList: string
   readonly icon: string
   readonly link: string
