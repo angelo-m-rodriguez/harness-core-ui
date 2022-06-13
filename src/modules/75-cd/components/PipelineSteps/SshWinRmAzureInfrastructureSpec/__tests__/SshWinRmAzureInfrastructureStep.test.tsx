@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, waitFor, queryByAttribute } from '@testing-library/react'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import type { SshWinRmAzureInfrastructure } from 'services/cd-ng'
@@ -50,7 +50,7 @@ const accountIdParams = { accountId: 'accountId1' }
 const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   credentialsRef: 'credentialsRef1',
   sshKey: { identifier: 'credentialsRef1' },
-  connectorRef: 'connectorRef',
+  connectorRef: 'connectorRef1',
   subscriptionId: 'subscriptionId',
   resourceGroup: 'resourceGroup',
   cluster: 'cluster',
@@ -61,6 +61,13 @@ const submitForm = async (getByText: any) =>
   await act(async () => {
     fireEvent.click(getByText('Submit'))
   })
+
+const updateSelect = async (container: any, regex: any, value: string) => {
+  const dropdownEl = queryByAttribute('name', container, regex)
+  fireEvent.change(dropdownEl!, {
+    target: { value }
+  })
+}
 
 /*const getInvalidYaml = (): string => `p ipe<>line:
 sta ges:
@@ -126,6 +133,46 @@ describe('Test Azure Infrastructure Spec behavior', () => {
 
     await submitForm(getByText)
     expect(onUpdateHandler).not.toHaveBeenCalled()
+  })
+
+  test('Test user flow', async () => {
+    const onUpdateHandler = jest.fn()
+    const { getByText, container } = render(
+      <TestStepWidget
+        initialValues={getInitialValues()}
+        template={getInitialValues()}
+        allValues={getInitialValues()}
+        type={StepType.SshWinRmAzure}
+        stepViewType={StepViewType.InputSet}
+        onUpdate={onUpdateHandler}
+      />
+    )
+
+    await waitFor(() => {
+      expect(queryByAttribute('name', container, /subscriptionId/)).not.toBeDisabled()
+    })
+
+    await updateSelect(
+      container,
+      /subscriptionId/,
+      subscriptionsResponse.data?.data?.subscriptions?.[1].subscriptionId || ''
+    )
+    await waitFor(() => {
+      expect(CDNG.getAzureResourceGroupsBySubscriptionPromise).toBeCalled()
+    })
+
+    await updateSelect(
+      container,
+      /resourceGroup/,
+      resourceGroupsResponse.data?.data?.resourceGroups?.[1].resourceGroup || ''
+    )
+    await waitFor(() => {
+      expect(CDNG.getAzureClustersPromise).toBeCalled()
+    })
+
+    await updateSelect(container, /cluster/, clustersResponse.data?.data?.clusters?.[1].cluster || '')
+    await submitForm(getByText)
+    expect(onUpdateHandler).toHaveBeenCalled()
   })
 })
 
