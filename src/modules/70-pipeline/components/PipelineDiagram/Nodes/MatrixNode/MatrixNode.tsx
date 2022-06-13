@@ -34,7 +34,8 @@ const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
 const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number, showAllNodes?: boolean): LayoutStyles => {
   if (showAllNodes) {
     const maxChildLength = defaultTo(data.length, 0)
-    const finalHeight = (maxChildLength / parallelism + (maxChildLength % parallelism)) * 100
+    const finalHeight =
+      (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * 100
     const finalWidth = 170 * parallelism
     return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
   } else {
@@ -42,7 +43,10 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number, sh
     const maxChildLength = !showAllNodes
       ? Math.min(data.length, COLLAPSED_MATRIX_NODE_LENGTH)
       : defaultTo(data.length, 0)
-    const finalHeight = (maxChildLength / updatedParallelism + (maxChildLength % updatedParallelism)) * 100
+    const finalHeight =
+      (Math.floor(maxChildLength / updatedParallelism) +
+        Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
+      100
     const finalWidth = 170 * updatedParallelism
     return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is
   }
