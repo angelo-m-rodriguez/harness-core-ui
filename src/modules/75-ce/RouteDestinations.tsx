@@ -283,7 +283,6 @@ const CERoutes: React.FC = () => {
           <CECOLoadBalancersPage />
         </RouteWithLayout>
 
-<<<<<<< HEAD
         <RouteWithLayout
           licenseRedirectData={licenseRedirectData}
           sidebarProps={CESideNavProps}
@@ -306,12 +305,12 @@ const CERoutes: React.FC = () => {
         >
           <BudgetDetails />
         </RouteWithLayout> */}
-=======
         {!enableMicroFrontend ? (
           <RouteWithLayout
             licenseRedirectData={licenseRedirectData}
             sidebarProps={CESideNavProps}
             path={routes.toCEBudgets({ ...accountPathProps })}
+            pageName={PAGE_NAME.CEBudgets}
             exact
           >
             <Budgets />
@@ -327,11 +326,11 @@ const CERoutes: React.FC = () => {
               budgetId: ':budgetId',
               budgetName: ':budgetName'
             })}
+            pageName={PAGE_NAME.CEBudgetDetails}
           >
             <BudgetDetails />
           </RouteWithLayout>
         ) : null}
->>>>>>> feat: Small changes in routes
 
         <RouteWithLayout
           licenseRedirectData={licenseRedirectData}
