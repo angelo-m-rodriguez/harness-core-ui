@@ -315,8 +315,18 @@ export const FileStore: React.FC<FileStoreProps> = ({ onNodeChange }: FileStoreP
     getRootNodes({ identifier: FILE_STORE_ROOT, name: FILE_STORE_ROOT, type: FileStoreNodeTypes.FOLDER }).then(
       response => {
         if (response?.data?.children) {
-          setFileStore(response.data.children)
-          setCurrentNode(response.data)
+          setFileStore(
+            response.data.children.map(node => {
+              return {
+                ...node,
+                parentName: FILE_STORE_ROOT
+              }
+            })
+          )
+          setCurrentNode({
+            ...response.data,
+            parentName: FILE_STORE_ROOT
+          })
         }
       }
     )
@@ -472,7 +482,7 @@ export const FileStore: React.FC<FileStoreProps> = ({ onNodeChange }: FileStoreP
         searchTerm: query
       }
       refetchFileStoreList(updatedQueryParams, appliedFilter?.filterProperties)
-    }, 500),
+    }, 800),
     [refetchFileStoreList, appliedFilter?.filterProperties]
   )
 

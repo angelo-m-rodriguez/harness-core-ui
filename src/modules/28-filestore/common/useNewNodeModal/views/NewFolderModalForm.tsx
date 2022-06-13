@@ -41,7 +41,7 @@ interface NewFolderModalData {
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
   const { close, fileStoreContext, editMode, currentNode } = props
-  const { getNode, queryParams } = fileStoreContext
+  const { getNode, queryParams, updateCurrentNode } = fileStoreContext
   const [initialValues, setInitialValues] = useState<NewFolderDTO>({
     name: '',
     identifier: '',
@@ -51,12 +51,12 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
   useEffect(() => {
     if (currentNode && editMode) {
       setInitialValues({
-        name: currentNode.name,
-        identifier: currentNode.identifier,
+        name: fileStoreContext.currentNode.name,
+        identifier: fileStoreContext.currentNode.identifier,
         type: FileStoreNodeTypes.FOLDER
       })
     }
-  }, [currentNode, editMode])
+  }, [fileStoreContext.currentNode, editMode])
 
   const { mutate: createFolder, loading: createLoading } = useCreate({
     queryParams
@@ -87,20 +87,28 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
       data.append('identifier', identifier)
       data.append('name', name)
       data.append('type', type)
-      if (editMode && currentNode?.parentIdentifier) {
-        data.append('parentIdentifier', currentNode.parentIdentifier)
+      if (editMode) {
+        data.append('parentIdentifier', fileStoreContext?.currentNode?.parentIdentifier as string)
       } else {
-        if (currentNode.identifier === SEARCH_FILES) {
+        if (fileStoreContext.currentNode.identifier === SEARCH_FILES) {
           data.append('parentIdentifier', FILE_STORE_ROOT)
         } else {
-          data.append('parentIdentifier', currentNode.identifier)
+          data.append('parentIdentifier', fileStoreContext.currentNode.identifier)
         }
       }
 
       if (editMode) {
         const updateResponse = await updateFolder(data as any)
         if (updateResponse.status === 'SUCCESS') {
-          getNode(getConfig)
+          updateCurrentNode({
+            ...fileStoreContext.currentNode,
+            name,
+            children: fileStoreContext.currentNode?.children?.map(node => ({
+              ...node,
+              parentName: name
+            }))
+          })
+          // getNode(getConfig)
           showSuccess(getString('filestore.folderSuccessSaved', { name: values.name }))
         }
       } else {
@@ -110,7 +118,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
           showSuccess(getString('filestore.folderSuccessCreated', { name: values.name }))
           getNode(getConfig, {
             setNewCurrentNode: true,
-            newNode: { ...createResponse.data, parentName: currentNode.name } as FileStoreNodeDTO,
+            newNode: { ...createResponse.data, parentName: fileStoreContext.currentNode.name } as FileStoreNodeDTO,
             type: FileStoreNodeTypes.FOLDER
           })
         }

@@ -20,8 +20,16 @@ import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constant
 const useDelete = (identifier: string, name: string, type: string, notCurrentNode?: boolean): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
-  const { setActiveTab, setCurrentNode, getNode, queryParams, currentNode, isCachedNode, removeFromTempNodes } =
-    useContext(FileStoreContext)
+  const {
+    setActiveTab,
+    setCurrentNode,
+    getNode,
+    queryParams,
+    currentNode,
+    isCachedNode,
+    removeFromTempNodes,
+    addDeletedNode
+  } = useContext(FileStoreContext)
 
   const getConfirmationDialogContent = (): JSX.Element => {
     return (
@@ -81,6 +89,7 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
       identifier: '',
       name: '',
       type: FileStoreNodeTypes.FOLDER,
+      parentIdentifier: '',
       children: []
     }
     if (notCurrentNode) {
@@ -90,6 +99,7 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
       } else {
         params.identifier = currentNode.identifier
         params.name = currentNode.name
+        params.parentIdentifier = currentNode?.parentIdentifier || ''
       }
     } else {
       params.identifier = currentNode.parentIdentifier || FILE_STORE_ROOT
@@ -111,6 +121,7 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
         if (isCachedNode(currentNode.identifier)) {
           removeFromTempNodes(currentNode.identifier)
           try {
+            addDeletedNode(identifier)
             getNode(nodeParams as FileStoreNodeDTO)
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
           } catch (err) {
@@ -123,6 +134,8 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
             headers: { 'content-type': 'application/json' }
           })
           if (deleted) {
+            addDeletedNode(identifier)
+
             showSuccess(getString('filestore.deletedSuccessMessage', { name: name, type: _capitalize(type) }))
             getNode(nodeParams as FileStoreNodeDTO)
           }

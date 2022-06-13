@@ -79,7 +79,7 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
             const uniqID = `${name}_${uuid().slice(0, 6)}`
             const node: FileStoreNodeDTO = {
               name,
-              identifier: `${uniqID.replace(/[^A-Z0-9]+/gi, '_')}`,
+              identifier: `${currentNode.identifier}_${uniqID.replace(/[^A-Z0-9]+/gi, '_')}`,
               type: FileStoreNodeTypes.FILE,
               mimeType,
               content: reader.result,
@@ -91,7 +91,8 @@ const useUploadFile = (config: UploadFile): FileStorePopoverItem => {
                 ...node,
                 identifier: currentNode.identifier,
                 content: reader.result,
-                parentIdentifier: currentNode.parentIdentifier
+                parentIdentifier: currentNode.parentIdentifier,
+                parentName: currentNode.parentName
               })
               if (tempNodes?.length) {
                 updateTempNodes({

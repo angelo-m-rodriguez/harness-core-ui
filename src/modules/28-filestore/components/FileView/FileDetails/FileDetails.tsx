@@ -105,8 +105,10 @@ function FileDetails({ handleError }: FileDetailsProps): React.ReactElement {
   })
 
   React.useEffect(() => {
-    if (error?.status) {
+    if (error?.status && !isCachedNode(currentNode.identifier)) {
       handleError(FSErrosType.DELETED_NODE)
+    } else {
+      handleError('')
     }
   }, [error])
 

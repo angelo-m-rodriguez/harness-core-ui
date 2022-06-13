@@ -44,6 +44,8 @@ export interface FileStoreContextState {
   tempNodes: FileStoreNodeDTO[]
   setTempNodes: (node: FileStoreNodeDTO[]) => void
   updateTempNodes: (node: FileStoreNodeDTO) => void
+  deletedNode: string
+  addDeletedNode: (node: string) => void
   removeFromTempNodes: (nodeId: string) => void
   isCachedNode: (nodeId: string) => FileStoreNodeDTO | undefined
   isModalView: boolean
@@ -75,6 +77,7 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
     isModalView
   })
   const [tempNodes, setTempNodes] = useState<FileStoreNodeDTO[]>([])
+  const [deletedNode, setDeletedNodes] = useState<string>('')
   const [activeTab, setActiveTab] = useState<FILE_VIEW_TAB>(FILE_VIEW_TAB.DETAILS)
   const [loading, setLoading] = useState<boolean>(false)
   const [currentNode, setCurrentNodeState] = useState<FileStoreNodeDTO>({
@@ -112,6 +115,10 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
     ])
   }
 
+  const addDeletedNode = (node: string): void => {
+    setDeletedNodes(node)
+  }
+
   const removeFromTempNodes = (nodeIdentifier: string): void => {
     setTempNodes(tempNodes.filter((tempNode: FileStoreNodeDTO) => tempNode.identifier !== nodeIdentifier))
   }
@@ -129,13 +136,15 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
         setFileStore(
           response?.data?.children?.map((node: FileStoreNodeDTO) => ({
             ...node,
-            parentIdentifier: FILE_STORE_ROOT
+            parentIdentifier: FILE_STORE_ROOT,
+            parentName: FILE_STORE_ROOT
           }))
         )
       }
       if (response?.data) {
         if (!config?.switchNode) {
           updateCurrentNode({
+            ...nodeParams,
             ...response.data,
             children: response.data?.children?.map(node => ({
               ...node,
@@ -144,10 +153,14 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
           })
         }
         if (config?.newNode && config.type === FileStoreNodeTypes.FOLDER) {
-          setCurrentNode(config.newNode)
+          setCurrentNode({
+            ...nodeParams,
+            ...config.newNode
+          })
         }
         if (config?.switchNode && config.type === FileStoreNodeTypes.FOLDER) {
           setCurrentNode({
+            ...nodeParams,
             ...response.data,
             children: response.data?.children?.map(node => ({
               ...node,
@@ -162,6 +175,7 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
             )
             if (newFile) {
               setCurrentNode({
+                ...nodeParams,
                 ...newFile,
                 parentName: config?.parentName || ''
               })
@@ -193,7 +207,9 @@ export const FileStoreContextProvider: React.FC<FileStoreContextProps> = (props:
         setActiveTab,
         isModalView,
         scope,
-        queryParams
+        queryParams,
+        deletedNode,
+        addDeletedNode
       }}
     >
       {props.children}

@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import type { Column, Renderer, CellProps } from 'react-table'
 import { Position } from '@blueprintjs/core'
 import ReactTimeago from 'react-timeago'
@@ -115,7 +115,24 @@ const RenderColumnMenu: Renderer<CellProps<FileStoreNodeDTO>> = ({ row }) => {
 
 const NodesList: React.FC = () => {
   const { getString } = useStrings()
-  const { currentNode, getNode, setCurrentNode } = useContext(FileStoreContext)
+  const [childNodes, setChildNodes] = useState<FileStoreNodeDTO[]>([])
+  const { currentNode, getNode, setCurrentNode, deletedNode } = useContext(FileStoreContext)
+
+  useEffect(() => {
+    if (currentNode?.children) {
+      setChildNodes(currentNode.children)
+    } else {
+      setChildNodes([])
+    }
+  }, [currentNode])
+
+  React.useEffect(() => {
+    const existDeletedItem = childNodes.find((node: FileStoreNodeDTO) => node.identifier === deletedNode)
+    if (existDeletedItem) {
+      setChildNodes(childNodes.filter((node: FileStoreNodeDTO) => node.identifier !== deletedNode))
+    }
+  }, [deletedNode])
+
   const columns: Column<FileStoreNodeDTO>[] = [
     {
       Header: getString('filestore.view.fileName'),
@@ -164,7 +181,7 @@ const NodesList: React.FC = () => {
       {currentNode?.children?.length ? (
         <TableV2
           columns={columns}
-          data={currentNode.children}
+          data={childNodes}
           name="FileStoreView"
           onRowClick={node => {
             if (node.type === FileStoreNodeTypes.FILE) {

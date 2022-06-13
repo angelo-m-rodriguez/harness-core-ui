@@ -199,7 +199,7 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
       formName="newFile"
       validationSchema={Yup.object().shape({
         identifier: IdentifierSchema(),
-        fileUsage: Yup.string().trim().required(getString('filestore.errors.fileUsage'))
+        fileUsage: Yup.string().nullable(true).trim().required(getString('filestore.errors.fileUsage'))
       })}
       onSubmit={values => {
         modalErrorHandler?.hide()

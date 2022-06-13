@@ -46,7 +46,17 @@ export const FolderNodesList = ({ fileStore }: FolderNodesListProps): React.Reac
 export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>): ReactElement => {
   const { identifier, type } = props
   const context = useContext(FileStoreContext)
-  const { currentNode, setCurrentNode, getNode, loading, tempNodes, isCachedNode } = context
+  const {
+    currentNode,
+    setCurrentNode,
+    getNode,
+    loading,
+    tempNodes,
+    isCachedNode,
+    deletedNode,
+    fileStore,
+    setFileStore
+  } = context
 
   const [childNodes, setChildNodes] = useState<FileStoreNodeDTO[]>([])
   const [isOpenNode, setIsOpenNode] = useState<boolean>(false)
@@ -72,6 +82,19 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     }
   }, [tempNodes, isCachedNode, props])
 
+  React.useEffect(() => {
+    const existDeletedItem = childNodes.find(item => item.identifier === deletedNode)
+
+    if (existDeletedItem && identifier !== FILE_STORE_ROOT) {
+      setChildNodes(childNodes.filter(node => node.identifier !== deletedNode))
+    }
+    const existInFS = !!fileStore && fileStore.find((item: FileStoreNodeDTO) => item.identifier === deletedNode)
+
+    if (identifier === FILE_STORE_ROOT && existInFS && !!fileStore) {
+      setFileStore(fileStore.filter((item: FileStoreNodeDTO) => item.identifier !== deletedNode))
+    }
+  }, [deletedNode])
+
   const isActiveNode = React.useMemo(() => currentNode.identifier === identifier, [currentNode, identifier])
   const isRootNode = React.useMemo(() => identifier === FILE_STORE_ROOT, [identifier])
 
@@ -86,7 +109,12 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     }
     if (currentNode?.children && isActiveNode && !isRootNode) {
       setNodeItem(currentNode)
-      setChildNodes(currentNode.children)
+      setChildNodes(
+        currentNode.children.map(node => ({
+          ...node,
+          parentName: props.name
+        }))
+      )
     }
   }, [currentNode, isActiveNode, isRootNode, setNodeItem])
 
@@ -110,6 +138,7 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
           identifier: FILE_STORE_ROOT,
           name: FILE_STORE_ROOT,
           type: FileStoreNodeTypes.FOLDER
+          // parentIdentifier: FILE_STORE_ROOT
         })
       }
     }
@@ -203,6 +232,8 @@ export const FolderNode = React.memo((props: PropsWithChildren<FileStoreNodeDTO>
     </Layout.Vertical>
   )
 })
+
+FolderNode.displayName = 'FolderNode'
 
 export const RootNodesList = ({ rootStore }: RootNodesListProps): React.ReactElement => (
   <Layout.Vertical padding={{ left: 'small' }} margin={{ top: 'xlarge' }}>

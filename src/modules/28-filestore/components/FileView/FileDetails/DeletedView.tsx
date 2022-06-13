@@ -23,9 +23,9 @@ export default function DeletedView({ error }: DeletedViewProps): React.ReactEle
   const getError = (): string => {
     switch (error) {
       case FSErrosType.DELETED_NODE:
-        return getString('filestore.errors.deleted')
+        return getString('errorTitle')
       default:
-        return getString('filestore.errors.deleted')
+        return getString('errorTitle')
     }
   }
 
