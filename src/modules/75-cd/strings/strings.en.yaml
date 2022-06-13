@@ -319,3 +319,4 @@ unLink: 'UnLink'
 unLinkedCluster: 'Unlinked Successfully'
 overrideYaml: Override Yaml Values
 manifestId: Manifest Id
+azureWebAppRollbackDescription: Roll back Azure Web App resources to the last successful deployment of this stage.

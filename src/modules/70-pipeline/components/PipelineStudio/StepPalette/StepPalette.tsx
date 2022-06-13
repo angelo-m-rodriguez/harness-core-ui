@@ -99,7 +99,21 @@ export function StepPalette({ onSelect, stepsFactory, stepPaletteModuleInfos }: 
       }
     })
     if (toShow) {
-      setStepsCategories(toShow)
+      setStepsCategories([
+        ...toShow,
+        {
+          name: 'AzureWebApp',
+          stepsData: [
+            {
+              name: 'AzureWebApp Rollback',
+              type: 'AzureWebAppRollback',
+              disabled: false,
+              featureRestrictionName: 'ROLLBACK_STACK'
+            }
+          ],
+          stepCategories: []
+        }
+      ])
       setOriginalCategories(toShow)
     }
   }, [stepsData?.data?.stepCategories])

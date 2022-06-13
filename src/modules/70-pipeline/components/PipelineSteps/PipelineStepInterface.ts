@@ -75,7 +75,8 @@ export enum StepType {
   CloudFormationRollbackStack = 'RollbackStack',
   CloudFormationDeleteStack = 'DeleteStack',
   CloudFormationCreateStack = 'CreateStack',
-  CreatePR = 'CreatePR'
+  CreatePR = 'CreatePR',
+  AzureWebAppsRollback = 'AzureWebAppRollback'
 }
 
 export interface PipelineInfrastructureV2 extends PipelineInfrastructure {
