@@ -838,9 +838,9 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         const childData: PipelineGraphState[] = []
         currentNodeChildren.forEach(item => {
           const nodeDataItem = layoutNodeMap[item]
-          const matrixNodeName = `(${Object.values(
-            defaultTo(nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues, {})
-          )?.join(' ')}): `
+          const matrixNodeName =
+            nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues &&
+            `(${Object.values(nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues)?.join(' ')}): `
           childData.push({
             id: nodeDataItem.nodeExecutionId as string,
             stageNodeId: nodeDataItem?.nodeUuid as string,
@@ -867,9 +867,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: childData,
             graphType: PipelineGraphType.STAGE_GRAPH,
             id: nodeDetails?.nodeUuid,
-            maxParallelism:
-              nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.matrixConfig?.maxConcurrency ||
-              nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.forConfig?.maxConcurrency
+            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value
           }
         })
 

@@ -142,7 +142,7 @@ export function MatrixNode(props: any): JSX.Element {
           <Layout.Horizontal className={css.matrixLabel}>
             <Icon size={16} name="looping" style={{ marginRight: '5px' }} color={Color.WHITE} />
             <Text color={Color.WHITE} font="small" style={{ paddingRight: '5px' }}>
-              MATRIX
+              {props?.data?.nodeType}
             </Text>
           </Layout.Horizontal>
           <div
@@ -273,7 +273,7 @@ export function MatrixNode(props: any): JSX.Element {
                       readonly={props.readonly}
                       selectedNodeId={queryParams?.stageId}
                       showMarkers={false}
-                      name={`${node?.matrixNodeName}${node?.name}`}
+                      name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
                     />
                   )
                 })}
