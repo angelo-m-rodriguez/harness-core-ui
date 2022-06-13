@@ -90,7 +90,7 @@ function FormContent({
 
   const {
     refetch: refetchJobParameters,
-    data: jobParamterResponse
+    data: jobParameterResponse
     // error: jobDetailsFetchError,
     // loading: fetchingJobDetails
   } = useGetJobParametersForJenkins({
@@ -99,9 +99,9 @@ function FormContent({
   })
 
   useEffect(() => {
-    if (jobParamterResponse?.data) {
+    if (jobParameterResponse?.data) {
       const parameterData: jobParameterInterface[] =
-        jobParamterResponse?.data?.map(item => {
+        jobParameterResponse?.data?.map(item => {
           return {
             name: item.name,
             value: item.defaultValue,
@@ -117,7 +117,7 @@ function FormContent({
         }
       })
     }
-  }, [jobParamterResponse])
+  }, [jobParameterResponse])
 
   useEffect(() => {
     if (typeof formik.values.spec.jobName === 'string' && jobsResponse?.data?.jobDetails?.length) {
@@ -168,6 +168,15 @@ function FormContent({
         connectorRef: connectorRefFixedValue?.toString()
       }
     })
+    if (getMultiTypeFromValue(formik.values.spec.connectorRef) === MultiTypeInputType.RUNTIME) {
+      formik.setValues({
+        ...formik.values,
+        spec: {
+          ...formik.values.spec,
+          jobName: formik.values.spec.connectorRef
+        }
+      })
+    }
   }, [formik.values.spec.connectorRef])
 
   const getJobItems = (jobs: JobDetails[]): SubmenuSelectOption[] => {
@@ -181,7 +190,7 @@ function FormContent({
     })
   }
 
-  console.log('jobDetailsFetchError', jobDetailsFetchError)
+  console.log('formik', formik.values)
 
   return (
     <React.Fragment>

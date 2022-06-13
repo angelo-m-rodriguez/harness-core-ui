@@ -5,7 +5,7 @@ import type { JenkinsStepData } from './types'
 export const resetForm = (formik: FormikProps<JenkinsStepData>, parent: string) => {
   if (parent === 'connectorRef') {
     formik.setFieldValue('spec.jobName', '')
-    formik.setFieldValue('spec.jobParamter', [])
+    formik.setFieldValue('spec.jobParameter', [])
   }
   if (parent === 'jobName') {
     formik.setFieldValue('spec.jobParameter', [])
