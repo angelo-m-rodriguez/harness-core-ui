@@ -1091,7 +1091,5 @@ OverviewEmptyStates:
   createPipelineInfo: A Harness Pipeline is a series of stages that performs operations like building and deploying software.
   runPipelineHeaderMsg: You haven’t tried running your pipelines yet.
   runPipelineInfo: Click the button below to select a pipeline and get your deployments started.
-Jenkins:
-  name: Jenkins
 MatrixNode:
   maxParallelism: 'Max Parallelism:'
