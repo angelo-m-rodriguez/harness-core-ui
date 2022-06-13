@@ -23,6 +23,7 @@ import {
   SshWinRmAzureInfrastructure,
   getSubscriptionTagsPromise
 } from 'services/cd-ng'
+import type { AzureSubscriptionDTO, AzureTagDTO } from 'services/cd-ng'
 import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProps'
 import { loggerFor } from 'framework/logging/logging'
 import { ModuleName } from 'framework/types/ModuleName'
@@ -90,11 +91,6 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
 
   const formikRef = useRef<FormikProps<AzureInfrastructureUI> | null>(null)
 
-  useEffect(() => {
-    formikRef?.current?.setFieldValue('subscriptionId', getSubscription(initialValues))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subscriptions])
-
   const fetchSubscriptions = async (connectorRef: string) => {
     setIsSubsLoading(true)
     try {
@@ -107,8 +103,8 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }
       })
       if (response.status === 'SUCCESS') {
-        const subs = get(response, 'data.subscriptions', []).map(sub => ({
-          label: `${sub.subscriptionName}: ${sub.subscriptionId}`,
+        const subs = get(response, 'data.subscriptions', []).map((sub: AzureSubscriptionDTO) => ({
+          label: sub.subscriptionName,
           value: sub.subscriptionId
         }))
         setSubscriptions(subs)
@@ -135,7 +131,9 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         }
       })
       if (response.status === 'SUCCESS') {
-        setAzureTags(response.data?.tags || [])
+        setAzureTags(
+          get(response, 'data.tags', []).map((azureTag: AzureTagDTO) => ({ label: azureTag.tag, value: azureTag.tag }))
+        )
       } else {
         showError(get(response, 'message', response))
       }
@@ -186,7 +184,10 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         resourceGroup: resourceGroup
       })
       if (response.status === 'SUCCESS') {
-        const clusterOptions = get(response, 'data.clusters', []).map(cl => ({ label: cl.cluster, value: cl.cluster }))
+        const clusterOptions = get(response, 'data.clusters', []).map((cl: { cluster: string }) => ({
+          label: cl.cluster,
+          value: cl.cluster
+        }))
         setClusters(clusterOptions)
       } else {
         showError(get(response, 'message', response))
@@ -213,7 +214,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
       }
     }
     if (initialValues.credentialsRef) {
-      const setSecretInitial = async () => {
+      ;(async () => {
         try {
           const secretData = await setSecretField(initialValues.credentialsRef, {
             accountIdentifier: accountId,
@@ -225,30 +226,22 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           /* istanbul ignore next */
           showError(e.data?.message || e.message)
         }
-      }
-      setSecretInitial()
+      })()
     }
   }, [])
 
-  const getSubscription = (values: AzureInfrastructureUI): SelectOption | undefined => {
-    const value = values.subscriptionId ? values.subscriptionId : formikRef?.current?.values?.subscriptionId?.value
-    return (
-      subscriptions.find(subscription => subscription.value === value) || {
-        label: value,
-        value: value
-      }
-    )
-  }
-
   const getInitialValues = (): AzureInfrastructureUI => {
-    debugger
     const currentValues: AzureInfrastructureUI = {
       ...initialValues,
       tags: Object.values(initialValues.tags || {})
     }
-    currentValues.subscriptionId = getSubscription(initialValues)
-    currentValues.cluster = { label: initialValues.cluster, value: initialValues.cluster }
-    currentValues.resourceGroup = { label: initialValues.resourceGroup, value: initialValues.resourceGroup }
+    currentValues.subscriptionId = initialValues.subscriptionId
+      ? { label: initialValues.subscriptionId, value: initialValues.subscriptionId }
+      : ''
+    currentValues.cluster = initialValues.cluster ? { label: initialValues.cluster, value: initialValues.cluster } : ''
+    currentValues.resourceGroup = initialValues.resourceGroup
+      ? { label: initialValues.resourceGroup, value: initialValues.resourceGroup }
+      : ''
     return currentValues
   }
 
@@ -267,6 +260,29 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const clearClusters = () => {
+    formikRef.current?.setFieldValue('cluster', '')
+    setClusters([])
+  }
+
+  const clearTags = () => {
+    formikRef.current?.setFieldValue('tags', [])
+    setAzureTags([])
+  }
+
+  const clearResourceGroup = () => {
+    formikRef.current?.setFieldValue('resourceGroup', '')
+    setResourceGroups([])
+    clearClusters()
+    clearTags()
+  }
+
+  const clearSubscriptionId = () => {
+    formikRef.current?.setFieldValue('subscriptionId', '')
+    setSubscriptions([])
+    clearResourceGroup()
+  }
+
   return (
     <Layout.Vertical spacing="medium">
       <Formik<AzureInfrastructureUI>
@@ -274,7 +290,6 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
         initialValues={getInitialValues()}
         validate={value => {
           const data: Partial<SshWinRmAzureInfrastructure> = {
-            credentialsRef: getValue(value.sshKey) || value.sshKey,
             connectorRef: getValue(value.connectorRef) || value.connectorRef,
             subscriptionId:
               getValue(value.subscriptionId) === ''
@@ -285,9 +300,19 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 ? /* istanbul ignore next */ undefined
                 : getValue(value.resourceGroup),
             cluster: getValue(value.cluster) === '' ? /* istanbul ignore next */ undefined : getValue(value.cluster),
+            tags: value.tags.reduce(
+              (obj: object, tag: AzureTagDTO) => ({
+                ...obj,
+                [tag.tag]: tag.tag
+              }),
+              {}
+            ),
             usePublicDns: value.usePublicDns
           }
-          debugger
+          if (value.sshKey) {
+            const prefix = value.sshKey.projectIdentifier ? '' : value.sshKey.projectIdentifier ? 'org.' : 'account.'
+            data.credentialsRef = `${prefix}${value.sshKey.identifier}`
+          }
           delayedOnUpdate(data)
         }}
         validationSchema={getValidationSchema(getString)}
@@ -298,10 +323,10 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
           formikRef.current = formik
           return (
             <FormikForm>
-              <Layout.Vertical className={css.formRow}>
-                <SSHSecretInput name={'sshKey'} label={getString('cd.steps.common.specifyCredentials')} />
-              </Layout.Vertical>
-              <Layout.Vertical className={css.formRow} spacing="medium">
+              <Layout.Vertical spacing="medium">
+                <Layout.Vertical className={css.inputWidth}>
+                  <SSHSecretInput name={'sshKey'} label={getString('cd.steps.common.specifyCredentials')} />
+                </Layout.Vertical>
                 <ConnectorReferenceField
                   name="connectorRef"
                   label={getString('connector')}
@@ -310,8 +335,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   accountIdentifier={accountId}
                   projectIdentifier={projectIdentifier}
                   orgIdentifier={orgIdentifier}
-                  width={450}
-                  style={{ marginBottom: 'var(--spacing-large)' }}
+                  className={css.inputWidth}
                   type={Connectors.AZURE}
                   selected={formik.values.connectorRef}
                   onChange={(value, scope) => {
@@ -324,24 +348,17 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                         live: value?.status?.status === 'SUCCESS',
                         connector: value
                       })
-                      formik.setFieldValue('subscriptionId', '')
-                      formik.setFieldValue('resourceGroup', '')
-                      formik.setFieldValue('cluster', '')
-                      setSubscriptions([])
-                      setResourceGroups([])
-                      setClusters([])
+                      clearSubscriptionId()
                       fetchSubscriptions(connectorValue)
                     }
                   }}
                   gitScope={{ repo: repoIdentifier || '', branch, getDefaultFromOtherRepo: true }}
                 />
-              </Layout.Vertical>
-              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="subscriptionId"
                   className={css.inputWidth}
                   items={subscriptions}
-                  disabled={isSubsLoading || !formik.values.subscriptionId || readonly}
+                  disabled={isSubsLoading || !formik.values.connectorRef || readonly}
                   placeholder={
                     isSubsLoading ? getString('loading') : getString('cd.steps.azureInfraStep.subscriptionPlaceholder')
                   }
@@ -349,20 +366,15 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   onChange={
                     /* istanbul ignore next */ value => {
                       if (value) {
-                        const connectorRefIdentifier = formik.values?.connectorRef?.value
+                        clearResourceGroup()
+                        const connectorRefIdentifier = getValue(formik.values?.connectorRef)
                         const subsId = getValue(value)
                         fetchResourceGroups(connectorRefIdentifier, subsId)
                         fetchSubscriptionTags(connectorRefIdentifier, subsId)
-                        formik.setFieldValue('resourceGroup', '')
-                        formik.setFieldValue('cluster', '')
-                        setResourceGroups([])
-                        setClusters([])
                       }
                     }
                   }
                 />
-              </Layout.Vertical>
-              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="resourceGroup"
                   className={css.inputWidth}
@@ -371,8 +383,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   placeholder={getString('cd.steps.azureInfraStep.resourceGroupPlaceholder')}
                   onChange={value => {
                     if (value) {
-                      formik.setFieldValue('cluster', '')
-                      setClusters([])
+                      clearClusters()
                       fetchAzureClusters(
                         getValue(formik.values?.connectorRef),
                         getValue(formik.values?.subscriptionId),
@@ -382,8 +393,6 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   }}
                   label={getString(resourceGroupLabel)}
                 />
-              </Layout.Vertical>
-              <Layout.Vertical className={css.formRow} spacing="medium">
                 <FormInput.Select
                   name="cluster"
                   className={css.inputWidth}
@@ -399,16 +408,13 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     formik.setFieldValue('cluster', value)
                   }}
                 />
-              </Layout.Vertical>
-              <Layout.Horizontal className={css.formRow} spacing="medium">
                 <FormInput.MultiSelect
                   name="tags"
                   label={getString('tagLabel')}
                   items={azureTags}
                   disabled={isTagsLoading || !formik.values.subscriptionId || readonly}
+                  className={css.inputWidth}
                 />
-              </Layout.Horizontal>
-              <Layout.Horizontal spacing="medium" style={{ alignItems: 'center' }} className={css.lastRow}>
                 <FormInput.CheckBox
                   className={css.simultaneousDeployment}
                   tooltipProps={{
@@ -418,7 +424,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   label={getString('cd.infrastructure.sshWinRmAzure.usePublicDns')}
                   disabled={readonly}
                 />
-              </Layout.Horizontal>
+              </Layout.Vertical>
             </FormikForm>
           )
         }}
@@ -448,7 +454,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     resourceGroup: '',
     cluster: '',
     tags: {},
-    usePublicDNS: false
+    usePublicDns: false
   }
 
   protected stepIcon: IconName = 'microsoft-azure'

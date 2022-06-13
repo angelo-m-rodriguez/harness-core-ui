@@ -481,7 +481,6 @@ export default function DeployInfraDefinition(props: React.PropsWithChildren<unk
             stepViewType={StepViewType.Edit}
             allowableTypes={allowableTypes}
             onUpdate={value => {
-              debugger
               onUpdateInfrastructureDefinition(
                 {
                   credentialsRef: value.credentialsRef,
@@ -490,7 +489,7 @@ export default function DeployInfraDefinition(props: React.PropsWithChildren<unk
                   resourceGroup: value.resourceGroup,
                   cluster: value.cluster,
                   tags: value.tags,
-                  usePublicDNS: value.usePublicDNS
+                  usePublicDns: value.usePublicDns
                 },
                 InfraDeploymentType.SshWinRmAzure
               )
