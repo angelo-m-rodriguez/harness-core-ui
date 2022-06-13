@@ -228,7 +228,8 @@ export function IconNode(props: IconNodeProps): React.ReactElement {
         />
       )}
       {(props?.nextNode?.nodeType === NodeType.StepGroupNode || (!props?.nextNode && props?.parentIdentifier)) &&
-        !props.isParallelNode && (
+        !props.isParallelNode &&
+        !props.readonly && (
           <AddLinkNode<IconNodeProps>
             nextNode={props?.nextNode}
             style={{ right: getPositionOfAddIcon(props, true) }}

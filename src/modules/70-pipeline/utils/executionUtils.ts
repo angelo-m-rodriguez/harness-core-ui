@@ -833,6 +833,9 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         const childData: PipelineGraphState[] = []
         currentNodeChildren.forEach(item => {
           const nodeDataItem = layoutNodeMap[item]
+          const matrixNodeName = `(${Object.values(nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues)?.join(
+            ' '
+          )}): `
           childData.push({
             id: nodeDataItem.nodeExecutionId as string,
             stageNodeId: nodeDataItem?.nodeUuid as string,
@@ -840,7 +843,11 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             type: nodeDataItem.nodeType as string,
             name: nodeDataItem.name as string,
             icon: 'cross',
-            data: { ...(nodeDataItem as any), graphType: PipelineGraphType.STAGE_GRAPH },
+            data: {
+              ...(nodeDataItem as any),
+              graphType: PipelineGraphType.STAGE_GRAPH,
+              matrixNodeName
+            },
             children: []
           })
         })

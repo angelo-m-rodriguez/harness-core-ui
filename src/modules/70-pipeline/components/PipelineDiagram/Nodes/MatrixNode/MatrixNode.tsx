@@ -29,11 +29,23 @@ interface LayoutStyles {
   width: string
   marginLeft?: string
 }
-const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number): LayoutStyles => {
-  const maxChildLength = defaultTo(data.length, 0)
-  const finalHeight = (maxChildLength / parallelism + (maxChildLength % parallelism)) * 100
-  const finalWidth = 170 * parallelism
-  return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
+const COLLAPSED_MATRIX_NODE_LENGTH = 8
+const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
+const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number, showAllNodes?: boolean): LayoutStyles => {
+  if (showAllNodes) {
+    const maxChildLength = defaultTo(data.length, 0)
+    const finalHeight = (maxChildLength / parallelism + (maxChildLength % parallelism)) * 100
+    const finalWidth = 170 * parallelism
+    return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
+  } else {
+    const updatedParallelism = Math.min(parallelism, MAX_ALLOWED_MATRIX__COLLAPSED_NODES)
+    const maxChildLength = !showAllNodes
+      ? Math.min(data.length, COLLAPSED_MATRIX_NODE_LENGTH)
+      : defaultTo(data.length, 0)
+    const finalHeight = (maxChildLength / updatedParallelism + (maxChildLength % updatedParallelism)) * 100
+    const finalWidth = 170 * updatedParallelism
+    return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is
+  }
 }
 
 export function MatrixNode(props: any): JSX.Element {
@@ -44,6 +56,7 @@ export function MatrixNode(props: any): JSX.Element {
   const [treeRectangle, setTreeRectangle] = React.useState<DOMRect | void>()
   const [state, setState] = React.useState<PipelineGraphState[]>([])
   const [isNodeCollapsed, setNodeCollapsed] = React.useState(false)
+  const [showAllNodes, setShowAllNodes] = React.useState(false)
   const [layoutStyles, setLayoutStyles] = React.useState<LayoutStyles>({ height: '100px', width: '70px' })
   const CreateNode: React.FC<any> | undefined = props?.getNode?.(NodeType.CreateNode)?.component
   const DefaultNode: React.FC<any> | undefined = props?.getDefaultNode()?.component
@@ -101,9 +114,9 @@ export function MatrixNode(props: any): JSX.Element {
 
   React.useLayoutEffect(() => {
     if (state?.length) {
-      setLayoutStyles(getCalculatedStyles(state, props?.data?.maxParallelism))
+      setLayoutStyles(getCalculatedStyles(state, props?.data?.maxParallelism, showAllNodes))
     }
-  }, [state, props?.isNodeCollapsed])
+  }, [state, props?.isNodeCollapsed, showAllNodes])
 
   const isSelectedNode = React.useMemo(() => {
     return state.some(node => node.id === queryParams?.stageId)
@@ -123,7 +136,7 @@ export function MatrixNode(props: any): JSX.Element {
       ) : (
         <div style={{ position: 'relative' }}>
           <Layout.Horizontal className={css.matrixLabel}>
-            <Icon size={16} name="equals" style={{ marginLeft: '5px' }} color={Color.WHITE} />
+            <Icon size={16} name="looping" style={{ marginRight: '5px' }} color={Color.WHITE} />
             <Text color={Color.WHITE} font="small" style={{ paddingRight: '5px' }}>
               MATRIX
             </Text>
@@ -228,7 +241,7 @@ export function MatrixNode(props: any): JSX.Element {
             </div>
             <div className={css.stepGroupBody} style={layoutStyles}>
               <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '80px', rowGap: '20px' }}>
-                {state.map((node: any) => {
+                {state.slice(0, showAllNodes ? state.length : COLLAPSED_MATRIX_NODE_LENGTH).map((node: any) => {
                   const NodeComponent: React.FC<BaseReactComponentProps> = defaultTo(
                     props.getNode?.(node?.type)?.component,
                     defaultNode
@@ -256,6 +269,7 @@ export function MatrixNode(props: any): JSX.Element {
                       readonly={props.readonly}
                       selectedNodeId={queryParams?.stageId}
                       showMarkers={false}
+                      name={`${node?.matrixNodeName}${node?.name}`}
                     />
                   )
                 })}
@@ -282,7 +296,15 @@ export function MatrixNode(props: any): JSX.Element {
               />
             )}
             <Layout.Horizontal className={css.matrixFooter}>
-              <Text font="normal">
+              <Layout.Horizontal margin={0} className={css.showNodes}>
+                <Text padding={0}>{`${!showAllNodes ? COLLAPSED_MATRIX_NODE_LENGTH : state.length}/ ${
+                  state.length
+                }`}</Text>
+                <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
+                  {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
+                </Text>
+              </Layout.Horizontal>
+              <Text font="normal" margin={0}>
                 {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism}
               </Text>
             </Layout.Horizontal>

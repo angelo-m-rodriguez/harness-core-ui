@@ -25,6 +25,8 @@ declare const styles: {
   readonly nestedGroup: string
   readonly nodeNameText: string
   readonly readonly: string
+  readonly showNodeText: string
+  readonly showNodes: string
   readonly stageName: string
   readonly stepGroup: string
   readonly stepGroupBody: string

@@ -234,10 +234,21 @@
   position: absolute;
   bottom: 0;
   width: 100% !important;
-  justify-content: flex-end;
-  margin: 12px;
+  justify-content: space-between;
+  padding: 20px 44px !important;
   p {
     font-weight: bold !important;
     padding: 0 21px 12px 0px !important;
+  }
+  .showNodes {
+    display: flex;
+    margin: 0 !important;
+    p {
+      font-weight: bold !important;
+      padding: 0 8px 0 0 !important;
+    }
+    .showNodeText {
+      color: var(--primary-7);
+    }
   }
 }

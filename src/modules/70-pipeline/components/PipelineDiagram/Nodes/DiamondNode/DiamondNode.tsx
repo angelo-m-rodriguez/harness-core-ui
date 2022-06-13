@@ -226,7 +226,7 @@ export function DiamondNodeWidget(props: any): JSX.Element {
           </Text>
         </div>
       )}
-      {!props.isParallelNode && (
+      {!props.isParallelNode && !props.readonly && (
         <AddLinkNode<PipelineStepNodeProps>
           nextNode={props?.nextNode}
           parentIdentifier={props?.parentIdentifier}
@@ -253,7 +253,8 @@ export function DiamondNodeWidget(props: any): JSX.Element {
         />
       )}
       {(props?.nextNode?.nodeType === NodeType.StepGroupNode || (!props?.nextNode && props?.parentIdentifier)) &&
-        !props.isParallelNode && (
+        !props.isParallelNode &&
+        !props.readonly && (
           <AddLinkNode<PipelineStepNodeProps>
             nextNode={props?.nextNode}
             parentIdentifier={props?.parentIdentifier}
