@@ -161,11 +161,11 @@ export function getPipelineStagesMap(
   const map = new Map<string, GraphLayoutNode>()
 
   function recursiveSetInMap(node: GraphLayoutNode): void {
-    if (node.nodeType === NodeTypes.Parallel || node.nodeType === NodeTypes.Matrix) {
+    if (node.nodeType === NodeTypes.Parallel || node.nodeType === NodeTypes.Matrix || node.nodeType === NodeTypes.For) {
       node.edgeLayoutList?.currentNodeChildren?.forEach(item => {
         if (item && layoutNodeMap?.[item]) {
           const nodeId =
-            node.nodeType === NodeTypes.Matrix
+            node.nodeType === NodeTypes.Matrix || node.nodeType === NodeTypes.For
               ? defaultTo(layoutNodeMap[item]?.nodeExecutionId, layoutNodeMap[item].nodeUuid)
               : layoutNodeMap[item].nodeUuid
           map.set(nodeId || '', layoutNodeMap[item])
@@ -195,7 +195,8 @@ export function getPipelineStagesMap(
 enum NodeTypes {
   Parallel = 'parallel',
   Stage = 'stage',
-  Matrix = 'MATRIX'
+  Matrix = 'MATRIX',
+  For = 'FOR'
 }
 export interface ProcessLayoutNodeMapResponse {
   stage?: GraphLayoutNode
@@ -829,7 +830,11 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
 
         response.push(parentNode)
         nodeDetails = layoutNodeMap[nodeDetails.edgeLayoutList?.nextIds?.[0] || '']
-      } else if (nodeDetails?.nodeType === NodeTypes.Matrix && currentNodeChildren && currentNodeChildren.length > 1) {
+      } else if (
+        (nodeDetails?.nodeType === NodeTypes.Matrix || nodeDetails?.nodeType === NodeTypes.For) &&
+        currentNodeChildren &&
+        currentNodeChildren.length > 1
+      ) {
         const childData: PipelineGraphState[] = []
         currentNodeChildren.forEach(item => {
           const nodeDataItem = layoutNodeMap[item]
@@ -862,7 +867,9 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: childData,
             graphType: PipelineGraphType.STAGE_GRAPH,
             id: nodeDetails?.nodeUuid,
-            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.matrixConfig?.maxConcurrency
+            maxParallelism:
+              nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.matrixConfig?.maxConcurrency ||
+              nodeDetails?.moduleInfo?.stepParameters?.strategyConfig?.forConfig?.maxConcurrency
           }
         })
 
@@ -928,7 +935,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             currentStageData?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
-              : currentStageData?.nodeType === StageType.MATRIX
+              : [StageType.MATRIX, StageType.FOR].includes(currentStageData?.nodeType)
               ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: currentStageData?.skipInfo?.evaluatedCondition
@@ -973,6 +980,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
         ...currentStage,
         icon: getIconFromStageModule(stage?.module, stage?.nodeType),
         status: stage?.status as any,
+        type: currentStage?.type === StageType.FOR ? ExecutionPipelineNodeType.MATRIX : currentStage?.type,
         data: {
           ...stage,
           identifier: stage?.nodeUuid || /* istanbul ignore next */ '',
@@ -983,7 +991,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             stage?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
-              : stage?.nodeType === StageType.MATRIX
+              : [StageType.MATRIX, StageType.FOR].includes(stage?.nodeType)
               ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: stage?.skipInfo?.evaluatedCondition ? stage.skipInfo.skipCondition : undefined,

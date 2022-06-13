@@ -301,12 +301,14 @@ export function MatrixNode(props: any): JSX.Element {
             )}
             <Layout.Horizontal className={css.matrixFooter}>
               <Layout.Horizontal margin={0} className={css.showNodes}>
-                <Text padding={0}>{`${!showAllNodes ? COLLAPSED_MATRIX_NODE_LENGTH : state.length}/ ${
-                  state.length
-                }`}</Text>
-                <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
-                  {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
-                </Text>
+                <Text padding={0}>{`${
+                  !showAllNodes ? Math.min(state.length, COLLAPSED_MATRIX_NODE_LENGTH) : state.length
+                }/ ${state.length}`}</Text>
+                {state.length > COLLAPSED_MATRIX_NODE_LENGTH && (
+                  <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
+                    {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
+                  </Text>
+                )}
               </Layout.Horizontal>
               <Text font="normal" margin={0}>
                 {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism}
