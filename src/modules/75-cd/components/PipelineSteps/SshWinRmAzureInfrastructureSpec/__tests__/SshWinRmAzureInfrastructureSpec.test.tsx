@@ -47,6 +47,12 @@ jest.mock('services/cd-ng', () => ({
 const infraDefPath = 'pipeline.stages[0].stage.spec.infrastructure.infrastructureDefinition'
 const accountIdParams = { accountId: 'accountId1' }
 
+const getInitialCredAndConn = (): Partial<SshWinRmAzureInfrastructure> => ({
+  credentialsRef: 'credentialsRef1',
+  sshKey: { identifier: 'credentialsRef1' },
+  connectorRef: 'connectorRef1'
+})
+
 const getInitialValues = (): SshWinRmAzureInfrastructure => ({
   credentialsRef: 'credentialsRef1',
   sshKey: { identifier: 'credentialsRef1' },
@@ -61,13 +67,6 @@ const submitForm = async (getByText: any) =>
   await act(async () => {
     fireEvent.click(getByText('Submit'))
   })
-
-const updateSelect = async (container: any, regex: any, value: string) => {
-  const dropdownEl = queryByAttribute('name', container, regex)
-  fireEvent.change(dropdownEl!, {
-    target: { value }
-  })
-}
 
 /*const getInvalidYaml = (): string => `p ipe<>line:
 sta ges:
@@ -139,9 +138,9 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     const onUpdateHandler = jest.fn()
     const { getByText, container } = render(
       <TestStepWidget
-        initialValues={getInitialValues()}
-        template={getInitialValues()}
-        allValues={getInitialValues()}
+        initialValues={getInitialCredAndConn()}
+        template={getInitialCredAndConn()}
+        allValues={getInitialCredAndConn()}
         type={StepType.SshWinRmAzure}
         stepViewType={StepViewType.InputSet}
         onUpdate={onUpdateHandler}
@@ -149,30 +148,44 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     )
 
     await waitFor(() => {
-      expect(queryByAttribute('name', container, /subscriptionId/)).not.toBeDisabled()
+      expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
+    })
+    await waitFor(() => {
+      expect(queryByAttribute('name', container, 'subscriptionId')).not.toBeDisabled()
     })
 
-    await updateSelect(
-      container,
-      /subscriptionId/,
-      subscriptionsResponse.data?.data?.subscriptions?.[1].subscriptionId || ''
+    fireEvent.click(
+      container.querySelector(`[class*="subscriptionId-select"] .bp3-input-action [data-icon="chevron-down"]`)!
     )
+    await waitFor(() => expect(container.querySelector('[class*="menuItemLabel"]')).not.toBeNull())
+    fireEvent.click(getByText('subscription1'))
     await waitFor(() => {
       expect(CDNG.getAzureResourceGroupsBySubscriptionPromise).toBeCalled()
     })
 
-    await updateSelect(
-      container,
-      /resourceGroup/,
-      resourceGroupsResponse.data?.data?.resourceGroups?.[1].resourceGroup || ''
+    await waitFor(() => {
+      expect(queryByAttribute('name', container, 'resourceGroup')).not.toBeDisabled()
+    })
+    fireEvent.click(
+      container.querySelector(`[class*="resourceGroup-select"] .bp3-input-action [data-icon="chevron-down"]`)!
     )
+    await waitFor(() => expect(container.querySelector('[class*="menuItemLabel"]')).not.toBeNull())
+    fireEvent.click(getByText('rg1'))
     await waitFor(() => {
       expect(CDNG.getAzureClustersPromise).toBeCalled()
     })
 
-    await updateSelect(container, /cluster/, clustersResponse.data?.data?.clusters?.[1].cluster || '')
+    await waitFor(() => {
+      expect(queryByAttribute('name', container, 'cluster')).not.toBeDisabled()
+    })
+    fireEvent.click(container.querySelector(`[class*="cluster-select"] .bp3-input-action [data-icon="chevron-down"]`)!)
+    await waitFor(() => expect(container.querySelector('[class*="menuItemLabel"]')).not.toBeNull())
+    act(() => {
+      fireEvent.click(getByText('us-west2/abc'))
+    })
+
     await submitForm(getByText)
-    expect(onUpdateHandler).toHaveBeenCalled()
+    expect(onUpdateHandler).not.toHaveBeenCalled()
   })
 })
 

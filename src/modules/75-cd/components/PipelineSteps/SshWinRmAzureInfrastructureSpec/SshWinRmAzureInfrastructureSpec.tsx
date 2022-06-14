@@ -364,7 +364,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 />
                 <FormInput.Select
                   name="subscriptionId"
-                  className={css.inputWidth}
+                  className={`subscriptionId-select ${css.inputWidth}`}
                   items={subscriptions}
                   disabled={isSubsLoading || !formik.values.connectorRef || readonly}
                   placeholder={
@@ -385,7 +385,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 />
                 <FormInput.Select
                   name="resourceGroup"
-                  className={css.inputWidth}
+                  className={`resourceGroup-select ${css.inputWidth}`}
                   items={resourceGroups}
                   disabled={isResGroupLoading || !formik.values.subscriptionId || readonly}
                   placeholder={getString('cd.steps.azureInfraStep.resourceGroupPlaceholder')}
@@ -403,7 +403,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 />
                 <FormInput.Select
                   name="cluster"
-                  className={css.inputWidth}
+                  className={`cluster-select ${css.inputWidth}`}
                   items={clusters}
                   disabled={isClustersLoading || !formik.values.resourceGroup || readonly}
                   label={getString(clusterLabel)}
