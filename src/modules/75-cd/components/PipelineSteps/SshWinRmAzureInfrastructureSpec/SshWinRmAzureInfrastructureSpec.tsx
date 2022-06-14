@@ -288,7 +288,9 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
   const clearSubscriptionId = () => {
     /* istanbul ignore next */
     formikRef.current?.setFieldValue('subscriptionId', '')
+    /* istanbul ignore next */
     setSubscriptions([])
+    /* istanbul ignore next */
     clearResourceGroup()
   }
 
@@ -308,7 +310,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
               getValue(value.resourceGroup) === ''
                 ? /* istanbul ignore next */ undefined
                 : getValue(value.resourceGroup),
-            cluster: getValue(value.cluster) === '' ? /* istanbul ignore next */ undefined : getValue(value.cluster),
+            cluster: getValue(value.cluster),
             tags: /* istanbul ignore next */ value.tags.reduce(
               (obj: object, tag: AzureTagDTO) => ({
                 ...obj,
