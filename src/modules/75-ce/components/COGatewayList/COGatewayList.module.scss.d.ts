@@ -16,6 +16,7 @@ declare const styles: {
   readonly detailItemHeader: string
   readonly detailItemValue: string
   readonly disable: string
+  readonly disableRule: string
   readonly disabled: string
   readonly downTag: string
   readonly fulFilmentIcon: string

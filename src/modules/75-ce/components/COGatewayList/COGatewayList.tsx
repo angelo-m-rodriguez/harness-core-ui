@@ -805,7 +805,11 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
                   itemCount: pageProps.totalRecords,
                   gotoPage: onPageClick
                 }}
-                getRowClassName={() => css.ruleListRow}
+                getRowClassName={({ original }) =>
+                  cx(css.ruleListRow, {
+                    [css.disableRule]: original.disabled
+                  })
+                }
                 onRowClick={onRowClick}
                 columns={columns}
                 sortable={true}

@@ -36,7 +36,8 @@ const getChartOptions = (savings: number, disable?: boolean) => {
       spacingLeft: 0,
       spacingRight: 0,
       width: 50,
-      height: 50
+      height: 50,
+      backgroundColor: disable ? '#F3F3FA' : ''
     },
     tooltip: { enabled: false },
     title: {
@@ -53,7 +54,8 @@ const getChartOptions = (savings: number, disable?: boolean) => {
           enabled: false
         },
         showInLegend: false,
-        size: '200%'
+        size: '200%',
+        borderColor: disable ? '#F3F3FA' : ''
       },
       series: {
         enableMouseTracking: false

@@ -184,4 +184,8 @@
       }
     }
   }
+  &.disableRule {
+    background: var(--grey-100);
+    border: 1px solid var(--grey-400);
+  }
 }
