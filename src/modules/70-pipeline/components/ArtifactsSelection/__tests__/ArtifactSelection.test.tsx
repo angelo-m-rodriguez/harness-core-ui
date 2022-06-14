@@ -466,8 +466,12 @@ describe('ArtifactsSelection tests', () => {
     const portal = document.getElementsByClassName('bp3-dialog')[0]
     const artifactLabel = await waitFor(() => findByText(portal as HTMLElement, 'connectors.specifyArtifactRepoType'))
     expect(artifactLabel).toBeDefined()
+    // Artifactory and ECR should be rendered
     const artifactory = await container.querySelector('input[value="ArtifactoryRegistry"]')
     expect(artifactory).toBeDefined()
+    const ecr = await container.querySelector('input[value="Ecr"]')
+    expect(ecr).toBeDefined()
+    // Nexus, ACR and Custom should not be rendered
     const nexus = await container.querySelector('input[value="Nexus3Registry"]')
     expect(nexus).toBeNull()
     const acr = await container.querySelector('input[value="Acr"]')
