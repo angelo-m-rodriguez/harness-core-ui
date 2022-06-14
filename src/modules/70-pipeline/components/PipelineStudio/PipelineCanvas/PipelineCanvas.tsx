@@ -89,6 +89,7 @@ interface PipelineWithGitContextFormProps extends PipelineInfoConfig {
   connectorRef?: string
   filePath?: string
   remoteType?: string
+  storeType?: string
 }
 
 interface InputSetValue extends SelectOption {
@@ -432,6 +433,7 @@ export function PipelineCanvas({
       delete (pipeline as PipelineWithGitContextFormProps).connectorRef
       delete (pipeline as PipelineWithGitContextFormProps).filePath
       delete (pipeline as PipelineWithGitContextFormProps).remoteType
+      delete (pipeline as PipelineWithGitContextFormProps).storeType
       updatePipeline(pipeline)
       if (currStoreMetadata?.storeType) {
         updatePipelineStoreMetadata(currStoreMetadata, gitDetails)

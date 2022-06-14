@@ -22,6 +22,7 @@ import css from '../../AppDHealthSource.module.scss'
 
 interface AppDynamicsTierInterface {
   isTemplate?: boolean
+  expressions?: string[]
   tierOptions: SelectOption[]
   tierLoading: boolean
   formikValues: any
@@ -38,6 +39,7 @@ interface AppDynamicsTierInterface {
 
 export default function AppDynamicsTier({
   isTemplate,
+  expressions,
   tierOptions,
   tierLoading,
   formikValues,
@@ -64,7 +66,7 @@ export default function AppDynamicsTier({
     <>
       <Label>{getString('cv.healthSource.connectors.AppDynamics.trierLabel')}</Label>
       <MultiTypeInput
-        key={multitypeInputValue}
+        key={multitypeInputValue + formikValues?.appdApplication}
         name={'appDTier'}
         placeholder={getPlaceholder(tierLoading, 'cv.healthSource.connectors.AppDynamics.tierPlaceholder', getString)}
         selectProps={{
@@ -73,7 +75,7 @@ export default function AppDynamicsTier({
         allowableTypes={allowedTypes}
         value={setAppDynamicsTier(tierLoading, formikValues?.appDTier, tierOptions, multitypeInputValue)}
         style={{ width: '300px' }}
-        expressions={[]}
+        expressions={expressions}
         multitypeInputValue={multitypeInputValue}
         onChange={async (item, _valueType, multiType) => {
           if (multitypeInputValue !== multiType) {

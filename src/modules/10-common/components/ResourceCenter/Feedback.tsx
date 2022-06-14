@@ -26,6 +26,9 @@ const Feedback = ({ label }: FeedbackProps): React.ReactElement => {
   useEffect(() => {
     _refiner('dismissForm', refinerSurveryId)
     _refiner('setProject', refinerProjectId)
+    _refiner('addToResponse', {
+      email: currentUserInfo.email
+    })
 
     // callback function so that upon survey completion,
     // the feedback button will be disabled for 6s

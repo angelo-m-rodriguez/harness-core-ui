@@ -1,0 +1,328 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FinalReview render 1`] = `
+<div>
+  <div
+    class="Layout--vertical StyledProps--main"
+  >
+    <div
+      class="Layout--vertical StyledProps--main StyledProps--padding-bottom-large"
+    >
+      <p
+        class="StyledProps--font StyledProps--main StyledProps--font-variation-h4 StyledProps--padding-bottom-large"
+        style="display: flex; align-items: center;"
+      >
+        <span
+          class="bp3-icon StyledProps--main Text--icon StyledProps--padding-right-small"
+          data-icon="ff-solid"
+        >
+          <svg
+            fill="none"
+            height="24"
+            viewBox="0 0 32 32"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <lineargradient
+              gradientUnits="userSpaceOnUse"
+              id="ff-solid_svg__a"
+              x1="6.837"
+              x2="23.78"
+              y1="2"
+              y2="28.227"
+            >
+              <stop
+                offset="0"
+                stop-color="#ffc100"
+              />
+              <stop
+                offset="1"
+                stop-color="#e66b35"
+              />
+            </lineargradient>
+            <g
+              fill="url(#ff-solid_svg__a)"
+            >
+              <path
+                d="M10.632 2.08A5.19 5.19 0 004.62 6.29L2.08 20.697a5.19 5.19 0 004.21 6.012l7.463 1.316a.2.2 0 00.208-.298L6.882 15.656c-.296-.469-.292-1.382.05-1.6.08-.05.313-.259.313-.259l.398-.436.066-.072c.37-.406.704-.773 1.76-1.302l.227-.079c1.548-.484 2.41-.449 3.27-.414.862.035 1.724.07 3.274-.414 1.272-.398 2.43-1.178 3.074-1.667a.622.622 0 01.9.15l4.596 7.362a.53.53 0 01-.101.696 8.694 8.694 0 01-2.834 1.538c-1.549.484-2.432.463-3.316.442-.884-.021-1.768-.042-3.318.442-1.314.41-1.868.948-2.07 1.204-.048.061-.07.21-.032.279.4.724 2.295 4.06 3.794 6.693a.998.998 0 00.695.49l3.07.541a5.19 5.19 0 006.012-4.21l2.54-14.408a5.19 5.19 0 00-4.21-6.012z"
+              />
+              <path
+                d="M16.646 13.074c-1.303.34-2.093.316-2.882.29-.79-.024-1.58-.049-2.881.291-.744.216-1.178.592-1.587 1.072a.197.197 0 00-.018.23l2.482 4.069c.064.106.209.13.307.055.374-.283 1.28-.9 2.42-1.198 1.469-.383 2.348-.375 3.273-.366.717.007 1.462.014 2.53-.16a4.454 4.454 0 001.629-.635.347.347 0 00.094-.488L19.472 12.3a.421.421 0 00-.56-.128 9.57 9.57 0 01-2.265.902z"
+              />
+            </g>
+          </svg>
+        </span>
+        common.purpose.cf.continuous common.plans.subscription
+      </p>
+      <div
+        class="Layout--horizontal StyledProps--main"
+      >
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--flex"
+        >
+          <div
+            class="MultiStepProgressIndicator--dot MultiStepProgressIndicator--dotSuccess MultiStepProgressIndicator--spacing"
+          />
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--flex"
+        >
+          <div
+            class="MultiStepProgressIndicator--statusBar"
+          >
+            <div
+              class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--fullBar"
+            />
+            <div
+              class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--barSuccess MultiStepProgressIndicator--fullBar"
+            />
+          </div>
+          <div
+            class="MultiStepProgressIndicator--dot MultiStepProgressIndicator--dotSuccess MultiStepProgressIndicator--spacing"
+          />
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--flex"
+        >
+          <div
+            class="MultiStepProgressIndicator--statusBar"
+          >
+            <div
+              class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--fullBar"
+            />
+            <div
+              class="MultiStepProgressIndicator--bar MultiStepProgressIndicator--barSuccess MultiStepProgressIndicator--fullBar"
+            />
+          </div>
+          <div
+            class="MultiStepProgressIndicator--dot MultiStepProgressIndicator--dotSuccess MultiStepProgressIndicator--spacing"
+          />
+        </div>
+      </div>
+      <p
+        class="StyledProps--font StyledProps--main StyledProps--padding-top-large StyledProps--font-variation-h3"
+      >
+        authSettings.finalReview.step
+      </p>
+    </div>
+    <div
+      class="Layout--vertical StyledProps--main"
+    >
+      <div
+        class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
+      >
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--font-variation-h5"
+        >
+          authSettings.costCalculator.newSubscription
+        </p>
+        <p
+          class="StyledProps--font StyledProps--main newPlan StyledProps--font-weight-bold StyledProps--font-size-xsmall StyledProps--color StyledProps--color-white StyledProps--border"
+        >
+          ENTERPRISE
+        </p>
+      </div>
+      <div
+        class="Layout--vertical Layout--layout-spacing-large StyledProps--main"
+      >
+        <div
+          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+        >
+          <p
+            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+          >
+            authSettings.costCalculator.developerLicenses
+          </p>
+          <div
+            class="lineItem"
+          >
+             
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              authSettings.unitPrice
+              common.perMonth
+            </p>
+          </div>
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          >
+            $0.00
+          </p>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+        >
+          <p
+            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+          >
+            authSettings.costCalculator.maus
+          </p>
+          <div
+            class="lineItem"
+          >
+             
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <p
+                class="StyledProps--font StyledProps--main"
+              >
+                authSettings.unitPrice
+                common.perMonth
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main"
+              >
+                authSettings.firstIncludedFree
+              </p>
+            </div>
+          </div>
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          >
+            $0.00
+          </p>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+        >
+          <p
+            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+          >
+            authSettings.costCalculator.support
+          </p>
+          <div
+            class="lineItem"
+          >
+             
+            <div
+              class="Layout--horizontal StyledProps--main"
+            >
+              <p
+                class="StyledProps--font StyledProps--main"
+              >
+                authSettings.finalReview.premiumSupport
+              </p>
+              <p
+                class="StyledProps--font StyledProps--main"
+              >
+                authSettings.finalReview.ofTotalSpend
+              </p>
+            </div>
+          </div>
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          >
+            $0.00
+          </p>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+        >
+          <p
+            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+          >
+            authSettings.costCalculator.tax
+          </p>
+          <div
+            class="lineItem"
+          >
+             
+          </div>
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          >
+            $0.00
+          </p>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main line StyledProps--flex StyledProps--flex-alignItems-start"
+        >
+          <p
+            class="StyledProps--font StyledProps--main lineItem StyledProps--font-weight-semi-bold"
+          >
+            authSettings.yearlySubscriptionTotal
+          </p>
+          <div
+            class="lineItem"
+          >
+             
+            <p
+              class="StyledProps--font StyledProps--main"
+            >
+              authSettings.costCalculator.autoRenew
+            </p>
+          </div>
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--padding-right-xlarge"
+          >
+            $0.00
+          </p>
+        </div>
+      </div>
+      <div
+        class="Layout--horizontal StyledProps--main payingToday StyledProps--flex StyledProps--flex-justifyContent-space-between"
+      >
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--font-variation-h4"
+        >
+          authSettings.costCalculator.payingToday
+        </p>
+        <p
+          class="StyledProps--font StyledProps--main StyledProps--font-variation-h4"
+        >
+          $0.00
+        </p>
+      </div>
+    </div>
+    <div
+      class="Layout--horizontal StyledProps--main footer"
+    >
+      <div
+        class="Layout--horizontal Layout--layout-spacing-large StyledProps--main"
+      >
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--withLeftIcon Button--variation Button--variation-secondary"
+          type="button"
+        >
+          <span
+            class="bp3-icon bp3-icon-chevron-left StyledProps--main"
+            icon="chevron-left"
+          >
+            <svg
+              data-icon="chevron-left"
+              height="16"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <desc>
+                chevron-left
+              </desc>
+              <path
+                d="M7.41 8l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C5.11 7.47 5 7.72 5 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L7.41 8z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            class="bp3-button-text"
+          >
+            back
+          </span>
+        </button>
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--iconOnly Button--variation Button--variation-primary"
+          type="button"
+        >
+          <span
+            class="bp3-button-text"
+          >
+            authSettings.billing.subscribeNPay
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

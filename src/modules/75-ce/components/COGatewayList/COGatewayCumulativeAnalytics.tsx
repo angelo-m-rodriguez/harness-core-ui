@@ -6,234 +6,164 @@
  */
 
 // import { ProgressBar } from '@blueprintjs/core'
-import React from 'react'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { isEmpty as _isEmpty, defaultTo as _defaultTo } from 'lodash-es'
-import { Container, HarnessDocTooltip, Heading, Icon, Layout, Text } from '@wings-software/uicore'
+import { Container, HarnessDocTooltip, Icon, Layout, Text } from '@wings-software/uicore'
 import { Color, FontVariation } from '@harness/design-system'
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
 import { String, useStrings } from 'framework/strings'
-import type { CumulativeSavings } from 'services/lw'
+import { CumulativeSavings, FilterDTO, useCumulativeServiceSavingsV2 } from 'services/lw'
 import { RulesMode } from '@ce/constants'
 import EmptyView from '@ce/images/empty-state.svg'
 import { getEmissionsValue } from '@ce/utils/formatResourceValue'
 import greenLeaf from '@ce/common/images/green-leaf.svg'
 import grayLeaf from '@ce/common/images/gray-leaf.svg'
+import TimeRangePicker from '@ce/common/TimeRangePicker/TimeRangePicker'
+import type { TimeRangeFilterType } from '@ce/types'
+import { CE_DATE_FORMAT_INTERNAL, DATE_RANGE_SHORTCUTS } from '@ce/utils/momentUtils'
 import { FeatureFlag } from '@common/featureFlags'
+import { useToaster } from '@common/exports'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
+import { useDeepCompareEffect } from '@common/hooks'
 import { Utils } from '@ce/common/Utils'
-import { geGaugeChartOptionsWithoutLabel, getDay } from './Utils'
+import { getFilterBodyFromFilterData } from './Utils'
+import SpendVsSavingsChart from './SpendVsSavingsChart'
+import SavingsPieChart from './SavingsPieChart'
 import css from './COGatewayCumulativeAnalytics.module.scss'
 
 interface COGatewayCumulativeAnalyticsProps {
-  data: CumulativeSavings | undefined
-  loadingData: boolean
   mode: RulesMode
+  searchQuery?: string
+  appliedFilter?: FilterDTO
 }
 
-const toFixedDecimalNumber = (num: number, decimalPlaces = 2) => Number(num.toFixed(decimalPlaces))
-
-function getStackedAreaChartOptions(
-  title: string,
-  categories: string[],
-  yAxisText: string,
-  savingsData: number[],
-  spendData: number[],
-  mode: RulesMode
-): Highcharts.Options {
-  let step = 1
-  if (categories && categories.length) {
-    categories = categories.map(x => getDay(x, 'YYYY-MM-DDTHH:mm:ssZ'))
-    step = Math.ceil(categories.length * 0.25)
-  }
-  savingsData = _defaultTo(
-    savingsData.map(n => toFixedDecimalNumber(n)),
-    []
-  )
-  spendData = _defaultTo(
-    spendData.map(n => toFixedDecimalNumber(n)),
-    []
-  )
-  return {
-    chart: {
-      type: 'spline',
-      height: 180,
-      spacing: [5, 20, 5, 5]
-    },
-    colors: ['rgba(71, 213, 223)', 'rgba(124, 77, 211,0.05)'],
-    title: {
-      text: title
-    },
-    xAxis: {
-      categories: categories,
-      labels: {
-        step: step
-      },
-      units: [['day', [1]]],
-      startOnTick: true,
-      tickmarkPlacement: 'on'
-    },
-    yAxis: {
-      // min: 0,
-      title: {
-        text: yAxisText
-      },
-      labels: {
-        format: '${value}'
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    tooltip: {
-      pointFormat: '{series.name}: ${point.y}<br/>'
-    },
-    plotOptions: {
-      area: {
-        stacking: 'normal',
-        pointPlacement: 'on'
-      }
-    },
-    series: [
-      {
-        name: 'Savings',
-        type: 'area',
-        data: savingsData,
-        showInLegend: false,
-        color: {
-          linearGradient: {
-            x1: 0,
-            x2: 1,
-            y1: 0,
-            y2: 1
-          },
-          stops: [
-            [0, 'rgba(71, 213, 223, 0.7)'],
-            [1, 'rgba(71, 213, 223, 0)']
-          ]
-        },
-        pointPlacement: 'on',
-        dashStyle: mode === RulesMode.DRY ? 'Dash' : 'Solid'
-      },
-      {
-        name: 'Spend',
-        type: 'area',
-        data: spendData,
-        showInLegend: false,
-        color: {
-          linearGradient: {
-            x1: 0,
-            x2: 1,
-            y1: 0,
-            y2: 1
-          },
-          stops: [
-            [0, 'rgba(124, 77, 211, 0.7)'],
-            [1, 'rgba(124, 77, 211, 0) 55.59%)']
-          ]
-        },
-        pointPlacement: 'on',
-        dashStyle: mode === RulesMode.DRY ? 'Dash' : 'Solid'
-      }
-    ]
-  }
-}
 function getSavingsPercentage(totalSavings: number, totalPotentialCost: number): number {
   if (totalPotentialCost == 0) {
     return 0
   }
   return Math.round((totalSavings / totalPotentialCost) * 100)
 }
-const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> = ({ data, loadingData, mode }) => {
+const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> = ({
+  mode,
+  searchQuery,
+  appliedFilter
+}) => {
   const { getString } = useStrings()
+  const { accountId } = useParams<AccountPathProps>()
+  const { showError } = useToaster()
   const sustainabilityEnabled = useFeatureFlag(FeatureFlag.CCM_SUSTAINABILITY)
-  const hasData = !_isEmpty(data)
 
+  const [data, setData] = useState<CumulativeSavings>()
+  const [timeRange, setTimeRange] = useState<TimeRangeFilterType>({
+    to: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[1].format(CE_DATE_FORMAT_INTERNAL),
+    from: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[0].format(CE_DATE_FORMAT_INTERNAL)
+  })
+
+  const hasData = !_isEmpty(data)
   const isDryRunMode = mode === RulesMode.DRY
+
+  const { mutate: fetchCumulativeSavings, loading: loadingData } = useCumulativeServiceSavingsV2({
+    account_id: accountId,
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
+  useDeepCompareEffect(() => {
+    getSavingsData()
+  }, [mode, searchQuery, timeRange.from, timeRange.to, appliedFilter?.data])
+
+  const getSavingsData = async () => {
+    try {
+      const savingsResponse = await fetchCumulativeSavings({
+        dry_run: isDryRunMode,
+        query: searchQuery?.length ? searchQuery : undefined,
+        from: timeRange.from,
+        to: timeRange.to,
+        filters: !_isEmpty(appliedFilter?.data)
+          ? getFilterBodyFromFilterData(appliedFilter?.data as { [key: string]: any })
+          : undefined
+      })
+      setData(savingsResponse.response as CumulativeSavings)
+    } catch (error) {
+      const errMessage = _defaultTo(error?.data?.errors?.join(', '), error?.message)
+      showError(errMessage)
+    }
+  }
 
   return (
     <Container padding="small">
-      <div>
-        <Text className={css.summaryHeading} data-tooltip-id="summaryOfRulesHeader">
-          {getString('ce.co.summarySection.sectionHeader')}
-          <HarnessDocTooltip tooltipId="summaryOfRulesHeader" useStandAlone={true} />
-        </Text>
-        <Layout.Horizontal
-          spacing="xxlarge"
-          background={Color.WHITE}
-          className={css.analyticsContainer}
-          // style={{ margin: '0px var(--spacing-medium) !important' }}
-        >
-          <Layout.Vertical
-            spacing="large"
-            style={{ textAlign: 'center', flex: 3, marginRight: 'var(--spacing-xxlarge)' }}
-          >
-            <Text className={css.analyticsColHeader}>
-              {Utils.getConditionalResult(
-                isDryRunMode,
-                getString('ce.co.summarySection.dryRunGraphHeader'),
-                getString('ce.co.summarySection.graphHeader')
-              )}
-            </Text>
-            {data?.days && data?.days.length ? (
-              <HighchartsReact
-                highchart={Highcharts}
-                options={getStackedAreaChartOptions(
-                  '',
-                  data?.days as string[],
-                  '',
-                  data?.savings as number[],
-                  data?.actual_cost as number[],
-                  mode
-                )}
-              />
-            ) : loadingData ? (
-              <Icon name="spinner" size={24} color="blue500" style={{ alignSelf: 'center' }} />
-            ) : (
-              <Text style={{ marginTop: 'var(--spacing-xxlarge)', fontSize: 'var(--font-size-medium)' }}>
-                {getString('ce.co.noData')}
-              </Text>
-            )}
-          </Layout.Vertical>
-          <Layout.Vertical style={{ flex: 1 }}>
-            <Layout.Vertical spacing="xsmall">
-              <Text className={css.analyticsColHeader}>
+      <Layout.Vertical background={Color.WHITE} className={css.analyticsContainer} spacing="large">
+        <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
+          <Text font={{ variation: FontVariation.H6 }} data-tooltip-id="summaryOfRulesHeader">
+            {getString('ce.co.summarySection.sectionHeader')}
+            <HarnessDocTooltip tooltipId="summaryOfRulesHeader" useStandAlone={true} />
+          </Text>
+          <Container margin={{ right: 'xxxlarge' }}>
+            <TimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />
+          </Container>
+        </Layout.Horizontal>
+        <Layout.Horizontal spacing="xxlarge">
+          <Layout.Vertical style={{ flex: 1 }} flex={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <Layout.Vertical spacing="small">
+              <Text font={{ variation: FontVariation.H6 }} color={Color.GREY_500}>
                 {Utils.getConditionalResult(
                   isDryRunMode,
                   getString('ce.co.summarySection.dryRunSavingsPercentage'),
                   getString('ce.co.summarySection.savingsPercentage')
                 )}
               </Text>
-              <Heading level={1}>
-                {hasData ? getSavingsPercentage(data?.total_savings as number, data?.total_potential as number) : 0}%
-              </Heading>
-              <Layout.Horizontal>
-                <HighchartsReact
-                  highchart={Highcharts}
-                  options={
-                    hasData
-                      ? geGaugeChartOptionsWithoutLabel(
-                          getSavingsPercentage(data?.total_savings as number, data?.total_potential as number),
-                          mode
-                        )
-                      : geGaugeChartOptionsWithoutLabel(0, mode)
-                  }
-                />
-              </Layout.Horizontal>
+              <SavingsPieChart
+                savingsPercentage={
+                  hasData ? getSavingsPercentage(data?.total_savings as number, data?.total_potential as number) : 0
+                }
+                mode={mode}
+              />
             </Layout.Vertical>
-            <Text className={css.analyticsColHeader}>
+            <div style={{ paddingBottom: 'var(--spacing-large)' }}>
+              <Text font={{ variation: FontVariation.H6 }} color={Color.GREY_500}>
+                {Utils.getConditionalResult(
+                  isDryRunMode,
+                  getString('ce.co.dryRunModeLabel'),
+                  getString('ce.co.activeModeLabel')
+                )}
+              </Text>
+              <Layout.Horizontal spacing="small">
+                <Text font={{ variation: FontVariation.H2 }} color={Color.GREY_600}>
+                  {_defaultTo(data?.total_active_services, 0)}
+                </Text>
+                <Text
+                  font={{ variation: FontVariation.BODY2_SEMI }}
+                  color={Color.GREY_600}
+                  style={{ alignSelf: 'center' }}
+                >
+                  {getString('ce.co.rules')}
+                </Text>
+              </Layout.Horizontal>
+            </div>
+          </Layout.Vertical>
+          <Layout.Vertical spacing="large" style={{ flex: 3, marginRight: 'var(--spacing-xxlarge)' }}>
+            <Text font={{ variation: FontVariation.H6 }} color={Color.GREY_500}>
               {Utils.getConditionalResult(
                 isDryRunMode,
-                getString('ce.co.dryRunModeLabel'),
-                getString('ce.co.activeModeLabel')
+                getString('ce.co.summarySection.dryRunGraphHeader'),
+                getString('ce.co.summarySection.graphHeader')
               )}
             </Text>
-            <Layout.Horizontal spacing="small">
-              <Heading level={1}>{_defaultTo(data?.total_active_services, 0)}</Heading>
-              <Text style={{ alignSelf: 'center' }}>Rules</Text>
-            </Layout.Horizontal>
+            <SpendVsSavingsChart
+              data={data}
+              loading={loadingData}
+              mode={mode}
+              timeRange={timeRange}
+              searchTerm={searchQuery}
+            />
           </Layout.Vertical>
-          <Layout.Vertical spacing="small" style={{ flex: 1 }}>
+          <Layout.Vertical
+            spacing="small"
+            style={{ flex: 1 }}
+            flex={{ justifyContent: 'space-between', alignItems: 'flex-start' }}
+          >
             <div
               className={Utils.getConditionalResult(
                 isDryRunMode,
@@ -269,6 +199,7 @@ const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> 
             </div>
             <div
               className={Utils.getConditionalResult(isDryRunMode, css.totalSpendInfoCardDryRun, css.totalSpendInfoCard)}
+              style={{ marginBottom: 'var(--spacing-large)' }}
             >
               <Layout.Vertical spacing="small">
                 <Text font={{ variation: FontVariation.H6 }} color={Color.GREY_500}>
@@ -289,7 +220,11 @@ const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> 
             </div>
           </Layout.Vertical>
           {sustainabilityEnabled && (
-            <Layout.Vertical spacing={'huge'} style={{ flex: 1 }} padding="small">
+            <Layout.Vertical
+              spacing={'huge'}
+              style={{ flex: 1 }}
+              flex={{ justifyContent: 'space-between', alignItems: 'flex-start' }}
+            >
               <Layout.Vertical spacing={'medium'}>
                 <Layout.Horizontal flex={{ justifyContent: 'flex-start', alignItems: 'center' }} spacing="small">
                   <img src={greenLeaf} width={20} />
@@ -305,7 +240,7 @@ const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> 
                   />
                 </Text>
               </Layout.Vertical>
-              <Layout.Vertical spacing={'medium'} style={{ paddingTop: 'var(--spacing-large)' }}>
+              <Layout.Vertical spacing={'medium'} style={{ paddingBottom: 'var(--spacing-large)' }}>
                 <Layout.Horizontal flex={{ justifyContent: 'flex-start', alignItems: 'center' }} spacing="small">
                   <img src={grayLeaf} width={20} />
                   <Text font={{ variation: FontVariation.H6 }} color={Color.GREY_500}>
@@ -323,7 +258,7 @@ const COGatewayCumulativeAnalytics: React.FC<COGatewayCumulativeAnalyticsProps> 
             </Layout.Vertical>
           )}
         </Layout.Horizontal>
-      </div>
+      </Layout.Vertical>
     </Container>
   )
 }

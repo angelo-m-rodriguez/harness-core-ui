@@ -206,7 +206,7 @@ function RepositorySelectionTable({ repositories, onRowClick }: RepositorySelect
         width: '100%',
         Cell: ({ row }: CellProps<UserRepoResponse>) => {
           const { name: repositoryName } = row.original
-          const isRowSelected = repositoryName === selectedRow?.name
+          const isRowSelected = selectedRow && getFullRepoName(row.original) === getFullRepoName(selectedRow)
           return (
             <Layout.Horizontal
               data-testid={repositoryName}

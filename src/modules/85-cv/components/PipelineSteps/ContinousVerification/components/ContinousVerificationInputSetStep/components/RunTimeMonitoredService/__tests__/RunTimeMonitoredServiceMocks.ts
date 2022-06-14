@@ -11,6 +11,10 @@ export const initialValues = {
   spec: {
     type: 'Rolling',
     spec: {},
+    monitoredService: {
+      type: 'Default',
+      spec: {}
+    },
     healthSources: [
       {
         identifier: 'appd'

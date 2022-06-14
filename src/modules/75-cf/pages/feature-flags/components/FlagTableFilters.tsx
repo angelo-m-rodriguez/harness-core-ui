@@ -7,14 +7,13 @@
 
 import React from 'react'
 import { FilterProps, TableFilters } from '@cf/components/TableFilters/TableFilters'
-import { useStrings } from 'framework/strings'
 import type { Features } from 'services/cf'
 import { FeatureFlagStatus } from '../FlagStatus'
 
 export interface FlagTableFiltersProps {
-  features: Features | null | undefined
+  features?: Features | null
   currentFilter: FilterProps | Record<string, any>
-  updateTableFilter: (filter: FilterProps) => void
+  updateTableFilter: (filter: FilterProps | Record<string, any>) => void
 }
 
 export enum FlagFilterKeys {
@@ -29,46 +28,47 @@ export const FlagFilterValues = {
   PERMANENT: 'permanent'
 }
 
+export const featureFlagFilters = (features?: Features | null): Array<FilterProps> => [
+  {
+    queryProps: {},
+    label: 'cf.flagFilters.allFlags',
+    total: features?.featureCounts?.totalFeatures || 0
+  },
+  {
+    queryProps: { key: FlagFilterKeys.ENABLED, value: 'true' },
+    label: 'cf.flagFilters.enabled',
+    total: features?.featureCounts?.totalEnabled || 0,
+    tooltipId: 'ff_flagFilters_enabledFlags'
+  },
+  {
+    queryProps: { key: FlagFilterKeys.LIFETIME, value: FlagFilterValues.PERMANENT },
+    label: 'cf.flagFilters.permanent',
+    total: features?.featureCounts?.totalPermanent || 0,
+    tooltipId: 'ff_flagFilters_permanentFlags'
+  },
+  {
+    queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.RECENTLY_ACCESSED },
+    label: 'cf.flagFilters.last24',
+    total: features?.featureCounts?.totalRecentlyAccessed || 0
+  },
+  {
+    queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.ACTIVE },
+    label: 'cf.flagFilters.active',
+    total: features?.featureCounts?.totalActive || 0,
+    tooltipId: 'ff_flagFilters_activeFlags'
+  },
+  {
+    queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.POTENTIALLY_STALE },
+    label: 'cf.flagFilters.potentiallyStale',
+    total: features?.featureCounts?.totalPotentiallyStale || 0,
+    tooltipId: 'ff_flagFilters_potentiallyStaleFlags'
+  }
+]
+
 export const FlagTableFilters: React.FC<FlagTableFiltersProps> = ({ features, currentFilter, updateTableFilter }) => {
-  const { getString } = useStrings()
   return (
     <TableFilters
-      filters={[
-        {
-          queryProps: {},
-          label: getString('cf.flagFilters.allFlags'),
-          total: features?.itemCount || 0
-        },
-        {
-          queryProps: { key: FlagFilterKeys.ENABLED, value: 'true' },
-          label: getString('cf.flagFilters.enabled'),
-          total: features?.enabledCount || 0,
-          tooltipId: 'ff_flagFilters_enabledFlags'
-        },
-        {
-          queryProps: { key: FlagFilterKeys.LIFETIME, value: FlagFilterValues.PERMANENT },
-          label: getString('cf.flagFilters.permanent'),
-          total: features?.permanentCount || 0,
-          tooltipId: 'ff_flagFilters_permanentFlags'
-        },
-        {
-          queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.RECENTLY_ACCESSED },
-          label: getString('cf.flagFilters.last24'),
-          total: features?.recentlyActiveCount || 0
-        },
-        {
-          queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.ACTIVE },
-          label: getString('cf.flagFilters.active'),
-          total: features?.activeCount || 0,
-          tooltipId: 'ff_flagFilters_activeFlags'
-        },
-        {
-          queryProps: { key: FlagFilterKeys.STATUS, value: FlagFilterValues.POTENTIALLY_STALE },
-          label: getString('cf.flagFilters.potentiallyStale'),
-          total: features?.potentiallyStaleCount || 0,
-          tooltipId: 'ff_flagFilters_potentiallyStaleFlags'
-        }
-      ]}
+      filters={featureFlagFilters(features)}
       currentFilter={currentFilter}
       updateTableFilter={updateTableFilter}
     />

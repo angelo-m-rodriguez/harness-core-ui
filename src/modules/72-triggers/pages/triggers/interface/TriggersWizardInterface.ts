@@ -190,6 +190,7 @@ export interface artifactTableDetails {
   location?: string
   chartVersion?: string
   tag?: string
+  storeType?: string
 }
 
 export interface artifactTableItem {

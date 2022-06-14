@@ -29,6 +29,7 @@ export interface MultiTypeDelegateSelectorProps extends IFormGroupProps {
   label?: string
   expressions?: string[]
   allowableTypes?: MultiTypeInputType[]
+  useExecutionTimeInput?: boolean
   tooltipProps?: DataTooltipInterface
   inputProps: Omit<DelegateSelectorsProps, 'onChange'>
 }
@@ -46,6 +47,7 @@ export function MultiTypeDelegateSelector(props: ConnectedMultiTypeDelegateSelec
     name,
     expressions = [],
     inputProps,
+    useExecutionTimeInput,
     ...restProps
   } = props
 
@@ -84,6 +86,7 @@ export function MultiTypeDelegateSelector(props: ConnectedMultiTypeDelegateSelec
           defaultValueToReset={['']}
           skipRenderValueInExpressionLabel
           allowedTypes={allowableTypes}
+          useExecutionTimeInput={useExecutionTimeInput}
           supportListOfExpressions={true}
           disableMultiSelectBtn={disabled}
           expressionRender={() => (

@@ -9,6 +9,7 @@ import type { SelectOption } from '@wings-software/uicore'
 import { ErrorType, Strategy } from '@pipeline/utils/FailureStrategyUtils'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import type { ContinousVerificationData } from './types'
+import { MONITORED_SERVICE_TYPE } from './components/ContinousVerificationWidget/components/ContinousVerificationWidgetSections/components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
 
 export enum JobTypes {
   BLUE_GREEN = 'Bluegreen',
@@ -58,6 +59,10 @@ export const cvDefaultValues: ContinousVerificationData = {
     monitoredServiceRef: '',
     type: '',
     healthSources: [],
+    monitoredService: {
+      type: MONITORED_SERVICE_TYPE.DEFAULT,
+      spec: {}
+    },
     spec: {
       sensitivity: '',
       duration: '',
@@ -101,3 +106,10 @@ export const cvDefaultValues: ContinousVerificationData = {
     }
   ]
 }
+
+export const defaultMonitoredServiceSpec = {
+  type: MONITORED_SERVICE_TYPE.DEFAULT,
+  spec: {}
+}
+
+export const monitoredServiceRefPath = 'spec.monitoredService.spec.monitoredServiceRef'

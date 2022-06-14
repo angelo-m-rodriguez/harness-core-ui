@@ -14,7 +14,7 @@ export function getStageFromPipeline<T extends StageElementConfig = StageElement
 ): PipelineStageWrapper<T> {
   let stage: StageElementWrapperConfig | undefined = undefined
   let parent: StageElementWrapperConfig | undefined = undefined
-  const stages = localPipeline.template
+  const stages = localPipeline?.template
     ? (localPipeline.template.templateInputs as PipelineInfoConfig)?.stages
     : localPipeline?.stages
   if (stages) {

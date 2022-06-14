@@ -168,7 +168,7 @@ export const getInfrastructureDefinitionValidationSchema = (
 
 function getServiceSchema(
   getString: UseStringsReturn['getString'],
-  isNewServiceEnvEntity?: boolean
+  isNewServiceEnvEntity: boolean
 ): Record<string, Yup.Schema<unknown>> {
   return isNewServiceEnvEntity
     ? {
@@ -190,8 +190,8 @@ function getServiceSchema(
 export function getCDStageValidationSchema(
   getString: UseStringsReturn['getString'],
   deploymentType: GetExecutionStrategyYamlQueryParams['serviceDefinitionType'],
-  contextType?: string,
-  isNewServiceEnvEntity?: boolean
+  isNewServiceEnvEntity: boolean,
+  contextType?: string
 ): Yup.Schema<unknown> {
   return Yup.object().shape({
     ...getNameAndIdentifierSchema(getString, contextType),

@@ -30,16 +30,20 @@ export const LoadSourceByType = ({
   type,
   data,
   onSubmit,
-  isTemplate
+  isTemplate,
+  expressions
 }: {
   type: string
   data: any
   onSubmit: (formdata: any, healthSourceList: UpdatedHealthSource) => Promise<void>
   isTemplate?: boolean
+  expressions?: string[]
 }): JSX.Element => {
   switch (type) {
     case HealthSourceTypes.AppDynamics:
-      return <AppDHealthSourceContainer data={data} isTemplate={isTemplate} onSubmit={onSubmit} />
+      return (
+        <AppDHealthSourceContainer data={data} isTemplate={isTemplate} expressions={expressions} onSubmit={onSubmit} />
+      )
     case Connectors.GCP:
       if (data?.product?.value === GCOProduct.CLOUD_LOGS) {
         return <GCOLogsMonitoringSource data={data} onSubmit={onSubmit} />

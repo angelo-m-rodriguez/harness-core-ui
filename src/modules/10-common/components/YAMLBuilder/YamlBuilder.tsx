@@ -54,7 +54,11 @@ import {
   KEY_CODE_FOR_PERIOD,
   KEY_CODE_FOR_SPACE,
   KEY_CODE_FOR_CHAR_Z,
-  MAX_ERR_MSSG_LENGTH
+  MAX_ERR_MSSG_LENGTH,
+  CONTROL_EVENT_KEY_CODE,
+  META_EVENT_KEY_CODE,
+  KEY_CODE_FOR_CHAR_V,
+  KEY_CODE_FOR_CHAR_C
 } from './YAMLBuilderConstants'
 import CopyToClipboard from '../CopyToClipBoard/CopyToClipBoard'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
@@ -399,7 +403,14 @@ const YAMLBuilder: React.FC<YamlBuilderProps> = (props: YamlBuilderProps): JSX.E
     if (isHarnessManaged) {
       showHarnessManagedError()
     } else if (props.isReadOnlyMode && isEditModeSupported) {
-      openDialog()
+      const { keyCode, code, ctrlKey, metaKey } = event
+      const isMetaOrControlKeyPressed = [CONTROL_EVENT_KEY_CODE, META_EVENT_KEY_CODE].includes(keyCode)
+      const isMetaOrControlKeyPressedForCopyPaste =
+        (ctrlKey || metaKey) && [KEY_CODE_FOR_CHAR_V, KEY_CODE_FOR_CHAR_C].includes(code)
+      if (!(isMetaOrControlKeyPressed || isMetaOrControlKeyPressedForCopyPaste)) {
+        // this is to avoid showing warning dialog if user just wants to copy paste
+        openDialog()
+      }
     } else if (props.isReadOnlyMode && !isEditModeSupported && !hideErrorMesageOnReadOnlyMode) {
       showNoPermissionError()
     }

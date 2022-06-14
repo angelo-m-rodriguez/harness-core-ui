@@ -91,7 +91,7 @@ export const PipelineExecutions: React.FC = () => {
       <Layout.Vertical height="100%">
         <Layout.Horizontal padding={{ top: 'medium' }} flex={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Text font={{ weight: 'bold' }} color={Color.GREY_600}>
-            {`${getString('cd.serviceDashboard.totalPipelines')}: ${deployments.length}`}
+            {`${getString('cd.serviceDashboard.totalDeployments')}: ${deployments.length}`}
           </Text>
           <ExpandingSearchInput flip width={200} placeholder={getString('search')} throttle={200} onChange={onSearch} />
         </Layout.Horizontal>

@@ -67,7 +67,7 @@ interface AddEditServiceOverrideFormProps {
   serviceYaml?: SelectOption
   environmentRef?: string
   variableOverride?: VariableOverride
-  variableOverrides?: VariableOverride[]
+  variables?: VariableOverride[]
 }
 
 export interface AddEditServiceOverrideProps {
@@ -203,8 +203,8 @@ export default function AddEditServiceOverride({
         if (yamlVisual) {
           formikRef.current?.setValues({
             ...yamlVisual,
-            variableOverrides: null,
-            variableOverride: yamlVisual.variableOverrides?.[defaultTo(yamlVisual.variableOverrides?.length, 1) - 1]
+            variables: null,
+            variableOverride: yamlVisual.variables?.[defaultTo(yamlVisual.variables?.length, 1) - 1]
           } as any)
         }
       } else {
@@ -221,8 +221,8 @@ export default function AddEditServiceOverride({
 
   const formVariableOverrideObject = (serviceOverride?: ServiceOverrideResponseDTO, variableOverride?: NGVariable) => {
     const parsedYaml = parse(defaultTo(serviceOverride?.yaml, '{}')) as NGServiceOverrideConfig
-    const otherVariableOverrides = defaultTo(
-      parsedYaml.serviceOverrides?.variableOverrides
+    const otherVariables = defaultTo(
+      parsedYaml.serviceOverrides?.variables
         ?.map(override => ({ name: get(override, 'name'), type: get(override, 'type'), value: get(override, 'value') }))
 
         ?.filter(override => {
@@ -231,7 +231,7 @@ export default function AddEditServiceOverride({
       []
     )
 
-    return [...otherVariableOverrides, variableOverride]
+    return [...otherVariables, variableOverride]
   }
 
   const { mutate: upsertServiceOverride, loading: upsertServiceOverrideLoading } = useUpsertServiceOverride({
@@ -251,8 +251,8 @@ export default function AddEditServiceOverride({
           serviceOverrides: {
             environmentRef: environmentIdentifier,
             serviceRef: (values as any).serviceRef,
-            variableOverrides:
-              values.variableOverrides ||
+            variables:
+              values.variables ||
               formVariableOverrideObject(
                 serviceOverrides?.data?.content?.filter(
                   serviceOverride => serviceOverride.serviceRef === values.serviceRef
@@ -368,7 +368,7 @@ export default function AddEditServiceOverride({
                   serviceOverrides: {
                     environmentRef: environmentIdentifier,
                     serviceRef: formikProps.values.serviceRef,
-                    variableOverrides: formVariableOverrideObject(
+                    variables: formVariableOverrideObject(
                       serviceOverrides?.data?.content?.filter(
                         serviceOverride => serviceOverride.serviceRef === formikProps.values.serviceRef
                       )?.[0],

@@ -60,13 +60,13 @@ export const onClickErrorTrackingRow = (
           ,"timestamp":"${timestamp}"
         }`
 
-  const arcUrl = routes.toErrorTrackingArc({
+  const errorTrackingBaseUrl = routes.toErrorTracking({
     orgIdentifier: orgIdentifier,
     projectIdentifier: projectIdentifier,
     accountId: accountId
   })
   const baseUrl = window.location.href.split('#')[0]
-  window.open(`${baseUrl}#${arcUrl}/arc?event=${btoa(arcJson)}`)
+  window.open(`${baseUrl}#${errorTrackingBaseUrl}/arc?event=${btoa(arcJson)}`)
 }
 
 export const isNoLogSelected = (selectedLog?: string | null): boolean =>

@@ -7,5 +7,6 @@
 
 export const PATHTYPE = {
   FullPath: 'fullPath',
-  DropdownPath: 'dropdownPath'
+  DropdownPath: 'dropdownPath',
+  CompleteMetricPath: 'completeMetricPath'
 }

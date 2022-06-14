@@ -37,9 +37,10 @@ export interface ConfigureOptionsDialogProps {
   type: string | JSX.Element
   showDefaultField?: boolean
   showRequiredField?: boolean
-  showAdvanced: boolean
+  hideExecutionTimeField?: boolean
+  showAdvanced?: boolean
   fetchValues?: (done: (response: SelectOption[] | MultiSelectOption[]) => void) => void
-  isReadonly: boolean
+  isReadonly?: boolean
   closeModal: (
     str?: string | undefined,
     defaultStr?: string | number | undefined,
@@ -55,6 +56,7 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
     showDefaultField = true,
     variableName,
     type,
+    hideExecutionTimeField = false,
     showRequiredField = false,
     showAdvanced = false,
     fetchValues,
@@ -133,7 +135,7 @@ export default function ConfigureOptionsDialog(props: ConfigureOptionsDialogProp
                 disabled={isReadonly}
               />
             )}
-            {NG_EXECUTION_INPUT ? (
+            {NG_EXECUTION_INPUT && !hideExecutionTimeField ? (
               <FormInput.CheckBox
                 className={css.checkbox}
                 label={getString('common.configureOptions.askDuringExecution')}

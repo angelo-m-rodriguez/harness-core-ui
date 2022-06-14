@@ -31,6 +31,7 @@ module.exports = {
     '!src/**/__tests__/**',
     '!src/services/**',
     '!src/**/YamlBuilder.tsx',
+    '!src/**/YAMLBuilderConstants.ts',
     '!src/**/*mock*.{ts,tsx}',
     '!src/**/*Mock*.{ts,tsx}',
     '!src/**/CreateConnectorFromYamlPage.tsx',

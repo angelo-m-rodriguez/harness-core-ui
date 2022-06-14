@@ -26,6 +26,7 @@ export interface UseNotificationModalProps {
   onCreateOrUpdate?: (data?: NotificationRules, index?: number, action?: Actions) => void
   stagesOptions?: MultiSelectOption[]
   getExistingNotificationNames?: (skipIndex?: number) => string[]
+  expressions?: string[]
 }
 
 export interface UseNotificationModalReturn {
@@ -42,7 +43,8 @@ export const useNotificationModal = ({
   onCreateOrUpdate,
   onCloseModal,
   stagesOptions,
-  getExistingNotificationNames
+  getExistingNotificationNames,
+  expressions
 }: UseNotificationModalProps): UseNotificationModalReturn => {
   const [view, setView] = useState(Views.CREATE)
   const [index, setIndex] = useState<number>()
@@ -80,6 +82,7 @@ export const useNotificationModal = ({
           <NotificationMethods
             name={getString('notifications.notificationMethod')}
             typeOptions={NotificationTypeSelectOptions}
+            expressions={expressions}
           />
         </StepWizard>
         <Button

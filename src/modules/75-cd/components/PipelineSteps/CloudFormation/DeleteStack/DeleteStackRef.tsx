@@ -33,6 +33,7 @@ import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorRef
 import { setFormikRef, StepFormikFowardRef } from '@pipeline/components/AbstractSteps/Step'
 import { useListAwsRegions } from 'services/portal'
 import { useGetIamRolesForAws } from 'services/cd-ng'
+import { useQueryParams } from '@common/hooks'
 import { Connectors } from '@connectors/constants'
 import { DeleteStackTypes, CloudFormationDeleteStackProps } from '../CloudFormationInterfaces.types'
 import { isRuntime } from '../CloudFormationHelper'
@@ -49,6 +50,8 @@ export const CloudFormationDeleteStack = (
   const [regions, setRegions] = useState<MultiSelectOption[]>([])
   const [awsRoles, setAwsRoles] = useState<MultiSelectOption[]>([])
   const [awsRef, setAwsRef] = useState<string>('')
+  const query = useQueryParams()
+  const sectionId = (query as any).sectionId || ''
 
   const { data: regionData, loading: regionLoading } = useListAwsRegions({
     queryParams: {
@@ -89,7 +92,7 @@ export const CloudFormationDeleteStack = (
       setAwsRoles(roles)
     }
 
-    if (!roleData && !isEmpty(awsRef)) {
+    if (!roleData && !isEmpty(awsRef) && getMultiTypeFromValue(awsRef) === MultiTypeInputType.FIXED) {
       refetch()
     }
   }, [roleData, awsRef])
@@ -105,7 +108,7 @@ export const CloudFormationDeleteStack = (
     <Formik
       enableReinitialize={true}
       initialValues={initialValues}
-      formName="cloudFormationDeleteStack"
+      formName={`cloudFormationDeleteStack-${sectionId}`}
       validate={values => {
         const payload = {
           ...values
@@ -238,14 +241,22 @@ export const CloudFormationDeleteStack = (
                       multiTypeProps={{ expressions, allowableTypes }}
                       disabled={readonly}
                       width={300}
-                      setRefValue
                       onChange={(value: any, _unused, _multiType) => {
-                        /* istanbul ignore next */
-                        if (value?.record?.identifier !== awsConnector) {
-                          setAwsRef(value?.record?.identifier as string)
+                        const scope = value?.scope
+                        let newConnectorRef: string
+                        if (scope === 'org' || scope === 'account') {
+                          newConnectorRef = `${scope}.${value?.record?.identifier}`
+                        } else if (getMultiTypeFromValue(value) === MultiTypeInputType.RUNTIME) {
+                          newConnectorRef = value
+                        } else {
+                          newConnectorRef = value?.record?.identifier
                         }
                         /* istanbul ignore next */
-                        setFieldValue('spec.configuration.spec.connectorRef', value?.record?.identifier || value)
+                        if (value?.record?.identifier !== awsConnector) {
+                          setAwsRef(newConnectorRef)
+                        }
+                        /* istanbul ignore next */
+                        setFieldValue('spec.configuration.connectorRef', newConnectorRef)
                       }}
                     />
                   </div>

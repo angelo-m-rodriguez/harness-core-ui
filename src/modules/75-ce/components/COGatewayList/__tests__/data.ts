@@ -5,6 +5,8 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import type { ResponsePageUserAggregate } from 'services/cd-ng'
+
 export const mockedK8sServiceData = {
   id: 282,
   name: 'ravi-test-13',
@@ -317,4 +319,112 @@ export const mockedEcsClusterServiceData = {
   account_id: 'kmpySmUISimoRrJL6NL73w',
   cloud_account_id: 'Lightwing_Non_prod_old',
   capacity_provider: 'EC2'
+}
+
+export const mockedConnector = {
+  connector: {
+    name: 'dms-test',
+    identifier: 'mock-kubernetes-id',
+    description: '',
+    orgIdentifier: null,
+    projectIdentifier: null,
+    tags: {},
+    type: 'CEK8sCluster',
+    spec: {
+      connectorRef: 'cadfsdg',
+      featuresEnabled: ['VISIBILITY']
+    }
+  },
+  createdAt: 1632812028599,
+  lastModifiedAt: 1632812028588,
+  status: {
+    status: 'SUCCESS',
+    errorSummary: null,
+    errors: null,
+    testedAt: 1632812029812,
+    lastTestedAt: 0,
+    lastConnectedAt: 1632812029812
+  },
+  activityDetails: {
+    lastActivityTime: 1632812028609
+  },
+  harnessManaged: false,
+  gitDetails: {
+    objectId: null,
+    branch: null,
+    repoIdentifier: null,
+    rootFolder: null,
+    filePath: null
+  }
+}
+
+export const activeUserMock: ResponsePageUserAggregate = {
+  status: 'SUCCESS',
+  data: {
+    totalPages: 1,
+    totalItems: 2,
+    pageItemCount: 1,
+    pageSize: 10,
+    content: [
+      {
+        user: {
+          name: 'Rishabh',
+          email: 'abc@harness.io',
+          uuid: '123',
+          locked: false
+        },
+        roleAssignmentMetadata: [
+          {
+            identifier: 'role_assignment_vawmAV0YuQ9HlxmljpAu',
+            roleIdentifier: '_account_admin',
+            roleName: 'Account Admin',
+            resourceGroupIdentifier: '_all_account_level_resources',
+            resourceGroupName: 'All Resources',
+            managedRole: true,
+            managedRoleAssignment: false
+          },
+          {
+            identifier: 'role_assignment_obm6QvdxtfqrlDzug31t',
+            roleIdentifier: '_account_viewer',
+            roleName: 'Account Viewer',
+            resourceGroupIdentifier: '_all_account_level_resources',
+            resourceGroupName: 'All Resources',
+            managedRole: true,
+            managedRoleAssignment: true
+          }
+        ]
+      },
+      {
+        user: {
+          name: 'abc2',
+          email: 'abc2@harness.io',
+          uuid: 'locked',
+          locked: true
+        },
+        roleAssignmentMetadata: [
+          {
+            identifier: 'role_assignment_vawmAV0YuQ9HlxmljpAu',
+            roleIdentifier: '_account_admin',
+            roleName: 'Account Admin',
+            resourceGroupIdentifier: '_all_account_level_resources',
+            resourceGroupName: 'All Resources',
+            managedRole: true,
+            managedRoleAssignment: false
+          },
+          {
+            identifier: 'role_assignment_obm6QvdxtfqrlDzug31t',
+            roleIdentifier: '_account_viewer',
+            roleName: 'Account Viewer',
+            resourceGroupIdentifier: '_all_account_level_resources',
+            resourceGroupName: 'All Resources',
+            managedRole: true,
+            managedRoleAssignment: true
+          }
+        ]
+      }
+    ],
+    pageIndex: 0,
+    empty: false
+  },
+  correlationId: ''
 }

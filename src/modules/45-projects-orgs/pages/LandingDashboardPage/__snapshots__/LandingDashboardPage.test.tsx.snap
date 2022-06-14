@@ -438,7 +438,7 @@ exports[`Landing Dashboard Page render landing page and welcome page by swtich 1
                           <p
                             class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
                           >
-                            deploymentsText
+                            executionsText
                           </p>
                         </div>
                       </p>

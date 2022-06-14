@@ -53,6 +53,12 @@ export const getModuleLink = ({ accountId, orgIdentifier, projectIdentifier, mod
       })
     case ModuleName.CE:
       return routes.toCEOverview({ accountId })
+    case ModuleName.STO:
+      return routes.toSTOProjectOverview({
+        projectIdentifier,
+        orgIdentifier,
+        accountId
+      })
   }
   return ''
 }

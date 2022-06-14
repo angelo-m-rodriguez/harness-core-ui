@@ -12,7 +12,7 @@ export enum StepType {
   HTTP = 'Http',
   SHELLSCRIPT = 'ShellScript',
   Barrier = 'Barrier',
-  Lock = 'Lock',
+  Queue = 'Queue',
   K8sRollingRollback = 'K8sRollingRollback',
   K8sBlueGreenDeploy = 'K8sBlueGreenDeploy',
   K8sCanaryDeploy = 'K8sCanaryDeploy',
@@ -75,7 +75,8 @@ export enum StepType {
   ServerlessAwsInfra = 'ServerlessAwsInfra',
   CloudFormationRollbackStack = 'RollbackStack',
   CloudFormationDeleteStack = 'DeleteStack',
-  CloudFormationCreateStack = 'CreateStack'
+  CloudFormationCreateStack = 'CreateStack',
+  CreatePR = 'CreatePR'
 }
 
 export interface PipelineInfrastructureV2 extends PipelineInfrastructure {

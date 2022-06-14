@@ -25,14 +25,14 @@ interface ProjectSetupMenuProps {
 const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<PipelineType<ProjectPathProps>>()
-  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, NG_GIT_EXPERIENCE } = useFeatureFlags()
+  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, CVNG_TEMPLATE_MONITORED_SERVICE } = useFeatureFlags()
   const { showGetStartedTabInMainMenu } = useSideNavContext()
   const { enabledHostedBuildsForFreeUsers } = useHostedBuilds()
   const params = { accountId, orgIdentifier, projectIdentifier, module }
   const isCIorCD = module === 'ci' || module === 'cd'
-  // const isCV = module === 'cv'
+  const isCV = module === 'cv'
   const canUsePolicyEngine = useAnyEnterpriseLicense()
-  const getGitSyncEnabled = (isCIorCD || !module) && !NG_GIT_EXPERIENCE
+  const getGitSyncEnabled = isCIorCD || !module
 
   return (
     <NavExpandable title={getString('common.projectSetup')} route={routes.toSetup(params)}>
@@ -48,12 +48,14 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
             to={routes.toGitSyncAdmin({ accountId, orgIdentifier, projectIdentifier, module })}
           />
         ) : null}
-        {/* 
-         To enable templates for CV
-         Replace isCIorCD with (isCIorCD || isCV) 
-         */}
         {NG_TEMPLATES && isCIorCD && (
           <SidebarLink label={getString('common.templates')} to={routes.toTemplates(params)} />
+        )}
+        {CVNG_TEMPLATE_MONITORED_SERVICE && isCV && (
+          <SidebarLink
+            label={getString('common.templates')}
+            to={routes.toTemplates({ ...params, templateType: 'MonitoredService' })}
+          />
         )}
         {OPA_PIPELINE_GOVERNANCE && isCIorCD && canUsePolicyEngine && (
           <SidebarLink label={getString('common.governance')} to={routes.toGovernance(params as GovernancePathProps)} />

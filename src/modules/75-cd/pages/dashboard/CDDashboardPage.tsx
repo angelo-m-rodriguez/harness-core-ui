@@ -218,7 +218,11 @@ export const CDDashboardPage: React.FC = () => {
             <Container className={styles.page} padding="large">
               <DeploymentsHealthCards range={timeRange} setRange={setTimeRange} title="Deployments Health" />
               <Container className={styles.executionsWrapper}>
-                <DeploymentExecutionsChart range={timeRange} setRange={setTimeRange} title="Deployments" />
+                <DeploymentExecutionsChart
+                  range={timeRange}
+                  setRange={setTimeRange}
+                  title={getString('executionsText')}
+                />
               </Container>
               <CardRailView contentType="WORKLOAD" isLoading={loadingWorkloads}>
                 {workloadsData?.data?.workloadDeploymentInfoList?.map(workload => (

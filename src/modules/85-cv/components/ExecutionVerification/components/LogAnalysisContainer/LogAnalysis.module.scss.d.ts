@@ -12,6 +12,7 @@ declare const styles: {
   readonly filters: string
   readonly loading: string
   readonly logAnalysisRow: string
+  readonly logCountsDetail: string
   readonly logsAnalysisFilters: string
   readonly logsTab: string
   readonly logsTabServiceScreen: string

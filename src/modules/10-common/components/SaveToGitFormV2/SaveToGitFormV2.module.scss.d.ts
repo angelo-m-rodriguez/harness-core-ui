@@ -9,6 +9,7 @@
 declare const styles: {
   readonly branchInput: string
   readonly branchSection: string
+  readonly createPrCheckbox: string
   readonly formBody: string
   readonly formButton: string
   readonly formRow: string

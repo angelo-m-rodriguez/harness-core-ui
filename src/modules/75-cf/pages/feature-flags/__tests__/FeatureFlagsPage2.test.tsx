@@ -35,6 +35,9 @@ describe('FeatureFlagsPage', () => {
     mockImport('services/cd-ng', {
       useGetEnvironmentListForProject: () => ({ error: { message }, refetch: jest.fn() })
     })
+    mockImport('services/cf', {
+      useGetAllFeatures: () => ({ data: undefined, refetch: jest.fn() })
+    })
 
     render(
       <TestWrapper

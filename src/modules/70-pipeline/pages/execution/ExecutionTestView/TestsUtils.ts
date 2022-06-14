@@ -12,6 +12,9 @@ import { uniqWith, isEqual, orderBy } from 'lodash-es'
 import type { StepInfo, Error } from 'services/ti-service'
 import type { GraphLayoutNode } from 'services/pipeline-ng'
 
+export const StepTypes = {
+  RUN_TESTS: 'RunTests'
+}
 export const renderFailureRate = (failureRate: number): number => {
   let scale = 1
   let value = failureRate

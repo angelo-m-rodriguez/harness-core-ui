@@ -86,10 +86,6 @@ export function CustomVariablesEditableStage(props: CustomVariableEditableProps)
     }
   }, [enableValidation, subscribeForm, unSubscribeForm, tabName])
 
-  React.useEffect(() => {
-    formikRef.current?.setValues({ ...initialValues })
-  }, [initialValues])
-
   return (
     <Formik
       initialValues={initialValues}

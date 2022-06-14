@@ -16,7 +16,8 @@ import {
   Heading,
   ButtonProps,
   Formik,
-  ButtonVariation
+  ButtonVariation,
+  MultiTypeInputType
 } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
@@ -39,6 +40,7 @@ interface ConfigureSlackNotificationsProps {
   onBack?: (config?: SlackNotificationConfiguration) => void
   submitButtonText?: string
   config?: SlackNotificationConfiguration
+  expressions?: string[]
 }
 
 interface SlackNotificationData {
@@ -101,6 +103,7 @@ export const TestSlackNotifications: React.FC<{
 }
 
 const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = props => {
+  const [webhookUrlType, setWebhookUrlType] = useState<MultiTypeInputType>(MultiTypeInputType.FIXED)
   const { getString } = useStrings()
 
   const handleSubmit = (formData: SlackNotificationData): void => {
@@ -133,8 +136,9 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
             // TODO: Create global validation function for url validation
             webhookUrl: Yup.string().when('userGroups', {
               is: val => isEmpty(val),
-              then: URLValidationSchema(),
-              otherwise: URLValidationSchemaWithoutRequired()
+              then: webhookUrlType === MultiTypeInputType.EXPRESSION ? Yup.string().required() : URLValidationSchema(),
+              otherwise:
+                webhookUrlType === MultiTypeInputType.EXPRESSION ? Yup.string() : URLValidationSchemaWithoutRequired()
             })
           })}
           initialValues={{
@@ -146,9 +150,25 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
           {formik => {
             return (
               <FormikForm>
-                <FormInput.Text name={'webhookUrl'} label={getString('notifications.slackwebhookUrl')} />
+                {props.expressions ? (
+                  <FormInput.MultiTextInput
+                    name={'webhookUrl'}
+                    label={getString('notifications.slackwebhookUrl')}
+                    multiTextInputProps={{
+                      expressions: props.expressions,
+                      allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION],
+                      onTypeChange: setWebhookUrlType
+                    }}
+                  />
+                ) : (
+                  <FormInput.Text name={'webhookUrl'} label={getString('notifications.slackwebhookUrl')} />
+                )}
+
                 <Layout.Horizontal margin={{ bottom: 'xxlarge' }} style={{ alignItems: 'center' }}>
-                  <TestSlackNotifications data={formik.values} />
+                  <TestSlackNotifications
+                    data={formik.values}
+                    buttonProps={{ disabled: webhookUrlType === MultiTypeInputType.EXPRESSION }}
+                  />
                 </Layout.Horizontal>
                 <UserGroupsInput name="userGroups" label={getString('notifications.labelSlackUserGroups')} />
                 {props.isStep ? (
@@ -162,7 +182,7 @@ const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = 
                     />
                     <Button
                       text={props.submitButtonText || getString('next')}
-                      disabled={!(formik.values.userGroups.length || formik.values.webhookUrl.length)}
+                      disabled={!(formik.values.userGroups.length || formik.values.webhookUrl?.length)}
                       variation={ButtonVariation.PRIMARY}
                       type="submit"
                     />

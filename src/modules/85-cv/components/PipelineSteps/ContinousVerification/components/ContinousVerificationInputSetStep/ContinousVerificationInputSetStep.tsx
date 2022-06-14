@@ -24,6 +24,7 @@ import type { ContinousVerificationProps } from './types'
 import {
   baseLineOptions,
   durationOptions,
+  monitoredServiceRefPath,
   trafficSplitPercentageOptions,
   VerificationSensitivityOptions
 } from '../../constants'
@@ -33,6 +34,8 @@ import {
   getInfraAndServiceFromStage
 } from './components/ContinousVerificationInputSetStep.utils'
 
+import { MONITORED_SERVICE_TYPE } from '../ContinousVerificationWidget/components/ContinousVerificationWidgetSections/components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
+import ConfiguredRunTimeMonitoredService from './components/ConfiguredRunTimeMonitoredService/ConfiguredRunTimeMonitoredService'
 import css from './ContinousVerificationInputSetStep.module.scss'
 
 export function ContinousVerificationInputSetStep(
@@ -47,6 +50,7 @@ export function ContinousVerificationInputSetStep(
   const [pipeline, setPipeline] = useState<{ pipeline: PipelineInfoConfig } | undefined>()
   const prefix = isEmpty(path) ? '' : `${path}.`
   const { sensitivity, duration, baseline, trafficsplit, deploymentTag } = (template?.spec?.spec as spec) || {}
+  const { monitoredService } = template?.spec || {}
   const { data: pipelineData, refetch: fetchPipeline } = useGetPipeline({
     pipelineIdentifier,
     queryParams: {
@@ -80,9 +84,25 @@ export function ContinousVerificationInputSetStep(
     return { serviceIdentifier: serviceIdentifierData, envIdentifier: envIdentifierData }
   }, [pipeline, formik])
 
-  return (
-    <FormikForm>
-      {(serviceIdentifierFromStage === RUNTIME_INPUT_VALUE || envIdentifierDataFromStage === RUNTIME_INPUT_VALUE) && (
+  const renderRunTimeMonitoredService = (): JSX.Element => {
+    if (
+      monitoredService?.type === MONITORED_SERVICE_TYPE.CONFIGURED &&
+      checkIfRunTimeInput(monitoredService?.spec?.monitoredServiceRef)
+    ) {
+      return (
+        <ConfiguredRunTimeMonitoredService
+          prefix={prefix}
+          monitoredServiceRefPath={monitoredServiceRefPath}
+          expressions={expressions}
+          allowableTypes={allowableTypes}
+          monitoredService={monitoredService}
+        />
+      )
+    } else if (
+      serviceIdentifierFromStage === RUNTIME_INPUT_VALUE ||
+      envIdentifierDataFromStage === RUNTIME_INPUT_VALUE
+    ) {
+      return (
         <RunTimeMonitoredService
           serviceIdentifier={serviceIdentifier}
           envIdentifier={envIdentifier}
@@ -90,8 +110,15 @@ export function ContinousVerificationInputSetStep(
           initialValues={initialValues}
           prefix={prefix}
         />
-      )}
+      )
+    } else {
+      return <></>
+    }
+  }
 
+  return (
+    <FormikForm>
+      {renderRunTimeMonitoredService()}
       <Container className={css.container}>
         {checkIfRunTimeInput(sensitivity) && (
           <Container className={css.itemRuntimeSetting}>

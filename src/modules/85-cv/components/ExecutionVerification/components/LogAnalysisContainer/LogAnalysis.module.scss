@@ -77,3 +77,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.logCountsDetail {
+  margin-bottom: var(--spacing-small);
+  flex-wrap: wrap;
+}

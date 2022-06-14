@@ -6,13 +6,14 @@
  */
 
 import React from 'react'
-import { debounce, set } from 'lodash-es'
+import { debounce, omit, set } from 'lodash-es'
 import produce from 'immer'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import type { StageElementConfig } from 'services/cd-ng'
+import type { DeploymentStageConfig, StageElementConfig } from 'services/cd-ng'
 import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
 import { deleteStageInfo, ServiceDeploymentType } from '@pipeline/utils/stageHelpers'
 import { EditStageView } from '../DeployStage/EditStageView/EditStageView'
+import type { EditStageFormikType } from '../DeployStage/EditStageViewInterface'
 
 export default function DeployStageSpecifications(props: React.PropsWithChildren<unknown>): JSX.Element {
   const {
@@ -27,10 +28,14 @@ export default function DeployStageSpecifications(props: React.PropsWithChildren
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleChange = React.useCallback(
-    debounce((values: StageElementConfig): void => {
+    debounce((values: DeploymentStageElementConfig): void => {
       updateStage({
         ...stage?.stage,
-        ...values
+        ...omit(values, 'gitOpsEnabled'),
+        spec: {
+          ...stage?.stage?.spec,
+          gitOpsEnabled: (values as EditStageFormikType).gitOpsEnabled
+        } as DeploymentStageConfig
       })
     }, 300),
     [stage?.stage, updateStage]

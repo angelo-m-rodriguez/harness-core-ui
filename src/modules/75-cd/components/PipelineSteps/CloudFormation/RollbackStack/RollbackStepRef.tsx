@@ -17,6 +17,7 @@ import {
 import { IdentifierSchemaWithOutName, NameSchema } from '@common/utils/Validation'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
+import { useQueryParams } from '@common/hooks'
 import { setFormikRef, StepFormikFowardRef } from '@pipeline/components/AbstractSteps/Step'
 import type { RollbackStackProps } from '../CloudFormationInterfaces.types'
 import { isRuntime } from '../CloudFormationHelper'
@@ -29,12 +30,13 @@ export const RollbackStack = (
 ): JSX.Element => {
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
-
+  const query = useQueryParams()
+  const sectionId = (query as any).sectionId || ''
   return (
     <Formik
       enableReinitialize={true}
       initialValues={initialValues}
-      formName="cloudFormationDeleteStack"
+      formName={`cloudFormationRollbackStack-${sectionId}`}
       validate={values => {
         const payload = {
           ...values

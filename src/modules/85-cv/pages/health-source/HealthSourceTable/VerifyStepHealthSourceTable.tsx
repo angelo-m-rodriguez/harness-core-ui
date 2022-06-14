@@ -20,7 +20,7 @@ import { useDrawer } from '@cv/hooks/useDrawerHook/useDrawerHook'
 import { useToaster } from '@common/exports'
 import { getErrorMessage } from '@cv/utils/CommonUtils'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { PageSpinner } from '@common/components'
+import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import HealthSourceTable from './HealthSourceTable'
 import HealthSourceDrawerHeader from '../HealthSourceDrawer/component/HealthSourceDrawerHeader/HealthSourceDrawerHeader'
 import HealthSourceDrawerContent from '../HealthSourceDrawer/HealthSourceDrawerContent'
@@ -170,7 +170,7 @@ export default function VerifyStepHealthSourceTable(tableProps: VerifyStepHealth
   ])
 
   if (loading) {
-    return <PageSpinner />
+    return <ContainerSpinner />
   }
   return (
     <>

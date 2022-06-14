@@ -56,9 +56,10 @@
 
   &.resourcewaiting,
   &.approvalwaiting,
-  &.interventionwaiting {
+  &.interventionwaiting,
+  &.inputwaiting {
     --execution-status-bg-color: var(--yellow-200);
-    --execution-status-color: #d2261d;
+    --execution-status-color: var(--red-600);
   }
 
   &.pausing,

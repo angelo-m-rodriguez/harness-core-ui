@@ -6,9 +6,13 @@
  */
 
 import React from 'react'
+import type { ModulePathParams } from '@common/interfaces/RouteInterfaces'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
-import { accountPathProps, variablePathProps } from '@common/utils/routeUtils'
+import { accountPathProps, projectPathProps, variablePathProps } from '@common/utils/routeUtils'
 
 import { AccountSideNavProps } from '@common/RouteDestinations'
 import AuditTrailFactory from '@audit-trail/factories/AuditTrailFactory'
@@ -52,6 +56,24 @@ export default (
       exact
     >
       {/* TODO */}
+    </RouteWithLayout>
+  </>
+)
+
+export const VariableRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toVariables({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.VariablesPage}
+    >
+      <VariablesPage />
     </RouteWithLayout>
   </>
 )

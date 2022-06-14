@@ -28,10 +28,7 @@ import { useFeature } from '@common/hooks/useFeatures'
 import { savePipeline, usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
 import { UseSaveSuccessResponse, useSaveToGitDialog } from '@common/modals/SaveToGitDialog/useSaveToGitDialog'
-import {
-  DefaultNewPipelineId,
-  SplitViewTypes
-} from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
+import { DefaultNewPipelineId } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineActions'
 import { PipelineActions } from '@common/constants/TrackingConstants'
 import { validateCICodebaseConfiguration } from '@pipeline/components/PipelineStudio/StepUtil'
 import { useQueryParams } from '@common/hooks'
@@ -48,13 +45,13 @@ import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import type { PipelineInfoConfig } from 'services/cd-ng'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import type { GovernanceMetadata } from 'services/pipeline-ng'
-import PipelineErrors from '@pipeline/components/PipelineStudio/PipelineCanvas/PipelineErrors/PipelineErrors'
 import { StoreMetadata, StoreType } from '@common/constants/GitSyncTypes'
 import type { AccessControlCheckError } from 'services/rbac'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { EvaluationModal } from '@governance/EvaluationModal'
 import type { SaveToGitFormV2Interface } from '@common/components/SaveToGitFormV2/SaveToGitFormV2'
 import { SCHEMA_VALIDATION_FAILED } from '@common/interfaces/GitSyncInterface'
+import usePipelineErrors from '../PipelineCanvas/PipelineErrors/usePipelineErrors'
 
 export interface SavePipelinePopoverProps extends PopoverProps {
   toPipelineStudio: PathFn<PipelineType<PipelinePathProps> & PipelineStudioQueryParams>
@@ -68,14 +65,12 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
   const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
 
   const {
-    state: { pipeline, yamlHandler, storeMetadata, gitDetails, pipelineView, isUpdated },
+    state: { pipeline, yamlHandler, storeMetadata, gitDetails, isUpdated },
     deletePipelineCache,
     fetchPipeline,
     view,
     setSchemaErrorView,
-    setSelection,
-    isReadonly,
-    updatePipelineView
+    isReadonly
   } = usePipelineContext()
   const [loading, setLoading] = React.useState<boolean>()
   const { branch, repoName, connectorRef, storeType, repoIdentifier } = useQueryParams<GitQueryParams>()
@@ -92,7 +87,6 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
   const { projectIdentifier, orgIdentifier, accountId, pipelineIdentifier, module } =
     useParams<PipelineType<PipelinePathProps>>()
   const isYaml = view === SelectedView.YAML
-  const [updatePipelineAPIResponse, setUpdatePipelineAPIResponse] = React.useState<any>()
   const [governanceMetadata, setGovernanceMetadata] = React.useState<GovernanceMetadata>()
 
   const isPipelineRemote = isGitSimplificationEnabled && storeType === StoreType.REMOTE
@@ -132,12 +126,12 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
     templatesFeatureFlagEnabled &&
     pipelineTemplatesFeatureFlagEnabled &&
     canEdit &&
-    !pipeline.template
+    !pipeline?.template
 
   const isSaveEnabled = !isReadonly && isUpdated
 
   const { save } = useSaveAsTemplate({ data: pipeline, type: 'Pipeline', fireSuccessEvent: true })
-
+  const { openPipelineErrorsModal } = usePipelineErrors()
   const navigateToLocation = (newPipelineId: string, updatedGitDetails?: SaveToGitFormInterface): void => {
     history.replace(
       toPipelineStudio({
@@ -158,34 +152,6 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
       })
     )
   }
-
-  const gotoViewWithDetails = React.useCallback(
-    ({ stageId, stepId, sectionId }: { stageId?: string; stepId?: string; sectionId?: string } = {}): void => {
-      hideErrorModal()
-      // If Yaml mode, or if pipeline error - stay on yaml mode
-      if (isYaml || (!stageId && !stepId)) {
-        return
-      }
-      setSelection(sectionId ? { stageId, stepId, sectionId } : { stageId, stepId })
-      updatePipelineView({
-        ...pipelineView,
-        isSplitViewOpen: true,
-        splitViewData: { type: SplitViewTypes.StageView }
-      })
-    },
-    [isYaml, pipelineView]
-  )
-
-  const [showErrorModal, hideErrorModal] = useModalHook(
-    () => (
-      <PipelineErrors
-        errors={updatePipelineAPIResponse?.metadata?.schemaErrors}
-        gotoViewWithDetails={gotoViewWithDetails}
-        onClose={hideErrorModal}
-      />
-    ),
-    [updatePipelineAPIResponse]
-  )
 
   const publishPipeline = async (newPipelineId: string, updatedGitDetails?: SaveToGitFormInterface) => {
     if (pipelineIdentifier === DefaultNewPipelineId) {
@@ -254,8 +220,7 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
       clear()
       setSchemaErrorView(true)
       if ((response as any)?.metadata?.schemaErrors?.length) {
-        setUpdatePipelineAPIResponse(response)
-        showErrorModal()
+        openPipelineErrorsModal(response)
         if (isGitSyncEnabled || currStoreMetadata?.storeType === StoreType.REMOTE) {
           // isGitSyncEnabled true
           throw { code: SCHEMA_VALIDATION_FAILED }

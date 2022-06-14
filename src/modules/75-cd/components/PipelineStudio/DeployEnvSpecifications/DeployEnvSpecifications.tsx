@@ -82,10 +82,16 @@ export default function DeployEnvSpecifications(props: PropsWithChildren<unknown
   const updateEnvStep = useCallback(
     (value: any) => {
       const stageData = produce(stage, draft => {
-        const environmentObj: any = get(draft, 'stage.spec.environment', {})
-        if (value.environmentRef) {
-          environmentObj.environmentRef = value.environmentRef
-          environmentObj.infrastructureDefinitions = [{ ref: value.infrastructureRef }]
+        const specObject: any = get(draft, 'stage.spec', {})
+
+        if (specObject) {
+          if (value.environment) {
+            specObject.environment = value.environment
+            delete specObject.environmentGroup
+          } else if (value.environmentGroup) {
+            specObject.environmentGroup = value.environmentGroup
+            delete specObject.environment
+          }
         }
       })
       debounceUpdateStage(stageData?.stage)

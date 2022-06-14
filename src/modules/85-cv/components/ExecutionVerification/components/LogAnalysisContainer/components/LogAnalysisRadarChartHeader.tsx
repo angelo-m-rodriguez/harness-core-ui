@@ -19,13 +19,14 @@ const LogAnalysisRadarChartHeader: React.FC<LogAnalysisRadarChartHeaderProps> = 
   const { getString } = useStrings()
   return (
     <Container margin={{ bottom: 'large' }}>
-      <Layout.Horizontal margin={{ bottom: 'small' }}>
+      <Layout.Horizontal className={css.logCountsDetail}>
         {eventsCount ? (
           <Text
             border={{ right: true }}
             padding={{ right: 'small' }}
             margin={{ right: 'small' }}
             font={{ variation: FontVariation.SMALL }}
+            style={{ whiteSpace: 'nowrap' }}
             data-testid="LogAnalysis_totalClusters"
           >
             {getString('total')} : {totalClustersCount ?? getString('noData')}

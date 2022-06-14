@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react'
-import type { CellProps } from 'react-table'
+import type { CellProps, Column } from 'react-table'
 import cx from 'classnames'
 import {
   Text,
@@ -32,26 +32,29 @@ import Highcharts from 'highcharts'
 import { useHistory, useParams } from 'react-router-dom'
 import { Classes, Drawer, Menu, Position } from '@blueprintjs/core'
 import routes from '@common/RouteDefinitions'
-import { useToaster } from '@common/exports'
+import { StringUtils, useToaster } from '@common/exports'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
 import {
   AllResourcesOfAccountResponse,
   Service,
   ServiceSavings,
   useAllServiceResources,
-  useGetServices,
   useHealthOfService,
   useRequestsOfService,
   useSavingsOfService,
   useGetServiceDiagnostics,
   ServiceError,
-  useCumulativeServiceSavings,
   useDescribeServiceInContainerServiceCluster,
-  useRouteDetails
+  useRouteDetails,
+  useFetchRules,
+  FetchRulesResponseRecords,
+  FetchRulesBody,
+  FilterDTO
 } from 'services/lw'
 import { String, useStrings } from 'framework/strings'
 import useDeleteServiceHook from '@ce/common/useDeleteService'
 import { useTelemetry } from '@common/hooks/useTelemetry'
+import { useAllQueryParamsState } from '@ce/common/hooks/useAllQueryParamsState'
 import { USER_JOURNEY_EVENTS } from '@ce/TrackingEventsConstants'
 import { useFeature } from '@common/hooks/useFeatures'
 import RbacButton from '@rbac/components/Button/Button'
@@ -60,16 +63,24 @@ import type { FeatureDetail } from 'framework/featureStore/featureStoreUtil'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { RulesMode } from '@ce/constants'
 import { Utils } from '@ce/common/Utils'
-import { useQueryParamsState } from '@common/hooks/useQueryParamsState'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
-import { useQueryParams } from '@common/hooks'
+import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
+import type { orderType, serverSortProps, sortType } from '@common/components/Table/react-table-config'
+import { UNSAVED_FILTER } from '@common/components/Filter/utils/FilterUtils'
 import COGatewayAnalytics from './COGatewayAnalytics'
 import COGatewayCumulativeAnalytics from './COGatewayCumulativeAnalytics'
 import ComputeType from './components/ComputeType'
-import { getInstancesLink, getRelativeTime, getStateTag, getRiskGaugeChartOptions } from './Utils'
+import {
+  getInstancesLink,
+  getRelativeTime,
+  getStateTag,
+  getRiskGaugeChartOptions,
+  getFilterBodyFromFilterData
+} from './Utils'
 import useToggleRuleState from './useToggleRuleState'
 import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
+import GatewayListFilters from './GatewayListFilters'
 import landingPageSVG from './images/AutostoppingRuleIllustration.svg'
 import refreshIcon from './images/refresh.svg'
 import NoDataImage from './images/NoData.svg'
@@ -97,6 +108,27 @@ interface EmptyListPageProps {
 interface RulesListQueryParams {
   mode?: RulesMode
   search?: string
+  page?: number
+  sort?: SortByObjInterface
+}
+
+interface GetRulesReturnDetails {
+  response?: FetchRulesResponseRecords
+  error?: any
+}
+
+interface PaginationResponseProps {
+  totalPages: number
+  totalRecords: number
+}
+
+interface PaginationProps extends PaginationResponseProps {
+  pageIndex: number
+}
+
+interface SortByObjInterface {
+  field?: sortType
+  type?: orderType
 }
 
 function IconCell(tableProps: CellProps<Service>): JSX.Element {
@@ -483,12 +515,16 @@ interface RulesTableContainerProps {
   setRules: (services: Service[]) => void
   loading: boolean
   rowMenuProps: TableRowMenuProps
-  pageProps: { index: number; setIndex: (index: number) => void }
+  pageProps: PaginationProps
+  setPageProps: (pagination: PaginationProps) => void
   onRowClick: (data: Service, index: number) => void
-  refetchRules: (value: string, isSearchActive: boolean, triggerFetch?: boolean) => Promise<void>
+  refetchRules: () => Promise<void>
   onSearchCallback?: (value: string) => void
   searchParams: SearchParams
   mode: RulesMode
+  sortObj: SortByObjInterface
+  handleSort: (sort: SortByObjInterface) => void
+  isSorting: boolean
 }
 
 const POLL_TIMER = 1000 * 60 * 1
@@ -545,6 +581,41 @@ const useSubmittedRulesStatusUpdate = ({
   }, [data?.response])
 }
 
+const getServerSortProps = ({
+  enableServerSort,
+  accessor,
+  sortByObj,
+  setSortByObj
+}: {
+  enableServerSort: boolean
+  accessor: string
+  sortByObj: SortByObjInterface
+  setSortByObj: (sort: SortByObjInterface) => void
+  refetch?: () => void
+}): serverSortProps => {
+  if (!enableServerSort) {
+    return { enableServerSort: false }
+  } else {
+    let newOrder: orderType | undefined
+    const sortName = accessor
+
+    return {
+      enableServerSort: true,
+      isServerSorted: sortByObj.field === accessor,
+      isServerSortedDesc: sortByObj.type === 'DESC',
+      getSortedColumn: _sortData => {
+        if (sortName === sortByObj.field && sortByObj.type) {
+          newOrder = sortByObj.type === 'DESC' ? 'ASC' : 'DESC'
+        } else {
+          // no saved state for sortBy of the same sort type
+          newOrder = 'ASC'
+        }
+        setSortByObj({ field: sortName, type: newOrder })
+      }
+    }
+  }
+}
+
 const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
   rules,
   setRules,
@@ -554,62 +625,118 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
   onRowClick,
   refetchRules,
   searchParams,
-  mode
+  mode,
+  setPageProps,
+  sortObj,
+  handleSort,
+  isSorting
 }) => {
   const { getString } = useStrings()
-  const tableData = rules.slice(
-    pageProps.index * TOTAL_ITEMS_PER_PAGE,
-    pageProps.index * TOTAL_ITEMS_PER_PAGE + TOTAL_ITEMS_PER_PAGE
-  )
 
   useSubmittedRulesStatusUpdate({
-    rules: tableData,
+    rules,
     onRuleUpdate: ({ updatedService, index }) => {
       const updatedRules = [...rules]
-      const updatedIndex = pageProps.index * TOTAL_ITEMS_PER_PAGE + index
+      const updatedIndex = pageProps.pageIndex * TOTAL_ITEMS_PER_PAGE + index
       updatedRules.splice(updatedIndex, 1, updatedService)
       setRules(updatedRules)
     }
   })
 
-  /* istanbul ignore next */
-  const onSearchChange = async (val: string) => {
-    val = val.trim()
-    await refetchRules(val, true, false)
-    pageProps.setIndex(0)
+  const handleRefreshClick = () => {
+    refetchRules()
   }
 
-  const handleRefreshClick = () => {
-    refetchRules(searchParams.text, !_isEmpty(searchParams.text))
+  const onPageClick = (newPageIndex: number) => {
+    setPageProps({ ...pageProps, pageIndex: newPageIndex + 1 })
   }
 
   const emptySearchResults = _isEmpty(rules)
 
+  const columns: Column<Service>[] = React.useMemo(
+    () => [
+      {
+        accessor: 'name',
+        Header: getString('ce.co.rulesTableHeaders.name'),
+        width: '18%',
+        Cell: NameCell,
+        serverSortProps: getServerSortProps({
+          enableServerSort: true,
+          accessor: 'name',
+          sortByObj: sortObj,
+          setSortByObj: handleSort
+        })
+      },
+      {
+        accessor: 'idle_time_mins',
+        Header: getString('ce.co.rulesTableHeaders.idleTime'),
+        width: '8%',
+        Cell: TimeCell,
+        disableSortBy: true
+      },
+      {
+        accessor: 'fulfilment',
+        Header: getString('ce.co.rulesTableHeaders.fulfilment'),
+        width: '12%',
+        Cell: IconCell,
+        disableSortBy: true
+      },
+      {
+        Header: getString('ce.co.rulesTableHeaders.mangedResources'),
+        width: '22%',
+        Cell: ResourcesCell
+      },
+      {
+        accessor: 'access_point_id', // random accessor to display sort icon
+        Header: getString('ce.co.rulesTableHeaders.savings').toUpperCase(),
+        width: '15%',
+        Cell: SavingsCell,
+        serverSortProps: getServerSortProps({
+          enableServerSort: true,
+          accessor: 'savings',
+          sortByObj: sortObj,
+          setSortByObj: handleSort
+        })
+      },
+      {
+        accessor: 'account_identifier', // random accessor to display sort icon
+        Header: getString('ce.co.rulesTableHeaders.lastActivity'),
+        width: '10%',
+        Cell: ActivityCell,
+        serverSortProps: getServerSortProps({
+          enableServerSort: true,
+          accessor: 'last_activity',
+          sortByObj: sortObj,
+          setSortByObj: handleSort
+        })
+      },
+      {
+        Header: getString('ce.co.rulesTableHeaders.status'),
+        width: '10%',
+        Cell: StatusCell,
+        disableSortBy: true
+      },
+      {
+        Header: '',
+        id: 'menu',
+        accessor: row => row.id,
+        width: '5%',
+        Cell: (cellData: CellProps<Service>) =>
+          RenderColumnMenu(cellData, {
+            onDelete,
+            onEdit,
+            onStateToggle
+          }),
+        disableSortBy: true
+      }
+    ],
+    [rules, isSorting]
+  )
+
   return (
     <Container padding={'xlarge'}>
-      <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
-        <Layout.Horizontal>
-          {!emptySearchResults && searchParams.text && !loading ? (
-            <Text font={{ variation: FontVariation.H6 }}>
-              {getString('ce.co.searchResultsText', {
-                count: rules.length,
-                text: searchParams.text
-              })}
-            </Text>
-          ) : null}
-        </Layout.Horizontal>
-        <Layout.Horizontal flex>
-          <ExpandingSearchInput
-            placeholder={getString('search')}
-            onChange={onSearchChange}
-            throttle={300}
-            alwaysExpanded={true}
-            defaultValue={searchParams.text}
-          />
-        </Layout.Horizontal>
-      </Layout.Horizontal>
       <Container margin={{ top: 'medium' }} style={{ position: 'relative' }}>
-        {loading ? (
+        {!isSorting && loading ? (
           <Layout.Horizontal style={{ padding: 'var(--spacing-large)', paddingTop: 'var(--spacing-xxxlarge)' }}>
             <PageSpinner />
           </Layout.Horizontal>
@@ -638,74 +765,21 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
               <img src={refreshIcon} width={'12px'} height={'12px'} />
               <Text>{getString('common.refresh')}</Text>
             </Layout.Horizontal>
-            <TableV2<Service>
-              data={tableData}
-              pagination={{
-                pageSize: TOTAL_ITEMS_PER_PAGE,
-                pageIndex: pageProps.index,
-                pageCount: Math.ceil(rules.length / TOTAL_ITEMS_PER_PAGE) ?? 1,
-                itemCount: rules.length,
-                gotoPage: newPageIndex => pageProps.setIndex(newPageIndex)
-              }}
-              onRowClick={onRowClick}
-              columns={[
-                {
-                  accessor: 'name',
-                  Header: getString('ce.co.rulesTableHeaders.name'),
-                  width: '18%',
-                  Cell: NameCell,
-                  disableSortBy: true
-                },
-                {
-                  accessor: 'idle_time_mins',
-                  Header: getString('ce.co.rulesTableHeaders.idleTime'),
-                  width: '8%',
-                  Cell: TimeCell,
-                  disableSortBy: true
-                },
-                {
-                  accessor: 'fulfilment',
-                  Header: getString('ce.co.rulesTableHeaders.fulfilment'),
-                  width: '12%',
-                  Cell: IconCell,
-                  disableSortBy: true
-                },
-                {
-                  Header: getString('ce.co.rulesTableHeaders.mangedResources'),
-                  width: '22%',
-                  Cell: ResourcesCell
-                },
-                {
-                  Header: getString('ce.co.rulesTableHeaders.savings').toUpperCase(),
-                  width: '15%',
-                  Cell: SavingsCell,
-                  disableSortBy: true
-                },
-                {
-                  Header: getString('ce.co.rulesTableHeaders.lastActivity'),
-                  width: '10%',
-                  Cell: ActivityCell
-                },
-                {
-                  Header: getString('ce.co.rulesTableHeaders.status'),
-                  width: '10%',
-                  Cell: StatusCell
-                },
-                {
-                  Header: '',
-                  id: 'menu',
-                  accessor: row => row.id,
-                  width: '5%',
-                  Cell: (cellData: CellProps<Service>) =>
-                    RenderColumnMenu(cellData, {
-                      onDelete,
-                      onEdit,
-                      onStateToggle
-                    }),
-                  disableSortBy: true
-                }
-              ]}
-            />
+            <div className={cx(css.tableWrapper, { [css.disable]: isSorting })}>
+              <TableV2
+                data={rules}
+                pagination={{
+                  pageSize: TOTAL_ITEMS_PER_PAGE,
+                  pageIndex: pageProps.pageIndex - 1,
+                  pageCount: pageProps.totalPages ?? 1,
+                  itemCount: pageProps.totalRecords,
+                  gotoPage: onPageClick
+                }}
+                onRowClick={onRowClick}
+                columns={columns}
+                sortable={true}
+              />
+            </div>
           </>
         )}
       </Container>
@@ -753,123 +827,121 @@ const COGatewayList: React.FC = () => {
       featureName: FeatureIdentifier.RESTRICTED_AUTOSTOPPING_RULE_CREATION
     }
   })
+  const queryParams = useQueryParams<RulesListQueryParams>()
 
-  const { mode: modeQueryParam } = useQueryParams<RulesListQueryParams>()
+  const [allParams, setAllParams] = useAllQueryParamsState({
+    mode: { value: RulesMode.ACTIVE },
+    search: { value: '' },
+    sort: { value: {}, parseAsObject: true },
+    page: { value: 1, parseAsNumeric: true },
+    filter: { value: { identifier: StringUtils.getIdentifierFromName(UNSAVED_FILTER), data: {} }, parseAsObject: true }
+  })
+  const { search, mode, sort, page, filter } = allParams
 
   const [selectedService, setSelectedService] = useState<{ data: Service; index: number } | null>()
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
   const [tableData, setTableData] = useState<Service[]>([])
-  const [pageIndex, setPageIndex] = useState<number>(0)
-  const [mode, setMode] = useQueryParamsState<RulesMode>('mode', RulesMode.ACTIVE)
-  const [searchQueryText, setSearchQueryText] = useQueryParamsState<string | undefined>('search', undefined)
-  const fetchCounter = useRef<number>(0)
-  const tryFetchingDryRun = useRef<boolean>(false)
+  const [paginationProps, setPaginationProps] = useState<PaginationResponseProps>({
+    totalPages: 1,
+    totalRecords: 0
+  })
+  const [sortingInProgress, setSortingInProgress] = useState(false)
   const [searchParams, setSearchParams] = useState<SearchParams>({
-    isActive: !_isEmpty(searchQueryText),
-    text: _defaultTo(searchQueryText, '')
+    isActive: !_isEmpty(search.value),
+    text: _defaultTo(search.value, '')
   })
   const [isLoadingPage, setIsLoadingPage] = useState(true) // track initial loading of page
 
-  const getServicesQueryParams = React.useMemo(
-    () => ({
-      accountIdentifier: accountId,
-      value: _defaultTo(searchParams.text, ''),
-      dry_run: mode === RulesMode.DRY
-    }),
-    [searchParams.text, mode]
-  )
+  const hasQueryParams = !_isEmpty(queryParams)
+  const initLoadComplete = useRef<boolean>(hasQueryParams)
 
-  const {
-    data: servicesData,
-    error,
-    loading,
-    refetch: refetchServices
-  } = useGetServices({
+  const { mutate: fetchRules, loading } = useFetchRules({
     account_id: accountId,
     queryParams: {
-      ...getServicesQueryParams
+      accountIdentifier: accountId
     }
   })
 
-  const {
-    data: graphData,
-    loading: graphLoading,
-    refetch: refetchGraphData
-  } = useCumulativeServiceSavings({
-    account_id: accountId,
-    queryParams: {
-      accountIdentifier: accountId,
-      dry_run: mode === RulesMode.DRY
-    }
-  })
-
-  const triggerServiceFetch = async (value: string, isSearchActive: boolean, triggerFetch = true) => {
-    if (triggerFetch) {
-      await refetchServices({
-        queryParams: {
-          ...getServicesQueryParams
-        }
+  const getRules = async (body?: FetchRulesBody): Promise<GetRulesReturnDetails> => {
+    let response, error
+    const sortType = sort.value?.type?.toLowerCase()
+    try {
+      const rulesResponse = await fetchRules({
+        page: page.value,
+        limit: TOTAL_ITEMS_PER_PAGE,
+        query: Utils.getConditionalResult(searchParams.text.length > 0, searchParams.text, undefined),
+        dry_run: mode.value === RulesMode.DRY,
+        sort: Utils.getConditionalResult(sort.value?.field && sortType, { ...sort.value, type: sortType }, undefined),
+        filters: !_isEmpty(filter.value?.data) ? getFilterBodyFromFilterData(filter.value?.data) : undefined,
+        ...body
       })
+      response = rulesResponse.response
+    } catch (err) {
+      error = err
     }
-    setSearchParams({ isActive: isSearchActive, text: value })
-    setSearchQueryText(Utils.getConditionalResult(_isEmpty(value), undefined, value))
+    return { response, error }
   }
 
-  const trackLandingPage = () => {
-    const hasData = !_isEmpty(servicesData?.response)
+  useDeepCompareEffect(() => {
+    if (initLoadComplete.current) {
+      fetchAndSaveRules()
+    } else {
+      handleInitialPageLoad()
+    }
+  }, [mode.value, searchParams.text, page.value, sort.value?.field, sort.value?.type, filter.value?.data])
+
+  const handleInitialPageLoad = async () => {
+    const { response: activeRulesResponse } = await getRules()
+    const { response: dryRunRulesResponse } = await getRules({ dry_run: true })
+    const dataToSave = Utils.getConditionalResult(
+      !_isEmpty(activeRulesResponse?.records),
+      activeRulesResponse,
+      dryRunRulesResponse
+    )
+    trackLandingPage(dataToSave?.records)
+    if (_isEmpty(activeRulesResponse?.records) && !_isEmpty(dryRunRulesResponse?.records)) {
+      // setMode(RulesMode.DRY)
+      setAllParams({
+        mode: { value: RulesMode.DRY }
+      })
+    }
+    setTableData(_defaultTo(dataToSave?.records, []))
+    setPaginationProps(prevProps => ({
+      ...prevProps,
+      totalPages: _defaultTo(dataToSave?.pages, 1),
+      totalRecords: _defaultTo(dataToSave?.total, 0)
+    }))
+    setIsLoadingPage(false)
+    initLoadComplete.current = true
+  }
+
+  const fetchAndSaveRules = async (body?: FetchRulesBody) => {
+    const { response, error } = await getRules(body)
+    if (error) {
+      const errMessage = _defaultTo((error?.data as any)?.errors?.join(', '), error?.message)
+      showError(errMessage)
+    } else {
+      setTableData(_defaultTo(response?.records, []))
+      setPaginationProps(prevProps => ({
+        ...prevProps,
+        totalPages: _defaultTo(response?.pages, 1),
+        totalRecords: _defaultTo(response?.total, 0)
+      }))
+      setIsLoadingPage(false)
+      setTimeout(() => {
+        setSortingInProgress(false)
+      }, 500)
+    }
+  }
+
+  const trackLandingPage = (data?: Service[]) => {
+    const hasData = !_isEmpty(data)
     const eventName = Utils.getConditionalResult(
       hasData,
       USER_JOURNEY_EVENTS.LOAD_AS_SUMMARY_PAGE,
       USER_JOURNEY_EVENTS.LOAD_AS_LANDING_PAGE
     )
-    if (!loading) {
-      trackEvent(eventName, {})
-    }
-  }
-
-  useEffect(() => {
-    handleDataLoading()
-    trackLandingPage()
-  }, [servicesData])
-
-  const handleDataLoading = () => {
-    if (servicesData) {
-      fetchCounter.current += 1
-      const rules = _defaultTo(servicesData?.response, [])
-      handleRulesDataSaving(rules)
-    }
-  }
-
-  const handleRulesDataSaving = (rules: Service[]) => {
-    if (_isEmpty(rules) && mode === RulesMode.ACTIVE) {
-      handleEmptyRulesSave(rules)
-    } else {
-      handleFinalRulesSave(rules)
-    }
-  }
-
-  const handleEmptyRulesSave = (rules: Service[]) => {
-    if (fetchCounter.current < 2) {
-      tryFetchingDryRun.current = true
-      refetchServices({ queryParams: { ...getServicesQueryParams, dry_run: true } })
-    } else {
-      setTableData(rules)
-      setIsLoadingPage(false) // to stop initial loading of page
-    }
-  }
-
-  const handleFinalRulesSave = (rules: Service[]) => {
-    if (tryFetchingDryRun.current && mode === RulesMode.ACTIVE) {
-      tryFetchingDryRun.current = false
-      setMode(RulesMode.DRY)
-    }
-    setTableData(rules)
-    setIsLoadingPage(false) // to stop initial loading of page
-  }
-
-  if (error) {
-    const errMessage = _defaultTo((error.data as any)?.errors?.join(', '), error.message)
-    showError(errMessage, undefined, 'ce.get.svc.error')
+    trackEvent(eventName, {})
   }
 
   /* istanbul ignore next */
@@ -906,8 +978,7 @@ const COGatewayList: React.FC = () => {
       setIsDrawerOpen(false)
       setSelectedService(null)
     }
-    refetchServices()
-    refetchGraphData()
+    fetchAndSaveRules()
   }
 
   const handleServiceEdit = (_service: Service) =>
@@ -918,9 +989,43 @@ const COGatewayList: React.FC = () => {
       })
     )
 
-  const handleModeChange = async (val: RulesMode) => {
-    setPageIndex(0)
-    setMode(val)
+  const handleModeChange = (val: RulesMode) => {
+    setAllParams({
+      mode: { value: val },
+      page: { value: 1 }
+    })
+  }
+
+  const handlePageChange = (updatedPageProps: PaginationProps) => {
+    setAllParams({
+      page: { value: updatedPageProps.pageIndex }
+    })
+    setPaginationProps({ totalPages: updatedPageProps.totalPages, totalRecords: updatedPageProps.totalRecords })
+  }
+
+  const handleTableSort = (sortObj: SortByObjInterface) => {
+    setSortingInProgress(true)
+    setAllParams({
+      sort: { value: sortObj },
+      page: { value: 1 }
+    })
+  }
+
+  const onSearchChange = async (val: string) => {
+    val = val.trim()
+    setSearchParams({ isActive: !_isEmpty(val), text: val })
+    setAllParams({
+      page: { value: 1 },
+      search: { value: Utils.getConditionalResult(_isEmpty(val), undefined, val) }
+    })
+  }
+
+  const handleFilterApply = (filterData?: FilterDTO) => {
+    const { identifier, data } = _defaultTo(filterData, {}) as FilterDTO
+    setAllParams({
+      page: { value: 1 },
+      filter: { value: Utils.getConditionalResult(_isEmpty(data), undefined, { identifier, data }) }
+    })
   }
 
   // Render page loader for initial loading of the page
@@ -935,8 +1040,8 @@ const COGatewayList: React.FC = () => {
   // Render empty page component when:
   // no data is available
   // search is not active
-  // and no 'mode' query param is present
-  if (!isLoadingPage && !modeQueryParam && _isEmpty(tableData) && !searchParams.isActive) {
+  // and no query param is present
+  if (!isLoadingPage && !hasQueryParams && _isEmpty(tableData) && !searchParams.isActive) {
     return <EmptyListPage featureDetail={featureDetail} />
   }
 
@@ -984,7 +1089,7 @@ const COGatewayList: React.FC = () => {
         />
       </Drawer>
       <>
-        <Layout.Horizontal padding="large">
+        <Layout.Horizontal padding="large" flex={{ justifyContent: 'space-between' }}>
           <Layout.Horizontal width="55%">
             <RbacButton
               intent="primary"
@@ -1005,11 +1110,31 @@ const COGatewayList: React.FC = () => {
               }}
             />
           </Layout.Horizontal>
+          <Layout.Horizontal spacing={'large'} flex>
+            <ExpandingSearchInput
+              placeholder={getString('search')}
+              onChange={onSearchChange}
+              throttle={300}
+              alwaysExpanded={true}
+              defaultValue={searchParams.text}
+            />
+            <GatewayListFilters applyFilter={handleFilterApply} appliedFilter={filter.value} />
+          </Layout.Horizontal>
         </Layout.Horizontal>
       </>
       <Page.Body className={css.pageContainer}>
-        <ModePillToggle mode={mode} onChange={handleModeChange} />
-        <COGatewayCumulativeAnalytics data={graphData?.response} loadingData={graphLoading} mode={mode} />
+        <ModePillToggle mode={mode.value} onChange={handleModeChange} />
+        <Layout.Horizontal padding={{ left: 'xlarge', right: 'xlarge' }}>
+          {!_isEmpty(tableData) && searchParams.text && !loading ? (
+            <Text font={{ variation: FontVariation.H6 }}>
+              {getString('ce.co.searchResultsText', {
+                count: paginationProps.totalRecords,
+                text: searchParams.text
+              })}
+            </Text>
+          ) : null}
+        </Layout.Horizontal>
+        <COGatewayCumulativeAnalytics mode={mode.value} searchQuery={searchParams.text} appliedFilter={filter.value} />
         <RulesTableContainer
           rules={tableData}
           setRules={setTableData}
@@ -1018,15 +1143,19 @@ const COGatewayList: React.FC = () => {
             setSelectedService({ data: e, index })
             setIsDrawerOpen(true)
           }}
-          pageProps={{ index: pageIndex, setIndex: setPageIndex }}
-          refetchRules={triggerServiceFetch}
+          pageProps={{ ...paginationProps, pageIndex: page.value }}
+          setPageProps={handlePageChange}
+          refetchRules={fetchAndSaveRules}
           rowMenuProps={{
             onDelete: onServiceDeletion,
             onEdit: handleServiceEdit,
             onStateToggle: onServiceStateToggle
           }}
           searchParams={searchParams}
-          mode={mode}
+          mode={mode.value}
+          sortObj={sort.value}
+          handleSort={handleTableSort}
+          isSorting={sortingInProgress}
         />
       </Page.Body>
     </Container>

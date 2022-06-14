@@ -404,7 +404,7 @@ function LandingDashboardDeploymentsWidget(): React.ReactElement {
         trend: getFormattedNumber(response?.deploymentsStatsSummary?.failureRateAndChangeRate?.rateChangeRate) + '%'
       },
       {
-        title: getString('pipeline.deploymentFrequency'),
+        title: getString('pipeline.executionFrequency'),
         count: getFormattedNumber(defaultTo(response?.deploymentsStatsSummary?.deploymentRateAndChangeRate?.rate, 0)),
         trend: getFormattedNumber(response?.deploymentsStatsSummary?.deploymentRateAndChangeRate?.rateChangeRate) + '%'
       }

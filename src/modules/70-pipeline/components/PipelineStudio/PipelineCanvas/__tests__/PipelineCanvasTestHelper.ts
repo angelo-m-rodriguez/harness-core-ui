@@ -178,3 +178,32 @@ export const mockPipelineTemplateYaml: UseGetMockDataWithMutateAndRefetch<Respon
     }
   }
 }
+
+export const getGitContext = (pipelineError = false): any => {
+  const data = getDummyPipelineCanvasContextValue({
+    isLoading: false,
+    gitDetails: {
+      objectId: 'a4adab9dcfd584864e1d714b4bdfe8c6be2802e6',
+      branch: 'main',
+      filePath: '.harness/pipeline.yaml',
+      repoName: 'harness',
+      commitId: '06bb427c8223740fb95a7c73d955b0551b30eb91'
+    },
+    isReadonly: false,
+    isUpdated: true
+  })
+
+  return {
+    ...data,
+    state: {
+      ...data.state,
+      storeMetadata: {
+        connectorRef: 'harness',
+        storeType: 'REMOTE'
+      },
+      ...(pipelineError ? { pipeline: {}, templateError: { data: {}, message: '' } } : {})
+    },
+    updateGitDetails: jest.fn(),
+    updatePipelineStoreMetadata: jest.fn()
+  }
+}

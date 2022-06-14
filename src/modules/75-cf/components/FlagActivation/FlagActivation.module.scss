@@ -9,7 +9,7 @@
   width: 200px !important;
 }
 
-:global([data-trial-banner-is-visible] ~ * [data-tab-container]) {
+:global([data-trial-banner-is-visible] ~ * [data-is-new-targetting-rules='false']) {
   height: calc(100vh - 200px);
 }
 
@@ -57,7 +57,6 @@
 
 .formContainer {
   position: relative;
-  height: 100vh;
 
   .actionButtons {
     bottom: 0;

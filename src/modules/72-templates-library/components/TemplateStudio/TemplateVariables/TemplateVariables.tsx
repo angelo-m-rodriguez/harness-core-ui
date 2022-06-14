@@ -9,7 +9,10 @@ import React, { useCallback } from 'react'
 import { MultiTypeInputType, NestedAccordionProvider, PageError } from '@wings-software/uicore'
 import { isEmpty, omit, set } from 'lodash-es'
 import { produce } from 'immer'
-import { useTemplateVariables } from '@pipeline/components/TemplateVariablesContext/TemplateVariablesContext'
+import {
+  MonitoredServiceConfig,
+  useTemplateVariables
+} from '@pipeline/components/TemplateVariablesContext/TemplateVariablesContext'
 import { PageSpinner } from '@common/components'
 import type { NGTemplateInfoConfig } from 'services/template-ng'
 import StageCard from '@pipeline/components/PipelineStudio/PipelineVariables/Cards/StageCard'
@@ -21,6 +24,7 @@ import { DefaultNewStageId } from '@templates-library/components/TemplateStudio/
 import { GitSyncStoreProvider } from 'framework/GitRepoStore/GitSyncStoreContext'
 import { sanitize } from '@common/utils/JSONUtils'
 import { VariablesHeader } from '@pipeline/components/PipelineStudio/PipelineVariables/VariablesHeader/VariablesHeader'
+import MonitoredServiceCard from '@pipeline/components/PipelineStudio/PipelineVariables/Cards/MonitoredServiceCard'
 import { TemplateType } from '@templates-library/utils/templatesUtils'
 import { PipelineCardPanel } from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables'
 import { DrawerTypes } from '../TemplateContext/TemplateActions'
@@ -104,6 +108,26 @@ const TemplateVariables: React.FC = (): JSX.Element => {
                   stageIdentifier={DefaultNewStageId}
                   onUpdateStep={onUpdate}
                   stepsFactory={factory}
+                />
+              )}
+              {originalTemplate.type === TemplateType.MonitoredService && (
+                <MonitoredServiceCard
+                  monitoredService={variablesTemplate as MonitoredServiceConfig}
+                  unresolvedMonitoredService={
+                    { ...template.spec, identifier: DefaultNewStageId } as MonitoredServiceConfig
+                  }
+                  originalMonitoredService={
+                    {
+                      ...originalTemplate.spec,
+                      spec: { env: {} },
+                      identifier: DefaultNewStageId
+                    } as MonitoredServiceConfig
+                  }
+                  metadataMap={metadataMap}
+                  path="template"
+                  allowableTypes={allowableTypes}
+                  stepsFactory={factory}
+                  updateMonitoredService={onUpdate}
                 />
               )}
             </GitSyncStoreProvider>

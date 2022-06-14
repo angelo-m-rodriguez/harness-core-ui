@@ -35,7 +35,7 @@ const ContextMenu: React.FC<ContextMenuProps> = props => {
   const { accountId } = useParams<AccountPathProps>()
   const { getString } = useStrings()
   const { project, editProject, collaborators, setMenuOpen, openDialog } = props
-  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED } = useFeatureFlags()
+  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED, SECURITY } = useFeatureFlags()
 
   const permissionRequest: Optional<PermissionRequest, 'permission'> = {
     resourceScope: {
@@ -123,6 +123,17 @@ const ContextMenu: React.FC<ContextMenuProps> = props => {
       })
     )
   }
+  const handleSTO = (event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    event.stopPropagation()
+    setMenuOpen?.(false)
+    history.push(
+      routes.toSTOProjectOverview({
+        projectIdentifier: project.identifier,
+        orgIdentifier: project.orgIdentifier || /* istanbul ignore next */ '',
+        accountId
+      })
+    )
+  }
 
   return (
     <Menu style={{ minWidth: 'unset' }}>
@@ -179,6 +190,17 @@ const ContextMenu: React.FC<ContextMenuProps> = props => {
             </Layout.Horizontal>
           }
           onClick={handleCV}
+        />
+      ) : null}
+      {SECURITY && project.modules?.includes(ModuleName.STO) ? (
+        <Menu.Item
+          text={
+            <Layout.Horizontal spacing="xsmall">
+              <Icon name="sto-color-filled" size={20} />
+              <Text color={Color.WHITE}>{getString('projectsOrgs.gotoSTO')}</Text>
+            </Layout.Horizontal>
+          }
+          onClick={handleSTO}
         />
       ) : null}
       <RbacMenuItem

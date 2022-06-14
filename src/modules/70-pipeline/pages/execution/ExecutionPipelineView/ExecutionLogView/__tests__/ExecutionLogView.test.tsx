@@ -15,7 +15,8 @@ import ExecutionLogView from '../ExecutionLogView'
 import mock from '../../ExecutionGraphView/__tests__/mock.json'
 
 jest.mock('@pipeline/components/PipelineSteps/PipelineStepFactory', () => ({
-  getStepIcon: jest.fn()
+  getStepIcon: jest.fn(),
+  registerStep: jest.fn()
 }))
 
 const contextValue: ExecutionContextParams = {

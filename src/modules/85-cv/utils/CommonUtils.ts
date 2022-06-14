@@ -152,6 +152,7 @@ interface GetCVMonitoringServicesSearchParamProps {
   redirectToSLO?: boolean
   sloIdentifier?: string
   monitoredServiceIdentifier?: string
+  templateRef?: string
 }
 
 export const getCVMonitoringServicesSearchParam = (props: GetCVMonitoringServicesSearchParamProps): string => {

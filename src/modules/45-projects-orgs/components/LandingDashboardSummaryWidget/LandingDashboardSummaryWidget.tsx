@@ -156,7 +156,7 @@ const getModuleData = (moduleType: ModuleName): ModuleDataType => {
     case ModuleName.CD:
       return {
         iconName: 'cd-main',
-        titleId: 'deploymentsText',
+        titleId: 'executionsText',
         dataKey: 'cdtopProjectsInfo'
       }
     case ModuleName.CI:

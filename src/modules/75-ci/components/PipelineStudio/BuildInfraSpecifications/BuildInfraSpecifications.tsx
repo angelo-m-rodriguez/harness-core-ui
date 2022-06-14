@@ -724,8 +724,8 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
           })
         }
       })
-
-      if (stageData.stage) {
+      const shouldUpdate = stageData.stage && JSON.stringify(stage.stage) !== JSON.stringify(stageData.stage)
+      if (stageData.stage && shouldUpdate) {
         updateStage(stageData.stage)
       }
 
@@ -813,7 +813,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
         />
       </Container>
     ),
-    []
+    [expressions]
   )
 
   const renderContainerSecurityContext = React.useCallback(
@@ -906,7 +906,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
         </>
       )
     },
-    []
+    [expressions]
   )
 
   const renderKubernetesBuildInfraAdvancedSection = React.useCallback(
@@ -940,7 +940,7 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
         </Container>
       )
     },
-    []
+    [expressions]
   )
 
   const renderPropagateKeyValuePairs = ({
@@ -1202,128 +1202,131 @@ export default function BuildInfraSpecifications({ children }: React.PropsWithCh
         {renderHarnessImageConnectorRefField()}
       </>
     )
-  }, [])
+  }, [expressions])
 
-  const renderAccordianDetailSection = React.useCallback(({ formik }: { formik: any }): React.ReactElement => {
-    const tolerationsValue = get(formik?.values, 'tolerations')
-    return (
-      <>
-        <Container className={css.bottomMargin7}>
-          <Volumes
-            name="volumes"
-            formik={formik}
-            expressions={expressions}
-            disabled={isReadonly}
-            allowableTypes={[MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME]}
-          />
-        </Container>
-        <Container className={css.bottomMargin4}>
-          <MultiTypeTextField
-            label={
-              <Text
-                font={{ variation: FontVariation.FORM_LABEL }}
-                margin={{ bottom: 'xsmall' }}
-                tooltipProps={{ dataTooltipId: 'serviceAccountName' }}
-              >
-                {getString('pipeline.infraSpecifications.serviceAccountName')}
-              </Text>
-            }
-            name="serviceAccountName"
-            style={{ width: 300 }}
-            multiTextInputProps={{
-              multiTextInputProps: { expressions, allowableTypes },
-              disabled: isReadonly,
-              placeholder: getString('pipeline.infraSpecifications.serviceAccountNamePlaceholder')
-            }}
-          />
-        </Container>
-        <Container width={300}>
-          <FormMultiTypeCheckboxField
-            name="automountServiceAccountToken"
-            label={getString('pipeline.buildInfra.automountServiceAccountToken')}
-            multiTypeTextbox={{
-              expressions,
-              allowableTypes,
-              disabled: isReadonly
-            }}
-            tooltipProps={{ dataTooltipId: 'automountServiceAccountToken' }}
-            disabled={isReadonly}
-          />
-        </Container>
-        <Container className={css.bottomMargin7}>
-          {renderMultiTypeMap({ fieldName: 'labels', stringKey: 'ci.labels' })}
-        </Container>
-        <Container className={css.bottomMargin7}>
-          {renderMultiTypeMap({ fieldName: 'annotations', stringKey: 'ci.annotations' })}
-        </Container>
-        {renderContainerSecurityContext({ formik })}
-        <Container className={css.bottomMargin7}>
-          <MultiTypeTextField
-            label={
-              <Text
-                font={{ variation: FontVariation.FORM_LABEL }}
-                margin={{ bottom: 'xsmall' }}
-                tooltipProps={{ dataTooltipId: 'priorityClassName' }}
-              >
-                {getString(priorityClassNameStringKey)}
-              </Text>
-            }
-            name="priorityClassName"
-            style={{ width: 300, marginBottom: 'var(--spacing-xsmall)' }}
-            multiTextInputProps={{
-              multiTextInputProps: { expressions, allowableTypes },
-              disabled: isReadonly
-            }}
-          />
-        </Container>
-        <Container className={css.bottomMargin7}>
-          {renderMultiTypeMap({
-            fieldName: 'nodeSelector',
-            stringKey: 'pipeline.buildInfra.nodeSelector'
-          })}
-        </Container>
-        <Container className={css.bottomMargin7}>
-          <Container
-            className={cx(stepCss.formGroup, css.bottomMargin7)}
-            {...(typeof tolerationsValue === 'string' &&
-              getMultiTypeFromValue(tolerationsValue) === MultiTypeInputType.RUNTIME && { width: 300 })}
-          >
-            <MultiTypeCustomMap
-              name="tolerations"
-              appearance={'minimal'}
-              cardStyle={{ width: '50%' }}
-              valueMultiTextInputProps={{
-                expressions,
-                allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
-              }}
+  const renderAccordianDetailSection = React.useCallback(
+    ({ formik }: { formik: any }): React.ReactElement => {
+      const tolerationsValue = get(formik?.values, 'tolerations')
+      return (
+        <>
+          <Container className={css.bottomMargin7}>
+            <Volumes
+              name="volumes"
               formik={formik}
-              multiTypeFieldSelectorProps={{
-                label: (
-                  <Text
-                    font={{ variation: FontVariation.FORM_LABEL }}
-                    margin={{ bottom: 'xsmall' }}
-                    tooltipProps={{ dataTooltipId: 'tolerations' }}
-                  >
-                    {getString('pipeline.buildInfra.tolerations')}
-                  </Text>
-                ),
-                allowedTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION, MultiTypeInputType.RUNTIME]
-              }}
+              expressions={expressions}
               disabled={isReadonly}
-              multiTypeMapKeys={[
-                { label: 'Effect', value: 'effect' },
-                { label: 'Key', value: 'key' },
-                { label: 'Operator', value: 'operator' },
-                { label: 'Value', value: 'value' }
-              ]}
-              enableConfigureOptions={false}
+              allowableTypes={[MultiTypeInputType.FIXED, MultiTypeInputType.RUNTIME]}
             />
           </Container>
-        </Container>
-        {renderTimeOutFields()}
-      </>
-    )
-  }, [])
+          <Container className={css.bottomMargin4}>
+            <MultiTypeTextField
+              label={
+                <Text
+                  font={{ variation: FontVariation.FORM_LABEL }}
+                  margin={{ bottom: 'xsmall' }}
+                  tooltipProps={{ dataTooltipId: 'serviceAccountName' }}
+                >
+                  {getString('pipeline.infraSpecifications.serviceAccountName')}
+                </Text>
+              }
+              name="serviceAccountName"
+              style={{ width: 300 }}
+              multiTextInputProps={{
+                multiTextInputProps: { expressions, allowableTypes },
+                disabled: isReadonly,
+                placeholder: getString('pipeline.infraSpecifications.serviceAccountNamePlaceholder')
+              }}
+            />
+          </Container>
+          <Container width={300}>
+            <FormMultiTypeCheckboxField
+              name="automountServiceAccountToken"
+              label={getString('pipeline.buildInfra.automountServiceAccountToken')}
+              multiTypeTextbox={{
+                expressions,
+                allowableTypes,
+                disabled: isReadonly
+              }}
+              tooltipProps={{ dataTooltipId: 'automountServiceAccountToken' }}
+              disabled={isReadonly}
+            />
+          </Container>
+          <Container className={css.bottomMargin7}>
+            {renderMultiTypeMap({ fieldName: 'labels', stringKey: 'ci.labels' })}
+          </Container>
+          <Container className={css.bottomMargin7}>
+            {renderMultiTypeMap({ fieldName: 'annotations', stringKey: 'ci.annotations' })}
+          </Container>
+          {renderContainerSecurityContext({ formik })}
+          <Container className={css.bottomMargin7}>
+            <MultiTypeTextField
+              label={
+                <Text
+                  font={{ variation: FontVariation.FORM_LABEL }}
+                  margin={{ bottom: 'xsmall' }}
+                  tooltipProps={{ dataTooltipId: 'priorityClassName' }}
+                >
+                  {getString(priorityClassNameStringKey)}
+                </Text>
+              }
+              name="priorityClassName"
+              style={{ width: 300, marginBottom: 'var(--spacing-xsmall)' }}
+              multiTextInputProps={{
+                multiTextInputProps: { expressions, allowableTypes },
+                disabled: isReadonly
+              }}
+            />
+          </Container>
+          <Container className={css.bottomMargin7}>
+            {renderMultiTypeMap({
+              fieldName: 'nodeSelector',
+              stringKey: 'pipeline.buildInfra.nodeSelector'
+            })}
+          </Container>
+          <Container className={css.bottomMargin7}>
+            <Container
+              className={cx(stepCss.formGroup, css.bottomMargin7)}
+              {...(typeof tolerationsValue === 'string' &&
+                getMultiTypeFromValue(tolerationsValue) === MultiTypeInputType.RUNTIME && { width: 300 })}
+            >
+              <MultiTypeCustomMap
+                name="tolerations"
+                appearance={'minimal'}
+                cardStyle={{ width: '50%' }}
+                valueMultiTextInputProps={{
+                  expressions,
+                  allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+                }}
+                formik={formik}
+                multiTypeFieldSelectorProps={{
+                  label: (
+                    <Text
+                      font={{ variation: FontVariation.FORM_LABEL }}
+                      margin={{ bottom: 'xsmall' }}
+                      tooltipProps={{ dataTooltipId: 'tolerations' }}
+                    >
+                      {getString('pipeline.buildInfra.tolerations')}
+                    </Text>
+                  ),
+                  allowedTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION, MultiTypeInputType.RUNTIME]
+                }}
+                disabled={isReadonly}
+                multiTypeMapKeys={[
+                  { label: 'Effect', value: 'effect' },
+                  { label: 'Key', value: 'key' },
+                  { label: 'Operator', value: 'operator' },
+                  { label: 'Value', value: 'value' }
+                ]}
+                enableConfigureOptions={false}
+              />
+            </Container>
+          </Container>
+          {renderTimeOutFields()}
+        </>
+      )
+    },
+    [expressions]
+  )
 
   const getValidationSchema = React.useCallback((): yup.Schema<unknown> => {
     switch (buildInfraType) {

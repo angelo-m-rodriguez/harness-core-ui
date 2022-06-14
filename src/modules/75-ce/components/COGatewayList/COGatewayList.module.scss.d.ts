@@ -15,6 +15,7 @@ declare const styles: {
   readonly col3: string
   readonly detailItemHeader: string
   readonly detailItemValue: string
+  readonly disable: string
   readonly disabled: string
   readonly downTag: string
   readonly fulFilmentIcon: string
@@ -34,6 +35,7 @@ declare const styles: {
   readonly search: string
   readonly serviceAccordionContainer: string
   readonly serviceDetailsItemContainer: string
+  readonly tableWrapper: string
   readonly upTag: string
 }
 export default styles

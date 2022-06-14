@@ -47,7 +47,8 @@ import type {
   EnvironmentGroupQueryParams,
   VariablesPathProps,
   EnvironmentQueryParams,
-  AccountLevelGitOpsPathProps
+  AccountLevelGitOpsPathProps,
+  TemplateType
 } from '@common/interfaces/RouteInterfaces'
 
 const CV_HOME = `/cv/home`
@@ -996,8 +997,13 @@ const routes = {
   ),
   /********************************************************************************************************************/
   toTemplates: withAccountId(
-    ({ orgIdentifier, projectIdentifier, module }: Partial<ProjectPathProps & ModulePathParams>) => {
-      const path = `resources/templates`
+    ({
+      orgIdentifier,
+      projectIdentifier,
+      module,
+      templateType
+    }: Partial<(ProjectPathProps & ModulePathParams) & { templateType?: TemplateType }>) => {
+      const path = templateType ? `resources/templates?templateType=${templateType}` : 'resources/templates'
       return getScopeBasedRoute({
         scope: {
           orgIdentifier,
@@ -1283,6 +1289,12 @@ const routes = {
       return `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/monitoringservices`
     }
   ),
+
+  toCVMonitoringServicesInputSets: withAccountId(
+    ({ orgIdentifier, projectIdentifier, module = 'cv' }: Partial<ProjectPathProps & { module?: string }>) => {
+      return `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/monitoringservicesinputset`
+    }
+  ),
   toCVSLOs: withAccountId(
     ({ orgIdentifier, projectIdentifier, module = 'cv' }: Partial<ProjectPathProps & { module?: string }>) => {
       return `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/slos`
@@ -1300,11 +1312,6 @@ const routes = {
   toErrorTracking: withAccountId(
     ({ orgIdentifier, projectIdentifier, module = 'cv' }: Partial<ProjectPathProps & { module?: string }>) => {
       return `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/et`
-    }
-  ),
-  toErrorTrackingArc: withAccountId(
-    ({ orgIdentifier, projectIdentifier, module = 'cv' }: Partial<ProjectPathProps & { module?: string }>) => {
-      return `/${module}/orgs/${orgIdentifier}/projects/${projectIdentifier}/et/arc`
     }
   ),
   toCVCreateSLOs: withAccountId(

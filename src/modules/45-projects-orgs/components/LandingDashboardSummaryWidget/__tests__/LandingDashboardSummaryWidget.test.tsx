@@ -57,7 +57,7 @@ describe('LandingDashboard At a Glance', () => {
     expect(getCountData).toBeCalledTimes(0)
 
     expect(queryByText('+137')).toBeInTheDocument()
-    expect(queryByText('deploymentsText')).toBeInTheDocument()
+    expect(queryByText('executionsText')).toBeInTheDocument()
     expect(queryByText('dev test')).toBeInTheDocument()
     expect(queryByText('47')).toBeInTheDocument()
     expect(container).toMatchSnapshot()

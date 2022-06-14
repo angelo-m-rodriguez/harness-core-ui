@@ -6,10 +6,12 @@
  */
 
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 import { TestWrapper } from '@common/utils/testUtils'
 import { RulesMode } from '@ce/constants'
+import { CE_DATE_FORMAT_INTERNAL, DATE_RANGE_SHORTCUTS } from '@ce/utils/momentUtils'
 import COGatewayCumulativeAnalytics from '../COGatewayCumulativeAnalytics'
+import SpendVsSavingsChart from '../SpendVsSavingsChart'
 
 const testParams = { accountId: 'accountId', orgIdentifier: 'orgIdentifier', projectIdentifier: 'projectIdentifier' }
 
@@ -44,20 +46,23 @@ const mockedResponse = {
     '2021-05-21T00:00:00Z',
     '2021-05-22T00:00:00Z',
     '2021-05-23T00:00:00Z',
-    '2021-05-24T00:00:00Z'
+    '2021-05-24T00:00:00Z',
+    '2021-05-25T00:00:00Z',
+    '2021-05-26T00:00:00Z'
   ],
   potential_cost: [
     0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952,
     0.5952, 0.5952, 0.5952, 0.5952, 0.7352672312729965, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928,
-    0.8928, 0.8928, 0.8928
+    0.8928, 0.8928, 0.8928, 0.234, 0
   ],
   actual_cost: [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.004736388347555556, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.004736388347555556, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0.001234, 0
   ],
   savings: [
     0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952, 0.5952,
     0.5952, 0.5952, 0.5952, 0.5952, 0.730530842925441, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928, 0.8928,
-    0.8928, 0.8928, 0.8928
+    0.8928, 0.8928, 0.8928, 0.7654, 0
   ],
   total_potential: 21.269667231273,
   total_cost: 0.004736388347555556,
@@ -68,18 +73,66 @@ const mockedResponse = {
 jest.mock('highcharts-react-official', () => () => <div />)
 
 jest.mock('services/lw', () => ({
-  useCumulativeServiceSavings: jest
+  useCumulativeServiceSavingsV2: jest
     .fn()
-    .mockImplementation(() => ({ data: { response: mockedResponse }, loading: false }))
+    .mockImplementation(() => ({ mutate: () => Promise.resolve({ response: mockedResponse }), loading: false }))
 }))
 
 describe('Cumulative Analytics tests', () => {
-  test('render component', () => {
+  test('render component', async () => {
     const { container } = render(
       <TestWrapper pathParams={testParams}>
-        <COGatewayCumulativeAnalytics data={mockedResponse} loadingData={false} mode={RulesMode.ACTIVE} />
+        <COGatewayCumulativeAnalytics mode={RulesMode.ACTIVE} />
       </TestWrapper>
     )
+    await waitFor(() => Promise.resolve())
     expect(container).toMatchSnapshot()
+  })
+
+  test('render component in Dry run mode', async () => {
+    const { container } = render(
+      <TestWrapper pathParams={testParams}>
+        <COGatewayCumulativeAnalytics mode={RulesMode.DRY} />
+      </TestWrapper>
+    )
+    await waitFor(() => Promise.resolve())
+    expect(container).toMatchSnapshot()
+  })
+
+  describe('spend vs savings chart tests', () => {
+    const defaultRange = {
+      to: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[1].format(CE_DATE_FORMAT_INTERNAL),
+      from: DATE_RANGE_SHORTCUTS.LAST_30_DAYS[0].format(CE_DATE_FORMAT_INTERNAL)
+    }
+    test('show loader while loading data', () => {
+      const { container } = render(<SpendVsSavingsChart loading={true} timeRange={defaultRange} />)
+      expect(container.querySelector('span[data-icon="spinner"]')).toBeDefined()
+    })
+
+    test('show loader while loading data', () => {
+      const { getByText } = render(
+        <TestWrapper>
+          <SpendVsSavingsChart loading={false} timeRange={defaultRange} searchTerm="test" />
+        </TestWrapper>
+      )
+      expect(getByText('ce.co.noDataForSearchAndDateRange')).toBeDefined()
+    })
+
+    test('render area chart for range greater than 30 days', async () => {
+      const { container } = render(
+        <TestWrapper>
+          <SpendVsSavingsChart
+            loading={false}
+            timeRange={{
+              to: mockedResponse.days[mockedResponse.days.length - 1],
+              from: mockedResponse.days[0]
+            }}
+            data={mockedResponse}
+          />
+        </TestWrapper>
+      )
+      await waitFor(() => Promise.resolve())
+      expect(container).toMatchSnapshot()
+    })
   })
 })

@@ -46,5 +46,9 @@ export const KEY_CODE_FOR_SEMI_COLON = 'Semicolon'
 export const KEY_CODE_FOR_PERIOD = 'Period'
 export const KEY_CODE_FOR_SPACE = 'Space'
 export const KEY_CODE_FOR_CHAR_Z = 'KeyZ'
+export const KEY_CODE_FOR_CHAR_C = 'KeyC'
+export const KEY_CODE_FOR_CHAR_V = 'KeyV'
+export const META_EVENT_KEY_CODE = 57
+export const CONTROL_EVENT_KEY_CODE = 5
 
 export const MAX_ERR_MSSG_LENGTH = 80

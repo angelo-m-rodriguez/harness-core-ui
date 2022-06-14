@@ -187,12 +187,7 @@ const StepOne: React.FC<StepProps<any> & StepOneProps> = ({
                       label={
                         <Text style={{ display: 'flex', alignItems: 'center' }}>
                           {ConnectorMap[selectedConnector]} {getString('connector')}
-                          <Button
-                            icon="question"
-                            minimal
-                            tooltip={`${ConnectorMap[selectedConnector]} ${getString('connector')}`}
-                            iconProps={{ size: 14 }}
-                          />
+                          <Button icon="question" minimal iconProps={{ size: 14 }} />
                         </Text>
                       }
                       type={ConnectorMap[selectedConnector]}

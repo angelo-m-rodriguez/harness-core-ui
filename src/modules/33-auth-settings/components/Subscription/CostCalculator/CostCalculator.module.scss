@@ -1,0 +1,111 @@
+/*
+ * Copyright 2022 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
+.body {
+  width: max-content;
+  height: 600px;
+  overflow-y: auto;
+
+  :global(.PillToggle--selected) {
+    background-color: var(--primary-7) !important;
+  }
+
+  :global(.TextInput--main) {
+    display: flex;
+    width: 60px;
+  }
+
+  :global(.bp3-slider-handle) {
+    border-radius: 100%;
+    background-color: var(--primary-7);
+    border: solid 3px var(--grey-0);
+    box-shadow: 0px 0px 1px rgba(40, 41, 61, 0.04), 0px 2px 4px rgba(96, 97, 112, 0.16);
+  }
+
+  :global(.bp3-intent-primary) {
+    background-color: var(--primary-7);
+  }
+}
+
+.billingHeader {
+  display: block !important;
+}
+
+.newSubscription {
+  border-bottom: 1px solid var(--grey-100);
+}
+
+.equation {
+  vertical-align: top;
+}
+
+.currentPlan {
+  padding: 4px !important;
+  background-color: var(--primary-7) !important;
+}
+
+.newPlan {
+  padding: 4px !important;
+  background-color: var(--green-600) !important;
+}
+
+.enterprisePlan {
+  padding: 4px !important;
+  background-color: var(--blue-600) !important;
+}
+
+.premLabel {
+  margin-left: 10px;
+  padding-left: 10px;
+}
+
+.premSupport {
+  padding: var(--spacing-large) !important;
+  margin-right: var(--spacing-xsmall) !important;
+  margin-bottom: var(--spacing-xxxlarge) !important;
+  border-radius: 4px;
+  background-color: var(--grey-100) !important;
+}
+
+.crownLabel {
+  align-items: flex-start !important;
+}
+
+.textInput {
+  & > input {
+    border-color: var(--primary-6) !important;
+  }
+}
+
+.dropdown {
+  & > div > div > div {
+    border-color: var(--primary-6) !important;
+  }
+}
+
+.slider {
+  margin-left: var(--spacing-small);
+  padding-right: var(--spacing-large) !important;
+}
+
+.checkbox {
+  --cb-bg-color: unset;
+}
+
+.switchToYearly {
+  font-size: smaller;
+  &:hover {
+    cursor: pointer !important;
+  }
+}
+
+.includedFree {
+  background-color: var(--primary-2) !important;
+  margin-left: var(--spacing-small) !important;
+  border: unset !important;
+  color: var(--grey-0);
+}

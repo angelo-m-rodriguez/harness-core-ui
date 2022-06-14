@@ -110,7 +110,7 @@ exports[`<TemplateStudioSubHeaderLeftView /> tests should match snapshot 1`] = `
           class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-alignItems-center"
         >
           <span
-            class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-purple700"
+            class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-black"
             data-icon="template-library"
           >
             <svg

@@ -32,6 +32,7 @@ import type { TemplateFormRef } from '@templates-library/components/TemplateStud
 import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { MonitoredServiceEnum } from '@cv/pages/monitored-service/MonitoredServicePage.constants'
 import { ChangeSourceCategoryName } from '@cv/pages/ChangeSource/ChangeSourceDrawer/ChangeSourceDrawer.constants'
+import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { useStrings } from 'framework/strings'
 import { SLODetailsPageTabIds } from '@cv/pages/slos/CVSLODetailsPage/CVSLODetailsPage.types'
 import Service, { ServiceWithRef } from './components/Service/Service'
@@ -58,6 +59,7 @@ export default function Configurations(
   const { showWarning, showError, showSuccess } = useToaster()
   const history = useHistory()
   const { isTemplate } = useMonitoredServiceContext()
+  const { expressions } = useVariablesExpression()
   const { orgIdentifier, projectIdentifier, accountId, identifier } = useParams<
     ProjectPathProps & { identifier: string }
   >()
@@ -356,6 +358,7 @@ export default function Configurations(
               setDBData={setDBData}
               onDiscard={onDiscard}
               isTemplate={isTemplate}
+              expressions={expressions}
               updateTemplate={updateTemplate}
               onChangeMonitoredServiceType={updatedDTO => {
                 setDefaultMonitoredService(omit(updatedDTO, ['isEdit']) as MonitoredServiceDTO)

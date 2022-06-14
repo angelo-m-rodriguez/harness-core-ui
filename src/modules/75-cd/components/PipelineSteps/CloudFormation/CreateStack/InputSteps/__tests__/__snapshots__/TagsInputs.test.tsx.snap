@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test cloudformation create stack tags input set should render remote tags 1`] = `
+<div>
+  <div
+    class="OverlaySpinner--overlaySpinner"
+  >
+    <form
+      action="#"
+      class="FormikForm--main"
+    >
+      <div>
+        <div
+          class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--padding-bottom-small"
+          style="width: 120px;"
+        >
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-bold"
+          >
+            cd.cloudFormation.remoteTags
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;
+
+exports[`Test cloudformation create stack tags input set should render remote tags with github params 1`] = `
+<div>
+  <div
+    class="OverlaySpinner--overlaySpinner"
+  >
+    <form
+      action="#"
+      class="FormikForm--main"
+    >
+      <div>
+        <div
+          class="StyledProps--font StyledProps--main StyledProps--flex StyledProps--padding-bottom-small"
+          style="width: 120px;"
+        >
+          <p
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-bold"
+          >
+            cd.cloudFormation.remoteTags
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

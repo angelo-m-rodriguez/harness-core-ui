@@ -430,8 +430,9 @@ const FeatureFlagsPage: React.FC = () => {
       pageSize: CF_DEFAULT_PAGE_SIZE,
       pageNumber,
       metrics: true,
+      flagCounts: true,
       name: searchTerm,
-      [flagFilter?.queryProps?.key]: flagFilter?.queryProps?.value
+      [flagFilter.queryProps?.key]: flagFilter.queryProps?.value
     }
   }, [projectIdentifier, environmentIdentifier, accountIdentifier, orgIdentifier, pageNumber, searchTerm, flagFilter])
 
@@ -482,6 +483,11 @@ const FeatureFlagsPage: React.FC = () => {
   useEffect(() => {
     setLoading(flagsLoading || envsLoading)
   }, [flagsLoading, envsLoading])
+
+  /* Hook needed because lazy loading being used on useGetAllFeatures above means changes to filters are NOT picked up when queryParams memo changes */
+  useEffect(() => {
+    refetch({ queryParams: { ...queryParams } })
+  }, [refetch, queryParams])
 
   const gitSyncing = useMemo<boolean>(
     () => toggleFeatureFlag.loading || deleteFlag.loading,
@@ -581,13 +587,6 @@ const FeatureFlagsPage: React.FC = () => {
     [setSearchTerm, refetch, queryParams, setPageNumber]
   )
 
-  const onUpdateFilter = (filter: FilterProps): void => {
-    setFlagFilter(filter)
-    refetch({
-      queryParams: { ...queryParams, ...(filter && { [`${filter?.queryProps?.key}`]: filter?.queryProps?.value }) }
-    })
-  }
-
   const hasFeatureFlags = features?.features && features?.features?.length > 0
   const emptyFeatureFlags = !loading && features?.features?.length === 0
   const title = getString('featureFlagsText')
@@ -639,7 +638,7 @@ const FeatureFlagsPage: React.FC = () => {
       {hasFeatureFlags && (
         <Container padding={{ top: 'medium', right: 'xlarge', left: 'xlarge' }}>
           {FILTER_FEATURE_FLAGS && (
-            <FlagTableFilters features={features} currentFilter={flagFilter} updateTableFilter={onUpdateFilter} />
+            <FlagTableFilters features={features} currentFilter={flagFilter} updateTableFilter={setFlagFilter} />
           )}
           <TableV2<Feature>
             columns={columns}

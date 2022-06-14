@@ -49,6 +49,10 @@ export interface CICodebaseInputSetFormProps {
 
 type CodeBaseType = 'branch' | 'tag' | 'PR'
 
+const TriggerTypes = {
+  SCHEDULED: 'Scheduled'
+}
+
 export enum ConnectionType {
   Repo = 'Repo',
   Account = 'Account',
@@ -195,6 +199,7 @@ function CICodebaseInputSetFormInternal({
   const isMemoryLimitRuntimeInput = (template?.properties || templateInputsProperties)?.ci?.codebase?.resources?.limits
     ?.memory
   const isDeploymentForm = viewType === StepViewType.DeploymentForm
+  const isNotScheduledTrigger = formik?.values?.triggerType !== TriggerTypes.SCHEDULED
   const showSetContainerResources = isCpuLimitRuntimeInput || isMemoryLimitRuntimeInput
   const [isConnectorExpression, setIsConnectorExpression] = useState<boolean>(false)
   const containerWidth = viewTypeMetadata?.isTemplateDetailDrawer ? '100%' : '50%' // drawer view is much smaller 50% would cut out
@@ -386,7 +391,7 @@ function CICodebaseInputSetFormInternal({
     formik?.setFieldValue(`${formattedPath}properties.ci.codebase.build`, '')
     formik?.setFieldValue(codeBaseTypePath, newType)
 
-    if (!isInputTouched && triggerIdentifier) {
+    if (!isInputTouched && triggerIdentifier && isNotScheduledTrigger) {
       formik?.setFieldValue(buildSpecPath, { [inputNames[newType]]: defaultValues[newType] })
     } else {
       formik?.setFieldValue(buildSpecPath, { [inputNames[newType]]: savedValues.current[newType] })
@@ -402,7 +407,7 @@ function CICodebaseInputSetFormInternal({
             expressions,
             allowableTypes: [MultiTypeInputType.EXPRESSION, MultiTypeInputType.FIXED]
           }}
-          placeholder={triggerIdentifier ? placeholderValues[type] : ''}
+          placeholder={triggerIdentifier && isNotScheduledTrigger ? placeholderValues[type] : ''}
           disabled={readonly}
           onChange={() => setIsInputTouched(true)}
         />

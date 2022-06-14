@@ -62,62 +62,67 @@ function NoEntityFound(props: NoEntityFoundProps): JSX.Element {
   >()
 
   const onGitBranchChange = React.useMemo(
-    () => (selectedFilter: GitFilterScope) => {
-      if (branch !== selectedFilter.branch) {
-        if (entityType === 'pipeline') {
-          history.push(
-            routes.toPipelineStudio({
-              projectIdentifier,
-              orgIdentifier,
-              pipelineIdentifier: identifier || '-1',
-              accountId,
-              module,
-              branch: selectedFilter.branch,
-              repoIdentifier: selectedFilter.repo,
-              ...(isPipelineRemote
-                ? {
-                    repoName,
-                    connectorRef,
-                    storeType
-                  }
-                : {})
-            })
-          )
-          location.reload()
-        } else if (entityType === 'inputSet') {
-          replaceQueryParams(
-            {
-              branch: selectedFilter.branch,
-              repoIdentifier: selectedFilter.repo,
-              ...(isPipelineRemote
-                ? {
-                    repoName,
-                    connectorRef,
-                    storeType
-                  }
-                : {})
-            },
-            { skipNulls: true },
-            true
-          )
-          location.reload()
-        } else {
-          history.push(
-            routes.toTemplateStudio({
-              projectIdentifier,
-              orgIdentifier,
-              accountId,
-              module,
-              templateType: templateType,
-              templateIdentifier: identifier,
-              versionLabel: versionLabel,
-              repoIdentifier: selectedFilter.repo,
-              branch: selectedFilter.branch
-            })
-          )
+    () =>
+      (selectedFilter: GitFilterScope, defaultSelected = false) => {
+        // Reason for adding branch check :
+        // For GitX, if branch is not given BranchSelectV2 will internally select default and
+        // notify parent with this callback. For that we do not want to reload the page.
+        // For old GitSync branch is always availble so this check for internally selecting default branch will not matter.
+        if (!defaultSelected && branch !== selectedFilter.branch) {
+          if (entityType === 'pipeline') {
+            history.push(
+              routes.toPipelineStudio({
+                projectIdentifier,
+                orgIdentifier,
+                pipelineIdentifier: identifier || '-1',
+                accountId,
+                module,
+                branch: selectedFilter.branch,
+                repoIdentifier: selectedFilter.repo,
+                ...(isPipelineRemote
+                  ? {
+                      repoName,
+                      connectorRef,
+                      storeType
+                    }
+                  : {})
+              })
+            )
+            location.reload()
+          } else if (entityType === 'inputSet') {
+            replaceQueryParams(
+              {
+                branch: selectedFilter.branch,
+                repoIdentifier: selectedFilter.repo,
+                ...(isPipelineRemote
+                  ? {
+                      repoName,
+                      connectorRef,
+                      storeType
+                    }
+                  : {})
+              },
+              { skipNulls: true },
+              true
+            )
+            location.reload()
+          } else {
+            history.push(
+              routes.toTemplateStudio({
+                projectIdentifier,
+                orgIdentifier,
+                accountId,
+                module,
+                templateType: templateType,
+                templateIdentifier: identifier,
+                versionLabel: versionLabel,
+                repoIdentifier: selectedFilter.repo,
+                branch: selectedFilter.branch
+              })
+            )
+          }
         }
-      }
-    },
+      },
     [repoIdentifier, branch, identifier, orgIdentifier, projectIdentifier, accountId, module]
   )
 

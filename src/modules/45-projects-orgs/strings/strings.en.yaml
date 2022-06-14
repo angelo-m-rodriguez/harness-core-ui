@@ -50,6 +50,7 @@ gotoCV: 'Go to Service Reliability Management'
 gotoCD: 'Go to Continuous Delivery'
 gotoCF: 'Go to Feature Flags'
 gotoCI: 'Go to Continuous Integration'
+gotoSTO: 'Go to Security Tests'
 invite: 'Invite Collaborators'
 urlMessageProject: "Your Project is only accessible to people you've invited"
 urlMessageOrg: "Your organization is only accessible to people you've invited"

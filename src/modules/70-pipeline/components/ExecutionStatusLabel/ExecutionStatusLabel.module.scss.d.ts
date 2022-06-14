@@ -17,6 +17,7 @@ declare const styles: {
   readonly failed: string
   readonly icon: string
   readonly ignorefailed: string
+  readonly inputwaiting: string
   readonly interventionwaiting: string
   readonly notstarted: string
   readonly paused: string

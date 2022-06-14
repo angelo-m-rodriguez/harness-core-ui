@@ -38,7 +38,7 @@ describe('LandingDashboardDeploymentsWidget tests', () => {
     expect(deploymentStatsSummaryCard).toBeInTheDocument()
     const failureRateSummaryCard = getByText('common.failureRate')
     expect(failureRateSummaryCard).toBeInTheDocument()
-    const deploymentFrequencySummaryCard = getByText('pipeline.deploymentFrequency')
+    const deploymentFrequencySummaryCard = getByText('pipeline.executionFrequency')
     expect(deploymentFrequencySummaryCard).toBeInTheDocument()
 
     const mostActiveServicesTitle = getByText('common.mostActiveServices')

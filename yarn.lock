@@ -1756,10 +1756,10 @@
     "@contentful/rich-text-react-renderer" "^15.12.0"
     contentful "^9.1.20"
 
-"@harness/icons@1.14.0":
-  version "1.14.0"
-  resolved "https://npm.pkg.github.com/download/@harness/icons/1.14.0/d96b7f2b7de41180e80f6c2253089576a961d5d702bb444d95d9ada5264f6e5e#040a4e418305aa756fb2e7d2149157c99fa82832"
-  integrity sha512-pOPP5dzmZdo/4VX2AToEcl7G6mTXFajZCJWOpP8Ty1lOpqKmma5hwvoKSXwhnBMJNJjj1QJeLwQSrD6MstgCgA==
+"@harness/icons@1.16.0":
+  version "1.16.0"
+  resolved "https://npm.pkg.github.com/download/@harness/icons/1.16.0/99312b9ab6425a9cca5fc653cedfbfd251cb8432f42e3f5e5494ed0d150b158c#a66e0e29f4342620ecd6ba50de76b67dabd2feb3"
+  integrity sha512-FgiaGrnUTQkhuMeoYaA+wKS71JRGNt7ajlVSr76P9TzA/dfWYVjTupz6Kr1pgHJ2idk8qL5At+qPSJHwnQuUqA==
 
 "@harness/jarvis@0.16.0":
   version "0.16.0"
@@ -3156,6 +3156,18 @@
     regenerator-runtime "^0.13.7"
     resolve-from "^5.0.0"
     store2 "^2.12.0"
+
+"@stripe/react-stripe-js@^1.7.2":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-1.8.1.tgz#b646e3a8775dbb0432e234c6e1d67b19c4c0462d"
+  integrity sha512-8TpHu87zWSX/PhMMIC2C0jYXKl53kdiHz7bDSfLDs2oIynbV5L9cyoCZ1NuTllrNvFtd28fOqPc4IikZYRRDew==
+  dependencies:
+    prop-types "^15.7.2"
+
+"@stripe/stripe-js@^1.29.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.31.0.tgz#2920bdddc3eabb5734f9ca794824e25b378533ac"
+  integrity sha512-drlXsNvd/s9S1+Ghja0aDB81N3Wr/6iRAZ7MOzKv7AtKxVdvGpOwESw3z1lHl/Wx/rvPpA7whKdB3W2CnVSArw==
 
 "@swc/core-android-arm-eabi@1.2.139":
   version "1.2.139"

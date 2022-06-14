@@ -851,9 +851,7 @@ exports[`testing notification method selecting slack as notification method from
                     data-tooltip-id="testSlackConfigButton"
                   >
                     <button
-                      class="bp3-button bp3-disabled Button--button StyledProps--font StyledProps--main Button--with-current-color"
-                      disabled=""
-                      tabindex="-1"
+                      class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color"
                       type="button"
                     >
                       <span

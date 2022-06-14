@@ -93,6 +93,7 @@ export default function PipelineCard(props: PipelineCardProps): React.ReactEleme
               className: cx(css.customVariables, css.customVarPadL1, css.addVariableL1),
               // heading: <b>{getString('customVariables.title')}</b>,
               path: 'pipeline.variables',
+              hideExecutionTimeField: true,
               yamlProperties: (variablePipeline.variables as AllNGVariables[])?.map(
                 variable => metadataMap[variable.value || '']?.yamlProperties || {}
               )

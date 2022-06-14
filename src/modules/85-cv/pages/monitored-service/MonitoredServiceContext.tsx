@@ -7,18 +7,20 @@
 
 import React from 'react'
 
-interface MonitoredServiceContext {
+interface MonitoredServiceContextInterface {
   isTemplate: boolean
 }
-export const MonitoredServiceContext = React.createContext({ isTemplate: false })
+export const MonitoredServiceContext = React.createContext<MonitoredServiceContextInterface>({
+  isTemplate: false
+})
 
 export const MonitoredServiceProvider = ({
   isTemplate,
   children
-}: React.PropsWithChildren<MonitoredServiceContext>) => {
+}: React.PropsWithChildren<MonitoredServiceContextInterface>) => {
   return <MonitoredServiceContext.Provider value={{ isTemplate }}>{children}</MonitoredServiceContext.Provider>
 }
 
-export function useMonitoredServiceContext(): MonitoredServiceContext {
+export function useMonitoredServiceContext(): MonitoredServiceContextInterface {
   return React.useContext(MonitoredServiceContext)
 }

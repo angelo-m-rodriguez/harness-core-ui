@@ -182,7 +182,7 @@ exports[`SaveToGitFormV2 test Creating new branch and PR in SaveToGitFormV2 1`] 
                       </div>
                     </div>
                     <div
-                      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-baseline StyledProps--flex-justifyContent-flex-start StyledProps--padding-top-small"
+                      class="Layout--horizontal StyledProps--main StyledProps--flex StyledProps--flex-alignItems-flex-start StyledProps--flex-justifyContent-flex-start StyledProps--padding-top-small"
                     >
                       <div
                         class="bp3-form-group"
@@ -191,7 +191,7 @@ exports[`SaveToGitFormV2 test Creating new branch and PR in SaveToGitFormV2 1`] 
                           class="bp3-form-content"
                         >
                           <label
-                            class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox StyledProps--main StyledProps--margin-right-small StyledProps--inline"
+                            class="bp3-control bp3-checkbox StyledProps--font Checkbox--checkbox createPrCheckbox StyledProps--main StyledProps--inline"
                           >
                             <input
                               name="createPr"

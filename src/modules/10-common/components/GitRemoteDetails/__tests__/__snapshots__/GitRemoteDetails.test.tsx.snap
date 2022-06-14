@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GitRemoteDetails test default rendering GitRemoteDetails 1`] = `
+exports[`<GitRemoteDetails /> default rendering GitRemoteDetails 1`] = `
 <div>
   <div
     class="wrapper"

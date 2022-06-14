@@ -32,10 +32,8 @@ import DrawerFooter from '@cv/pages/health-source/common/DrawerFooter/DrawerFoot
 import { SetupSourceTabsContext } from '@cv/components/CVSetupSourcesView/SetupSourceTabs/SetupSourceTabs'
 import { Connectors } from '@connectors/constants'
 import { HealthSourceTypes } from '@cv/pages/health-source/types'
-import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import { AllMultiTypeInputTypesForStep } from '@ci/components/PipelineSteps/CIStep/StepUtils'
-import { TemplateType } from '@templates-library/utils/templatesUtils'
 import { FormConnectorReferenceField } from '@connectors/components/ConnectorReferenceField/FormConnectorReferenceField'
 import { ConnectorRefFieldName, HEALTHSOURCE_LIST } from './DefineHealthSource.constant'
 import {
@@ -49,12 +47,13 @@ import css from './DefineHealthSource.module.scss'
 
 interface DefineHealthSourceProps {
   onSubmit?: (values: any) => void
+  isTemplate?: boolean
+  expressions?: string[]
 }
 
 function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
-  const { onSubmit } = props
+  const { onSubmit, isTemplate, expressions } = props
   const { getString } = useStrings()
-  const { expressions } = useVariablesExpression?.() || {}
   const { onNext, sourceData } = useContext(SetupSourceTabsContext)
   const { orgIdentifier, projectIdentifier, accountId, templateType } = useParams<
     ProjectPathProps & { identifier: string; templateType?: string }
@@ -99,7 +98,7 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
 
   const connectorData = useCallback(
     formik => {
-      return (templateType as unknown as TemplateType) === TemplateType.MonitoredService ? (
+      return isTemplate ? (
         <FormMultiTypeConnectorField
           name={formik?.values?.[ConnectorRefFieldName] ? ConnectorRefFieldName : 'connectorId'}
           disabled={!formik?.values?.sourceType}
@@ -118,7 +117,10 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
           type={formik?.values?.sourceType}
           multiTypeProps={{ expressions, allowableTypes: AllMultiTypeInputTypesForStep }}
           onChange={(value: any) => {
-            const connectorValue = value?.scope ? `${value.scope}.${value?.record?.identifier}` : value
+            const connectorValue =
+              value?.scope && value?.scope !== 'project'
+                ? `${value.scope}.${value?.record?.identifier}`
+                : value?.record?.identifier || value
             formik?.setFieldValue(ConnectorRefFieldName, connectorValue)
           }}
         />

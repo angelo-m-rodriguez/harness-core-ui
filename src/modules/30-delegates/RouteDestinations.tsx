@@ -10,8 +10,10 @@ import { Redirect, useParams } from 'react-router-dom'
 
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
-import { accountPathProps, delegateConfigProps, delegatePathProps } from '@common/utils/routeUtils'
+import { accountPathProps, delegateConfigProps, delegatePathProps, projectPathProps } from '@common/utils/routeUtils'
 import { AccountSideNavProps } from '@common/RouteDestinations'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 
 import RbacFactory from '@rbac/factories/RbacFactory'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -21,6 +23,7 @@ import type { ResourceDTO } from 'services/audit'
 import AuditTrailFactory, { ResourceScope } from '@audit-trail/factories/AuditTrailFactory'
 
 import { String } from 'framework/strings'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 
 import DelegatesPage from '@delegates/pages/delegates/DelegatesPage'
 import DelegateProfileDetails from '@delegates/pages/delegates/DelegateConfigurationDetailPage'
@@ -34,7 +37,13 @@ import DelegateResourceRenderer from '@delegates/components/DelegateResourceRend
 import DelegateListing from '@delegates/pages/delegates/DelegateListing'
 import DelegateConfigurations from '@delegates/pages/delegates/DelegateConfigurations'
 import DelegateTokens from '@delegates/components/DelegateTokens/DelegateTokens'
-import type { AccountPathProps, Module } from '@common/interfaces/RouteInterfaces'
+import type {
+  AccountPathProps,
+  Module,
+  ModulePathParams,
+  PipelineType,
+  ProjectPathProps
+} from '@common/interfaces/RouteInterfaces'
 
 RbacFactory.registerResourceTypeHandler(ResourceType.DELEGATE, {
   icon: 'res-delegates',
@@ -143,6 +152,115 @@ export default (
       <DelegateProfileDetails />
     </RouteWithLayout>
     <RouteWithLayout sidebarProps={AccountSideNavProps} path={[routes.toDelegateTokens({ ...accountPathProps })]}>
+      <DelegatesPage>
+        <DelegateTokens />
+      </DelegatesPage>
+    </RouteWithLayout>
+  </>
+)
+
+const RedirectToModuleDelegatesHome = (): React.ReactElement => {
+  const { accountId, projectIdentifier, orgIdentifier, module } = useParams<PipelineType<ProjectPathProps>>()
+
+  return <Redirect to={routes.toDelegateList({ accountId, projectIdentifier, orgIdentifier, module })} />
+}
+export const DelegateRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toDelegates({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...moduleParams
+      })}
+    >
+      <RedirectToModuleDelegatesHome />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toDelegateList({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.DelegateListing}
+    >
+      <DelegatesPage>
+        <DelegateListing />
+      </DelegatesPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toDelegateConfigs({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.DelegateConfigurations}
+    >
+      <DelegatesPage>
+        <DelegateConfigurations />
+      </DelegatesPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toDelegatesDetails({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...delegatePathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.DelegateDetails}
+    >
+      <DelegateDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[
+        routes.toDelegateConfigsDetails({
+          ...accountPathProps,
+          ...projectPathProps,
+          ...delegateConfigProps,
+          ...moduleParams
+        }),
+        routes.toEditDelegateConfigsDetails({
+          ...accountPathProps,
+          ...projectPathProps,
+          ...delegateConfigProps,
+          ...moduleParams
+        })
+      ]}
+      pageName={PAGE_NAME.DelegateProfileDetails}
+    >
+      <DelegateProfileDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[
+        routes.toDelegateTokens({
+          ...accountPathProps,
+          ...projectPathProps,
+          ...moduleParams
+        })
+      ]}
+      pageName={PAGE_NAME.DelegateTokens}
+    >
       <DelegatesPage>
         <DelegateTokens />
       </DelegatesPage>

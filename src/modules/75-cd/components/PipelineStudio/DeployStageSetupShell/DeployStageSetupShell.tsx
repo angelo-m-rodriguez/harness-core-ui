@@ -71,7 +71,7 @@ const iconNames = { tick: 'tick' as IconName }
 
 export default function DeployStageSetupShell(): JSX.Element {
   const { getString } = useStrings()
-  const { NG_TEMPLATES, NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const { NG_TEMPLATES, NG_SVC_ENV_REDESIGN = false } = useFeatureFlags()
   const layoutRef = React.useRef<HTMLDivElement>(null)
   const pipelineContext = usePipelineContext()
   const {
@@ -203,7 +203,7 @@ export default function DeployStageSetupShell(): JSX.Element {
 
   const validate = React.useCallback(() => {
     try {
-      getCDStageValidationSchema(getString, selectedDeploymentType, contextType, NG_SVC_ENV_REDESIGN).validateSync(
+      getCDStageValidationSchema(getString, selectedDeploymentType, NG_SVC_ENV_REDESIGN, contextType).validateSync(
         selectedStage?.stage,
         {
           abortEarly: false,

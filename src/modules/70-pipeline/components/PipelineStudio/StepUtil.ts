@@ -44,13 +44,13 @@ import { StepViewType } from '../AbstractSteps/Step'
  * Loops over the pipeline and clears all the runtime inputs i.e. <+input>
  * expect for execution time inputs i.e. <+input>.executionInput()
  */
-export const clearRuntimeInput = (template: PipelineInfoConfig): PipelineInfoConfig => {
+export function clearRuntimeInput<T = PipelineInfoConfig>(template: T, shouldAlsoClearRuntimeInputs?: boolean): T {
   const INPUT_EXPRESSION_REGEX = new RegExp(`"${INPUT_EXPRESSION_REGEX_STRING}"`, 'g')
   return JSON.parse(
     JSON.stringify(template || {}).replace(
       new RegExp(`"${INPUT_EXPRESSION_REGEX.source.slice(1).slice(0, -1)}"`, 'g'),
       value => {
-        return isExecionInput(value) ? value : '""'
+        return isExecionInput(value) && !shouldAlsoClearRuntimeInputs ? value : '""'
       }
     )
   )

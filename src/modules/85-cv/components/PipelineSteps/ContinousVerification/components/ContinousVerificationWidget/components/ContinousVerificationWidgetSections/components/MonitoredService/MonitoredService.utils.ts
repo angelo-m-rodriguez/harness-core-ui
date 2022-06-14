@@ -24,14 +24,14 @@ export const getNewSpecs = (
 }
 
 export const isAnExpression = (value: string): boolean => {
-  return value.startsWith('<+') && value !== RUNTIME_INPUT_VALUE
+  return value.startsWith('<+') || (value.startsWith('<') && value !== RUNTIME_INPUT_VALUE)
 }
 
 export const getServiceIdFromStage = (stage: StageElementWrapper<DeploymentStageElementConfig>): string => {
   return stage?.stage?.spec?.serviceConfig?.service?.identifier || stage?.stage?.spec?.serviceConfig?.serviceRef || ''
 }
 
-export function getServiceIdentifier(
+export function getServiceIdentifierFromStage(
   selectedStage: StageElementWrapper<DeploymentStageElementConfig> | undefined,
   pipeline: PipelineInfoConfig
 ): string {
@@ -44,4 +44,14 @@ export function getServiceIdentifier(
     serviceId = getServiceIdFromStage(selectedStage as StageElementWrapper<DeploymentStageElementConfig>)
   }
   return serviceId
+}
+
+export function getEnvironmentIdentifierFromStage(
+  selectedStage?: StageElementWrapper<DeploymentStageElementConfig>
+): string {
+  return (
+    selectedStage?.stage?.spec?.infrastructure?.environment?.identifier ||
+    selectedStage?.stage?.spec?.infrastructure?.environmentRef ||
+    ''
+  )
 }

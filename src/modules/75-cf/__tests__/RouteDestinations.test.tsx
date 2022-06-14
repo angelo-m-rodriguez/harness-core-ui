@@ -35,27 +35,36 @@ describe('RouteDestinations', () => {
 
   beforeEach(() => jest.resetAllMocks())
 
-  test('it should render default routes', async () => {
+  test('it should render default routes, including pipeline routes', async () => {
     const routes = renderRoutes()
 
     expect(routes).toMatchSnapshot()
+    expect(routesHavePageName(routes, 'PipelineRouteDestinations')).toBeTruthy()
   })
 
-  describe('PipelineRouteDestinations', () => {
-    test('it should not return the pipeline routes when the FF_PIPELINE feature flag is false', () => {
-      const routes = renderRoutes({ FF_PIPELINE: false })
+  test('it should not return the pipeline routes when the FF_PIPELINE feature flag is false', () => {
+    const routes = renderRoutes({ FF_PIPELINE: false })
 
-      expect(routes).not.toContainEqual(
-        expect.objectContaining({ type: expect.objectContaining({ name: 'PipelineRouteDestinations' }) })
-      )
-    })
-
-    test('it should return the pipeline routes when the FF_PIPELINE feature flag is true', () => {
-      const routes = renderRoutes({ FF_PIPELINE: true })
-
-      expect(routes).toContainEqual(
-        expect.objectContaining({ type: expect.objectContaining({ name: 'PipelineRouteDestinations' }) })
-      )
-    })
+    expect(routesHavePageName(routes, 'PipelineRouteDestinations')).toBeFalsy()
   })
 })
+
+// Recursively search through routes (which can contain arrays of routes) for the given page name.
+function routesHavePageName(el: ReactElement | ReactElement[], componentName: string): boolean {
+  if (Array.isArray(el)) {
+    for (const child of el) {
+      if (routesHavePageName(child, componentName)) {
+        return true
+      }
+    }
+  } else {
+    if (el.props?.children) {
+      if (routesHavePageName(el.props?.children, componentName)) {
+        return true
+      }
+    }
+
+    return typeof el.type === 'function' && el.type.name === componentName
+  }
+  return false
+}

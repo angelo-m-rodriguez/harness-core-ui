@@ -317,6 +317,33 @@ export interface Feature {
   variations: Variation[]
 }
 
+export interface FeatureCounts {
+  /**
+   * The total number of flags with a active status in a project/environment
+   */
+  totalActive?: number
+  /**
+   * The total number of flags that are turned on in a project/environment
+   */
+  totalEnabled?: number
+  /**
+   * The total number of flags in the project/environment
+   */
+  totalFeatures?: number
+  /**
+   * The total number of permanent flags in a project/environment
+   */
+  totalPermanent?: number
+  /**
+   * The total number of flags with a potentially-stale status in a project/environment
+   */
+  totalPotentiallyStale?: number
+  /**
+   * The total number of flags with a recently-accessed status in a project/environment
+   */
+  totalRecentlyAccessed?: number
+}
+
 /**
  * A Feature Flag evaluation describes a variation for the flag and the number of times it was evaluated
  */
@@ -405,27 +432,8 @@ export interface FeatureStatus {
  * A list of Feature Flags
  */
 export type Features = Pagination & {
+  featureCounts?: FeatureCounts
   features?: Feature[]
-  /**
-   * The total number of items with lifetime marked 'permanent'
-   */
-  permanentCount?: number
-  /**
-   * The total number of items that are enabled
-   */
-  enabledCount?: number
-  /**
-   * The total number of items that were accesed in last 24hrs
-   */
-  recentlyActiveCount?: number
-  /**
-   * The total number of items currently active
-   */
-  activeCount?: number
-  /**
-   * The total number of items that may no longer be needed
-   */
-  potentiallyStaleCount?: number
 }
 
 /**
@@ -2634,7 +2642,7 @@ export interface GetAllFeaturesQueryParams {
    */
   excludedFeatures?: string
   /**
-   * Filter for flags based on their status (active,never_requested,recently_accessed,potentially_stale)
+   * Filter for flags based on their status (active,never-requested,recently-accessed,potentially-stale)
    */
   status?: string
   /**
@@ -2645,6 +2653,10 @@ export interface GetAllFeaturesQueryParams {
    * Filter for flags based on if they are enabled or disabled
    */
   enabled?: boolean
+  /**
+   * Returns counts for the different types of flags e.g num active, potentially-stale, recently-accessed etc
+   */
+  flagCounts?: boolean
 }
 
 export type GetAllFeaturesProps = Omit<

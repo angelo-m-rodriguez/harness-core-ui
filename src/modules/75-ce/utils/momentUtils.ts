@@ -43,6 +43,7 @@ export const getStaticSchedulePeriodTime = (str: string) => moment(str).valueOf(
 export const getStaticSchedulePeriodString = (timeEpoch: number) =>
   getTimePeriodString(timeEpoch, STATIC_SCHEDULE_PERIOD_FORMAT)
 export const getMinDate = (dates: Array<Date | number>) => moment.min(dates.map(d => moment(d))).valueOf()
+export const getDiffInDays = (from: string, to: string) => moment(to).diff(moment(from), 'days')
 
 export const DATE_RANGE_SHORTCUTS: Record<string, moment.Moment[]> = {
   LAST_7_DAYS: [todayInUTC().subtract(6, 'days').startOf('day'), todayInUTC().endOf('day')],

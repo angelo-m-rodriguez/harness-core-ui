@@ -167,6 +167,70 @@ export const pipelineInputInitialValues = {
     ],
     variables: [{ name: 'newVar', type: 'String', value: '<+input>', default: 'defaultValue' }]
   },
+  resolvedPipeline: {
+    identifier: 'p1',
+    properties: {
+      ci: {
+        codebase: {
+          connectorRef: 'github',
+          build: '<+input>'
+        }
+      }
+    },
+    stages: [
+      {
+        stage: {
+          identifier: 'stage1',
+          type: 'Deployment',
+          spec: {
+            infrastructure: {
+              infrastructureDefinition: {
+                type: 'KubernetesDirect',
+                spec: {
+                  namespace: RUNTIME_INPUT_VALUE,
+                  releaseName: RUNTIME_INPUT_VALUE
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        stage: {
+          name: 'Stage 2',
+          identifier: 'Stage2',
+          type: 'CI',
+          spec: {
+            cloneCodebase: true,
+            infrastructure: {
+              type: 'KubernetesDirect',
+              spec: {
+                connectorRef: 'k8s',
+                namespace: 'default'
+              }
+            },
+            execution: {
+              steps: [
+                {
+                  step: {
+                    type: 'Run',
+                    name: 'Run',
+                    identifier: 'Run',
+                    spec: {
+                      connectorRef: 'docker',
+                      image: 'node',
+                      command: 'echo "test"'
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    variables: [{ name: 'newVar', type: 'String', value: '<+input>', default: 'defaultValue' }]
+  },
   pipeline: {
     identifier: 'p1',
     properties: {
@@ -283,6 +347,108 @@ export const getTriggerConfigDefaultProps = ({
         ]
       },
       originalPipeline: {
+        name: 'SampleTestArtifactsArchit',
+        identifier: 'SampleTestArtifactsArchit',
+        allowStageExecutions: false,
+        projectIdentifier: 'Kapil',
+        orgIdentifier: 'default',
+        tags: {},
+        stages: [
+          {
+            stage: {
+              name: 's1',
+              identifier: 's1',
+              description: '',
+              type: 'Deployment',
+              spec: {
+                serviceConfig: {
+                  serviceRef: 'architservice',
+                  serviceDefinition: {
+                    type: 'Kubernetes',
+                    spec: {
+                      variables: [],
+                      artifacts: {
+                        primary: {
+                          spec: {
+                            connectorRef: 'account.DockerAnonymous',
+                            imagePath: 'library/nginx',
+                            tag: '<+input>'
+                          },
+                          type: 'DockerRegistry'
+                        },
+                        sidecars: [
+                          {
+                            sidecar: {
+                              spec: {
+                                connectorRef: 'account.DockerAnonymous',
+                                imagePath: 'library/nginx',
+                                tag: 'latest'
+                              },
+                              identifier: 's1',
+                              type: 'DockerRegistry'
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                infrastructure: {
+                  environmentRef: 'env9',
+                  infrastructureDefinition: {
+                    type: 'KubernetesDirect',
+                    spec: {
+                      connectorRef: 'pieplay',
+                      namespace: '<+input>',
+                      releaseName: 'release-<+INFRA_KEY>'
+                    }
+                  },
+                  allowSimultaneousDeployments: false
+                },
+                execution: {
+                  steps: [
+                    {
+                      step: {
+                        type: 'ShellScript',
+                        name: 'step1',
+                        identifier: 'step1',
+                        spec: {
+                          shell: 'Bash',
+                          onDelegate: true,
+                          source: {
+                            type: 'Inline',
+                            spec: {
+                              script:
+                                'echo <+serviceConfig.serviceDefinition.spec.artifacts.primary.spec.connectorRef>\necho <+serviceConfig.serviceDefinition.spec.artifacts.sidecars.s1.spec.connectorRef>'
+                            }
+                          },
+                          environmentVariables: [],
+                          outputVariables: [],
+                          executionTarget: {}
+                        },
+                        timeout: '10m'
+                      }
+                    }
+                  ],
+                  rollbackSteps: []
+                }
+              },
+              tags: {},
+              failureStrategies: [
+                {
+                  onFailure: {
+                    errors: ['AllErrors'],
+                    action: {
+                      type: 'StageRollback'
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      resolvedPipeline: {
         name: 'SampleTestArtifactsArchit',
         identifier: 'SampleTestArtifactsArchit',
         allowStageExecutions: false,

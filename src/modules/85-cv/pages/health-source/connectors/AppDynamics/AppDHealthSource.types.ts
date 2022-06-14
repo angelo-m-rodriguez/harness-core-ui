@@ -33,6 +33,7 @@ export type MapAppDynamicsMetric = {
   metricIdentifier?: string
   fullPath?: string
   pathType?: string
+  completeMetricPath?: string
 }
 
 export interface AppDynamicsData {
@@ -76,6 +77,7 @@ export interface AppDynamicsFomikFormInterface {
   metricIdentifier?: string
   fullPath?: string
   pathType?: string
+  completeMetricPath?: string
 }
 
 export interface InitAppDCustomFormInterface {

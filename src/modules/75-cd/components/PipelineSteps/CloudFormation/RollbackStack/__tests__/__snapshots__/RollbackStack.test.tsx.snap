@@ -84,7 +84,7 @@ exports[`Test Cloudformation rollback stack should error on submit 1`] = `
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -123,7 +123,7 @@ exports[`Test Cloudformation rollback stack should error on submit 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -197,7 +197,7 @@ exports[`Test Cloudformation rollback stack should error on submit 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>
@@ -372,7 +372,7 @@ exports[`Test Cloudformation rollback stack should render edit view as new step 
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -411,7 +411,7 @@ exports[`Test Cloudformation rollback stack should render edit view as new step 
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -485,7 +485,7 @@ exports[`Test Cloudformation rollback stack should render edit view as new step 
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>
@@ -631,7 +631,7 @@ exports[`Test Cloudformation rollback stack should render rollback stack view 1`
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -670,7 +670,7 @@ exports[`Test Cloudformation rollback stack should render rollback stack view 1`
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -744,7 +744,7 @@ exports[`Test Cloudformation rollback stack should render rollback stack view 1`
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>
@@ -925,7 +925,7 @@ exports[`Test Cloudformation rollback stack should show runtime component 1`] = 
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -964,7 +964,7 @@ exports[`Test Cloudformation rollback stack should show runtime component 1`] = 
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -1043,7 +1043,7 @@ exports[`Test Cloudformation rollback stack should show runtime component 1`] = 
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>
@@ -1228,7 +1228,7 @@ exports[`Test Cloudformation rollback stack should submit rollback form 1`] = `
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -1267,7 +1267,7 @@ exports[`Test Cloudformation rollback stack should submit rollback form 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -1341,7 +1341,7 @@ exports[`Test Cloudformation rollback stack should submit rollback form 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>
@@ -1487,7 +1487,7 @@ exports[`Test Cloudformation rollback stack should update field values 1`] = `
           >
             <span
               class="Tooltip--acenter"
-              data-tooltip-id="cloudFormationDeleteStack_name"
+              data-tooltip-id="cloudFormationRollbackStack-_name"
             >
               name
             </span>
@@ -1526,7 +1526,7 @@ exports[`Test Cloudformation rollback stack should update field values 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_timeout"
+            data-tooltip-id="cloudFormationRollbackStack-_timeout"
           >
             pipelineSteps.timeoutLabel
           </span>
@@ -1600,7 +1600,7 @@ exports[`Test Cloudformation rollback stack should update field values 1`] = `
         >
           <span
             class="Tooltip--acenter"
-            data-tooltip-id="cloudFormationDeleteStack_spec.configuration.provisionerIdentifier"
+            data-tooltip-id="cloudFormationRollbackStack-_spec.configuration.provisionerIdentifier"
           >
             pipelineSteps.provisionerIdentifier
           </span>

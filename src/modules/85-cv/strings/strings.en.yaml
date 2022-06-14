@@ -627,6 +627,7 @@ healthSource:
       trierLabel: Find an AppDynamics tier
       tierPlaceholder: Type an tier name
       metricPackLabel: Select Metric Packs to be monitored
+      serviceInstance: Specify a service instance path
       validation:
         application: Please select applications
         tier: Please select tier
@@ -650,7 +651,8 @@ healthSource:
       defaultMetricName: Dynatrace metric
       submitQueryLabel: Submit query to see Dynatrace metrics
       keyRequestRequiredLabel: Only services with marked Key Requests are shown
-
+templates:
+  healthSourceDetails: Health Source Details
 slos:
   title: SLOs
   deleteSLO: Delete SLO

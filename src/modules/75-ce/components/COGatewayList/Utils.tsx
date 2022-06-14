@@ -295,3 +295,13 @@ export function cleanupForHostName(name: string): string {
 export function roundToPrecision(n: number): number {
   return Math.round(n * 100) / 100
 }
+
+export const getFilterBodyFromFilterData = (data: { [key: string]: any }) => {
+  return Object.entries(data).map(([key, values]) => {
+    return {
+      field: key,
+      operator: 'equals',
+      values
+    }
+  })
+}

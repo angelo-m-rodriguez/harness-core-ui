@@ -36,7 +36,8 @@ import {
   setInitialStageAndSteps,
   getUIType,
   getError,
-  UI
+  UI,
+  StepTypes
 } from './TestsUtils'
 // import { TestsCoverage } from './TestsCoverage'
 import css from './BuildTests.module.scss'
@@ -422,6 +423,7 @@ function BuildTests({ reportSummaryMock, testOverviewMock }: BuildTestsProps): R
 
   useEffect(() => {
     if (reportInfoData && testInfoData) {
+      const tiStepExists = Object.values(context?.allNodeMap || {})?.some(step => step.stepType === StepTypes.RUN_TESTS)
       setInitialStageAndSteps({
         reportInfoData,
         testInfoData,
@@ -433,7 +435,7 @@ function BuildTests({ reportSummaryMock, testOverviewMock }: BuildTestsProps): R
         setStepIdOptions
       })
 
-      if (testInfoData.length > 0) {
+      if (testInfoData.length > 0 || tiStepExists) {
         setHasTIStep(true)
       }
     }

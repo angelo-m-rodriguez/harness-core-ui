@@ -28,6 +28,9 @@ describe('FeatureFlagsPage', () => {
     mockImport('services/cd-ng', {
       useGetEnvironmentListForProject: () => ({ loading: true, refetch: jest.fn() })
     })
+    mockImport('services/cf', {
+      useGetAllFeatures: () => ({ loading: true, refetch: jest.fn() })
+    })
 
     const { container } = render(
       <TestWrapper

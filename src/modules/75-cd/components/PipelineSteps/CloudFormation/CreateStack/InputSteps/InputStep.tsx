@@ -33,6 +33,7 @@ import MultiTypeFieldSelector from '@common/components/MultiTypeFieldSelector/Mu
 import { TFMonaco } from '../../../Common/Terraform/Editview/TFMonacoEditor'
 import TemplateFileInputs from './TemplateFile'
 import ParameterFileInputs from './ParameterInputs'
+import TagsInputs from './TagsInputs'
 import type { CreateStackData, CreateStackProps, Tags } from '../../CloudFormationInterfaces.types'
 import { isRuntime } from '../../CloudFormationHelper'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
@@ -301,6 +302,7 @@ function CreateStackInputStepRef<T extends CreateStackData = CreateStackData>(
           </Layout.Vertical>
         )
       }
+      {inputSetData?.template?.spec?.configuration?.tags?.type === 'Remote' && <TagsInputs {...props} />}
       {
         /* istanbul ignore next */
         isRuntime((inputSetData?.template?.spec?.configuration?.tags as Tags)?.spec?.content) && (

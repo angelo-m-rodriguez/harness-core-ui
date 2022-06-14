@@ -6,11 +6,14 @@
  */
 
 import React from 'react'
-
+import type { ModulePathParams } from '@common/interfaces/RouteInterfaces'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 import AuditTrailFactory, { ResourceScope } from '@audit-trail/factories/AuditTrailFactory'
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
-import { accountPathProps, connectorPathProps } from '@common/utils/routeUtils'
+import { accountPathProps, connectorPathProps, projectPathProps } from '@common/utils/routeUtils'
 import ConnectorsPage from '@connectors/pages/connectors/ConnectorsPage'
 import ConnectorDetailsPage from '@connectors/pages/connectors/ConnectorDetailsPage/ConnectorDetailsPage'
 import CreateConnectorFromYamlPage from '@connectors/pages/createConnectorFromYaml/CreateConnectorFromYamlPage'
@@ -73,6 +76,47 @@ export default (
       exact
     >
       <CreateConnectorFromYamlPage />
+    </RouteWithLayout>
+  </>
+)
+
+export const ConnectorRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toConnectors({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.ConnectorsPage}
+    >
+      <ConnectorsPage />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toCreateConnectorFromYaml({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.CreateConnectorFromYamlPage}
+    >
+      <CreateConnectorFromYamlPage />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toConnectorDetails({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...connectorPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.ConnectorDetailsPage}
+    >
+      <ConnectorDetailsPage />
     </RouteWithLayout>
   </>
 )

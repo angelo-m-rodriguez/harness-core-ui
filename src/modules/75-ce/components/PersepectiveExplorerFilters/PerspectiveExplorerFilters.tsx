@@ -10,7 +10,7 @@ import { Container, Text, Button, Icon, FlexExpander } from '@wings-software/uic
 import cx from 'classnames'
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core'
 import { QlceViewTimeGroupType, QlceViewFilterInput } from 'services/ce/services'
-import PerspectiveTimeRangePicker from '@ce/components/PerspectiveTimeRangePicker/PerspectiveTimeRangePicker'
+import TimeRangePicker from '@ce/common/TimeRangePicker/TimeRangePicker'
 import {
   CE_DATE_FORMAT_INTERNAL,
   DATE_RANGE_SHORTCUTS,
@@ -150,7 +150,7 @@ const PersepectiveExplorerFilters: React.FC<PersepectiveExplorerFiltersProps> = 
         <Icon name="ng-filter" size={20} />
         <ExplorerFilters timeRange={timeRange} filters={filters} setFilters={setFilters} />
         <FlexExpander />
-        <PerspectiveTimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} featureEnabled={featureEnabled} />
+        <TimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} featureEnabled={featureEnabled} />
         <Text color="primary7">|</Text>
         <TimeGranularityDropDown
           aggregation={aggregation}

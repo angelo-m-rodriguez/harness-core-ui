@@ -71,7 +71,7 @@ const RenderColumnOrganization: Renderer<CellProps<ProjectAggregateDTO>> = ({ ro
 }
 
 const RenderColumnModules: Renderer<CellProps<ProjectAggregateDTO>> = ({ row }) => {
-  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED } = useFeatureFlags()
+  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED, SECURITY } = useFeatureFlags()
   const data = row.original
 
   const shouldShowModules = data.projectResponse.project.modules?.length
@@ -98,6 +98,10 @@ const RenderColumnModules: Renderer<CellProps<ProjectAggregateDTO>> = ({ row }) 
 
     if (CVNG_ENABLED && modules?.includes(ModuleName.CV)) {
       icons.push(<Icon name={getModuleIcon(ModuleName.CV)} size={20} key={ModuleName.CV} />)
+    }
+
+    if (SECURITY && modules?.includes(ModuleName.STO)) {
+      icons.push(<Icon name={getModuleIcon(ModuleName.STO)} size={20} key={ModuleName.STO} />)
     }
 
     return icons

@@ -13,6 +13,7 @@ declare const styles: {
   readonly dialogStyles: string
   readonly environmentDetailsBody: string
   readonly environmentDetailsHeader: string
+  readonly fullWidth: string
   readonly label: string
   readonly sectionCard: string
   readonly tagsPopover: string

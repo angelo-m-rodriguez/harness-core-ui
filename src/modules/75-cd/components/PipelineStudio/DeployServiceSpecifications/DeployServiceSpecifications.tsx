@@ -195,13 +195,8 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       if (serviceInfo) {
         const stageData = produce(stage, draft => {
           if (draft) {
-            set(draft, 'stage.spec', {
-              ...draft.stage?.spec,
-              deploymentType: serviceInfo?.type,
-              service: {
-                serviceRef: parsedYaml.service?.identifier
-              }
-            })
+            set(draft, 'stage.spec.deploymentType', serviceInfo?.type)
+            set(draft, 'stage.spec.service.serviceRef', parsedYaml.service?.identifier)
           }
         })
         if (stageData?.stage) {
@@ -568,7 +563,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   }, [])
 
   const isNewServiceEntity = (): boolean => {
-    return (isSvcEnvEntityEnabled as boolean) && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
+    return isSvcEnvEntityEnabled && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
   }
 
   const shouldRenderDeployServiceStep = (): boolean => {

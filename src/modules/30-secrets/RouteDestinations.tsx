@@ -7,10 +7,13 @@
 
 import React from 'react'
 import { Redirect, useParams } from 'react-router-dom'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 import AuditTrailFactory, { ResourceScope } from '@audit-trail/factories/AuditTrailFactory'
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
-import { accountPathProps, secretPathProps } from '@common/utils/routeUtils'
+import { accountPathProps, orgPathProps, projectPathProps, secretPathProps } from '@common/utils/routeUtils'
 
 import SecretsPage from '@secrets/pages/secrets/SecretsPage'
 import SecretDetails from '@secrets/pages/secretDetails/SecretDetails'
@@ -62,7 +65,7 @@ AuditTrailFactory.registerResourceHandler('SECRET', {
   }
 })
 
-const RedirectToSecretDetailHome = () => {
+const RedirectToSecretDetailHome: React.FC = () => {
   const { accountId, projectIdentifier, orgIdentifier, secretId, module } = useParams<
     ProjectPathProps & SecretsPathProps & ModulePathParams
   >()
@@ -73,7 +76,12 @@ const RedirectToSecretDetailHome = () => {
 
 export default (
   <>
-    <RouteWithLayout sidebarProps={AccountSideNavProps} path={routes.toSecrets({ ...accountPathProps })} exact>
+    <RouteWithLayout
+      sidebarProps={AccountSideNavProps}
+      path={routes.toSecrets({ ...accountPathProps })}
+      pageName={PAGE_NAME.SecretsPage}
+      exact
+    >
       <SecretsPage />
     </RouteWithLayout>
     <RouteWithLayout
@@ -92,6 +100,7 @@ export default (
         ...accountPathProps,
         ...secretPathProps
       })}
+      pageName={PAGE_NAME.SecretDetails}
       exact
     >
       <SecretDetailsHomePage>
@@ -104,6 +113,7 @@ export default (
         ...accountPathProps,
         ...secretPathProps
       })}
+      pageName={PAGE_NAME.SecretReferences}
       exact
     >
       <SecretDetailsHomePage>
@@ -113,6 +123,7 @@ export default (
     <RouteWithLayout
       sidebarProps={AccountSideNavProps}
       path={routes.toCreateSecretFromYaml({ ...accountPathProps })}
+      pageName={PAGE_NAME.CreateSecretFromYamlPage}
       exact
     >
       <CreateSecretFromYamlPage />
@@ -120,3 +131,80 @@ export default (
   </>
 )
 export { RedirectToSecretDetailHome }
+
+export const SecretRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toSecrets({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.SecretsPage}
+    >
+      <SecretsPage />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toCreateSecretFromYaml({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...orgPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.CreateSecretFromYamlPage}
+    >
+      <CreateSecretFromYamlPage />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toSecretDetails({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...secretPathProps,
+        ...moduleParams
+      })}
+    >
+      <RedirectToSecretDetailHome />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toSecretDetailsOverview({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...secretPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.SecretDetails}
+    >
+      <SecretDetailsHomePage>
+        <SecretDetails />
+      </SecretDetailsHomePage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toSecretDetailsReferences({
+        ...accountPathProps,
+        ...projectPathProps,
+        ...secretPathProps,
+        ...moduleParams
+      })}
+      pageName={PAGE_NAME.SecretReferences}
+    >
+      <SecretDetailsHomePage>
+        <SecretReferences />
+      </SecretDetailsHomePage>
+    </RouteWithLayout>
+  </>
+)

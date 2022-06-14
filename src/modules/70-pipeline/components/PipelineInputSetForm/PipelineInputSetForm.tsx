@@ -284,7 +284,8 @@ export function PipelineInputSetFormInternal(props: PipelineInputSetFormProps): 
               variables: (originalPipeline.variables || []) as AllNGVariables[],
               canAddVariable: true
             }}
-            allowableTypes={allowableTypes}
+            // pipeline varibales do not support execution time inputs
+            allowableTypes={allowableTypes.filter(type => type !== MultiTypeInputType.RUNTIME)}
             readonly={readonly}
             type={StepType.CustomVariable}
             stepViewType={viewType}

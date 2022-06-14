@@ -944,6 +944,7 @@ export const formikInitialData = {
       value: ''
     }
   },
+  completeMetricPath: '',
   connectorRef: 'TestAppD',
   continuousVerification: true,
   groupName: {

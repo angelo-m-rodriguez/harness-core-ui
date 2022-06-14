@@ -7,42 +7,24 @@
 
 import React from 'react'
 import { Route, useParams, Redirect } from 'react-router-dom'
-import { useQueryParams } from '@common/hooks'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { RouteWithLayout } from '@common/router'
-import { EmptyLayout, MinimalLayout } from '@common/layouts'
+import { MinimalLayout } from '@common/layouts'
 import type { SidebarContext } from '@common/navigation/SidebarProvider'
 import {
   accountPathProps,
   projectPathProps,
-  pipelinePathProps,
-  triggerPathProps,
-  connectorPathProps,
-  secretPathProps,
-  executionPathProps,
-  inputSetFormPathProps,
-  orgPathProps,
-  rolePathProps,
-  resourceGroupPathProps,
-  delegatePathProps,
-  delegateConfigProps,
-  userPathProps,
-  userGroupPathProps,
-  serviceAccountProps,
   servicePathProps,
-  templatePathProps,
   environmentGroupPathProps,
   environmentPathProps
 } from '@common/utils/routeUtils'
-import type {
-  PipelinePathProps,
-  ExecutionPathProps,
-  ProjectPathProps,
-  PipelineType,
-  ModulePathParams,
-  Module
-} from '@common/interfaces/RouteInterfaces'
+import type { ProjectPathProps, ModulePathParams } from '@common/interfaces/RouteInterfaces'
 import routes from '@common/RouteDefinitions'
+import {
+  RedirectToModuleTrialHomeFactory,
+  RedirectToSubscriptionsFactory,
+  RedirectToProjectFactory
+} from '@common/Redirects'
 
 import { String as LocaleString } from 'framework/strings'
 import featureFactory, { RenderMessageReturn } from 'framework/featureStore/FeaturesFactory'
@@ -50,77 +32,35 @@ import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import CDSideNav from '@cd/components/CDSideNav/CDSideNav'
 import CDHomePage from '@cd/pages/home/CDHomePage'
 import CDDashboardPage from '@cd/pages/dashboard/CDDashboardPage'
-import DeploymentsList from '@pipeline/pages/deployments-list/DeploymentsList'
 import CDPipelineStudioWrapper from '@cd/pages/pipeline-studio/CDPipelineStudioWrapper'
-import PipelinesPage from '@pipeline/pages/pipelines/PipelinesPage'
-import ConnectorsPage from '@connectors/pages/connectors/ConnectorsPage'
-import SecretsPage from '@secrets/pages/secrets/SecretsPage'
-import ConnectorDetailsPage from '@connectors/pages/connectors/ConnectorDetailsPage/ConnectorDetailsPage'
-import SecretDetails from '@secrets/pages/secretDetails/SecretDetails'
-import DelegatesPage from '@delegates/pages/delegates/DelegatesPage'
-import DelegateListing from '@delegates/pages/delegates/DelegateListing'
-import DelegateConfigurations from '@delegates/pages/delegates/DelegateConfigurations'
-import DelegateDetails from '@delegates/pages/delegates/DelegateDetails'
-import DelegateProfileDetails from '@delegates/pages/delegates/DelegateConfigurationDetailPage'
-import DelegateTokens from '@delegates/components/DelegateTokens/DelegateTokens'
-import { RedirectToSecretDetailHome } from '@secrets/RouteDestinations'
-import SecretReferences from '@secrets/pages/secretReferences/SecretReferences'
-import SecretDetailsHomePage from '@secrets/pages/secretDetailsHomePage/SecretDetailsHomePage'
-import InputSetList from '@pipeline/pages/inputSet-list/InputSetList'
-import TriggersPage from '@triggers/pages/triggers/TriggersPage'
-import TriggersWizardPage from '@triggers/pages/triggers/TriggersWizardPage'
-import ExecutionLandingPage from '@pipeline/pages/execution/ExecutionLandingPage/ExecutionLandingPage'
-import ExecutionPipelineView from '@pipeline/pages/execution/ExecutionPipelineView/ExecutionPipelineView'
-import ExecutionArtifactsView from '@pipeline/pages/execution/ExecutionArtifactsView/ExecutionArtifactsView'
-import ExecutionInputsView from '@pipeline/pages/execution/ExecutionInputsView/ExecutionInputsView'
-import PipelineDetails from '@pipeline/pages/pipeline-details/PipelineDetails'
-import TriggerDetails from '@triggers/pages/trigger-details/TriggerDetails'
+import { ConnectorRouteDestinations } from '@connectors/RouteDestinations'
+import { DelegateRouteDestinations } from '@delegates/RouteDestinations'
+import { GitSyncRouteDestinations } from '@gitsync/RouteDestinations'
+import { PipelineRouteDestinations } from '@pipeline/RouteDestinations'
+import { AccessControlRouteDestinations } from '@rbac/RouteDestinations'
+import { TemplateRouteDestinations } from '@templates-library/RouteDestinations'
+import { TriggersRouteDestinations } from '@triggers/RouteDestinations'
+import { VariableRouteDestinations } from '@variables/RouteDestinations'
+import { SecretRouteDestinations } from '@secrets/RouteDestinations'
 import CDPipelineDeploymentList from '@cd/pages/pipeline-deployment-list/CDPipelineDeploymentList'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { ModuleName } from 'framework/types/ModuleName'
-import { EnhancedInputSetForm } from '@pipeline/components/InputSetForm/InputSetForm'
-import TriggersDetailPage from '@triggers/pages/triggers/TriggersDetailPage'
-import CreateConnectorFromYamlPage from '@connectors/pages/createConnectorFromYaml/CreateConnectorFromYamlPage'
-import CreateSecretFromYamlPage from '@secrets/pages/createSecretFromYaml/CreateSecretFromYamlPage'
 import { Services } from '@cd/components/Services/Services'
 
 import './components/PipelineSteps'
 import './components/PipelineStudio/DeployStage'
-import AccessControlPage from '@rbac/pages/AccessControl/AccessControlPage'
-import UsersPage from '@rbac/pages/Users/UsersPage'
-import ResourceGroups from '@rbac/pages/ResourceGroups/ResourceGroups'
-import Roles from '@rbac/pages/Roles/Roles'
-import RoleDetails from '@rbac/pages/RoleDetails/RoleDetails'
-import ResourceGroupDetails from '@rbac/pages/ResourceGroupDetails/ResourceGroupDetails'
-import UserGroups from '@rbac/pages/UserGroups/UserGroups'
-import GitSyncPage from '@gitsync/pages/GitSyncPage'
-import GitSyncRepoTab from '@gitsync/pages/repos/GitSyncRepoTab'
-import GitSyncEntityTab from '@gitsync/pages/entities/GitSyncEntityTab'
-import GitSyncErrors from '@gitsync/pages/errors/GitSyncErrors'
-import BuildTests from '@pipeline/pages/execution/ExecutionTestView/BuildTests'
-import UserDetails from '@rbac/pages/UserDetails/UserDetails'
-import UserGroupDetails from '@rbac/pages/UserGroupDetails/UserGroupDetails'
-import ServiceAccountsPage from '@rbac/pages/ServiceAccounts/ServiceAccounts'
-import ServiceAccountDetails from '@rbac/pages/ServiceAccountDetails/ServiceAccountDetails'
 import executionFactory from '@pipeline/factories/ExecutionFactory'
 import { StageType } from '@pipeline/utils/stageHelpers'
 import RbacFactory from '@rbac/factories/RbacFactory'
 import { TriggerFormType } from '@pipeline/factories/ArtifactTriggerInputFactory/types'
 import TriggerFactory from '@pipeline/factories/ArtifactTriggerInputFactory/index'
-import ExecutionPolicyEvaluationsView from '@pipeline/pages/execution/ExecutionPolicyEvaluationsView/ExecutionPolicyEvaluationsView'
-import ExecutionSecurityView from '@pipeline/pages/execution/ExecutionSecurityView/ExecutionSecurityView'
 import { ResourceCategory, ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { LicenseRedirectProps, LICENSE_STATE_NAMES } from 'framework/LicenseStore/LicenseStoreContext'
 import { isCommunityPlan } from '@common/utils/utils'
-import { TemplateStudioWrapper } from '@templates-library/components/TemplateStudio/TemplateStudioWrapper'
-import TemplatesPage from '@templates-library/pages/TemplatesPage/TemplatesPage'
 import { GovernanceRouteDestinations } from '@governance/RouteDestinations'
-import GitSyncConfigTab from '@gitsync/pages/config/GitSyncConfigTab'
-import FullPageLogView from '@pipeline/pages/full-page-log-view/FullPageLogView'
 import { PAGE_NAME } from '@common/pages/pageContext/PageName'
 import type { ModuleListCardProps } from '@projects-orgs/components/ModuleListCard/ModuleListCard'
-import VariablesPage from '@variables/pages/variables/VariablesPage'
 import { FeatureFlag } from '@common/featureFlags'
 import { Environments } from './components/Environments/Environments'
 import { Environments as EnvironmentsV2 } from './components/EnvironmentsV2/Environments'
@@ -249,43 +189,7 @@ featureFactory.registerFeaturesByModule('cd', {
   }
 })
 
-const RedirectToAccessControlHome = (): React.ReactElement => {
-  const { accountId, projectIdentifier, orgIdentifier, module } = useParams<PipelineType<ProjectPathProps>>()
-
-  return <Redirect to={routes.toUsers({ accountId, projectIdentifier, orgIdentifier, module })} />
-}
-
-const RedirectToGitSyncHome = (): React.ReactElement => {
-  const { accountId, projectIdentifier, orgIdentifier, module } =
-    useParams<PipelineType<ProjectPathProps & ModulePathParams>>()
-
-  return <Redirect to={routes.toGitSyncReposAdmin({ projectIdentifier, accountId, orgIdentifier, module })} />
-}
-
-const RedirectToDelegatesHome = (): React.ReactElement => {
-  const { accountId, projectIdentifier, orgIdentifier, module } = useParams<PipelineType<ProjectPathProps>>()
-
-  return <Redirect to={routes.toDelegateList({ accountId, projectIdentifier, orgIdentifier, module })} />
-}
-
-const RedirectToCDProject = (): React.ReactElement => {
-  const { accountId } = useParams<ProjectPathProps>()
-  const { selectedProject } = useAppStore()
-  if (selectedProject?.modules?.includes(ModuleName.CD)) {
-    return (
-      <Redirect
-        to={routes.toProjectOverview({
-          accountId,
-          orgIdentifier: selectedProject.orgIdentifier || '',
-          projectIdentifier: selectedProject.identifier,
-          module: 'cd'
-        })}
-      />
-    )
-  } else {
-    return <Redirect to={routes.toCDHome({ accountId })} />
-  }
-}
+const RedirectToCDProject = RedirectToProjectFactory(ModuleName.CD, routes.toCDHome)
 
 const CDDashboardPageOrRedirect = (): React.ReactElement => {
   const params = useParams<ProjectPathProps & ModuleListCardProps>()
@@ -305,50 +209,7 @@ const CDDashboardPageOrRedirect = (): React.ReactElement => {
   }
 }
 
-const RedirectToPipelineDetailHome = (): React.ReactElement => {
-  const params = useParams<PipelineType<PipelinePathProps>>()
-
-  return <Redirect to={routes.toPipelineStudio(params)} />
-}
-
-const RedirectToExecutionPipeline = (): React.ReactElement => {
-  const params = useParams<PipelineType<ExecutionPathProps>>()
-
-  return <Redirect to={routes.toExecutionPipelineView(params)} />
-}
-
-const RedirectToModuleTrialHome = (): React.ReactElement => {
-  const { accountId } = useParams<{
-    accountId: string
-  }>()
-
-  const { source } = useQueryParams<{ source?: string }>()
-
-  return (
-    <Redirect
-      to={routes.toModuleTrialHome({
-        accountId,
-        module: 'cd',
-        source
-      })}
-    />
-  )
-}
-
-const RedirectToSubscriptions = (): React.ReactElement => {
-  const { accountId } = useParams<{
-    accountId: string
-  }>()
-
-  return (
-    <Redirect
-      to={routes.toSubscriptions({
-        accountId,
-        moduleCard: ModuleName.CD.toLowerCase() as Module
-      })}
-    />
-  )
-}
+const RedirectToSubscriptions = RedirectToSubscriptionsFactory(ModuleName.CD)
 
 const EnvironmentsPage = (): React.ReactElement | null => {
   const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
@@ -362,7 +223,7 @@ const EnvironmentsPage = (): React.ReactElement | null => {
 
 const licenseRedirectData: LicenseRedirectProps = {
   licenseStateName: LICENSE_STATE_NAMES.CD_LICENSE_STATE,
-  startTrialRedirect: RedirectToModuleTrialHome,
+  startTrialRedirect: RedirectToModuleTrialHomeFactory(ModuleName.CD),
   expiredTrialRedirect: RedirectToSubscriptions
 }
 
@@ -373,11 +234,7 @@ const CDSideNavProps: SidebarContext = {
   icon: 'cd-main'
 }
 
-const pipelineModuleParams: ModulePathParams = {
-  module: ':module(cd)'
-}
-
-const templateModuleParams: ModulePathParams = {
+const moduleParams: ModulePathParams = {
   module: ':module(cd)'
 }
 
@@ -417,34 +274,16 @@ export default (
     <RouteWithLayout
       licenseRedirectData={licenseRedirectData}
       sidebarProps={CDSideNavProps}
-      path={routes.toProjectOverview({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
+      path={routes.toProjectOverview({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
       exact
     >
       <CDDashboardPageOrRedirect />
     </RouteWithLayout>
     <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toDeployments({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      exact
-      pageName={PAGE_NAME.DeploymentsList}
-    >
-      <DeploymentsList />
-    </RouteWithLayout>
-    <RouteWithLayout
       exact
       licenseRedirectData={licenseRedirectData}
       sidebarProps={CDSideNavProps}
-      path={routes.toPipelines({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.PipelinesPage}
-    >
-      <PipelinesPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toServices({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
+      path={routes.toServices({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
       pageName={PAGE_NAME.Services}
     >
       <Services />
@@ -456,7 +295,7 @@ export default (
       path={routes.toServiceStudio({
         ...accountPathProps,
         ...projectPathProps,
-        ...pipelineModuleParams,
+        ...moduleParams,
         ...servicePathProps
       })}
       pageName={PAGE_NAME.ServiceStudio}
@@ -467,7 +306,7 @@ export default (
       exact
       licenseRedirectData={licenseRedirectData}
       sidebarProps={CDSideNavProps}
-      path={routes.toEnvironment({ ...projectPathProps, ...pipelineModuleParams })}
+      path={routes.toEnvironment({ ...projectPathProps, ...moduleParams })}
       pageName={PAGE_NAME.Environments}
     >
       <EnvironmentsPage />
@@ -476,7 +315,7 @@ export default (
       exact
       licenseRedirectData={licenseRedirectData}
       sidebarProps={CDSideNavProps}
-      path={routes.toEnvironmentDetails({ ...projectPathProps, ...pipelineModuleParams, ...environmentPathProps })}
+      path={routes.toEnvironmentDetails({ ...projectPathProps, ...moduleParams, ...environmentPathProps })}
       pageName={PAGE_NAME.Environments}
     >
       <EnvironmentDetails />
@@ -485,7 +324,7 @@ export default (
       exact
       licenseRedirectData={licenseRedirectData}
       sidebarProps={CDSideNavProps}
-      path={routes.toEnvironmentGroups({ ...projectPathProps, ...pipelineModuleParams })}
+      path={routes.toEnvironmentGroups({ ...projectPathProps, ...moduleParams })}
     >
       <EnvironmentGroups />
     </RouteWithLayout>
@@ -495,602 +334,94 @@ export default (
       sidebarProps={CDSideNavProps}
       path={routes.toEnvironmentGroupDetails({
         ...projectPathProps,
-        ...pipelineModuleParams,
+        ...moduleParams,
         ...environmentGroupPathProps
       })}
     >
       <EnvironmentGroupDetails />
     </RouteWithLayout>
 
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      exact
-      path={routes.toPipelineStudio({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.CDPipelineStudio}
-    >
-      <PipelineDetails>
-        <CDPipelineStudioWrapper />
-      </PipelineDetails>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      layout={EmptyLayout}
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toPipelineLogs({
-        ...accountPathProps,
-        ...executionPathProps,
-        ...pipelineModuleParams,
-        stageIdentifier: ':stageIdentifier',
-        stepIndentifier: ':stepIndentifier'
-      })}
-      pageName={PAGE_NAME.FullPageLogView}
-    >
-      <FullPageLogView />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      exact
-      path={routes.toTemplateStudio({ ...accountPathProps, ...templatePathProps, ...templateModuleParams })}
-      pageName={PAGE_NAME.TemplateStudioWrapper}
-    >
-      <TemplateStudioWrapper />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toPipelineDeploymentList({
-        ...accountPathProps,
-        ...pipelinePathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.CDPipelineDeploymentList}
-    >
-      <PipelineDetails>
-        <CDPipelineDeploymentList />
-      </PipelineDetails>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toConnectors({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.ConnectorsPage}
-    >
-      <ConnectorsPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toCreateConnectorFromYaml({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.CreateConnectorFromYamlPage}
-    >
-      <CreateConnectorFromYamlPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toCreateConnectorFromYaml({ ...accountPathProps, ...orgPathProps })}
-      pageName={PAGE_NAME.CreateConnectorFromYamlPage}
-    >
-      <CreateConnectorFromYamlPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toSecrets({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.SecretsPage}
-    >
-      <SecretsPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toVariables({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-    >
-      <VariablesPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toConnectorDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...connectorPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.ConnectorDetailsPage}
-    >
-      <ConnectorDetailsPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toSecretDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...pipelineModuleParams
-      })}
-    >
-      <RedirectToSecretDetailHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toSecretDetailsOverview({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.SecretDetails}
-    >
-      <SecretDetailsHomePage>
-        <SecretDetails />
-      </SecretDetailsHomePage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toSecretDetailsReferences({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.SecretReferences}
-    >
-      <SecretDetailsHomePage>
-        <SecretReferences />
-      </SecretDetailsHomePage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toDelegates({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...pipelineModuleParams
-      })}
-    >
-      <RedirectToDelegatesHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toDelegateList({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.DelegateListing}
-    >
-      <DelegatesPage>
-        <DelegateListing />
-      </DelegatesPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toDelegateConfigs({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.DelegateConfigurations}
-    >
-      <DelegatesPage>
-        <DelegateConfigurations />
-      </DelegatesPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toDelegatesDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...delegatePathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.DelegateDetails}
-    >
-      <DelegateDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[
-        routes.toDelegateConfigsDetails({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...delegateConfigProps,
-          ...pipelineModuleParams
-        }),
-        routes.toEditDelegateConfigsDetails({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...delegateConfigProps,
-          ...pipelineModuleParams
-        })
-      ]}
-      pageName={PAGE_NAME.DelegateProfileDetails}
-    >
-      <DelegateProfileDetails />
-    </RouteWithLayout>
+    {
+      PipelineRouteDestinations({
+        pipelineStudioComponent: CDPipelineStudioWrapper,
+        pipelineStudioPageName: PAGE_NAME.CDPipelineStudio,
+        pipelineDeploymentListComponent: CDPipelineDeploymentList,
+        pipelineDeploymentListPageName: PAGE_NAME.CDPipelineDeploymentList,
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
 
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[
-        routes.toDelegateTokens({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...pipelineModuleParams
-        })
-      ]}
-      pageName={PAGE_NAME.DelegateTokens}
-    >
-      <DelegatesPage>
-        <DelegateTokens />
-      </DelegatesPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toCreateSecretFromYaml({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...orgPathProps,
-        ...pipelineModuleParams
-      })}
-      exact
-      pageName={PAGE_NAME.CreateSecretFromYamlPage}
-    >
-      <CreateSecretFromYamlPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toInputSetList({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.InputSetList}
-    >
-      <PipelineDetails>
-        <InputSetList />
-      </PipelineDetails>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toInputSetForm({ ...accountPathProps, ...inputSetFormPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.EnhancedInputSetForm}
-    >
-      <EnhancedInputSetForm />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toTriggersPage({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.TriggersPage}
-    >
-      <PipelineDetails>
-        <TriggersPage />
-      </PipelineDetails>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toTriggersWizardPage({ ...accountPathProps, ...triggerPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.TriggersWizardPage}
-    >
-      <TriggerDetails wizard={true}>
-        <TriggersWizardPage />
-      </TriggerDetails>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toTriggersDetailPage({ ...accountPathProps, ...triggerPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.TriggersDetailPage}
-    >
-      <TriggersDetailPage />
-    </RouteWithLayout>
-    <Route
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toExecution({ ...accountPathProps, ...executionPathProps, ...pipelineModuleParams })}
-    >
-      <RedirectToExecutionPipeline />
-    </Route>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionPipelineView({ ...accountPathProps, ...executionPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.ExecutionPipelineView}
-    >
-      <ExecutionLandingPage>
-        <ExecutionPipelineView />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionPolicyEvaluationsView({
-        ...accountPathProps,
-        ...executionPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.ExecutionPolicyEvaluationsView}
-    >
-      <ExecutionLandingPage>
-        <ExecutionPolicyEvaluationsView />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionSecurityView({
-        ...accountPathProps,
-        ...executionPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.ExecutionSecurityView}
-    >
-      <ExecutionLandingPage>
-        <ExecutionSecurityView />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionInputsView({ ...accountPathProps, ...executionPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.ExecutionInputsView}
-    >
-      <ExecutionLandingPage>
-        <ExecutionInputsView />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionTestsView({ ...accountPathProps, ...executionPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.BuildTests}
-    >
-      <ExecutionLandingPage>
-        <BuildTests />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      layout={MinimalLayout}
-      path={routes.toExecutionArtifactsView({
-        ...accountPathProps,
-        ...executionPathProps,
-        ...pipelineModuleParams
-      })}
-      pageName={PAGE_NAME.ExecutionArtifactsView}
-    >
-      <ExecutionLandingPage>
-        <ExecutionArtifactsView />
-      </ExecutionLandingPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toPipelineDetail({ ...accountPathProps, ...pipelinePathProps, ...pipelineModuleParams })}
-    >
-      <RedirectToPipelineDetailHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toAccessControl({ ...projectPathProps, ...pipelineModuleParams })]}
-      exact
-    >
-      <RedirectToAccessControlHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toUsers({ ...projectPathProps, ...pipelineModuleParams })]}
-      exact
-      pageName={PAGE_NAME.UsersPage}
-    >
-      <AccessControlPage>
-        <UsersPage />
-      </AccessControlPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toUserDetails({ ...projectPathProps, ...pipelineModuleParams, ...userPathProps })}
-      exact
-      pageName={PAGE_NAME.UserDetails}
-    >
-      <UserDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toUserGroups({ ...projectPathProps, ...pipelineModuleParams })]}
-      exact
-      pageName={PAGE_NAME.UserGroups}
-    >
-      <AccessControlPage>
-        <UserGroups />
-      </AccessControlPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toUserGroupDetails({ ...projectPathProps, ...pipelineModuleParams, ...userGroupPathProps })}
-      exact
-      pageName={PAGE_NAME.UserGroupDetails}
-    >
-      <UserGroupDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      sidebarProps={CDSideNavProps}
-      path={routes.toServiceAccounts({ ...projectPathProps, ...pipelineModuleParams })}
-      exact
-      pageName={PAGE_NAME.ServiceAccountsPage}
-    >
-      <AccessControlPage>
-        <ServiceAccountsPage />
-      </AccessControlPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toServiceAccountDetails({ ...projectPathProps, ...pipelineModuleParams, ...serviceAccountProps })}
-      exact
-      pageName={PAGE_NAME.ServiceAccountDetails}
-    >
-      <ServiceAccountDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toResourceGroups({ ...projectPathProps, ...pipelineModuleParams })]}
-      exact
-      pageName={PAGE_NAME.ResourceGroups}
-    >
-      <AccessControlPage>
-        <ResourceGroups />
-      </AccessControlPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toRoles({ ...projectPathProps, ...pipelineModuleParams })]}
-      exact
-      pageName={PAGE_NAME.Roles}
-    >
-      <AccessControlPage>
-        <Roles />
-      </AccessControlPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[routes.toRoleDetails({ ...projectPathProps, ...pipelineModuleParams, ...rolePathProps })]}
-      exact
-      pageName={PAGE_NAME.RoleDetails}
-    >
-      <RoleDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={[
-        routes.toResourceGroupDetails({ ...projectPathProps, ...pipelineModuleParams, ...resourceGroupPathProps })
-      ]}
-      exact
-      pageName={PAGE_NAME.ResourceGroupDetails}
-    >
-      <ResourceGroupDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      exact
-      path={[routes.toGitSyncAdmin({ ...accountPathProps, ...pipelineModuleParams, ...projectPathProps })]}
-    >
-      <RedirectToGitSyncHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toGitSyncReposAdmin({ ...accountPathProps, ...pipelineModuleParams, ...projectPathProps })}
-      pageName={PAGE_NAME.GitSyncRepoTab}
-    >
-      <GitSyncPage>
-        <GitSyncRepoTab />
-      </GitSyncPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toGitSyncEntitiesAdmin({ ...accountPathProps, ...pipelineModuleParams, ...projectPathProps })}
-      exact
-      pageName={PAGE_NAME.GitSyncEntityTab}
-    >
-      <GitSyncPage>
-        <GitSyncEntityTab />
-      </GitSyncPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toGitSyncErrors({ ...accountPathProps, ...pipelineModuleParams, ...projectPathProps })}
-      exact
-      pageName={PAGE_NAME.GitSyncErrors}
-    >
-      <GitSyncPage>
-        <GitSyncErrors />
-      </GitSyncPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toGitSyncConfig({ ...accountPathProps, ...pipelineModuleParams, ...projectPathProps })}
-      exact
-      pageName={PAGE_NAME.GitSyncConfigTab}
-    >
-      <GitSyncPage>
-        <GitSyncConfigTab />
-      </GitSyncPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      licenseRedirectData={licenseRedirectData}
-      sidebarProps={CDSideNavProps}
-      path={routes.toTemplates({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.TemplatesPage}
-    >
-      <TemplatesPage />
-    </RouteWithLayout>
+    {
+      ConnectorRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
 
-    {GovernanceRouteDestinations({
-      sidebarProps: CDSideNavProps,
-      pathProps: { ...accountPathProps, ...projectPathProps, ...pipelineModuleParams }
-    })}
+    {
+      SecretRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      VariableRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      DelegateRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      TriggersRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      AccessControlRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      GitSyncRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      TemplateRouteDestinations({
+        moduleParams,
+        licenseRedirectData,
+        sidebarProps: CDSideNavProps
+      })?.props.children
+    }
+
+    {
+      GovernanceRouteDestinations({
+        sidebarProps: CDSideNavProps,
+        pathProps: { ...accountPathProps, ...projectPathProps, ...moduleParams }
+      })?.props.children
+    }
   </>
 )

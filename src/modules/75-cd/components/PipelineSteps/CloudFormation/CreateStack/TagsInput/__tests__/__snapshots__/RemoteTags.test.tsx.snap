@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test cloudformation remote tags should render click new connector modal 1`] = `<div />`;
+
+exports[`Test cloudformation remote tags should render with no initial data 1`] = `<div />`;

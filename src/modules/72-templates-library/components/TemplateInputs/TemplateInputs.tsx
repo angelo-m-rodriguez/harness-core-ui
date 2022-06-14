@@ -47,6 +47,7 @@ import NoResultsView from '@templates-library/pages/TemplatesPage/views/NoResult
 import { getTemplateNameWithLabel } from '@pipeline/utils/templateUtils'
 import { useMutateAsGet } from '@common/hooks'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
+import templateFactory from '../Templates/TemplatesFactory'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './TemplateInputs.module.scss'
 
@@ -260,6 +261,10 @@ export const TemplateInputs: React.FC<TemplateInputsProps> = props => {
                             )}
                           </Container>
                         )}
+                        {templateEntityType === TemplateType.MonitoredService &&
+                          templateFactory
+                            .getTemplate(templateEntityType)
+                            ?.renderTemplateInputsForm({ template, accountId })}
                       </>
                     )
                   }}

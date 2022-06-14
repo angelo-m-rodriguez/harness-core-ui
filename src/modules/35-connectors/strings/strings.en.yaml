@@ -366,6 +366,7 @@ customHealth:
 cdng:
   jobName: Job Name
   continousVerificationType: Continous Verification Type
+  monitoredServiceType: Monitored Service Type
   artifactTag: Artifact Tag
   defineVerificationJob: Define Verification Job
   baseline: Baseline
@@ -380,6 +381,7 @@ cdng:
   monitoredService:
     label: Monitored Service
     fetchingMonitoredService: Fetching Monitored service ...
+    fetchingHealthSources: Fetching Health Sources ...
     creatingMonitoredService: Creating Monitored service ...
     fetchingMonitoredServiceError: Failed to fetch monitored service . Please try again by reopening the Verify Step
     autoCreateMonitoredService: Click to autocreate a monitored service

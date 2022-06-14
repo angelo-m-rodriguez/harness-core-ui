@@ -102,6 +102,7 @@ export const createAppDynamicsData = (sourceData: any): AppDynamicsData => {
       appdData.mappedServicesAndEnvs.set(metricDefinition.metricName, {
         metricPath: metricPathObj,
         basePath: basePathObj,
+        completeMetricPath: metricDefinition.completeMetricPath,
         metricName: metricDefinition.metricName,
         metricIdentifier: metricDefinition.identifier,
         riskCategory:
@@ -185,15 +186,25 @@ const validateCustomMetricFields = (
 
   if (values.pathType === PATHTYPE.FullPath) {
     const isfullPathEmpty = !values.fullPath.length
-    const fullPathContainsTierInfo = values.fullPath
-      .split('|')
-      .map((item: string) => item.trim())
-      .includes(values?.appDTier)
-    const incorrectPairing = values.fullPath.split('|').filter((item: string) => !item.length).length
-    if (incorrectPairing && isfullPathEmpty) {
-      _error[PATHTYPE.FullPath] = getString('cv.healthSource.connectors.AppDynamics.validation.fullPath')
-    } else if (!fullPathContainsTierInfo) {
-      _error[PATHTYPE.FullPath] = getString('cv.healthSource.connectors.AppDynamics.validation.missingTierInFullPath')
+    const hasCompleteMetricPath = Boolean(values?.completeMetricPath)
+
+    if (hasCompleteMetricPath) {
+      const incorrectPairing = values.completeMetricPath.split('|').filter((item: string) => !item.length).length
+      if (incorrectPairing) {
+        _error[PATHTYPE.FullPath] = getString('cv.healthSource.connectors.AppDynamics.validation.fullPath')
+      }
+    } else {
+      const fullPathContainsTierInfo = values.fullPath
+        .split('|')
+        .map((item: string) => item.trim())
+        .includes(values?.appDTier)
+      const incorrectPairing = values.fullPath.split('|').filter((item: string) => !item.length).length
+
+      if (incorrectPairing && isfullPathEmpty) {
+        _error[PATHTYPE.FullPath] = getString('cv.healthSource.connectors.AppDynamics.validation.fullPath')
+      } else if (!fullPathContainsTierInfo) {
+        _error[PATHTYPE.FullPath] = getString('cv.healthSource.connectors.AppDynamics.validation.missingTierInFullPath')
+      }
     }
   }
 
@@ -345,7 +356,7 @@ export const getBaseAndMetricPath = (
     const data = convertFullPathToBaseAndMetric(fullPath, appDTier)
     derivedBasePath = data.derivedBasePath
     derivedMetricPath = data.derivedMetricPath
-  } else {
+  } else if (basePath && metricPath) {
     derivedBasePath = basePath[Object.keys(basePath)[Object.keys(basePath).length - 1]]?.path
     derivedMetricPath = metricPath[Object.keys(metricPath)[Object.keys(metricPath).length - 1]]?.path
   }
@@ -387,7 +398,8 @@ export const createAppDynamicsPayload = (formData: any): UpdatedHealthSource | n
         metricPath,
         metricIdentifier,
         serviceInstanceMetricPath,
-        fullPath
+        fullPath,
+        completeMetricPath
       } = entry[1]
 
       const { derivedBasePath, derivedMetricPath } = getBaseAndMetricPath(
@@ -414,6 +426,7 @@ export const createAppDynamicsPayload = (formData: any): UpdatedHealthSource | n
         metricName,
         baseFolder: derivedBasePath,
         metricPath: derivedMetricPath,
+        completeMetricPath,
         groupName: groupName?.value as string,
         sli: { enabled: Boolean(sli) },
         analysis: {
@@ -513,21 +526,14 @@ export const createAppDFormData = (
 ): AppDynamicsFomikFormInterface => {
   const mappedMetricsData = mappedMetrics.get(selectedMetric) as MapAppDynamicsMetric
   const metricIdentifier = mappedMetricsData?.metricIdentifier || selectedMetric?.split(' ').join('_')
-  const { basePath = {}, metricPath = {} } = mappedMetricsData || {}
+  const { basePath = {}, metricPath = {}, completeMetricPath = '' } = mappedMetricsData || {}
   const lastItemBasePath = Object.keys(basePath)[Object.keys(basePath).length - 1]
   const lastItemMetricPath = Object.keys(metricPath)[Object.keys(metricPath).length - 1]
-  let fullPath =
+  const fullPath =
     basePath[lastItemBasePath]?.path && metricPath[lastItemMetricPath]?.path && appDynamicsData.tierName
       ? `${basePath[lastItemBasePath]?.path}|${appDynamicsData.tierName}|${metricPath[lastItemMetricPath]?.path}`
       : ''
 
-  if (
-    isTemplate &&
-    fullPath === '' &&
-    (nonCustomFeilds.appDTier === '<+input>' || nonCustomFeilds.appdApplication === '<+input>')
-  ) {
-    fullPath = '<+input>'
-  }
   return {
     name: appDynamicsData.name,
     identifier: appDynamicsData.identifier,
@@ -535,8 +541,9 @@ export const createAppDFormData = (
     isEdit: appDynamicsData.isEdit,
     product: appDynamicsData.product,
     type: appDynamicsData.type,
-    pathType: isTemplate ? PATHTYPE.FullPath : PATHTYPE.DropdownPath,
+    pathType: isTemplate || completeMetricPath ? PATHTYPE.FullPath : PATHTYPE.DropdownPath,
     fullPath,
+    completeMetricPath,
     mappedServicesAndEnvs: appDynamicsData.mappedServicesAndEnvs,
     ...(mappedMetrics.get(selectedMetric) as MapAppDynamicsMetric),
     appdApplication: nonCustomFeilds.appdApplication,

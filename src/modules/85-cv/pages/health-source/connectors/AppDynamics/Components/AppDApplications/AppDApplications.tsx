@@ -22,6 +22,7 @@ interface AppDApplicationsInterface {
   refetchTier: any
   setCustomFieldAndValidation: any
   isTemplate?: boolean
+  expressions?: string[]
   applicationError?: string
   allowedTypes?: MultiTypeInputType[]
 }
@@ -34,6 +35,7 @@ export default function AppDApplications({
   refetchTier,
   setCustomFieldAndValidation,
   isTemplate,
+  expressions,
   allowedTypes,
   applicationError
 }: AppDApplicationsInterface): JSX.Element {
@@ -82,7 +84,7 @@ export default function AppDApplications({
         allowableTypes={allowedTypes}
         value={setAppDynamicsApplication(formikAppDynamicsValue, applicationOptions, inputType)}
         style={{ width: '300px' }}
-        expressions={[]}
+        expressions={expressions}
         onChange={(item, _valueType, multiType) => {
           if (inputType !== multiType) {
             setInputType(multiType)
