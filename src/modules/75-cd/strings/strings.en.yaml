@@ -319,3 +319,6 @@ unLink: 'UnLink'
 unLinkedCluster: 'Unlinked Successfully'
 overrideYaml: Override Yaml Values
 manifestId: Manifest Id
+azureWebAppSwapSlotDescription: Azure Swap environment slot with new instance.
+azureWebAppTargetSlot: Target Slot
+azureWebAppTargetSlotError: Target Slot cannot be empty

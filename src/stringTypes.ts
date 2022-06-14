@@ -3682,6 +3682,9 @@ export interface StringsMap {
   'cd.artifactPaths': string
   'cd.artifactRepoTooltip': string
   'cd.artifactVersion': string
+  'cd.azureWebAppSwapSlotDescription': string
+  'cd.azureWebAppTargetSlot': string
+  'cd.azureWebAppTargetSlotError': string
   'cd.backEndConfig': string
   'cd.cdLaunchText': string
   'cd.cdSwitchToFirstGen.description1': string
