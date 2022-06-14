@@ -13,6 +13,7 @@ export enum HealthSourceTypes {
   StackdriverMetrics = 'Stackdriver',
   GoogleCloudOperations = 'Google Cloud Operations',
   Splunk = 'Splunk',
+  SplunkMetric = 'SplunkMetric',
   DatadogMetrics = 'DatadogMetrics',
   DatadogLog = 'DatadogLog',
   Datadog = 'Datadog',

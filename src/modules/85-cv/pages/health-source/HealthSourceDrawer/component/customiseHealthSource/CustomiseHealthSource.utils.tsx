@@ -75,12 +75,10 @@ export const LoadSourceByType = ({
     case Connectors.DYNATRACE:
       return <DynatraceHealthSourceContainer data={data} onSubmit={onSubmit} />
     case Connectors.SPLUNK:
-      if (data?.product?.value === SplunkProduct.SPLUNK_METRICS) {
-        if (!isSplunkMetricEnabled) return null
-        return <SplunkMetricsHealthSource data={data} onSubmit={onSubmit} />
-      } else {
-        return <SplunkHealthSource data={data} onSubmit={onSubmit} />
-      }
+      return <SplunkHealthSource data={data} onSubmit={onSubmit} />
+    case HealthSourceTypes.SplunkMetric:
+      if (!isSplunkMetricEnabled) return null
+      return <SplunkMetricsHealthSource data={data} onSubmit={onSubmit} />
     case HealthSourceTypes.CustomHealth:
       if (data.product?.value === CustomHealthProduct.METRICS) {
         return <CustomHealthSource data={data} onSubmit={onSubmit} />

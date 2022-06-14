@@ -206,8 +206,6 @@ export function transformPrometheusHealthSourceToSetupSource(
     (source: UpdatedHealthSource) => source.name === sourceData.healthSourceName
   )
 
-  console.log('sourceData util', sourceData)
-
   if (!healthSource) {
     return {
       isEdit: false,
@@ -255,7 +253,7 @@ export function transformPrometheusHealthSourceToSetupSource(
 
 export function transformPrometheusSetupSourceToHealthSource(setupSource: PrometheusSetupSource): UpdatedHealthSource {
   const dsConfig: UpdatedHealthSource = {
-    type: HealthSourceTypes.Splunk,
+    type: HealthSourceTypes.SplunkMetric,
     identifier: setupSource.healthSourceIdentifier,
     name: setupSource.healthSourceName,
     spec: {
