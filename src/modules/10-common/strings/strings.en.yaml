@@ -884,3 +884,5 @@ getStarted:
   selectArtifact: Select Artifact
   selectInfra: Select Infrastructure
 serviceName: Service Name
+authMethod: Select your Authentication method
+selectYourRepo: Select your Repository

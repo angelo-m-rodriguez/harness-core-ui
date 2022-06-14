@@ -147,12 +147,10 @@ getStartedWithCI:
   onCloudLabel: on Cloud
   onPremLabel: On-prem
   codeRepo: Which code repository do you use?
-  authMethod: Select your Authentication method
   oAuthLabel: OAuth
   accessTokenLabel: Access Token
   codeRepoLabel: Code repository
   authMethodLabel: Authentication method
-  selectYourRepo: Select your Repository
   createPipeline: Create Pipeline
   codebaseHelptext: Harness will clone your codebase to your build infrastructure at Pipeline runtime.
   searchRepo: Search Repository

@@ -57,6 +57,7 @@ export interface StringsMap {
   'common.artifactTag': string
   'common.at': string
   'common.auditTrail': string
+  'common.authMethod': string
   'common.aws': string
   'common.azure': string
   'common.azureConnector': string
@@ -617,6 +618,7 @@ export interface StringsMap {
   'common.selectType': string
   'common.selectUserGroups': string
   'common.selectVersion': string
+  'common.selectYourRepo': string
   'common.selected': string
   'common.serviceCreated': string
   'common.serviceName': string
@@ -3644,7 +3646,15 @@ export interface StringsMap {
   'cd.featureRestriction.banners.serviceWarningActive': string
   'cd.filePathPlaceholder': string
   'cd.filePathRequired': string
+  'cd.getStartedWithCD.artifactLocation': string
+  'cd.getStartedWithCD.artifactManifest': string
+  'cd.getStartedWithCD.artifactManifestContent': string
+  'cd.getStartedWithCD.codeRepos': string
   'cd.getStartedWithCD.configureRepo': string
+  'cd.getStartedWithCD.inManifest': string
+  'cd.getStartedWithCD.inManifestContent': string
+  'cd.getStartedWithCD.manifestFile': string
+  'cd.getStartedWithCD.provideManifest': string
   'cd.getStartedWithCD.serverless': string
   'cd.getStartedWithCD.serviceDeploy': string
   'cd.getStartedWithCD.serviceHeading': string
@@ -5251,7 +5261,6 @@ export interface StringsMap {
   'ci.getStartedWithCI.accessTokenLabel': string
   'ci.getStartedWithCI.apiUrlLabel': string
   'ci.getStartedWithCI.appPassword': string
-  'ci.getStartedWithCI.authMethod': string
   'ci.getStartedWithCI.authMethodLabel': string
   'ci.getStartedWithCI.awsBuildLocation': string
   'ci.getStartedWithCI.buildLocation': string
@@ -5315,7 +5324,6 @@ export interface StringsMap {
   'ci.getStartedWithCI.securityHelpText': string
   'ci.getStartedWithCI.selectInfra': string
   'ci.getStartedWithCI.selectRepo': string
-  'ci.getStartedWithCI.selectYourRepo': string
   'ci.getStartedWithCI.setUpAuth': string
   'ci.getStartedWithCI.startProvisioning': string
   'ci.getStartedWithCI.takeToTheNextLevel': string
