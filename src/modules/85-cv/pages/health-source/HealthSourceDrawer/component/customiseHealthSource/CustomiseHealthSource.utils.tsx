@@ -13,6 +13,8 @@ import AppDHealthSourceContainer from '@cv/pages/health-source/connectors/AppDyn
 import { PrometheusHealthSource } from '@cv/pages/health-source/connectors/PrometheusHealthSource/PrometheusHealthSource'
 import NewrelicMonitoredSourceContainer from '@cv/pages/health-source/connectors/NewRelic/NewRelicHealthSourceContainer'
 import { Connectors } from '@connectors/constants'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { GCOMetricsHealthSource } from '@cv/pages/health-source/connectors/GCOMetricsHealthSource/GCOMetricsHealthSource'
 import { GCOProduct } from '@cv/pages/health-source/connectors/GCOMetricsHealthSource/GCOMetricsHealthSource.utils'
 import { HealthSourceTypes } from '@cv/pages/health-source/types'
@@ -26,7 +28,6 @@ import CustomHealthLogSource from '@cv/pages/health-source/connectors/CustomHeal
 import { CustomHealthProduct } from '@cv/pages/health-source/connectors/CustomHealthSource/CustomHealthSource.constants'
 import { SplunkMetricsHealthSource } from '@cv/pages/health-source/connectors/SplunkMetricsHealthSourceV2/SplunkMetricsHealthSource'
 import type { UpdatedHealthSource } from '../../HealthSourceDrawerContent.types'
-import { SplunkProduct } from '../defineHealthSource/DefineHealthSource.constant'
 
 export const LoadSourceByType = ({
   type,
@@ -41,8 +42,8 @@ export const LoadSourceByType = ({
   isTemplate?: boolean
   expressions?: string[]
 }): JSX.Element | null => {
-  // const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
-  const isSplunkMetricEnabled = true
+  const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
+  // const isSplunkMetricEnabled = true
   switch (type) {
     case HealthSourceTypes.AppDynamics:
       return (

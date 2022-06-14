@@ -60,8 +60,8 @@ function DefineHealthSource(props: DefineHealthSourceProps): JSX.Element {
   >()
   const { isEdit } = sourceData
 
-  // const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
-  const isSplunkMetricEnabled = true
+  const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
+  // const isSplunkMetricEnabled = true
 
   const isErrorTrackingEnabled = useFeatureFlag(FeatureFlag.ERROR_TRACKING_ENABLED)
   const isDynatraceAPMEnabled = useFeatureFlag(FeatureFlag.DYNATRACE_APM_ENABLED)
