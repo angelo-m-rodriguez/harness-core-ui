@@ -62,9 +62,13 @@ export default function TemplatesPage(): React.ReactElement {
   const { isGitSyncEnabled } = useAppStore()
   const scope = getScopeFromDTO({ projectIdentifier, orgIdentifier, accountIdentifier: accountId })
   const pipelineTemplatesFeatureFlagEnabled = useFeatureFlag(FeatureFlag.NG_PIPELINE_TEMPLATE)
-  const allowedTemplateTypes = getAllowedTemplateTypes(getString, module, pipelineTemplatesFeatureFlagEnabled).filter(
-    item => !item.disabled
-  )
+  const scriptTemplateEnabled = useFeatureFlag(FeatureFlag.CUSTOM_SECRET_MANAGER_NG)
+  const allowedTemplateTypes = getAllowedTemplateTypes(
+    getString,
+    module,
+    pipelineTemplatesFeatureFlagEnabled,
+    scriptTemplateEnabled
+  ).filter(item => !item.disabled)
 
   useDocumentTitle([getString('common.templates')])
 

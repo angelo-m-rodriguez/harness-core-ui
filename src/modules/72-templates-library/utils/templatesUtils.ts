@@ -17,13 +17,15 @@ export enum TemplateType {
   Infrastructure = 'Infrastructure',
   StepGroup = 'StepGroup',
   Execution = 'Execution',
-  MonitoredService = 'MonitoredService'
+  MonitoredService = 'MonitoredService',
+  Script = 'Script'
 }
 
 export const getAllowedTemplateTypes = (
   getString: UseStringsReturn['getString'],
   module?: string,
-  isPipelineTemplateEnabled?: boolean
+  isPipelineTemplateEnabled?: boolean,
+  scriptTemplateEnabled?: boolean
 ): { label: string; value: string; disabled?: boolean }[] => {
   const AllowedTemplateTypes = [
     {
@@ -35,6 +37,11 @@ export const getAllowedTemplateTypes = (
       label: getString('common.stage'),
       value: TemplateType.Stage,
       disabled: false
+    },
+    {
+      label: 'Script',
+      value: TemplateType.Script,
+      disabled: !scriptTemplateEnabled
     },
     {
       label: getString('common.pipeline'),

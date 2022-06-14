@@ -53,13 +53,14 @@ const StepTemplateForm = (_props: unknown, formikRef: TemplateFormRef): JSX.Elem
   const debounceSubmit = debounce((step: Partial<Values>): void => {
     onSubmitStep(step)
   }, 500)
-
+  // temp changes
+  const template1 = { ...template, spec: { type: 'ShellScript' } }
   return (
     <Container background={Color.FORM_BG}>
-      {template && !isEmpty(template.spec) && !!(template.spec as StepElementConfig)?.type && (
+      {template1 && !isEmpty(template1.spec) && !!(template1.spec as StepElementConfig)?.type && (
         <StepCommands
           className={css.stepForm}
-          step={template.spec as StepElementConfig}
+          step={template1.spec as StepElementConfig}
           isReadonly={isReadonly}
           stepsFactory={factory}
           onChange={debounceSubmit}

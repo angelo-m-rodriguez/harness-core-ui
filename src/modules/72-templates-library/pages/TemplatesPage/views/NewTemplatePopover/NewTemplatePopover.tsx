@@ -34,7 +34,13 @@ function NewTemplatePopoverWrapper(): React.ReactElement {
   const history = useHistory()
   const { projectIdentifier, orgIdentifier, accountId, module } = useParams<ProjectPathProps & ModulePathParams>()
   const pipelineTemplatesFeatureFlagEnabled = useFeatureFlag(FeatureFlag.NG_PIPELINE_TEMPLATE)
-  const allowedTemplateTypes = getAllowedTemplateTypes(getString, module, pipelineTemplatesFeatureFlagEnabled)
+  const scriptTemplateEnabled = useFeatureFlag(FeatureFlag.CUSTOM_SECRET_MANAGER_NG)
+  const allowedTemplateTypes = getAllowedTemplateTypes(
+    getString,
+    module,
+    pipelineTemplatesFeatureFlagEnabled,
+    scriptTemplateEnabled
+  )
   const [menuOpen, setMenuOpen] = React.useState(false)
   const { enabled: templatesEnabled } = useFeature({
     featureRequest: {

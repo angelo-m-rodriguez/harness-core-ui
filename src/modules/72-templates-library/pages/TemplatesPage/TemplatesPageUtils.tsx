@@ -54,6 +54,11 @@ export const templateColorStyleMap: { [keyof in TemplateType]: React.CSSProperti
     color: '#06B7C3',
     stroke: '#D4E7D1',
     fill: '#E4F7E1'
+  },
+  [TemplateType.Script]: {
+    color: '#CDF4FE',
+    stroke: '#A3E9FF',
+    fill: '#CDF4FE'
   }
 }
 
@@ -97,6 +102,11 @@ export const templateStudioColorStyleMap: { [keyof in TemplateType]: React.CSSPr
     color: '#06B7C3',
     stroke: '#D4E7D1',
     fill: '#E4F7E1'
+  },
+  [TemplateType.Script]: {
+    color: '#CDF4FE',
+    stroke: '#A3E9FF',
+    fill: '#CDF4FE'
   }
 }
 
@@ -141,16 +151,18 @@ export const getIconForTemplate = (
   getString: UseStringsReturn['getString'],
   template?: NGTemplateInfoConfigWithGitDetails | TemplateSummaryResponse
 ): IconName | undefined => {
-  const templateTye =
+  const templateType =
     (template as TemplateSummaryResponse)?.templateEntityType || (template as NGTemplateInfoConfigWithGitDetails)?.type
-  if (templateTye === TemplateType.Pipeline) {
+  if (templateType === TemplateType.Script) {
+    return 'script'
+  } else if (templateType === TemplateType.Pipeline) {
     return 'pipeline'
   } else {
     const childType =
       (template as TemplateSummaryResponse)?.childType ||
       get(template as NGTemplateInfoConfigWithGitDetails, 'spec.type')
     if (childType) {
-      switch (templateTye) {
+      switch (templateType) {
         case TemplateType.Step:
           return factory.getStepIcon(childType)
         case TemplateType.Stage:

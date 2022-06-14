@@ -9,6 +9,7 @@ import { TemplateFactory } from '@templates-library/components/AbstractTemplate/
 import { StepTemplate } from '@templates-library/components/Templates/StepTemplate/StepTemplate'
 import { StageTemplate } from '@templates-library/components/Templates/StageTemplate/StageTemplate'
 import { PipelineTemplate } from '@templates-library/components/Templates/PipelineTemplate/PipelineTemplate'
+import { ScriptTemplate } from './ScriptTemplate/ScriptTemplate'
 
 const templateFactory = new TemplateFactory()
 
@@ -16,6 +17,7 @@ const templateFactory = new TemplateFactory()
 templateFactory.registerTemplate(new StepTemplate())
 templateFactory.registerTemplate(new StageTemplate())
 templateFactory.registerTemplate(new PipelineTemplate())
+templateFactory.registerTemplate(new ScriptTemplate())
 
 // build steps
 export default templateFactory
