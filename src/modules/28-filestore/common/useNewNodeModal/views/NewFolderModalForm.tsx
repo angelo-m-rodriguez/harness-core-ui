@@ -40,7 +40,7 @@ interface NewFolderModalData {
 }
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
-  const { close, fileStoreContext, editMode, currentNode } = props
+  const { close, fileStoreContext, editMode, currentNode, notCurrentNode } = props
   const { getNode, queryParams, updateCurrentNode } = fileStoreContext
   const [initialValues, setInitialValues] = useState<NewFolderDTO>({
     name: '',
@@ -49,14 +49,22 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
   })
 
   useEffect(() => {
-    if (currentNode && editMode) {
-      setInitialValues({
-        name: fileStoreContext.currentNode.name,
-        identifier: fileStoreContext.currentNode.identifier,
-        type: FileStoreNodeTypes.FOLDER
-      })
+    if (editMode) {
+      if (currentNode && !notCurrentNode) {
+        setInitialValues({
+          name: fileStoreContext.currentNode.name,
+          identifier: fileStoreContext.currentNode.identifier,
+          type: FileStoreNodeTypes.FOLDER
+        })
+      } else {
+        setInitialValues({
+          name: currentNode.name,
+          identifier: currentNode.identifier,
+          type: FileStoreNodeTypes.FOLDER
+        })
+      }
     }
-  }, [fileStoreContext.currentNode, editMode])
+  }, [fileStoreContext.currentNode, editMode, notCurrentNode])
 
   const { mutate: createFolder, loading: createLoading } = useCreate({
     queryParams
@@ -87,7 +95,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
       data.append('identifier', identifier)
       data.append('name', name)
       data.append('type', type)
-      if (editMode) {
+      if (editMode && !notCurrentNode) {
         data.append('parentIdentifier', fileStoreContext?.currentNode?.parentIdentifier as string)
       } else {
         if (fileStoreContext.currentNode.identifier === SEARCH_FILES) {
@@ -108,7 +116,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
               parentName: name
             }))
           })
-          // getNode(getConfig)
+          getNode(getConfig)
           showSuccess(getString('filestore.folderSuccessSaved', { name: values.name }))
         }
       } else {
