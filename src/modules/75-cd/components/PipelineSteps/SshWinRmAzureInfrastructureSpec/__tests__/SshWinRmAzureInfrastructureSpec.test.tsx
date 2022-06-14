@@ -185,7 +185,7 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     })
 
     await submitForm(getByText)
-    expect(onUpdateHandler).not.toHaveBeenCalled()
+    expect(onUpdateHandler).toHaveBeenCalled()
   })
 })
 
