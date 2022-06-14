@@ -42,7 +42,8 @@ export class AzureWebAppRollback extends PipelineStep<AzureWebAppRollbackStepInf
     type: StepType.AzureWebAppsRollback,
     name: '',
     identifier: '',
-    timeout: '10m'
+    timeout: '10m',
+    spec: {}
   }
 
   /* istanbul ignore next */

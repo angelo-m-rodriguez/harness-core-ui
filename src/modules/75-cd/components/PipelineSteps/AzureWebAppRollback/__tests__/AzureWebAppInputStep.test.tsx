@@ -16,7 +16,7 @@ import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterfa
 import AzureWebAppRollbackInputStep from '../AzureWebAppInputStep'
 
 const initialValues = {
-  type: StepType.CloudFormationRollbackStack,
+  type: StepType.AzureWebAppsRollback,
   name: 'test name',
   identifier: 'test_identifier',
   timeout: '10m'
@@ -32,7 +32,7 @@ const renderComponent = (data: any) => {
         <FormikForm>
           <AzureWebAppRollbackInputStep
             initialValues={initialValues as any}
-            stepType={StepType.CloudFormationRollbackStack}
+            stepType={StepType.AzureWebAppsRollback}
             stepViewType={StepViewType.InputSet}
             inputSetData={{
               template: data
@@ -49,7 +49,7 @@ const renderComponent = (data: any) => {
 describe('Test Azure Web App Rollback input set', () => {
   test('should render all input variables components', () => {
     const data = {
-      type: StepType.CloudFormationRollbackStack,
+      type: StepType.AzureWebAppsRollback,
       name: 'test name',
       identifier: 'test_identifier',
       timeout: '10m'
@@ -60,7 +60,7 @@ describe('Test Azure Web App Rollback input set', () => {
 
   test('timeout should be updated', async () => {
     const data = {
-      type: StepType.CloudFormationRollbackStack,
+      type: StepType.AzureWebAppsRollback,
       name: 'test name',
       identifier: 'test_identifier',
       timeout: RUNTIME_INPUT_VALUE
