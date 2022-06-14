@@ -97,7 +97,7 @@ const RepositorySelect: React.FC<RepositorySelectProps<any>> = props => {
       <FormInput.Select
         name="repo"
         label={getString('repository')}
-        placeholder={loading ? getString('loading') : getString('select')}
+        placeholder={loading ? getString('loading') : getString('common.git.selectRepositoryPlaceholder')}
         disabled={loading || disabled}
         items={repoSelectOptions}
         value={{ label: defaultTo(selectedValue, ''), value: defaultTo(selectedValue, '') }}

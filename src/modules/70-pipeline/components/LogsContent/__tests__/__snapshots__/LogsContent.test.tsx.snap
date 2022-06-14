@@ -403,39 +403,117 @@ exports[`<LogsContent /> tests console-view error message test 1`] = `
       </div>
     </pre>
     <div
-      class="errorMessage"
+      class="errorMsgs"
     >
       <div
-        class="summary"
+        class="errorMsgContainer"
       >
-        summary
-      </div>
-      <div
-        class="error"
-      >
-        <span
-          class="bp3-icon StyledProps--main"
-          data-icon="circle-cross"
+        <div
+          class="StyledProps--font StyledProps--main StyledProps--margin-bottom-medium"
         >
-          <svg
-            height="16"
-            viewBox="0 0 13 13"
-            width="16"
-            xmlns="http://www.w3.org/2000/svg"
+          <span
+            class="bp3-icon StyledProps--main errorIcon"
+            data-icon="circle-cross"
           >
-            <path
-              clip-rule="evenodd"
-              d="M.167 6.501a6.333 6.333 0 1012.666 0 6.333 6.333 0 00-12.666 0zm4.071-3.003l2.26 2.263 2.264-2.263c.495-.495 1.236.248.741.743L7.24 6.504l2.254 2.258c.495.495-.247 1.238-.742.743L6.497 7.246 4.238 9.505c-.495.495-1.236-.249-.741-.744l2.258-2.258-2.259-2.262c-.494-.495.248-1.238.742-.743z"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </span>
-        <p
-          class="StyledProps--font Text--lineclamp StyledProps--main"
-          style="--text-line-clamp: 1;"
+            <svg
+              height="16"
+              viewBox="0 0 13 13"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M.167 6.501a6.333 6.333 0 1012.666 0 6.333 6.333 0 00-12.666 0zm4.071-3.003l2.26 2.263 2.264-2.263c.495-.495 1.236.248.741.743L7.24 6.504l2.254 2.258c.495.495-.247 1.238-.742.743L6.497 7.246 4.238 9.505c-.495.495-1.236-.249-.741-.744l2.258-2.258-2.259-2.262c-.494-.495.248-1.238.742-.743z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-red700 StyledProps--inline"
+          >
+            Not Found
+          </span>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--margin-bottom-xlarge"
         >
-          This is an error message
-        </p>
+          <span
+            class="bp3-icon StyledProps--main StyledProps--margin-right-small"
+            data-icon="info"
+          >
+            <svg
+              height="16"
+              viewBox="0 0 12 12"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M0 6a6 6 0 1012 0A6 6 0 000 6zm.75 0a5.25 5.25 0 1010.5 0A5.25 5.25 0 00.75 6zm4.206 3.104v.646h2.682v-.646l-.836-.144V4.203H4.956v.65l.836.144V8.96l-.836.144zm1.846-7.352v1.03h-1.01v-1.03h1.01z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <div
+            class="Layout--vertical StyledProps--main errorListTextContainer shrink"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--font-size-small StyledProps--color StyledProps--color-white StyledProps--margin-bottom-xsmall"
+            >
+              common.errorHandler.issueCouldBe
+            </p>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-xsmall"
+            >
+              <span
+                class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-white StyledProps--font-size-small StyledProps--inline"
+              >
+                - Check if the image exists and if the permissions are scoped for the authenticated user
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--margin-bottom-xlarge"
+        >
+          <span
+            class="bp3-icon bp3-icon-lightbulb StyledProps--main StyledProps--margin-right-small"
+            icon="lightbulb"
+          >
+            <svg
+              data-icon="lightbulb"
+              height="16"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <desc>
+                lightbulb
+              </desc>
+              <path
+                d="M9.01 14h-2c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1-.45 1-1s-.44-1-1-1zm1-3h-4c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.44-1-1-1zm-2-11C5.26 0 3.03 1.95 3.03 4.35c0 2.37 1.63 2.64 1.94 5.22 0 .24.22.44.5.44h5.09c.28 0 .5-.19.5-.44C11.37 6.99 13 6.72 13 4.35 13 1.95 10.77 0 8.01 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <div
+            class="Layout--vertical StyledProps--main errorListTextContainer shrink"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--font-size-small StyledProps--color StyledProps--color-white StyledProps--margin-bottom-xsmall"
+            >
+              common.errorHandler.tryTheseSuggestions
+            </p>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-xsmall"
+            >
+              <span
+                class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-white StyledProps--font-size-small StyledProps--inline"
+              >
+                - Unable to fetch the tags for the image
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -609,41 +687,119 @@ exports[`<LogsContent /> tests console-view warning message test 1`] = `
       </div>
     </pre>
     <div
-      class="errorMessage isWarning"
+      class="errorMsgs isWarning"
     >
       <div
-        class="summary"
+        class="errorMsgContainer"
       >
-        summary
-      </div>
-      <div
-        class="error"
-      >
-        <span
-          class="bp3-icon bp3-icon-warning-sign StyledProps--main"
-          icon="warning-sign"
+        <div
+          class="StyledProps--font StyledProps--main StyledProps--margin-bottom-medium"
         >
-          <svg
-            data-icon="warning-sign"
-            height="16"
-            viewBox="0 0 16 16"
-            width="16"
+          <span
+            class="bp3-icon bp3-icon-warning-sign StyledProps--main errorIcon"
+            icon="warning-sign"
           >
-            <desc>
-              warning-sign
-            </desc>
-            <path
-              d="M15.84 13.5l.01-.01-7-12-.01.01c-.17-.3-.48-.5-.85-.5s-.67.2-.85.5l-.01-.01-7 12 .01.01c-.09.15-.15.31-.15.5 0 .55.45 1 1 1h14c.55 0 1-.45 1-1 0-.19-.06-.35-.15-.5zm-6.85-.51h-2v-2h2v2zm0-3h-2v-5h2v5z"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </span>
-        <p
-          class="StyledProps--font Text--lineclamp StyledProps--main"
-          style="--text-line-clamp: 1;"
+            <svg
+              data-icon="warning-sign"
+              height="16"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <desc>
+                warning-sign
+              </desc>
+              <path
+                d="M15.84 13.5l.01-.01-7-12-.01.01c-.17-.3-.48-.5-.85-.5s-.67.2-.85.5l-.01-.01-7 12 .01.01c-.09.15-.15.31-.15.5 0 .55.45 1 1 1h14c.55 0 1-.45 1-1 0-.19-.06-.35-.15-.5zm-6.85-.51h-2v-2h2v2zm0-3h-2v-5h2v5z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-red700 StyledProps--inline"
+          >
+            Not Found
+          </span>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--margin-bottom-xlarge"
         >
-          This is a warning message
-        </p>
+          <span
+            class="bp3-icon StyledProps--main StyledProps--margin-right-small"
+            data-icon="info"
+          >
+            <svg
+              height="16"
+              viewBox="0 0 12 12"
+              width="16"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M0 6a6 6 0 1012 0A6 6 0 000 6zm.75 0a5.25 5.25 0 1010.5 0A5.25 5.25 0 00.75 6zm4.206 3.104v.646h2.682v-.646l-.836-.144V4.203H4.956v.65l.836.144V8.96l-.836.144zm1.846-7.352v1.03h-1.01v-1.03h1.01z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <div
+            class="Layout--vertical StyledProps--main errorListTextContainer shrink"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--font-size-small StyledProps--color StyledProps--color-white StyledProps--margin-bottom-xsmall"
+            >
+              common.errorHandler.issueCouldBe
+            </p>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-xsmall"
+            >
+              <span
+                class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-white StyledProps--font-size-small StyledProps--inline"
+              >
+                - Check if the image exists and if the permissions are scoped for the authenticated user
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="Layout--horizontal StyledProps--main StyledProps--margin-bottom-xlarge"
+        >
+          <span
+            class="bp3-icon bp3-icon-lightbulb StyledProps--main StyledProps--margin-right-small"
+            icon="lightbulb"
+          >
+            <svg
+              data-icon="lightbulb"
+              height="16"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <desc>
+                lightbulb
+              </desc>
+              <path
+                d="M9.01 14h-2c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1-.45 1-1s-.44-1-1-1zm1-3h-4c-.55 0-1 .45-1 1s.45 1 1 1h4c.55 0 1-.45 1-1s-.44-1-1-1zm-2-11C5.26 0 3.03 1.95 3.03 4.35c0 2.37 1.63 2.64 1.94 5.22 0 .24.22.44.5.44h5.09c.28 0 .5-.19.5-.44C11.37 6.99 13 6.72 13 4.35 13 1.95 10.77 0 8.01 0z"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <div
+            class="Layout--vertical StyledProps--main errorListTextContainer shrink"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--font-weight-semi-bold StyledProps--font-size-small StyledProps--color StyledProps--color-white StyledProps--margin-bottom-xsmall"
+            >
+              common.errorHandler.tryTheseSuggestions
+            </p>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-xsmall"
+            >
+              <span
+                class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-white StyledProps--font-size-small StyledProps--inline"
+              >
+                - Unable to fetch the tags for the image
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

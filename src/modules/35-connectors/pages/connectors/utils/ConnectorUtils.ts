@@ -1876,7 +1876,7 @@ export const getIconByType = (type: ConnectorInfoDTO['type'] | undefined): IconN
     case Connectors.HttpHelmRepo:
       return 'service-helm'
     case Connectors.OciHelmRepo:
-      return 'service-helm'
+      return 'helm-oci'
     case Connectors.GITHUB:
       return 'github'
     case Connectors.GITLAB:

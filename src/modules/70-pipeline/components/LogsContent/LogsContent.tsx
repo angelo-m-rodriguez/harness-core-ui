@@ -11,14 +11,17 @@ import {
   Button,
   ButtonSize,
   ButtonVariation,
+  Color,
+  Container,
   ExpandingSearchInput,
   ExpandingSearchInputHandle,
-  Icon,
-  Text
-} from '@wings-software/uicore'
+  Icon
+} from '@harness/uicore'
 import type { GroupedVirtuosoHandle, VirtuosoHandle } from 'react-virtuoso'
 
+import { defaultTo } from 'lodash-es'
 import routes from '@common/RouteDefinitions'
+import { ErrorList, extractInfo } from '@common/components/ErrorHandler/ErrorHandler'
 import { String as StrTemplate, useStrings } from 'framework/strings'
 import { useExecutionContext } from '@pipeline/context/ExecutionContext'
 import { useGlobalEventListener } from '@common/hooks'
@@ -28,6 +31,7 @@ import type { ModulePathParams, ExecutionPathProps } from '@common/interfaces/Ro
 import { addHotJarSuppressionAttribute } from '@common/utils/utils'
 import { isExecutionComplete } from '@pipeline/utils/statusHelpers'
 import { PreferenceScope, usePreferenceStore } from 'framework/PreferenceStore/PreferenceStoreContext'
+import { LinkifyText } from '@common/components/LinkifyText/LinkifyText'
 import { useLogsContent } from './useLogsContent'
 import { GroupedLogsWithRef as GroupedLogs } from './components/GroupedLogs'
 import { SingleSectionLogsWithRef as SingleSectionLogs } from './components/SingleSectionLogs'
@@ -114,7 +118,7 @@ export enum SavedExecutionViewTypes {
 }
 
 export function LogsContent(props: LogsContentProps): React.ReactElement {
-  const { mode, toConsoleView = '', errorMessage, isWarning } = props
+  const { mode, toConsoleView = '', isWarning } = props
   const pathParams = useParams<ExecutionPathProps & ModulePathParams>()
   const { pipelineStagesMap, selectedStageId, allNodeMap, selectedStepId, pipelineExecutionDetail, queryParams } =
     useExecutionContext()
@@ -195,9 +199,11 @@ export function LogsContent(props: LogsContentProps): React.ReactElement {
 
   const currentStepId = resolveCurrentStep(selectedStepId, queryParams)
   const currentStep = allNodeMap[currentStepId]
+  const errorObjects = extractInfo(defaultTo(currentStep?.failureInfo?.responseMessages, []))
+  const hasError = Array.isArray(errorObjects) && errorObjects.length > 0
 
   return (
-    <div ref={rootRef} className={cx(css.main, { [css.hasErrorMessage]: !!errorMessage })} data-mode={mode}>
+    <div ref={rootRef} className={cx(css.main, { [css.hasErrorMessage]: hasError })} data-mode={mode}>
       <div className={css.header}>
         <StrTemplate
           tagName="div"
@@ -260,13 +266,35 @@ export function LogsContent(props: LogsContentProps): React.ReactElement {
           <StrTemplate tagName="div" className={css.noLogs} stringID="common.logs.noLogsText" />
         </pre>
       )}
-      {mode === 'console-view' && errorMessage ? (
-        <div className={cx(css.errorMessage, { [css.isWarning]: isWarning })}>
-          <StrTemplate className={css.summary} tagName="div" stringID="summary" />
-          <div className={css.error}>
-            <Icon name={isWarning ? 'warning-sign' : 'circle-cross'} />
-            <Text lineClamp={1}>{errorMessage}</Text>
-          </div>
+      {mode === 'console-view' && hasError ? (
+        <div className={cx(css.errorMsgs, { [css.isWarning]: isWarning })}>
+          {errorObjects.map((errorObject, index) => {
+            const { error = {}, explanations = [], hints = [] } = errorObject
+            return (
+              <div key={index} className={css.errorMsgContainer}>
+                <Container margin={{ bottom: 'medium' }}>
+                  <Icon className={css.errorIcon} name={isWarning ? 'warning-sign' : 'circle-cross'} />
+                  <LinkifyText
+                    content={error.message}
+                    textProps={{ font: { weight: 'bold' }, color: Color.RED_700 }}
+                    linkStyles={css.link}
+                  />
+                </Container>
+                <ErrorList
+                  items={explanations}
+                  header={getString('common.errorHandler.issueCouldBe')}
+                  icon={'info'}
+                  color={Color.WHITE}
+                />
+                <ErrorList
+                  items={hints}
+                  header={getString('common.errorHandler.tryTheseSuggestions')}
+                  icon={'lightbulb'}
+                  color={Color.WHITE}
+                />
+              </div>
+            )
+          })}
         </div>
       ) : null}
     </div>

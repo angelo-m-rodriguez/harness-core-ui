@@ -6,7 +6,7 @@
  */
 
 .main {
-  background: #09090b;
+  background-color: var(--theme-dark-canvas-bg);
   color: var(--grey-300);
   flex: 1 1 auto;
   overflow: hidden;
@@ -21,34 +21,33 @@
     position: relative;
   }
 
-  .errorMessage {
+  .errorMsgs {
     background-color: var(--grey-800);
-    padding: var(--spacing-small) var(--spacing-huge);
+    padding: var(--spacing-large);
     font-family: 'Roboto Mono', 'Monaco', 'Ubuntu Mono', monospace;
     border-top: 1px solid var(--grey-700);
+    overflow: auto;
 
-    .summary {
-      margin-bottom: var(--spacing-small);
+    & .errorMsgContainer {
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr;
+      column-gap: var(--spacing-5);
     }
 
-    .error {
+    .link {
+      color: var(--white) !important;
+      text-decoration: underline;
+    }
+
+    .errorIcon {
       color: var(--red-500);
-      display: flex;
-      align-items: center;
-      column-gap: var(--spacing-small);
       --intent-color: var(--red-500);
       --typography-color: var(--red-500);
-
-      :global {
-        .bp3-popover-target,
-        .bp3-popover-wrapper {
-          display: block;
-        }
-      }
+      margin-right: var(--spacing-2);
     }
 
     &.isWarning {
-      .error {
+      .errorIcon {
         color: var(--yellow-500);
         --intent-color: var(--yellow-500);
         --typography-color: var(--yellow-500);
@@ -75,7 +74,7 @@
     grid-template-rows: 52px 1fr;
 
     &.hasErrorMessage {
-      grid-template-rows: 52px 1fr 70px;
+      grid-template-rows: 52px 1fr 132px;
     }
 
     & .header {
@@ -149,7 +148,7 @@
   height: 100%;
   overflow: hidden;
   display: flex;
-  background-color: #09090b;
+  background-color: var(--theme-dark-canvas-bg);
 }
 
 .errorContainer {

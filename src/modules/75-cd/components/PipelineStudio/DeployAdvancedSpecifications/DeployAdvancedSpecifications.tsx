@@ -92,7 +92,6 @@ const DeployAdvancedSpecifications: React.FC<AdvancedSpecifications> = ({ childr
             </div>
           </Layout.Horizontal>
         </Card>
-        <Container margin={{ top: 'xxlarge' }}>{children}</Container>
 
         <div className={stageCss.tabHeading}>
           <span data-tooltip-id="conditionalExecutionDeployStage">

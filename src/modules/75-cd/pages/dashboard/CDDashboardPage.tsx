@@ -38,7 +38,6 @@ import {
 } from '@common/components/TimeRangeSelector/TimeRangeSelector'
 import { DeploymentsTimeRangeContext } from '@cd/components/Services/common'
 import { useLocalStorage, useMutateAsGet, useQueryParams } from '@common/hooks'
-import { validTimeFormat } from '@common/factories/LandingDashboardContext'
 import PipelineDeploymentList, {
   processQueryParams
 } from '@pipeline/pages/pipeline-deployment-list/PipelineDeploymentList'
@@ -86,6 +85,16 @@ const NoDataOverviewPage = (): JSX.Element => {
   )
 }
 
+export const validTimeFormat = (timeRange: TimeRangeSelectorProps): TimeRangeSelectorProps => {
+  //convert to valid format if string
+  if (typeof timeRange.range[0] === 'string') {
+    timeRange.range[0] = new Date(defaultTo(timeRange.range[0], ''))
+    timeRange.range[1] = new Date(defaultTo(timeRange.range[1], ''))
+  }
+  return timeRange
+}
+
+/** TODO: fix types after BE merge */
 export function executionStatusInfoToExecutionSummary(info: ExecutionStatusInfo): PipelineExecutionSummary {
   const cd: CDPipelineModuleInfo = {
     serviceIdentifiers: info.serviceInfoList?.map(({ serviceName }) => defaultTo(serviceName, '')).filter(svc => !!svc)

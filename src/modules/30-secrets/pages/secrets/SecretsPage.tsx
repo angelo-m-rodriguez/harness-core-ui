@@ -38,6 +38,7 @@ import { Scope } from '@common/interfaces/SecretsInterface'
 import { getLinkForAccountResources } from '@common/utils/BreadcrumbUtils'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { Category, SecretActions } from '@common/constants/TrackingConstants'
+import { getPrincipalScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import SecretsList from './views/SecretsListView/SecretsList'
 
 import SecretEmptyState from './secrets-empty-state.png'
@@ -54,6 +55,11 @@ interface CreateSecretBtnProp {
 
 const SecretsPage: React.FC<SecretsPageProps> = ({ mock }) => {
   const { accountId, orgIdentifier, projectIdentifier, module } = useParams<ProjectPathProps & ModulePathParams>()
+  const scope = getPrincipalScopeFromDTO({
+    accountIdentifier: accountId,
+    orgIdentifier,
+    projectIdentifier
+  })
   const history = useHistory()
   const { getString } = useStrings()
   const [searchTerm, setSearchTerm] = useState<string | undefined>()
@@ -206,7 +212,7 @@ const SecretsPage: React.FC<SecretsPageProps> = ({ mock }) => {
           image: SecretEmptyState,
           message: searchTerm
             ? getString('secrets.secret.noSecretsFound')
-            : getString('secrets.noSecrets', { resourceName: projectIdentifier ? 'project' : 'organization' }),
+            : getString('secrets.noSecrets', { resourceName: scope }),
           button: !searchTerm ? (
             <Popover minimal position={Position.BOTTOM_LEFT} interactionKind={PopoverInteractionKind.CLICK_TARGET_ONLY}>
               <CreateSecretBtn size={ButtonSize.LARGE} setOpenPopOverProp={setEmptyStateOpenPopOver} />

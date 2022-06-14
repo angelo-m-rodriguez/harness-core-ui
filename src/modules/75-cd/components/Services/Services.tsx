@@ -18,7 +18,7 @@ import {
   TimeRangeSelectorProps
 } from '@common/components/TimeRangeSelector/TimeRangeSelector'
 import { useLocalStorage } from '@common/hooks'
-import { validTimeFormat } from '@common/factories/LandingDashboardContext'
+import { validTimeFormat } from '@cd/pages/dashboard/CDDashboardPage'
 import { DeploymentsTimeRangeContext, ServiceStoreContext, useServiceStore } from './common'
 
 import { ServicesListPage } from './ServicesListPage/ServicesListPage'

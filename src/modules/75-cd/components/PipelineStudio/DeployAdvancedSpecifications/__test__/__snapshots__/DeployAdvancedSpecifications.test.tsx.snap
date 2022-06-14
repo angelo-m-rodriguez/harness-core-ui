@@ -127,9 +127,6 @@ exports[`Deploy advanced specifications test Should match snapshot 1`] = `
         </div>
       </div>
       <div
-        class="StyledProps--font StyledProps--main StyledProps--margin-top-xxlarge"
-      />
-      <div
         class="tabHeading"
       >
         <span

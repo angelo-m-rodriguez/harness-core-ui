@@ -8,13 +8,15 @@
 // this is an auto-generated file, do not update this manually
 declare const styles: {
   readonly container: string
-  readonly error: string
   readonly errorContainer: string
-  readonly errorMessage: string
+  readonly errorIcon: string
+  readonly errorMsgContainer: string
+  readonly errorMsgs: string
   readonly fullScreen: string
   readonly hasErrorMessage: string
   readonly header: string
   readonly isWarning: string
+  readonly link: string
   readonly logViewer: string
   readonly main: string
   readonly newTab: string
@@ -23,7 +25,6 @@ declare const styles: {
   readonly search: string
   readonly selectedSearchResult: string
   readonly singleSectionScrollBtn: string
-  readonly summary: string
   readonly toConsoleView: string
   readonly txt: string
 }

@@ -69,6 +69,7 @@ interface UserGroupsListViewProps {
 export const UserGroupColumn = (data: UserGroupDTO): React.ReactElement => {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const userGroupInherited = isUserGroupInherited(accountId, orgIdentifier, projectIdentifier, data)
+  const parentScope = mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(data))
   const { getString } = useStrings()
   return (
     <Layout.Vertical>
@@ -103,7 +104,7 @@ export const UserGroupColumn = (data: UserGroupDTO): React.ReactElement => {
         {userGroupInherited ? (
           <Text color={Color.PURPLE_500} lineClamp={1} font={{ variation: FontVariation.SMALL }}>
             {getString('rbac.unableToEditInheritedMembership', {
-              parentScope: mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(data))
+              parentScope: parentScope ? parentScope.charAt(0).toUpperCase() + parentScope.slice(1) : undefined
             })}
           </Text>
         ) : null}

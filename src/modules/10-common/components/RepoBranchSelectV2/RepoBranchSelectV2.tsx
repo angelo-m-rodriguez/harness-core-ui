@@ -49,13 +49,26 @@ const getDefaultBranchOption = (defaultBranch: string): SelectOption => {
   }
 }
 
-export const getBranchSelectOptions = (data: GitBranchDetailsDTO[] = []): SelectOption[] => {
-  return data.map((branch: GitBranchDetailsDTO) => {
+export const getBranchSelectOptions = (data: GitBranchDetailsDTO[] = [], selectedBranch?: string): SelectOption[] => {
+  const selectOptions = data.map((branch: GitBranchDetailsDTO) => {
     return {
       label: defaultTo(branch.name, ''),
       value: defaultTo(branch.name, '')
     }
   })
+
+  // If dropdown has a selected value which is not in branchList response, pushining selectedBranch as an select option.
+  // Use cases for this can be :
+  // 1. User selected a branch using createNew
+  // 2. URL changed to a branch beyond thresold limit of 30
+  if (selectedBranch && -1 === selectOptions.findIndex(selectOption => selectOption.value === selectedBranch)) {
+    selectOptions.unshift({
+      label: selectedBranch,
+      value: selectedBranch
+    })
+  }
+
+  return selectOptions
 }
 const getDefaultSelectedOption = (defaultToBranch: string, selected?: string): SelectOption => {
   return { label: selected || defaultToBranch, value: selected || defaultToBranch }
@@ -145,7 +158,7 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
     }
 
     if (responseHasBranches(response)) {
-      const branchOptions = getBranchSelectOptions(response?.data?.branches)
+      const branchOptions = getBranchSelectOptions(response?.data?.branches, selectedValue)
       setBranchSelectOptions(branchOptions)
 
       // If used in Formik, onChange will set branch after default selection to overcome form validation
@@ -170,10 +183,15 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
         disabled={disabled || loading}
         items={branchSelectOptions}
         label={noLabel ? '' : defaultTo(label, getString('gitBranch'))}
-        placeholder={loading ? getString('loading') : getString('select')}
+        placeholder={loading ? getString('loading') : getString('common.git.selectBranchPlaceholder')}
         value={getDefaultSelectedOption(defaultToBranch, selectedValue)}
         onChange={selected => props.onChange?.(selected, false)}
-        selectProps={{ usePortal: true, popoverClassName: css.gitBranchSelectorPopover, ...selectProps }}
+        selectProps={{
+          usePortal: true,
+          allowCreatingNewItems: true,
+          popoverClassName: css.gitBranchSelectorPopover,
+          ...selectProps
+        }}
         className={cx(branchSelectorClassName, css.branchSelector)}
       />
       {!showIcons ? null : loading && !disabled ? (

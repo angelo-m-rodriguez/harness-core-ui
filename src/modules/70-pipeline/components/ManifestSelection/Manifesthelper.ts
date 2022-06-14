@@ -126,7 +126,7 @@ export const ManifestIconByType: Record<ManifestStores, IconName> = {
   GitLab: 'service-gotlab',
   Bitbucket: 'bitbucket',
   Http: 'service-helm',
-  OciHelmChart: 'service-helm',
+  OciHelmChart: 'helm-oci',
   S3: 'service-service-s3',
   Gcs: 'gcs-step',
   InheritFromManifest: 'custom-artifact',

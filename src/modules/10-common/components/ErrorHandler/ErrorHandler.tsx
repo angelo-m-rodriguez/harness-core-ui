@@ -15,7 +15,7 @@ import { useStrings } from 'framework/strings'
 import { LinkifyText } from '@common/components/LinkifyText/LinkifyText'
 import css from '@common/components/ErrorHandler/ErrorHandler.module.scss'
 
-type ResponseMessage = ResponseMessageCDNG | ResponseMessagePipeline
+export type ResponseMessage = ResponseMessageCDNG | ResponseMessagePipeline
 
 export interface ErrorHandlerProps {
   responseMessages: ResponseMessage[]
@@ -54,26 +54,29 @@ export const extractInfo = (responseMessages: ResponseMessage[]): ExtractedInfo[
   return errorObjects
 }
 
-const ErrorList: React.FC<{
+export const ErrorList: React.FC<{
   items: ResponseMessage[]
   header: string
   icon: IconName
+  color?: Color
 }> = props => {
   if (!props.items.length) {
     return null
   }
+  const { color = Color.BLACK } = props
+
   return (
     <Layout.Horizontal margin={{ bottom: 'xlarge' }}>
       <Icon name={props.icon} margin={{ right: 'small' }} />
       <Layout.Vertical className={cx(css.errorListTextContainer, css.shrink)}>
-        <Text font={{ weight: 'semi-bold', size: 'small' }} color={Color.BLACK} margin={{ bottom: 'xsmall' }}>
+        <Text font={{ weight: 'semi-bold', size: 'small' }} color={color} margin={{ bottom: 'xsmall' }}>
           {props.header}
         </Text>
         {props.items.map((item, index) => (
           <Container margin={{ bottom: 'xsmall' }} key={index}>
             <LinkifyText
               content={`- ${item.message}`}
-              textProps={{ color: Color.BLACK, font: { size: 'small' }, className: css.text }}
+              textProps={{ color, font: { size: 'small' }, className: css.text }}
               linkStyles={cx(css.link, css.linkSmall)}
             />
           </Container>

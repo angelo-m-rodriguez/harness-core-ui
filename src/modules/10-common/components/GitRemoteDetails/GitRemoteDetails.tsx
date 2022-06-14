@@ -89,7 +89,7 @@ const GitRemoteDetails = ({
           }}
           selectedValue={branch}
           branchSelectorClassName={css.branchSelector}
-          selectProps={{ borderless, popoverClassName: '' }}
+          selectProps={{ borderless }}
           showIcons={false}
           showErrorInModal
         />

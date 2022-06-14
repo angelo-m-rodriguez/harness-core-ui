@@ -22,7 +22,6 @@ import {
 import { Form, FormikProps } from 'formik'
 import produce from 'immer'
 import { useParams } from 'react-router-dom'
-import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useStrings } from 'framework/strings'
 import { NotificationSettingConfigDTO, usePutUserGroup, UserGroupDTO } from 'services/cd-ng'
 import { TestEmailNotifications } from '@notifications/modals/ConfigureNotificationsModal/views/ConfigureEmailNotifications/ConfigureEmailNotifications'
@@ -34,6 +33,8 @@ import { TestMSTeamsNotifications } from '@notifications/modals/ConfigureNotific
 import { getNotificationByConfig } from '@notifications/Utils/Utils'
 import { EmailSchema, URLValidationSchema } from '@common/utils/Validation'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
+import ManagePrincipalButton from '../ManagePrincipalButton/ManagePrincipalButton'
 import css from './NotificationList.module.scss'
 
 interface NotificationListProps {
@@ -384,9 +385,11 @@ const NotificationList: React.FC<NotificationListProps> = ({
       ))}
       <Layout.Horizontal padding={{ top: 'small' }}>
         {values.length < 4 && !values.includes(null) ? (
-          <Button
-            text={getString('plusNumber', { number: getString('common.channel') })}
+          <ManagePrincipalButton
+            disabled={inherited}
             data-testid="addChannel"
+            tooltip={inherited ? inheritedCreateDisabledText : undefined}
+            text={getString('plusNumber', { number: getString('common.channel') })}
             variation={ButtonVariation.LINK}
             onClick={() => {
               setValues(
@@ -395,16 +398,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 })
               )
             }}
-            disabled={inherited}
-            tooltip={inherited ? inheritedCreateDisabledText : undefined}
-            tooltipProps={
-              inherited
-                ? {
-                    hoverCloseDelay: 50,
-                    interactionKind: PopoverInteractionKind.HOVER_TARGET_ONLY
-                  }
-                : undefined
-            }
+            resourceType={ResourceType.USERGROUP}
+            resourceIdentifier={userGroup.identifier}
           />
         ) : null}
       </Layout.Horizontal>

@@ -6,17 +6,36 @@
  */
 
 import React from 'react'
-import { useLandingDashboardContext } from '@common/factories/LandingDashboardContext'
-import { TimeRangeSelector } from '@common/components/TimeRangeSelector/TimeRangeSelector'
+import { SelectOption, Select } from '@wings-software/uicore'
+import { DashboardTimeRange, useLandingDashboardContext } from '@common/factories/LandingDashboardContext'
+import { useStrings } from 'framework/strings'
 
 interface TimeRangeSelectProps {
   className?: string
 }
 
-const TimeRangeSelect: React.FC<TimeRangeSelectProps> = () => {
-  const { selectedTimeRange, selectTimeRange } = useLandingDashboardContext()
+const TimeRangeSelect: React.FC<TimeRangeSelectProps> = props => {
+  const { selectTimeRange, selectedTimeRange } = useLandingDashboardContext()
+  const { getString } = useStrings()
 
-  return <TimeRangeSelector minimal timeRange={selectedTimeRange.range} setTimeRange={selectTimeRange} />
+  const options: SelectOption[] = [
+    { label: getString('projectsOrgs.landingDashboard.last30Days'), value: DashboardTimeRange['30Days'] },
+    { label: getString('projectsOrgs.landingDashboard.last60Days'), value: DashboardTimeRange['60Days'] },
+    { label: getString('projectsOrgs.landingDashboard.last90Days'), value: DashboardTimeRange['90Days'] },
+    { label: getString('projectsOrgs.landingDashboard.last1Year'), value: DashboardTimeRange['1Year'] }
+  ]
+
+  const defaultTime = options.filter(i => i.value === selectedTimeRange)
+  return (
+    <Select
+      items={options}
+      onChange={option => {
+        selectTimeRange(option.value as DashboardTimeRange)
+      }}
+      className={props.className}
+      defaultSelectedItem={defaultTime.length ? defaultTime[0] : options[0]}
+    />
+  )
 }
 
 export default TimeRangeSelect

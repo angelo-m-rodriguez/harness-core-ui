@@ -366,10 +366,12 @@ export const getUserGroupActionTooltipText = (
     orgIdentifier,
     projectIdentifier
   })
+  const parentScope = mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup))
+  const currentScope = mapfromScopetoPrincipalScope(scope)
   if (userGroupInherited) {
     const vars = {
-      parentScope: mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup)),
-      childScope: mapfromScopetoPrincipalScope(scope)
+      parentScope: parentScope ? parentScope.charAt(0).toUpperCase() + parentScope.slice(1) : undefined,
+      childScope: currentScope ? currentScope.charAt(0).toUpperCase() + currentScope.slice(1) : undefined
     }
     return <String stringID="rbac.unableToEditInheritedMembershipDetailed" vars={vars} />
   }
@@ -390,10 +392,11 @@ export const getUserGroupMenuOptionText = (
   userGroupInherited?: boolean
 ): React.ReactElement | undefined => {
   const { externallyManaged } = userGroup
+  const parentScope = mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup))
   if (userGroupInherited) {
     const vars = {
       action: action.toLowerCase(),
-      parentScope: mapfromScopetoPrincipalScope(getScopeFromUserGroupDTO(userGroup))
+      parentScope: parentScope ? parentScope.charAt(0).toUpperCase() + parentScope.slice(1) : undefined
     }
     return <String stringID="rbac.manageInheritedGroupText" vars={vars} />
   }

@@ -73,7 +73,7 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
 
   const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
   const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
-  const { data: permissionsYaml } = useMutateAsGet(useCloudCostK8sClusterSetup, {
+  const { data: permissionsYaml, loading: yamlLoading } = useMutateAsGet(useCloudCostK8sClusterSetup, {
     queryParams: {
       accountIdentifier: accountId
     },
@@ -173,6 +173,7 @@ const ProvidePermissions: React.FC<StepProps<StepSecretManagerProps> & ProvidePe
             onClick={handleDownload}
             text={getString('connectors.ceK8.providePermissionsStep.downloadYamlBtnText')}
             className={css.stepBtn}
+            disabled={yamlLoading}
           />
         )}
         {isDownloadComplete && (

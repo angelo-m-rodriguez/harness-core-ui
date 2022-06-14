@@ -232,7 +232,7 @@ exports[`SaveToGitFormV2 test Creating new branch and PR in SaveToGitFormV2 1`] 
                                     autocomplete="off"
                                     class="bp3-input"
                                     name="targetBranch"
-                                    placeholder="- select -"
+                                    placeholder="- common.git.selectBranchPlaceholder -"
                                     style="padding-right: 0px;"
                                     type="text"
                                     value=""
