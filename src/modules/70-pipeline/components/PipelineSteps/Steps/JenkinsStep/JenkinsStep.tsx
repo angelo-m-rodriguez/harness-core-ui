@@ -9,7 +9,8 @@ import React from 'react'
 import { IconName, SelectOption, getMultiTypeFromValue, MultiTypeInputType } from '@wings-software/uicore'
 import { parse } from 'yaml'
 import get from 'lodash-es/get'
-import { connect, FormikErrors } from 'formik'
+import * as Yup from 'yup'
+import { connect, FormikErrors, yupToFormErrors } from 'formik'
 import type { StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
 import { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
@@ -30,6 +31,9 @@ import { JenkinsStepVariables, JenkinsStepVariablesProps } from './JenkinsStepVa
 import { getInputSetViewValidateFieldsConfig } from './JenkinsStepFunctionConfigs'
 import { getConnectorSuggestions } from './EditorSuggestionUtils'
 import type { JenkinsStepSpec, JenkinsStepData } from './types'
+import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
+import { isArray, isEmpty } from 'lodash-es'
+import { variableSchema } from '@cd/components/PipelineSteps/ShellScriptStep/shellScriptTypes'
 
 const logger = loggerFor(ModuleName.CI)
 const JenkinsStepInputSet = connect(JenkinsStepInputSetBasic)
@@ -136,12 +140,66 @@ export class JenkinsStep extends PipelineStep<JenkinsStepData> {
     getString,
     viewType
   }: ValidateInputSetProps<JenkinsStepData>): FormikErrors<JenkinsStepData> {
+    const errors: FormikErrors<JenkinsStepData> = {}
     const isRequired = viewType === StepViewType.DeploymentForm || viewType === StepViewType.TriggerForm
-    if (getString) {
-      return validateInputSet(data, template, getInputSetViewValidateFieldsConfig(isRequired), { getString }, viewType)
+    if (getMultiTypeFromValue(template?.timeout) === MultiTypeInputType.RUNTIME) {
+      const timeout = Yup.object().shape({
+        timeout: getDurationValidationSchema({ minimum: '10s' }).required(getString?.('validation.timeout10SecMinimum'))
+      })
+
+      try {
+        timeout.validateSync(data)
+      } catch (e) {
+        /* istanbul ignore else */
+        if (e instanceof Yup.ValidationError) {
+          const err = yupToFormErrors(e)
+          Object.assign(errors, err)
+        }
+      }
     }
 
-    return {}
+    if (
+      typeof template?.spec?.connectorRef === 'string' &&
+      getMultiTypeFromValue(template?.spec?.connectorRef) === MultiTypeInputType.RUNTIME &&
+      isRequired &&
+      isEmpty(data?.spec?.connectorRef)
+    ) {
+      errors.spec = {
+        connectorRef: getString?.('pipeline.jenkinsStep.validations.connectorRef')
+      }
+    }
+
+    if (
+      typeof template?.spec?.connectorRef === 'string' &&
+      getMultiTypeFromValue(template?.spec?.jobName) === MultiTypeInputType.RUNTIME &&
+      isRequired &&
+      isEmpty(data?.spec?.jobName)
+    ) {
+      errors.spec = {
+        jobName: getString?.('pipeline.jenkinsStep.validations.jobName')
+      }
+    }
+
+    /* istanbul ignore else */
+    if (isArray(template?.spec?.jobParameter) && getString) {
+      try {
+        const schema = Yup.object().shape({
+          spec: Yup.object().shape({
+            jobParameter: variableSchema(getString)
+          })
+        })
+        schema.validateSync(data)
+      } catch (e) {
+        /* istanbul ignore else */
+        if (e instanceof Yup.ValidationError) {
+          const err = yupToFormErrors(e)
+
+          Object.assign(errors, err)
+        }
+      }
+    }
+
+    return errors
   }
 
   private getInitialValues(initialValues: JenkinsStepData): JenkinsStepData {

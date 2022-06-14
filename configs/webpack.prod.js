@@ -38,7 +38,7 @@ console.table(versionContent)
 
 const config = {
   mode: 'production',
-  devtool: 'hidden-source-map',
+  devtool: 'source-map',
   output: {
     path: path.resolve(CONTEXT, 'dist/static'),
     filename: '[name].[contenthash:6].js',

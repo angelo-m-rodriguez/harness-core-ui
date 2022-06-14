@@ -11,8 +11,8 @@ declare const styles: {
   readonly connector: string
   readonly connectorLabel: string
   readonly deploymentViewMedium: string
-  readonly environmentVarHeader: string
   readonly jobDetails: string
+  readonly jobParameter: string
   readonly label: string
   readonly marginTop: string
   readonly minConfigBtn: string

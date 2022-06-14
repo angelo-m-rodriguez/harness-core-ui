@@ -12,7 +12,7 @@ const OptionalConfiguration = (props: { readonly?: boolean; allowableTypes: Mult
   const { getString } = useStrings()
   return (
     <>
-      <div className={cx(stepCss.formGroup, stepCss.md)}>
+      <div className={cx(stepCss.formGroup)}>
         <FormMultiTypeCheckboxField
           name="spec.unstableStatusAsSuccess"
           label={getString('pipeline.jenkinsStep.unstableStatusAsSuccess')}
@@ -20,7 +20,7 @@ const OptionalConfiguration = (props: { readonly?: boolean; allowableTypes: Mult
           disabled={readonly}
         />
       </div>
-      <div className={cx(stepCss.formGroup, stepCss.md)}>
+      <div className={cx(stepCss.formGroup)}>
         <FormMultiTypeCheckboxField
           name="spec.captureEnvironmentVariable"
           label={getString('pipeline.jenkinsStep.captureEnvironmentVariable')}

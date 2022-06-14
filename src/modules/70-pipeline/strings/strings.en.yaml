@@ -113,6 +113,9 @@ lockStep:
   scopePlaceholder: Select Scope
   scope: Scope (to release constraint)
 jenkinsStep:
+  validations:
+    connectorRef: Connector is a required field
+    jobName: Jobname is a required field
   jobNamePlaceholder: Select Job Name
   jobParameter: Job Parameters
   unstableStatusAsSuccess: Treat unstable Jenkins status as success

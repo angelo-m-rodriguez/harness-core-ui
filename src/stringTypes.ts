@@ -2975,6 +2975,8 @@ export interface StringsMap {
   'pipeline.jenkinsStep.jobNamePlaceholder': string
   'pipeline.jenkinsStep.jobParameter': string
   'pipeline.jenkinsStep.unstableStatusAsSuccess': string
+  'pipeline.jenkinsStep.validations.connectorRef': string
+  'pipeline.jenkinsStep.validations.jobName': string
   'pipeline.jiraApprovalStep.connectToJira': string
   'pipeline.jiraApprovalStep.connectorRef': string
   'pipeline.jiraApprovalStep.execution.allConditionsMsg': string

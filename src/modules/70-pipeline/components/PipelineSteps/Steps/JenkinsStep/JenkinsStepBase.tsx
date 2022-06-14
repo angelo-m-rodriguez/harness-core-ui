@@ -15,10 +15,12 @@ import {
   Accordion,
   getMultiTypeFromValue,
   MultiTypeInputType,
+  RUNTIME_INPUT_VALUE,
   SelectOption
 } from '@wings-software/uicore'
 import type { FormikProps } from 'formik'
 import { v4 as uuid } from 'uuid'
+import * as Yup from 'yup'
 import { FieldArray } from 'formik'
 import cx from 'classnames'
 import MultiTypeFieldSelector from '@common/components/MultiTypeFieldSelector/MultiTypeFieldSelector'
@@ -31,14 +33,17 @@ import { JobDetails, useGetJobDetailsForJenkins, useGetJobParametersForJenkins }
 import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import { useParams } from 'react-router'
-import { useQueryParams } from '@common/hooks'
+import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
 import type {
   AccountPathProps,
   GitQueryParams,
   PipelinePathProps,
   PipelineType
 } from '@common/interfaces/RouteInterfaces'
-import { FormMultiTypeDurationField } from '@common/components/MultiTypeDuration/MultiTypeDuration'
+import {
+  FormMultiTypeDurationField,
+  getDurationValidationSchema
+} from '@common/components/MultiTypeDuration/MultiTypeDuration'
 import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
 import { FormMultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import { getGenuineValue } from '../JiraApproval/helper'
@@ -49,6 +54,9 @@ import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './JenkinsStep.module.scss'
 import { getFormValuesInCorrectFormat, getInitialValuesInCorrectFormat } from '../StepsTransformValuesUtils'
 import { transformValuesFieldsConfig } from './JenkinsStepFunctionConfigs'
+import { variableSchema } from '@cd/components/PipelineSteps/ShellScriptStep/shellScriptTypes'
+import { getNameAndIdentifierSchema } from '../StepsValidateUtils'
+import { cloneDeep, isEqual } from 'lodash-es'
 
 function FormContent({
   formik,
@@ -61,6 +69,7 @@ function FormContent({
   const lastOpenedJob = useRef<any>(null)
   const { expressions } = useVariablesExpression()
   const { values: formValues } = formik
+  const parentJobY = useRef<any>(null)
   const { accountId, projectIdentifier, orgIdentifier } =
     useParams<PipelineType<PipelinePathProps & AccountPathProps>>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
@@ -140,11 +149,12 @@ function FormContent({
     }
     if (lastOpenedJob.current) {
       setJobDetails((prevState: SubmenuSelectOption[]) => {
-        const parentJob = prevState.find(obj => obj.value === lastOpenedJob.current)
+        const clonedJobDetails = cloneDeep(prevState)
+        const parentJob = clonedJobDetails.find(obj => obj.value === lastOpenedJob.current)
         if (parentJob) {
           parentJob.submenuItems = [...getJobItems(jobsResponse?.data?.jobDetails || [])]
         }
-        return prevState
+        return clonedJobDetails
       })
     } else {
       const jobs = jobsResponse?.data?.jobDetails?.map(job => {
@@ -155,9 +165,17 @@ function FormContent({
           hasSubItems: job.folder
         }
       })
-      setJobDetails(jobs || ([] as any))
+      if (!isEqual(jobs, jobDetails)) setJobDetails(jobs || ([] as any))
     }
   }, [jobsResponse])
+
+  useEffect(() => {
+    if (lastOpenedJob.current && parentJobY.current) {
+      const jobListMenu = document.getElementsByClassName('bp3-menu')[0]
+      console.log('jobDetails', jobDetails, parentJobY.current)
+      jobListMenu?.scrollIntoView(parentJobY.current)
+    }
+  }, [jobDetails])
 
   const connectorRefFixedValue = getGenuineValue(formik.values.spec.connectorRef)
 
@@ -168,12 +186,15 @@ function FormContent({
         connectorRef: connectorRefFixedValue?.toString()
       }
     })
-    if (getMultiTypeFromValue(formik.values.spec.connectorRef) === MultiTypeInputType.RUNTIME) {
+    if (
+      getMultiTypeFromValue(formik.values.spec.connectorRef) === MultiTypeInputType.RUNTIME ||
+      getMultiTypeFromValue(formik.values.spec.connectorRef) === MultiTypeInputType.EXPRESSION
+    ) {
       formik.setValues({
         ...formik.values,
         spec: {
           ...formik.values.spec,
-          jobName: formik.values.spec.connectorRef
+          jobName: RUNTIME_INPUT_VALUE
         }
       })
     }
@@ -189,8 +210,6 @@ function FormContent({
       }
     })
   }
-
-  console.log('formik', formik.values)
 
   return (
     <React.Fragment>
@@ -248,7 +267,6 @@ function FormContent({
           enableConfigureOptions={false}
           selected={formik?.values?.spec.connectorRef as string}
           onChange={(value: any, _unused, multiType) => {
-            console.log('check it', multiType, value)
             setConnectorValueType(multiType)
             if (value?.record?.identifier !== connectorRefFixedValue) {
               resetForm(formik, 'connectorRef')
@@ -297,7 +315,7 @@ function FormContent({
               })
               if (type !== MultiTypeInputType.RUNTIME) {
                 refetchJobParameters({
-                  pathParams: { jobName: newJobName.label },
+                  pathParams: { jobName: encodeURIComponent(newJobName.label) },
                   queryParams: {
                     ...commonParams,
                     connectorRef: connectorRefFixedValue?.toString()
@@ -307,6 +325,11 @@ function FormContent({
             },
             onOpening: (item: SelectOption) => {
               lastOpenedJob.current = item.value
+              const indexOfParent = jobDetails.findIndex(obj => obj.value === item.value)
+              const parentNode = document.getElementsByClassName('Select--menuItem')?.[indexOfParent]
+              if (parentNode) {
+                parentJobY.current = parentNode.getBoundingClientRect()?.y
+              }
               refetchJobs({
                 queryParams: {
                   ...commonParams,
@@ -347,14 +370,14 @@ function FormContent({
             render={({ push, remove }) => {
               return (
                 <div className={css.panel}>
-                  <div className={css.environmentVarHeader}>
+                  <div className={css.jobParameter}>
                     <span className={css.label}>Name</span>
                     <span className={css.label}>Type</span>
                     <span className={css.label}>Value</span>
                   </div>
                   {formValues.spec.jobParameter?.map(({ id }: jobParameterInterface, i: number) => {
                     return (
-                      <div className={css.environmentVarHeader} key={id}>
+                      <div className={css.jobParameter} key={id}>
                         <FormInput.Text
                           name={`spec.jobParameter.[${i}].name`}
                           placeholder={getString('name')}
@@ -421,6 +444,17 @@ export const JenkinsStepBase = (
   { initialValues, onUpdate, isNewStep = true, readonly, allowableTypes, stepViewType, onChange }: JenkinsStepProps,
   formikRef: StepFormikFowardRef<JenkinsStepData>
 ): React.ReactElement => {
+  const { getString } = useStrings()
+  const validationSchema = Yup.object().shape({
+    timeout: getDurationValidationSchema({ minimum: '10s' }).required(getString('validation.timeout10SecMinimum')),
+    spec: Yup.object().shape({
+      // connectorRef: Yup.object().required(getString('pipeline.jenkinsStep.validations.connectorRef')),
+      // jobName: Yup.object().required(getString('pipeline.jenkinsStep.validations.jobName')),
+      jobParameter: variableSchema(getString)
+    }),
+    ...getNameAndIdentifierSchema(getString, stepViewType)
+  })
+
   return (
     <Formik
       initialValues={initialValues}
@@ -431,6 +465,7 @@ export const JenkinsStepBase = (
       onSubmit={(_values: JenkinsStepData) => {
         onUpdate?.(_values)
       }}
+      validationSchema={validationSchema}
       // initialValues={getInitialValuesInCorrectFormat<JenkinsStepData, JenkinsStepDataUI>(
       //   initialValues,
       //   transformValuesFieldsConfig
