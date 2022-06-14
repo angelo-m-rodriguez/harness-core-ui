@@ -17,7 +17,8 @@ import {
   Icon,
   Layout,
   SelectOption,
-  Text
+  Text,
+  MultiTypeInputType
 } from '@wings-software/uicore'
 import { Form, FormikProps } from 'formik'
 import produce from 'immer'
@@ -87,6 +88,7 @@ const ChannelRow: React.FC<ChannelRow> = ({
   const [edit, setEdit] = useState<boolean>(false)
   const enableEdit = isCreate || edit
   const { showSuccess, showError } = useToaster()
+  const [inputTypeMap, setInputTypeMap] = useState<Record<string, MultiTypeInputType>>({})
 
   const { mutate: updateNotifications, loading } = usePutUserGroup({
     queryParams: {
@@ -177,6 +179,32 @@ const ChannelRow: React.FC<ChannelRow> = ({
     }
   }
 
+  const renderInputField = (type: NotificationSettingConfigDTO['type']) => {
+    const { name, textPlaceholder } = getFieldDetails(type)
+    if (name === 'groupEmail') {
+      return <FormInput.Text name={name} placeholder={textPlaceholder} />
+    }
+
+    return (
+      <FormInput.MultiTextInput
+        name={name}
+        label=""
+        placeholder={textPlaceholder}
+        multiTextInputProps={{
+          allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION],
+          onTypeChange: inputType => {
+            if (type) {
+              setInputTypeMap({
+                ...inputTypeMap,
+                [type]: inputType
+              })
+            }
+          }
+        }}
+      />
+    )
+  }
+
   return (
     <>
       <Formik<RowData>
@@ -189,7 +217,8 @@ const ChannelRow: React.FC<ChannelRow> = ({
           }),
           slackWebhookUrl: Yup.string().when(['type'], {
             is: 'SLACK',
-            then: URLValidationSchema()
+            then:
+              inputTypeMap['SLACK'] === MultiTypeInputType.EXPRESSION ? Yup.string().required() : URLValidationSchema()
           }),
           pagerDutyKey: Yup.string().when(['type'], {
             is: 'PAGERDUTY',
@@ -197,7 +226,10 @@ const ChannelRow: React.FC<ChannelRow> = ({
           }),
           msTeamKeys: Yup.string().when(['type'], {
             is: 'MSTEAMS',
-            then: URLValidationSchema()
+            then:
+              inputTypeMap['MSTEAMS'] === MultiTypeInputType.EXPRESSION
+                ? Yup.string().required()
+                : URLValidationSchema()
           })
         })}
         formName="NotificationForm"
@@ -219,12 +251,7 @@ const ChannelRow: React.FC<ChannelRow> = ({
                         disabled={edit}
                       />
                     </Container>
-                    <Container width="40%">
-                      <FormInput.Text
-                        name={getFieldDetails(formikProps.values.type).name}
-                        placeholder={getFieldDetails(formikProps.values.type).textPlaceholder}
-                      />
-                    </Container>
+                    <Container width="40%">{renderInputField(formikProps.values.type)}</Container>
                   </>
                 ) : (
                   <>
@@ -256,7 +283,8 @@ const ChannelRow: React.FC<ChannelRow> = ({
                         data={formikProps.values as any}
                         onClick={() => handleTest(formikProps)}
                         buttonProps={{
-                          minimal: true
+                          minimal: true,
+                          disabled: inputTypeMap['SLACK'] === MultiTypeInputType.EXPRESSION
                         }}
                       />
                     ) : null}
@@ -273,7 +301,8 @@ const ChannelRow: React.FC<ChannelRow> = ({
                       <TestMSTeamsNotifications
                         data={formikProps.values as any}
                         buttonProps={{
-                          minimal: true
+                          minimal: true,
+                          disabled: inputTypeMap['SLACK'] === MultiTypeInputType.EXPRESSION
                         }}
                         errors={{}}
                         onClick={() => handleTest(formikProps)}
