@@ -304,6 +304,7 @@ export const processNodeDataV1 = (
     } else if (
       nodeData?.stepType === NodeType.STEP_GROUP ||
       nodeData?.stepType === NodeType.NG_SECTION ||
+      nodeData?.stepType === NodeType.STRATEGY ||
       (nodeData && isRollback)
     ) {
       processGroupItem({
@@ -454,8 +455,8 @@ ProcessGroupItemArgs): void => {
     id: nodeData.uuid as string,
     identifier: nodeData?.identifier as string,
     name: nodeData?.name as string,
-    type: 'STEP_GROUP',
-    nodeType: 'STEP_GROUP',
+    type: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
+    nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
     icon: StepTypeIconsMap.STEP_GROUP as IconName,
     status: nodeData?.status as ExecutionStatus,
 
@@ -478,7 +479,25 @@ ProcessGroupItemArgs): void => {
               }
             }
           }
-        : item)
+        : nodeData?.stepType === NodeType.STRATEGY
+        ? {
+            graphType: PipelineGraphType.STEP_GRAPH,
+            isNestedGroup,
+            ...iconData,
+            stepGroup: {
+              ...item,
+              type: 'STEP_GROUP',
+              nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
+              icon: StepTypeIconsMap.STEP_GROUP,
+              steps,
+              status: nodeData?.status as ExecutionStatus,
+              containerCss: {
+                ...(isRollbackNext ? RollbackContainerCss : {})
+              }
+            }
+          }
+        : item),
+      nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP'
     }
   }
   items.push(finalDataItem)

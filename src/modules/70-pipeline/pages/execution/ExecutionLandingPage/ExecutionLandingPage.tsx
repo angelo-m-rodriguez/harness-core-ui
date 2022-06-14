@@ -160,10 +160,13 @@ export default function ExecutionLandingPage(props: React.PropsWithChildren<unkn
       orgIdentifier,
       projectIdentifier,
       accountIdentifier: accountId,
-      stageNodeId: isEmpty(queryParams.stage || autoStageNodeExecutionId)
-        ? undefined
-        : queryParams.stage || autoStageNodeExecutionId,
-      ...((!isEmpty(queryParams?.stageId) || autoSelectedStageId) && {
+      stageNodeId: queryParams.stage || autoSelectedStageId,
+      // isEmpty(queryParams.stage) || autoStageNodeExecutionId
+      //   ? autoStageNodeExecutionId
+      //   : queryParams.stage || autoStageNodeExecutionId,
+      ...(((!isEmpty(queryParams?.stageId) && !isEmpty(queryParams?.stage)) ||
+        autoSelectedStageId ||
+        autoStageNodeExecutionId) && {
         stageNodeExecutionId: isEmpty(queryParams?.stageId) ? autoSelectedStageId : queryParams?.stageId
       })
     },
