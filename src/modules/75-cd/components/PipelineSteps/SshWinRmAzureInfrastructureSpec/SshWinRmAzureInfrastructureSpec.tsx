@@ -9,7 +9,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 import { Layout, FormInput, SelectOption, Formik, FormikForm, IconName } from '@wings-software/uicore'
 import type { FormikProps, FormikErrors } from 'formik'
 import { useParams } from 'react-router-dom'
-import { debounce, noop, get, defaultTo, isEmpty } from 'lodash-es'
+import { debounce, noop, get, isEmpty } from 'lodash-es'
 import { parse } from 'yaml'
 import { CompletionItemKind } from 'vscode-languageserver-types'
 import { useToaster } from '@common/exports'
@@ -21,7 +21,10 @@ import {
   getAzureSubscriptionsPromise,
   getConnectorListV2Promise,
   SshWinRmAzureInfrastructure,
-  getSubscriptionTagsPromise
+  getSubscriptionTagsPromise,
+  ConnectorResponse,
+  AzureResourceGroupDTO,
+  AzureClusterDTO
 } from 'services/cd-ng'
 import type { AzureSubscriptionDTO, AzureTagDTO } from 'services/cd-ng'
 import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProps'
@@ -162,7 +165,10 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
       })
       if (response.status === 'SUCCESS') {
         setResourceGroups(
-          (response.data?.resourceGroups || []).map(rg => ({ label: rg.resourceGroup, value: rg.resourceGroup }))
+          get(response, 'data.resourceGroups', []).map((rg: AzureResourceGroupDTO) => ({
+            label: rg.resourceGroup,
+            value: rg.resourceGroup
+          }))
         )
       } else {
         /* istanbul ignore next */
@@ -229,7 +235,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
             projectIdentifier,
             orgIdentifier
           })
-          formikRef?.current?.setFieldValue('sshKey', secretData)
+          formikRef.current?.setFieldValue('sshKey', secretData)
         } catch (e) {
           /* istanbul ignore next */
           showError(e.data?.message || e.message)
@@ -351,13 +357,13 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   selected={formik.values.connectorRef}
                   onChange={(value, scope) => {
                     /* istanbul ignore next */
-                    if (value?.identifier) {
+                    if (get(value, 'identifier', '')) {
                       const connectorValue = `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`
                       formik.setFieldValue('connectorRef', {
                         label: value.name || '',
                         value: connectorValue,
                         scope: scope,
-                        live: value?.status?.status === 'SUCCESS',
+                        live: get(value, 'status.status', '') === 'SUCCESS',
                         connector: value
                       })
                       clearSubscriptionId()
@@ -379,7 +385,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     /* istanbul ignore next */ value => {
                       if (value) {
                         clearResourceGroup()
-                        const connectorRefIdentifier = getValue(formik.values?.connectorRef)
+                        const connectorRefIdentifier = getValue(get(formik, 'values.connectorRef', ''))
                         const subsId = getValue(value)
                         fetchResourceGroups(connectorRefIdentifier, subsId)
                         fetchSubscriptionTags(connectorRefIdentifier, subsId)
@@ -397,8 +403,8 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                     if (value) {
                       clearClusters()
                       fetchAzureClusters(
-                        getValue(formik.values?.connectorRef),
-                        getValue(formik.values?.subscriptionId),
+                        getValue(get(formik, 'values.connectorRef', '')),
+                        getValue(get(formik, 'values.subscriptionId', '')),
                         getValue(value)
                       )
                     }
@@ -507,7 +513,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     /* istanbul ignore else */
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.connectorRef', ''))
-      if (obj?.type === SshWinRmAzureType) {
+      if (get(obj, 'type', '') === SshWinRmAzureType) {
         return getConnectorListV2Promise({
           queryParams: {
             accountIdentifier: accountId,
@@ -518,7 +524,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
           body: { types: [Connectors.AZURE], filterType: 'Connector' }
         }).then(
           response =>
-            response?.data?.content?.map(connector => ({
+            get(response, 'data.content', []).map((connector: ConnectorResponse) => ({
               label: getConnectorName(connector),
               insertText: getConnectorValue(connector),
               kind: CompletionItemKind.Field
@@ -549,17 +555,17 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     /* istanbul ignore else */
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.subscriptionId', ''))
-      if (obj?.type === SshWinRmAzureType && obj?.spec?.connectorRef) {
+      if (get(obj, 'type', '') === SshWinRmAzureType && get(obj, 'spec.connectorRef', '')) {
         return getAzureSubscriptionsPromise({
           queryParams: {
             accountIdentifier: accountId,
             orgIdentifier,
             projectIdentifier,
-            connectorRef: obj.spec?.connectorRef
+            connectorRef: get(obj, 'spec.connectorRef', '')
           }
         }).then(response => {
           const values: CompletionItemInterface[] = []
-          defaultTo(response?.data?.subscriptions, []).map(sub =>
+          get(response, 'data.subscriptions', []).map((sub: AzureSubscriptionDTO) =>
             values.push({ label: sub.subscriptionId, insertText: sub.subscriptionId, kind: CompletionItemKind.Field })
           )
           return values
@@ -589,18 +595,22 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     // /* istanbul ignore else */
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.resourceGroup', ''))
-      if (obj?.type === SshWinRmAzureType && obj?.spec?.connectorRef && obj?.spec?.subscriptionId) {
+      if (
+        get(obj, 'type', '') === SshWinRmAzureType &&
+        get(obj, 'spec.connectorRef', '') &&
+        get(obj, 'spec.subscriptionId', '')
+      ) {
         return getAzureResourceGroupsBySubscriptionPromise({
           queryParams: {
             accountIdentifier: accountId,
             orgIdentifier,
             projectIdentifier,
-            connectorRef: obj.spec?.connectorRef
+            connectorRef: get(obj, 'spec.connectorRef', '')
           },
-          subscriptionId: obj.spec?.subscriptionId
+          subscriptionId: get(obj, 'spec.subscriptionId', '')
         }).then(
           response =>
-            response?.data?.resourceGroups?.map(rg => ({
+            get(response, 'data.resourceGroups', []).map((rg: AzureResourceGroupDTO) => ({
               label: rg.resourceGroup,
               insertText: rg.resourceGroup,
               kind: CompletionItemKind.Field
@@ -632,27 +642,26 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     if (pipelineObj) {
       const obj = get(pipelineObj, path.replace('.spec.cluster', ''))
       if (
-        obj?.type === SshWinRmAzureType &&
-        obj?.spec?.connectorRef &&
-        obj?.spec?.subscriptionId &&
-        obj?.spec?.resourceGroup
+        get(obj, 'type', '') === SshWinRmAzureType &&
+        get(obj, 'spec.connectorRef', '') &&
+        get(obj, 'spec.subscriptionId', '') &&
+        get(obj, 'spec.resourceGroup', '')
       ) {
         return getAzureClustersPromise({
           queryParams: {
             accountIdentifier: accountId,
             orgIdentifier,
             projectIdentifier,
-            connectorRef: obj.spec?.connectorRef
+            connectorRef: get(obj, 'spec.connectorRef', '')
           },
-          subscriptionId: obj.spec?.subscriptionId,
-          resourceGroup: obj.spec?.resourceGroup
-        }).then(
-          response =>
-            response?.data?.clusters?.map(cl => ({
-              label: cl.cluster,
-              insertText: cl.cluster,
-              kind: CompletionItemKind.Field
-            })) || /* istanbul ignore next */ []
+          subscriptionId: get(obj, 'spec.subscriptionId', ''),
+          resourceGroup: get(obj, 'spec.resourceGroup', '')
+        }).then(response =>
+          get(response, 'data.clusters', []).map((cl: AzureClusterDTO) => ({
+            label: cl.cluster,
+            insertText: cl.cluster,
+            kind: CompletionItemKind.Field
+          }))
         )
       }
     }
