@@ -1,0 +1,827 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnvironmentsGrid renders Environment Grid 1`] = `
+<div>
+  <div
+    class="StyledProps--font StyledProps--main"
+    style="margin: 0px auto; width: 1160px;"
+  >
+    <div
+      class="StyledProps--font StyledProps--main uicore-masonry-layout--container0 StyledProps--padding-xxxlarge"
+      style="margin: 0px auto; width: 1160px; height: 0px; position: relative;"
+    >
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  gjhjghjhg
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                gjhjghjhg
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType StyledProps--font-size-small"
+              >
+                cd.preProductionType
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  asdd
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                fdf
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType production StyledProps--font-size-small"
+              >
+                cd.serviceDashboard.prod
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  ddsffdgg
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                ddsffdgg
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType production StyledProps--font-size-small"
+              >
+                cd.serviceDashboard.prod
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  asdfdf
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                asdfdf
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType StyledProps--font-size-small"
+              >
+                cd.preProductionType
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  qa
+                </p>
+                <span
+                  class="bp3-popover-wrapper"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <div
+                      class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main tagsPopover StyledProps--flex StyledProps--flex-align-center-center"
+                      tabindex="0"
+                    >
+                      <span
+                        class="bp3-icon StyledProps--main StyledProps--color StyledProps--color-grey600"
+                        data-icon="main-tags"
+                      >
+                        <svg
+                          height="14"
+                          viewBox="0 0 14 14"
+                          width="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M7 0h-.2c-.2 0-.4.1-.6.3l-6 6c-.3.3-.3.8 0 1.1L2 9.1l4.6 4.6c.3.3.8.3 1.1 0l6-6c.2-.1.3-.3.3-.5v-.7-.3-1.3-2c0-.5-.4-1-1-1h-.9V1c0-.5-.4-1-1-1H7zm0 .6h4.2c.2 0 .4.2.4.4v.9h-1.1c-.3-.3-.5-.4-.8-.4s-.4.1-.6.3h-.5c-.2.1-.4.1-.6.3l-6 6s-.1.1-.1.2L.7 6.9c-.1-.1-.1-.2 0-.3l6-6s.1-.1.2-.1c0 .1.1.1.1.1zm1.9 1.8H13c.2 0 .4.2.4.4v4.3s0 .2-.1.2l-6 6c-.1.1-.2.1-.3 0L2.5 8.8c-.1-.1-.1-.2 0-.3l6-6s.1-.1.2-.1zm2.7.9c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3s.9.4 1.3 0 .4-.9 0-1.3c-.3-.2-.5-.3-.7-.3zm0 .7c.1 0 .2 0 .2.1.1.1.1.3 0 .4s-.3.1-.4 0-.1-.3 0-.4c0-.1.1-.1.2-.1z"
+                            fill="#4d5969"
+                          />
+                        </svg>
+                      </span>
+                      <p
+                        class="StyledProps--font StyledProps--main"
+                      >
+                        1
+                      </p>
+                    </div>
+                  </span>
+                </span>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                qa
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType production StyledProps--font-size-small"
+              >
+                cd.serviceDashboard.prod
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  asd
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                asd
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType production StyledProps--font-size-small"
+              >
+                cd.serviceDashboard.prod
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="StyledProps--font StyledProps--main uicore-masonry-layout--item-0"
+        style="margin-bottom: 25px; position: absolute; left: 0px; top: 0px;"
+      >
+        <div
+          class="bp3-card bp3-interactive bp3-elevation-0 Card--card environmentCard Card--interactive"
+          tabindex="0"
+        >
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge StyledProps--border StyledProps--border-bottom"
+          >
+            <div
+              class="Card--cardMenu"
+            >
+              <div
+                class="Card--dots"
+              >
+                <span
+                  class="bp3-popover-wrapper bp3-dark"
+                >
+                  <span
+                    class="bp3-popover-target"
+                  >
+                    <button
+                      class="bp3-button bp3-minimal Button--button StyledProps--font StyledProps--main Card--menu Button--with-current-color Button--round Button--iconOnly Button--without-shadow Button--withLeftIcon"
+                      type="button"
+                    >
+                      <span
+                        class="bp3-icon bp3-icon-more StyledProps--main"
+                        icon="more"
+                      >
+                        <svg
+                          data-icon="more"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <desc>
+                            more
+                          </desc>
+                          <path
+                            d="M2 6.03a2 2 0 100 4 2 2 0 100-4zM14 6.03a2 2 0 100 4 2 2 0 100-4zM8 6.03a2 2 0 100 4 2 2 0 100-4z"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div
+              class="Layout--vertical StyledProps--main"
+            >
+              <div
+                class="Layout--horizontal Layout--layout-spacing-small StyledProps--main StyledProps--flex StyledProps--flex-justifyContent-flex-start StyledProps--margin-bottom-small"
+              >
+                <p
+                  class="StyledProps--font StyledProps--main StyledProps--color StyledProps--color-black"
+                >
+                  sdf
+                </p>
+              </div>
+              <p
+                class="StyledProps--font Text--lineclamp StyledProps--main StyledProps--color StyledProps--color-grey500 StyledProps--font-size-small"
+                style="--text-line-clamp: 1;"
+              >
+                common.ID
+                : 
+                sdf
+              </p>
+            </div>
+            <div
+              class="StyledProps--font StyledProps--main StyledProps--margin-top-medium"
+            >
+              <p
+                class="StyledProps--font StyledProps--main environmentType StyledProps--font-size-small"
+              >
+                cd.preProductionType
+              </p>
+            </div>
+          </div>
+          <div
+            class="StyledProps--font StyledProps--main StyledProps--padding-xlarge"
+          >
+            <p
+              class="StyledProps--font StyledProps--main StyledProps--margin-bottom-small"
+            >
+              lastUpdated
+            </p>
+            <div
+              class="Layout--vertical Layout--layout-spacing-small StyledProps--main"
+            >
+              dummy date
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`EnvironmentsGrid should be possible to delete from Environment Card menu 1`] = `
+<div
+  class="bp3-dialog ConfirmationDialog--dialog"
+  style="width: 500px; min-height: 218px;"
+>
+  <div
+    class="StyledProps--font StyledProps--main ConfirmationDialog--iconContainer StyledProps--flex"
+  >
+    <span
+      class="bp3-icon StyledProps--main ConfirmationDialog--icon"
+      data-icon="main-close"
+    >
+      <svg
+        height="8"
+        viewBox="0 0 14 14"
+        width="8"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.6 7l5-5c.3-.2.4-.5.4-.8 0-.7-.5-1.2-1.2-1.2-.3 0-.6.1-.8.3l-5 5-5-5C1.8.1 1.5 0 1.2 0 .5 0 0 .5 0 1.2c0 .3.1.6.3.8l5 5-5 5c-.2.2-.3.5-.3.8 0 .7.5 1.2 1.2 1.2.3 0 .6-.1.8-.3l5-5 5 5c.2.2.5.4.8.4.6 0 1.2-.5 1.2-1.2 0-.3-.1-.6-.3-.8z"
+          fill="#4d5969"
+        />
+      </svg>
+    </span>
+  </div>
+  <div
+    class="Layout--horizontal StyledProps--main ConfirmationDialog--header StyledProps--padding-left-xsmall"
+  >
+    <span
+      class="bp3-icon StyledProps--main StyledProps--margin-right-small"
+      data-icon="danger-icon"
+    >
+      <svg
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M16.878 4.506a1 1 0 00-1.737 0L3.153 25.505A1 1 0 004.022 27h23.974a1 1 0 00.869-1.495L16.878 4.506zm.603 17.973c0-.823-.684-1.49-1.527-1.49-.843 0-1.527.667-1.527 1.49 0 .822.684 1.49 1.527 1.49.843 0 1.527-.668 1.527-1.49zm-1.527-3.486a1 1 0 001-1v-6.997a1 1 0 00-2 0v6.997a1 1 0 001 1z"
+          fill="#DA291D"
+          fill-rule="evenodd"
+        />
+        <path
+          clip-rule="evenodd"
+          d="M4.022 26L16.009 5.002 27.996 26H4.022zm11.832-6.01a2 2 0 01-1.9-1.997v-6.997a2 2 0 114 0v6.997a2 2 0 01-1.9 1.998c1.328.052 2.427 1.124 2.427 2.488 0 1.398-1.155 2.49-2.527 2.49s-2.527-1.092-2.527-2.49c0-1.364 1.099-2.436 2.427-2.488zM15.14 4.507a1 1 0 011.737 0l11.987 20.999A1 1 0 0127.996 27H4.022a1 1 0 01-.869-1.495L15.141 4.506zm.813 16.483c.843 0 1.527.667 1.527 1.49 0 .822-.684 1.49-1.527 1.49-.843 0-1.527-.668-1.527-1.49 0-.823.684-1.49 1.527-1.49zm1-2.996a1 1 0 01-2 0v-6.997a1 1 0 112 0v6.997z"
+          fill="#DA291D"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </span>
+    <p
+      class="StyledProps--font StyledProps--main StyledProps--font-variation-h4"
+    >
+      cd.environment.delete
+    </p>
+  </div>
+  <div
+    class="Layout--vertical StyledProps--main ConfirmationDialog--body StyledProps--font StyledProps--font-variation-body StyledProps--color StyledProps--color-black StyledProps--margin-top-large StyledProps--margin-bottom-xxlarge"
+  >
+    cd.environment.deleteConfirmation
+  </div>
+  <div
+    class="Layout--horizontal Layout--layout-spacing-small StyledProps--main"
+  >
+    <button
+      class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--intent-danger Button--with-current-color"
+      type="button"
+    >
+      <span
+        class="bp3-button-text"
+      >
+        delete
+      </span>
+    </button>
+    <button
+      class="bp3-button Button--button StyledProps--font StyledProps--main Button--with-current-color Button--variation Button--variation-tertiary"
+      type="button"
+    >
+      <span
+        class="bp3-button-text"
+      >
+        cancel
+      </span>
+    </button>
+  </div>
+</div>
+`;

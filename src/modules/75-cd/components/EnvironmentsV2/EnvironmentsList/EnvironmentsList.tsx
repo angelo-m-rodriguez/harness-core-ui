@@ -8,7 +8,7 @@
 import React, { useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import type { Column } from 'react-table'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, get } from 'lodash-es'
 
 import { TableV2, useToaster } from '@harness/uicore'
 import { EnvironmentResponse, useDeleteEnvironmentV2 } from 'services/cd-ng'
@@ -98,7 +98,7 @@ export default function EnvironmentsList({ response, refetch }: any) {
         }
       }
     ],
-    [getString, handleEnvEdit, handleEnvDelete]
+    [getString]
   )
   return (
     <TableV2<EnvironmentResponse>
@@ -111,7 +111,7 @@ export default function EnvironmentsList({ response, refetch }: any) {
             orgIdentifier,
             projectIdentifier,
             module,
-            environmentIdentifier: defaultTo(row.environment?.identifier, ''),
+            environmentIdentifier: get(row, 'environment.identifier', ''),
             sectionId: EnvironmentDetailsTab.CONFIGURATION
           })
         )

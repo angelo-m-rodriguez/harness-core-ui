@@ -6,10 +6,10 @@
  */
 
 import React from 'react'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, get } from 'lodash-es'
 import { Classes, Menu } from '@blueprintjs/core'
 
-import { Card, Text, Container, CardBody } from '@harness/uicore'
+import { Card, Text, Container, CardBody, useConfirmationDialog, Intent } from '@harness/uicore'
 
 import { useStrings } from 'framework/strings'
 import type { EnvironmentResponse } from 'services/cd-ng'
@@ -30,12 +30,31 @@ export interface EnvironmentCardProps {
 
 export function EnvironmentCard({ response, onEdit, onDelete }: EnvironmentCardProps): React.ReactElement {
   const { getString } = useStrings()
+  const { openDialog } = useConfirmationDialog({
+    titleText: getString('cd.environment.delete'),
+    contentText: getString('cd.environment.deleteConfirmation'),
+    confirmButtonText: getString('delete'),
+    cancelButtonText: getString('cancel'),
+    intent: Intent.DANGER,
+    buttonIntent: Intent.DANGER,
+    onCloseDialog: async (isConfirmed: boolean) => {
+      /* istanbul ignore else */
+      if (isConfirmed) {
+        await onDelete(get(response, 'environment.identifier', ''))
+      }
+    }
+  })
+
+  const handleDelete = (event: React.MouseEvent) => {
+    event.stopPropagation()
+    openDialog()
+  }
 
   return (
     <Card
       className={css.environmentCard}
       interactive
-      onClick={() => onEdit(defaultTo(response.environment?.identifier, ''))}
+      onClick={() => onEdit(get(response, 'environment.identifier', ''))}
     >
       <Container padding={'xlarge'} border={{ bottom: true }}>
         <CardBody.Menu
@@ -44,7 +63,7 @@ export function EnvironmentCard({ response, onEdit, onDelete }: EnvironmentCardP
               <RbacMenuItem
                 icon="edit"
                 text={getString('edit')}
-                onClick={() => onEdit(defaultTo(response?.environment?.identifier, ''))}
+                onClick={() => onEdit(get(response, 'environment.identifier', ''))}
                 permission={{
                   resource: {
                     resourceType: ResourceType.ENVIRONMENT
@@ -55,7 +74,7 @@ export function EnvironmentCard({ response, onEdit, onDelete }: EnvironmentCardP
               <RbacMenuItem
                 icon="trash"
                 text={getString('delete')}
-                onClick={() => onDelete(defaultTo(response?.environment?.identifier, ''))}
+                onClick={handleDelete}
                 permission={{
                   resource: {
                     resourceType: ResourceType.ENVIRONMENT
