@@ -12,6 +12,8 @@ common:
   totalCount: 'Total: {{ count }}'
   emissionUnitHTML: '{{value}} kg CO<sub>2</sub>'
   refresh: '{{$.common.refresh}}'
+  expand: 'Expand'
+  collapse: 'Collapse'
 allRegions: 'All Regions'
 allClusters: 'All Clusters'
 enforcementMessage:

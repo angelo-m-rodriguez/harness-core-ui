@@ -4440,9 +4440,11 @@ export interface StringsMap {
   'ce.co.totalEmissions': string
   'ce.common.and': string
   'ce.common.budget': string
+  'ce.common.collapse': string
   'ce.common.containerService': string
   'ce.common.database': string
   'ce.common.emissionUnitHTML': string
+  'ce.common.expand': string
   'ce.common.newBudget': string
   'ce.common.or': string
   'ce.common.refresh': string
