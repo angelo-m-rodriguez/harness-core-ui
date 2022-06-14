@@ -40,8 +40,8 @@ import {
   useHealthOfService,
   useRequestsOfService,
   useSavingsOfService,
-  useGetServiceDiagnostics,
-  ServiceError,
+  // useGetServiceDiagnostics,
+  // ServiceError,
   useDescribeServiceInContainerServiceCluster,
   useRouteDetails,
   useFetchRules,
@@ -68,10 +68,10 @@ import type { orderType, serverSortProps, sortType } from '@common/components/Ta
 import { UNSAVED_FILTER } from '@common/components/Filter/utils/FilterUtils'
 import COGatewayAnalytics from './COGatewayAnalytics'
 import COGatewayCumulativeAnalytics from './COGatewayCumulativeAnalytics'
-import ComputeType from './components/ComputeType'
+// import ComputeType from './components/ComputeType'
 import { getInstancesLink, getRelativeTime, getStateTag, getFilterBodyFromFilterData } from './Utils'
 import useToggleRuleState from './useToggleRuleState'
-import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
+// import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
 import GatewayListFilters from './GatewayListFilters'
 import RuleSavingsPieChart from './charts/RuleSavingsPieChart'
 import landingPageSVG from './images/AutostoppingRuleIllustration.svg'
@@ -124,14 +124,35 @@ interface SortByObjInterface {
   type?: orderType
 }
 
-function IconCell(tableProps: CellProps<Service>): JSX.Element {
-  return <ComputeType data={tableProps.row.original} />
-}
+// function IconCell(tableProps: CellProps<Service>): JSX.Element {
+//   return <ComputeType data={tableProps.row.original} />
+// }
 function TimeCell(tableProps: CellProps<Service>): JSX.Element {
+  const { getString } = useStrings()
+  const isEcsRule = !_isEmpty(tableProps.row.original.routing?.container_svc)
+  const isRdsRule = !_isEmpty(tableProps.row.original.routing?.database)
+  const fulfilmentString: Record<string, string> = {
+    ondemand: getString('ce.nodeRecommendation.onDemand'),
+    spot: getString('ce.nodeRecommendation.spot')
+  }
+
+  const getDisplayValue = () => {
+    return isRdsRule
+      ? getString('ce.common.database')
+      : isEcsRule
+      ? getString('ce.common.containerService')
+      : _defaultTo(fulfilmentString[tableProps.row.original.fulfilment as string], tableProps.row.original.fulfilment)
+  }
+
   return (
-    <Text lineClamp={3} color={tableProps.row.original.disabled ? textColor.disable : Color.GREY_500}>
-      {tableProps.value} mins
-    </Text>
+    <Layout.Vertical>
+      <Text lineClamp={3} color={Color.GREY_1000}>
+        {getString('ce.co.ruleDetailsHeader.idleTime')}
+        {' : '}
+        {tableProps.value} min
+      </Text>
+      <Text>{getDisplayValue()}</Text>
+    </Layout.Vertical>
   )
 }
 function NameCell(tableProps: CellProps<Service>): JSX.Element {
@@ -416,33 +437,33 @@ function RenderColumnMenu(
   )
 }
 
-const StatusCell = ({ row }: CellProps<Service>) => {
-  const { accountId } = useParams<AccountPathProps>()
-  const { data, loading } = useGetServiceDiagnostics({
-    account_id: accountId, // eslint-disable-line
-    rule_id: row.original.id as number, // eslint-disable-line
-    queryParams: {
-      accountIdentifier: accountId
-    }
-  })
-  const diagnosticsErrors = (data?.response || [])
-    .filter(item => !item.success)
-    .map(item => ({ action: item.name, error: item.message }))
-  const hasError: boolean = !_isEmpty(row.original.metadata?.service_errors) || !_isEmpty(diagnosticsErrors)
-  const combinedErrors: ServiceError[] = (row.original.metadata?.service_errors || []).concat(diagnosticsErrors)
-  return loading ? (
-    <Icon name="spinner" size={12} color="blue500" />
-  ) : (
-    <TextWithToolTip
-      messageText={row.original.status}
-      errors={hasError ? combinedErrors : []}
-      status={
-        row.original.status === 'errored' || hasError ? textWithToolTipStatus.ERROR : textWithToolTipStatus.SUCCESS
-      }
-      indicatorColor={row.original.status === 'submitted' ? Color.YELLOW_500 : undefined}
-    />
-  )
-}
+// const StatusCell = ({ row }: CellProps<Service>) => {
+//   const { accountId } = useParams<AccountPathProps>()
+//   const { data, loading } = useGetServiceDiagnostics({
+//     account_id: accountId, // eslint-disable-line
+//     rule_id: row.original.id as number, // eslint-disable-line
+//     queryParams: {
+//       accountIdentifier: accountId
+//     }
+//   })
+//   const diagnosticsErrors = (data?.response || [])
+//     .filter(item => !item.success)
+//     .map(item => ({ action: item.name, error: item.message }))
+//   const hasError: boolean = !_isEmpty(row.original.metadata?.service_errors) || !_isEmpty(diagnosticsErrors)
+//   const combinedErrors: ServiceError[] = (row.original.metadata?.service_errors || []).concat(diagnosticsErrors)
+//   return loading ? (
+//     <Icon name="spinner" size={12} color="blue500" />
+//   ) : (
+//     <TextWithToolTip
+//       messageText={row.original.status}
+//       errors={hasError ? combinedErrors : []}
+//       status={
+//         row.original.status === 'errored' || hasError ? textWithToolTipStatus.ERROR : textWithToolTipStatus.SUCCESS
+//       }
+//       indicatorColor={row.original.status === 'submitted' ? Color.YELLOW_500 : undefined}
+//     />
+//   )
+// }
 
 const EmptyListPage: React.FC<EmptyListPageProps> = () => {
   const { accountId } = useParams<AccountPathProps>()
@@ -644,7 +665,7 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
       {
         accessor: 'name',
         Header: getString('ce.co.rulesTableHeaders.name'),
-        width: '18%',
+        width: '20%',
         Cell: NameCell,
         serverSortProps: getServerSortProps({
           enableServerSort: true,
@@ -655,27 +676,27 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
       },
       {
         accessor: 'idle_time_mins',
-        Header: getString('ce.co.rulesTableHeaders.idleTime'),
-        width: '8%',
+        Header: getString('details'),
+        width: '20%',
         Cell: TimeCell,
         disableSortBy: true
       },
-      {
-        accessor: 'fulfilment',
-        Header: getString('ce.co.rulesTableHeaders.fulfilment'),
-        width: '12%',
-        Cell: IconCell,
-        disableSortBy: true
-      },
+      // {
+      //   accessor: 'fulfilment',
+      //   Header: getString('ce.co.rulesTableHeaders.fulfilment'),
+      //   width: '12%',
+      //   Cell: IconCell,
+      //   disableSortBy: true
+      // },
       {
         Header: getString('ce.co.rulesTableHeaders.mangedResources'),
-        width: '22%',
+        width: '30%',
         Cell: ResourcesCell
       },
       {
         accessor: 'access_point_id', // random accessor to display sort icon
         Header: getString('ce.co.rulesTableHeaders.savings').toUpperCase(),
-        width: '15%',
+        width: '20%',
         Cell: SavingsCell,
         serverSortProps: getServerSortProps({
           enableServerSort: true,
@@ -687,7 +708,7 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
       {
         accessor: 'account_identifier', // random accessor to display sort icon
         Header: getString('ce.co.rulesTableHeaders.lastActivity'),
-        width: '10%',
+        width: '15%',
         Cell: ActivityCell,
         serverSortProps: getServerSortProps({
           enableServerSort: true,
@@ -696,12 +717,12 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
           setSortByObj: handleSort
         })
       },
-      {
-        Header: getString('ce.co.rulesTableHeaders.status'),
-        width: '10%',
-        Cell: StatusCell,
-        disableSortBy: true
-      },
+      // {
+      //   Header: getString('ce.co.rulesTableHeaders.status'),
+      //   width: '10%',
+      //   Cell: StatusCell,
+      //   disableSortBy: true
+      // },
       {
         Header: '',
         id: 'menu',

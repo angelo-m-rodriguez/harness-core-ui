@@ -454,10 +454,10 @@ co:
     totalSpend: 'TOTAL SPEND'
     dryRunSpend: 'POTENTIAL SPEND'
   rulesTableHeaders:
-    name: '{{$.name}}'
+    name: 'Rule name'
     idleTime: 'IDLE TIME'
     fulfilment: 'COMPUTE TYPE'
-    mangedResources: 'RESOURCES MANAGED BY THE RULE'
+    mangedResources: 'RESOURCES MANAGED'
     savings: 'Cumulative Savings'
     lastActivity: 'LAST ACTIVITY'
     status: 'RULE STATUS'
