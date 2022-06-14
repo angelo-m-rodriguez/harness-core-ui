@@ -122,7 +122,7 @@ const processExecutionData = (
 }
 
 export interface ExecutionGraphProps {
-  onSelectedStage(stage: string, stageId?: string): void
+  onSelectedStage(stage: string, stageExecId?: string): void
 }
 
 export default function ExecutionGraph(props: ExecutionGraphProps): React.ReactElement {
@@ -173,7 +173,7 @@ export default function ExecutionGraph(props: ExecutionGraphProps): React.ReactE
           setStageSetupIdId('')
         },
         onMouseEnter: onMouseEnterV1,
-        onStepSelect: (id: string, stageId?: string) => props.onSelectedStage(id, stageId)
+        onStepSelect: (id: string, stageExecId?: string) => props.onSelectedStage(id, stageExecId)
       })
     )
   }, [pipelineExecutionDetail?.pipelineExecutionSummary?.layoutNodeMap, dynamicPopoverHandler])
@@ -270,7 +270,7 @@ export default function ExecutionGraph(props: ExecutionGraphProps): React.ReactE
               selectedNodeId={selectedStageId}
               panZoom={false}
               parentSelector=".Pane1"
-              collapsibleProps={{ percentageNodeVisible: 0.8, bottomMarginInPixels: 120 }}
+              // collapsibleProps={{ percentageNodeVisible: 0.8, bottomMarginInPixels: 120 }}
               graphLinkClassname={css.graphLink}
             />
           ) : (

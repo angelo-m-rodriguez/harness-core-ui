@@ -42,6 +42,7 @@ import StartNodeStep from '@pipeline/components/PipelineDiagram/Nodes/StartNode/
 import DiagramLoader from '@pipeline/components/DiagramLoader/DiagramLoader'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { MatrixStepNode } from '@pipeline/components/PipelineDiagram/Nodes/MatrixStepNode/MatrixStepNode'
 import BarrierStepTooltip from './components/BarrierStepTooltip/BarrierStepTooltip'
 import ResourceConstraintTooltip from './components/ResourceConstraints/ResourceConstraints'
 import VerifyStepTooltip from './components/VerifyStepTooltip/VerifyStepTooltip'
@@ -55,6 +56,7 @@ diagram.registerNode(NodeType.CreateNode, CreateNodeStep as unknown as React.FC<
 diagram.registerNode(NodeType.EndNode, EndNodeStep)
 diagram.registerNode(NodeType.StartNode, StartNodeStep)
 diagram.registerNode('STEP_GROUP', DiagramNodes[NodeType.StepGroupNode])
+diagram.registerNode([NodeType.MatrixNode, NodeType.ForNode], MatrixStepNode)
 diagram.registerNode('Approval', DiamondNodeWidget)
 diagram.registerNode('JiraApproval', DiamondNodeWidget)
 diagram.registerNode('HarnessApproval', DiamondNodeWidget)

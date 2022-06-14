@@ -16,7 +16,7 @@ export interface ExecutionPageQueryParams {
   stage?: string
   step?: string
   retryStep?: string
-  stageId?: string
+  stageExecId?: string
 }
 
 export interface ExpressionBlock {

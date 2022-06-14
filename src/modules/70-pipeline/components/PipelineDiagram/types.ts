@@ -91,7 +91,7 @@ export enum NodeType {
   EndNode = 'end-node',
   StepGroupNode = 'StepGroup',
   MatrixNode = 'MATRIX',
-  ForNode = 'MATRIX'
+  ForNode = 'FOR'
 }
 
 export interface NodeProps<T> {

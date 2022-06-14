@@ -13,15 +13,9 @@ import { defaultTo, get } from 'lodash-es'
 import { Event, DiagramDrag, DiagramType } from '@pipeline/components/Diagram'
 import { STATIC_SERVICE_GROUP_NAME } from '@pipeline/utils/executionUtils'
 import { useStrings } from 'framework/strings'
-import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
-import { useValidationErrors } from '@pipeline/components/PipelineStudio/PiplineHooks/useValidationErrors'
-import { useQueryParams } from '@common/hooks'
-import type { ExecutionPageQueryParams } from '@pipeline/utils/types'
-import { BaseReactComponentProps, NodeType, PipelineGraphState, PipelineGraphType } from '../../types'
-// import SVGMarker from '../SVGMarker'
+import { BaseReactComponentProps, NodeType, PipelineGraphState } from '../../types'
 import { getPositionOfAddIcon } from '../utils'
-import { getPipelineGraphData } from '../../PipelineGraph/PipelineGraphUtils'
-import css from './MatrixNode.module.scss'
+import css from './MatrixStepNode.module.scss'
 import defaultCss from '../DefaultNode/DefaultNode.module.scss'
 
 interface LayoutStyles {
@@ -29,16 +23,16 @@ interface LayoutStyles {
   width: string
   marginLeft?: string
 }
+
 const COLLAPSED_MATRIX_NODE_LENGTH = 8
 const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
-
 const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAllNodes?: boolean): LayoutStyles => {
   if (showAllNodes) {
     const maxChildLength = defaultTo(data.length, 0)
     const finalHeight =
-      (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * 150 // 100-PipelineStage , 130(Diamond) + 20(text)
+      (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * 100
     const finalWidth = 200 * parallelism
-    return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
+    return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
   } else {
     const updatedParallelism = Math.min(parallelism, MAX_ALLOWED_MATRIX__COLLAPSED_NODES)
     const maxChildLength = !showAllNodes
@@ -47,89 +41,45 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAl
     const finalHeight =
       (Math.floor(maxChildLength / updatedParallelism) +
         Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
-      120
+      100
     const finalWidth = 200 * updatedParallelism
-    return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is
+    return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is
   }
 }
 
-export function MatrixNode(props: any): JSX.Element {
+export function MatrixStepNode(props: any): JSX.Element {
   const allowAdd = defaultTo(props.allowAdd, false)
   const { getString } = useStrings()
   const [showAdd, setVisibilityOfAdd] = React.useState(false)
   const [showAddLink, setShowAddLink] = React.useState(false)
-  const [treeRectangle, setTreeRectangle] = React.useState<DOMRect | void>()
-  const [state, setState] = React.useState<PipelineGraphState[]>([])
   const [isNodeCollapsed, setNodeCollapsed] = React.useState(false)
   const [showAllNodes, setShowAllNodes] = React.useState(false)
   const [layoutStyles, setLayoutStyles] = React.useState<LayoutStyles>({ height: '100px', width: '70px' })
   const CreateNode: React.FC<any> | undefined = props?.getNode?.(NodeType.CreateNode)?.component
   const DefaultNode: React.FC<any> | undefined = props?.getDefaultNode()?.component
-  const stepGroupData = defaultTo(props?.data?.children, props?.data?.step?.data?.stepGroup) || props?.data?.step
+  const stepGroupData = defaultTo(props?.data?.matrixGroup, props?.data?.step?.data?.stepGroup) || props?.data?.step
   const stepsData = stepGroupData?.steps
   const hasStepGroupChild = stepsData?.some((step: { step: { type: string } }) => {
     const stepType = get(step, 'step.type')
     return stepType === 'STEP_GROUP'
   })
-  const queryParams = useQueryParams<ExecutionPageQueryParams>()
-  const defaultNode = props.getDefaultNode()?.component
-
   const isNestedStepGroup = Boolean(get(props, 'data.step.data.isNestedGroup'))
-  const updateTreeRect = (): void => {
-    const treeContainer = document.getElementById('tree-container')
-    const rectBoundary = treeContainer?.getBoundingClientRect()
-    setTreeRectangle(rectBoundary)
-  }
-  const { errorMap } = useValidationErrors()
-  const {
-    state: { templateTypes },
-    getStagePathFromPipeline
-  } = usePipelineContext()
-
-  const stagePath = getStagePathFromPipeline(props?.identifier || '', 'pipeline.stages')
 
   React.useEffect(() => {
     props?.updateGraphLinks?.()
   }, [isNodeCollapsed])
 
-  React.useEffect(() => {
-    props?.data?.isMatrixCollapsed && setNodeCollapsed(true)
-  }, [props?.data?.isMatrixCollapsed])
-
   React.useLayoutEffect(() => {
-    if (state?.length) {
+    if (props?.data?.length) {
       props?.updateGraphLinks?.()
     }
   }, [layoutStyles])
 
-  React.useEffect(() => {
-    updateTreeRect()
-  }, [])
-
   React.useLayoutEffect(() => {
-    if (props?.data?.children?.length) {
-      setState(
-        getPipelineGraphData({
-          data: props.data?.children,
-          templateTypes: templateTypes,
-          serviceDependencies: undefined,
-          errorMap: errorMap,
-          graphDataType: PipelineGraphType.STAGE_GRAPH,
-          parentPath: `${stagePath}.stage.spec.execution.steps.stepGroup.steps` //index after step missing - getStepPathFromPipeline??
-        })
-      )
+    if (props?.data?.matrixGroup?.steps?.length) {
+      setLayoutStyles(getCalculatedStyles(props?.data?.matrixGroup?.steps, props?.data?.maxParallelism, showAllNodes))
     }
-  }, [treeRectangle, props.data, templateTypes])
-
-  React.useLayoutEffect(() => {
-    if (state?.length) {
-      setLayoutStyles(getCalculatedStyles(state, props?.data?.maxParallelism, showAllNodes))
-    }
-  }, [state, props?.isNodeCollapsed, showAllNodes])
-
-  const isSelectedNode = React.useMemo(() => {
-    return state.some(node => node.id === queryParams?.stageExecId)
-  }, [queryParams?.stageExecId, isNodeCollapsed])
+  }, [props?.data?.matrixGroup?.steps, isNodeCollapsed, props?.isNodeCollapsed, showAllNodes])
 
   return (
     <>
@@ -139,7 +89,6 @@ export function MatrixNode(props: any): JSX.Element {
             setNodeCollapsed(false)
           }}
           {...props}
-          isSelected={isSelectedNode}
           icon="step-group"
         />
       ) : (
@@ -250,38 +199,44 @@ export function MatrixNode(props: any): JSX.Element {
             </div>
             <div className={css.stepGroupBody} style={layoutStyles}>
               <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '80px', rowGap: '20px' }}>
-                {state.slice(0, showAllNodes ? state.length : COLLAPSED_MATRIX_NODE_LENGTH).map((node: any) => {
-                  const NodeComponent: React.FC<BaseReactComponentProps> = defaultTo(
-                    props.getNode?.(node?.type)?.component,
-                    defaultNode
-                  ) as React.FC<BaseReactComponentProps>
-                  return (
-                    <NodeComponent
-                      {...node}
-                      parentIdentifier={node.parentIdentifier}
-                      key={node.data?.identifier}
-                      getNode={props.getNode}
-                      fireEvent={props.fireEvent}
-                      getDefaultNode={props.getDxefaultNode}
-                      className={cx(css.graphNode, node.className)}
-                      isSelected={node.selectedNode === node.data?.id}
-                      isParallelNode={node.isParallelNode}
-                      allowAdd={
-                        (!node.data?.children?.length && !node.isParallelNode) ||
-                        (node.isParallelNode && node.isLastChild)
-                      }
-                      isFirstParallelNode={true}
-                      prevNodeIdentifier={node.prevNodeIdentifier}
-                      prevNode={node.prevNode}
-                      nextNode={node.nextNode}
-                      updateGraphLinks={node.updateGraphLinks}
-                      readonly={props.readonly}
-                      selectedNodeId={props?.selectedNodeId || queryParams?.stageExecId}
-                      showMarkers={false}
-                      name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
-                    />
-                  )
-                })}
+                {props?.data?.matrixGroup?.steps
+                  ?.slice(0, showAllNodes ? props?.data?.matrixGroup?.steps?.length : COLLAPSED_MATRIX_NODE_LENGTH)
+                  .map(({ step: node }: any) => {
+                    const defaultNode = props?.getDefaultNode()?.component
+                    const NodeComponent: React.FC<BaseReactComponentProps> = defaultTo(
+                      props.getNode?.(node?.type)?.component,
+                      defaultNode
+                    ) as React.FC<BaseReactComponentProps>
+                    return (
+                      <NodeComponent
+                        {...node}
+                        parentIdentifier={node.parentIdentifier}
+                        key={node.data?.identifier}
+                        getNode={props.getNode}
+                        fireEvent={props.fireEvent}
+                        getDefaultNode={props.getDxefaultNode}
+                        className={cx(css.graphNode, node.className)}
+                        isSelected={node.selectedNode === (node.data?.id || node.data?.uuid)}
+                        isParallelNode={node.isParallelNode}
+                        allowAdd={
+                          (!node.data?.children?.length && !node.isParallelNode) ||
+                          (node.isParallelNode && node.isLastChild)
+                        }
+                        isFirstParallelNode={true}
+                        prevNodeIdentifier={node.prevNodeIdentifier}
+                        prevNode={node.prevNode}
+                        nextNode={node.nextNode}
+                        updateGraphLinks={node.updateGraphLinks}
+                        readonly={props.readonly}
+                        selectedNodeId={
+                          props?.selectedNodeId
+                          // || queryParams?.stageId
+                        }
+                        showMarkers={false}
+                        name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
+                      />
+                    )
+                  })}
               </div>
             </div>
             {!props.readonly && props?.identifier !== STATIC_SERVICE_GROUP_NAME && (
@@ -307,9 +262,11 @@ export function MatrixNode(props: any): JSX.Element {
             <Layout.Horizontal className={css.matrixFooter}>
               <Layout.Horizontal margin={0} className={css.showNodes}>
                 <Text padding={0}>{`${
-                  !showAllNodes ? Math.min(state.length, COLLAPSED_MATRIX_NODE_LENGTH) : state.length
-                }/ ${state.length}`}</Text>
-                {state.length > COLLAPSED_MATRIX_NODE_LENGTH && (
+                  !showAllNodes
+                    ? Math.min(props?.data?.matrixGroup?.steps.length, COLLAPSED_MATRIX_NODE_LENGTH)
+                    : props?.data?.matrixGroup?.steps.length
+                }/ ${props?.data?.matrixGroup?.steps.length}`}</Text>
+                {props?.data?.matrixGroup?.steps.length > COLLAPSED_MATRIX_NODE_LENGTH && (
                   <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
                     {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
                   </Text>
@@ -397,7 +354,7 @@ export function MatrixNode(props: any): JSX.Element {
                   data: {
                     identifier: props?.identifier,
                     parentIdentifier: props?.parentIdentifier,
-                    entityType: DiagramType.MatrixNode,
+                    entityType: DiagramType.StepGroupNode,
                     node: props
                   }
                 })

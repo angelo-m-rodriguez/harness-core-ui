@@ -39,7 +39,7 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
 
   const queryParams = useQueryParams<ExecutionPageQueryParams>()
   const { isGitSyncEnabled } = useAppStore()
-  const stage = pipelineStagesMap.get(queryParams?.stageId ? queryParams?.stageId : selectedStageId)
+  const stage = pipelineStagesMap.get(queryParams?.stageExecId ? queryParams?.stageExecId : selectedStageId)
   const stageDetail = factory.getStageDetails(stage?.nodeType as StageType)
   const shouldShowError = isExecutionFailed(stage?.status)
   const responseMessages = defaultTo(

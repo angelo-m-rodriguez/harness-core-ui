@@ -24,7 +24,7 @@ import { getRelativeBounds } from './PipelineGraphUtils'
 import { isFirstNodeAGroupNode, isNodeParallel, shouldAttachRef, shouldRenderGroupNode, showChildNode } from './utils'
 import css from './PipelineGraph.module.scss'
 
-const IS_RENDER_OPTIMIZATION_ENABLED = true
+const IS_RENDER_OPTIMIZATION_ENABLED = false
 export interface PipelineGraphRecursiveProps {
   nodes?: PipelineGraphState[]
   getNode: GetNodeMethod

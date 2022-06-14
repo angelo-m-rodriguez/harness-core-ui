@@ -102,11 +102,11 @@ const setStageIds = ({
     if (isNodeTypeMatrixOrFor(data.data?.pipelineExecutionSummary?.layoutNodeMap?.[runningStage]?.nodeType)) {
       const id =
         data.data?.pipelineExecutionSummary?.layoutNodeMap?.[runningStage]?.edgeLayoutList?.currentNodeChildren?.[0] ||
-        runningStage
-      const execId = data.data?.pipelineExecutionSummary?.layoutNodeMap?.[id]?.nodeUuid
-      setAutoSelectedStageId(id)
-      setSelectedStageId(id)
-      setAutoStageNodeExecutionId(execId!)
+        runningStage // UNIQUE ID--> stageNodeExecutionID
+      const execId = data.data?.pipelineExecutionSummary?.layoutNodeMap?.[id]?.nodeUuid // COMMMON--> stageNodeID
+      setAutoSelectedStageId(execId!)
+      setSelectedStageId(execId!)
+      setAutoStageNodeExecutionId(id!)
     } else {
       setAutoSelectedStageId(runningStage)
       setSelectedStageId(runningStage)
@@ -160,14 +160,11 @@ export default function ExecutionLandingPage(props: React.PropsWithChildren<unkn
       orgIdentifier,
       projectIdentifier,
       accountIdentifier: accountId,
-      stageNodeId: queryParams.stage || autoSelectedStageId,
-      // isEmpty(queryParams.stage) || autoStageNodeExecutionId
-      //   ? autoStageNodeExecutionId
-      //   : queryParams.stage || autoStageNodeExecutionId,
-      ...(((!isEmpty(queryParams?.stageId) && !isEmpty(queryParams?.stage)) ||
-        autoSelectedStageId ||
-        autoStageNodeExecutionId) && {
-        stageNodeExecutionId: isEmpty(queryParams?.stageId) ? autoSelectedStageId : queryParams?.stageId
+      stageNodeId: isEmpty(queryParams.stage || autoSelectedStageId)
+        ? undefined
+        : queryParams.stage || autoSelectedStageId,
+      ...((queryParams?.stageExecId || autoStageNodeExecutionId) && {
+        stageNodeExecutionId: queryParams?.stageExecId || autoStageNodeExecutionId
       })
     },
     debounce: 500
@@ -267,7 +264,7 @@ export default function ExecutionLandingPage(props: React.PropsWithChildren<unkn
   // update stage/step selection
   React.useEffect(() => {
     if (loading) {
-      setSelectedStageId((queryParams.stage as string) || autoSelectedStageId)
+      setSelectedStageId((queryParams?.stageExecId as string) || (queryParams.stage as string) || autoSelectedStageId)
     }
     setSelectedStepId((queryParams.step as string) || autoSelectedStepId)
   }, [loading, queryParams, autoSelectedStageId, autoSelectedStepId])

@@ -394,6 +394,7 @@ ProcessGroupItemArgs): void => {
             status: childStep?.status as ExecutionStatus,
             type: childStep?.stepType as string,
             data: {
+              id: childStep?.uuid as string,
               isNestedGroup: true,
               stepGroup: {
                 ...childStep,
@@ -447,7 +448,7 @@ ProcessGroupItemArgs): void => {
     status: nodeData?.status as ExecutionStatus,
     type: nodeData?.stepType,
     id: nodeData.uuid as string,
-    data: nodeData
+    data: { ...nodeData, id: nodeData.uuid as string }
   }
 
   const isRollbackNext = nodeData?.name?.endsWith(StepGroupRollbackIdentifier) ?? false
@@ -455,11 +456,16 @@ ProcessGroupItemArgs): void => {
     id: nodeData.uuid as string,
     identifier: nodeData?.identifier as string,
     name: nodeData?.name as string,
-    type: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
-    nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
+    type:
+      nodeData.stepType === 'STRATEGY'
+        ? ((nodeData?.stepParameters?.strategyType || 'MATRIX') as string)
+        : 'STEP_GROUP',
+    nodeType:
+      nodeData.stepType === 'STRATEGY'
+        ? ((nodeData?.stepParameters?.strategyType || 'MATRIX') as string)
+        : 'STEP_GROUP',
     icon: StepTypeIconsMap.STEP_GROUP as IconName,
     status: nodeData?.status as ExecutionStatus,
-
     ...getNodeConditions(nodeData),
     data: {
       ...(nodeData?.stepType === NodeType.STEP_GROUP || nodeData.stepType === NodeType.ROLLBACK_OPTIONAL_CHILD_CHAIN
@@ -484,10 +490,12 @@ ProcessGroupItemArgs): void => {
             graphType: PipelineGraphType.STEP_GRAPH,
             isNestedGroup,
             ...iconData,
-            stepGroup: {
+            maxParallelism: nodeData?.stepParameters?.maxConcurrency,
+            matrixGroup: {
               ...item,
-              type: 'STEP_GROUP',
-              nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP',
+              type: nodeData.stepType === 'STRATEGY' ? nodeData?.stepParameters?.strategyType : 'STEP_GROUP',
+              nodeType: nodeData.stepType === 'STRATEGY' ? nodeData?.stepParameters?.strategyType : 'STEP_GROUP',
+              maxParallelism: nodeData?.stepParameters?.maxConcurrency,
               icon: StepTypeIconsMap.STEP_GROUP,
               steps,
               status: nodeData?.status as ExecutionStatus,
@@ -497,7 +505,8 @@ ProcessGroupItemArgs): void => {
             }
           }
         : item),
-      nodeType: nodeData.stepType === 'STRATEGY' ? 'MATRIX' : 'STEP_GROUP'
+      nodeType: nodeData.stepType === 'STRATEGY' ? nodeData?.stepParameters?.strategyType : 'STEP_GROUP',
+      maxParallelism: nodeData?.stepParameters?.maxConcurrency
     }
   }
   items.push(finalDataItem)
@@ -650,7 +659,7 @@ interface GetExecutionStageDiagramListenersParams {
   onMouseEnter: ({ data, event }: { data: any; event: any }) => void
   allNodeMap?: any
   onMouseLeave: () => void
-  onStepSelect: (id: string, stageId?: string) => void
+  onStepSelect: (id: string, stageExecId?: string) => void
 }
 export const getExecutionStageDiagramListeners = ({
   allNodeMap,

@@ -801,7 +801,7 @@ export const getChildNodeDataForMatrix = (
   layoutNodeMap: LayoutNodeMapInterface
 ): PipelineGraphState[] => {
   const childData: PipelineGraphState[] = []
-  if (parentNode?.nodeType === NodeTypes.Matrix || parentNode?.nodeType === NodeTypes.For) {
+  if (isNodeTypeMatrixOrFor(parentNode?.nodeType)) {
     parentNode?.edgeLayoutList?.currentNodeChildren?.forEach(item => {
       const nodeDataItem = layoutNodeMap[item]
       const matrixNodeName =
