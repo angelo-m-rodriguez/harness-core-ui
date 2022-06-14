@@ -10,11 +10,9 @@ import { VariablesListTable } from '@pipeline/components/VariablesListTable/Vari
 import type { AzureWebAppRollbackData, AzureWebAppRollbackVariableStepProps } from './Rollback.types'
 import pipelineVariableCss from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables.module.scss'
 
-export function AzureWebAppRollbackVariableStep({
-  variablesData = {} as AzureWebAppRollbackData,
-  metadataMap,
-  initialValues
-}: AzureWebAppRollbackVariableStepProps): React.ReactElement {
+export function AzureWebAppRollbackVariableStep(props: AzureWebAppRollbackVariableStepProps): React.ReactElement {
+  /* istanbul ignore next */
+  const { variablesData = {} as AzureWebAppRollbackData, metadataMap, initialValues } = props
   return (
     <VariablesListTable
       data={variablesData}

@@ -23,9 +23,11 @@ import type { AzureWebAppRollbackProps } from './Rollback.types'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
 export const AzureWebAppRollbackRef = (
-  { allowableTypes, isNewStep = true, readonly = false, initialValues, onUpdate, onChange }: AzureWebAppRollbackProps,
+  props: AzureWebAppRollbackProps,
   formikRef: StepFormikFowardRef
 ): JSX.Element => {
+  /* istanbul ignore next */
+  const { allowableTypes, isNewStep = true, readonly = false, initialValues, onUpdate, onChange } = props
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
   const query = useQueryParams()
