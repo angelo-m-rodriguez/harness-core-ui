@@ -846,7 +846,6 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
       if (nodeDetails?.nodeType === NodeTypes.Parallel && currentNodeChildren && currentNodeChildren.length > 1) {
         const firstParallelNode = layoutNodeMap[currentNodeChildren[0]]
         const restChildNodes = currentNodeChildren.slice(1)
-        const isMatrixCollapsed = isExecutionNotStarted(firstParallelNode?.status)
         const parentNode = {
           id: firstParallelNode?.nodeUuid as string,
           identifier: firstParallelNode?.nodeIdentifier as string,
@@ -860,15 +859,13 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
               graphType: PipelineGraphType.STAGE_GRAPH,
               id: firstParallelNode?.nodeUuid,
               maxParallelism:
-                firstParallelNode?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
-              isMatrixCollapsed
+                firstParallelNode?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value
             })
           },
 
           children: restChildNodes.map(item => {
             const nodeDataItem = layoutNodeMap[item]
             // eslint-disable-next-line @typescript-eslint/no-shadow
-            const isMatrixCollapsed = isExecutionNotStarted(nodeDataItem?.status)
             return {
               id: nodeDataItem.nodeUuid as string,
               identifier: nodeDataItem.nodeIdentifier as string,
@@ -882,8 +879,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
                   graphType: PipelineGraphType.STAGE_GRAPH,
                   id: nodeDataItem?.nodeUuid,
                   maxParallelism:
-                    nodeDataItem?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
-                  isMatrixCollapsed
+                    nodeDataItem?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value
                 })
               },
               children: []
@@ -919,7 +915,6 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: []
           })
         })
-        const isMatrixCollapsed = isExecutionNotStarted(nodeDetails?.status)
         response.push({
           id: nodeDetails?.nodeUuid as string,
           identifier: nodeDetails?.nodeIdentifier as string,
@@ -931,8 +926,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: childData,
             graphType: PipelineGraphType.STAGE_GRAPH,
             id: nodeDetails?.nodeUuid,
-            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
-            isMatrixCollapsed
+            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value
           }
         })
 

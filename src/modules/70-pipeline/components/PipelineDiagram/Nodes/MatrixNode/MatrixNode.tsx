@@ -17,6 +17,7 @@ import { usePipelineContext } from '@pipeline/components/PipelineStudio/Pipeline
 import { useValidationErrors } from '@pipeline/components/PipelineStudio/PiplineHooks/useValidationErrors'
 import { useQueryParams } from '@common/hooks'
 import type { ExecutionPageQueryParams } from '@pipeline/utils/types'
+import { isExecutionNotStarted } from '@pipeline/utils/statusHelpers'
 import { BaseReactComponentProps, NodeType, PipelineGraphState, PipelineGraphType } from '../../types'
 // import SVGMarker from '../SVGMarker'
 import { getPositionOfAddIcon } from '../utils'
@@ -93,8 +94,8 @@ export function MatrixNode(props: any): JSX.Element {
   }, [isNodeCollapsed])
 
   React.useEffect(() => {
-    props?.data?.isMatrixCollapsed && setNodeCollapsed(true)
-  }, [props?.data?.isMatrixCollapsed])
+    props?.data?.status && setNodeCollapsed(isExecutionNotStarted(props?.data?.status))
+  }, [props?.data?.status])
 
   React.useLayoutEffect(() => {
     if (state?.length) {
