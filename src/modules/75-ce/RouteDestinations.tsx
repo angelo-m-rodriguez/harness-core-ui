@@ -283,28 +283,6 @@ const CERoutes: React.FC = () => {
           <CECOLoadBalancersPage />
         </RouteWithLayout>
 
-        {/* <RouteWithLayout
-          licenseRedirectData={licenseRedirectData}
-          sidebarProps={CESideNavProps}
-          path={routes.toCEBudgets({ ...accountPathProps })}
-          exact
-          pageName={PAGE_NAME.CEBudgets}
-        >
-          <Budgets />
-        </RouteWithLayout> */}
-        {/* 
-        <RouteWithLayout
-          licenseRedirectData={licenseRedirectData}
-          sidebarProps={CESideNavProps}
-          path={routes.toCEBudgetDetails({
-            ...accountPathProps,
-            budgetId: ':budgetId',
-            budgetName: ':budgetName'
-          })}
-          pageName={PAGE_NAME.CEBudgetDetails}
-        >
-          <BudgetDetails />
-        </RouteWithLayout> */}
         {!enableMicroFrontend ? (
           <RouteWithLayout
             licenseRedirectData={licenseRedirectData}
@@ -509,21 +487,6 @@ const CERoutes: React.FC = () => {
         >
           <OverviewPage />
         </RouteWithLayout>
-
-        {/* {enableMicroFrontend ? (
-          <RouteWithLayout path={routes.toCEBudgets({ ...accountPathProps })} sidebarProps={CESideNavProps}>
-            <ChildAppMounter ChildApp={CcmMicroFrontendPath} />
-          </RouteWithLayout>
-        ) : null}
-
-        {enableMicroFrontend ? (
-          <RouteWithLayout
-            path={routes.toCEBudgetDetails({ ...accountPathProps, budgetId: ':budgetId', budgetName: ':budgetName' })}
-            sidebarProps={CESideNavProps}
-          >
-            <ChildAppMounter ChildApp={CcmMicroFrontendPath} />
-          </RouteWithLayout>
-        ) : null} */}
 
         {enableMicroFrontend ? (
           <RouteWithLayout
