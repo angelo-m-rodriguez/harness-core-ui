@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { defaultTo, omit, pick } from 'lodash-es'
+import { defaultTo, noop, omit, pick } from 'lodash-es'
 import {
   Layout,
   NestedAccordionProvider,
@@ -93,6 +93,7 @@ export interface InputSetFormProps {
   isNew?: boolean
   className?: string
   onCancel?: () => void
+  onCreateSuccess?: (response: any) => void
 }
 
 const getInputSet = (
@@ -155,7 +156,7 @@ const getInputSet = (
 }
 
 export function InputSetForm(props: InputSetFormProps): React.ReactElement {
-  const { executionView, isNew, className, onCancel } = props
+  const { executionView, isNew, className, onCancel, onCreateSuccess = noop } = props
   const { getString } = useStrings()
   const history = useHistory()
   const [isEdit, setIsEdit] = React.useState(false)
@@ -282,7 +283,14 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
     }
   })
 
-  const { handleSubmit } = useSaveInputSet({ createInputSet, updateInputSet, inputSetResponse, isEdit, setFormErrors })
+  const { handleSubmit } = useSaveInputSet({
+    createInputSet,
+    updateInputSet,
+    inputSetResponse,
+    isEdit,
+    setFormErrors,
+    onCreateSuccess
+  })
 
   const inputSet: InputSetDTO | InputSetType = React.useMemo(() => {
     if (inputSetUpdateResponse) {

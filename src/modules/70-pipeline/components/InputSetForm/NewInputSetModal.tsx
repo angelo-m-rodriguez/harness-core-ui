@@ -8,15 +8,21 @@
 import React from 'react'
 import cx from 'classnames'
 import { Dialog } from '@blueprintjs/core'
+import type { ResponseInputSetResponse } from 'services/pipeline-ng'
 import { EnhancedInputSetForm } from '@pipeline/components/InputSetForm/InputSetForm'
 import css from './InputSetForm.module.scss'
 
 export interface NewInputSetModalProps {
   isModalOpen: boolean
-  closeModal: () => void // pass new Input Set info as args
+  closeModal: () => void
+  onCreateSuccess: (response: ResponseInputSetResponse) => void
 }
 
-export function NewInputSetModal({ isModalOpen, closeModal }: NewInputSetModalProps): React.ReactElement {
+export function NewInputSetModal({
+  isModalOpen,
+  closeModal,
+  onCreateSuccess
+}: NewInputSetModalProps): React.ReactElement {
   return (
     <Dialog
       title=""
@@ -28,7 +34,15 @@ export function NewInputSetModal({ isModalOpen, closeModal }: NewInputSetModalPr
         closeModal()
       }}
     >
-      <EnhancedInputSetForm isNew className={css.formInModal} onCancel={closeModal} />
+      <EnhancedInputSetForm
+        isNew
+        className={css.formInModal}
+        onCancel={closeModal}
+        onCreateSuccess={response => {
+          closeModal()
+          onCreateSuccess(response)
+        }}
+      />
     </Dialog>
   )
 }

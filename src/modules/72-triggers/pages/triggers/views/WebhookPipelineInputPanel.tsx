@@ -383,7 +383,13 @@ function WebhookPipelineInputPanelForm({
         fetchInputSets()
       }
     },
-    [formikProps?.values?.inputSetRefs, inputSetSelected, inputSetQueryParams]
+    [
+      formikProps?.values?.inputSetRefs,
+      inputSetSelected,
+      inputSetQueryParams,
+      fetchInputSetsInProgress,
+      selectedInputSets
+    ]
   )
 
   useEffect(() => {
@@ -487,7 +493,11 @@ function WebhookPipelineInputPanelForm({
                 <Text className={css.formContentTitle} inline={true} data-tooltip-id="pipelineInputLabel">
                   {getString('triggers.pipelineInputLabel')}
                   <HarnessDocTooltip tooltipId="pipelineInputLabel" useStandAlone={true} />
-                  <Button onClick={() => setShowNewInputSetModal(true)}>+ New Input Set</Button>
+
+                  {/* TODO NEW DESIGN */}
+                  {gitAwareForTriggerEnabled && (
+                    <Button onClick={() => setShowNewInputSetModal(true)}>+ New Input Set</Button>
+                  )}
                 </Text>
 
                 <GitSyncStoreProvider>
@@ -516,6 +526,24 @@ function WebhookPipelineInputPanelForm({
                   <NewInputSetModal
                     isModalOpen={showNewInputSetModal}
                     closeModal={() => setShowNewInputSetModal(false)}
+                    onCreateSuccess={response => {
+                      const inputSet = response.data as InputSetResponse
+                      const _inputSetSelected = (selectedInputSets || []).concat({
+                        label: inputSet.name as string,
+                        value: inputSet.identifier as string,
+                        type: 'INPUT_SET',
+                        gitDetails: inputSet.gitDetails
+                      })
+
+                      setInputSetError('')
+                      setSelectedInputSets(_inputSetSelected)
+
+                      formikProps.setValues({
+                        ...formikProps.values,
+                        inputSetSelected: _inputSetSelected,
+                        inputSetRefs: (formikProps.values.inputSetRefs || []).concat(inputSet.identifier)
+                      })
+                    }}
                   />
                 )}
               </div>
