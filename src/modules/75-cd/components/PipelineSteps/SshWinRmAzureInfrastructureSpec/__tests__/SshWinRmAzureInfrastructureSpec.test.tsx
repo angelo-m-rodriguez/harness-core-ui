@@ -185,7 +185,9 @@ describe('Test Azure Infrastructure Spec behavior', () => {
     })
 
     await submitForm(getByText)
-    expect(onUpdateHandler).toHaveBeenCalled()
+    await waitFor(() => {
+      expect(onUpdateHandler).toHaveBeenCalled()
+    })
   })
 })
 
@@ -198,7 +200,7 @@ describe('invocation map test', () => {
     invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
     invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
-    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    expect(CDNG.getAzureResourceGroupsBySubscriptionPromise).toBeCalled()
     invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
@@ -211,7 +213,7 @@ describe('invocation map test', () => {
     invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
     invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
-    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    expect(CDNG.getAzureResourceGroupsBySubscriptionPromise).toBeCalled()
     invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
@@ -230,7 +232,7 @@ describe('invocation map test', () => {
     invocationMap?.get(AzureSubscriptionRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureSubscriptionsPromise).toBeCalled()
     invocationMap?.get(AzureResourceGroupRegex)?.(infraDefPath, yaml, accountIdParams)
-    expect(CDNG.getAzureClustersPromise).toBeCalled()
+    expect(CDNG.getAzureResourceGroupsBySubscriptionPromise).toBeCalled()
     invocationMap?.get(AzureClusterRegex)?.(infraDefPath, yaml, accountIdParams)
     expect(CDNG.getAzureClustersPromise).toBeCalled()
   })
