@@ -25,14 +25,14 @@ interface ProjectSetupMenuProps {
 const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
   const { getString } = useStrings()
   const { accountId, orgIdentifier, projectIdentifier } = useParams<PipelineType<ProjectPathProps>>()
-  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, CVNG_TEMPLATE_MONITORED_SERVICE } = useFeatureFlags()
+  const { NG_TEMPLATES, OPA_PIPELINE_GOVERNANCE, NG_VARIABLES, NG_GIT_EXPERIENCE } = useFeatureFlags()
   const { showGetStartedTabInMainMenu } = useSideNavContext()
   const { enabledHostedBuildsForFreeUsers } = useHostedBuilds()
   const params = { accountId, orgIdentifier, projectIdentifier, module }
-  const isCIorCD = module === 'ci' || module === 'cd'
-  const isCV = module === 'cv'
+  const isCIorCDorSTO = module === 'ci' || module === 'cd' || module === 'sto'
+  // const isCV = module === 'cv'
   const canUsePolicyEngine = useAnyEnterpriseLicense()
-  const getGitSyncEnabled = isCIorCD || !module
+  const getGitSyncEnabled = (isCIorCDorSTO || !module) && !NG_GIT_EXPERIENCE
 
   return (
     <NavExpandable title={getString('common.projectSetup')} route={routes.toSetup(params)}>
@@ -48,16 +48,14 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module }) => {
             to={routes.toGitSyncAdmin({ accountId, orgIdentifier, projectIdentifier, module })}
           />
         ) : null}
-        {NG_TEMPLATES && isCIorCD && (
+        {/* 
+         To enable templates for CV
+         Replace isCIorCDorSTO with (isCIorCDorSTO || isCV) 
+         */}
+        {NG_TEMPLATES && isCIorCDorSTO && (
           <SidebarLink label={getString('common.templates')} to={routes.toTemplates(params)} />
         )}
-        {CVNG_TEMPLATE_MONITORED_SERVICE && isCV && (
-          <SidebarLink
-            label={getString('common.templates')}
-            to={routes.toTemplates({ ...params, templateType: 'MonitoredService' })}
-          />
-        )}
-        {OPA_PIPELINE_GOVERNANCE && isCIorCD && canUsePolicyEngine && (
+        {OPA_PIPELINE_GOVERNANCE && isCIorCDorSTO && canUsePolicyEngine && (
           <SidebarLink label={getString('common.governance')} to={routes.toGovernance(params as GovernancePathProps)} />
         )}
         {enabledHostedBuildsForFreeUsers && !showGetStartedTabInMainMenu && module === 'ci' && (
