@@ -90,7 +90,7 @@ const UserRoleAssignment: React.FC<UserRoleAssignmentData> = props => {
   const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps>()
   const scope = getScopeFromDTO({ accountIdentifier: accountId, orgIdentifier, projectIdentifier })
   const { getString } = useStrings()
-  const { ACCOUNT_BASIC_ROLE } = useFeatureFlags()
+  const { ACCOUNT_BASIC_ROLE, ACCOUNT_BASIC_ROLE_ONLY } = useFeatureFlags()
   const isCommunity = isCommunityPlan()
   const [query, setQuery] = useState<string>()
   const { showSuccess } = useToaster()
@@ -158,7 +158,8 @@ const UserRoleAssignment: React.FC<UserRoleAssignmentData> = props => {
       scope,
       getString,
       isCommunity,
-      isAccountBasicRolePresent(scope, !!ACCOUNT_BASIC_ROLE)
+      isAccountBasicRolePresent(scope, !!ACCOUNT_BASIC_ROLE),
+      !!ACCOUNT_BASIC_ROLE_ONLY
     )
   )
 

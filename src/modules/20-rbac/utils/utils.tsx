@@ -179,7 +179,8 @@ export const getScopeBasedDefaultAssignment = (
   scope: Scope,
   getString: UseStringsReturn['getString'],
   isCommunity: boolean,
-  isBasicRolePresent: boolean
+  isBasicRolePresent: boolean,
+  disableDefaultAssignment: boolean
 ): Assignment[] => {
   if (isCommunity) {
     return []
@@ -190,17 +191,19 @@ export const getScopeBasedDefaultAssignment = (
     }
     switch (scope) {
       case Scope.ACCOUNT:
-        return [
-          {
-            role: {
-              label: getString('common.accViewer'),
-              value: '_account_viewer',
-              managed: true,
-              managedRoleAssignment: !isBasicRolePresent
-            },
-            resourceGroup
-          }
-        ]
+        return disableDefaultAssignment
+          ? []
+          : [
+              {
+                role: {
+                  label: getString('common.accViewer'),
+                  value: '_account_viewer',
+                  managed: true,
+                  managedRoleAssignment: !isBasicRolePresent
+                },
+                resourceGroup
+              }
+            ]
       case Scope.ORG:
         return [
           {
