@@ -487,6 +487,10 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        &.failed {
+          cursor: pointer;
+        }
       }
     }
   }

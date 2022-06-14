@@ -28,6 +28,7 @@ declare const styles: {
   readonly expandButton: string
   readonly expandErrorText: string
   readonly expanded: string
+  readonly failed: string
   readonly failedNumber: string
   readonly findOutMoreBtn: string
   readonly graph: string
