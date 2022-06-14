@@ -31,12 +31,13 @@ interface LayoutStyles {
 }
 const COLLAPSED_MATRIX_NODE_LENGTH = 8
 const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
-const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number, showAllNodes?: boolean): LayoutStyles => {
+
+const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAllNodes?: boolean): LayoutStyles => {
   if (showAllNodes) {
     const maxChildLength = defaultTo(data.length, 0)
     const finalHeight =
       (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * 100
-    const finalWidth = 170 * parallelism
+    const finalWidth = 200 * parallelism
     return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
   } else {
     const updatedParallelism = Math.min(parallelism, MAX_ALLOWED_MATRIX__COLLAPSED_NODES)
@@ -47,7 +48,7 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism: number, sh
       (Math.floor(maxChildLength / updatedParallelism) +
         Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
       100
-    const finalWidth = 170 * updatedParallelism
+    const finalWidth = 200 * updatedParallelism
     return { height: `${finalHeight + 240}px`, width: `${finalWidth - 40}px` } // 80 is
   }
 }
@@ -90,6 +91,10 @@ export function MatrixNode(props: any): JSX.Element {
   React.useEffect(() => {
     props?.updateGraphLinks?.()
   }, [isNodeCollapsed])
+
+  React.useEffect(() => {
+    props?.data?.isMatrixCollapsed && setNodeCollapsed(true)
+  }, [props?.data?.isMatrixCollapsed])
 
   React.useLayoutEffect(() => {
     if (state?.length) {
@@ -271,7 +276,7 @@ export function MatrixNode(props: any): JSX.Element {
                       nextNode={node.nextNode}
                       updateGraphLinks={node.updateGraphLinks}
                       readonly={props.readonly}
-                      selectedNodeId={queryParams?.stageId}
+                      selectedNodeId={props?.selectedNodeId || queryParams?.stageId}
                       showMarkers={false}
                       name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
                     />
@@ -311,7 +316,7 @@ export function MatrixNode(props: any): JSX.Element {
                 )}
               </Layout.Horizontal>
               <Text font="normal" margin={0}>
-                {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism}
+                {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism || 1}
               </Text>
             </Layout.Horizontal>
           </div>

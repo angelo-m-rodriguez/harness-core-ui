@@ -154,6 +154,9 @@ export interface ExecutionQueryParams {
   type?: string
 }
 
+export interface LayoutNodeMapInterface {
+  [key: string]: GraphLayoutNode
+}
 export function getPipelineStagesMap(
   layoutNodeMap: PipelineExecutionSummary['layoutNodeMap'],
   startingNodeId?: string
@@ -791,6 +794,40 @@ export const addServiceDependenciesFromLiteTaskEngine = (
   }
 }
 
+export const getChildNodeDataForMatrix = (
+  parentNode: GraphLayoutNode,
+  layoutNodeMap: LayoutNodeMapInterface
+): PipelineGraphState[] => {
+  const childData: PipelineGraphState[] = []
+  if (parentNode?.nodeType === NodeTypes.Matrix || parentNode?.nodeType === NodeTypes.For) {
+    parentNode?.edgeLayoutList?.currentNodeChildren?.forEach(item => {
+      const nodeDataItem = layoutNodeMap[item]
+      const matrixNodeName =
+        nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues &&
+        `(${Object.values(nodeDataItem?.strategyMetadata?.matrixmetadata?.matrixvalues)?.join(' ')}): `
+      childData.push({
+        id: nodeDataItem.nodeExecutionId as string,
+        stageNodeId: nodeDataItem?.nodeUuid as string,
+        identifier: nodeDataItem.nodeIdentifier as string,
+        type: nodeDataItem.nodeType as string,
+        name: nodeDataItem.name as string,
+        icon: 'cross',
+        data: {
+          ...(nodeDataItem as any),
+          graphType: PipelineGraphType.STAGE_GRAPH,
+          matrixNodeName
+        },
+        children: []
+      })
+    })
+  }
+
+  return childData
+}
+
+export const isNodeTypeMatrixOrFor = (nodeType?: string): boolean => {
+  return nodeType === NodeTypes.Matrix || nodeType === NodeTypes.For
+}
 export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSummary): PipelineGraphState[] => {
   const response: PipelineGraphState[] = []
   if (!executionSummary) {
@@ -807,22 +844,46 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
       if (nodeDetails?.nodeType === NodeTypes.Parallel && currentNodeChildren && currentNodeChildren.length > 1) {
         const firstParallelNode = layoutNodeMap[currentNodeChildren[0]]
         const restChildNodes = currentNodeChildren.slice(1)
+        const isMatrixCollapsed = isExecutionNotStarted(firstParallelNode?.status)
         const parentNode = {
           id: firstParallelNode?.nodeUuid as string,
           identifier: firstParallelNode?.nodeIdentifier as string,
           type: firstParallelNode?.nodeType as string,
           name: firstParallelNode?.name as string,
           icon: 'cross',
-          data: firstParallelNode as any,
+          data: {
+            ...(firstParallelNode as any),
+            ...(isNodeTypeMatrixOrFor(firstParallelNode?.nodeType) && {
+              children: getChildNodeDataForMatrix(firstParallelNode, layoutNodeMap),
+              graphType: PipelineGraphType.STAGE_GRAPH,
+              id: firstParallelNode?.nodeUuid,
+              maxParallelism:
+                firstParallelNode?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
+              isMatrixCollapsed
+            })
+          },
+
           children: restChildNodes.map(item => {
             const nodeDataItem = layoutNodeMap[item]
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            const isMatrixCollapsed = isExecutionNotStarted(nodeDataItem?.status)
             return {
               id: nodeDataItem.nodeUuid as string,
               identifier: nodeDataItem.nodeIdentifier as string,
               type: nodeDataItem.nodeType as string,
               name: nodeDataItem.name as string,
               icon: 'cross',
-              data: nodeDataItem as any,
+              data: {
+                ...(nodeDataItem as any),
+                ...(isNodeTypeMatrixOrFor(nodeDataItem?.nodeType) && {
+                  children: getChildNodeDataForMatrix(nodeDataItem, layoutNodeMap),
+                  graphType: PipelineGraphType.STAGE_GRAPH,
+                  id: nodeDataItem?.nodeUuid,
+                  maxParallelism:
+                    nodeDataItem?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
+                  isMatrixCollapsed
+                })
+              },
               children: []
             }
           })
@@ -831,7 +892,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
         response.push(parentNode)
         nodeDetails = layoutNodeMap[nodeDetails.edgeLayoutList?.nextIds?.[0] || '']
       } else if (
-        (nodeDetails?.nodeType === NodeTypes.Matrix || nodeDetails?.nodeType === NodeTypes.For) &&
+        isNodeTypeMatrixOrFor(nodeDetails?.nodeType) &&
         currentNodeChildren &&
         currentNodeChildren.length > 1
       ) {
@@ -856,6 +917,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: []
           })
         })
+        const isMatrixCollapsed = isExecutionNotStarted(nodeDetails?.status)
         response.push({
           id: nodeDetails?.nodeUuid as string,
           identifier: nodeDetails?.nodeIdentifier as string,
@@ -867,7 +929,8 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
             children: childData,
             graphType: PipelineGraphType.STAGE_GRAPH,
             id: nodeDetails?.nodeUuid,
-            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value
+            maxParallelism: nodeDetails?.moduleInfo?.stepParameters?.maxConcurrency?.__encodedValue?.valueDoc?.value,
+            isMatrixCollapsed
           }
         })
 
@@ -923,6 +986,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
         ...currentStage,
         icon: getIconFromStageModule(currentStageData?.module, currentStageData?.nodeType),
         status: currentStageData?.status as any,
+        type: currentStage?.type === StageType.FOR ? ExecutionPipelineNodeType.MATRIX : currentStage?.type,
         data: {
           ...currentStage.data,
           identifier: currentStageData?.nodeUuid || /* istanbul ignore next */ '',
