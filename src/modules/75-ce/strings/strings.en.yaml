@@ -470,6 +470,14 @@ co:
   filters:
     resourceTypeLabelWithExample: 'Resource Type (ECS, K8s, RDS, etc.)'
     namespaceLabel: 'Namespaces (kubernetes only)'
+  ruleTypes:
+    k8s: 'K8s workload'
+    ec2: 'EC2 instance(s)'
+    ecs: 'ECS service'
+    rds: 'RDS cluster'
+    asg: 'Auto Scaling group'
+    gcpVm: 'Compute Engine VM(s)'
+    ig: 'Instance group'
 
 learnMore: Learn more about Cloud Cost Management
 ceTrialHomePage:

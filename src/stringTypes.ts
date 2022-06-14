@@ -4409,6 +4409,13 @@ export interface StringsMap {
   'ce.co.ruleDrawer.logs': string
   'ce.co.ruleDrawer.spendVsSavings': string
   'ce.co.ruleDrawer.usageTime': string
+  'ce.co.ruleTypes.asg': string
+  'ce.co.ruleTypes.ec2': string
+  'ce.co.ruleTypes.ecs': string
+  'ce.co.ruleTypes.gcpVm': string
+  'ce.co.ruleTypes.ig': string
+  'ce.co.ruleTypes.k8s': string
+  'ce.co.ruleTypes.rds': string
   'ce.co.rules': string
   'ce.co.rulesTableHeaders.fulfilment': string
   'ce.co.rulesTableHeaders.idleTime': string

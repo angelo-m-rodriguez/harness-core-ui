@@ -5,7 +5,7 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { CellProps, Column } from 'react-table'
 import cx from 'classnames'
 import {
@@ -28,7 +28,7 @@ import {
 import { FontVariation, Color } from '@harness/design-system'
 import { isEmpty as _isEmpty, defaultTo as _defaultTo, get } from 'lodash-es'
 import { useHistory, useParams } from 'react-router-dom'
-import { Classes, Drawer, Menu, Position } from '@blueprintjs/core'
+import { Classes, Drawer, IconName, Menu, Position } from '@blueprintjs/core'
 import routes from '@common/RouteDefinitions'
 import { StringUtils, useToaster } from '@common/exports'
 import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
@@ -40,8 +40,8 @@ import {
   useHealthOfService,
   useRequestsOfService,
   useSavingsOfService,
-  // useGetServiceDiagnostics,
-  // ServiceError,
+  useGetServiceDiagnostics,
+  ServiceError,
   useDescribeServiceInContainerServiceCluster,
   useRouteDetails,
   useFetchRules,
@@ -50,6 +50,7 @@ import {
   FilterDTO
 } from 'services/lw'
 import { String, useStrings } from 'framework/strings'
+import type { StringsMap } from 'stringTypes'
 import useDeleteServiceHook from '@ce/common/useDeleteService'
 import { useTelemetry } from '@common/hooks/useTelemetry'
 import { useAllQueryParamsState } from '@ce/common/hooks/useAllQueryParamsState'
@@ -59,19 +60,20 @@ import RbacButton from '@rbac/components/Button/Button'
 import { FeatureIdentifier } from 'framework/featureStore/FeatureIdentifier'
 import type { FeatureDetail } from 'framework/featureStore/featureStoreUtil'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
-import { RulesMode } from '@ce/constants'
+import { allProviders, ceConnectorTypes, RulesMode } from '@ce/constants'
 import { Utils } from '@ce/common/Utils'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { FeatureFlag } from '@common/featureFlags'
 import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
 import type { orderType, serverSortProps, sortType } from '@common/components/Table/react-table-config'
 import { UNSAVED_FILTER } from '@common/components/Filter/utils/FilterUtils'
+import { useGetConnector } from 'services/cd-ng'
 import COGatewayAnalytics from './COGatewayAnalytics'
 import COGatewayCumulativeAnalytics from './COGatewayCumulativeAnalytics'
 // import ComputeType from './components/ComputeType'
-import { getInstancesLink, getRelativeTime, getStateTag, getFilterBodyFromFilterData } from './Utils'
+import { getInstancesLink, getRelativeTime, getStateTag, getFilterBodyFromFilterData, getRuleType } from './Utils'
 import useToggleRuleState from './useToggleRuleState'
-// import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
+import TextWithToolTip, { textWithToolTipStatus } from '../TextWithTooltip/TextWithToolTip'
 import GatewayListFilters from './GatewayListFilters'
 import RuleSavingsPieChart from './charts/RuleSavingsPieChart'
 import landingPageSVG from './images/AutostoppingRuleIllustration.svg'
@@ -145,7 +147,7 @@ function TimeCell(tableProps: CellProps<Service>): JSX.Element {
   }
 
   return (
-    <Layout.Vertical>
+    <Layout.Vertical spacing={'small'}>
       <Text lineClamp={3} color={Color.GREY_1000}>
         {getString('ce.co.ruleDetailsHeader.idleTime')}
         {' : '}
@@ -156,15 +158,37 @@ function TimeCell(tableProps: CellProps<Service>): JSX.Element {
   )
 }
 function NameCell(tableProps: CellProps<Service>): JSX.Element {
+  const { getString } = useStrings()
+  const { accountId } = useParams<AccountPathProps>()
+  const isK8sRule = tableProps.row.original.kind === 'k8s'
+
+  const { data: connectorData } = useGetConnector({
+    identifier: tableProps.row.original.cloud_account_id,
+    queryParams: { accountIdentifier: accountId },
+    lazy: isK8sRule
+  })
+
+  const cloudProviderType =
+    connectorData?.data?.connector?.type && ceConnectorTypes[connectorData?.data?.connector?.type]
+  const provider = useMemo(() => allProviders.find(item => item.value === cloudProviderType), [cloudProviderType])
+  const iconName = isK8sRule ? 'app-kubernetes' : _defaultTo(provider?.icon, 'spinner')
+  const ruleTypeStringKey = getRuleType(tableProps.row.original, provider) as keyof StringsMap
+
   return (
-    <Text
-      lineClamp={3}
-      color={Color.BLACK}
-      style={{ fontWeight: 600, color: tableProps.row.original.disabled ? textColor.disable : 'inherit' }}
-    >
-      {/* <Icon name={tableProps.row.original.provider.icon as IconName}></Icon> */}
-      {tableProps.value}
-    </Text>
+    <Layout.Horizontal spacing={'small'} flex={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+      <div>
+        <Icon name={iconName as IconName} size={24} />
+      </div>
+      <Layout.Vertical spacing={'small'}>
+        <Layout.Horizontal spacing={'small'}>
+          <Text lineClamp={1} font={{ variation: FontVariation.FORM_SUB_SECTION }} color={Color.GREY_1000}>
+            {tableProps.value}
+          </Text>
+          <RuleStatus rule={tableProps.row.original} />
+        </Layout.Horizontal>
+        <Text lineClamp={1}>{ruleTypeStringKey ? getString(ruleTypeStringKey) : ''}</Text>
+      </Layout.Vertical>
+    </Layout.Horizontal>
   )
 }
 
@@ -415,6 +439,7 @@ function RenderColumnMenu(
         <Button
           minimal
           icon="Options"
+          iconProps={{ color: Color.PRIMARY_5 }}
           onClick={e => {
             e.stopPropagation()
             setMenuOpen(true)
@@ -437,33 +462,31 @@ function RenderColumnMenu(
   )
 }
 
-// const StatusCell = ({ row }: CellProps<Service>) => {
-//   const { accountId } = useParams<AccountPathProps>()
-//   const { data, loading } = useGetServiceDiagnostics({
-//     account_id: accountId, // eslint-disable-line
-//     rule_id: row.original.id as number, // eslint-disable-line
-//     queryParams: {
-//       accountIdentifier: accountId
-//     }
-//   })
-//   const diagnosticsErrors = (data?.response || [])
-//     .filter(item => !item.success)
-//     .map(item => ({ action: item.name, error: item.message }))
-//   const hasError: boolean = !_isEmpty(row.original.metadata?.service_errors) || !_isEmpty(diagnosticsErrors)
-//   const combinedErrors: ServiceError[] = (row.original.metadata?.service_errors || []).concat(diagnosticsErrors)
-//   return loading ? (
-//     <Icon name="spinner" size={12} color="blue500" />
-//   ) : (
-//     <TextWithToolTip
-//       messageText={row.original.status}
-//       errors={hasError ? combinedErrors : []}
-//       status={
-//         row.original.status === 'errored' || hasError ? textWithToolTipStatus.ERROR : textWithToolTipStatus.SUCCESS
-//       }
-//       indicatorColor={row.original.status === 'submitted' ? Color.YELLOW_500 : undefined}
-//     />
-//   )
-// }
+const RuleStatus = ({ rule }: { rule: Service }) => {
+  const { accountId } = useParams<AccountPathProps>()
+  const { data, loading } = useGetServiceDiagnostics({
+    account_id: accountId, // eslint-disable-line
+    rule_id: rule.id as number, // eslint-disable-line
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+  const diagnosticsErrors = (data?.response || [])
+    .filter(item => !item.success)
+    .map(item => ({ action: item.name, error: item.message }))
+  const hasError: boolean = !_isEmpty(rule.metadata?.service_errors) || !_isEmpty(diagnosticsErrors)
+  const combinedErrors: ServiceError[] = (rule.metadata?.service_errors || []).concat(diagnosticsErrors)
+  const showError = rule.status === 'errored' || hasError
+  return !loading ? (
+    <TextWithToolTip
+      icon={rule.status === 'submitted' ? 'time' : showError ? 'warning-sign' : 'tick-circle'}
+      iconSize={14}
+      errors={hasError ? combinedErrors : []}
+      status={showError ? textWithToolTipStatus.ERROR : textWithToolTipStatus.SUCCESS}
+      indicatorColor={rule.status === 'submitted' ? Color.ORANGE_900 : showError ? Color.RED_700 : Color.GREEN_700}
+    />
+  ) : null
+}
 
 const EmptyListPage: React.FC<EmptyListPageProps> = () => {
   const { accountId } = useParams<AccountPathProps>()
@@ -782,6 +805,7 @@ const RulesTableContainer: React.FC<RulesTableContainerProps> = ({
                   itemCount: pageProps.totalRecords,
                   gotoPage: onPageClick
                 }}
+                getRowClassName={() => css.ruleListRow}
                 onRowClick={onRowClick}
                 columns={columns}
                 sortable={true}

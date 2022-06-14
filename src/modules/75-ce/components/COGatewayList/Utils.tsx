@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { defaultTo as _defaultTo } from 'lodash-es'
+import { defaultTo as _defaultTo, isEmpty } from 'lodash-es'
 import moment from 'moment'
 import { getColorValue } from '@common/components/HeatMap/ColorUtils'
 import {
@@ -16,6 +16,7 @@ import {
 } from '@ce/common/InstanceStatusIndicator/InstanceStatusIndicator'
 import type { AllResourcesOfAccountResponse, Service } from 'services/lw'
 import { GatewayKindType, PROVIDER_TYPES, RulesMode } from '@ce/constants'
+import type { Provider } from '../COCreateGateway/models'
 import odIcon from './images/ondemandIcon.svg'
 import spotIcon from './images/spotIcon.svg'
 import css from './COGatewayCumulativeAnalytics.module.scss'
@@ -304,4 +305,30 @@ export const getFilterBodyFromFilterData = (data: { [key: string]: any }) => {
       values
     }
   })
+}
+
+export const getRuleType = (rule: Service, provider?: Provider) => {
+  let type = ''
+  if (rule.kind === 'k8s') {
+    type = 'ce.co.ruleTypes.k8s'
+  } else if (provider?.value === PROVIDER_TYPES.AWS) {
+    if (!isEmpty(rule.routing?.container_svc)) {
+      type = 'ce.co.ruleTypes.ecs'
+    } else if (!isEmpty(rule.routing?.database)) {
+      type = 'ce.co.ruleTypes.rds'
+    } else if (!isEmpty(rule.routing?.instance?.scale_group)) {
+      type = 'ce.co.ruleTypes.asg'
+    } else {
+      type = 'ce.co.ruleTypes.ec2'
+    }
+  } else if (provider?.value === PROVIDER_TYPES.AZURE) {
+    type = 'ce.co.autoStoppingRule.helpText.step2.description.resourceList.azureVms'
+  } else if (provider?.value === PROVIDER_TYPES.GCP) {
+    if (!isEmpty(rule.routing?.instance?.scale_group)) {
+      type = 'ce.co.ruleTypes.ig'
+    } else {
+      type = 'ce.co.ruleTypes.gcpVm'
+    }
+  }
+  return type
 }

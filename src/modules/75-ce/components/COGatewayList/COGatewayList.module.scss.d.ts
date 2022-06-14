@@ -28,6 +28,7 @@ declare const styles: {
   readonly pageContainer: string
   readonly refreshIconContainer: string
   readonly resourceCell: string
+  readonly ruleListRow: string
   readonly ruleToggle: string
   readonly savingsAmount: string
   readonly scheduleAccordion: string

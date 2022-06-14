@@ -14,7 +14,19 @@ interface RuleSavingsPieChartProps {
   disable?: boolean
 }
 
-const getChartOptions = (savings: number, _disable?: boolean) => {
+const getChartOptions = (savings: number, disable?: boolean) => {
+  let primaryColor = '#1B841D'
+  let secondaryColor = '#E4F7E1'
+  if (disable) {
+    primaryColor = '#6B6D85'
+    secondaryColor = '#D9DAE5'
+  } else if (savings <= 20) {
+    primaryColor = '#B41710'
+    secondaryColor = '#FCEDEC'
+  } else if (savings > 20 && savings <= 50) {
+    primaryColor = '#ff5310'
+    secondaryColor = '#fff0e6'
+  }
   return {
     chart: {
       type: 'pie',
@@ -31,7 +43,7 @@ const getChartOptions = (savings: number, _disable?: boolean) => {
       text: `${savings}%`,
       align: 'center',
       verticalAlign: 'middle',
-      style: { fontSize: '15px', fontWeight: 700, color: '#1B841D' }
+      style: { fontSize: '15px', fontWeight: 700, color: primaryColor }
     },
     plotOptions: {
       pie: {
@@ -50,7 +62,7 @@ const getChartOptions = (savings: number, _disable?: boolean) => {
     series: [
       {
         data: [
-          { y: savings, color: '#E4F7E1' },
+          { y: savings, color: secondaryColor },
           { y: 100 - savings, color: 'transparent' }
         ]
       }
