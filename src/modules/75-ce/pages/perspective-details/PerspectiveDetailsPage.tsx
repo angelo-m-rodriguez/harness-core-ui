@@ -272,6 +272,15 @@ const PerspectiveDetailsPage: React.FC = () => {
     }
   }, [isAnomaliesEnabled, timeRange.from, timeRange.to, filters, groupBy])
 
+  useDeepCompareEffect(() => {
+    executePerspectiveGridQuery({
+      requestPolicy: 'network-only'
+    })
+    executePerspectiveChartQuery({
+      requestPolicy: 'network-only'
+    })
+  }, [groupBy])
+
   const setFilterUsingChartClick: (value: string) => void = value => {
     setFilters([
       ...filters,
@@ -292,7 +301,7 @@ const PerspectiveDetailsPage: React.FC = () => {
     [perspectiveId, timeRange, filters]
   )
 
-  const [chartResult] = useFetchPerspectiveTimeSeriesQuery({
+  const [chartResult, executePerspectiveChartQuery] = useFetchPerspectiveTimeSeriesQuery({
     variables: {
       filters: queryFilters,
       limit: 12,
@@ -325,7 +334,7 @@ const PerspectiveDetailsPage: React.FC = () => {
     return af
   }
 
-  const [gridResults] = useFetchperspectiveGridQuery({
+  const [gridResults, executePerspectiveGridQuery] = useFetchperspectiveGridQuery({
     variables: {
       aggregateFunction: getAggregationFunc(),
       filters: queryFilters,
