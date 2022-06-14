@@ -835,6 +835,7 @@ perspectives:
   folders:
     customFolders: '{{ $.dashboards.homePage.folders }}'
     newFolder: New folder
+    harnessFolders: '{{ $.dashboards.modules.harness }}'
     createNewFolderHeading: Create new Folder for Perspectives
     folderNamePlaceholder: Enter folder name
     selectPerspectiveLabel: Include perspectives

@@ -144,7 +144,7 @@ exports[`test cases for Perspective details Page should be able to render and sw
                   />
                 </svg>
               </span>
-              Out of the box Folder
+              ce.perspectives.folders.harnessFolders
             </p>
           </div>
         </li>
@@ -2387,7 +2387,7 @@ exports[`test cases for Perspective details Page should be able to render the de
                   />
                 </svg>
               </span>
-              Out of the box Folder
+              ce.perspectives.folders.harnessFolders
             </p>
           </div>
         </li>

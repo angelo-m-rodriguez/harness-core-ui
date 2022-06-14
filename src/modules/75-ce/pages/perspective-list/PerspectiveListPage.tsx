@@ -430,8 +430,10 @@ const PerspectiveListPage: React.FC = () => {
       viewVersion: 'v1'
     }
 
+    const folderId = selectedFolderId === sampleFolderId ? defaultFolderId : selectedFolderId
+
     formData['name'] = `Perspective-${generateId(6).toUpperCase()}`
-    formData = { ...CREATE_CALL_OBJECT, ...formData, folderId: selectedFolderId }
+    formData = { ...CREATE_CALL_OBJECT, ...formData, folderId }
 
     try {
       const response = await createView(formData as CEView)
@@ -649,7 +651,6 @@ const PerspectiveListPage: React.FC = () => {
                       featureNames: [FeatureIdentifier.PERSPECTIVES]
                     }
                   }}
-                  disabled={sampleFolderId === selectedFolderId}
                   onClick={() => {
                     trackEvent(USER_JOURNEY_EVENTS.CREATE_NEW_PERSPECTIVE, {})
                     createNewPerspective({})

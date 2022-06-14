@@ -68,9 +68,10 @@ export const SideNavItem: React.FC<SidebarLinkProps> = ({
   updateFolder,
   showIcons = true
 }) => {
-  /* istanbul ignore next */
-  const { uuid: folderId = '', name = '', pinned = false } = folderData
+  const { getString } = useStrings()
+  const { viewType, uuid: folderId = '', name = '', pinned = false } = folderData
   const [isEdit, setEditEnable] = useState(false)
+  const folderLabel = viewType === folderViewType.SAMPLE ? getString('ce.perspectives.folders.harnessFolders') : name
 
   const onPinClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void = e => {
     e.stopPropagation()
@@ -98,7 +99,7 @@ export const SideNavItem: React.FC<SidebarLinkProps> = ({
       <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
         {isEdit ? (
           <TextInput
-            defaultValue={name}
+            defaultValue={folderLabel}
             wrapperClassName={css.folderNameField}
             onBlur={e => {
               editFlow(e.target.value)
@@ -116,7 +117,7 @@ export const SideNavItem: React.FC<SidebarLinkProps> = ({
             style={{ maxWidth: 200 }}
             iconProps={{ padding: { right: 'small' } }}
           >
-            {name}
+            {folderLabel}
           </Text>
         )}
         {showIcons && (
