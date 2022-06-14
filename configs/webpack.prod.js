@@ -25,7 +25,15 @@ const BUGSNAG_TOKEN = process.env.BUGSNAG_TOKEN
 const BUGSNAG_SOURCEMAPS_UPLOAD = process.env.BUGSNAG_SOURCEMAPS_UPLOAD === 'true'
 const harnessPackages = Object.keys(packageJson.dependencies)
   .filter(name => name.startsWith('@harness'))
-  .reduce((accumulator, current) => ({ ...accumulator, [current]: require(`${current}/package.json`).version }), {})
+  .reduce(
+    (accumulator, current) => ({
+      ...accumulator,
+      [current]: JSON.parse(
+        fs.readFileSync(path.resolve(process.cwd(), `./node_modules/${current}/package.json`), 'utf8')
+      ).version
+    }),
+    {}
+  )
 
 const versionContent = {
   version: packageJson.version,
