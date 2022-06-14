@@ -23,7 +23,7 @@ const modalProps: IDialogProps = {
   isOpen: true,
   enforceFocus: false,
   style: {
-    width: 750,
+    width: 1000,
     borderLeft: 0,
     paddingBottom: 0,
     position: 'relative',

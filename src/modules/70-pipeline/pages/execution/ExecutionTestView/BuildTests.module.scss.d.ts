@@ -26,8 +26,8 @@ declare const styles: {
   readonly direct: string
   readonly executionResult: string
   readonly expandButton: string
+  readonly expandErrorText: string
   readonly expanded: string
-  readonly failed: string
   readonly failedNumber: string
   readonly findOutMoreBtn: string
   readonly graph: string

@@ -13,15 +13,16 @@ import { useStrings } from 'framework/strings'
 import type { TestCase } from 'services/ti-service'
 import css from './BuildTests.module.scss'
 
-function PopoverSection(props: { label: string; content: string }): React.ReactElement {
-  const { label, content } = props
+export function PopoverSection(props: { label: string; content: string; asPre?: boolean }): React.ReactElement {
+  const { label, content, asPre } = props
+
   return (
     <Container>
       <Heading className={css.testPopoverHeading} level={3} font={{ weight: 'bold' }}>
         {label}
       </Heading>
       <Text className={css.testPopoverDetail} font={{ mono: true }}>
-        <Ansi useClasses>{content}</Ansi>
+        {asPre ? <pre>{content}</pre> : <Ansi useClasses>{content}</Ansi>}
       </Text>
     </Container>
   )

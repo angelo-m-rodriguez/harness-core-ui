@@ -7433,8 +7433,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               1.
                             </p>
@@ -7449,28 +7448,23 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             class="StyledProps--font StyledProps--main testCell"
                             style="width: 90%;"
                           >
-                            <span
-                              class="bp3-popover-wrapper"
+                            <p
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
-                              <span
-                                class="bp3-popover-target Text--targetClass"
+                              <div
+                                class="main"
                               >
-                                <p
-                                  class="StyledProps--font StyledProps--main text failed StyledProps--color StyledProps--color-red700"
-                                  tabindex="0"
+                                <div
+                                  class="text"
                                 >
-                                  <div
-                                    class="main"
+                                  <span
+                                    class="expandErrorText"
                                   >
-                                    <div
-                                      class="text"
-                                    >
-                                      testShouldCollectData_logsMoreThan60MinSinceLastCollectionWithinBuffer
-                                    </div>
-                                  </div>
-                                </p>
-                              </span>
-                            </span>
+                                    testShouldCollectData_logsMoreThan60MinSinceLastCollectionWithinBuffer
+                                  </span>
+                                </div>
+                              </div>
+                            </p>
                           </div>
                         </div>
                         <div
@@ -7483,8 +7477,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               <div
                                 class="main"
@@ -7508,8 +7501,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               failed
                             </p>
@@ -7525,8 +7517,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -7552,8 +7543,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               2.
                             </p>
@@ -7569,8 +7559,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7578,7 +7567,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -7594,8 +7587,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7619,8 +7611,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -7636,8 +7627,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -7663,8 +7653,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               3.
                             </p>
@@ -7680,8 +7669,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7689,7 +7677,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_firstAnalysisAfterMoreThan2Hours
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_firstAnalysisAfterMoreThan2Hours
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -7705,8 +7697,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7730,8 +7721,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -7747,8 +7737,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -7774,8 +7763,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               4.
                             </p>
@@ -7791,8 +7779,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7800,7 +7787,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_noDataInThePastMonth
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_noDataInThePastMonth
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -7816,8 +7807,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7841,8 +7831,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -7858,8 +7847,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -7885,8 +7873,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               5.
                             </p>
@@ -7902,8 +7889,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7911,7 +7897,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL1Clustering_duringBaselineWindow
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL1Clustering_duringBaselineWindow
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -7927,8 +7917,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -7952,8 +7941,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -7969,8 +7957,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -7996,8 +7983,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               6.
                             </p>
@@ -8013,8 +7999,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8022,7 +8007,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysisAlertIfNecessary
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysisAlertIfNecessary
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8038,8 +8027,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8063,8 +8051,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8080,8 +8067,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8107,8 +8093,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               7.
                             </p>
@@ -8124,8 +8109,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8133,7 +8117,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary_numOccurrencesNotMet
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary_numOccurrencesNotMet
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8149,8 +8137,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8174,8 +8161,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8191,8 +8177,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8218,8 +8203,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               8.
                             </p>
@@ -8235,8 +8219,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8244,7 +8227,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_within2hourWindowWithBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_within2hourWindowWithBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8260,8 +8247,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8285,8 +8271,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8302,8 +8287,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8329,8 +8313,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               9.
                             </p>
@@ -8346,8 +8329,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8355,7 +8337,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_firstAnalysisAfterBaseline
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_firstAnalysisAfterBaseline
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8371,8 +8357,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8396,8 +8381,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8413,8 +8397,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8440,8 +8423,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               10.
                             </p>
@@ -8457,8 +8439,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8466,7 +8447,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL2ClusteringRetryBackoff
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL2ClusteringRetryBackoff
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8482,8 +8467,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8507,8 +8491,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8524,8 +8507,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8551,8 +8533,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               11.
                             </p>
@@ -8568,8 +8549,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8577,7 +8557,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsDataCollectionAfter2Hours
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsDataCollectionAfter2Hours
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8593,8 +8577,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8618,8 +8601,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8635,8 +8617,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8662,8 +8643,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               12.
                             </p>
@@ -8679,8 +8659,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8688,7 +8667,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_logsLessThan30MinSinceLastCollectionWithinBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_logsLessThan30MinSinceLastCollectionWithinBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8704,8 +8687,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8729,8 +8711,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8746,8 +8727,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8773,8 +8753,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               13.
                             </p>
@@ -8790,8 +8769,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8799,7 +8777,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL2Clustering
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL2Clustering
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8815,8 +8797,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8840,8 +8821,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8857,8 +8837,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8884,8 +8863,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               14.
                             </p>
@@ -8901,8 +8879,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8910,7 +8887,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_timeSeries
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_timeSeries
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -8926,8 +8907,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -8951,8 +8931,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -8968,8 +8947,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -8995,8 +8973,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               15.
                             </p>
@@ -9012,8 +8989,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9021,7 +8997,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testCreateFeedbackAnalysisTaskCheckIfIs24x7FlagTrue
+                                  <span
+                                    class=""
+                                  >
+                                    testCreateFeedbackAnalysisTaskCheckIfIs24x7FlagTrue
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9037,8 +9017,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9062,8 +9041,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9079,8 +9057,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -9106,8 +9083,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               16.
                             </p>
@@ -9123,8 +9099,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9132,7 +9107,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testDataCollectionFirstCollection
+                                  <span
+                                    class=""
+                                  >
+                                    testDataCollectionFirstCollection
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9148,8 +9127,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9173,8 +9151,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9190,8 +9167,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -9217,8 +9193,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               17.
                             </p>
@@ -9234,8 +9209,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9243,7 +9217,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAnalysisHappyCaseWithExperiment
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAnalysisHappyCaseWithExperiment
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9259,8 +9237,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9284,8 +9261,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9301,8 +9277,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -9328,8 +9303,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               18.
                             </p>
@@ -9345,8 +9319,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9354,7 +9327,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testCreateFeedbackAnalysisTask_noFeedbacks
+                                  <span
+                                    class=""
+                                  >
+                                    testCreateFeedbackAnalysisTask_noFeedbacks
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9370,8 +9347,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9395,8 +9371,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9412,8 +9387,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -9439,8 +9413,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               19.
                             </p>
@@ -9456,8 +9429,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9465,7 +9437,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_timeSeriesMoreThan30MinWithinBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_timeSeriesMoreThan30MinWithinBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9481,8 +9457,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9506,8 +9481,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9523,8 +9497,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -9550,8 +9523,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               20.
                             </p>
@@ -9567,8 +9539,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9576,7 +9547,11 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary_numOccurrencesMet
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary_numOccurrencesMet
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -9592,8 +9567,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -9617,8 +9591,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -9634,8 +9607,7 @@ exports[`BuildTests snapshot test should render Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -18907,8 +18879,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               1.
                             </p>
@@ -18923,28 +18894,23 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             class="StyledProps--font StyledProps--main testCell"
                             style="width: 90%;"
                           >
-                            <span
-                              class="bp3-popover-wrapper"
+                            <p
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
-                              <span
-                                class="bp3-popover-target Text--targetClass"
+                              <div
+                                class="main"
                               >
-                                <p
-                                  class="StyledProps--font StyledProps--main text failed StyledProps--color StyledProps--color-red700"
-                                  tabindex="0"
+                                <div
+                                  class="text"
                                 >
-                                  <div
-                                    class="main"
+                                  <span
+                                    class="expandErrorText"
                                   >
-                                    <div
-                                      class="text"
-                                    >
-                                      testShouldCollectData_logsMoreThan60MinSinceLastCollectionWithinBuffer
-                                    </div>
-                                  </div>
-                                </p>
-                              </span>
-                            </span>
+                                    testShouldCollectData_logsMoreThan60MinSinceLastCollectionWithinBuffer
+                                  </span>
+                                </div>
+                              </div>
+                            </p>
                           </div>
                         </div>
                         <div
@@ -18957,8 +18923,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               <div
                                 class="main"
@@ -18982,8 +18947,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               failed
                             </p>
@@ -18999,8 +18963,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-red700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-red700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19026,8 +18989,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               2.
                             </p>
@@ -19043,8 +19005,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19052,7 +19013,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19068,8 +19033,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19093,8 +19057,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19110,8 +19073,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19137,8 +19099,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               3.
                             </p>
@@ -19154,8 +19115,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19163,7 +19123,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_firstAnalysisAfterMoreThan2Hours
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_firstAnalysisAfterMoreThan2Hours
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19179,8 +19143,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19204,8 +19167,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19221,8 +19183,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19248,8 +19209,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               4.
                             </p>
@@ -19265,8 +19225,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19274,7 +19233,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_noDataInThePastMonth
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_noDataInThePastMonth
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19290,8 +19253,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19315,8 +19277,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19332,8 +19293,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19359,8 +19319,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               5.
                             </p>
@@ -19376,8 +19335,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19385,7 +19343,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL1Clustering_duringBaselineWindow
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL1Clustering_duringBaselineWindow
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19401,8 +19363,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19426,8 +19387,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19443,8 +19403,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19470,8 +19429,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               6.
                             </p>
@@ -19487,8 +19445,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19496,7 +19453,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysisAlertIfNecessary
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysisAlertIfNecessary
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19512,8 +19473,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19537,8 +19497,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19554,8 +19513,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19581,8 +19539,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               7.
                             </p>
@@ -19598,8 +19555,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19607,7 +19563,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary_numOccurrencesNotMet
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary_numOccurrencesNotMet
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19623,8 +19583,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19648,8 +19607,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19665,8 +19623,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19692,8 +19649,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               8.
                             </p>
@@ -19709,8 +19665,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19718,7 +19673,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_within2hourWindowWithBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_within2hourWindowWithBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19734,8 +19693,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19759,8 +19717,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19776,8 +19733,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19803,8 +19759,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               9.
                             </p>
@@ -19820,8 +19775,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19829,7 +19783,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerLogAnalysis_firstAnalysisAfterBaseline
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerLogAnalysis_firstAnalysisAfterBaseline
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19845,8 +19803,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19870,8 +19827,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19887,8 +19843,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -19914,8 +19869,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               10.
                             </p>
@@ -19931,8 +19885,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19940,7 +19893,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL2ClusteringRetryBackoff
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL2ClusteringRetryBackoff
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -19956,8 +19913,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -19981,8 +19937,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -19998,8 +19953,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20025,8 +19979,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               11.
                             </p>
@@ -20042,8 +19995,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20051,7 +20003,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsDataCollectionAfter2Hours
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsDataCollectionAfter2Hours
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20067,8 +20023,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20092,8 +20047,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20109,8 +20063,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20136,8 +20089,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               12.
                             </p>
@@ -20153,8 +20105,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20162,7 +20113,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_logsLessThan30MinSinceLastCollectionWithinBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_logsLessThan30MinSinceLastCollectionWithinBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20178,8 +20133,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20203,8 +20157,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20220,8 +20173,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20247,8 +20199,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               13.
                             </p>
@@ -20264,8 +20215,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20273,7 +20223,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testLogsL2Clustering
+                                  <span
+                                    class=""
+                                  >
+                                    testLogsL2Clustering
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20289,8 +20243,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20314,8 +20267,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20331,8 +20283,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20358,8 +20309,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               14.
                             </p>
@@ -20375,8 +20325,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20384,7 +20333,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_timeSeries
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_timeSeries
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20400,8 +20353,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20425,8 +20377,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20442,8 +20393,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20469,8 +20419,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               15.
                             </p>
@@ -20486,8 +20435,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20495,7 +20443,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testCreateFeedbackAnalysisTaskCheckIfIs24x7FlagTrue
+                                  <span
+                                    class=""
+                                  >
+                                    testCreateFeedbackAnalysisTaskCheckIfIs24x7FlagTrue
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20511,8 +20463,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20536,8 +20487,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20553,8 +20503,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20580,8 +20529,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               16.
                             </p>
@@ -20597,8 +20545,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20606,7 +20553,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testDataCollectionFirstCollection
+                                  <span
+                                    class=""
+                                  >
+                                    testDataCollectionFirstCollection
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20622,8 +20573,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20647,8 +20597,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20664,8 +20613,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20691,8 +20639,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               17.
                             </p>
@@ -20708,8 +20655,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20717,7 +20663,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAnalysisHappyCaseWithExperiment
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAnalysisHappyCaseWithExperiment
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20733,8 +20683,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20758,8 +20707,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20775,8 +20723,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20802,8 +20749,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               18.
                             </p>
@@ -20819,8 +20765,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20828,7 +20773,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testCreateFeedbackAnalysisTask_noFeedbacks
+                                  <span
+                                    class=""
+                                  >
+                                    testCreateFeedbackAnalysisTask_noFeedbacks
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20844,8 +20793,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20869,8 +20817,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20886,8 +20833,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -20913,8 +20859,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               19.
                             </p>
@@ -20930,8 +20875,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20939,7 +20883,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testShouldCollectData_timeSeriesMoreThan30MinWithinBuffer
+                                  <span
+                                    class=""
+                                  >
+                                    testShouldCollectData_timeSeriesMoreThan30MinWithinBuffer
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -20955,8 +20903,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -20980,8 +20927,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -20997,8 +20943,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
@@ -21024,8 +20969,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               20.
                             </p>
@@ -21041,8 +20985,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -21050,7 +20993,11 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                                 <div
                                   class="text"
                                 >
-                                  testTriggerTimeSeriesAlertIfNecessary_numOccurrencesMet
+                                  <span
+                                    class=""
+                                  >
+                                    testTriggerTimeSeriesAlertIfNecessary_numOccurrencesMet
+                                  </span>
                                 </div>
                               </div>
                             </p>
@@ -21066,8 +21013,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <div
                                 class="main"
@@ -21091,8 +21037,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               passed
                             </p>
@@ -21108,8 +21053,7 @@ exports[`BuildTests snapshot test should render TI+Reports UI 1`] = `
                             style="width: 90%;"
                           >
                             <p
-                              class="StyledProps--font Text--lineclamp StyledProps--main text StyledProps--color StyledProps--color-grey700"
-                              style="--text-line-clamp: 1;"
+                              class="StyledProps--font StyledProps--main text StyledProps--color StyledProps--color-grey700"
                             >
                               <span
                                 class="StyledProps--font StyledProps--main StyledProps--inline"
