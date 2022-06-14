@@ -286,6 +286,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
   }
 
   const clearSubscriptionId = () => {
+    /* istanbul ignore next */
     formikRef.current?.setFieldValue('subscriptionId', '')
     setSubscriptions([])
     clearResourceGroup()
@@ -308,7 +309,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                 ? /* istanbul ignore next */ undefined
                 : getValue(value.resourceGroup),
             cluster: getValue(value.cluster) === '' ? /* istanbul ignore next */ undefined : getValue(value.cluster),
-            tags: value.tags.reduce(
+            tags: /* istanbul ignore next */ value.tags.reduce(
               (obj: object, tag: AzureTagDTO) => ({
                 ...obj,
                 [tag.tag]: tag.tag
@@ -347,6 +348,7 @@ const AzureInfrastructureSpecEditable: React.FC<AzureInfrastructureSpecEditableP
                   type={Connectors.AZURE}
                   selected={formik.values.connectorRef}
                   onChange={(value, scope) => {
+                    /* istanbul ignore next */
                     if (value?.identifier) {
                       const connectorValue = `${scope !== Scope.PROJECT ? `${scope}.` : ''}${value.identifier}`
                       formik.setFieldValue('connectorRef', {
@@ -478,7 +480,7 @@ export class SshWinRmAzureInfrastructureSpec extends PipelineStep<AzureInfrastru
     this.lastFetched = new Date().getTime()
     this.invocationMap.set(AzureConnectorRegex, this.getConnectorsListForYaml.bind(this))
     this.invocationMap.set(AzureSubscriptionRegex, this.getSubscriptionListForYaml.bind(this))
-    this.invocationMap.set(AzureResourceGroupRegex, this.getClusterListForYaml.bind(this))
+    this.invocationMap.set(AzureResourceGroupRegex, this.getResourceGroupListForYaml.bind(this))
     this.invocationMap.set(AzureClusterRegex, this.getClusterListForYaml.bind(this))
 
     this._hasStepVariables = true
