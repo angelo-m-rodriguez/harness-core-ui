@@ -10,6 +10,7 @@ import { Form, Formik } from 'formik'
 import type { ObjectSchema } from 'yup'
 import * as yup from 'yup'
 import { ButtonVariation, ExpandingSearchInput, Page, Pagination } from '@harness/uicore'
+import { useModalHook } from '@harness/use-modal'
 import type { Feature, Segment, Target } from 'services/cf'
 import { useStrings } from 'framework/strings'
 import { CF_DEFAULT_PAGE_SIZE } from '@cf/utils/CFUtils'
@@ -26,7 +27,9 @@ import AddFlagButton from './AddFlagButton'
 import { STATUS, TargetManagementFlagConfigurationPanelFormValues as FormValues } from './types'
 
 import TargetManagementToolbar from '../TargetManagementToolbar/TargetManagementToolbar'
+import SaveFlagToGitModal from '../SaveFlagToGitModal/SaveFlagToGitModal'
 import css from './TargetManagementFlagConfigurationPanel.module.scss'
+import { on } from 'stream'
 
 export interface TargetManagementFlagConfigurationPanelProps {
   item: Target | Segment
@@ -61,6 +64,9 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
 
   const { isGitSyncActionsEnabled } = useFFGitSyncContext()
 
+  const gitSync = useFFGitSyncContext()
+  const { gitSyncInitialValues, gitSyncValidationSchema } = gitSync.getGitSyncFormMeta()
+
   const validationSchema = useMemo(() => {
     if (!includePercentageRollout) {
       return undefined
@@ -93,6 +99,7 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
     removedFlags,
     pageNumber
   })
+  const [savedFlags, setSavedFlags] = useState<FormValues>()
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
@@ -102,6 +109,29 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
     },
     [onChange]
   )
+  const onGitSync = (values: FormValues) => {
+    if (values) {
+      setSavedFlags(values)
+    }
+  }
+
+  const [showGitModal, hideGitModal] = useModalHook(() => {
+    return (
+      <SaveFlagToGitModal
+        hideNameField
+        flagIdentifier=""
+        flagName=""
+        gitSyncInitialValues={gitSyncInitialValues}
+        gitSyncValidationSchema={gitSyncValidationSchema}
+        onSubmit={() => {
+          console.log(savedFlags)
+        }}
+        onClose={() => {
+          hideGitModal()
+        }}
+      />
+    )
+  }, [savedFlags])
 
   useEffect(() => {
     if (searchedFlags.length && !pagedFlags.length && pageNumber) {
@@ -152,8 +182,13 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
 
   return (
     <Formik<FormValues>
-      onSubmit={values => {
-        onSubmit(values)
+      onSubmit={async values => {
+        if (gitSync?.isGitSyncEnabled && !gitSync?.isAutoCommitEnabled) {
+          onGitSync(values)
+          await showGitModal()
+        } else {
+          onSubmit(values)
+        }
       }}
       onReset={() => setRemovedFlags([])}
       initialValues={initialValues}
