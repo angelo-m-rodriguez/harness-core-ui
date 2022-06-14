@@ -89,11 +89,11 @@ export interface InputSetFormProps {
   executionView?: boolean
 
   // Props to support embedding InputSetForm (create new) in a modal
-  // @see src/modules/72-triggers/pages/triggers/views/modals/NewInputSetModal.tsx
-  isNew?: boolean
+  // @see src/modules/70-pipeline/components/InputSetForm/NewInputSetModal.tsx
+  isNewInModal?: boolean
   className?: string
   onCancel?: () => void
-  onCreateSuccess?: (response: any) => void
+  onCreateSuccess?: (response: ResponseInputSetResponse) => void
 }
 
 const getInputSet = (
@@ -156,7 +156,7 @@ const getInputSet = (
 }
 
 export function InputSetForm(props: InputSetFormProps): React.ReactElement {
-  const { executionView, isNew, className, onCancel, onCreateSuccess = noop } = props
+  const { executionView, isNewInModal, className, onCancel, onCreateSuccess = noop } = props
   const { getString } = useStrings()
   const history = useHistory()
   const [isEdit, setIsEdit] = React.useState(false)
@@ -462,7 +462,7 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
   }, [inputSet.entityValidityDetails?.valid])
 
   React.useEffect(() => {
-    if (inputSetIdentifier !== '-1' && !isNew) {
+    if (inputSetIdentifier !== '-1' && !isNewInModal) {
       setIsEdit(true)
       refetch({ pathParams: { inputSetIdentifier: inputSetIdentifier } })
       refetchTemplate()
@@ -495,10 +495,14 @@ export function InputSetForm(props: InputSetFormProps): React.ReactElement {
     }
   }, [loadingInputSet])
 
-  useDocumentTitle([
-    defaultTo(parse(defaultTo(pipeline?.data?.yamlPipeline, ''))?.pipeline?.name, getString('pipelines')),
-    isEdit ? defaultTo(inputSetResponse?.data?.name, '') : getString('inputSets.newInputSetLabel')
-  ])
+  useDocumentTitle(
+    isNewInModal
+      ? document.title
+      : [
+          defaultTo(parse(defaultTo(pipeline?.data?.yamlPipeline, ''))?.pipeline?.name, getString('pipelines')),
+          isEdit ? defaultTo(inputSetResponse?.data?.name, '') : getString('inputSets.newInputSetLabel')
+        ]
+  )
 
   const handleModeSwitch = React.useCallback(
     (view: SelectedView) => {

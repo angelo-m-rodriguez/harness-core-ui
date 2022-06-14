@@ -41,7 +41,7 @@ import type { InputSetValue } from '@pipeline/components/InputSetSelector/utils'
 import { mergeTemplateWithInputSetData } from '@pipeline/utils/runPipelineUtils'
 import { memoizedParse } from '@common/utils/YamlHelperMethods'
 import type { Pipeline } from '@pipeline/utils/types'
-import { NewInputSetModal } from '@pipeline/components/InputSetForm/NewInputSetModal'
+import NewInputSetModal from '@pipeline/components/InputSetForm/NewInputSetModal'
 import {
   ciCodebaseBuild,
   ciCodebaseBuildPullRequest,

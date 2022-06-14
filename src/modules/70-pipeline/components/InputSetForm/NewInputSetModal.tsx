@@ -18,7 +18,7 @@ export interface NewInputSetModalProps {
   onCreateSuccess: (response: ResponseInputSetResponse) => void
 }
 
-export function NewInputSetModal({
+export default React.memo(function NewInputSetModal({
   isModalOpen,
   closeModal,
   onCreateSuccess
@@ -35,7 +35,7 @@ export function NewInputSetModal({
       }}
     >
       <EnhancedInputSetForm
-        isNew
+        isNewInModal
         className={css.formInModal}
         onCancel={closeModal}
         onCreateSuccess={response => {
@@ -45,4 +45,4 @@ export function NewInputSetModal({
       />
     </Dialog>
   )
-}
+})
