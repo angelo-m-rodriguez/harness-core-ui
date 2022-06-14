@@ -21,6 +21,9 @@ export interface AzureWebAppSwapSlotData {
   name: string
   identifier: string
   timeout: string
+  spec: {
+    targetSlot: string
+  }
 }
 
 export interface AzureWebAppSwapSlotVariableStepProps {

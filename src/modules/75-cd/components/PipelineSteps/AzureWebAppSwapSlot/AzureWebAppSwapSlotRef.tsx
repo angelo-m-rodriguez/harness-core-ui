@@ -91,7 +91,7 @@ export const AzureWebAppSwapSlotRef = (
               />
             </div>
             <div className={cx(stepCss.formGroup, stepCss.md)}>
-              <FormInput.Select
+              <FormInput.MultiSelect
                 label={getString('cd.azureWebAppTargetSlot')}
                 name="spec.targetSlot"
                 items={targetSlots}
