@@ -17,11 +17,9 @@ import {
   Text
 } from '@wings-software/uicore'
 
-// import { useParams } from 'react-router-dom'
 import type { CellProps, Column, Renderer } from 'react-table'
 import { Color } from '@wings-software/design-system'
 import ReactTimeago from 'react-timeago'
-// import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { useStrings } from 'framework/strings'
@@ -42,7 +40,6 @@ export const getIconByType = (type: EntityDetail['type'] | undefined): IconName 
 }
 
 export default function ReferencedBy(): React.ReactElement {
-  // const { accountId, orgIdentifier, projectIdentifier } = useParams<ProjectPathProps & ModulePathParams>()
   const { currentNode, queryParams } = useContext(FileStoreContext)
   const [searchTerm, setSearchTerm] = useState<string | undefined>()
   const [page, setPage] = useState(0)

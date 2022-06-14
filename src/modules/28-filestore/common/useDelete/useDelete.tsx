@@ -5,9 +5,9 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 
-import { Text, useConfirmationDialog, useToaster } from '@wings-software/uicore'
+import { useConfirmationDialog, useToaster } from '@wings-software/uicore'
 import { Intent } from '@blueprintjs/core'
 import { capitalize as _capitalize, defaultTo as _defaultTo, lowerCase as _lowerCase } from 'lodash-es'
 import { String, useStrings } from 'framework/strings'
@@ -15,11 +15,12 @@ import { FileStoreNodeDTO, useDeleteFile } from 'services/cd-ng'
 import type { FileStorePopoverItem } from '@filestore/common/FileStorePopover/FileStorePopover'
 import { FileStoreContext } from '@filestore/components/FileStoreContext/FileStoreContext'
 import { FILE_VIEW_TAB, FileStoreNodeTypes } from '@filestore/interfaces/FileStore'
-import { FileStoreActionTypes, FILE_STORE_ROOT } from '@filestore/utils/constants'
+import { FileStoreActionTypes, FILE_STORE_ROOT, SEARCH_FILES } from '@filestore/utils/constants'
 
 const useDelete = (identifier: string, name: string, type: string, notCurrentNode?: boolean): FileStorePopoverItem => {
   const { getString } = useStrings()
   const { showSuccess, showError } = useToaster()
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const {
     setActiveTab,
     setCurrentNode,
@@ -53,22 +54,21 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
   const { openDialog: openReferenceErrorDialog } = useConfirmationDialog({
     contentText: (
       <span>
-        <Text inline font={{ weight: 'bold' }}>
-          {`${name} `}
-        </Text>
+        {errorMessage.replace(/\[.+\]/g, name)}
         {getString('filestore.fileReferenceText')}
       </span>
     ),
     titleText: getString('filestore.cantDeleteFile'),
-    confirmButtonText: type === 'FILE' ? getString('filestore.referenceButtonText') : undefined,
+    confirmButtonText: type === FileStoreNodeTypes.FILE ? getString('filestore.referenceButtonText') : undefined,
     cancelButtonText: getString('cancel'),
     intent: Intent.DANGER,
     onCloseDialog: async (isConfirmed: boolean) => {
       if (isConfirmed) {
+        setErrorMessage('')
         setCurrentNode({
           identifier,
           name,
-          type: 'FILE',
+          type: FileStoreNodeTypes.FILE,
           children: []
         } as FileStoreNodeDTO)
         setActiveTab(FILE_VIEW_TAB.REFERENCED_BY)
@@ -78,6 +78,7 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
 
   const handleFileDeleteError = (code: string, message: string): void => {
     if (code === 'ENTITY_REFERENCE_EXCEPTION') {
+      setErrorMessage(message)
       openReferenceErrorDialog()
     } else {
       showError(message)
@@ -93,7 +94,7 @@ const useDelete = (identifier: string, name: string, type: string, notCurrentNod
       children: []
     }
     if (notCurrentNode) {
-      if (currentNode.identifier === 'SEARCH') {
+      if (currentNode.identifier === SEARCH_FILES) {
         params.identifier = FILE_STORE_ROOT
         params.name = FILE_STORE_ROOT
       } else {

@@ -19,7 +19,7 @@ folderSuccessCreated: 'Folder "{{name}}" created'
 fileSuccessCreated: 'File "{{name}}" created'
 folderSuccessSaved: 'Folder "{{name}}" saved'
 fileSuccessSaved: 'File "{{name}}" saved'
-fileReferenceText: "can't be deleted as it is being referenced by other entities. To delete your files, please remove the reference file from these entities."
+fileReferenceText: 'To delete your files, please remove the reference file from these entities.'
 cantDeleteFile: 'Unable to delete {{type}}'
 referenceButtonText: 'Go view references'
 errors:
