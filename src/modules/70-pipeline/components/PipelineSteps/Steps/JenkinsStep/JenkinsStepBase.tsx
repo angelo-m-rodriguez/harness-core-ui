@@ -32,7 +32,7 @@ import type { JenkinsStepDataUI, JenkinsStepProps } from './JenkinsStep'
 import { JobDetails, useGetJobDetailsForJenkins, useGetJobParametersForJenkins } from 'services/cd-ng'
 import { PopoverInteractionKind } from '@blueprintjs/core'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useDeepCompareEffect, useQueryParams } from '@common/hooks'
 import type {
   AccountPathProps,
@@ -169,13 +169,15 @@ function FormContent({
     }
   }, [jobsResponse])
 
-  useEffect(() => {
-    if (lastOpenedJob.current && parentJobY.current) {
-      const jobListMenu = document.getElementsByClassName('bp3-menu')[0]
-      console.log('jobDetails', jobDetails, parentJobY.current)
-      jobListMenu?.scrollIntoView(parentJobY.current)
-    }
-  }, [jobDetails])
+  console.log('rerendered')
+
+  // useEffect(() => {
+  //   if (lastOpenedJob.current && parentJobY.current) {
+  //     const jobListMenu = document.getElementsByClassName('bp3-menu')[0]
+  //     console.log('jobDetails', jobDetails, parentJobY.current)
+  //     jobListMenu?.scrollIntoView(parentJobY.current)
+  //   }
+  // }, [jobDetails])
 
   const connectorRefFixedValue = getGenuineValue(formik.values.spec.connectorRef)
 
