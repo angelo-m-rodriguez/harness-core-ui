@@ -29,7 +29,6 @@ import { STATUS, TargetManagementFlagConfigurationPanelFormValues as FormValues 
 import TargetManagementToolbar from '../TargetManagementToolbar/TargetManagementToolbar'
 import SaveFlagToGitModal from '../SaveFlagToGitModal/SaveFlagToGitModal'
 import css from './TargetManagementFlagConfigurationPanel.module.scss'
-import { on } from 'stream'
 
 export interface TargetManagementFlagConfigurationPanelProps {
   item: Target | Segment
