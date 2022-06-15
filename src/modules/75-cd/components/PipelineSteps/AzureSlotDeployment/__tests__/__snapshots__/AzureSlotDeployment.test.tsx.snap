@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AzureSlot_testzureSlotDeployment step Should render edit view as edit step 1`] = `
+exports[`Azure Slot Deployment step Should render edit view as edit step 1`] = `
 <div>
   <div
     class="OverlaySpinner--overlaySpinner"
@@ -159,7 +159,7 @@ exports[`AzureSlot_testzureSlotDeployment step Should render edit view as edit s
 </div>
 `;
 
-exports[`AzureSlot_testzureSlotDeployment step Should render edit view as new step 1`] = `
+exports[`Azure Slot Deployment step Should render edit view as new step 1`] = `
 <div>
   <div
     class="OverlaySpinner--overlaySpinner"
@@ -343,7 +343,7 @@ exports[`AzureSlot_testzureSlotDeployment step Should render edit view as new st
 </div>
 `;
 
-exports[`AzureSlot_testzureSlotDeployment step Should render input set view 1`] = `
+exports[`Azure Slot Deployment step Should render input set view 1`] = `
 <div>
   <div
     class="OverlaySpinner--overlaySpinner"
@@ -449,7 +449,7 @@ exports[`AzureSlot_testzureSlotDeployment step Should render input set view 1`] 
 </div>
 `;
 
-exports[`AzureSlot_testzureSlotDeployment step Should render variable view 1`] = `
+exports[`Azure Slot Deployment step Should render variable view 1`] = `
 <div>
   <div
     class="variablesListTable variablePaddingL3"

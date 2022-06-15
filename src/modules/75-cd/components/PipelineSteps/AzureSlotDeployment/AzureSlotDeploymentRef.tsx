@@ -16,9 +16,11 @@ import type { AzureSlotDeploymentProps } from './AzureSlotDeploymentInterface'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
 export const AzureSlotDeploymentRef = (
-  { allowableTypes, isNewStep = true, readonly = false, initialValues, onUpdate, onChange }: AzureSlotDeploymentProps,
+  props: AzureSlotDeploymentProps,
   formikRef: StepFormikFowardRef
 ): JSX.Element => {
+  /* istanbul ignore next */
+  const { allowableTypes, isNewStep = true, readonly, initialValues, onUpdate, onChange } = props
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
   const query = useQueryParams()
@@ -34,12 +36,14 @@ export const AzureSlotDeploymentRef = (
         const payload = {
           ...values
         }
+        /* istanbul ignore next */
         onChange?.(payload)
       }}
       onSubmit={values => {
         const payload = {
           ...values
         }
+        /* istanbul ignore next */
         onUpdate?.(payload)
       }}
       validationSchema={Yup.object().shape({
