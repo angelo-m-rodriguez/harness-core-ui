@@ -1,3 +1,10 @@
+/*
+ * Copyright 2022 Harness Inc. All rights reserved.
+ * Use of this source code is governed by the PolyForm Shield 1.0.0 license
+ * that can be found in the licenses directory at the root of this repository, also available at
+ * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
+ */
+
 import { StepWizard } from '@harness/uicore'
 import React from 'react'
 
@@ -5,7 +12,7 @@ import { usePipelineContext } from '@pipeline/components/PipelineStudio/Pipeline
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
 import RepoStore from './RepoStore'
 import RepoDetails from './RepoDetails'
-import css from './ReleaseRepo.module.scss'
+import css from '../ManifestWizard/ManifestWizard.module.scss'
 
 function ReleaseRepoWizard(props: any): React.ReactElement {
   const { allowableTypes, isReadonly } = usePipelineContext()

@@ -272,7 +272,7 @@ function RepoDetails({
                       expressions={expressions}
                       allowableTypes={allowableTypes}
                       fieldPath="paths"
-                      pathLabel={getString('pipeline.manifestType.filePath')}
+                      pathLabel={getString('common.git.filePath')}
                       placeholder={getString('pipeline.manifestType.pathPlaceholder')}
                     />
                   </div>

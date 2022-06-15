@@ -105,7 +105,7 @@ approvalStep:
     REJECT: Rejected
   notAuthorizedExecution: User is not authorized to approve/reject the pipeline
   disallowedApproverExecution: This approval step has been configured to disallow pipeline executors to approve this stage.
-lockStep:
+queueStep:
   keyPlaceholder: Enter Resource Key
   resourceKey: Resource Key
   keyRequired: Resource Key is required
@@ -289,7 +289,6 @@ manifestType:
   commitPlaceholder: Enter Commit Id / Git Tag
   filePathPlaceholder: Enter File or Folder Path
   kustomizeFolderPath: Kustomize Folder Path
-  filePath: File Path
   kustomizeFolderPathPlaceholder: Enter Kustomize Folder Path
   kustomizePluginPathPlaceholder: Enter Kustomize Plugin Path
   repoNamePlaceholder: Enter Repository Name
@@ -493,6 +492,9 @@ startTime: Start time
 duration: Duration
 and: '{{ $.common.andCaps }}'
 gitDetails: git details
+runtimeInputs: Runtime Inputs
+releaseRepo: Release Repo
+runtimeInputsSubmittedMsg: Inputs have been submitted successfully
 pipelineInputPanel:
   noRuntimeInputs: 'No Runtime Inputs'
   automaticallyExtractedFromText: Automatically extracted from event payload
@@ -814,7 +816,7 @@ stepDescription:
   HTTP: Run HTTP requests containing URLs, methods, headers, assertions, and variables.
   SHELLSCRIPT: Execute scripts in the shell session. The scripts can be executed on the pod/instance running a Harness Delegate or on a remote host in the infrastructure.
   Barrier: Synchronize multiple Pipelines to coordinate deployments systematically.
-  Lock: Description of lock step comes here.
+  Queue: Queue pipeline executions to prevent multiple stages or pipelines from requesting the same deployment resources simultaneously.
   K8sRollingRollback: Roll back the workloads deployed by the stage.
   K8sBlueGreenDeploy: Deploy your new app version to the stage environment.
   K8sCanaryDeploy: Define how many pods are deployed for a Canary test of your new service version.
@@ -1028,7 +1030,6 @@ serviceDeploymentTypes:
   azureFunctions: Azure Functions
 noArtifactPaths: No artifact paths found with given Artifact Directory
 stageDataDeleteWarningTitle: Discard Stage Data
-serviceDataDeleteWarningTitle: Discard Service Data
 stageDataDeleteWarningText: Changing deployment type will delete existing stage data like artifacts, manifests, infrastructure details, steps etc. Do you still want to proceed?
 stageDataDeleteWarningContent: Changing deployment type will delete existing stage data like service, environments, steps etc. Do you still want to proceed?
 errorFramework:
@@ -1083,5 +1084,3 @@ OverviewEmptyStates:
   createPipelineInfo: A Harness Pipeline is a series of stages that performs operations like building and deploying software.
   runPipelineHeaderMsg: You haven’t tried running your pipelines yet.
   runPipelineInfo: Click the button below to select a pipeline and get your deployments started.
-
-releaseRepo: Release Repo

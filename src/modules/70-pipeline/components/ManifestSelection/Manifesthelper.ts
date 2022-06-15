@@ -21,8 +21,7 @@ export const ManifestDataType: Record<ManifestTypes, ManifestTypes> = {
   OpenshiftTemplate: 'OpenshiftTemplate',
   OpenshiftParam: 'OpenshiftParam',
   KustomizePatches: 'KustomizePatches',
-  ServerlessAwsLambda: 'ServerlessAwsLambda',
-  ReleaseRepo: 'ReleaseRepo'
+  ServerlessAwsLambda: 'ServerlessAwsLambda'
 }
 
 export const ManifestToPathMap: Record<PrimaryManifestType, string> = {

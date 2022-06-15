@@ -88,7 +88,7 @@ function RepoStore({
         !isEmpty(connectorRefValue))
     )
   }
-  const handleOptionSelection = (formikData: any, storeSelected: ManifestStoreExcludingInheritFromManifest): void => {
+  const handleOptionSelection = (storeSelected: ManifestStoreExcludingInheritFromManifest): void => {
     // if (
     //   getMultiTypeFromValue(formikData.connectorRef) !== MultiTypeInputType.FIXED &&
     //   formikData.store !== storeSelected
@@ -164,7 +164,7 @@ function RepoStore({
                     items={supportedManifestTypes}
                     isReadonly={isReadonly}
                     onChange={storeSelected => {
-                      handleOptionSelection(formik?.values, storeSelected as ManifestStoreExcludingInheritFromManifest)
+                      handleOptionSelection(storeSelected as ManifestStoreExcludingInheritFromManifest)
                     }}
                   />
                 </Layout.Horizontal>
