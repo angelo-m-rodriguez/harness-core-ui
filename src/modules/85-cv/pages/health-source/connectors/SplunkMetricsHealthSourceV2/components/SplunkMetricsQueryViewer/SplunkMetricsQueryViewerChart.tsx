@@ -17,12 +17,13 @@ export function transformSplunkMetricSampleData(sampleData?: TimeSeriesSampleDTO
   const option: Highcharts.SeriesLineOptions = {
     name: '',
     data: [],
-    type: 'line'
+    type: 'line',
+    color: '#25A6F7'
   }
 
   for (const sample of sampleData) {
     if (sample?.timestamp && sample.metricValue) {
-      option.data?.push([sample.timestamp * 1000, sample.metricValue])
+      option.data?.push([sample.timestamp, sample.metricValue])
     }
 
     data.push(option)

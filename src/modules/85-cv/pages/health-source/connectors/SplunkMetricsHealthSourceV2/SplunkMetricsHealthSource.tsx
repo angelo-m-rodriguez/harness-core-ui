@@ -83,7 +83,7 @@ export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps)
     mappedServicesAndEnvs: transformedSourceData.mappedServicesAndEnvs
   })
 
-  const [prometheusGroupNames, setPrometheusGroupName] = useState<SelectOption[]>(
+  const [splunkGroupNames, setSplunkGroupName] = useState<SelectOption[]>(
     initializeGroupNames(mappedMetrics, getString)
   )
 
@@ -175,10 +175,10 @@ export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps)
                             }}
                           />
                           <GroupName
-                            groupNames={prometheusGroupNames}
+                            groupNames={splunkGroupNames}
                             onChange={formikProps.setFieldValue}
                             item={formikProps.values?.groupName}
-                            setGroupNames={setPrometheusGroupName}
+                            setGroupNames={setSplunkGroupName}
                           />
                         </>
                       }

@@ -7,6 +7,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react'
 import { Utils } from '@wings-software/uicore'
+import { IDrawerProps, Position, Drawer } from '@blueprintjs/core'
 import { Container, Text } from '@harness/uicore'
 import { FontVariation } from '@harness/design-system'
 import { useParams } from 'react-router-dom'
@@ -27,6 +28,18 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps>()
   const { getString } = useStrings()
   const values = formikProps?.values
+
+  const DrawerProps: IDrawerProps = {
+    autoFocus: true,
+    canEscapeKeyClose: true,
+    canOutsideClickClose: true,
+    enforceFocus: true,
+    isOpen: false,
+    hasBackdrop: true,
+    position: Position.RIGHT,
+    usePortal: true,
+    size: '50%'
+  }
 
   const query = useMemo(() => (values?.query?.length ? values.query : ''), [values])
   const queryParams = useMemo(
@@ -77,59 +90,53 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
-  return (
-    <div className={css.queryViewContainer}>
-      {/* <QueryViewer
-        isQueryExecuted={isQueryExecuted}
-        className={css.validationContainer}
-        records={splunkData?.resource}
-        fetchRecords={fetchSplunkRecords}
-        postFetchingRecords={postFetchingRecords}
-        loading={loading}
-        error={error}
-        query={query}
-        queryNotExecutedMessage={getString('cv.monitoringSources.splunk.submitQueryToSeeRecords')}
-        queryTextAreaProps={{
-          onChangeCapture: () => {
-            onChange(MapSplunkToServiceFieldNames.IS_STALE_RECORD, true)
-          }
-        }}
-        staleRecordsWarning={staleRecordsWarningMessage}
-        dataTooltipId={'splunkQuery'}
-      /> */}
-      <Container className={css.validationContainer}>
-        <Text font={{ variation: FontVariation.SMALL }} tooltipProps={{ dataTooltipId: 'splunkQuery' }}>
-          {getString('cv.query')}
-        </Text>
+  let content = (
+    <>
+      <Text font={{ variation: FontVariation.SMALL }} tooltipProps={{ dataTooltipId: 'splunkQuery' }}>
+        {getString('cv.query')}
+      </Text>
 
-        <Container margin={{ bottom: 'medium' }}>
-          <QueryContent
-            onClickExpand={setIsDialogOpen}
-            query={query}
-            isDialogOpen={isDialogOpen}
-            loading={loading}
-            handleFetchRecords={handleFetchRecords}
-            textAreaProps={{
-              onChangeCapture: () => {
-                onChange(MapSplunkToServiceFieldNames.IS_STALE_RECORD, true)
-              }
-            }}
-            staleRecordsWarning={staleRecordsWarningMessage}
-          />
-        </Container>
-
-        <SplunkMetricsQueryViewerChart data={splunkData?.resource} />
-
-        <Records
-          fetchRecords={handleFetchRecords}
-          loading={loading}
-          data={splunkData?.resource}
-          error={error}
+      <Container margin={{ bottom: 'medium' }}>
+        <QueryContent
+          onClickExpand={setIsDialogOpen}
           query={query}
-          isQueryExecuted={isQueryExecuted}
-          queryNotExecutedMessage={getString('cv.monitoringSources.splunk.submitQueryToSeeRecords')}
+          isDialogOpen={isDialogOpen}
+          loading={loading}
+          handleFetchRecords={handleFetchRecords}
+          textAreaProps={{
+            onChangeCapture: () => {
+              onChange(MapSplunkToServiceFieldNames.IS_STALE_RECORD, true)
+            }
+          }}
+          staleRecordsWarning={staleRecordsWarningMessage}
         />
       </Container>
+
+      <SplunkMetricsQueryViewerChart data={splunkData?.resource} />
+
+      <Records
+        fetchRecords={handleFetchRecords}
+        loading={loading}
+        data={splunkData?.resource}
+        error={error}
+        query={query}
+        isQueryExecuted={isQueryExecuted}
+        queryNotExecutedMessage={getString('cv.monitoringSources.splunk.submitQueryToSeeRecords')}
+      />
+    </>
+  )
+
+  if (isDialogOpen) {
+    content = (
+      <Drawer {...DrawerProps} isOpen={true} onClose={() => setIsDialogOpen(false)}>
+        <Container padding="medium">{content}</Container>
+      </Drawer>
+    )
+  }
+
+  return (
+    <div className={css.queryViewContainer}>
+      <Container className={css.validationContainer}>{content}</Container>
     </div>
   )
 }
