@@ -25,12 +25,14 @@ import { useCache } from '@common/hooks/useCache'
 import type { ManifestSelectionProps } from './ManifestInterface'
 import ManifestListView from './ManifestListView/ManifestListView'
 import { getConnectorPath } from './ManifestWizardSteps/ManifestUtils'
+import ReleaseRepoListView from './ReleaseRepoListView/ReleaseRepoListView'
 
 export default function ManifestSelection({
   isPropagating,
   deploymentType,
   isReadonlyServiceMode,
-  readonly
+  readonly,
+  gitOpsEnabled = true
 }: ManifestSelectionProps): JSX.Element | null {
   const {
     state: {
@@ -112,19 +114,34 @@ export default function ManifestSelection({
 
   return (
     <Layout.Vertical>
-      <ManifestListView
-        isPropagating={isPropagating}
-        pipeline={pipeline}
-        updateStage={updateStage}
-        stage={stage}
-        connectors={fetchedConnectorResponse}
-        refetchConnectors={refetchConnectorList}
-        listOfManifests={listOfManifests}
-        isReadonly={readonly}
-        deploymentType={deploymentType}
-        allowableTypes={allowableTypes}
-        allowOnlyOne={isServerlessDeploymentType(deploymentType)}
-      />
+      {!gitOpsEnabled ? (
+        <ManifestListView
+          isPropagating={isPropagating}
+          pipeline={pipeline}
+          updateStage={updateStage}
+          stage={stage}
+          connectors={fetchedConnectorResponse}
+          refetchConnectors={refetchConnectorList}
+          listOfManifests={listOfManifests}
+          isReadonly={readonly}
+          deploymentType={deploymentType}
+          allowableTypes={allowableTypes}
+          allowOnlyOne={isServerlessDeploymentType(deploymentType)}
+        />
+      ) : (
+        <ReleaseRepoListView
+          pipeline={pipeline}
+          updateStage={updateStage}
+          stage={stage}
+          connectors={fetchedConnectorResponse}
+          refetchConnectors={refetchConnectorList}
+          listOfManifests={listOfManifests}
+          isReadonly={readonly}
+          deploymentType={deploymentType}
+          allowableTypes={allowableTypes}
+          allowOnlyOne={true}
+        />
+      )}
     </Layout.Vertical>
   )
 }

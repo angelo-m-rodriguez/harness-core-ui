@@ -1,0 +1,58 @@
+.tabSubHeading {
+  font-size: var(--font-size-normal);
+  color: var(--grey-800);
+  margin-bottom: var(--spacing-5);
+  font-weight: 600;
+}
+
+.section-card {
+  width: 1024px;
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-7) !important;
+  &.notwide {
+    width: auto;
+  }
+  background-color: var(--white);
+}
+
+.modal {
+  [class*='bp3-dialog-header'] button {
+    z-index: 2;
+  }
+}
+
+.releaseRepoWizard {
+  width: 100%;
+}
+
+.wizardDialog {
+  flex-grow: 1;
+  display: flex;
+}
+
+.optionsViewContainer {
+  margin: var(--spacing-small) 0 0 var(--spacing-small) !important;
+  .releaseRepoForm {
+    min-height: 470px;
+
+    .connectorContainer {
+      .addNewReleaseRepo {
+        margin-top: 25px;
+      }
+      .configureOptions {
+        margin-top: 21px;
+      }
+    }
+  }
+}
+
+.saveBtn {
+  position: relative;
+  bottom: 0;
+}
+
+.crossIcon {
+  position: absolute;
+  right: var(--spacing-large);
+  top: var(--spacing-large);
+}

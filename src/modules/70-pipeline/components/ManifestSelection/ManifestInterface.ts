@@ -47,6 +47,7 @@ export interface ManifestSelectionProps {
   deploymentType: ServiceDefinition['type']
   isReadonlyServiceMode: boolean
   readonly: boolean
+  gitOpsEnabled?: boolean
 }
 
 export interface ManifestListViewProps {

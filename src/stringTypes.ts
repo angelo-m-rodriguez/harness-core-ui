@@ -3027,6 +3027,12 @@ export interface StringsMap {
   'pipeline.keyPlaceholder': string
   'pipeline.kubernetesStep.workload': string
   'pipeline.lastSevenDays': string
+  'pipeline.lockStep.keyPlaceholder': string
+  'pipeline.lockStep.keyRequired': string
+  'pipeline.lockStep.resourceKey': string
+  'pipeline.lockStep.scope': string
+  'pipeline.lockStep.scopePlaceholder': string
+  'pipeline.lockStep.scopeRequired': string
   'pipeline.logs.errorText': string
   'pipeline.logs.retry': string
   'pipeline.logs.sectionName': string
@@ -3046,6 +3052,7 @@ export interface StringsMap {
   'pipeline.manifestType.commandFlagRequired': string
   'pipeline.manifestType.commitId': string
   'pipeline.manifestType.commitPlaceholder': string
+  'pipeline.manifestType.filePath': string
   'pipeline.manifestType.filePathPlaceholder': string
   'pipeline.manifestType.folderPathPlaceholder': string
   'pipeline.manifestType.folderPathRequired': string
@@ -3170,12 +3177,6 @@ export interface StringsMap {
   'pipeline.previewTemplateLabel': string
   'pipeline.progressPercentage': string
   'pipeline.provisionerSteps': string
-  'pipeline.queueStep.keyPlaceholder': string
-  'pipeline.queueStep.keyRequired': string
-  'pipeline.queueStep.resourceKey': string
-  'pipeline.queueStep.scope': string
-  'pipeline.queueStep.scopePlaceholder': string
-  'pipeline.queueStep.scopeRequired': string
   'pipeline.recentExecutionText': string
   'pipeline.reconcileDialog.originalYamlLabel': string
   'pipeline.reconcileDialog.refreshedYamlLabel': string
@@ -3186,6 +3187,7 @@ export interface StringsMap {
   'pipeline.reconcileDialog.updateEntityLabel': string
   'pipeline.reconcileDialog.updatedTemplateInfo': string
   'pipeline.regionPlaceholder': string
+  'pipeline.releaseRepo': string
   'pipeline.removeTemplate': string
   'pipeline.removeTemplateLabel': string
   'pipeline.replacedExpressions': string
@@ -3210,8 +3212,6 @@ export interface StringsMap {
   'pipeline.runPipelineForm.notifyOnlyMe': string
   'pipeline.runstageError': string
   'pipeline.runtimeInputNotSupported': string
-  'pipeline.runtimeInputs': string
-  'pipeline.runtimeInputsSubmittedMsg': string
   'pipeline.savingInProgress': string
   'pipeline.scriptInputVariables': string
   'pipeline.scriptOutputVariables': string
@@ -3221,6 +3221,7 @@ export interface StringsMap {
   'pipeline.selectOrCreatePipeline.setupHeader': string
   'pipeline.selectStage': string
   'pipeline.selectStagePlaceholder': string
+  'pipeline.serviceDataDeleteWarningTitle': string
   'pipeline.serviceDependenciesText': string
   'pipeline.serviceDependencyText': string
   'pipeline.serviceDeploymentTypes.amazonAmi': string
@@ -3319,9 +3320,9 @@ export interface StringsMap {
   'pipeline.stepDescription.K8sRollingDeploy': string
   'pipeline.stepDescription.K8sRollingRollback': string
   'pipeline.stepDescription.K8sScale': string
+  'pipeline.stepDescription.Lock': string
   'pipeline.stepDescription.Plugin': string
   'pipeline.stepDescription.Policy': string
-  'pipeline.stepDescription.Queue': string
   'pipeline.stepDescription.ResourceConstraint': string
   'pipeline.stepDescription.RestoreCacheGCS': string
   'pipeline.stepDescription.RestoreCacheS3': string

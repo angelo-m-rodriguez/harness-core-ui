@@ -21,7 +21,8 @@ export const ManifestDataType: Record<ManifestTypes, ManifestTypes> = {
   OpenshiftTemplate: 'OpenshiftTemplate',
   OpenshiftParam: 'OpenshiftParam',
   KustomizePatches: 'KustomizePatches',
-  ServerlessAwsLambda: 'ServerlessAwsLambda'
+  ServerlessAwsLambda: 'ServerlessAwsLambda',
+  ReleaseRepo: 'ReleaseRepo'
 }
 
 export const ManifestToPathMap: Record<PrimaryManifestType, string> = {
@@ -126,7 +127,7 @@ export const ManifestIconByType: Record<ManifestStores, IconName> = {
   GitLab: 'service-gotlab',
   Bitbucket: 'bitbucket',
   Http: 'service-helm',
-  OciHelmChart: 'helm-oci',
+  OciHelmChart: 'service-helm',
   S3: 'service-service-s3',
   Gcs: 'gcs-step',
   InheritFromManifest: 'custom-artifact',
