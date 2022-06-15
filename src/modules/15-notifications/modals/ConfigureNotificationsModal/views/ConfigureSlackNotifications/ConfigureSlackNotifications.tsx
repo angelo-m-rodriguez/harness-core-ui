@@ -17,7 +17,8 @@ import {
   ButtonProps,
   Formik,
   ButtonVariation,
-  MultiTypeInputType
+  MultiTypeInputType,
+  getMultiTypeFromValue
 } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
@@ -103,7 +104,9 @@ export const TestSlackNotifications: React.FC<{
 }
 
 const ConfigureSlackNotifications: React.FC<ConfigureSlackNotificationsProps> = props => {
-  const [webhookUrlType, setWebhookUrlType] = useState<MultiTypeInputType>(MultiTypeInputType.FIXED)
+  const [webhookUrlType, setWebhookUrlType] = useState<MultiTypeInputType>(
+    getMultiTypeFromValue(props.config?.webhookUrl)
+  )
   const { getString } = useStrings()
 
   const handleSubmit = (formData: SlackNotificationData): void => {
