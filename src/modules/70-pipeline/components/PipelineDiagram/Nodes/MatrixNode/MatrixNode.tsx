@@ -34,6 +34,8 @@ const COLLAPSED_MATRIX_NODE_LENGTH = 8
 const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
 
 const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAllNodes?: boolean): LayoutStyles => {
+  const nodeWidth = data?.[0]?.nodeType === 'Approval' ? 170 : 200
+  const nodeHeight = data?.[0]?.nodeType === 'Approval' ? 130 : 100
   if (showAllNodes) {
     const maxChildLength = defaultTo(data.length, 0)
     const finalHeight =
@@ -48,8 +50,8 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAl
     const finalHeight =
       (Math.floor(maxChildLength / updatedParallelism) +
         Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
-      120
-    const finalWidth = 200 * updatedParallelism
+      nodeHeight
+    const finalWidth = nodeWidth * updatedParallelism
     return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is
   }
 }
