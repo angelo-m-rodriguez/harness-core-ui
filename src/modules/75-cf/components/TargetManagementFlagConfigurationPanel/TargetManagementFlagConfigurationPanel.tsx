@@ -11,6 +11,8 @@ import type { ObjectSchema } from 'yup'
 import * as yup from 'yup'
 import { ButtonVariation, ExpandingSearchInput, Page, Pagination } from '@harness/uicore'
 import { useModalHook } from '@harness/use-modal'
+import usePatchFeatureFlag from '@cf/pages/feature-flags-detail/targeting-rules-tab/hooks/usePatchFeatureFlag'
+import usePatchTargetFlag from '@cf/pages/feature-flags-detail/targeting-rules-tab/hooks/usePatchTargetFlag'
 import type { Feature, Segment, Target } from 'services/cf'
 import { useStrings } from 'framework/strings'
 import { CF_DEFAULT_PAGE_SIZE } from '@cf/utils/CFUtils'
@@ -65,6 +67,21 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
 
   const gitSync = useFFGitSyncContext()
   const { gitSyncInitialValues, gitSyncValidationSchema } = gitSync.getGitSyncFormMeta()
+  const [savedFlags, setSavedFlags] = useState<FormValues>()
+
+  // const {
+  //   flagVariations
+  //   // , loading: patchFeatureLoading
+  // } = usePatchTargetFlag(
+  //   savedFlags
+  //   {
+  //   initialValues
+  //   variations: featureFlagData.variations,
+  //   featureFlagIdentifier: featureFlagData.identifier,
+  //   featureFlagName: featureFlagData.name,
+  //   refetchFlag
+  // }
+  // )
 
   const validationSchema = useMemo(() => {
     if (!includePercentageRollout) {
@@ -98,16 +115,26 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
     removedFlags,
     pageNumber
   })
-  const [savedFlags, setSavedFlags] = useState<FormValues>()
+
+  const flagVariations = usePatchTargetFlag(savedFlags)
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
+      if (gitSync?.isGitSyncEnabled && !gitSync?.isAutoCommitEnabled) {
+        console.log('on submit values', values)
+        //  usePatchTargetFlag(values)
+        console.log('flagVariations', flagVariations)
+
+        // function from usePatchFeatureFlag
+        // saveChanges(values)
+      }
       setSubmitting(true)
       await onChange(values)
       setSubmitting(false)
     },
     [onChange]
   )
+
   const onGitSync = (values: FormValues) => {
     if (values) {
       setSavedFlags(values)
@@ -123,7 +150,7 @@ const TargetManagementFlagConfigurationPanel: FC<TargetManagementFlagConfigurati
         gitSyncInitialValues={gitSyncInitialValues}
         gitSyncValidationSchema={gitSyncValidationSchema}
         onSubmit={() => {
-          console.log(savedFlags)
+          onSubmit(savedFlags)
         }}
         onClose={() => {
           hideGitModal()

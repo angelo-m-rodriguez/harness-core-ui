@@ -23,6 +23,7 @@ import {
   VariationPercentageRollout
 } from '../types'
 import { PatchFeatureFlagUtils } from '../utils/PatchFeatureFlagUtils'
+
 export interface UsePatchFeatureFlagProps {
   featureFlagIdentifier: string
   featureFlagName: string
