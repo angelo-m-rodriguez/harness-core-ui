@@ -132,17 +132,17 @@ exports[`ServiceStudio should render ServiceStudio 1`] = `
             summary
           </div>
           <div
-            aria-controls="bp3-tab-panel_serviceDetailsTab_refrencedByTab"
+            aria-controls="bp3-tab-panel_serviceDetailsTab_referencedByTab"
             aria-disabled="false"
             aria-expanded="false"
             aria-selected="false"
             class="bp3-tab"
-            data-tab-id="refrencedByTab"
-            id="bp3-tab-title_serviceDetailsTab_refrencedByTab"
+            data-tab-id="referencedByTab"
+            id="bp3-tab-title_serviceDetailsTab_referencedByTab"
             role="tab"
             tabindex="0"
           >
-            refrencedBy
+            referencedBy
           </div>
         </div>
         <div
