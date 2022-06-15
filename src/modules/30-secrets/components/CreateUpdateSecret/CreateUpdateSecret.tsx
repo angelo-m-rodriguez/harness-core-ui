@@ -231,6 +231,7 @@ const CreateUpdateSecret: React.FC<CreateUpdateSecretProps> = props => {
 
   const handleSubmit = async (data: SecretFormData): Promise<void> => {
     let response
+    let successMessage: string
     try {
       if (editing) {
         if (type === 'SecretText') {
@@ -239,7 +240,7 @@ const CreateUpdateSecret: React.FC<CreateUpdateSecretProps> = props => {
         if (type === 'SecretFile') {
           response = await updateSecretFile(createFormData(data, editing) as any)
         }
-        showSuccess(`Secret '${data.name}' updated successfully`)
+        successMessage = `Secret '${data.name}' updated successfully`
       } else {
         trackEvent(SecretActions.SaveCreateSecret, {
           category: Category.SECRET,
@@ -252,10 +253,11 @@ const CreateUpdateSecret: React.FC<CreateUpdateSecretProps> = props => {
         if (type === 'SecretFile') {
           response = await createSecretFile(createFormData(data) as any)
         }
+        successMessage = `Secret '${data.name}' created successfully`
       }
 
       conditionallyOpenGovernanceErrorModal(response?.data?.governanceMetadata, () => {
-        showSuccess(`Secret '${data.name}' created successfully`)
+        showSuccess(successMessage)
         onSuccess?.(data)
       })
     } catch (error) {
