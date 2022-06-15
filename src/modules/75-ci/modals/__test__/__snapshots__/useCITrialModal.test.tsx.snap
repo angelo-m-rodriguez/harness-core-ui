@@ -70,7 +70,7 @@ exports[`open and close CITrial Modal Rendering should open and default as Creat
                     >
                       <div
                         class="Text--withDocsTooltip"
-                        data-tooltip-id="createPipeline_identifier"
+                        data-tooltip-id="universalInputNameWithId"
                       >
                         <p
                           class="StyledProps--font StyledProps--main"

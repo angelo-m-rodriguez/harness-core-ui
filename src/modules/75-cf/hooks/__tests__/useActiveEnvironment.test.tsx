@@ -7,13 +7,12 @@
 
 import { renderHook } from '@testing-library/react-hooks'
 import useActiveEnvironment from '@cf/hooks/useActiveEnvironment'
-import * as commonHooks from '@common/hooks'
 
 jest.mock('@common/hooks')
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const renderActiveEnvironmentHook = (activeEnvironment = 'TEST_ENV') => {
-  jest.spyOn(commonHooks, 'useQueryParams').mockReturnValue({ activeEnvironment })
+  window.location.hash = `path?activeEnvironment=${activeEnvironment}`
   return renderHook(() => useActiveEnvironment())
 }
 

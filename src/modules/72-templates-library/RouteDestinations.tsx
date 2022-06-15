@@ -5,13 +5,14 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import './components/PipelineSteps'
-import './components/TemplateStage'
 import React from 'react'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 import { RouteWithLayout } from '@common/router'
 import { AccountSideNavProps } from '@common/RouteDestinations'
 import routes from '@common/RouteDefinitions'
-import { accountPathProps, orgPathProps } from '@common/utils/routeUtils'
+import { accountPathProps, orgPathProps, projectPathProps, templatePathProps } from '@common/utils/routeUtils'
 import TemplatesPage from '@templates-library/pages/TemplatesPage/TemplatesPage'
 import { TemplateStudioWrapper } from '@templates-library/components/TemplateStudio/TemplateStudioWrapper'
 import RbacFactory from '@rbac/factories/RbacFactory'
@@ -20,9 +21,12 @@ import { String } from 'framework/strings'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import type { ResourceDTO } from 'services/audit'
 import AuditTrailFactory, { ResourceScope } from '@audit-trail/factories/AuditTrailFactory'
-import type { Module } from '@common/interfaces/RouteInterfaces'
+import type { Module, ModulePathParams } from '@common/interfaces/RouteInterfaces'
 import TemplateResourceModal from './components/RbacResourceModals/TemplateResourceModal'
 import TemplateResourceRenderer from './components/RbacResourceModals/TemplateResourceRenderer'
+import './components/PipelineSteps'
+import './components/TemplateStage'
+import './components/Templates'
 
 /**
  * Register RBAC resources
@@ -98,6 +102,33 @@ export default (
         }
       })}
       exact
+    >
+      <TemplateStudioWrapper />
+    </RouteWithLayout>
+  </>
+)
+
+export const TemplateRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toTemplates({ ...accountPathProps, ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.TemplatesPage}
+    >
+      <TemplatesPage />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toTemplateStudio({ ...accountPathProps, ...templatePathProps, ...moduleParams })}
+      pageName={PAGE_NAME.TemplateStudioWrapper}
     >
       <TemplateStudioWrapper />
     </RouteWithLayout>

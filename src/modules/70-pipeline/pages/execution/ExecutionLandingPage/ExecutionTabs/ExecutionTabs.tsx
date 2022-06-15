@@ -60,6 +60,7 @@ export default function ExecutionTabs(props: ExecutionTabsProps): React.ReactEle
     view === SavedExecutionViewTypes.LOG || (!view && initialSelectedView === SavedExecutionViewTypes.LOG)
   const isCD = params.module === 'cd'
   const isCI = params.module === 'ci'
+  const isSTO = params.module === 'sto'
   const isCIInPipeline = pipelineExecutionDetail?.pipelineExecutionSummary?.moduleInfo?.ci
 
   const ciData = pipelineExecutionDetail?.pipelineExecutionSummary?.moduleInfo?.ci
@@ -221,7 +222,7 @@ export default function ExecutionTabs(props: ExecutionTabsProps): React.ReactEle
     })
   }
 
-  if ((isCD && stoCDPipelineSecurityEnabled) || (isCI && stoCIPipelineSecurityEnabled)) {
+  if ((isCD && stoCDPipelineSecurityEnabled) || ((isCI || isSTO) && stoCIPipelineSecurityEnabled)) {
     tabList.push({
       id: TAB_ID_MAP.STO_SECURITY,
       title: (

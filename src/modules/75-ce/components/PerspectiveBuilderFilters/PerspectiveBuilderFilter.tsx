@@ -103,7 +103,8 @@ const PerspectiveBuilderFilter: React.FC<FilterPillProps> = ({
         fieldName: serviceData.name,
         identifierName: providerData.name,
         identifier: providerData.id
-      }
+      },
+      values: []
     }
     onChange(id, changedData)
   }
@@ -171,18 +172,17 @@ const PerspectiveBuilderFilter: React.FC<FilterPillProps> = ({
       setPageInfo(prevInfo => ({
         ...prevInfo,
         loadMore: moreItemsPresent,
-        filtersValuesData: [...prevInfo.filtersValuesData, ...filteredVal]
+        filtersValuesData: pageInfo.page > 1 ? [...prevInfo.filtersValuesData, ...filteredVal] : filteredVal
       }))
     }
   }, [data?.perspectiveFilters?.values])
 
   const onInputChange: (val: string) => void = val => {
-    setPageInfo({
-      filtersValuesData: [],
-      loadMore: true,
+    setPageInfo(prevInfo => ({
+      ...prevInfo,
       page: 1,
       searchValue: val
-    })
+    }))
   }
 
   return (
@@ -210,7 +210,7 @@ const PerspectiveBuilderFilter: React.FC<FilterPillProps> = ({
         }}
         onInputChange={onInputChange}
         shouldFetchMore={pageInfo.loadMore}
-        fetching={!pageInfo.filtersValuesData.length && fetching}
+        fetching={fetching && pageInfo.page === 1}
         selectedVal={selectedVal}
         onValueChange={onValueChange}
         searchText={pageInfo.searchValue}

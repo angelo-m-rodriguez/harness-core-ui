@@ -6,17 +6,26 @@
  */
 
 import React from 'react'
-import { Redirect, useParams } from 'react-router-dom'
+import { Redirect, Route, useParams } from 'react-router-dom'
+import { ConnectorRouteDestinations } from '@connectors/RouteDestinations'
+import { DelegateRouteDestinations } from '@delegates/RouteDestinations'
+import { GitSyncRouteDestinations } from '@gitsync/RouteDestinations'
+import { PipelineRouteDestinations } from '@pipeline/RouteDestinations'
+import { AccessControlRouteDestinations } from '@rbac/RouteDestinations'
+import { TemplateRouteDestinations } from '@templates-library/RouteDestinations'
+import { TriggersRouteDestinations } from '@triggers/RouteDestinations'
+import { VariableRouteDestinations } from '@variables/RouteDestinations'
+import CIPipelineDeploymentList from '@ci/pages/pipeline-deployment-list/CIPipelineDeploymentList'
+import CIPipelineStudio from '@ci/pages/pipeline-studio/CIPipelineStudio'
+import { GovernanceRouteDestinations } from '@governance/RouteDestinations'
+import { SecretRouteDestinations } from '@secrets/RouteDestinations'
 import type { SidebarContext } from '@common/navigation/SidebarProvider'
 import routes from '@common/RouteDefinitions'
 import { RouteWithLayout } from '@common/router'
 import { accountPathProps, projectPathProps } from '@common/utils/routeUtils'
 import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { PAGE_NAME } from '@common/pages/pageContext/PageName'
-import DeploymentsList from '@pipeline/pages/deployments-list/DeploymentsList'
 import CardRailView from '@pipeline/components/Dashboards/CardRailView/CardRailView'
 import ExecutionCard from '@pipeline/components/ExecutionCard/ExecutionCard'
-import PipelinesPage from '@pipeline/pages/pipelines/PipelinesPage'
 import executionFactory from '@pipeline/factories/ExecutionFactory'
 import { StageType } from '@pipeline/utils/stageHelpers'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
@@ -33,7 +42,7 @@ const STOSideNavProps: SidebarContext = {
   icon: 'sto-color-filled'
 }
 
-const pipelineModuleParams: ModulePathParams = {
+const moduleParams: ModulePathParams = {
   module: ':module(sto)'
 }
 
@@ -84,25 +93,6 @@ export default (
     </RouteWithLayout>
 
     <RouteWithLayout
-      exact
-      // licenseRedirectData={licenseRedirectData}
-      sidebarProps={STOSideNavProps}
-      path={routes.toDeployments({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-    >
-      <DeploymentsList />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      exact
-      // licenseRedirectData={licenseRedirectData}
-      sidebarProps={STOSideNavProps}
-      path={routes.toPipelines({ ...accountPathProps, ...projectPathProps, ...pipelineModuleParams })}
-      pageName={PAGE_NAME.PipelinesPage}
-    >
-      <PipelinesPage />
-    </RouteWithLayout>
-
-    <RouteWithLayout
       sidebarProps={STOSideNavProps}
       path={[
         routes.toSTOTargets({ ...accountPathProps }),
@@ -111,5 +101,59 @@ export default (
     >
       <ChildAppMounter ChildApp={STOApp} />
     </RouteWithLayout>
+
+    <Route path="/account/:accountId/:module(sto)">
+      <PipelineRouteDestinations
+        pipelineStudioComponent={CIPipelineStudio}
+        pipelineDeploymentListComponent={CIPipelineDeploymentList}
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <AccessControlRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <ConnectorRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <SecretRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <VariableRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <DelegateRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <TemplateRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <GitSyncRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <TriggersRouteDestinations
+        moduleParams={moduleParams}
+        // licenseRedirectData={licenseRedirectData}
+        sidebarProps={STOSideNavProps}
+      />
+      <GovernanceRouteDestinations
+        sidebarProps={STOSideNavProps}
+        pathProps={{ ...accountPathProps, ...projectPathProps, ...moduleParams }}
+      />
+    </Route>
   </>
 )

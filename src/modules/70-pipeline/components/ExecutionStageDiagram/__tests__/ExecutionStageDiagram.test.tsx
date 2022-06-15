@@ -72,6 +72,7 @@ describe('Test Execution StageDiagram', () => {
           accountId: 'px7xd_BFRCi-pfWPYXVjvw',
           projectIdentifier: 'Kapil',
           module: 'cd',
+          source: 'executions',
           executionIdentifier: 'dummy',
           pipelineIdentifier: 'test_ash',
           orgIdentifier: 'dummy'
@@ -111,6 +112,7 @@ describe('Test Execution StageDiagram - Action/Events for Stage', () => {
           accountId: 'px7xd_BFRCi-pfWPYXVjvw',
           projectIdentifier: 'Kapil',
           module: 'cd',
+          source: 'executions',
           executionIdentifier: 'P_th0g9eRn-BVTwujdyqPw',
           pipelineIdentifier: 'test_ash',
           orgIdentifier: 'default'
@@ -159,6 +161,7 @@ describe('Test Execution StageDiagram for Grouped Steps', () => {
           module: 'cd',
           executionIdentifier: 'P_th0g9eRn-BVTwujdyqPw',
           pipelineIdentifier: 'test_ash',
+          source: 'executions',
           orgIdentifier: 'default'
         }}
       >
@@ -182,6 +185,7 @@ describe('Test Execution StageDiagram for Grouped Steps', () => {
           accountId: 'px7xd_BFRCi-pfWPYXVjvw',
           projectIdentifier: 'Kapil',
           module: 'cd',
+          source: 'executions',
           executionIdentifier: 'P_th0g9eRn-BVTwujdyqPw',
           pipelineIdentifier: 'test_ash',
           orgIdentifier: 'default'

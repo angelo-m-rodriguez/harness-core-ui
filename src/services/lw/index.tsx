@@ -287,6 +287,14 @@ export interface CumulativeSavingsResponse {
   response?: CumulativeSavings
 }
 
+export interface CumulativeServiceSavingsBody {
+  dry_run?: boolean
+  filters?: FetchRulesFilterObj[]
+  from?: string
+  query?: string
+  to?: string
+}
+
 export interface DeleteAccessPointPayload {
   ids?: string[]
   with_resources?: boolean
@@ -300,6 +308,50 @@ export interface ExecutionRule {
   id?: string
   name?: string
 }
+
+export interface FetchRulesBody {
+  dry_run?: boolean
+  filters?: FetchRulesFilterObj[]
+  limit?: number
+  page?: number
+  /**
+   * Fetch rules based on search query
+   */
+  query?: string
+  sort?: FetchRulesSortObj
+}
+
+export interface FetchRulesFilterObj {
+  field?: string
+  operator?: string
+  values?: string[]
+}
+
+export interface FetchRulesResponse {
+  response?: FetchRulesResponseRecords
+}
+
+export interface FetchRulesResponseRecords {
+  pages?: number
+  records?: Service[]
+  total?: number
+}
+
+export interface FetchRulesSortObj {
+  field?: string
+  type?: string
+}
+
+export interface FilterDTO {
+  created_by?: string
+  data: { [key: string]: any }
+  filterVisibility?: 'EveryOne' | 'OnlyCreator'
+  identifier: string
+  name: string
+  type?: FilterType
+}
+
+export type FilterType = 'rule'
 
 export interface FirewallRule {
   from?: string
@@ -336,6 +388,10 @@ export interface GetAccessPointResponse {
   response?: AccessPoint
 }
 
+export interface GetAllRuleFiltersResponse {
+  response?: FilterDTO[]
+}
+
 export interface HealthCheck {
   path?: string
   port?: number
@@ -362,6 +418,10 @@ export interface ListAccessPointResponse {
 export interface MaptoDNSBody {
   details?: { [key: string]: any }
   dns_provider?: string
+}
+
+export interface NamespaceMetadata {
+  namespaces?: string[]
 }
 
 export interface NetworkSecurityGroup {
@@ -491,11 +551,25 @@ export interface RoutingRule {
   path_match?: string
 }
 
+export interface RulesMetadataResponse {
+  response?: NamespaceMetadata
+}
+
 export interface SGResourceFilterBody {
   /**
    * String representation of TOML filter
    */
   text?: string
+}
+
+export interface SaveRuleFilterBody {
+  data?: { [key: string]: any }
+  name?: string
+  type?: FilterType
+}
+
+export interface SaveRuleFilterResponse {
+  response?: FilterDTO
 }
 
 export interface SaveServiceRequest {
@@ -786,6 +860,13 @@ export interface TimeSchedule {
 
 export interface ToggleRuleModeDetails {
   id?: number
+}
+
+export interface UpdateRuleFilterBody {
+  data?: { [key: string]: any }
+  id?: number
+  name?: string
+  type?: FilterType
 }
 
 export interface ValidateSchedulesBody {
@@ -1399,6 +1480,52 @@ export const useSaveService = ({ account_id, ...props }: UseSaveServiceProps) =>
     { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
   )
 
+export interface FetchRulesQueryParams {
+  accountIdentifier: string
+}
+
+export interface FetchRulesPathParams {
+  account_id: string
+}
+
+export type FetchRulesProps = Omit<
+  MutateProps<FetchRulesResponse, void, FetchRulesQueryParams, FetchRulesBody, FetchRulesPathParams>,
+  'path' | 'verb'
+> &
+  FetchRulesPathParams
+
+/**
+ * Fetch Autostopping rules
+ *
+ * Fetch all Autostopping rules based on parameters like search, sort and filters.
+ */
+export const FetchRules = ({ account_id, ...props }: FetchRulesProps) => (
+  <Mutate<FetchRulesResponse, void, FetchRulesQueryParams, FetchRulesBody, FetchRulesPathParams>
+    verb="POST"
+    path={`/accounts/${account_id}/autostopping/rules/list`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseFetchRulesProps = Omit<
+  UseMutateProps<FetchRulesResponse, void, FetchRulesQueryParams, FetchRulesBody, FetchRulesPathParams>,
+  'path' | 'verb'
+> &
+  FetchRulesPathParams
+
+/**
+ * Fetch Autostopping rules
+ *
+ * Fetch all Autostopping rules based on parameters like search, sort and filters.
+ */
+export const useFetchRules = ({ account_id, ...props }: UseFetchRulesProps) =>
+  useMutate<FetchRulesResponse, void, FetchRulesQueryParams, FetchRulesBody, FetchRulesPathParams>(
+    'POST',
+    (paramsInPath: FetchRulesPathParams) => `/accounts/${paramsInPath.account_id}/autostopping/rules/list`,
+    { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
 export interface CumulativeServiceSavingsQueryParams {
   accountIdentifier: string
   dry_run?: boolean
@@ -1441,6 +1568,77 @@ export type UseCumulativeServiceSavingsProps = Omit<
 export const useCumulativeServiceSavings = ({ account_id, ...props }: UseCumulativeServiceSavingsProps) =>
   useGet<CumulativeSavingsResponse, void, CumulativeServiceSavingsQueryParams, CumulativeServiceSavingsPathParams>(
     (paramsInPath: CumulativeServiceSavingsPathParams) =>
+      `/accounts/${paramsInPath.account_id}/autostopping/rules/savings/cumulative`,
+    { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
+export interface CumulativeServiceSavingsV2QueryParams {
+  accountIdentifier: string
+}
+
+export interface CumulativeServiceSavingsV2PathParams {
+  account_id: string
+}
+
+export type CumulativeServiceSavingsV2Props = Omit<
+  MutateProps<
+    CumulativeSavingsResponse,
+    void,
+    CumulativeServiceSavingsV2QueryParams,
+    CumulativeServiceSavingsBody,
+    CumulativeServiceSavingsV2PathParams
+  >,
+  'path' | 'verb'
+> &
+  CumulativeServiceSavingsV2PathParams
+
+/**
+ * CumulativeSavings for all services based on filters and params
+ *
+ * CumulativeSavings for all services based on filters and params like search query, dry_run and date range
+ */
+export const CumulativeServiceSavingsV2 = ({ account_id, ...props }: CumulativeServiceSavingsV2Props) => (
+  <Mutate<
+    CumulativeSavingsResponse,
+    void,
+    CumulativeServiceSavingsV2QueryParams,
+    CumulativeServiceSavingsBody,
+    CumulativeServiceSavingsV2PathParams
+  >
+    verb="POST"
+    path={`/accounts/${account_id}/autostopping/rules/savings/cumulative`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseCumulativeServiceSavingsV2Props = Omit<
+  UseMutateProps<
+    CumulativeSavingsResponse,
+    void,
+    CumulativeServiceSavingsV2QueryParams,
+    CumulativeServiceSavingsBody,
+    CumulativeServiceSavingsV2PathParams
+  >,
+  'path' | 'verb'
+> &
+  CumulativeServiceSavingsV2PathParams
+
+/**
+ * CumulativeSavings for all services based on filters and params
+ *
+ * CumulativeSavings for all services based on filters and params like search query, dry_run and date range
+ */
+export const useCumulativeServiceSavingsV2 = ({ account_id, ...props }: UseCumulativeServiceSavingsV2Props) =>
+  useMutate<
+    CumulativeSavingsResponse,
+    void,
+    CumulativeServiceSavingsV2QueryParams,
+    CumulativeServiceSavingsBody,
+    CumulativeServiceSavingsV2PathParams
+  >(
+    'POST',
+    (paramsInPath: CumulativeServiceSavingsV2PathParams) =>
       `/accounts/${paramsInPath.account_id}/autostopping/rules/savings/cumulative`,
     { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
   )
@@ -3261,6 +3459,51 @@ export type UseGetAppIdProps = Omit<UseGetProps<AppIdResponse, void, void, void>
 export const useGetAppId = (props: UseGetAppIdProps) =>
   useGet<AppIdResponse, void, void, void>(`/app_id`, { base: getConfig('lw/api'), ...props })
 
+export interface GetRulesMetadataQueryParams {
+  accountIdentifier: string
+}
+
+export interface GetRulesMetadataPathParams {
+  account_id: string
+}
+
+export type GetRulesMetadataProps = Omit<
+  GetProps<RulesMetadataResponse, unknown, GetRulesMetadataQueryParams, GetRulesMetadataPathParams>,
+  'path'
+> &
+  GetRulesMetadataPathParams
+
+/**
+ * Fetches metadata for rules
+ *
+ * Fetches metadata for rules
+ */
+export const GetRulesMetadata = ({ account_id, ...props }: GetRulesMetadataProps) => (
+  <Get<RulesMetadataResponse, unknown, GetRulesMetadataQueryParams, GetRulesMetadataPathParams>
+    path={`accounts/${account_id}/autostopping/rules/list/metadata`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseGetRulesMetadataProps = Omit<
+  UseGetProps<RulesMetadataResponse, unknown, GetRulesMetadataQueryParams, GetRulesMetadataPathParams>,
+  'path'
+> &
+  GetRulesMetadataPathParams
+
+/**
+ * Fetches metadata for rules
+ *
+ * Fetches metadata for rules
+ */
+export const useGetRulesMetadata = ({ account_id, ...props }: UseGetRulesMetadataProps) =>
+  useGet<RulesMetadataResponse, unknown, GetRulesMetadataQueryParams, GetRulesMetadataPathParams>(
+    (paramsInPath: GetRulesMetadataPathParams) =>
+      `accounts/${paramsInPath.account_id}/autostopping/rules/list/metadata`,
+    { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
 export interface GetMachineListForZoneResponse {
   response?: GcpMachineType[]
 }
@@ -3314,6 +3557,265 @@ export const useGetMachineListForZone = ({ account_id, ...props }: UseGetMachine
   useGet<GetMachineListForZoneResponse, unknown, GetMachineListForZoneQueryParams, GetMachineListForZonePathParams>(
     (paramsInPath: GetMachineListForZonePathParams) => `accounts/${paramsInPath.account_id}/machine_types`,
     { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
+export interface SaveRuleFilterQueryParams {
+  accountIdentifier: string
+}
+
+export interface SaveRuleFilterPathParams {
+  account_id: string
+}
+
+export type SaveRuleFilterProps = Omit<
+  MutateProps<SaveRuleFilterResponse, unknown, SaveRuleFilterQueryParams, SaveRuleFilterBody, SaveRuleFilterPathParams>,
+  'path' | 'verb'
+> &
+  SaveRuleFilterPathParams
+
+/**
+ * Save a rule filter with key value pair data
+ *
+ * Save a rule filter with key value pair data
+ */
+export const SaveRuleFilter = ({ account_id, ...props }: SaveRuleFilterProps) => (
+  <Mutate<SaveRuleFilterResponse, unknown, SaveRuleFilterQueryParams, SaveRuleFilterBody, SaveRuleFilterPathParams>
+    verb="POST"
+    path={`accounts/${account_id}/savedfilters`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseSaveRuleFilterProps = Omit<
+  UseMutateProps<
+    SaveRuleFilterResponse,
+    unknown,
+    SaveRuleFilterQueryParams,
+    SaveRuleFilterBody,
+    SaveRuleFilterPathParams
+  >,
+  'path' | 'verb'
+> &
+  SaveRuleFilterPathParams
+
+/**
+ * Save a rule filter with key value pair data
+ *
+ * Save a rule filter with key value pair data
+ */
+export const useSaveRuleFilter = ({ account_id, ...props }: UseSaveRuleFilterProps) =>
+  useMutate<SaveRuleFilterResponse, unknown, SaveRuleFilterQueryParams, SaveRuleFilterBody, SaveRuleFilterPathParams>(
+    'POST',
+    (paramsInPath: SaveRuleFilterPathParams) => `accounts/${paramsInPath.account_id}/savedfilters`,
+    { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
+export interface UpdateRuleFilterQueryParams {
+  accountIdentifier: string
+}
+
+export interface UpdateRuleFilterPathParams {
+  account_id: string
+}
+
+export type UpdateRuleFilterProps = Omit<
+  MutateProps<
+    SaveRuleFilterResponse,
+    unknown,
+    UpdateRuleFilterQueryParams,
+    UpdateRuleFilterBody,
+    UpdateRuleFilterPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateRuleFilterPathParams
+
+/**
+ * Updates a rule filter with key value pair data
+ *
+ * Updates a rule filter with key value pair data
+ */
+export const UpdateRuleFilter = ({ account_id, ...props }: UpdateRuleFilterProps) => (
+  <Mutate<
+    SaveRuleFilterResponse,
+    unknown,
+    UpdateRuleFilterQueryParams,
+    UpdateRuleFilterBody,
+    UpdateRuleFilterPathParams
+  >
+    verb="PUT"
+    path={`accounts/${account_id}/savedfilters`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseUpdateRuleFilterProps = Omit<
+  UseMutateProps<
+    SaveRuleFilterResponse,
+    unknown,
+    UpdateRuleFilterQueryParams,
+    UpdateRuleFilterBody,
+    UpdateRuleFilterPathParams
+  >,
+  'path' | 'verb'
+> &
+  UpdateRuleFilterPathParams
+
+/**
+ * Updates a rule filter with key value pair data
+ *
+ * Updates a rule filter with key value pair data
+ */
+export const useUpdateRuleFilter = ({ account_id, ...props }: UseUpdateRuleFilterProps) =>
+  useMutate<
+    SaveRuleFilterResponse,
+    unknown,
+    UpdateRuleFilterQueryParams,
+    UpdateRuleFilterBody,
+    UpdateRuleFilterPathParams
+  >('PUT', (paramsInPath: UpdateRuleFilterPathParams) => `accounts/${paramsInPath.account_id}/savedfilters`, {
+    base: getConfig('lw/api'),
+    pathParams: { account_id },
+    ...props
+  })
+
+export interface GetAllRuleFiltersQueryParams {
+  accountIdentifier: string
+}
+
+export interface GetAllRuleFiltersPathParams {
+  account_id: string
+  filterType: string
+}
+
+export type GetAllRuleFiltersProps = Omit<
+  GetProps<GetAllRuleFiltersResponse, unknown, GetAllRuleFiltersQueryParams, GetAllRuleFiltersPathParams>,
+  'path'
+> &
+  GetAllRuleFiltersPathParams
+
+/**
+ * Fetches all rule filters with key value pair data
+ *
+ * Fetches all rule filters with key value pair data
+ */
+export const GetAllRuleFilters = ({ account_id, filterType, ...props }: GetAllRuleFiltersProps) => (
+  <Get<GetAllRuleFiltersResponse, unknown, GetAllRuleFiltersQueryParams, GetAllRuleFiltersPathParams>
+    path={`accounts/${account_id}/savedfilters/type/${filterType}`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseGetAllRuleFiltersProps = Omit<
+  UseGetProps<GetAllRuleFiltersResponse, unknown, GetAllRuleFiltersQueryParams, GetAllRuleFiltersPathParams>,
+  'path'
+> &
+  GetAllRuleFiltersPathParams
+
+/**
+ * Fetches all rule filters with key value pair data
+ *
+ * Fetches all rule filters with key value pair data
+ */
+export const useGetAllRuleFilters = ({ account_id, filterType, ...props }: UseGetAllRuleFiltersProps) =>
+  useGet<GetAllRuleFiltersResponse, unknown, GetAllRuleFiltersQueryParams, GetAllRuleFiltersPathParams>(
+    (paramsInPath: GetAllRuleFiltersPathParams) =>
+      `accounts/${paramsInPath.account_id}/savedfilters/type/${paramsInPath.filterType}`,
+    { base: getConfig('lw/api'), pathParams: { account_id, filterType }, ...props }
+  )
+
+export interface DeleteRuleFilterQueryParams {
+  accountIdentifier: string
+}
+
+export interface DeleteRuleFilterPathParams {
+  account_id: string
+}
+
+export type DeleteRuleFilterProps = Omit<
+  MutateProps<SaveRuleFilterResponse, unknown, DeleteRuleFilterQueryParams, string, DeleteRuleFilterPathParams>,
+  'path' | 'verb'
+> &
+  DeleteRuleFilterPathParams
+
+/**
+ * Deletes a rule filter with key value pair data
+ *
+ * Deletes a rule filter with key value pair data
+ */
+export const DeleteRuleFilter = ({ account_id, ...props }: DeleteRuleFilterProps) => (
+  <Mutate<SaveRuleFilterResponse, unknown, DeleteRuleFilterQueryParams, string, DeleteRuleFilterPathParams>
+    verb="DELETE"
+    path={`accounts/${account_id}/savedfilters`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseDeleteRuleFilterProps = Omit<
+  UseMutateProps<SaveRuleFilterResponse, unknown, DeleteRuleFilterQueryParams, string, DeleteRuleFilterPathParams>,
+  'path' | 'verb'
+> &
+  DeleteRuleFilterPathParams
+
+/**
+ * Deletes a rule filter with key value pair data
+ *
+ * Deletes a rule filter with key value pair data
+ */
+export const useDeleteRuleFilter = ({ account_id, ...props }: UseDeleteRuleFilterProps) =>
+  useMutate<SaveRuleFilterResponse, unknown, DeleteRuleFilterQueryParams, string, DeleteRuleFilterPathParams>(
+    'DELETE',
+    (paramsInPath: DeleteRuleFilterPathParams) => `accounts/${paramsInPath.account_id}/savedfilters`,
+    { base: getConfig('lw/api'), pathParams: { account_id }, ...props }
+  )
+
+export interface GetRuleFilterQueryParams {
+  accountIdentifier: string
+}
+
+export interface GetRuleFilterPathParams {
+  account_id: string
+  id: string
+}
+
+export type GetRuleFilterProps = Omit<
+  GetProps<SaveRuleFilterResponse, unknown, GetRuleFilterQueryParams, GetRuleFilterPathParams>,
+  'path'
+> &
+  GetRuleFilterPathParams
+
+/**
+ * Fetches a rule filter with key value pair data
+ *
+ * Fetches a rule filter with key value pair data
+ */
+export const GetRuleFilter = ({ account_id, id, ...props }: GetRuleFilterProps) => (
+  <Get<SaveRuleFilterResponse, unknown, GetRuleFilterQueryParams, GetRuleFilterPathParams>
+    path={`accounts/${account_id}/savedfilters/${id}`}
+    base={getConfig('lw/api')}
+    {...props}
+  />
+)
+
+export type UseGetRuleFilterProps = Omit<
+  UseGetProps<SaveRuleFilterResponse, unknown, GetRuleFilterQueryParams, GetRuleFilterPathParams>,
+  'path'
+> &
+  GetRuleFilterPathParams
+
+/**
+ * Fetches a rule filter with key value pair data
+ *
+ * Fetches a rule filter with key value pair data
+ */
+export const useGetRuleFilter = ({ account_id, id, ...props }: UseGetRuleFilterProps) =>
+  useGet<SaveRuleFilterResponse, unknown, GetRuleFilterQueryParams, GetRuleFilterPathParams>(
+    (paramsInPath: GetRuleFilterPathParams) => `accounts/${paramsInPath.account_id}/savedfilters/${paramsInPath.id}`,
+    { base: getConfig('lw/api'), pathParams: { account_id, id }, ...props }
   )
 
 export interface GetInstancesTagsQueryParams {

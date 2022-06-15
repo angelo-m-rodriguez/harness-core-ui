@@ -64,10 +64,11 @@ import { yamlStringify } from '@common/utils/YamlHelperMethods'
 import { useToaster } from '@common/exports'
 import routes from '@common/RouteDefinitions'
 import { useQueryParams } from '@common/hooks'
-import type { StoreType } from '@common/constants/GitSyncTypes'
+import { StoreType } from '@common/constants/GitSyncTypes'
 import { getFeaturePropsForRunPipelineButton, mergeTemplateWithInputSetData } from '@pipeline/utils/runPipelineUtils'
 import type { InputSetDTO, Pipeline } from '@pipeline/utils/types'
 import { PipelineErrorView } from '@pipeline/components/RunPipelineModal/PipelineErrorView'
+import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetails'
 import { ErrorsStrip } from '../ErrorsStrip/ErrorsStrip'
 import GitPopover from '../GitPopover/GitPopover'
 import SelectStagetoRetry from './SelectStagetoRetry'
@@ -101,13 +102,13 @@ function RetryPipeline({
   modules,
   onClose
 }: RetryPipelineProps): React.ReactElement {
-  const { isGitSyncEnabled } = useAppStore()
+  const { isGitSyncEnabled, isGitSimplificationEnabled } = useAppStore()
   const { getString } = useStrings()
   const { showSuccess, showWarning, showError } = useToaster()
   const { getRBACErrorMessage } = useRBACError()
   const history = useHistory()
 
-  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module } =
+  const { projectIdentifier, orgIdentifier, pipelineIdentifier, accountId, executionIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
 
   const { pipelineExecutionDetail } = useExecutionContext()
@@ -118,6 +119,7 @@ function RetryPipeline({
   const branch = pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.branch
   const connectorRef = pipelineExecutionDetail?.pipelineExecutionSummary?.connectorRef
   const storeType = pipelineExecutionDetail?.pipelineExecutionSummary?.storeType as StoreType
+  const isPipelineRemote = isGitSimplificationEnabled && storeType === StoreType.REMOTE
   const { inputSetType, inputSetValue, inputSetLabel, inputSetRepoIdentifier, inputSetBranch } = useQueryParams<
     GitQueryParams & RunPipelineQueryParams
   >()
@@ -465,7 +467,8 @@ function RetryPipeline({
                 projectIdentifier,
                 executionIdentifier: retryPipelineData?.planExecution?.uuid || '',
                 accountId,
-                module
+                module,
+                source
               })
             )
           }
@@ -680,13 +683,23 @@ function RetryPipeline({
                 >
                   {getString('pipeline.retryPipeline')}
                 </Heading>
-                {isGitSyncEnabled && (
-                  <GitSyncStoreProvider>
-                    <GitPopover
-                      data={pipelineResponse?.data?.gitDetails ?? {}}
-                      iconProps={{ margin: { left: 'small', top: 'xsmall' } }}
-                    />
-                  </GitSyncStoreProvider>
+                {isPipelineRemote ? (
+                  <GitRemoteDetails
+                    repoName={repoIdentifier}
+                    branch={branch}
+                    filePath={pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.filePath}
+                    fileUrl={pipelineExecutionDetail?.pipelineExecutionSummary?.gitDetails?.fileUrl}
+                    flags={{ readOnly: true }}
+                  />
+                ) : (
+                  isGitSyncEnabled && (
+                    <GitSyncStoreProvider>
+                      <GitPopover
+                        data={pipelineResponse?.data?.gitDetails ?? {}}
+                        iconProps={{ margin: { left: 'small', top: 'xsmall' } }}
+                      />
+                    </GitSyncStoreProvider>
+                  )
                 )}
                 <div className={css.optionBtns}>
                   <VisualYamlToggle

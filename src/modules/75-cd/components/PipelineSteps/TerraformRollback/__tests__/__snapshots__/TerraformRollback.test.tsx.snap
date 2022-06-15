@@ -121,7 +121,7 @@ exports[`Test TerraformRollback should render edit view as edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformRollback_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -382,7 +382,7 @@ exports[`Test TerraformRollback should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformRollback_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -641,7 +641,7 @@ exports[`Test TerraformRollback should render edit view with runtime input value
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformRollback_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

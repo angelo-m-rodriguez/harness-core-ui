@@ -30,7 +30,8 @@ function HealthSourceDrawerContent({
   shouldRenderAtVerifyStep,
   changeSources,
   metricDetails,
-  isTemplate
+  isTemplate,
+  expressions
 }: HealthSourceDrawerInterface): JSX.Element {
   const { getString } = useStrings()
 
@@ -80,11 +81,17 @@ function HealthSourceDrawerContent({
     }
     return [
       [getString('cv.healthSource.defineHealthSource'), getString('cv.healthSource.customizeHealthSource')],
-      <DefineHealthSource key="defineHealthSource" onSubmit={values => setSelectedProduct(values.product?.value)} />,
+      <DefineHealthSource
+        key="defineHealthSource"
+        isTemplate={isTemplate}
+        expressions={expressions}
+        onSubmit={values => setSelectedProduct(values.product?.value)}
+      />,
       <CustomiseHealthSource
         key="customiseHealthSource"
         onSuccess={onSuccess}
         isTemplate={isTemplate}
+        expressions={expressions}
         shouldRenderAtVerifyStep={shouldRenderAtVerifyStep}
       />
     ]

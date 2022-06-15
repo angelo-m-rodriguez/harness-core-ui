@@ -7,12 +7,10 @@
 
 import React from 'react'
 import { render, waitFor } from '@testing-library/react'
-import moment from 'moment'
 import * as dashboardServices from 'services/dashboard-service'
 import { TestWrapper } from '@common/utils/testUtils'
-import LandingDashboardContext from '@common/factories/LandingDashboardContext'
+import LandingDashboardContext, { DashboardTimeRange } from '@common/factories/LandingDashboardContext'
 import type { ResponseExecutionResponseCountOverview } from 'services/dashboard-service'
-import { startOfDay } from '@common/components/TimeRangeSelector/TimeRangeSelector'
 import OverviewGlanceCards from '../OverviewGlanceCards'
 
 import overviewCountMock from './overviewMock.json'
@@ -31,10 +29,7 @@ describe('OverviewGlanceCards', () => {
       <TestWrapper>
         <LandingDashboardContext.Provider
           value={{
-            selectedTimeRange: {
-              range: [startOfDay(moment().subtract(1, 'month').add(1, 'day')), startOfDay(moment())],
-              label: 'common.duration.month'
-            },
+            selectedTimeRange: DashboardTimeRange['30Days'],
             selectTimeRange: () => void 0,
             scope: { accountIdentifier: 'testAccount' }
           }}
@@ -45,7 +40,7 @@ describe('OverviewGlanceCards', () => {
     )
 
     await waitFor(() => expect(queryByText('projectsText')).toBeInTheDocument())
-    expect(getData).toBeCalledTimes(0)
+    expect(getData).toBeCalled()
 
     expect(queryByText('+137')).toBeInTheDocument()
     expect(container).toMatchSnapshot()

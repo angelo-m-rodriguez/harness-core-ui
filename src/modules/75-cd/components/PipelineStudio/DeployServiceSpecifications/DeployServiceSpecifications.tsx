@@ -76,15 +76,16 @@ import {
 } from '@common/components/EntityReference/EntityReference'
 import { useGetTemplate } from 'services/template-ng'
 import { Page } from '@common/exports'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { yamlParse } from '@common/utils/YamlHelperMethods'
 import type { DeployServiceData } from '@cd/components/PipelineSteps/DeployServiceStep/DeployServiceInterface'
 import { useCache } from '@common/hooks/useCache'
+import { FeatureFlag } from '@common/featureFlags'
 import stageCss from '../DeployStageSetupShell/DeployStage.module.scss'
 
 export default function DeployServiceSpecifications(props: React.PropsWithChildren<unknown>): JSX.Element {
   const { getString } = useStrings()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
   const queryParams = useParams<ProjectPathProps & ServicePathProps>()
   const { repoIdentifier, branch } = useQueryParams<GitQueryParams>()
 
@@ -165,7 +166,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
         !stage?.stage?.spec?.serviceConfig?.serviceDefinition &&
         !stage?.stage?.spec?.serviceConfig?.useFromStage?.stage &&
         stage?.stage?.type === StageType.DEPLOY &&
-        !NG_SVC_ENV_REDESIGN
+        !isSvcEnvEntityEnabled
       ) {
         setDefaultServiceSchema()
       } else if (
@@ -194,12 +195,8 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       if (serviceInfo) {
         const stageData = produce(stage, draft => {
           if (draft) {
-            set(draft, 'stage.spec', {
-              deploymentType: serviceInfo?.type,
-              service: {
-                serviceRef: parsedYaml.service?.identifier
-              }
-            })
+            set(draft, 'stage.spec.deploymentType', serviceInfo?.type)
+            set(draft, 'stage.spec.service.serviceRef', parsedYaml.service?.identifier)
           }
         })
         if (stageData?.stage) {
@@ -250,7 +247,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       stages.forEach((item, index) => {
         if (index < stageIndex) {
           //If the new stage or stage template has new service entity(stage.spec.service.serviceRef), propogate from stage is not allowed.
-          if (NG_SVC_ENV_REDESIGN) {
+          if (isSvcEnvEntityEnabled) {
             /* istanbul ignore else */
             if (
               (item.stage?.spec as any)?.service?.serviceRef ||
@@ -423,7 +420,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
       })
       await debounceUpdateStage(stageData?.stage)
 
-      if (NG_SVC_ENV_REDESIGN && value.serviceRef) {
+      if (isSvcEnvEntityEnabled && value.serviceRef) {
         refetchServiceData({
           pathParams: {
             serviceIdentifier: value.serviceRef
@@ -566,7 +563,7 @@ export default function DeployServiceSpecifications(props: React.PropsWithChildr
   }, [])
 
   const isNewServiceEntity = (): boolean => {
-    return (NG_SVC_ENV_REDESIGN as boolean) && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
+    return isSvcEnvEntityEnabled && isEmptyServiceConfigPath(stage?.stage as DeploymentStageElementConfig)
   }
 
   const shouldRenderDeployServiceStep = (): boolean => {

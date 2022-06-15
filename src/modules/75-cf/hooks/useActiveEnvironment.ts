@@ -5,13 +5,12 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { useQueryParams } from '@common/hooks'
-
 const useActiveEnvironment = (): {
   activeEnvironment: string
   withActiveEnvironment: (url: string, envOverride?: string) => string
 } => {
-  const activeEnvironment = useQueryParams<Record<string, string>>()?.activeEnvironment || ''
+  const params = new URLSearchParams(location.href.split('?')?.[1])
+  const activeEnvironment = params.get('activeEnvironment') ?? ''
 
   const withActiveEnvironment = (url: string, envOverride?: string): string => {
     const env = envOverride ?? activeEnvironment

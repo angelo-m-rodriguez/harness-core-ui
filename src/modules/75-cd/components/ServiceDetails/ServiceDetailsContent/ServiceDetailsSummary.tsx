@@ -23,7 +23,7 @@ import type { ServicePathProps } from '@common/interfaces/RouteInterfaces'
 import { InstanceCountHistory } from '@cd/components/ServiceDetails/InstanceCountHistory/InstanceCountHistory'
 import { PipelineExecutions } from '@cd/components/ServiceDetails/PipelineExecutions/PipelineExecutions'
 import { useLocalStorage } from '@common/hooks/useLocalStorage'
-import { validTimeFormat } from '@common/factories/LandingDashboardContext'
+import { validTimeFormat } from '@cd/pages/dashboard/CDDashboardPage'
 import css from '@cd/components/ServiceDetails/ServiceDetailsContent/ServicesDetailsContent.module.scss'
 
 const ServiceDetailsSummary: React.FC = () => {

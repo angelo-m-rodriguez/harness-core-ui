@@ -55,6 +55,7 @@ updating: 'Updating {{entity}} {{name}}'
 creating: 'Creating {{entity}} {{name}}'
 successfullCreate: '{{entity}} {{name}} created successfully'
 successfullUpdate: '{{entity}} {{name}} updated successfully'
+dataSubmitSuccess: 'Data has been submitted successfully'
 entityType: Entity Type
 approve: Approve
 reject: Reject
@@ -75,6 +76,8 @@ variables: Variables
 copyVariableName: Copy variable name
 copyFqn: Copy fully qualified name
 selectType: Select Type
+timeframe: Timeframe
+selectTimeFrame: Select Timeframe
 accountSetting:
   connector:
     loading: 'Loading settings...'
@@ -273,6 +276,8 @@ purpose:
   sto:
     continuous: Security Tests
     moduleSelectionSubHeading: Take your security tests to the next level using our Harness Security Tests
+    security: Security
+    tests: '{{$.tests}}'
 trialInProgress: Trial in progress
 trialInProgressDescription: A Project contains your pipelines, resources, and team members. Get started by creating your first Project.
 letsGetYouStarted: Let’s get you started
@@ -319,6 +324,8 @@ gitSync:
 
 git:
   branchName: 'Branch name'
+  selectBranchPlaceholder: Select or enter a branch name
+  selectRepositoryPlaceholder: Select or enter a repository name
   urlType: 'URL Type'
   connectionType: 'Connection Type'
   testRepository: 'Test Repository'
@@ -663,10 +670,13 @@ default: Default
 searchPlaceholder: Search by name or Id
 monthly: Monthly
 perMonth: /month
+perYear: /year
 hourly: Hourly
 daily: Daily
 yearly: Yearly
 billed: Billed
+subtotal: Subtotal
+annually: annually
 plans:
   title: Upgrade to get the most out of Harness
   featureComparison: Show All Feature Comparison
@@ -799,7 +809,6 @@ userLabel: User
 resourceLabel: Resource
 resourceTypeLabel: Resource Type
 moduleLabel: 'Module'
-timePstLabel: Time (PST)
 resourceGroupLabel: Resource Group
 roleAssignmentLabel: Role Assignment
 triggerLabel: Trigger

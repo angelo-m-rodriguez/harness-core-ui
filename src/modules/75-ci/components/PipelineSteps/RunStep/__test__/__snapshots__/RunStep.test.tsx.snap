@@ -21,7 +21,7 @@ exports[`Run Step Edit View edit mode works 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -708,7 +708,7 @@ exports[`Run Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1468,7 +1468,7 @@ exports[`Run Step Edit View should render properly 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

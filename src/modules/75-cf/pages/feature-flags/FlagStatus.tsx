@@ -25,6 +25,7 @@ export interface FlagStatusProps {
 export const FlagStatus: React.FC<FlagStatusProps> = ({ status, lastAccess }) => {
   const { getString } = useStrings()
   const isNeverRequested = status === FeatureFlagStatus.NEVER_REQUESTED
+  const isPotentiallyStale = status === FeatureFlagStatus.POTENTIALLY_STALE
   const textStyle = {
     fontWeight: 600,
     fontSize: '10px',
@@ -55,9 +56,8 @@ export const FlagStatus: React.FC<FlagStatusProps> = ({ status, lastAccess }) =>
       <Text inline style={textStyle}>
         {(status || '').toLocaleUpperCase()}
       </Text>
-      {(!isNeverRequested && <TimeAgo time={lastAccess} icon={undefined} style={subTextStyle} />) || (
-        <Text style={subTextStyle}>{getString('cf.featureFlags.makeSure')}</Text>
-      )}
+      {!isNeverRequested && !isPotentiallyStale && <TimeAgo time={lastAccess} icon={undefined} style={subTextStyle} />}
+      {isNeverRequested && <Text style={subTextStyle}>{getString('cf.featureFlags.makeSure')}</Text>}
     </ComponentLayout>
   )
 }

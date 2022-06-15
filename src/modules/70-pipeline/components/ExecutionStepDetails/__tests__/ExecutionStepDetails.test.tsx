@@ -42,6 +42,7 @@ const pathParams = {
   pipelineIdentifier: 'TEST_PIPELINE',
   executionIdentifier: 'TEST_EXECUTION',
   module: 'cd',
+  source: 'executions',
   stageId: 'selectedStageId'
 }
 

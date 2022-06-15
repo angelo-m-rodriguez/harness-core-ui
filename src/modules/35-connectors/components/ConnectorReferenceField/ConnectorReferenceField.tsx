@@ -649,16 +649,6 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
     }
   })
 
-  const [canUpdate] = usePermission(
-    {
-      resource: {
-        resourceType: ResourceType.CONNECTOR
-      },
-      permissions: [PermissionIdentifier.UPDATE_CONNECTOR]
-    },
-    []
-  )
-
   const [selectedValue, setSelectedValue] = React.useState(selected)
 
   const { showError } = useToaster()
@@ -814,7 +804,23 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
   const tooltipContext = React.useContext(FormikTooltipContext)
   const dataTooltipId =
     props.tooltipProps?.dataTooltipId || (tooltipContext?.formName ? `${tooltipContext?.formName}_${name}` : '')
-
+  const getReferenceFieldPropsValues = getReferenceFieldProps({
+    defaultScope,
+    gitScope,
+    accountIdentifier,
+    projectIdentifier,
+    orgIdentifier,
+    type,
+    name,
+    selected: selectedValue,
+    width,
+    placeholder: placeHolderLocal,
+    label,
+    getString,
+    category,
+    openConnectorModal,
+    setPagedConnectorData
+  })
   return (
     <FormGroup
       {...rest}
@@ -826,25 +832,8 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
         onChange={(connector, scope) => {
           props.onChange?.(connector, scope)
         }}
-        {...getReferenceFieldProps({
-          defaultScope,
-          gitScope,
-          accountIdentifier,
-          projectIdentifier,
-          orgIdentifier,
-          type,
-          name,
-          selected: selectedValue,
-          width,
-          placeholder: placeHolderLocal,
-          label,
-          getString,
-          category,
-          openConnectorModal,
-          setPagedConnectorData
-        })}
+        {...getReferenceFieldPropsValues}
         hideModal={inlineSelection.selected && inlineSelection.inlineModalClosed}
-        isNewConnectorLabelVisible={canUpdate}
         selectedRenderer={getSelectedRenderer(
           selectedValue as ConnectorSelectedValue,
           !!connectorStatus,
@@ -862,6 +851,23 @@ export const ConnectorReferenceField: React.FC<ConnectorReferenceFieldProps> = p
           gotoPage: pageIndex => setPage(pageIndex)
         }}
         disableCollapse={!(type === 'Github')}
+        createNewBtnComponent={
+          <RbacButton
+            variation={ButtonVariation.SECONDARY}
+            onClick={() => {
+              optionalReferenceSelectProps.createNewHandler?.()
+            }}
+            text={`+ ${getReferenceFieldPropsValues.createNewLabel}`}
+            margin={{ right: 'small' }}
+            permission={{
+              permission: PermissionIdentifier.UPDATE_CONNECTOR,
+              resource: {
+                resourceType: ResourceType.CONNECTOR
+              },
+              resourceScope: { accountIdentifier, orgIdentifier, projectIdentifier }
+            }}
+          ></RbacButton>
+        }
       />
     </FormGroup>
   )

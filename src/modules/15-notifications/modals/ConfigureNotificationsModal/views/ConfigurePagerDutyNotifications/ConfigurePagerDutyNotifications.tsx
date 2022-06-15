@@ -8,7 +8,17 @@
 import React, { useState } from 'react'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import { FormikForm, FormInput, Button, Layout, Icon, Text, Heading, ButtonProps } from '@wings-software/uicore'
+import {
+  FormikForm,
+  FormInput,
+  Button,
+  Layout,
+  Icon,
+  Text,
+  Heading,
+  ButtonProps,
+  MultiTypeInputType
+} from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import cx from 'classnames'
 import { useToaster } from '@common/components'
@@ -28,6 +38,7 @@ interface ConfigurePagerDutyNotificationsProps {
   onBack?: () => void
   submitButtonText?: string
   config?: PagerDutyNotificationConfiguration
+  expressions?: string[]
 }
 
 interface PagerDutyNotificationData {
@@ -118,7 +129,19 @@ const ConfigurePagerDutyNotifications: React.FC<ConfigurePagerDutyNotificationsP
           {formik => {
             return (
               <FormikForm>
-                <FormInput.Text name={'key'} label={getString('notifications.labelPDKey')} />
+                {props.expressions ? (
+                  <FormInput.MultiTextInput
+                    name={'key'}
+                    label={getString('notifications.labelPDKey')}
+                    multiTextInputProps={{
+                      expressions: props.expressions,
+                      allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+                    }}
+                  />
+                ) : (
+                  <FormInput.Text name={'key'} label={getString('notifications.labelPDKey')} />
+                )}
+
                 <Layout.Horizontal margin={{ bottom: 'xxlarge' }} style={{ alignItems: 'center' }}>
                   <TestPagerDutyNotifications data={formik.values} />
                 </Layout.Horizontal>

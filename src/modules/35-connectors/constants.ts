@@ -83,6 +83,7 @@ export const Connectors: ConnectorType = {
   ARTIFACTORY: 'Artifactory',
   CEAWS: 'CEAws',
   HttpHelmRepo: 'HttpHelmRepo',
+  OciHelmRepo: 'OciHelmRepo',
   Jira: 'Jira',
   NEW_RELIC: 'NewRelic',
   AWS_KMS: 'AwsKms',

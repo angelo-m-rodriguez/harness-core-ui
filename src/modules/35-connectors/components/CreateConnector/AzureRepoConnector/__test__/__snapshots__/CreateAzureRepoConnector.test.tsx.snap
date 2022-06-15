@@ -156,7 +156,7 @@ exports[`Create AzureRepoconnector Wizard Creating AzureRepo connector step one 
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormAzureRepo_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

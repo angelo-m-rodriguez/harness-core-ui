@@ -22,20 +22,16 @@ exports[`Git Sync - repo tab Filling gitSync repo form: connectorSelectorDialog 
             common.entityReferenceTitle
           </p>
         </div>
-        <div
-          class="Layout--horizontal StyledProps--main bp3-popover-dismiss"
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-right-small Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
         >
-          <button
-            class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-right-small Button--with-current-color Button--variation Button--variation-secondary"
-            type="button"
+          <span
+            class="bp3-button-text"
           >
-            <span
-              class="bp3-button-text"
-            >
-              + newConnector
-            </span>
-          </button>
-        </div>
+            + newConnector
+          </span>
+        </button>
       </div>
     </h4>
     <button
@@ -850,7 +846,7 @@ exports[`Git Sync - repo tab Filling gitSync repo form: gitSync repo form 1`] = 
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1571,7 +1567,7 @@ exports[`Git Sync - repo tab Repo type card should be enabled only for Github 1`
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -2083,20 +2079,16 @@ exports[`Git Sync - repo tab Updating the status of connector: connectorSelector
             common.entityReferenceTitle
           </p>
         </div>
-        <div
-          class="Layout--horizontal StyledProps--main bp3-popover-dismiss"
+        <button
+          class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-right-small Button--with-current-color Button--variation Button--variation-secondary"
+          type="button"
         >
-          <button
-            class="bp3-button Button--button StyledProps--font StyledProps--main StyledProps--margin-right-small Button--with-current-color Button--variation Button--variation-secondary"
-            type="button"
+          <span
+            class="bp3-button-text"
           >
-            <span
-              class="bp3-button-text"
-            >
-              + newConnector
-            </span>
-          </button>
-        </div>
+            + newConnector
+          </span>
+        </button>
       </div>
     </h4>
     <button
@@ -2981,7 +2973,7 @@ exports[`Git Sync - repo tab rendering form to create gitSync repo 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -3625,7 +3617,7 @@ exports[`Git Sync - repo tab rendering form to create gitSync repo 2`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

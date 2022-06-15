@@ -618,7 +618,7 @@ exports[`Render Forms - Snapshot Testing render Edit Input Set Form view: expand
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="inputSetForm_identifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"
@@ -1382,7 +1382,7 @@ exports[`Render Forms - Snapshot Testing render Input Set Form view 1`] = `
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="inputSetForm_identifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"
@@ -2201,7 +2201,7 @@ exports[`Render Forms - Snapshot Testing render inputset with no inputSetRespons
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="inputSetForm_identifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"

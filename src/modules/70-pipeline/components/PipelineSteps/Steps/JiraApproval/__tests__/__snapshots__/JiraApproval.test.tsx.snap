@@ -21,7 +21,7 @@ exports[`Jira Approval fetch projects show error if failed to fetch projects 1`]
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jiraApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1368,7 +1368,7 @@ exports[`Jira Approval tests Edit stage - readonly: edit stage view readonly 1`]
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jiraApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

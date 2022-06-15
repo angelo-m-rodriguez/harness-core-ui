@@ -32,7 +32,7 @@ exports[`TriggerOverviewPanel Triggers tests Renders/snapshots Initial Render - 
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="wrapperComponentForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

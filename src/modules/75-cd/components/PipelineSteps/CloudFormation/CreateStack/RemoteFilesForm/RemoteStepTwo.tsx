@@ -145,7 +145,12 @@ const StepTwo: React.FC<StepProps<any> & StepTwoProps> = ({
                   </div>
                 )}
                 {connector !== S3 && (
-                  <ParameterRepoDetails allowableTypes={allowableTypes} index={index} values={values} />
+                  <ParameterRepoDetails
+                    allowableTypes={allowableTypes}
+                    index={index}
+                    values={values}
+                    prevStepData={prevStepData}
+                  />
                 )}
                 <div className={cx(stepCss.md)}>
                   <MultiTypeFieldSelector

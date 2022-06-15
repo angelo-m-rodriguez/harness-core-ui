@@ -208,7 +208,7 @@ exports[`ServiceHeader should open and close the Services modal 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="deployService_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

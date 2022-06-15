@@ -35,6 +35,7 @@ import {
   getTextWithSearchMarkers,
   usePipelineVariables
 } from '@pipeline/components/PipelineVariablesContext/PipelineVariablesContext'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import AddEditCustomVariable from './AddEditCustomVariable'
 import type { VariableState } from './AddEditCustomVariable'
 import { VariableType } from './CustomVariableUtils'
@@ -57,6 +58,7 @@ export interface CustomVariableEditableExtraProps {
   showHeaders?: boolean
   enableValidation?: boolean
   path?: string
+  hideExecutionTimeField?: boolean
 }
 
 export interface CustomVariableEditableProps extends CustomVariableEditableExtraProps {
@@ -78,6 +80,7 @@ export function CustomVariableEditable(props: CustomVariableEditableProps): Reac
     readonly,
     path,
     formName,
+    hideExecutionTimeField,
     allowableTypes
   } = props
   const uids = React.useRef<string[]>([])
@@ -103,6 +106,7 @@ export function CustomVariableEditable(props: CustomVariableEditableProps): Reac
   const updatedPath = path?.replace('pipeline.', '')
   const tableRef = React.useRef()
   const { openNestedPath } = useNestedAccordion()
+  const { NG_EXECUTION_INPUT } = useFeatureFlags()
 
   React.useLayoutEffect(() => {
     if (tableRef.current) {
@@ -278,9 +282,13 @@ export function CustomVariableEditable(props: CustomVariableEditableProps): Reac
                                 defaultValue={variable.default}
                                 type={variable.type || /* istanbul ignore next */ 'String'}
                                 variableName={variable.name || /* istanbul ignore next */ ''}
+                                hideExecutionTimeField={hideExecutionTimeField}
                                 onChange={(value, defaultValue) => {
                                   setFieldValue(`variables[${index}].value`, value)
-                                  setFieldValue(`variables[${index}].default`, defaultValue)
+                                  setFieldValue(
+                                    `variables[${index}].default`,
+                                    NG_EXECUTION_INPUT ? undefined : defaultValue
+                                  )
                                 }}
                                 isReadonly={readonly}
                               />

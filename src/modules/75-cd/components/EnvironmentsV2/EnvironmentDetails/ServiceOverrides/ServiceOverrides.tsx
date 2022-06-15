@@ -7,12 +7,11 @@
 
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { defaultTo, isNil } from 'lodash-es'
+import { defaultTo, get, isNil } from 'lodash-es'
 import cx from 'classnames'
 import { parse } from 'yaml'
 
 import {
-  Button,
   FormInput,
   getMultiTypeFromValue,
   ButtonSize,
@@ -31,6 +30,8 @@ import {
   deleteServiceOverridePromise,
   NGServiceOverrideConfig,
   NGVariable,
+  ServiceOverrideResponseDTO,
+  ServiceResponse,
   upsertServiceOverridePromise,
   useGetServiceList,
   useGetServiceOverridesList
@@ -40,8 +41,12 @@ import { String, useStrings } from 'framework/strings'
 import { TextInputWithCopyBtn } from '@common/components/TextInputWithCopyBtn/TextInputWithCopyBtn'
 import { ContainerSpinner } from '@common/components/ContainerSpinner/ContainerSpinner'
 import type { EnvironmentPathProps, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
+import { yamlStringify } from '@common/utils/YamlHelperMethods'
 
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
+import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import RbacButton from '@rbac/components/Button/Button'
 
 import MultiTypeSecretInput from '@secrets/components/MutiTypeSecretInput/MultiTypeSecretInput'
 
@@ -86,14 +91,10 @@ export function ServiceOverrides(): React.ReactElement {
   })
 
   useEffect(() => {
-    if (!servicesLoading && services?.data?.empty === false) {
+    if (!servicesLoading && get(services, 'data.empty', null) === false) {
       refetchServiceOverrides()
     }
   }, [servicesLoading, services])
-
-  // TODO: Handle RBAC
-  const readonly = false
-  const canAddOverride = true
 
   const createNewOverride = () => {
     setIsEdit(false)
@@ -134,9 +135,9 @@ export function ServiceOverrides(): React.ReactElement {
     }
   }
 
-  const handleDeleteOverride = async (variableOverrides: NGVariable[], index: number, serviceRef?: string) => {
-    const variablesCount = variableOverrides.length
-    if (variablesCount === index + 1) {
+  const handleDeleteOverride = async (variables: NGVariable[], index: number, serviceRef?: string) => {
+    const variablesCount = variables.length
+    if (variablesCount === 1) {
       try {
         const response = await deleteServiceOverridePromise({
           queryParams: {
@@ -149,7 +150,7 @@ export function ServiceOverrides(): React.ReactElement {
           body: null as any
         })
         if (response.status === 'SUCCESS') {
-          showSuccess('Successfully deleted service override')
+          showSuccess(getString('cd.serviceOverrides.deletedOneVariable'))
           refetchServiceOverrides()
         } else {
           throw response
@@ -159,6 +160,19 @@ export function ServiceOverrides(): React.ReactElement {
       }
     } else {
       try {
+        const parsedYaml = parse(
+          defaultTo(
+            serviceOverrides?.data?.content?.filter(override => override.serviceRef === serviceRef)?.[0].yaml,
+            '{}'
+          )
+        ) as NGServiceOverrideConfig
+
+        variables.splice(index, 1).map(override => ({
+          name: get(override, 'name'),
+          type: get(override, 'type'),
+          value: get(override, 'value')
+        }))
+
         const response = await upsertServiceOverridePromise({
           queryParams: {
             accountIdentifier: accountId
@@ -167,12 +181,19 @@ export function ServiceOverrides(): React.ReactElement {
             orgIdentifier,
             projectIdentifier,
             environmentRef: environmentIdentifier,
-            serviceRef
+            serviceRef,
+            yaml: yamlStringify({
+              ...parsedYaml,
+              serviceOverrides: {
+                ...parsedYaml.serviceOverrides,
+                variables
+              }
+            })
           }
         })
 
         if (response.status === 'SUCCESS') {
-          showSuccess('Successfully deleted variable from service override')
+          showSuccess(getString('cd.serviceOverrides.deletedOneVariable'))
           refetchServiceOverrides()
         } else {
           throw response
@@ -190,84 +211,97 @@ export function ServiceOverrides(): React.ReactElement {
       <Card className={css.serviceOverridesContainer}>
         <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
           <Text color={Color.GREY_700} margin={{ bottom: 'small' }} font={{ weight: 'bold' }}>
-            {getString('cd.serviceOverrides')}
+            {getString('cd.serviceOverrides.label')}
           </Text>
-          <Button
+          <RbacButton
             size={ButtonSize.SMALL}
             variation={ButtonVariation.LINK}
             onClick={createNewOverride}
             text={getString('common.plusNewName', { name: getString('common.override') })}
+            permission={{
+              resource: {
+                resourceType: ResourceType.ENVIRONMENT
+              },
+              permission: PermissionIdentifier.EDIT_ENVIRONMENT
+            }}
           />
         </Layout.Horizontal>
-        <Text>{getString('cd.serviceOverridesHelperText')}</Text>
+        <Text>{getString('cd.serviceOverrides.helperText')}</Text>
 
-        {serviceOverrides?.data?.content?.map((serviceOverride, overrideIndex) => {
-          const { serviceOverrides: { serviceRef, variableOverrides } = {} } = parse(
-            defaultTo(serviceOverride.yaml, '{}')
-          ) as NGServiceOverrideConfig
-          return (
-            <Container key={serviceRef} margin={{ top: 'medium', bottom: 'medium' }}>
-              <Text
-                color={Color.BLACK}
-                font={{ variation: FontVariation.UPPERCASED, weight: 'bold' }}
-                margin={{ bottom: 'small' }}
-              >
-                {services?.data?.content?.filter(serviceObject => serviceRef === serviceObject.service?.identifier)?.[0]
-                  ?.service?.name || serviceRef}
-              </Text>
-              <Card style={{ width: '100%' }}>
-                {!isNil(variableOverrides) && variableOverrides.length > 0 && (
-                  <div className={cx(css.tableRow, css.headerRow)}>
-                    <Text font={{ variation: FontVariation.TABLE_HEADERS }}>
-                      {getString('cd.configurationVariable')}
-                    </Text>
-                    <Text font={{ variation: FontVariation.TABLE_HEADERS }}>{getString('typeLabel')}</Text>
-                    <Text font={{ variation: FontVariation.TABLE_HEADERS }}>{getString('cd.overrideValue')}</Text>
-                  </div>
-                )}
-                {variableOverrides?.map?.((variable: any, index: any) => {
-                  return (
-                    <div key={`${serviceRef}-${variable.name}`} className={css.tableRow}>
-                      <TextInputWithCopyBtn
-                        name={`serviceOverrides[${overrideIndex}]variables[${index}].name`}
-                        label=""
-                        disabled={true}
-                        staticDisplayValue={variable.name}
-                      />
-                      <String
-                        className={css.valueString}
-                        stringID={labelStringMap[variable.type as VariableType]}
-                        data-testid={`serviceOverrides[${overrideIndex}]variables[${index}].type`}
-                      />
-                      <div className={css.valueColumn} data-type={getMultiTypeFromValue(variable.value as string)}>
-                        {variable.type === VariableType.Secret ? (
-                          <MultiTypeSecretInput
-                            name={`serviceOverrides[${overrideIndex}]variables[${index}].value`}
-                            label=""
-                            disabled={true}
-                          />
-                        ) : (
-                          <FormInput.MultiTextInput
-                            className="variableInput"
-                            name={`serviceOverrides[${overrideIndex}]variables[${index}].value`}
-                            label=""
-                            disabled={true}
-                            multiTextInputProps={{
-                              defaultValueToReset: '',
-                              expressions,
-                              textProps: {
-                                type: variable.type === VariableType.Number ? 'number' : 'text'
-                              },
-                              value: variable.value
-                            }}
-                          />
-                        )}
-                        <div className={css.actionButtons}>
-                          {canAddOverride && (
+        {get(serviceOverrides, 'data.content', []).map(
+          (serviceOverride: ServiceOverrideResponseDTO, serviceOverrideIndex: number) => {
+            const { serviceOverrides: { serviceRef, variables } = {} } = parse(
+              defaultTo(serviceOverride.yaml, '{}')
+            ) as NGServiceOverrideConfig
+
+            const serviceName = get(
+              get(services, 'data.content', []).find(
+                (serviceObject: ServiceResponse) => serviceRef === serviceObject.service?.identifier
+              ),
+              'service.name',
+              serviceRef
+            )
+
+            return (
+              <Container key={serviceRef} margin={{ top: 'medium', bottom: 'medium' }}>
+                <Text
+                  color={Color.BLACK}
+                  font={{ variation: FontVariation.UPPERCASED, weight: 'bold' }}
+                  margin={{ bottom: 'small' }}
+                >
+                  {serviceName}
+                </Text>
+                <Card style={{ width: '100%' }}>
+                  {!isNil(variables) && variables.length > 0 && (
+                    <div className={cx(css.tableRow, css.headerRow)}>
+                      <Text font={{ variation: FontVariation.TABLE_HEADERS }}>
+                        {getString('cd.configurationVariable')}
+                      </Text>
+                      <Text font={{ variation: FontVariation.TABLE_HEADERS }}>{getString('typeLabel')}</Text>
+                      <Text font={{ variation: FontVariation.TABLE_HEADERS }}>{getString('cd.overrideValue')}</Text>
+                    </div>
+                  )}
+                  {variables?.map?.((variable: any, index: any) => {
+                    return (
+                      <div key={`${serviceRef}-${variable.name}`} className={css.tableRow}>
+                        <TextInputWithCopyBtn
+                          name={`serviceOverrides[${serviceOverrideIndex}]variables[${index}].name`}
+                          label=""
+                          disabled={true}
+                          staticDisplayValue={variable.name}
+                        />
+                        <String
+                          className={css.valueString}
+                          stringID={labelStringMap[variable.type as VariableType]}
+                          data-testid={`serviceOverrides[${serviceOverrideIndex}]variables[${index}].type`}
+                        />
+                        <div className={css.valueColumn} data-type={getMultiTypeFromValue(variable.value as string)}>
+                          {variable.type === VariableType.Secret ? (
+                            <MultiTypeSecretInput
+                              name={`serviceOverrides[${serviceOverrideIndex}]variables[${index}].value`}
+                              label=""
+                              disabled={true}
+                            />
+                          ) : (
+                            <FormInput.MultiTextInput
+                              className="variableInput"
+                              name={`serviceOverrides[${serviceOverrideIndex}]variables[${index}].value`}
+                              label=""
+                              disabled={true}
+                              multiTextInputProps={{
+                                defaultValueToReset: '',
+                                expressions,
+                                textProps: {
+                                  type: variable.type === VariableType.Number ? 'number' : 'text'
+                                },
+                                value: variable.value
+                              }}
+                            />
+                          )}
+                          <div className={css.actionButtons}>
                             <React.Fragment>
-                              <Button
+                              <RbacButton
                                 icon="Edit"
-                                disabled={readonly}
                                 tooltip={<String className={css.tooltip} stringID="common.editVariableType" />}
                                 data-testid={`edit-variable-${index}`}
                                 onClick={() => {
@@ -279,24 +313,33 @@ export function ServiceOverrides(): React.ReactElement {
                                   showModal()
                                 }}
                                 minimal
+                                permission={{
+                                  resource: {
+                                    resourceType: ResourceType.ENVIRONMENT
+                                  },
+                                  permission: PermissionIdentifier.EDIT_ENVIRONMENT
+                                }}
                               />
-                              <Button
+                              <RbacButton
                                 icon="main-trash"
-                                disabled={readonly}
                                 data-testid={`delete-variable-${index}`}
                                 tooltip={<String className={css.tooltip} stringID="common.removeThisVariable" />}
-                                onClick={() => handleDeleteOverride(variableOverrides, index, serviceRef)}
+                                onClick={() => handleDeleteOverride(variables, index, serviceRef)}
                                 minimal
+                                permission={{
+                                  resource: {
+                                    resourceType: ResourceType.ENVIRONMENT
+                                  },
+                                  permission: PermissionIdentifier.EDIT_ENVIRONMENT
+                                }}
                               />
                             </React.Fragment>
-                          )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )
-                })}
-                {canAddOverride && (
-                  <Button
+                    )
+                  })}
+                  <RbacButton
                     size={ButtonSize.SMALL}
                     variation={ButtonVariation.LINK}
                     onClick={() => {
@@ -308,12 +351,18 @@ export function ServiceOverrides(): React.ReactElement {
                       showModal()
                     }}
                     text={getString('common.plusAddName', { name: getString('common.override') })}
+                    permission={{
+                      resource: {
+                        resourceType: ResourceType.ENVIRONMENT
+                      },
+                      permission: PermissionIdentifier.EDIT_ENVIRONMENT
+                    }}
                   />
-                )}
-              </Card>
-            </Container>
-          )
-        })}
+                </Card>
+              </Container>
+            )
+          }
+        )}
       </Card>
     </Container>
   )

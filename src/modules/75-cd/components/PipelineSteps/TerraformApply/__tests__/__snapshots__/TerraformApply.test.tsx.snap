@@ -16,7 +16,7 @@ exports[`Test TerraformApply expand backend Spec config 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -989,7 +989,7 @@ exports[`Test TerraformApply rendering more than one varfile 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1378,7 +1378,7 @@ exports[`Test TerraformApply rendering more than one varfile 2`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2574,7 +2574,7 @@ exports[`Test TerraformApply should render edit view as edit step - Inheritfromp
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2906,7 +2906,7 @@ exports[`Test TerraformApply should render edit view as inline 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -3295,7 +3295,7 @@ exports[`Test TerraformApply should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -3713,7 +3713,7 @@ exports[`Test TerraformApply should submit form for inheritfromplan config 1`] =
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4045,7 +4045,7 @@ exports[`Test TerraformApply should submit form for inline config 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4465,7 +4465,7 @@ exports[`Test TerraformApply should trigger validation error for expression valu
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -4938,7 +4938,7 @@ exports[`Test TerraformApply should trigger validation error for fixed value 1`]
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -5389,7 +5389,7 @@ exports[`Test TerraformApply should trigger validation error for invalid fixed v
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="terraformEdit-TerraformApply-_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

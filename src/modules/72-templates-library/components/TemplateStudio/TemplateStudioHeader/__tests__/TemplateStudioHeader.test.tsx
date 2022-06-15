@@ -11,8 +11,21 @@ import { TestWrapper } from '@common/utils/testUtils'
 import { TemplateStudioHeader } from '@templates-library/components/TemplateStudio/TemplateStudioHeader/TemplateStudioHeader'
 import type { TemplateType } from '@templates-library/utils/templatesUtils'
 
+jest.mock('@templates-library/components/Templates/TemplatesFactory', () => ({
+  getTemplateName: jest.fn(templateType => {
+    switch (templateType) {
+      case 'Stage':
+        return 'Stage Template'
+      case 'Step':
+        return 'Step Template'
+      default:
+        return 'Studio'
+    }
+  })
+}))
+
 describe('TemplateStudioHeader', () => {
-  test('renders Stage templateType correctly', () => {
+  test('renders Stage templateType correctly', async () => {
     const { container, getByText } = render(
       <TestWrapper>
         <TemplateStudioHeader templateType={'Stage' as TemplateType} />

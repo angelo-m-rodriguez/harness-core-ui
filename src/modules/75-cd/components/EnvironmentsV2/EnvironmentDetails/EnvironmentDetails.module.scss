@@ -13,6 +13,22 @@
   }
 }
 
+.clusterDataTable {
+  padding-top: var(--spacing-small);
+  width: 100%;
+
+  :global(.TableV2--header) {
+    padding: var(--spacing-xlarge) var(--spacing-xxxlarge) !important;
+  }
+
+  :global(.TableV2--body) {
+    padding: 0 var(--spacing-xlarge);
+    max-height: calc(100% - 128px);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
 .environmentDetailsBody {
   :global {
     .bp3-tab-list {
@@ -76,4 +92,8 @@
       margin-bottom: 0px;
     }
   }
+}
+
+.fullWidth {
+  width: 100%;
 }

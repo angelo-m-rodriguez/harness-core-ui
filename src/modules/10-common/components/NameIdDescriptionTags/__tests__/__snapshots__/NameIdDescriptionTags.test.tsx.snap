@@ -21,7 +21,7 @@ exports[`NameIdDescriptionTags  tests Renders/snapshots Initial Render - Name, I
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="TestWrapper_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -215,7 +215,7 @@ exports[`NameIdDescriptionTags  tests Renders/snapshots On Edit Render - Name, I
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="TestWrapper_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

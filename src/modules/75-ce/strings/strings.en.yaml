@@ -62,6 +62,8 @@ co:
   breadCrumb:
     rules: 'AutoStopping Rules'
   noData: 'No data available. Please check after sometime'
+  noDataForDateRange: 'No data available for this date range.'
+  noDataForSearchAndDateRange: 'No data available for this search term and date range.'
   ruleDrawer:
     usageTime: 'Usage Time'
     logs: '{{ $.pipeline.verification.analysisTab.logs }}'
@@ -84,6 +86,7 @@ co:
             kubernetes: '{{$.connectors.title.k8sCluster}}'
             gcpVms: 'GCE VM(s)'
             ec2Vms: 'EC2 VM(s)'
+            azureVms: 'Azure VM(s)'
             ecsService: 'ECS Service'
             rdsInstances: 'RDS Instance'
             ig: Instance groups
@@ -464,6 +467,9 @@ co:
     hostName: 'Host name'
     computeType: 'Compute type'
     customDomain: 'Custom domain'
+  filters:
+    resourceTypeLabelWithExample: 'Resource Type (ECS, K8s, RDS, etc.)'
+    namespaceLabel: 'Namespaces (kubernetes only)'
 
 learnMore: Learn more about Cloud Cost Management
 ceTrialHomePage:

@@ -9,6 +9,7 @@ import type { SelectOption } from '@wings-software/uicore'
 import type { AllFailureStrategyConfig } from '@pipeline/components/PipelineSteps/AdvancedSteps/FailureStrategyPanel/utils'
 import type { StepElementConfig } from 'services/cd-ng'
 import type { VariableResponseMapValue } from 'services/pipeline-ng'
+import type { MONITORED_SERVICE_TYPE } from './components/ContinousVerificationWidget/components/ContinousVerificationWidgetSections/components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
 
 export interface ContinousVerificationVariableStepProps {
   metadataMap: Record<string, VariableResponseMapValue>
@@ -26,6 +27,15 @@ export interface spec {
   [x: string]: any
 }
 
+export interface VerifyStepMonitoredService {
+  type: MONITORED_SERVICE_TYPE | string
+  spec: {
+    monitoredServiceRef?: string | SelectOption
+    monitoredServiceTemplateRef?: string
+    versionLabel?: string
+  }
+}
+
 export interface ContinousVerificationData extends StepElementConfig {
   failureStrategies: AllFailureStrategyConfig[]
   spec: {
@@ -36,5 +46,6 @@ export interface ContinousVerificationData extends StepElementConfig {
       identifier: string
     }[]
     spec?: spec
+    monitoredService: VerifyStepMonitoredService
   }
 }

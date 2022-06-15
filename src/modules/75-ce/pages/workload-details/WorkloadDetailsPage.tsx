@@ -27,7 +27,7 @@ import routes from '@common/RouteDefinitions'
 import { getViewFilterForId, getTimeFilters, GROUP_BY_POD, getTimeRangeFilter } from '@ce/utils/perspectiveUtils'
 import CloudCostInsightChart from '@ce/components/CloudCostInsightChart/CloudCostInsightChart'
 import { CCM_CHART_TYPES } from '@ce/constants'
-import PerspectiveTimeRangePicker from '@ce/components/PerspectiveTimeRangePicker/PerspectiveTimeRangePicker'
+import TimeRangePicker from '@ce/common/TimeRangePicker/TimeRangePicker'
 import { DAYS_FOR_TICK_INTERVAL } from '@ce/components/CloudCostInsightChart/Chart'
 import {
   CE_DATE_FORMAT_INTERNAL,
@@ -220,7 +220,7 @@ const WorkloadDetailsPage: () => JSX.Element = () => {
       <Page.Body>
         <Container flex background="white" padding="small">
           <FlexExpander />
-          <PerspectiveTimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />
+          <TimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />
         </Container>
         <Container padding="large">
           <WorkloadSummary

@@ -1521,7 +1521,7 @@ exports[`Manifest Trigger Tests function getArtifactSpecObj by displaying select
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_artifacts_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -2231,7 +2231,7 @@ exports[`Manifest Trigger Tests on click of edit - submits thru the right payloa
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_artifacts_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -3541,7 +3541,7 @@ exports[`Manifest Trigger Tests on click of edit artifact - submits thru the rig
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_artifacts_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -4962,7 +4962,7 @@ exports[`Manifest Trigger Tests throws validation error when select artifact/man
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="wizardForm_artifacts_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

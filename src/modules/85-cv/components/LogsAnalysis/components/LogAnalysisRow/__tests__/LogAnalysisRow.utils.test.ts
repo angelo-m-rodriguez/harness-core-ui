@@ -17,7 +17,7 @@ describe('Unit tests for LogAnalysisRow utils', () => {
     const projectIdentifier = 'def'
     const orgIdentifier = 'ghi'
     onClickErrorTrackingRow(errorRow, accountId, projectIdentifier, orgIdentifier)
-    const url = `http://localhost/#/account/${accountId}/cv/orgs/${orgIdentifier}/projects/${projectIdentifier}/et/arc/arc?event=ewogICAgICAgICAgInNlcnZpY2VfaWQiOiAiUzEiLAogICAgICAgICAgInZpZXdwb3J0X3N0cmluZ3MiOnsKICAgICAgICAgICAgImZyb21fdGltZXN0YW1wIjoiMTY0Njc0NzM5NiIsCiAgICAgICAgICAgICJ0b190aW1lc3RhbXAiOiIxNjQ2NzUwOTk2IiwKICAgICAgICAgICAgInVudGlsX25vdyI6ZmFsc2UsCiAgICAgICAgICAgICJtYWNoaW5lX2hhc2hlcyI6W10sCiAgICAgICAgICAgICJhZ2VudF9oYXNoZXMiOltdLAogICAgICAgICAgICAiZGVwbG95bWVudF9oYXNoZXMiOltdLAogICAgICAgICAgICAicmVxdWVzdF9pZHMiOls2XQogICAgICAgICAgfQogICAgICAgICAgLCJ0aW1lc3RhbXAiOiIxNjQ2NzUwOTk2IgogICAgICAgIH0=`
+    const url = `http://localhost/#/account/${accountId}/cv/orgs/${orgIdentifier}/projects/${projectIdentifier}/et/arc?event=ewogICAgICAgICAgInNlcnZpY2VfaWQiOiAiUzEiLAogICAgICAgICAgInZpZXdwb3J0X3N0cmluZ3MiOnsKICAgICAgICAgICAgImZyb21fdGltZXN0YW1wIjoiMTY0Njc0NzM5NiIsCiAgICAgICAgICAgICJ0b190aW1lc3RhbXAiOiIxNjQ2NzUwOTk2IiwKICAgICAgICAgICAgInVudGlsX25vdyI6ZmFsc2UsCiAgICAgICAgICAgICJtYWNoaW5lX2hhc2hlcyI6W10sCiAgICAgICAgICAgICJhZ2VudF9oYXNoZXMiOltdLAogICAgICAgICAgICAiZGVwbG95bWVudF9oYXNoZXMiOltdLAogICAgICAgICAgICAicmVxdWVzdF9pZHMiOls2XQogICAgICAgICAgfQogICAgICAgICAgLCJ0aW1lc3RhbXAiOiIxNjQ2NzUwOTk2IgogICAgICAgIH0=`
     expect(window.open).toHaveBeenCalled()
     expect(window.open).toHaveBeenCalledWith(url)
   })

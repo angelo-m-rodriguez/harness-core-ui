@@ -30,8 +30,9 @@ import { GetServiceListQueryParams, ServiceResponseDTO, useGetServiceList } from
 import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import routes from '@common/RouteDefinitions'
 import { isCommunityPlan } from '@common/utils/utils'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import { NewEditServiceModal } from '@cd/components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
+import { FeatureFlag } from '@common/featureFlags'
 import ServicesGridView from '../ServicesGridView/ServicesGridView'
 import ServicesListView from '../ServicesListView/ServicesListView'
 import { ServiceTabs } from '../utils/ServiceUtils'
@@ -40,7 +41,7 @@ import css from './ServicesListPage.module.scss'
 export const ServicesListPage: React.FC = () => {
   const { accountId, orgIdentifier, projectIdentifier, module } = useParams<ProjectPathProps & ModulePathParams>()
   const isCommunity = isCommunityPlan()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
   const { getString } = useStrings()
   const { showError } = useToaster()
   const { fetchDeploymentList } = useServiceStore()
@@ -89,7 +90,7 @@ export const ServicesListPage: React.FC = () => {
             serviceId: selectedService?.identifier,
             module
           }),
-          search: NG_SVC_ENV_REDESIGN ? `tab=${ServiceTabs.Configuration}` : `tab=${ServiceTabs.SUMMARY}`
+          search: isSvcEnvEntityEnabled ? `tab=${ServiceTabs.Configuration}` : `tab=${ServiceTabs.SUMMARY}`
         })
       } else {
         showError(getString('cd.serviceList.noIdentifier'))
@@ -101,7 +102,7 @@ export const ServicesListPage: React.FC = () => {
 
   const onServiceCreate = useCallback(
     (values: ServiceResponseDTO): void => {
-      if (NG_SVC_ENV_REDESIGN) {
+      if (isSvcEnvEntityEnabled) {
         goToServiceDetails(values)
       } else {
         ;(fetchDeploymentList.current as () => void)?.()

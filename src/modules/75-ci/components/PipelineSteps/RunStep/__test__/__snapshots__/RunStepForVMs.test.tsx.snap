@@ -21,7 +21,7 @@ exports[`Run Step view Edit View should render properly for AWS VMs build infra 
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciRunStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

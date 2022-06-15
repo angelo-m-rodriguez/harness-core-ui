@@ -41,6 +41,7 @@ function Service(
     serviceTabformRef,
     onChangeMonitoredServiceType,
     isTemplate,
+    expressions,
     updateTemplate
   }: {
     value: MonitoredServiceForm
@@ -52,6 +53,7 @@ function Service(
     onChangeMonitoredServiceType: (updatedValues: MonitoredServiceForm) => void
     isTemplate?: boolean
     updateTemplate?: (template: MonitoredServiceForm) => void
+    expressions?: string[]
   },
   formikRef?: TemplateFormRef
 ): JSX.Element {
@@ -214,6 +216,7 @@ function Service(
                   healthSourceListFromAPI={initialValues.sources?.healthSources}
                   serviceFormFormik={formik}
                   isTemplate={isTemplate}
+                  expressions={expressions}
                 />
                 <MonitoredServiceNotificationsContainer
                   setFieldValue={formik?.setFieldValue}

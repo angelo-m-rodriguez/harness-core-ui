@@ -27,6 +27,7 @@ describe('Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -51,6 +52,7 @@ describe('Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -74,6 +76,7 @@ describe('Policy Info under Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -95,6 +98,7 @@ describe('Policy Info under Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -116,6 +120,7 @@ describe('Policy Info under Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -137,6 +142,7 @@ describe('Policy Info under Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >
@@ -158,6 +164,7 @@ describe('Policy Info under Policy Evaluation Content', () => {
           projectIdentifier: 'project',
           pipelineIdentifier: 'pipeline',
           executionIdentifier: 'execution',
+          source: 'executions',
           module: 'cd'
         }}
       >

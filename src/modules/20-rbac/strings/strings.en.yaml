@@ -224,8 +224,8 @@ group: Group
 manageSCIMText: 'Unable to {{action}} this {{target}} because it is managed using SCIM by your identity provider.'
 unableToEditSCIMMembership: Unable to edit membership to this group because it is managed using SCIM by your identity provider.
 unableToEditInheritedMembership: 'Members managed in {{parentScope}} scope'
-manageInheritedGroupText: 'Unable to {{action}} this usergroup because it is managed at {{parentScope}} level'
-unableToEditInheritedMembershipDetailed: 'This group is managed at {{parentScope}} level. Its user membership and notification settings can not be modified at {{childScope}} level'
+manageInheritedGroupText: 'Unable to {{action}} this User Group because it is managed at {{parentScope}} level'
+unableToEditInheritedMembershipDetailed: 'This group is managed at {{parentScope}} level. Its user membership and notification settings can not be modified at {{childScope}} level.'
 linkToOriginalUserGroup: Click here to modify settings
 copyGroup:
   title: 'Copy group: {{name}}'

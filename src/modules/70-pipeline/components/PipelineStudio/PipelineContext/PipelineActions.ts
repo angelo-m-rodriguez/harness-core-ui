@@ -12,7 +12,13 @@ import type { YamlSnippetMetaData, PipelineInfoConfig } from 'services/cd-ng'
 import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
 import type * as Diagram from '@pipeline/components/Diagram'
 import type { StoreMetadata } from '@common/constants/GitSyncTypes'
-import type { EntityGitDetails, EntityValidityDetails, ErrorNodeSummary, Failure } from 'services/pipeline-ng'
+import type {
+  EntityGitDetails,
+  EntityValidityDetails,
+  ErrorNodeSummary,
+  Failure,
+  YamlSchemaErrorWrapperDTO
+} from 'services/pipeline-ng'
 import type { DependencyElement } from 'services/ci'
 import type { TemplateType } from '@common/interfaces/RouteInterfaces'
 import type { TemplateSummaryResponse } from 'services/template-ng'
@@ -143,6 +149,7 @@ export interface PipelineReducerState {
   selectionState: SelectionState
   templateError?: GetDataError<Failure | Error> | null
   templateInputsErrorNodeSummary?: ErrorNodeSummary
+  yamlSchemaErrorWrapper?: YamlSchemaErrorWrapperDTO
 }
 
 export const DefaultPipeline: PipelineInfoConfig = {
@@ -167,6 +174,7 @@ export interface ActionResponse {
   selectionState?: SelectionState
   templateError?: GetDataError<Failure | Error> | null
   templateInputsErrorNodeSummary?: ErrorNodeSummary
+  yamlSchemaErrorWrapper?: YamlSchemaErrorWrapperDTO
 }
 
 export interface ActionReturnType {

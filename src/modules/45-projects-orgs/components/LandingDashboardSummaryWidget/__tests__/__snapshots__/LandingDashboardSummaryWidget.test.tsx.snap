@@ -267,7 +267,7 @@ exports[`LandingDashboard At a Glance LandingDashboard rendering 1`] = `
                       <p
                         class="StyledProps--font StyledProps--main StyledProps--font-variation-table-headers"
                       >
-                        deploymentsText
+                        executionsText
                       </p>
                     </div>
                   </p>

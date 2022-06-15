@@ -39,7 +39,7 @@ exports[`Edit stage view test Should match snapshot when context is provided 1`]
                     >
                       <div
                         class="Text--withDocsTooltip"
-                        data-tooltip-id="cdEditStage_identifier"
+                        data-tooltip-id="universalInputNameWithId"
                       >
                         <p
                           class="StyledProps--font StyledProps--main"
@@ -413,7 +413,7 @@ exports[`Edit stage view test Should match snapshot when template is provided 1`
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="cdEditStage_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

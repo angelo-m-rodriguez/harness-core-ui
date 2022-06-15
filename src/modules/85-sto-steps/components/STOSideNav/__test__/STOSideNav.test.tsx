@@ -55,19 +55,6 @@ describe('STO side nav tests', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('switches to project mode when no project in app store', async () => {
-    const { container } = render(
-      <TestWrapper path={testPathOverview} pathParams={testParams}>
-        <STOSideNav />
-      </TestWrapper>
-    )
-
-    const projectTab = await waitFor(() => container.querySelector('[data-tab-id="project"]'))
-    fireEvent.click(projectTab!)
-
-    expect(projectTab).toHaveAttribute('aria-selected', 'true')
-  })
-
   test('switches to project overview when app store has project', async () => {
     const { container, getByTestId } = render(
       <TestWrapper
@@ -79,14 +66,14 @@ describe('STO side nav tests', () => {
       </TestWrapper>
     )
 
-    const projectTab = await waitFor(() => container.querySelector('[data-tab-id="project"]'))
-    fireEvent.click(projectTab!)
+    const projectSelector = await waitFor(() => container.querySelector('#projectSelector'))
+    fireEvent.click(projectSelector!)
 
     expect(getByTestId('location').innerHTML).toEqual(
       routes.toSTOProjectOverview({
         accountId: 'accountId',
-        orgIdentifier: 'ORG',
-        projectIdentifier: 'PROJECT'
+        orgIdentifier: 'newOrg',
+        projectIdentifier: 'newProject'
       })
     )
   })
@@ -108,22 +95,5 @@ describe('STO side nav tests', () => {
         projectIdentifier: 'newProject'
       })
     )
-  })
-
-  test('switches to account overview', async () => {
-    const { container, getByTestId } = render(
-      <TestWrapper
-        path={testPathProjectOverview}
-        pathParams={testParams}
-        defaultAppStoreValues={{ selectedProject: { name: 'Target', identifier: 'PROJECT', orgIdentifier: 'ORG' } }}
-      >
-        <STOSideNav />
-      </TestWrapper>
-    )
-
-    const projectTab = await waitFor(() => container.querySelector('[data-tab-id="account"]'))
-    fireEvent.click(projectTab!)
-
-    expect(getByTestId('location').innerHTML).toEqual(routes.toSTOOverview({ accountId: 'accountId' }))
   })
 })

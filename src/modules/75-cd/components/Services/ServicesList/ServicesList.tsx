@@ -7,10 +7,20 @@
 
 import React, { useCallback, useMemo, useState } from 'react'
 import cx from 'classnames'
-import { useHistory, useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import type { CellProps, Renderer } from 'react-table'
 import ReactTimeago from 'react-timeago'
-import { Button, Layout, Popover, TagsPopover, Text, useConfirmationDialog, useToaster, Dialog } from '@harness/uicore'
+import {
+  Button,
+  Layout,
+  Popover,
+  TagsPopover,
+  Text,
+  useConfirmationDialog,
+  useToaster,
+  Dialog,
+  Icon
+} from '@harness/uicore'
 import { Color, Intent } from '@harness/design-system'
 import { Classes, Menu, Position } from '@blueprintjs/core'
 import { defaultTo, pick } from 'lodash-es'
@@ -31,7 +41,8 @@ import { DeploymentTypeIcons } from '@cd/components/DeploymentTypeIcons/Deployme
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { NewEditServiceModal } from '@cd/components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
 import { ServiceTabs } from '../utils/ServiceUtils'
 import css from '@cd/components/Services/ServicesList/ServiceList.module.scss'
@@ -298,7 +309,7 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
   const { getRBACErrorMessage } = useRBACError()
   const { getString } = useStrings()
   const history = useHistory()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
 
   const { mutate: deleteService } = useDeleteServiceV2({
     queryParams: {
@@ -390,7 +401,7 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
   const handleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     e.stopPropagation()
     setMenuOpen(false)
-    if (NG_SVC_ENV_REDESIGN) {
+    if (isSvcEnvEntityEnabled) {
       history.push({
         pathname: routes.toServiceStudio({
           accountId,
@@ -412,6 +423,14 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
     openDialog()
   }
 
+  const openInNewTab = routes.toServiceStudio({
+    accountId,
+    orgIdentifier,
+    projectIdentifier,
+    serviceId: data.identifier,
+    module
+  })
+
   return (
     <Layout.Horizontal>
       <Popover
@@ -431,6 +450,15 @@ const RenderColumnMenu: Renderer<CellProps<any>> = ({ row, column }) => {
           }}
         />
         <Menu style={{ minWidth: 'unset' }}>
+          <Link
+            className={cx('bp3-menu-item', css.openNewTabStyle)}
+            target="_blank"
+            to={openInNewTab}
+            onClick={e => e.stopPropagation()}
+          >
+            <Icon name="launch" style={{ marginRight: '5px' }} />
+            {getString('pipeline.openInNewTab')}
+          </Link>
           <RbacMenuItem
             icon="edit"
             text={getString('edit')}

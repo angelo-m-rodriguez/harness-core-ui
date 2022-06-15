@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FinalReview render 1`] = `
+<div>
+  <div
+    class="Layout--vertical Layout--layout-spacing-large StyledProps--main StyledProps--padding-bottom-large"
+  >
+    <p
+      class="StyledProps--font StyledProps--main StyledProps--font-variation-h3"
+    >
+      authSettings.success.title
+    </p>
+    <p
+      class="StyledProps--font StyledProps--main StyledProps--font-variation-h5"
+    >
+      authSettings.success.msg
+    </p>
+  </div>
+</div>
+`;

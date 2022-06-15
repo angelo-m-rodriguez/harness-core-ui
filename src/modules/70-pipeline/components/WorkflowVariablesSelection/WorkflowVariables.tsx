@@ -60,6 +60,7 @@ export default function WorkflowVariables({
   const [parentStageData, setParentStageData] = React.useState<StageElementWrapperConfig>()
   const getServiceCacheId = `${pipeline.identifier}-${selectedStageId}-service`
   const { getCache } = useCache([getServiceCacheId])
+  const serviceInfo = getCache<ServiceDefinition>(getServiceCacheId)
 
   React.useEffect(() => {
     if (isEmpty(parentStageData) && parentStage) {
@@ -97,8 +98,7 @@ export default function WorkflowVariables({
   }
 
   const getInitialValues = useCallback((): Variable[] => {
-    if (isReadonlyServiceMode) {
-      const serviceInfo = getCache(getServiceCacheId) as ServiceDefinition
+    if (isReadonlyServiceMode && !isEmpty(serviceInfo)) {
       return defaultTo(serviceInfo?.spec.variables, []) as Variable[]
     }
 
@@ -106,14 +106,7 @@ export default function WorkflowVariables({
       return (predefinedSetsPath?.variables || []) as Variable[]
     }
     return (stageSpec?.variables || []) as Variable[]
-  }, [
-    isReadonlyServiceMode,
-    isPropagating,
-    stageSpec?.variables,
-    getCache,
-    getServiceCacheId,
-    predefinedSetsPath?.variables
-  ])
+  }, [isReadonlyServiceMode, serviceInfo, isPropagating, stageSpec?.variables, predefinedSetsPath?.variables])
 
   const getYamlPropertiesForVariables = (): Variable[] => {
     if (isPropagating) {

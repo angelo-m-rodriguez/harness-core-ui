@@ -34,6 +34,7 @@ describe('<ExecutionMetadata.test /> tests', () => {
     projectIdentifier: 'TEST_PROJECT',
     pipelineIdentifier: 'TEST_PIPELINE',
     executionIdentifier: 'TEST_EXECUTION',
+    source: 'executions',
     module: 'ci'
   }
 

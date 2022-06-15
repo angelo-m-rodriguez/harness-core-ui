@@ -40,19 +40,24 @@ jest.mock('services/cv', () => ({
   })
 }))
 
-describe('Unit tests for ErrorTracking', () => {
-  test('Verify if Error Tracking View is rendered when required params are defined', async () => {
-    const props = {
-      monitoredServiceIdentifier: 'monitored_service_identifier',
-      serviceIdentifier: 'service-identifier',
-      environmentIdentifier: 'env-identifier',
-      startTime: 1630594988077,
-      endTime: 1630595011443
-    }
-    const { getByTestId } = render(<WrapperComponent {...props} />)
-    expect(getByTestId('error-tracking-analysis-view')).toBeTruthy()
-  })
+// eslint-disable-next-line react/display-name
+jest.mock('microfrontends/ChildAppMounter', () => () => {
+  return <div data-testid="error-tracking-child-mounter">mounted</div>
+})
 
+test('Verify if Error Tracking View is rendered when required params are defined', async () => {
+  const props = {
+    monitoredServiceIdentifier: 'monitored_service_identifier',
+    serviceIdentifier: 'service-identifier',
+    environmentIdentifier: 'env-identifier',
+    startTime: 1630594988077,
+    endTime: 1630595011443
+  }
+  const { getByTestId } = render(<WrapperComponent {...props} />)
+  expect(getByTestId('error-tracking-child-mounter')).toBeTruthy()
+})
+
+describe('Unit tests for ErrorTracking', () => {
   test('Verify if appropriate image is rendered when start or endtime is not present', async () => {
     const props = {
       monitoredServiceIdentifier: 'monitored_service_identifier',

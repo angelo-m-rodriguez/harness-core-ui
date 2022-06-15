@@ -5,326 +5,190 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import type { FormikProps } from 'formik'
+import { defaultTo, get } from 'lodash-es'
+import * as Yup from 'yup'
+import { parse } from 'yaml'
+
 import {
   Button,
   ButtonVariation,
   Formik,
   FormikForm,
-  Label,
   Layout,
-  ThumbnailSelect,
   VisualYamlSelectedView as SelectedView,
-  VisualYamlToggle,
   getErrorInfoFromErrorObject,
   Container
 } from '@harness/uicore'
-import * as Yup from 'yup'
-import { defaultTo, omit, isEqual } from 'lodash-es'
-import { useParams } from 'react-router-dom'
-import { Classes } from '@blueprintjs/core'
-import { parse } from 'yaml'
-import type { FormikProps } from 'formik'
-import cx from 'classnames'
+import { Color } from '@harness/design-system'
+
+import { useStrings } from 'framework/strings'
 import {
   EnvironmentRequestDTO,
-  EnvironmentResponseDTO,
   useUpsertEnvironmentV2,
-  useCreateEnvironmentV2,
-  useGetYamlSchema
+  NGEnvironmentInfoConfig,
+  NGEnvironmentConfig
 } from 'services/cd-ng'
+
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
-import { NameIdDescriptionTags, PageSpinner } from '@common/components'
-import { useStrings } from 'framework/strings'
 import { useToaster } from '@common/exports'
+import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderProps'
+import type { PipelinePathProps } from '@common/interfaces/RouteInterfaces'
+import { yamlStringify } from '@common/utils/YamlHelperMethods'
 
-import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
-
-import YAMLBuilder from '@common/components/YAMLBuilder/YamlBuilder'
-import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
-import { useTelemetry } from '@common/hooks/useTelemetry'
-import { Category, EnvironmentActions, ExitModalActions } from '@common/constants/TrackingConstants'
-import css from './DeployInfrastructureStep.module.scss'
+import EnvironmentConfiguration from '@cd/components/EnvironmentsV2/EnvironmentDetails/EnvironmentConfiguration/EnvironmentConfiguration'
 
 export interface AddEditEnvironmentModalProps {
-  isEdit: boolean
-  isEnvironment: boolean
-  data: EnvironmentResponseDTO
-  envIdentifier?: string
+  data: NGEnvironmentConfig
   onCreateOrUpdate(data: EnvironmentRequestDTO): void
   closeModal?: () => void
-}
-
-const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
-  fileName: `environment.yaml`,
-  entityType: 'Environment',
-  width: '100%',
-  height: 220,
-  showSnippetSection: false,
-  yamlSanityConfig: {
-    removeEmptyString: false,
-    removeEmptyObject: false,
-    removeEmptyArray: false
-  }
-}
-// SONAR recommendation
-const flexStart = 'flex-start'
-
-const cleanData = (values: EnvironmentResponseDTO): EnvironmentRequestDTO => {
-  const newDescription = values.description?.toString().trim()
-  const newId = values.identifier?.toString().trim()
-  const newName = values.name?.toString().trim()
-  const newType = values.type?.toString().trim()
-  return {
-    name: newName,
-    identifier: newId,
-    orgIdentifier: values.orgIdentifier,
-    projectIdentifier: values.projectIdentifier,
-    description: newDescription,
-    tags: values.tags,
-    type: newType as 'PreProduction' | 'Production'
-  }
+  isEdit: boolean
 }
 
 export const AddEditEnvironmentModal: React.FC<AddEditEnvironmentModalProps> = ({
-  isEdit,
   data,
-  isEnvironment,
   onCreateOrUpdate,
-  closeModal
+  closeModal,
+  isEdit
 }): JSX.Element => {
+  const { accountId, projectIdentifier, orgIdentifier } = useParams<PipelinePathProps>()
   const { getString } = useStrings()
-  const inputRef = React.useRef<HTMLInputElement | null>(null)
-  const { accountId, projectIdentifier, orgIdentifier } = useParams<{
-    orgIdentifier: string
-    projectIdentifier: string
-    accountId: string
-  }>()
-  const [yamlHandler, setYamlHandler] = React.useState<YamlBuilderHandlerBinding | undefined>()
-  const [selectedView, setSelectedView] = React.useState<SelectedView>(SelectedView.VISUAL)
-  const { loading: createLoading, mutate: createEnvironment } = useCreateEnvironmentV2({
-    queryParams: {
-      accountIdentifier: accountId
-    }
-  })
-  const { loading: updateLoading, mutate: updateEnvironment } = useUpsertEnvironmentV2({
-    queryParams: {
-      accountIdentifier: accountId
-    }
-  })
   const { showSuccess, showError, clear } = useToaster()
-  const { trackEvent } = useTelemetry()
 
-  React.useEffect(() => {
-    !isEdit &&
-      trackEvent(EnvironmentActions.StartCreateEnvironment, {
-        category: Category.ENVIRONMENT
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [yamlHandler, setYamlHandler] = useState<YamlBuilderHandlerBinding | undefined>()
+  const [selectedView, setSelectedView] = useState<SelectedView>(SelectedView.VISUAL)
 
-  const onSubmit = React.useCallback(
-    async (value: Required<EnvironmentRequestDTO>) => {
+  const { loading: upsertLoading, mutate: upsertEnvironment } = useUpsertEnvironmentV2({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+    // requestOptions: { headers: { 'Content-Type': 'application/yaml' } }
+  })
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const formikRef = useRef<FormikProps<NGEnvironmentInfoConfig>>()
+
+  const onSubmit = useCallback(
+    async (values: NGEnvironmentInfoConfig) => {
       try {
-        const values = cleanData(value)
-        if (!values.name) {
-          showError(getString('fieldRequired', { field: 'Environment' }))
-        } else if (!values.identifier) {
-          showError(getString('common.validation.fieldIsRequired', { name: 'Identifier' }))
-        } else if (!(isEqual(values.type, 'PreProduction') || isEqual(values.type, 'Production'))) {
-          showError(getString('cd.typeError'))
-        } else if (isEdit && id !== values.identifier) {
-          showError(getString('cd.editIdError', { id: id }))
-        } else if (isEdit && !isEnvironment) {
-          const response = await updateEnvironment({
-            ...omit(values, 'accountId', 'deleted'),
-            orgIdentifier,
-            projectIdentifier
-          })
-          if (response.status === 'SUCCESS') {
-            clear()
-            showSuccess(getString('cd.environmentUpdated'))
-            onCreateOrUpdate(values)
-          }
-        } else {
-          const response = await createEnvironment({ ...values, orgIdentifier, projectIdentifier })
-          if (response.status === 'SUCCESS') {
-            clear()
-            showSuccess(getString('cd.environmentCreated'))
-            onCreateOrUpdate(values)
-          }
+        const bodyWithoutYaml = {
+          name: values.name,
+          description: values.description,
+          identifier: values.identifier,
+          orgIdentifier: values.orgIdentifier,
+          projectIdentifier: values.projectIdentifier,
+          tags: values.tags,
+          type: defaultTo(values.type, 'Production')
         }
-      } catch (e) {
+
+        const response = await upsertEnvironment({
+          ...bodyWithoutYaml,
+          yaml: yamlStringify({ environment: values })
+        })
+
+        if (response.status === 'SUCCESS') {
+          clear()
+          showSuccess(getString(isEdit ? 'cd.environmentUpdated' : 'cd.environmentCreated'))
+          onCreateOrUpdate(values)
+        }
+      } catch (e: any) {
         showError(getErrorInfoFromErrorObject(e, true))
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onCreateOrUpdate, orgIdentifier, projectIdentifier, isEdit, isEnvironment]
+    [onCreateOrUpdate, orgIdentifier, projectIdentifier]
   )
-  React.useEffect(() => {
+
+  useEffect(() => {
     inputRef.current?.focus()
   }, [])
-  const typeList: { label: string; value: string }[] = [
-    {
-      label: getString('production'),
-      value: 'Production'
-    },
-    {
-      label: getString('cd.preProduction'),
-      value: 'PreProduction'
-    }
-  ]
-  const formikRef = React.useRef<FormikProps<EnvironmentResponseDTO>>()
-  const id = data.identifier
-  const { data: environmentSchema } = useGetYamlSchema({
-    queryParams: {
-      entityType: 'Environment',
-      projectIdentifier,
-      orgIdentifier,
-      accountIdentifier: accountId,
-      scope: getScopeFromDTO({ accountIdentifier: accountId, orgIdentifier, projectIdentifier })
-    }
-  })
-  const handleModeSwitch = React.useCallback(
-    (view: SelectedView) => {
-      if (view === SelectedView.VISUAL) {
-        const yaml = defaultTo(yamlHandler?.getLatestYaml(), '')
-        const envSetYamlVisual = parse(yaml).environment as EnvironmentResponseDTO
-        if (envSetYamlVisual) {
-          formikRef.current?.setValues({
-            ...omit(cleanData(envSetYamlVisual) as EnvironmentResponseDTO)
-          })
+
+  const { name, identifier, description, tags, type, variables } = get(
+    data,
+    'environment',
+    {} as NGEnvironmentInfoConfig
+  )
+
+  return (
+    <Formik<NGEnvironmentInfoConfig>
+      initialValues={
+        {
+          name: defaultTo(name, ''),
+          identifier: defaultTo(identifier, ''),
+          description: defaultTo(description, ''),
+          tags: defaultTo(tags, {}),
+          type: defaultTo(type, ''),
+          orgIdentifier: defaultTo(orgIdentifier, ''),
+          projectIdentifier: defaultTo(projectIdentifier, ''),
+          variables
+        } as NGEnvironmentInfoConfig
+      }
+      formName="editEnvironment"
+      onSubmit={
+        /* istanbul ignore next */ values => {
+          onSubmit?.({ ...values })
         }
       }
-      setSelectedView(view)
-    },
-    [yamlHandler?.getLatestYaml, data]
-  )
-  if (createLoading || updateLoading) {
-    return <PageSpinner />
-  }
-  return (
-    <>
-      <Container className={css.yamlToggleEnv}>
-        <Layout.Horizontal flex={{ justifyContent: flexStart }} padding={{ top: 'small' }}>
-          <VisualYamlToggle
-            selectedView={selectedView}
-            onChange={nextMode => {
-              handleModeSwitch(nextMode)
-            }}
-          />
-        </Layout.Horizontal>
-      </Container>
-      <Layout.Vertical>
-        <Formik<Required<EnvironmentResponseDTO>>
-          initialValues={data as Required<EnvironmentResponseDTO>}
-          formName="deployInfrastructure"
-          onSubmit={values => {
-            onSubmit(values)
-            !isEdit &&
-              trackEvent(EnvironmentActions.SaveCreateEnvironment, {
-                category: Category.ENVIRONMENT
-              })
-          }}
-          validationSchema={Yup.object().shape({
-            name: NameSchema({ requiredErrorMsg: getString?.('fieldRequired', { field: 'Environment' }) }),
-            type: Yup.string().required(getString?.('fieldRequired', { field: 'Type' })),
-            identifier: IdentifierSchema()
-          })}
-        >
-          {formikProps => {
-            formikRef.current = formikProps as FormikProps<EnvironmentResponseDTO> | undefined
-            return (
-              <>
-                {selectedView === SelectedView.VISUAL ? (
-                  <FormikForm>
-                    <NameIdDescriptionTags
-                      formikProps={formikProps}
-                      identifierProps={{
-                        inputLabel: getString('name'),
-                        inputGroupProps: {
-                          inputGroup: {
-                            inputRef: ref => (inputRef.current = ref)
-                          }
-                        },
-                        isIdentifierEditable: !isEdit
-                      }}
-                    />
-                    <Layout.Vertical spacing={'small'} style={{ marginBottom: 'var(--spacing-medium)' }}>
-                      <Label className={cx(Classes.LABEL, css.label)}>{getString('envType')}</Label>
-                      <ThumbnailSelect className={css.thumbnailSelect} name={'type'} items={typeList} />
-                    </Layout.Vertical>
-                    <Layout.Horizontal spacing="small" padding={{ top: 'xlarge' }}>
-                      <Button
-                        variation={ButtonVariation.PRIMARY}
-                        type={'submit'}
-                        text={getString('save')}
-                        data-id="environment-save"
-                      />
-                      <Button
-                        variation={ButtonVariation.TERTIARY}
-                        text={getString('cancel')}
-                        onClick={() => {
-                          !isEdit &&
-                            trackEvent(ExitModalActions.ExitByCancel, {
-                              category: Category.ENVIRONMENT
-                            })
-                          closeModal?.()
-                        }}
-                      />
-                    </Layout.Horizontal>
-                  </FormikForm>
-                ) : (
-                  <Container>
-                    <YAMLBuilder
-                      {...yamlBuilderReadOnlyModeProps}
-                      existingJSON={{
-                        environment: {
-                          ...omit(formikProps?.values),
-                          description: defaultTo(formikProps.values.description, ''),
-                          tags: defaultTo(formikProps.values.tags, {}),
-                          type: defaultTo(formikProps.values.type, '')
-                        }
-                      }}
-                      schema={environmentSchema?.data}
-                      bind={setYamlHandler}
-                      showSnippetSection={false}
-                    />
-
-                    <Layout.Horizontal spacing="small" padding={{ top: 'large' }}>
-                      <Button
-                        variation={ButtonVariation.PRIMARY}
-                        type="submit"
-                        text={getString('save')}
-                        onClick={() => {
-                          const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), '')
-                          const errorMsg = yamlHandler?.getYAMLValidationErrorMap()
-                          if (errorMsg?.size) {
-                            showError(errorMsg.entries().next().value[1])
-                          } else {
-                            onSubmit(parse(latestYaml)?.environment)
-                          }
-                        }}
-                      />
-                      <Button
-                        variation={ButtonVariation.TERTIARY}
-                        onClick={() => {
-                          !isEdit &&
-                            trackEvent(ExitModalActions.ExitByCancel, {
-                              category: Category.ENVIRONMENT
-                            })
-                          closeModal?.()
-                        }}
-                        text={getString('cancel')}
-                      />
-                    </Layout.Horizontal>
-                  </Container>
-                )}
-              </>
-            )
-          }}
-        </Formik>
-      </Layout.Vertical>
-    </>
+      validationSchema={Yup.object().shape({
+        name: NameSchema({ requiredErrorMsg: getString('fieldRequired', { field: 'Name' }) }),
+        identifier: IdentifierSchema(),
+        type: Yup.string().required().oneOf(['Production', 'PreProduction'])
+      })}
+      validateOnChange
+    >
+      {formikProps => {
+        formikRef.current = formikProps
+        return (
+          <>
+            <FormikForm>
+              <Container
+                background={Color.FORM_BG}
+                padding={{ top: 'large', right: 'medium', bottom: 'large', left: 'medium' }}
+              >
+                <EnvironmentConfiguration
+                  formikProps={formikProps}
+                  selectedView={selectedView}
+                  setSelectedView={setSelectedView}
+                  yamlHandler={yamlHandler}
+                  setYamlHandler={setYamlHandler}
+                  isModified={false}
+                  data={{ data: data } as any}
+                  isEdit={isEdit}
+                />
+              </Container>
+            </FormikForm>
+            <Layout.Horizontal
+              spacing="medium"
+              flex={{ alignItems: 'center', justifyContent: 'flex-start' }}
+              margin={{ top: 'large' }}
+            >
+              <Button
+                variation={ButtonVariation.PRIMARY}
+                type={'submit'}
+                text={getString('save')}
+                data-id="environment-edit"
+                onClick={
+                  /* istanbul ignore next */ () => {
+                    if (selectedView === SelectedView.YAML) {
+                      const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), /* istanbul ignore next */ '')
+                      onSubmit(parse(latestYaml)?.environment)
+                    } else {
+                      formikProps.submitForm()
+                    }
+                  }
+                }
+                loading={upsertLoading}
+              />
+              <Button
+                variation={ButtonVariation.TERTIARY}
+                text={getString('cancel')}
+                onClick={closeModal}
+                loading={upsertLoading}
+              />
+            </Layout.Horizontal>
+          </>
+        )
+      }}
+    </Formik>
   )
 }

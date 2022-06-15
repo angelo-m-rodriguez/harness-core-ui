@@ -60,6 +60,11 @@ jest.mock('@common/hooks/useTelemetryInstance', () => {
   }
 })
 
+jest.mock('@harness/help-panel', () => ({
+  ...jest.requireActual('@harness/help-panel'),
+  HelpPanel: () => 'Help Panel'
+}))
+
 jest.mock('react-timeago', () => () => 'dummy date')
 jest.mock('@delegates/modals/DelegateModal/useCreateDelegateModal', () => () => ({
   openDelegateModal: noop

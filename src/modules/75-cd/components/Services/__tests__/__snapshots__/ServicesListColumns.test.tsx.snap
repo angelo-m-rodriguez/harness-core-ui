@@ -292,7 +292,7 @@ exports[`ServiceMenu Should go to editModal by clicking edit 2`] = `
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="deployService_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

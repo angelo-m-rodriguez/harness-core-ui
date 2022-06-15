@@ -42,7 +42,7 @@ exports[`Connector details step Test for  create  connector step one required fe
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -518,7 +518,7 @@ exports[`Connector details step Test for  loading state 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -934,7 +934,7 @@ exports[`Connector details step Test for  updating state 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1275,7 +1275,7 @@ exports[`Connector details step Test for Failed response 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1616,7 +1616,7 @@ exports[`Connector details step Test for adding required fields and save 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1997,7 +1997,7 @@ exports[`Connector details step Test for data false 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -2338,7 +2338,7 @@ exports[`Connector details step Test for going to next step 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -2750,7 +2750,7 @@ exports[`Connector details step test for error in response 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -3294,7 +3294,7 @@ exports[`Connector details step test for opening in edit mode 1`] = `
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="GitOpsProviderStepFormundefined_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

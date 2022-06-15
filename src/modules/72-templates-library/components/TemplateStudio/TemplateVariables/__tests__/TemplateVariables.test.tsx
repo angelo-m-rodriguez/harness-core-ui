@@ -20,6 +20,8 @@ import {
 import TemplateVariablesWrapper from '@templates-library/components/TemplateStudio/TemplateVariables/TemplateVariables'
 import {
   getTemplateContextMock,
+  monitoedServiceMetaDataMap,
+  monitoredServiceTemplateMock,
   pipelineTemplateMock,
   stageTemplateMock,
   stepTemplateMock
@@ -28,6 +30,7 @@ import { TemplateType } from '@templates-library/utils/templatesUtils'
 import * as PipelineVariables from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables'
 import * as StepCard from '@pipeline/components/PipelineStudio/PipelineVariables/Cards/StepCard'
 import * as StageCard from '@pipeline/components/PipelineStudio/PipelineVariables/Cards/StageCard'
+import * as MonitoredServiceCard from '@pipeline/components/PipelineStudio/PipelineVariables/Cards/MonitoredServiceCard'
 import type { PipelineCardPanelProps } from '@pipeline/components/PipelineStudio/PipelineVariables/PipelineVariables'
 import type { PipelineInfoConfig } from 'services/cd-ng'
 import { DrawerTypes } from '@templates-library/components/TemplateStudio/TemplateContext/TemplateActions'
@@ -216,5 +219,34 @@ describe('<TemplateVariables /> tests', () => {
       isDrawerOpened: false,
       isYamlEditable: false
     })
+  })
+
+  test('should call MonitoredServiceCard with correct props', async () => {
+    const MonitoredServiceCardMock = jest.spyOn(MonitoredServiceCard, 'default')
+    render(
+      <TestWrapper>
+        <TemplateContext.Provider value={getTemplateContextMock(TemplateType.MonitoredService)}>
+          <TemplateVariablesContext.Provider
+            value={
+              {
+                originalTemplate: monitoredServiceTemplateMock,
+                metadataMap: monitoedServiceMetaDataMap,
+                variablesTemplate
+              } as unknown as TemplateVariablesData
+            }
+          >
+            <TemplateVariablesWrapper />
+          </TemplateVariablesContext.Provider>
+        </TemplateContext.Provider>
+      </TestWrapper>
+    )
+
+    expect(MonitoredServiceCardMock).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        metadataMap: monitoedServiceMetaDataMap
+      }),
+      expect.anything()
+    )
   })
 })

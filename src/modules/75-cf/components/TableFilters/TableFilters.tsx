@@ -6,11 +6,12 @@
  */
 
 import React from 'react'
-import { Layout } from '@harness/uicore'
+import type { StringKeys } from 'framework/strings'
 import { FilterCard } from './FilterCard'
+import css from './TableFilters.module.scss'
 
 export interface FilterProps {
-  label: string
+  label: StringKeys
   total: number
   queryProps?: Record<string, any>
   tooltipId?: string
@@ -18,16 +19,23 @@ export interface FilterProps {
 export interface TableFiltersProps {
   filters: Array<FilterProps>
   currentFilter: FilterProps | Record<string, any>
-  updateTableFilter: (filter: FilterProps) => void
+  updateTableFilter: (filter: FilterProps | Record<string, any>) => void
 }
 
-export const TableFilters: React.FC<TableFiltersProps> = ({ filters, currentFilter, updateTableFilter }) => (
-  <Layout.Horizontal spacing="small" flex={{ alignItems: 'center', justifyContent: 'flex-start' }}>
-    {filters?.map((filter, i) => {
-      const filterSelected =
-        currentFilter?.queryProps?.key === filter?.queryProps?.key &&
-        currentFilter?.queryProps?.value === filter?.queryProps?.value
-      return <FilterCard key={i} filter={filter} updateTableFilter={updateTableFilter} selected={filterSelected} />
-    })}
-  </Layout.Horizontal>
-)
+export const TableFilters: React.FC<TableFiltersProps> = ({ filters, currentFilter, updateTableFilter }) => {
+  return (
+    <div className={css.filterLayout}>
+      {filters.map((filter, i) => (
+        <FilterCard
+          key={i}
+          filter={filter}
+          updateTableFilter={updateTableFilter}
+          selected={
+            currentFilter.queryProps?.key === filter.queryProps?.key &&
+            currentFilter.queryProps?.value === filter.queryProps?.value
+          }
+        />
+      ))}
+    </div>
+  )
+}

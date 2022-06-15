@@ -192,15 +192,286 @@ export const pipelineTemplateMock: NGTemplateInfoConfig = {
 }
 
 export const monitoredServiceTemplateMock: NGTemplateInfoConfig = {
-  name: 'Test Template',
-  identifier: 'Test_Template',
-  versionLabel: 'v1',
+  name: 'Demo 2',
+  identifier: 'Demo_2',
+  versionLabel: '2',
   type: 'MonitoredService',
-  projectIdentifier: 'Yogesh_Test',
-  orgIdentifier: 'default',
+  projectIdentifier: 'SRM',
+  orgIdentifier: 'CVNG',
   tags: {},
-  spec: {} as JsonNode
+  spec: {
+    serviceRef: '<+input>',
+    environmentRef: '<+input>',
+    type: 'Application',
+    sources: {
+      healthSources: [
+        {
+          name: 'AppD with runtime connector',
+          identifier: 'AppD_with_runtime_connector',
+          type: 'AppDynamics',
+          spec: {
+            applicationName: '<+monitoredService.variables.AppDApplication>',
+            tierName: '<+monitoredService.variables.AppDTier>',
+            metricData: { Errors: true, Performance: true },
+            metricDefinitions: [
+              {
+                identifier: 'appdMetric_101',
+                metricName: 'appdMetric 101',
+                baseFolder: '',
+                metricPath: '',
+                completeMetricPath:
+                  'Overall Application Performance | <+monitoredService.variables.AppDTier> | Calls per Minute',
+                groupName: 'Group 1',
+                sli: { enabled: true },
+                analysis: {
+                  riskProfile: {},
+                  liveMonitoring: { enabled: false },
+                  deploymentVerification: { enabled: false }
+                }
+              }
+            ],
+            feature: 'Application Monitoring',
+            connectorRef: '<+input>',
+            metricPacks: [{ identifier: 'Errors' }, { identifier: 'Performance' }]
+          }
+        }
+      ]
+    },
+    name: '<+monitoredService.serviceRef> <+monitoredService.environmentRef>',
+    identifier: '<+monitoredService.serviceRef>_<+monitoredService.environmentRef>',
+    variables: [
+      { name: 'AppDApplication', type: 'String', value: '<+input>' },
+      { name: 'AppDTier', type: 'String', value: '<+input>' }
+    ]
+  } as JsonNode
 }
+
+export const monitoedServiceMetaDataMap = {
+  'Wre6-CTXTVyGRF3tPt2jXg': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.analysis.deploymentVerification.enabled',
+      localName: '',
+      variableName: 'enabled',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'sb-tX-K4SY-KVkNe_OpwbQ': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.name',
+      localName: '',
+      variableName: 'name',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  zSLKud5iSFmIeQE8oRyvqQ: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.sli.enabled',
+      localName: '',
+      variableName: 'enabled',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  sMZcpOpXQxuLTj7BllE4PA: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.connectorRef',
+      localName: '',
+      variableName: 'connectorRef',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  cgicVWANT2mwhg70gBLOJA: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.tierName',
+      localName: '',
+      variableName: 'tierName',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  '68HhmYeMTniPcCLS7KhaDg': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricData.Errors',
+      localName: '',
+      variableName: 'Errors',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  BjFMXfk3RSutGVippkPLwQ: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.groupName',
+      localName: '',
+      variableName: 'groupName',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  '1qlgP6IgSZau9K7l-PHNXw': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.baseFolder',
+      localName: '',
+      variableName: 'baseFolder',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  wi9HY4FVTLaoocs9qw4n8w: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.analysis.liveMonitoring.enabled',
+      localName: '',
+      variableName: 'enabled',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'snl03iz3QOWsMHxn5jGi-A': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.feature',
+      localName: '',
+      variableName: 'feature',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'yYC6RZ-8Ri2MOeGFeFMkaw': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.metricName',
+      localName: '',
+      variableName: 'metricName',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  InXp4ipNTeWkyoG6xmfjVA: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.metricPath',
+      localName: '',
+      variableName: 'metricPath',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  tROXWKsGT7CJkV82YVFeBQ: {
+    yamlProperties: {
+      fqn: 'monitoredService.environmentRef',
+      localName: '',
+      variableName: 'environmentRef',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'obPbz3XbSIeubw_-VmlK5Q': {
+    yamlProperties: {
+      fqn: 'monitoredService.variables.AppDApplication',
+      localName: '',
+      variableName: 'AppDApplication',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  '40yb25xmTcGzG1CtNDuTSA': {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricDefinitions.appdMetric_101.completeMetricPath',
+      localName: '',
+      variableName: 'completeMetricPath',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  fkv7_oVaRUiMXdBuNfXaHQ: {
+    yamlProperties: { fqn: 'monitoredService.name', localName: '', variableName: 'name', aliasFQN: '', visible: true },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'd7PftXvCSG-wMgScmq9QLQ': {
+    yamlProperties: {
+      fqn: 'monitoredService.variables.AppDTier',
+      localName: '',
+      variableName: 'AppDTier',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  'ABlg1Y5qQbS-1uh9nTv39w': {
+    yamlProperties: {
+      fqn: 'monitoredService.serviceRef',
+      localName: '',
+      variableName: 'serviceRef',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  a2loakuCQNqnDbk5Sj0dNQ: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.applicationName',
+      localName: '',
+      variableName: 'applicationName',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  },
+  YrVUY8bpQdy06QV2lXndwA: {
+    yamlProperties: {
+      fqn: 'monitoredService.sources.healthSources.AppD_with_runtime_connector.spec.metricData.Performance',
+      localName: '',
+      variableName: 'Performance',
+      aliasFQN: '',
+      visible: true
+    },
+    yamlOutputProperties: null,
+    yamlExtraProperties: null
+  }
+}
+// {
+//   name: 'Test Template',
+//   identifier: 'Test_Template',
+//   versionLabel: 'v1',
+//   type: 'MonitoredService',
+//   projectIdentifier: 'Yogesh_Test',
+//   orgIdentifier: 'default',
+//   tags: {},
+//   spec: {} as JsonNode
+// }
 
 export const getTemplateContextMock = (type: TemplateType): TemplateContextInterface => {
   const defaultTemplateContextMock: TemplateContextInterface = {

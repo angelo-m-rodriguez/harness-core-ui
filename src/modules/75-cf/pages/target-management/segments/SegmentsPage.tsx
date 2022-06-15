@@ -83,9 +83,10 @@ export const SegmentsPage: React.FC = () => {
   const onSearchInputChanged = useCallback(
     name => {
       setSearchTerm(name)
-      refetchSegments({ queryParams: { ...queryParams, name } as GetAllSegmentsQueryParams })
+      setPageNumber(0)
+      refetchSegments({ queryParams: { ...queryParams, name, pageNumber: 0 } as GetAllSegmentsQueryParams })
     },
-    [setSearchTerm, refetchSegments, queryParams]
+    [setSearchTerm, refetchSegments, queryParams, setPageNumber]
   )
   const loading = loadingEnvironments || loadingSegments
   const error = errEnvironments || errSegments

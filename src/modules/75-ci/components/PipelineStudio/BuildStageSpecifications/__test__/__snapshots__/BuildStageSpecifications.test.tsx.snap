@@ -36,7 +36,7 @@ exports[`BuildStageSpecifications tests renders correctly 1`] = `
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="ciBuildStage_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"

@@ -241,6 +241,7 @@ exports[`TargetDetailPage TargetDetailPage should render data correctly 1`] = `
     </div>
     <div
       class="content"
+      data-name="page-body"
     >
       <div
         class="Layout--vertical StyledProps--main gitSyncContainer"
@@ -792,6 +793,7 @@ exports[`TargetDetailPage TargetDetailPage should render its segments 1`] = `
     </div>
     <div
       class="content"
+      data-name="page-body"
     >
       <div
         class="Layout--vertical StyledProps--main gitSyncContainer"

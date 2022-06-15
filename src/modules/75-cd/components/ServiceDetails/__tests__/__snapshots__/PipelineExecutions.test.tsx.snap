@@ -16,12 +16,11 @@ exports[`PipelineExecutions render no data 1`] = `
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-grey600"
         >
-          cd.serviceDashboard.totalPipelines: 0
+          cd.serviceDashboard.totalDeployments: 0
         </p>
         <div
-          class="bp3-input-group ui-search-box ExpandingSearchInput--main  ExpandingSearchInput--flip  ExpandingSearchInput--light"
+          class="bp3-input-group ui-search-box ExpandingSearchInput--main searchIconStyle   ExpandingSearchInput--light"
           data-name=""
-          style="max-width: 200px;"
         >
           <span
             class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
@@ -102,12 +101,11 @@ exports[`PipelineExecutions should render PipelineExecutions 1`] = `
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-grey600"
         >
-          cd.serviceDashboard.totalPipelines: 2
+          cd.serviceDashboard.totalDeployments: 2
         </p>
         <div
-          class="bp3-input-group ui-search-box ExpandingSearchInput--main  ExpandingSearchInput--flip  ExpandingSearchInput--light"
+          class="bp3-input-group ui-search-box ExpandingSearchInput--main searchIconStyle   ExpandingSearchInput--light"
           data-name=""
-          style="max-width: 200px;"
         >
           <span
             class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
@@ -522,12 +520,11 @@ exports[`PipelineExecutions should render PipelineExecutions with error true 1`]
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-grey600"
         >
-          cd.serviceDashboard.totalPipelines: 0
+          cd.serviceDashboard.totalDeployments: 0
         </p>
         <div
-          class="bp3-input-group ui-search-box ExpandingSearchInput--main  ExpandingSearchInput--flip  ExpandingSearchInput--light"
+          class="bp3-input-group ui-search-box ExpandingSearchInput--main searchIconStyle   ExpandingSearchInput--light"
           data-name=""
-          style="max-width: 200px;"
         >
           <span
             class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"
@@ -655,12 +652,11 @@ exports[`PipelineExecutions should render PipelineExecutions with loading true 1
         <p
           class="StyledProps--font StyledProps--main StyledProps--font-weight-bold StyledProps--color StyledProps--color-grey600"
         >
-          cd.serviceDashboard.totalPipelines: 0
+          cd.serviceDashboard.totalDeployments: 0
         </p>
         <div
-          class="bp3-input-group ui-search-box ExpandingSearchInput--main  ExpandingSearchInput--flip  ExpandingSearchInput--light"
+          class="bp3-input-group ui-search-box ExpandingSearchInput--main searchIconStyle   ExpandingSearchInput--light"
           data-name=""
-          style="max-width: 200px;"
         >
           <span
             class="bp3-icon StyledProps--main ExpandingSearchInput--icon StyledProps--color StyledProps--color-grey700"

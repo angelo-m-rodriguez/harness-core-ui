@@ -21,7 +21,7 @@ exports[`Restore Cache GCS Step Edit View edit mode works 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="restoreCacheGcs_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -489,7 +489,7 @@ exports[`Restore Cache GCS Step Edit View renders runtime inputs 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="restoreCacheGcs_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -957,7 +957,7 @@ exports[`Restore Cache GCS Step Edit View should render edit view as new step 1`
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="restoreCacheGcs_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

@@ -84,7 +84,7 @@ exports[`Test DeployEnvironment Step should render edit Environment view (enviro
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="deployEnv_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -498,7 +498,7 @@ exports[`Test DeployEnvironment Step should render environment view and save 1`]
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="deployEnv_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"
@@ -810,7 +810,7 @@ exports[`render modal  NewEditEnvironmentModal 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="deployEnv_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -1218,7 +1218,7 @@ exports[`render modal  should validate edit mode snapshot 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="deployEnv_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

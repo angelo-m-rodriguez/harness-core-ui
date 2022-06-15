@@ -6,29 +6,23 @@
  */
 
 import React from 'react'
-import { Card, Layout, Text } from '@harness/uicore'
+import { Card, FontVariation, Text } from '@harness/uicore'
+import { useStrings } from 'framework/strings'
 import type { FilterProps } from './TableFilters'
-interface FilterCardProps {
+export interface FilterCardProps {
   filter: FilterProps
   selected: boolean
-  updateTableFilter: (filter: FilterProps) => void
+  updateTableFilter: (filter: FilterProps | Record<string, any>) => void
 }
 
-export const FilterCard: React.FC<FilterCardProps> = ({ filter, selected, updateTableFilter }) => (
-  <Card
-    interactive
-    elevation={1}
-    onClick={() => {
-      updateTableFilter(filter)
-    }}
-    style={{ minWidth: '150px', maxWidth: '250px' }}
-    selected={selected}
-  >
-    <Layout.Vertical>
-      <Text font={{ size: 'small' }} lineClamp={1} tooltipProps={{ dataTooltipId: filter.tooltipId }}>
-        {filter.label}
+export const FilterCard: React.FC<FilterCardProps> = ({ filter, selected, updateTableFilter }) => {
+  const { getString } = useStrings()
+  return (
+    <Card interactive elevation={1} onClick={() => updateTableFilter(!selected ? filter : {})} selected={selected}>
+      <Text font={{ variation: FontVariation.SMALL }} lineClamp={1} tooltipProps={{ dataTooltipId: filter.tooltipId }}>
+        {getString(filter.label)}
       </Text>
-      {<Text font={{ size: 'large' }}>{filter.total}</Text>}
-    </Layout.Vertical>
-  </Card>
-)
+      <Text font={{ variation: FontVariation.H2, weight: 'light' }}>{filter.total}</Text>
+    </Card>
+  )
+}

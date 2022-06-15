@@ -32,8 +32,7 @@ import { useStrings } from 'framework/strings'
 import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { useQueryParams } from '@common/hooks'
-import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
-import { FeatureFlag } from '@common/featureFlags'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { SaveTemplateButton } from '@pipeline/components/PipelineStudio/SaveTemplateButton/SaveTemplateButton'
 import { useAddStepTemplate } from '@pipeline/hooks/useAddStepTemplate'
 import {
@@ -72,8 +71,7 @@ const iconNames = { tick: 'tick' as IconName }
 
 export default function DeployStageSetupShell(): JSX.Element {
   const { getString } = useStrings()
-  const isTemplatesEnabled = useFeatureFlag(FeatureFlag.NG_TEMPLATES)
-  const isNewEnvironmentEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
+  const { NG_TEMPLATES, NG_SVC_ENV_REDESIGN = false } = useFeatureFlags()
   const layoutRef = React.useRef<HTMLDivElement>(null)
   const pipelineContext = usePipelineContext()
   const {
@@ -123,7 +121,7 @@ export default function DeployStageSetupShell(): JSX.Element {
 
   const handleTabChange = (nextTab: DeployTabs): void => {
     if (
-      isNewEnvironmentEnabled &&
+      NG_SVC_ENV_REDESIGN &&
       isEmpty(selectedStage?.stage?.spec?.infrastructure) &&
       nextTab === DeployTabs.INFRASTRUCTURE
     ) {
@@ -205,10 +203,13 @@ export default function DeployStageSetupShell(): JSX.Element {
 
   const validate = React.useCallback(() => {
     try {
-      getCDStageValidationSchema(getString, selectedDeploymentType, contextType).validateSync(selectedStage?.stage, {
-        abortEarly: false,
-        context: selectedStage?.stage
-      })
+      getCDStageValidationSchema(getString, selectedDeploymentType, NG_SVC_ENV_REDESIGN, contextType).validateSync(
+        selectedStage?.stage,
+        {
+          abortEarly: false,
+          context: selectedStage?.stage
+        }
+      )
       setIncompleteTabs({})
     } catch (error) {
       if (error.name !== 'ValidationError') {
@@ -348,7 +349,7 @@ export default function DeployStageSetupShell(): JSX.Element {
           panel={<DeployServiceSpecifications>{navBtns}</DeployServiceSpecifications>}
           data-testid="service"
         />
-        {isNewEnvironmentEnabled && isEmpty(selectedStage?.stage?.spec?.infrastructure) && (
+        {NG_SVC_ENV_REDESIGN && isEmpty(selectedStage?.stage?.spec?.infrastructure) && (
           <Tab
             id={DeployTabs.ENVIRONMENT}
             title={
@@ -361,8 +362,7 @@ export default function DeployStageSetupShell(): JSX.Element {
             data-testid="environment"
           />
         )}
-        {(!isNewEnvironmentEnabled ||
-          (isNewEnvironmentEnabled && !isEmpty(selectedStage?.stage?.spec?.infrastructure))) && (
+        {(!NG_SVC_ENV_REDESIGN || (NG_SVC_ENV_REDESIGN && !isEmpty(selectedStage?.stage?.spec?.infrastructure))) && (
           <Tab
             id={DeployTabs.INFRASTRUCTURE}
             title={
@@ -464,7 +464,7 @@ export default function DeployStageSetupShell(): JSX.Element {
           panel={<DeployAdvancedSpecifications>{navBtns}</DeployAdvancedSpecifications>}
           data-testid="advanced"
         />
-        {isTemplatesEnabled && isContextTypeNotStageTemplate(contextType) && selectedStage?.stage && (
+        {NG_TEMPLATES && isContextTypeNotStageTemplate(contextType) && selectedStage?.stage && (
           <>
             <Expander />
             <SaveTemplateButton

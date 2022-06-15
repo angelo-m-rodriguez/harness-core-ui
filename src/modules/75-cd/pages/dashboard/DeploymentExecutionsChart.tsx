@@ -85,12 +85,14 @@ export default function DeploymentExecutionsChart(props: any) {
             data={defaultTo(chartData, [])}
             customChartOptions={{
               tooltip: {
+                hideDelay: 5000,
+                stickOnContact: true,
                 useHTML: true,
                 formatter: function () {
                   return getTooltip(this)
                 },
                 backgroundColor: Color.BLACK,
-                outside: true,
+                outside: false,
                 borderColor: 'black'
               },
               xAxis: {
@@ -110,7 +112,7 @@ export default function DeploymentExecutionsChart(props: any) {
               },
               yAxis: {
                 title: {
-                  text: '# of Deployments'
+                  text: getString('pipeline.dashboards.executionsLabel')
                 }
               }
             }}

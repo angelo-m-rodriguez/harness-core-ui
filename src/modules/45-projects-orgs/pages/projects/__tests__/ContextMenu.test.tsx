@@ -77,7 +77,9 @@ describe('Context Menu test', () => {
     }),
     test('Go to CE ', async () => {
       fireEvent.click(getByText('projectsOrgs.gotoCloudCosts'))
-      expect(getByTestId('location').innerHTML.endsWith(routes.toCECORules(routeParams))).toBeTruthy()
+      expect(
+        getByTestId('location').innerHTML.endsWith(routes.toCECORules({ ...routeParams, params: '' }))
+      ).toBeTruthy()
     }),
     test('Go to CI ', async () => {
       fireEvent.click(getByText('projectsOrgs.gotoCI'))

@@ -73,16 +73,20 @@ const PerspectiveBuilderSelectorComponent: (props: PerspectiveBuilderSelectorCom
                       [value]: !prevVal[value]
                     }))
                   }}
+                  key={value}
                   checked={selectedValues[value]}
                   className={cx(css.checkbox, css.labelItem)}
-                  key={value}
                   value={value}
                 />
                 {!exactSearchTextMatch ? (
                   <>
                     <Text color={Color.GREY_700} font={{ variation: FontVariation.SMALL_SEMI }} lineClamp={1}>
-                      {value.split(splitSearchResultAt).map(str => (
-                        <Text key={str} inline className={cx({ [css.searchTextHighlight]: str === searchText })}>
+                      {value.split(splitSearchResultAt).map((str, i) => (
+                        <Text
+                          key={`${str}-${i}`}
+                          inline
+                          className={cx({ [css.searchTextHighlight]: str === searchText })}
+                        >
                           {str}
                         </Text>
                       ))}
@@ -145,7 +149,7 @@ const PerspectiveBuilderSelectorComponent: (props: PerspectiveBuilderSelectorCom
         </>
       ) : null}
 
-      {filteredValues.length > 0 ? (
+      {!fetching && filteredValues.length > 0 ? (
         <Container className={css.multiSelectOption} flex={{ justifyContent: 'flex-start' }} {...hoverProps}>
           <Checkbox
             inline

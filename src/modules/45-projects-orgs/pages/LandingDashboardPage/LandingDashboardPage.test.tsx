@@ -99,7 +99,7 @@ describe('Landing Dashboard Page', () => {
       fireEvent.click(getByText('Retry'))
     })
 
-    await waitFor(() => expect(getData).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(getData).toHaveBeenCalled())
   })
 
   test('Render Welcome Page when Lading Page api is success but no projects to show', async () => {

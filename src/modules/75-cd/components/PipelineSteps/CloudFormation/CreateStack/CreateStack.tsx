@@ -7,7 +7,7 @@
 
 import React, { forwardRef } from 'react'
 import * as Yup from 'yup'
-import { isEmpty, map, set, unset, isNull, forOwn } from 'lodash-es'
+import { isEmpty, map, set, unset, isNull, forOwn, get } from 'lodash-es'
 import { IconName, MultiTypeInputType, getMultiTypeFromValue } from '@harness/uicore'
 import { yupToFormErrors, FormikErrors } from 'formik'
 import { StepViewType, StepProps, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
@@ -161,9 +161,21 @@ export class CFCreateStack extends PipelineStep<CreateStackStepInfo> {
     }
 
     if (!isEmpty(data.spec.configuration?.tags)) {
-      set(data, 'spec.configuration.tags.type', 'Inline')
-    }
+      const tagsType = get(data?.spec?.configuration?.tags?.spec?.store, 'type')
+      const tags = get(data?.spec?.configuration?.tags?.spec?.store, 'spec')
+      if (tagsType === 'S3' || tagsType === 'S3Url') {
+        set(data?.spec?.configuration?.tags?.spec?.store, 'type', 'S3Url')
+        set(data?.spec?.configuration?.tags?.spec?.store, 'spec', {
+          region: tags?.region,
+          connectorRef: tags?.connectorRef,
+          urls: tags?.paths || tags?.urls
+        })
+      }
 
+      if (tags?.connectorRef?.value) {
+        set(data?.spec?.configuration?.tags?.spec?.store?.spec, 'connectorRef', tags?.connectorRef?.value)
+      }
+    }
     return {
       ...data,
       spec: {
@@ -207,6 +219,19 @@ export class CFCreateStack extends PipelineStep<CreateStackStepInfo> {
         }
       }))
       set(data, 'spec.configuration.parameters', parameters)
+    }
+
+    if (!isEmpty(data.spec.configuration?.tags)) {
+      const tagsType = get(data, 'spec.configuration.tags.spec.store.type')
+      if (tagsType === 'S3' || tagsType === 'S3Url') {
+        const tags = get(data, 'spec.configuration.tags.spec.store.spec')
+        set(data, 'spec.configuration.tags.spec.store.type', 'S3Url')
+        set(data, 'spec.configuration.tags.spec.store.spec', {
+          region: tags?.region,
+          connectorRef: tags?.connectorRef,
+          paths: tags?.paths || tags?.urls
+        })
+      }
     }
     // empty values returned from api removed
     // causes issues with yup having null values for strings/arrays

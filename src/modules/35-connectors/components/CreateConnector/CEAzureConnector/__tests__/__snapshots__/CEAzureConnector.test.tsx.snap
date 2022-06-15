@@ -2732,7 +2732,7 @@ exports[`Create Azure connector Wizard should render overview step 1`] = `
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="connectorOverviewForm_identifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"
@@ -3198,7 +3198,7 @@ exports[`Create Azure connector Wizard should throw an error when connectors alr
                         >
                           <div
                             class="Text--withDocsTooltip"
-                            data-tooltip-id="connectorOverviewForm_identifier"
+                            data-tooltip-id="universalInputNameWithId"
                           >
                             <p
                               class="StyledProps--font StyledProps--main"

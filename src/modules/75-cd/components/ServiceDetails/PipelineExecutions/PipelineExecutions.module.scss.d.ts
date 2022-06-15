@@ -11,5 +11,6 @@ declare const styles: {
   readonly executionCardContainer: string
   readonly pipelineExecutionsEmptyStateContainer: string
   readonly pipelineExecutionsEmptyStateImage: string
+  readonly searchIconStyle: string
 }
 export default styles

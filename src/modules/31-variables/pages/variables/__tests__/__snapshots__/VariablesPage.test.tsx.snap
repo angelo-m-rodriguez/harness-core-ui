@@ -545,7 +545,7 @@ exports[`Variables Page render page at project level - click new variable button
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="variable-form_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

@@ -19,7 +19,7 @@ exports[`Http Step edit mode works 1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="httpWidget_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -1273,7 +1273,7 @@ exports[`Http Step renders runtime inputs 1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="httpWidget_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -1831,7 +1831,7 @@ exports[`Http Step should render edit view as new step 1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="httpWidget_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"

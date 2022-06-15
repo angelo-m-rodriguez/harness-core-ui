@@ -40,7 +40,7 @@ const useRBACError = (): RbacErrorReturn => {
 
   const getProjectScopeSuffix = (resourceScope: ResourceScope): string => {
     /* istanbul ignore else */
-    if (selectedProject && [resourceScope.projectIdentifier, projectIdentifier].includes(selectedProject.identifier)) {
+    if (selectedProject && resourceScope.projectIdentifier === selectedProject.identifier) {
       return selectedProject.name
     } else {
       return resourceScope.projectIdentifier || projectIdentifier

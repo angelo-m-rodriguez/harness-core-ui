@@ -180,7 +180,7 @@ exports[`Test K8sCanaryDeleteStep should render edit view  1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k*CanaryDelete_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -404,7 +404,7 @@ exports[`Test K8sCanaryDeleteStep should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k*CanaryDelete_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

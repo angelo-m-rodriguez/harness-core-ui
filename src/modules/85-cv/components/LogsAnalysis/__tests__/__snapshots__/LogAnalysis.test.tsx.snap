@@ -107,11 +107,12 @@ exports[`Unit tests for LogAnalysisContainer Verify if LogAnalysisContainer rend
         class="StyledProps--font StyledProps--main StyledProps--margin-bottom-large"
       >
         <div
-          class="Layout--horizontal StyledProps--main StyledProps--margin-bottom-small"
+          class="Layout--horizontal StyledProps--main logCountsDetail"
         >
           <p
             class="StyledProps--font StyledProps--main StyledProps--border StyledProps--border-right StyledProps--padding-right-small StyledProps--margin-right-small StyledProps--font-variation-small"
             data-testid="LogAnalysis_totalClusters"
+            style="white-space: nowrap;"
           >
             total
              : 

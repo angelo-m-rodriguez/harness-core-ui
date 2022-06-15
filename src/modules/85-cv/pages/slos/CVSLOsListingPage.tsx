@@ -22,7 +22,6 @@ import {
   HarnessDocTooltip
 } from '@wings-software/uicore'
 import { FontVariation } from '@harness/design-system'
-import noData from '@cv/assets/noData.svg'
 import slosEmptyState from '@cv/assets/slosEmptyState.svg'
 import { Page } from '@common/exports'
 import routes from '@common/RouteDefinitions'
@@ -51,7 +50,6 @@ import {
   getIsSLODashboardAPIsLoading,
   getSLORiskTypeFilter,
   getIsWidgetDataEmpty,
-  getIsDataEmpty,
   getIsSetPreviousPage,
   sloFilterReducer,
   SLODashboardFilterActions,
@@ -218,7 +216,7 @@ const CVSLOsListingPage: React.FC<CVSLOsListingPageProps> = ({ monitoredService 
 
   return (
     <>
-      {!monitoredService?.identifier && !getIsDataEmpty(content?.length, riskCountResponse?.data?.riskCounts) && (
+      {
         <>
           <Page.Header
             breadcrumbs={<NGBreadcrumbs />}
@@ -231,7 +229,7 @@ const CVSLOsListingPage: React.FC<CVSLOsListingPageProps> = ({ monitoredService 
           />
           <Page.Header title={getAddSLOButton()} />
         </>
-      )}
+      }
 
       <Page.Body
         loading={getIsSLODashboardAPIsLoading(
@@ -259,13 +257,6 @@ const CVSLOsListingPage: React.FC<CVSLOsListingPageProps> = ({ monitoredService 
           if (dashboardRiskCountError) {
             refetchRiskCount()
           }
-        }}
-        noData={{
-          when: () => getIsDataEmpty(content?.length, riskCountResponse?.data?.riskCounts),
-          messageTitle: getString('cv.slos.noData'),
-          message: getString('cv.slos.noSLOsStateMessage'),
-          button: getAddSLOButton(),
-          image: slosEmptyState
         }}
         className={css.pageBody}
       >
@@ -323,12 +314,11 @@ const CVSLOsListingPage: React.FC<CVSLOsListingPageProps> = ({ monitoredService 
           )}
 
           {getIsWidgetDataEmpty(content?.length, dashboardWidgetsLoading) && (
-            <NoDataCard image={noData} message={getString('cv.slos.noMatchingData')} />
+            <NoDataCard image={slosEmptyState} message={getString('cv.slos.noMatchingData')} />
           )}
         </Layout.Vertical>
       </Page.Body>
     </>
   )
 }
-
 export default CVSLOsListingPage

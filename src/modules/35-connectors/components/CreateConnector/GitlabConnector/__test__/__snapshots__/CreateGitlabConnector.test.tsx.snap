@@ -177,7 +177,7 @@ exports[`Create Gitlab connector Wizard Creating gitlab step one 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormGitlab_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

@@ -14,16 +14,20 @@ import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureO
 import { useStrings } from 'framework/strings'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
+const Account = 'Account'
+
 interface CFFileStoreProps {
   allowableTypes: MultiTypeInputType[]
   index?: number
   values: any
+  prevStepData: any
 }
 
 export const ParameterRepoDetails: React.FC<StepProps<any> & CFFileStoreProps> = ({
   allowableTypes,
   index,
-  values
+  values,
+  prevStepData
 }) => {
   const { getString } = useStrings()
   const { expressions } = useVariablesExpression()
@@ -57,8 +61,9 @@ export const ParameterRepoDetails: React.FC<StepProps<any> & CFFileStoreProps> =
 
   return (
     <>
-      {(connectorRef?.connector?.spec?.connectionType === 'Account' ||
-        connectorRef?.connector?.spec?.type === 'Account') && (
+      {(connectorRef?.connector?.spec?.connectionType === Account ||
+        connectorRef?.connector?.spec?.type === Account ||
+        prevStepData?.urlType === Account) && (
         <div className={cx(stepCss.formGroup, stepCss.md)}>
           <FormInput.MultiTextInput
             label={getString('pipelineSteps.repoName')}

@@ -1102,7 +1102,7 @@ exports[`ServiceNow Update tests Edit Stage - readonly view for Template type: e
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1764,7 +1764,7 @@ exports[`ServiceNow Update tests Edit stage - readony view: editstage-readonly 1
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="serviceNowCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

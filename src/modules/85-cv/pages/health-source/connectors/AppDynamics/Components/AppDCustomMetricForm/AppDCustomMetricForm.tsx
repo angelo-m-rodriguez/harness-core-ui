@@ -43,6 +43,7 @@ import { BasePathInitValue } from '../BasePath/BasePath.constants'
 import MetricChart from '../MetricChart/MetricChart'
 import MetricPath from '../MetricPath/MetricPath'
 import type { AppDCustomMetricFormInterface } from './AppDCustomMetricForm.types'
+import { getTypeOfInput } from '../../AppDHealthSource.utils'
 import css from '../../AppDHealthSource.module.scss'
 import basePathStyle from '../BasePath/BasePath.module.scss'
 
@@ -118,6 +119,8 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
     [basePathValue, formikValues.appDTier, metricPathValue]
   )
 
+  const [multiTypeValue, setmultiTypeValue] = useState(getTypeOfInput(formikValues?.completeMetricPath as string))
+
   return (
     <Container className={css.main}>
       <SetupSourceCardHeader
@@ -157,15 +160,20 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
                 {!isTemplate ? (
                   <FormInput.Text
                     className={css.fullPath}
-                    name={PATHTYPE.FullPath}
+                    name={completeMetricPath ? PATHTYPE.CompleteMetricPath : PATHTYPE.FullPath}
                     tooltipProps={{ dataTooltipId: 'appDynamicsCompletePath' }}
                     disabled={formikValues?.pathType !== PATHTYPE.FullPath}
                   />
                 ) : (
                   <FormInput.MultiTextInput
                     className={css.fullPath}
-                    name={PATHTYPE.FullPath}
+                    name={PATHTYPE.CompleteMetricPath}
                     label={''}
+                    onChange={(_v, _type, multiType) => {
+                      if (multiTypeValue !== multiType) {
+                        setmultiTypeValue(multiType)
+                      }
+                    }}
                     tooltipProps={{ dataTooltipId: 'appDynamicsCompletePath' }}
                     disabled={formikValues?.pathType !== PATHTYPE.FullPath}
                   />
@@ -225,7 +233,8 @@ export default function AppDCustomMetricForm(props: AppDCustomMetricFormInterfac
               <>
                 {getMultiTypeFromValue(formikValues.appdApplication) !== MultiTypeInputType.FIXED ||
                 getMultiTypeFromValue(formikValues.appDTier) !== MultiTypeInputType.FIXED ||
-                getMultiTypeFromValue(connectorIdentifier) !== MultiTypeInputType.FIXED ? (
+                getMultiTypeFromValue(connectorIdentifier) !== MultiTypeInputType.FIXED ||
+                multiTypeValue !== MultiTypeInputType.FIXED ? (
                   <>
                     <Text className={basePathStyle.basePathValue} font={{ variation: FontVariation.SMALL_SEMI }}>
                       {getString('cv.customHealthSource.chartRuntimeWarning')}

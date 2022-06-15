@@ -29,7 +29,7 @@ import OverviewSummary from '@ce/components/OverviewPage/OverviewSummary'
 import OverviewTopCluster from '@ce/components/OverviewPage/OverviewTopClusters'
 import OverviewTopRecommendations from '@ce/components/OverviewPage/OverviewTopRecommendations'
 import OverviewCostByProviders from '@ce/components/OverviewPage/OverviewCostByProviders'
-import PerspectiveTimeRangePicker from '@ce/components/PerspectiveTimeRangePicker/PerspectiveTimeRangePicker'
+import TimeRangePicker from '@ce/common/TimeRangePicker/TimeRangePicker'
 import { PageSpinner } from '@common/components'
 import OverviewAddCluster from '@ce/components/OverviewPage/OverviewAddCluster'
 import { Utils } from '@ce/common/Utils'
@@ -134,7 +134,7 @@ const OverviewPage: React.FC = () => {
     <Container>
       <Page.Header
         title={<TitleWithToolTipId title={getString('overview')} toolTipId="ccmOverviewTitle" />}
-        content={<PerspectiveTimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />}
+        content={<TimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />}
       />
       <Page.Body>
         <Container padding={{ top: 'medium', right: 'xlarge', bottom: 'medium', left: 'xlarge' }}>

@@ -35,11 +35,13 @@ export type ManifestStores =
   | 'GitLab'
   | 'Bitbucket'
   | 'Http'
+  | 'OciHelmChart'
   | 'S3'
   | 'Gcs'
   | 'InheritFromManifest'
   | 'Inline'
 export type HelmVersionOptions = 'V2' | 'V3'
+export type HelmOCIVersionOptions = 'V380'
 export interface ManifestSelectionProps {
   isPropagating?: boolean
   deploymentType: ServiceDefinition['type']
@@ -110,6 +112,17 @@ export interface HelmWithHTTPDataType {
   identifier: string
   helmVersion: HelmVersionOptions
   skipResourceVersioning: boolean
+  chartName: string
+  chartVersion: string
+  valuesPaths?: any
+  commandFlags: Array<CommandFlags>
+}
+
+export interface HelmWithOCIDataType {
+  identifier: string
+  helmVersion: HelmOCIVersionOptions
+  skipResourceVersioning: boolean
+  basePath: string
   chartName: string
   chartVersion: string
   valuesPaths?: any

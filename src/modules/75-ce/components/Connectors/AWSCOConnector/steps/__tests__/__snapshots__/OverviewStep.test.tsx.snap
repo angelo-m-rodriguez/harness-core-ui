@@ -40,7 +40,7 @@ exports[`Test Step 1 renders without crashing 1`] = `
                     >
                       <div
                         class="Text--withDocsTooltip"
-                        data-tooltip-id="connectorOverview_identifier"
+                        data-tooltip-id="universalInputNameWithId"
                       >
                         <p
                           class="StyledProps--font StyledProps--main"

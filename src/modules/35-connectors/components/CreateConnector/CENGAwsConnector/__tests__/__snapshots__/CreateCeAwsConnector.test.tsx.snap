@@ -173,7 +173,7 @@ exports[`Create Secret Manager Wizard should render form 1`] = `
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorsCeAwsOverViewForm_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

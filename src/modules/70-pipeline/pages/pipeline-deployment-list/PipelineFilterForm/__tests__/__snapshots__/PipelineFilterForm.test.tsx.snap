@@ -97,6 +97,38 @@ exports[`<PipelineFilterForm /> test snapshot testing 1`] = `
             </div>
           </div>
         </div>
+        <div
+          data-nodeid="inputDatePicker"
+          data-testid="inputDatePicker"
+        >
+          <div
+            class="bp3-form-group"
+            data-id="null-2"
+          >
+            <label
+              class="bp3-label"
+            >
+              common.timeframe
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="bp3-input-group"
+              >
+                <input
+                  class="bp3-input"
+                  placeholder="common.selectTimeFrame"
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <span
           class="separator"
         >
@@ -108,7 +140,7 @@ exports[`<PipelineFilterForm /> test snapshot testing 1`] = `
         </span>
         <div
           class="bp3-form-group"
-          data-id="deploymentType-2"
+          data-id="deploymentType-3"
         >
           <label
             class="bp3-label"
@@ -176,7 +208,7 @@ exports[`<PipelineFilterForm /> test snapshot testing 1`] = `
         </div>
         <div
           class="bp3-form-group"
-          data-id="services-3"
+          data-id="services-4"
         >
           <label
             class="bp3-label"
@@ -227,7 +259,7 @@ exports[`<PipelineFilterForm /> test snapshot testing 1`] = `
         </div>
         <div
           class="bp3-form-group"
-          data-id="environments-4"
+          data-id="environments-5"
         >
           <label
             class="bp3-label"
@@ -287,7 +319,7 @@ exports[`<PipelineFilterForm /> test snapshot testing 1`] = `
         </span>
         <div
           class="bp3-form-group"
-          data-id="buildType-5"
+          data-id="buildType-6"
         >
           <label
             class="bp3-label"

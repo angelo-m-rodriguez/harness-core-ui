@@ -133,7 +133,7 @@ exports[`Unit tests for cv connector hoc should render form 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormPrometheus_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

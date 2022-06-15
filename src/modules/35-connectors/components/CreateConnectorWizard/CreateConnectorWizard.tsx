@@ -52,6 +52,7 @@ import CreateErrorTrackingConnector from '../CreateConnector/ErrorTrackingConnec
 import CreateAzureConnector from '../CreateConnector/AzureConnector/CreateAzureConnector'
 import { ConnectorWizardContextProvider } from './ConnectorWizardContext'
 import CreateJenkinsConnector from '../CreateConnector/JenkinsConnector/CreateJenkinsConnector'
+import OCIHelmConnector from '../CreateConnector/OCIHelmConnector.tsx/OCIHelmConnector'
 
 interface CreateConnectorWizardProps {
   accountId: string
@@ -96,7 +97,7 @@ export const ConnectorWizard: React.FC<CreateConnectorWizardProps> = props => {
     onSuccess: onSuccessWithEventTracking
   }
 
-  const { ERROR_TRACKING_ENABLED, NG_AZURE } = useFeatureFlags()
+  const { ERROR_TRACKING_ENABLED, NG_AZURE, HELM_OCI_SUPPORT } = useFeatureFlags()
 
   useTrackEvent(ConnectorActions.StartCreateConnector, {
     category: Category.CONNECTOR,
@@ -134,6 +135,8 @@ export const ConnectorWizard: React.FC<CreateConnectorWizardProps> = props => {
       return <CreateDockerConnector {...commonProps} />
     case Connectors.HttpHelmRepo:
       return <HelmRepoConnector {...commonProps} />
+    case Connectors.OciHelmRepo:
+      return HELM_OCI_SUPPORT ? <OCIHelmConnector {...commonProps} /> : null
     case Connectors.AWS:
       return <CreateAWSConnector {...commonProps} />
     case Connectors.AWS_CODECOMMIT:

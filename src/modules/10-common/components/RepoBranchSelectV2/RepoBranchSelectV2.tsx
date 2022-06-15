@@ -17,6 +17,7 @@ import {
   Error,
   Failure,
   GitBranchDetailsDTO,
+  ResponseGitBranchesResponseDTO,
   ResponseMessage,
   useGetListOfBranchesByRefConnectorV2
 } from 'services/cd-ng'
@@ -32,7 +33,7 @@ export interface RepoBranchSelectProps {
   connectorIdentifierRef?: string
   repoName?: string
   selectedValue?: string
-  onChange?: (selected: SelectOption, options?: SelectOption[]) => void
+  onChange?: (selected: SelectOption, defaultSelected?: boolean) => void // defaultSelected will be true component selected default itself
   setErrorResponse?: React.Dispatch<React.SetStateAction<ResponseMessage[]>>
   branchSelectorClassName?: string
   selectProps?: Omit<SelectProps, 'value' | 'onChange' | 'items'>
@@ -48,19 +49,38 @@ const getDefaultBranchOption = (defaultBranch: string): SelectOption => {
   }
 }
 
-export const getBranchSelectOptions = (data: GitBranchDetailsDTO[] = []): SelectOption[] => {
-  return data.map((branch: GitBranchDetailsDTO) => {
+export const getBranchSelectOptions = (data: GitBranchDetailsDTO[] = [], selectedBranch?: string): SelectOption[] => {
+  const selectOptions = data.map((branch: GitBranchDetailsDTO) => {
     return {
       label: defaultTo(branch.name, ''),
       value: defaultTo(branch.name, '')
     }
   })
+
+  // If dropdown has a selected value which is not in branchList response, pushining selectedBranch as an select option.
+  // Use cases for this can be :
+  // 1. User selected a branch using createNew
+  // 2. URL changed to a branch beyond thresold limit of 30
+  if (selectedBranch && -1 === selectOptions.findIndex(selectOption => selectOption.value === selectedBranch)) {
+    selectOptions.unshift({
+      label: selectedBranch,
+      value: selectedBranch
+    })
+  }
+
+  return selectOptions
 }
+const getDefaultSelectedOption = (defaultToBranch: string, selected?: string): SelectOption => {
+  return { label: selected || defaultToBranch, value: selected || defaultToBranch }
+}
+
 const hasToRefetchBranches = (
   disabled: boolean,
   connectorIdentifierRef: string | undefined,
   repoName: string | undefined
 ) => !disabled && connectorIdentifierRef && repoName
+
+const triggerOnChange = (disabled: boolean, selectedValue?: string) => !disabled && !selectedValue
 
 const showRefetchButon = (
   disabled: boolean,
@@ -76,6 +96,9 @@ const showRefetchButon = (
     ((responseMessages?.length && responseMessages?.length > 0) || !!error)
   )
 }
+
+const responseHasBranches = (response: ResponseGitBranchesResponseDTO | null): boolean =>
+  response?.status === 'SUCCESS' && !isEmpty(response?.data)
 
 const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
   const {
@@ -119,7 +142,7 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
   })
 
   const responseMessages = (error?.data as Error)?.responseMessages
-  const defaultToBranch = fallbackDefaultBranch ? response?.data?.defaultBranch?.name || '' : ''
+  const defaultToBranch = fallbackDefaultBranch ? defaultTo(response?.data?.defaultBranch?.name, '') : ''
 
   useEffect(() => {
     setBranchSelectOptions([])
@@ -134,12 +157,14 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
       return
     }
 
-    if (response?.status === 'SUCCESS') {
-      if (!isEmpty(response?.data)) {
-        const branchOptions = getBranchSelectOptions(response.data?.branches)
-        setBranchSelectOptions(branchOptions)
-        // If used in Formik, onChange will set branch after default selection to overcome form validation
-        !disabled && defaultToBranch && props.onChange?.(getDefaultBranchOption(defaultToBranch), branchOptions)
+    if (responseHasBranches(response)) {
+      const branchOptions = getBranchSelectOptions(response?.data?.branches, selectedValue)
+      setBranchSelectOptions(branchOptions)
+
+      // If used in Formik, onChange will set branch after default selection to overcome form validation
+      // If consumer is sending preselected, we do not want to change to default branch
+      if (triggerOnChange(disabled, selectedValue)) {
+        props.onChange?.(getDefaultBranchOption(defaultToBranch), true)
       }
     }
 
@@ -158,10 +183,15 @@ const RepoBranchSelectV2: React.FC<RepoBranchSelectProps> = props => {
         disabled={disabled || loading}
         items={branchSelectOptions}
         label={noLabel ? '' : defaultTo(label, getString('gitBranch'))}
-        placeholder={loading ? getString('loading') : getString('select')}
-        value={{ label: selectedValue || defaultToBranch, value: selectedValue || defaultToBranch }}
-        onChange={selected => props.onChange?.(selected, branchSelectOptions)}
-        selectProps={{ usePortal: true, popoverClassName: css.gitBranchSelectorPopover, ...selectProps }}
+        placeholder={loading ? getString('loading') : getString('common.git.selectBranchPlaceholder')}
+        value={getDefaultSelectedOption(defaultToBranch, selectedValue)}
+        onChange={selected => props.onChange?.(selected, false)}
+        selectProps={{
+          usePortal: true,
+          allowCreatingNewItems: true,
+          popoverClassName: css.gitBranchSelectorPopover,
+          ...selectProps
+        }}
         className={cx(branchSelectorClassName, css.branchSelector)}
       />
       {!showIcons ? null : loading && !disabled ? (

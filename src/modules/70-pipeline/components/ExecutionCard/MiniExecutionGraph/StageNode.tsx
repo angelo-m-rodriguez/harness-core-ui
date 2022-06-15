@@ -13,7 +13,7 @@ import { Icon } from '@wings-software/uicore'
 import { ExecutionStatusIconMap as IconMap, getStageType } from '@pipeline/utils/executionUtils'
 import { ExecutionStatus, isExecutionNotStarted } from '@pipeline/utils/statusHelpers'
 import routes from '@common/RouteDefinitions'
-import type { ModulePathParams, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
+import type { ExecutionPathProps, ModulePathParams, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
 import type { GraphLayoutNode } from 'services/pipeline-ng'
 import CDInfo from '@pipeline/pages/execution/ExecutionPipelineView/ExecutionGraphView/ExecutionGraph/components/CD/CDInfo/CDInfo'
 import StageHeader from '@pipeline/pages/execution/ExecutionPipelineView/ExecutionGraphView/ExecutionGraph/components/StageHeader'
@@ -32,11 +32,21 @@ export function RunningIcon(): React.ReactElement {
 export interface StageNodeProps extends Omit<IPopoverProps, 'content'>, PipelinePathProps, ModulePathParams {
   stage: GraphLayoutNode
   planExecutionId: string
+  source: ExecutionPathProps['source']
 }
 
 export function StageNode(props: StageNodeProps): React.ReactElement {
-  const { accountId, orgIdentifier, projectIdentifier, pipelineIdentifier, module, stage, planExecutionId, ...rest } =
-    props
+  const {
+    accountId,
+    orgIdentifier,
+    projectIdentifier,
+    pipelineIdentifier,
+    module,
+    stage,
+    planExecutionId,
+    source,
+    ...rest
+  } = props
   const { status } = stage || {}
   const statusLower = status?.toLowerCase() || ''
   const history = useHistory()
@@ -53,7 +63,8 @@ export function StageNode(props: StageNodeProps): React.ReactElement {
         orgIdentifier,
         pipelineIdentifier,
         projectIdentifier,
-        executionIdentifier: planExecutionId
+        executionIdentifier: planExecutionId,
+        source
       })
 
       if (!isExecutionNotStarted(status)) {

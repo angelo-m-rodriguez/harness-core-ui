@@ -65,6 +65,7 @@ describe('<ExecutionLandingPage /> tests', () => {
     projectIdentifier: 'TEST_PROJECT',
     pipelineIdentifier: 'TEST_PIPELINE',
     executionIdentifier: 'TEST_EXECUTION',
+    source: 'executions',
     module: 'cd'
   }
 
@@ -243,6 +244,7 @@ describe('<ExecutionLandingPage /> tests for CI', () => {
     projectIdentifier: 'TEST_PROJECT',
     pipelineIdentifier: 'TEST_PIPELINE',
     executionIdentifier: 'TEST_EXECUTION',
+    source: 'executions',
     module: 'ci'
   }
 

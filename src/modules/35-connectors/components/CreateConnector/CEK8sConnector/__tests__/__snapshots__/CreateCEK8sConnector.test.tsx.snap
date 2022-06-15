@@ -300,7 +300,7 @@ exports[`Create CE K8s Connector Wizard Proceed with following steps 1`] = `
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="overViewStepForm_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -1620,7 +1620,7 @@ exports[`Create CE K8s Connector Wizard Step One 1`] = `
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="overViewStepForm_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

@@ -1174,7 +1174,7 @@ exports[`Test Shell Script Step renders runtime inputs 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="shellScriptForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1581,7 +1581,7 @@ exports[`Test Shell Script Step should render edit view 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="shellScriptForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1972,7 +1972,7 @@ exports[`Test Shell Script Step should render edit view 2`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="shellScriptForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2363,7 +2363,7 @@ exports[`Test Shell Script Step should render edit view as edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="shellScriptForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2752,7 +2752,7 @@ exports[`Test Shell Script Step should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="shellScriptForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

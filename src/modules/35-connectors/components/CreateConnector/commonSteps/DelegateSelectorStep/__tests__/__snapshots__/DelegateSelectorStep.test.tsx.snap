@@ -45,7 +45,7 @@ exports[`DelegateSelectorStep should open Git Sync modal on clicking Save and Co
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="saveToGitForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

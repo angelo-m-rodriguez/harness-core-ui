@@ -55,7 +55,7 @@ exports[`open and close Harness Service Modal Rendering should open and close th
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="deployService_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"

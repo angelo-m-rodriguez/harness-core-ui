@@ -79,4 +79,5 @@ export interface HealthSourceDrawerInterface {
   changeSources: ChangeSourceDTO[]
   metricDetails: HealthSource | null
   isTemplate?: boolean
+  expressions?: string[]
 }

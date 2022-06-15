@@ -291,6 +291,7 @@ export type ConnectorFilterProperties = FilterProperties & {
     | 'Pdc'
     | 'AzureRepo'
     | 'Jenkins'
+    | 'OciHelmRepo'
   )[]
 }
 
@@ -376,6 +377,7 @@ export interface EntityGitDetails {
   branch?: string
   commitId?: string
   filePath?: string
+  fileUrl?: string
   objectId?: string
   repoIdentifier?: string
   repoName?: string
@@ -712,6 +714,7 @@ export interface Error {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   detailedMessage?: string
   message?: string
@@ -1190,6 +1193,7 @@ export interface Failure {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   errors?: ValidationError[]
   message?: string
@@ -1339,6 +1343,7 @@ export interface GraphLayoutNode {
   endTs?: number
   failureInfo?: ExecutionErrorInfo
   failureInfoDTO?: FailureInfoDTO
+  hidden?: boolean
   module?: string
   moduleInfo?: {
     [key: string]: {
@@ -1346,6 +1351,7 @@ export interface GraphLayoutNode {
     }
   }
   name?: string
+  nodeExecutionId?: string
   nodeGroup?: string
   nodeIdentifier?: string
   nodeRunInfo?: NodeRunInfo
@@ -1386,6 +1392,7 @@ export interface GraphLayoutNode {
       [key: string]: { [key: string]: any }
     }
   }
+  strategyMetadata?: StrategyMetadata
 }
 
 export interface HarnessApprovalActivity {
@@ -2274,6 +2281,7 @@ export interface ResourceDTO {
     | 'CHAOS_HUB'
     | 'MONITORED_SERVICE'
     | 'CHAOS_AGENT'
+    | 'CHAOS_WORKFLOW'
 }
 
 export interface ResourceScopeDTO {
@@ -2860,6 +2868,7 @@ export interface ResponseMessage {
     | 'AWS_CF_ERROR'
     | 'SCM_INTERNAL_SERVER_ERROR_V2'
     | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   exception?: Throwable
   failureTypes?: (
     | 'EXPIRED'
@@ -3383,6 +3392,10 @@ export interface StepPalleteModuleInfo {
 export interface StepWhenCondition {
   condition?: string
   stageStatus: 'Success' | 'Failure' | 'All'
+}
+
+export interface StrategyMetadata {
+  [key: string]: any
 }
 
 export interface SuccessHealthInfo {
@@ -8127,6 +8140,7 @@ export interface GetExecutionDetailV2QueryParams {
   orgIdentifier: string
   projectIdentifier: string
   stageNodeId?: string
+  stageNodeExecutionId?: string
   renderFullBottomGraph?: boolean
 }
 
@@ -8214,6 +8228,7 @@ export interface GetExecutionDetailQueryParams {
   orgIdentifier: string
   projectIdentifier: string
   stageNodeId?: string
+  stageNodeExecutionId?: string
 }
 
 export interface GetExecutionDetailPathParams {
@@ -11310,6 +11325,7 @@ export const getWebhookTriggerTypesPromise = (
 
 export interface GetSchemaYamlQueryParams {
   entityType:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'
@@ -11445,6 +11461,7 @@ export interface GetStepYamlSchemaQueryParams {
   projectIdentifier?: string
   yamlGroup?: string
   entityType?:
+    | 'CreatePR'
     | 'Projects'
     | 'Pipelines'
     | 'PipelineSteps'

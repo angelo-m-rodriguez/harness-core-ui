@@ -357,7 +357,7 @@ exports[`Environment Group Details Page loads configuration and update of name a
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="editEnvGroup_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

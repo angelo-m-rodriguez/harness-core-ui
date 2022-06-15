@@ -21,9 +21,24 @@ import {
 } from 'services/template-ng'
 import type { UseMutateAsGetReturn } from '@common/hooks/useMutateAsGet'
 import type { StageElementConfig, StepElementConfig } from 'services/cd-ng'
+import type { AllNGVariables } from '@pipeline/utils/types'
+
+const monitoredServiceYamlKey = 'monitoredService'
+
+export interface MonitoredServiceConfig {
+  environmentRef: string
+  identifier: string
+  name: string
+  serviceRef: string
+  sources: string
+  type: string
+  variables: AllNGVariables[]
+  __uuid: string
+  spec?: any
+}
 
 export interface TemplateVariablesData {
-  variablesTemplate: StepElementConfig | StageElementConfig
+  variablesTemplate: StepElementConfig | StageElementConfig | MonitoredServiceConfig
   originalTemplate: NGTemplateInfoConfig
   metadataMap: Required<VariableMergeServiceResponse>['metadataMap']
   error?: UseMutateAsGetReturn<Failure | Error>['error'] | null
@@ -94,9 +109,13 @@ export function TemplateVariablesContextProvider(
   }, [resolvedTemplateResponse])
 
   React.useEffect(() => {
+    const templateType =
+      resolvedTemplate.type.toLowerCase() === monitoredServiceYamlKey.toLowerCase()
+        ? monitoredServiceYamlKey
+        : resolvedTemplate.type.toLowerCase()
     setTemplateVariablesData({
       metadataMap: defaultTo(data?.data?.metadataMap, {}),
-      variablesTemplate: get(parse(defaultTo(data?.data?.yaml, '')), resolvedTemplate.type.toLowerCase())
+      variablesTemplate: get(parse(defaultTo(data?.data?.yaml, '')), templateType)
     })
   }, [data?.data?.metadataMap, data?.data?.yaml])
 

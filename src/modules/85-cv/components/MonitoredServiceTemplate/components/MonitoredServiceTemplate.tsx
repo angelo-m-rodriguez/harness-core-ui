@@ -10,6 +10,8 @@ import { Color } from '@harness/design-system'
 import { Template, TemplateProps } from '@templates-library/components/AbstractTemplate/Template'
 import { TemplateType } from '@templates-library/utils/templatesUtils'
 import type { NGTemplateInfoConfig } from 'services/template-ng'
+import type { TemplateInputsProps } from '@templates-library/components/TemplateInputs/TemplateInputs'
+import MonitoredServiceInputSetsTemplate from '@cv/pages/monitored-service/MonitoredServiceInputSetsTemplate'
 import { MonitoredTemplateCanvasWithRef } from './MonitoredServiceTemplateCanvas'
 
 export class MonitoredServiceTemplate extends Template<NGTemplateInfoConfig> {
@@ -24,10 +26,21 @@ export class MonitoredServiceTemplate extends Template<NGTemplateInfoConfig> {
     type: 'MonitoredService'
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   renderTemplateCanvas(props: TemplateProps<NGTemplateInfoConfig>): JSX.Element {
     const { formikRef } = props
     return <MonitoredTemplateCanvasWithRef ref={formikRef as any} />
+  }
+
+  renderTemplateInputsForm(props: TemplateInputsProps & { accountId: string }): JSX.Element {
+    const { template, accountId } = props
+    const { identifier = '', orgIdentifier = '', projectIdentifier = '', versionLabel = '' } = template
+    const templateData = {
+      accountId,
+      identifier,
+      orgIdentifier,
+      projectIdentifier,
+      versionLabel
+    }
+    return <MonitoredServiceInputSetsTemplate templateData={templateData} />
   }
 }

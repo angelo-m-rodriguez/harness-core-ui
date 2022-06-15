@@ -125,7 +125,8 @@ export const ValidationSchema = (
 export enum InpuSetFunction {
   ALLOWED_VALUES = 'allowedValues',
   EXECUTION_INPUT = 'executionInput',
-  REGEX = 'regex'
+  REGEX = 'regex',
+  DEFAULT = 'default'
 }
 
 export interface InpuSetFunctionMatcher {
@@ -133,11 +134,11 @@ export interface InpuSetFunctionMatcher {
   hasParameters: boolean
 }
 
-export function getInputExpressionRegExp(): RegExp {
-  const functionNames = Object.values(InpuSetFunction).join('|')
+export const INPUT_EXPRESSION_REGEX_STRING = `<\\+input>(?:(\\.(${Object.values(InpuSetFunction).join(
+  '|'
+)})\\((.*?)\\))*)`
 
-  return new RegExp(`^<\\+input>(?:(\\.(${functionNames})\\((.*?)\\))*)$`, 'g')
-}
+export const INPUT_EXPRESSION_SPLIT_REGEX = new RegExp(`\\.(?=${Object.values(InpuSetFunction).join('|')})`)
 
 export const JEXL_REGEXP = /jexl\((.*?)\)/
 export const JEXL = 'jexl'
@@ -149,26 +150,33 @@ export interface ParsedInput {
   } | null
   [InpuSetFunction.EXECUTION_INPUT]: boolean
   [InpuSetFunction.REGEX]: string | null
+  [InpuSetFunction.DEFAULT]: string | null
+}
+
+export function isExecionInput(input: string): boolean {
+  // split the string based on functions
+  const splitData = input.split(INPUT_EXPRESSION_SPLIT_REGEX).slice(1)
+
+  return splitData.some(val => val.startsWith(InpuSetFunction.EXECUTION_INPUT))
 }
 
 export function parseInput(input: string): ParsedInput | null {
-  const INPUT_EXPRESSION_REG_EXP = getInputExpressionRegExp()
+  const INPUT_EXPRESSION_REGEX = new RegExp(`^${INPUT_EXPRESSION_REGEX_STRING}$`, 'g')
 
-  const match = input.match(INPUT_EXPRESSION_REG_EXP)
+  const match = input.match(INPUT_EXPRESSION_REGEX)
 
   if (!match) {
     return null
   }
 
-  const fnNames = Object.values(InpuSetFunction)
-  const splitRegExp = new RegExp(`\\.(?=${fnNames.join('|')})`)
   // split the string based on functions
-  const splitData = input.split(splitRegExp).slice(1)
+  const splitData = input.split(INPUT_EXPRESSION_SPLIT_REGEX).slice(1)
 
   const parsedInput: ParsedInput = {
     [InpuSetFunction.ALLOWED_VALUES]: null,
     [InpuSetFunction.EXECUTION_INPUT]: false,
-    [InpuSetFunction.REGEX]: null
+    [InpuSetFunction.REGEX]: null,
+    [InpuSetFunction.DEFAULT]: null
   }
 
   splitData.forEach(fn => {
@@ -190,17 +198,26 @@ export function parseInput(input: string): ParsedInput | null {
       const fnArgs = fn.slice(InpuSetFunction.REGEX.length + 1).slice(0, -1)
 
       parsedInput[InpuSetFunction.REGEX] = fnArgs
+    } else if (fn.startsWith(InpuSetFunction.DEFAULT)) {
+      // slice the function name along with surrounding parenthesis
+      const fnArgs = fn.slice(InpuSetFunction.DEFAULT.length + 1).slice(0, -1)
+
+      parsedInput[InpuSetFunction.DEFAULT] = fnArgs
     }
   })
 
   return parsedInput
 }
 
-export const getInputStr = (data: FormValues): string => {
+export const getInputStr = (data: FormValues, shouldUseNewDefaultFormat: boolean): string => {
   let inputStr = RUNTIME_INPUT_VALUE
 
   if (data.isExecutionInput) {
     inputStr = EXECUTION_TIME_INPUT_VALUE
+  }
+
+  if (shouldUseNewDefaultFormat && data.defaultValue) {
+    inputStr += `.${InpuSetFunction.DEFAULT}(${data.defaultValue})`
   }
 
   if (

@@ -6,14 +6,25 @@
  */
 
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, RenderResult, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { TestWrapper } from '@common/utils/testUtils'
 import mockImport from 'framework/utils/mockImport'
 import mockEnvironments from '@cf/pages/environments/__tests__/mockEnvironments'
-import { FilterCard } from '../FilterCard'
+import { FilterCard, FilterCardProps } from '../FilterCard'
+
+const updateTableFilter = jest.fn()
+
+const renderComponent = (props: Partial<FilterCardProps>): RenderResult => {
+  return render(
+    <TestWrapper>
+      <FilterCard filter={{} as any} updateTableFilter={updateTableFilter} selected={false} {...props} />
+    </TestWrapper>
+  )
+}
 
 describe('FilterCard', () => {
-  test('FilterCard should render the card correctly', async () => {
+  beforeEach(() => {
     mockImport('services/cd-ng', {
       useGetEnvironmentListForProject: () => ({
         data: mockEnvironments,
@@ -21,62 +32,71 @@ describe('FilterCard', () => {
         error: undefined,
         refetch: jest.fn()
       })
-    })
-
-    const filter = {
-      queryProps: { key: 'enabled', value: 'true' },
-      label: 'Filter Two',
-      total: 4
-    }
-
-    render(
-      <TestWrapper
-        path="/account/:accountId/cf/orgs/:orgIdentifier/projects/:projectIdentifier/feature-flags"
-        pathParams={{ accountId: 'dummy', orgIdentifier: 'dummy', projectIdentifier: 'dummy' }}
-      >
-        <FilterCard filter={filter} updateTableFilter={jest.fn()} selected={false} />
-      </TestWrapper>
-    )
-
-    // check each filter label & total
-    await waitFor(() => {
-      const filter2 = screen.getByText('Filter Two')
-      expect(filter2).toBeInTheDocument()
-      expect(filter2.nextSibling?.textContent).toBe('4')
-      expect(filter2.closest('.Card--card')).not.toHaveClass('Card--selected')
     })
   })
-  test('FilterCard should show card as selected when true', async () => {
-    mockImport('services/cd-ng', {
-      useGetEnvironmentListForProject: () => ({
-        data: mockEnvironments,
-        loading: false,
-        error: undefined,
-        refetch: jest.fn()
-      })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  test('FilterCard should render the card values correctly', async () => {
+    renderComponent({
+      filter: {
+        queryProps: { key: 'enabled', value: 'true' },
+        label: 'cf.flagFilters.enabled',
+        total: 4
+      }
     })
-
-    const filter = {
-      queryProps: { key: 'enabled', value: 'true' },
-      label: 'Filter Two',
-      total: 4
-    }
-
-    render(
-      <TestWrapper
-        path="/account/:accountId/cf/orgs/:orgIdentifier/projects/:projectIdentifier/feature-flags"
-        pathParams={{ accountId: 'dummy', orgIdentifier: 'dummy', projectIdentifier: 'dummy' }}
-      >
-        <FilterCard filter={filter} updateTableFilter={jest.fn()} selected={true} />
-      </TestWrapper>
-    )
 
     // check each filter label & total
     await waitFor(() => {
-      const filter2 = screen.getByText('Filter Two')
-      expect(filter2).toBeInTheDocument()
-      expect(filter2.nextSibling?.textContent).toBe('4')
-      expect(filter2.closest('.Card--card')).toHaveClass('Card--selected')
+      const filterCard = screen.getByText('cf.flagFilters.enabled')
+      expect(filterCard).toBeInTheDocument()
+      expect(filterCard.nextSibling?.textContent).toBe('4')
+      expect(filterCard.closest('.Card--card')).not.toHaveClass('Card--selected')
     })
+  })
+
+  test('It should show card as selected when true', async () => {
+    renderComponent({
+      filter: {
+        queryProps: { key: 'status', value: 'active' },
+        label: 'cf.flagFilters.active',
+        total: 6
+      },
+      selected: true
+    })
+
+    // check each filter label & total
+    await waitFor(() => {
+      const filterCard = screen.getByText('cf.flagFilters.active')
+      expect(filterCard).toBeInTheDocument()
+      expect(filterCard.nextSibling?.textContent).toBe('6')
+      expect(filterCard.closest('.Card--card')).toHaveClass('Card--selected')
+    })
+  })
+
+  test('It should call updateTableFilter on click of card', async () => {
+    renderComponent({
+      filter: {
+        queryProps: { key: 'status', value: 'active' },
+        label: 'cf.flagFilters.active',
+        total: 6
+      },
+      selected: true
+    })
+
+    // check each filter label & total
+    const filterCard = screen.getByText('cf.flagFilters.active')
+    await waitFor(() => {
+      expect(filterCard).toBeInTheDocument()
+      expect(filterCard.closest('.Card--card')).toHaveClass('Card--selected')
+    })
+
+    await act(async () => {
+      userEvent.click(filterCard)
+    })
+
+    await waitFor(() => expect(updateTableFilter).toBeCalled())
   })
 })

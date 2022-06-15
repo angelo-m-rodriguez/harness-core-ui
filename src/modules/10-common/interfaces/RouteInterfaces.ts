@@ -98,6 +98,7 @@ export interface TriggerPathProps extends PipelinePathProps {
 
 export interface ExecutionPathProps extends PipelinePathProps {
   executionIdentifier: string
+  source: 'deployments' | 'executions' | 'builds' | ':source(deployments|executions|builds)'
 }
 
 export interface BuildPathProps extends ProjectPathProps {
@@ -148,7 +149,7 @@ export interface EnvironmentPathProps {
 }
 
 export interface EnvironmentQueryParams {
-  sectionId?: 'CONFIGURATION' | 'INFRASTRUCTURE' | 'SERVICE_OVERRIDES'
+  sectionId?: 'CONFIGURATION' | 'INFRASTRUCTURE' | 'SERVICE_OVERRIDES' | 'GITOPS'
 }
 
 export interface EnvironmentGroupPathProps {

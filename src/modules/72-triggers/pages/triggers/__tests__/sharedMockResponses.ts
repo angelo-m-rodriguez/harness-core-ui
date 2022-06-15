@@ -318,6 +318,21 @@ export const GetTemplateStageVariablesFromPipelineResponse: UseGetReturnData<Res
   }
 }
 
+export const GetTemplateStageVariablesFromPipelineResponse2: UseGetReturnData<ResponseInputSetTemplateResponse> = {
+  loading: false,
+  refetch: jest.fn(),
+  error: null,
+  data: {
+    status: 'SUCCESS',
+    data: {
+      inputSetTemplateYaml:
+        'pipeline:\n  identifier: "tolerations1"\n  properties:\n    ci:\n      codebase:\n        build: "<+input>"\n  stages:\n  - stage:\n      identifier: "stage1"\n      type: "CI"\n      spec:\n        infrastructure:\n          type: "KubernetesDirect"\n          spec:\n            namespace: "<+input>"\n        execution:\n          steps:\n          - step:\n              identifier: "s"\n              type: "Run"\n              spec:\n                image: "<+input>"\n'
+    },
+    metaData: null as unknown as undefined,
+    correlationId: '4e057505-dbd4-4de7-9a9d-43a0364e5825'
+  }
+}
+
 export const GetTemplateFromPipelineResponseEmpty: UseGetReturnData<ResponseInputSetTemplateResponse> = {
   loading: false,
   refetch: jest.fn(),
@@ -508,6 +523,40 @@ export const GetInputSetsResponse: UseGetReturnData<ResponsePageInputSetSummaryR
             rootFolder: null as unknown as undefined,
             filePath: null as unknown as undefined
           }
+        }
+      ],
+      pageIndex: 0,
+      empty: false
+    },
+    correlationId: 'dbc7238c-380f-4fe0-b160-a29510cfe0c8'
+  }
+}
+
+export const GetInputSetsResponse2: UseGetReturnData<ResponsePageInputSetSummaryResponse> = {
+  loading: false,
+  refetch: jest.fn(),
+  error: null,
+  data: {
+    status: 'SUCCESS',
+    data: {
+      totalPages: 1,
+      totalItems: 1,
+      pageItemCount: 1,
+      pageSize: 100,
+      content: [
+        {
+          identifier: 'inputset1',
+          name: 'inputset1',
+          pipelineIdentifier: 'tolerations1',
+          inputSetType: 'INPUT_SET',
+          tags: {},
+          createdAt: 1654886025540,
+          lastUpdatedAt: 1654886025540,
+          isOutdated: false,
+          entityValidityDetails: {
+            valid: true
+          },
+          storeType: 'INLINE'
         }
       ],
       pageIndex: 0,

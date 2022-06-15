@@ -9958,6 +9958,7 @@ exports[`Connectors List Test Click on Test button with result error 2`] = `
 
 exports[`Connectors List Test Initial render should match snapshot 1`] = `
 <div>
+  Help Panel
   <div
     class="TableV2--table table"
   >
@@ -11667,6 +11668,7 @@ exports[`Connectors List Test Initial render should match snapshot 1`] = `
 
 exports[`Connectors List Test Test of listing connectors with git enabled 1`] = `
 <div>
+  Help Panel
   <div
     class="TableV2--table table"
   >

@@ -12,6 +12,9 @@ import { uniqWith, isEqual, orderBy } from 'lodash-es'
 import type { StepInfo, Error } from 'services/ti-service'
 import type { GraphLayoutNode } from 'services/pipeline-ng'
 
+export const StepTypes = {
+  RUN_TESTS: 'RunTests'
+}
 export const renderFailureRate = (failureRate: number): number => {
   let scale = 1
   let value = failureRate
@@ -36,6 +39,10 @@ export enum SortByKey {
   SKIPPED_TESTS = 'skipped_tests',
   DURATION_MS = 'duration_ms',
   TOTAL_TESTS = 'total_tests'
+}
+
+const StageStatus = {
+  FAILED: 'Failed'
 }
 
 export const TestStatus = {
@@ -120,6 +127,59 @@ export const getOptionalQueryParamKeys = ({
   return optionalKeys
 }
 
+const getUniqueStageAndStepOptions = ({
+  reportInfoData,
+  testInfoData,
+  context
+}: {
+  reportInfoData: StepInfo[]
+  testInfoData: StepInfo[]
+  context?: any
+}) => {
+  const uniqItems = uniqWith([...reportInfoData, ...testInfoData], isEqual)
+  let uniqueStageIdOptions: SelectOption[] | any = [] // any includes additionally index for ordering below
+  const uniqueStepIdOptionsFromStageKeyMap: { [key: string]: SelectOption[] | any } = {}
+  const pipelineOrderedStagesMap: { [key: string]: { index: number; isFailed: boolean } } = {}
+  Array.from(context?.pipelineStagesMap?.values() || {})?.forEach(
+    (stage, index) =>
+      (pipelineOrderedStagesMap[`${(stage as GraphLayoutNode).nodeIdentifier}`] = {
+        index,
+        isFailed: (stage as GraphLayoutNode).status === StageStatus.FAILED
+      })
+  )
+
+  uniqItems.forEach(({ stage, step }) => {
+    if (stage && !uniqueStageIdOptions.some((option: { value: string }) => option.value === stage)) {
+      uniqueStageIdOptions.push({
+        label: `Stage: ${stage}`,
+        value: stage,
+        index: typeof stage === 'string' && pipelineOrderedStagesMap[stage]?.index,
+        ...(pipelineOrderedStagesMap[stage]?.isFailed ? { icon: { name: 'warning-sign' } } : {})
+      })
+    }
+    // Will support Steps with warning icon in redesign + api support
+    if (stage && Array.isArray(uniqueStepIdOptionsFromStageKeyMap?.[stage])) {
+      uniqueStepIdOptionsFromStageKeyMap[stage].push({
+        label: `Step: ${step}`,
+        value: step
+      })
+    } else if (stage && step) {
+      uniqueStepIdOptionsFromStageKeyMap[stage] = [
+        {
+          label: `Step: ${step}`,
+          value: step
+        }
+      ]
+    }
+  })
+
+  if (uniqueStageIdOptions.length > 1) {
+    uniqueStageIdOptions = orderBy(uniqueStageIdOptions, 'index')
+  }
+
+  return { uniqueStageIdOptions, uniqueStepIdOptionsFromStageKeyMap }
+}
+
 export const setInitialStageAndSteps = ({
   reportInfoData,
   testInfoData,
@@ -139,42 +199,16 @@ export const setInitialStageAndSteps = ({
   setStageIdOptions: Dispatch<SetStateAction<SelectOption[]>>
   setStepIdOptions: Dispatch<SetStateAction<SelectOption[]>>
 }): void => {
-  const uniqItems = uniqWith([...reportInfoData, ...testInfoData], isEqual)
-  let uniqueStageIdOptions: SelectOption[] | any = [] // any includes additionally index for ordering below
-  const uniqueStepIdOptionsFromStageKeyMap: { [key: string]: SelectOption[] | any } = {}
-  const pipelineOrderedStagesMap: { [key: string]: number } = {}
-  Array.from(context?.pipelineStagesMap?.values() || {})?.forEach(
-    (stage, index) => (pipelineOrderedStagesMap[`${(stage as GraphLayoutNode).nodeIdentifier}`] = index)
-  )
-
-  uniqItems.forEach(({ stage, step }) => {
-    if (stage && !uniqueStageIdOptions.some((option: { value: string }) => option.value === stage)) {
-      uniqueStageIdOptions.push({
-        label: `Stage: ${stage}`,
-        value: stage,
-        index: typeof stage === 'string' && pipelineOrderedStagesMap[stage]
-      })
-    }
-    if (stage && Array.isArray(uniqueStepIdOptionsFromStageKeyMap?.[stage])) {
-      uniqueStepIdOptionsFromStageKeyMap[stage].push({
-        label: `Step: ${step}`,
-        value: step
-      })
-    } else if (stage && step) {
-      uniqueStepIdOptionsFromStageKeyMap[stage] = [
-        {
-          label: `Step: ${step}`,
-          value: step
-        }
-      ]
-    }
+  const { uniqueStageIdOptions, uniqueStepIdOptionsFromStageKeyMap } = getUniqueStageAndStepOptions({
+    reportInfoData,
+    testInfoData,
+    context
   })
 
   setStepIdOptionsFromStageKeyMap(uniqueStepIdOptionsFromStageKeyMap)
 
   let selectedStageIndex = 0
   if (uniqueStageIdOptions.length > 1) {
-    uniqueStageIdOptions = orderBy(uniqueStageIdOptions, 'index')
     uniqueStageIdOptions.unshift(AllStagesOption)
     // select id from previously selected node on Pipeline tab
     const preSelectedStageId = context.pipelineStagesMap.get(context.selectedStageId)?.nodeIdentifier

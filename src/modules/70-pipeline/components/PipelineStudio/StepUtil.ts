@@ -6,16 +6,9 @@
  */
 
 import { FormikErrors, yupToFormErrors } from 'formik'
-import { getMultiTypeFromValue, MultiTypeInputType } from '@wings-software/uicore'
-import isEmpty from 'lodash-es/isEmpty'
-import has from 'lodash-es/has'
+import { getMultiTypeFromValue, MultiTypeInputType } from '@harness/uicore'
+import { isEmpty, has, set, reduce, isObject, memoize, isBoolean, get } from 'lodash-es'
 import * as Yup from 'yup'
-import set from 'lodash-es/set'
-import reduce from 'lodash-es/reduce'
-import isObject from 'lodash-es/isObject'
-import memoize from 'lodash-es/memoize'
-import isBoolean from 'lodash-es/isBoolean'
-import get from 'lodash-es/get'
 import type { K8sDirectInfraYaml } from 'services/ci'
 import type {
   StageElementConfig,
@@ -33,6 +26,10 @@ import type { TemplateStepNode } from 'services/pipeline-ng'
 import { ServiceDeploymentType } from '@pipeline/utils/stageHelpers'
 import { getPrCloneStrategyOptions } from '@pipeline/utils/constants'
 import { CodebaseTypes, isCloneCodebaseEnabledAtLeastOneStage } from '@pipeline/utils/CIUtils'
+import {
+  INPUT_EXPRESSION_REGEX_STRING,
+  isExecionInput
+} from '@common/components/ConfigureOptions/ConfigureOptionsUtils'
 import factory from '../PipelineSteps/PipelineStepFactory'
 import { StepType } from '../PipelineSteps/PipelineStepInterface'
 // eslint-disable-next-line no-restricted-imports
@@ -43,9 +40,19 @@ import '@ci/components/PipelineSteps'
 import '@sto-steps/components/PipelineSteps'
 import { StepViewType } from '../AbstractSteps/Step'
 
-export const clearRuntimeInput = (template: PipelineInfoConfig): PipelineInfoConfig => {
+/**
+ * Loops over the pipeline and clears all the runtime inputs i.e. <+input>
+ * expect for execution time inputs i.e. <+input>.executionInput()
+ */
+export function clearRuntimeInput<T = PipelineInfoConfig>(template: T, shouldAlsoClearRuntimeInputs?: boolean): T {
+  const INPUT_EXPRESSION_REGEX = new RegExp(`"${INPUT_EXPRESSION_REGEX_STRING}"`, 'g')
   return JSON.parse(
-    JSON.stringify(template || {}).replace(/"<\+input>.?(?:allowedValues\((.*?)\)|regex\((.*?)\))?"/g, '""')
+    JSON.stringify(template || {}).replace(
+      new RegExp(`"${INPUT_EXPRESSION_REGEX.source.slice(1).slice(0, -1)}"`, 'g'),
+      value => {
+        return isExecionInput(value) && !shouldAlsoClearRuntimeInputs ? value : '""'
+      }
+    )
   )
 }
 

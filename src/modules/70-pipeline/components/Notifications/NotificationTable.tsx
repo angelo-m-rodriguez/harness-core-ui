@@ -32,6 +32,7 @@ import { useNotificationModal } from './useNotificationModal'
 import { PipelineEventType } from './Steps/PipelineEvents'
 import { Actions } from './NotificationUtils'
 import { getAllNotificationTypeSelectOption, NotificationTypeSelectOptions } from './NotificationTypeOptions'
+import { useVariablesExpression } from '../PipelineStudio/PiplineHooks/useVariablesExpression'
 import css from './NotificationTable.module.scss'
 
 export interface NotificationRulesItem {
@@ -213,13 +214,15 @@ function NotificationTable(props: NotificationTableProps): React.ReactElement {
     isReadonly = false
   } = props
   const { getString } = useStrings()
+  const { expressions } = useVariablesExpression()
 
   const { openNotificationModal, closeNotificationModal } = useNotificationModal({
     onCreateOrUpdate: (_data?: NotificationRules, _index?: number, _action?: Actions) => {
       onUpdate?.({ notificationRules: _data!, index: _index! }, _action, closeNotificationModal)
     },
     stagesOptions,
-    getExistingNotificationNames
+    getExistingNotificationNames,
+    expressions
   })
 
   const columns: CustomColumn<NotificationRulesItem>[] = useMemo(

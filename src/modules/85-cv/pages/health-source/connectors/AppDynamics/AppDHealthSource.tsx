@@ -66,12 +66,14 @@ export default function AppDMonitoredSource({
   data: appDynamicsData,
   onSubmit,
   onPrevious,
-  isTemplate
+  isTemplate,
+  expressions
 }: {
   data: AppDynamicsData
   onSubmit: (healthSourcePayload: any) => void
   onPrevious: () => void
   isTemplate?: boolean
+  expressions?: string[]
 }): JSX.Element {
   const { getString } = useStrings()
   const { showError, clear } = useToaster()
@@ -245,7 +247,9 @@ export default function AppDMonitoredSource({
   }
 
   useEffect(() => {
-    setAppAndTierAsInputIfConnectorIsInput(isConnectorRuntimeOrExpression, nonCustomFeilds, setNonCustomFeilds)
+    if (!appDynamicsData.isEdit) {
+      setAppAndTierAsInputIfConnectorIsInput(isConnectorRuntimeOrExpression, nonCustomFeilds, setNonCustomFeilds)
+    }
   }, [])
 
   return (
@@ -299,12 +303,14 @@ export default function AppDMonitoredSource({
                       )
                     }
                     isTemplate={isTemplate}
+                    expressions={expressions}
                   />
                 </Container>
                 {!!formik.values.appdApplication && (
                   <Container margin={{ bottom: 'small' }} width={'300px'} color={Color.BLACK}>
                     <AppDynamicsTier
                       isTemplate={isTemplate}
+                      expressions={expressions}
                       tierOptions={tierOptions}
                       tierLoading={tierLoading}
                       formikValues={formik?.values}

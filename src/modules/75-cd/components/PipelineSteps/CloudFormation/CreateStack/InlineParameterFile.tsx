@@ -24,6 +24,7 @@ import {
 import { Form, FieldArray } from 'formik'
 import { Classes, Dialog } from '@blueprintjs/core'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import { useStrings } from 'framework/strings'
 import { useCFParametersForAws } from 'services/cd-ng'
 import css from '../CloudFormation.module.scss'
@@ -34,6 +35,7 @@ interface GitDetails {
   filePath?: string
   isBranch: boolean
   branch?: string
+  repoName?: string
 }
 
 interface ParameterOverride {
@@ -72,6 +74,7 @@ export const InlineParameterFile = ({
 }: InlineParameterFileProps): JSX.Element => {
   const { getString } = useStrings()
   const { showError } = useToaster()
+  const { getRBACErrorMessage } = useRBACError()
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
   const [remoteParams, setRemoteParams] = useState<MultiSelectOption[]>()
   const queryParams = useMemo(() => {
@@ -98,8 +101,8 @@ export const InlineParameterFile = ({
         if (result?.data) {
           setRemoteParams(map(result?.data, param => ({ label: param.paramKey!, value: param.paramKey! })))
         }
-      } catch (err) {
-        showError(err?.message)
+      } catch (err: any) {
+        showError(getRBACErrorMessage(err))
       }
     }
   }

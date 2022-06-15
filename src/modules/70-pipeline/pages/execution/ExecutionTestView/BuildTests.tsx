@@ -36,7 +36,8 @@ import {
   setInitialStageAndSteps,
   getUIType,
   getError,
-  UI
+  UI,
+  StepTypes
 } from './TestsUtils'
 // import { TestsCoverage } from './TestsCoverage'
 import css from './BuildTests.module.scss'
@@ -108,9 +109,10 @@ const renderHeader = ({
         {getString('pipeline.testsReports.testExecutions')}
       </Heading>
       {stageIdOptions && selectedStageId && (
-        <div style={{ width: '222px', marginLeft: 'var(--spacing-5)' }}>
+        <div className={css.stageOptions}>
           <Select
             fill
+            popoverClassName={css.repositionWarning}
             value={selectedStageId}
             items={stageIdOptions}
             onChange={option => {
@@ -142,7 +144,7 @@ const renderHeader = ({
         </div>
       )}
       {stepIdOptions && selectedStepId && (
-        <div style={{ width: '222px', marginLeft: 'var(--spacing-5)' }}>
+        <div className={css.stepOptions}>
           <Select
             fill
             value={selectedStepId}
@@ -421,6 +423,7 @@ function BuildTests({ reportSummaryMock, testOverviewMock }: BuildTestsProps): R
 
   useEffect(() => {
     if (reportInfoData && testInfoData) {
+      const tiStepExists = Object.values(context?.allNodeMap || {})?.some(step => step.stepType === StepTypes.RUN_TESTS)
       setInitialStageAndSteps({
         reportInfoData,
         testInfoData,
@@ -432,7 +435,7 @@ function BuildTests({ reportSummaryMock, testOverviewMock }: BuildTestsProps): R
         setStepIdOptions
       })
 
-      if (testInfoData.length > 0) {
+      if (testInfoData.length > 0 || tiStepExists) {
         setHasTIStep(true)
       }
     }

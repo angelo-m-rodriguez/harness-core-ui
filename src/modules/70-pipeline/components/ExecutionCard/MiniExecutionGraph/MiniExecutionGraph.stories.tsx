@@ -34,6 +34,7 @@ export const Basic: Story<MiniExecutionGraphProps> = _args => {
           pipelineExecution={pipeline as any}
           projectIdentifier="TEST_PROJECT"
           orgIdentifier="TEST_ORG"
+          source="executions"
           accountId="TEST_ACCOUNT"
           module="cd"
         />

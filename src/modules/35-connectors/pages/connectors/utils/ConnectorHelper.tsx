@@ -82,6 +82,8 @@ export const getConnectorTitleIdByType = (type: string): StringKeys => {
       return 'connectors.title.k8sCluster'
     case Connectors.HttpHelmRepo:
       return 'connectors.title.helmConnector'
+    case Connectors.OciHelmRepo:
+      return 'connectors.title.ociHelmConnector'
     case Connectors.GIT:
       return 'connectors.title.gitConnector'
     case Connectors.GITHUB:
@@ -156,6 +158,8 @@ export const getConnectorIconByType = (type: string): IconName => {
       return 'service-github'
     case Connectors.HttpHelmRepo:
       return 'service-helm'
+    case Connectors.OciHelmRepo:
+      return 'helm-oci'
     case Connectors.GITHUB:
       return 'github'
     case Connectors.GITLAB:

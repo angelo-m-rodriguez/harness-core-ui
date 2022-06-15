@@ -117,6 +117,8 @@ const RenderUrlInfo: React.FC<StepProps<VerifyOutOfClusterStepProps> & RenderUrl
         return props.prevStepData?.masterUrl
       case Connectors.HttpHelmRepo:
         return props.prevStepData?.helmRepoUrl
+      case Connectors.OciHelmRepo:
+        return props.prevStepData?.helmRepoUrl
       case Connectors.DOCKER:
         return props.prevStepData?.dockerRegistryUrl
       case Connectors.NEXUS:
@@ -228,6 +230,8 @@ const VerifyOutOfClusterDelegate: React.FC<StepProps<VerifyOutOfClusterStepProps
         case Connectors.SERVICE_NOW:
           return 'https://ngdocs.harness.io/article/illz8off8q'
         case Connectors.HttpHelmRepo:
+          return 'https://ngdocs.harness.io/article/a0jotsvsi7'
+        case Connectors.OciHelmRepo:
           return 'https://ngdocs.harness.io/article/a0jotsvsi7'
         case Connectors.DATADOG:
           return 'https://ngdocs.harness.io/article/g21fb5kfkg-connect-to-monitoring-and-logging-systems#step_add_datadog'

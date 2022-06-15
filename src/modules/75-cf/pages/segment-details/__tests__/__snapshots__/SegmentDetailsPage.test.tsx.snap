@@ -241,6 +241,7 @@ exports[`SegmentDetailsPage SegmentDetailsPage should render data correctly 1`] 
     </div>
     <div
       class="content"
+      data-name="page-body"
     >
       <div
         class="Layout--vertical StyledProps--main gitSyncContainer"

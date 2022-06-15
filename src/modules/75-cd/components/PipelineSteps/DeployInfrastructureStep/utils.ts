@@ -8,19 +8,27 @@
 import type { FormikProps } from 'formik'
 import { isEmpty } from 'lodash-es'
 
-import { getMultiTypeFromValue, MultiTypeInputType } from '@harness/uicore'
+import { getMultiTypeFromValue, MultiTypeInputType, SelectOption } from '@harness/uicore'
 import type { EnvironmentResponseDTO, PipelineInfrastructure } from 'services/cd-ng'
 
 import type { StepViewType } from '@pipeline/components/AbstractSteps/Step'
 
+export interface PipelineInfrastructureV2 extends PipelineInfrastructure {
+  environmentOrEnvGroupRef?: SelectOption
+  environmentGroup?: any
+  environmentRef2?: any
+  infrastructureRef?: any
+  deployToAll?: boolean
+}
+
 export interface DeployInfrastructureProps {
-  initialValues: PipelineInfrastructure
-  onUpdate?: (data: PipelineInfrastructure) => void
+  initialValues: PipelineInfrastructureV2
+  onUpdate?: (data: PipelineInfrastructureV2) => void
   readonly: boolean
   allowableTypes: MultiTypeInputType[]
   stepViewType?: StepViewType
   inputSetData?: {
-    template?: PipelineInfrastructure
+    template?: PipelineInfrastructureV2
     path?: string
     readonly?: boolean
   }
@@ -29,14 +37,15 @@ export interface DeployInfrastructureProps {
 export interface DeployInfrastructureState {
   isEdit: boolean
   isEnvironment: boolean
-  formik?: FormikProps<PipelineInfrastructure>
+  formik?: FormikProps<PipelineInfrastructureV2>
   data?: EnvironmentResponseDTO
 }
 
-export function isEditEnvironment(data: PipelineInfrastructure): boolean {
-  if (getMultiTypeFromValue(data.environmentRef) !== MultiTypeInputType.RUNTIME && !isEmpty(data.environmentRef)) {
-    return true
-  } else if (data.environment && !isEmpty(data.environment.identifier)) {
+export function isEditEnvironment(data: PipelineInfrastructureV2): boolean {
+  if (
+    getMultiTypeFromValue(data.environmentOrEnvGroupRef) !== MultiTypeInputType.RUNTIME &&
+    !isEmpty(data.environmentOrEnvGroupRef)
+  ) {
     return true
   }
   return false
@@ -47,8 +56,6 @@ export function isEditInfrastructure(data: any): boolean {
     getMultiTypeFromValue(data.infrastructureRef) !== MultiTypeInputType.RUNTIME &&
     !isEmpty(data.infrastructureRef)
   ) {
-    return true
-  } else if (data.infrastructure && !isEmpty(data.infrastructure.identifier)) {
     return true
   }
   return false

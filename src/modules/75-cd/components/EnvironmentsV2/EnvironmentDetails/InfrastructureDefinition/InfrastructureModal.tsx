@@ -88,7 +88,10 @@ export function InfrastructureModal({
     return (parse(defaultTo(infrastructureToEdit, '{}')) as InfrastructureConfig).infrastructureDefinition
   }, [infrastructureToEdit])
 
-  // const { type, spec } = defaultTo(infrastructureDefinition, {}) as InfrastructureDefinitionConfig
+  const { type, spec, allowSimultaneousDeployments } = defaultTo(
+    infrastructureDefinition,
+    {}
+  ) as InfrastructureDefinitionConfig
 
   const pipeline = React.useMemo(
     () =>
@@ -103,9 +106,10 @@ export function InfrastructureModal({
             spec: {
               infrastructure: {
                 infrastructureDefinition: {
-                  // type: defaultTo(type, deploymentTypeInfraTypeMap.Kubernetes),
-                  // spec: defaultTo(spec, {})
-                }
+                  ...(Boolean(type) && { type }),
+                  ...(Boolean(type) && { spec })
+                },
+                allowSimultaneousDeployments: Boolean(allowSimultaneousDeployments)
               },
               serviceConfig: {
                 serviceDefinition: {
@@ -205,7 +209,7 @@ function BootstrapDeployInfraDefinition({
   )
 
   const cleanBeforeClose = () => {
-    setInfrastructureToEdit()
+    setInfrastructureToEdit?.()
     hideModal()
   }
 
@@ -247,7 +251,10 @@ function BootstrapDeployInfraDefinition({
       yaml: yamlStringify({
         infrastructureDefinition: {
           ...body,
-          spec: (pipeline.stages?.[0].stage?.spec as any)?.infrastructure?.infrastructureDefinition?.spec
+          spec: (pipeline.stages?.[0].stage?.spec as DeploymentStageConfig)?.infrastructure?.infrastructureDefinition
+            ?.spec,
+          allowSimultaneousDeployments: (pipeline.stages?.[0].stage?.spec as DeploymentStageConfig)?.infrastructure
+            ?.allowSimultaneousDeployments
         }
       })
     })
@@ -259,7 +266,14 @@ function BootstrapDeployInfraDefinition({
             })
           )
           setIsSavingInfrastructure(false)
-          refetch()
+          if (envIdentifier) {
+            refetch({
+              label: response.data?.infrastructure?.name,
+              value: response.data?.infrastructure?.identifier
+            })
+          } else {
+            refetch()
+          }
           cleanBeforeClose()
         } else {
           throw response
@@ -320,12 +334,15 @@ function BootstrapDeployInfraDefinition({
                       }}
                     />
                   </Card>
-                  <SelectDeploymentType
-                    selectedDeploymentType={selectedDeploymentType}
-                    isReadonly={false}
-                    handleDeploymentTypeChange={handleDeploymentTypeChange}
-                  />
-                  {selectedDeploymentType && <DeployInfraDefinition />}
+                  {!infrastructureDefinition && (
+                    <SelectDeploymentType
+                      viewContext="setup"
+                      selectedDeploymentType={selectedDeploymentType}
+                      isReadonly={false}
+                      handleDeploymentTypeChange={handleDeploymentTypeChange}
+                    />
+                  )}
+                  {(selectedDeploymentType || infrastructureDefinition) && <DeployInfraDefinition />}
                 </>
               ) : (
                 <YAMLBuilder
@@ -335,7 +352,7 @@ function BootstrapDeployInfraDefinition({
                       ...formikProps.values,
                       orgIdentifier,
                       projectIdentifier,
-                      envIdentifier: environmentIdentifier || envIdentifier,
+                      environmentRef: environmentIdentifier || envIdentifier,
                       type: (pipeline.stages?.[0].stage?.spec as DeploymentStageConfig)?.infrastructure
                         ?.infrastructureDefinition?.type,
                       spec: (pipeline.stages?.[0].stage?.spec as DeploymentStageConfig)?.infrastructure
@@ -360,7 +377,12 @@ function BootstrapDeployInfraDefinition({
                     const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), /* istanbul ignore next */ '')
                     onSubmit(parse(latestYaml)?.infrastructureDefinition)
                   } else {
-                    formikProps.submitForm()
+                    onSubmit({
+                      ...formikProps.values,
+                      orgIdentifier,
+                      projectIdentifier,
+                      environmentRef: environmentIdentifier || envIdentifier
+                    } as InfrastructureDefinitionConfig)
                   }
                 }}
                 disabled={isSavingInfrastructure}

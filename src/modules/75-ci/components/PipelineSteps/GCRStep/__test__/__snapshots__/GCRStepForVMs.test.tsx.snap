@@ -21,7 +21,7 @@ exports[`GCR Step Edit View should render properly for AWS VMs build infra 1`] =
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="ciGcrStep_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

@@ -27,14 +27,18 @@ import VerifyStepHealthSourceTable from '@cv/pages/health-source/HealthSourceTab
 import type { RowData } from '@cv/pages/health-source/HealthSourceDrawer/HealthSourceDrawerContent.types'
 import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
 import type { MonitoredServiceProps } from './MonitoredService.types'
-import { getNewSpecs, getServiceIdentifier, isAnExpression } from './MonitoredService.utils'
+import {
+  getEnvironmentIdentifierFromStage,
+  getNewSpecs,
+  getServiceIdentifierFromStage,
+  isAnExpression
+} from './MonitoredService.utils'
 import { MONITORED_SERVICE_EXPRESSION } from './MonitoredService.constants'
 import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 import css from './MonitoredService.module.scss'
 
 export default function MonitoredService({
-  formik: { values: formValues, setFieldValue },
-  formik
+  formik: { values: formValues, setFieldValue }
 }: MonitoredServiceProps): JSX.Element {
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps & AccountPathProps>()
   const [monitoredService, setMonitoredService] = useState({
@@ -51,12 +55,13 @@ export default function MonitoredService({
     getStageFromPipeline
   } = usePipelineContext()
   const selectedStage = getStageFromPipeline<DeploymentStageElementConfig>(selectedStageId as string)?.stage
-  const environmentIdentifier =
-    selectedStage?.stage?.spec?.infrastructure?.environment?.identifier ||
-    selectedStage?.stage?.spec?.infrastructure?.environmentRef ||
-    ''
+
+  const environmentIdentifier = useMemo(() => {
+    return getEnvironmentIdentifierFromStage(selectedStage)
+  }, [selectedStage])
+
   const serviceIdentifier = useMemo(() => {
-    return getServiceIdentifier(selectedStage, pipeline)
+    return getServiceIdentifierFromStage(selectedStage, pipeline)
   }, [pipeline, selectedStage])
 
   const createServiceQueryParams = useMemo(
@@ -109,8 +114,9 @@ export default function MonitoredService({
         name: monitoredServiceData?.name as string
       })
     }
-    const formNewValues = { ...formValues, spec: newSpecs }
-    formik.resetForm({ values: formNewValues })
+
+    // const formNewValues = { ...formValues, spec: newSpecs }
+    // formik.resetForm({ values: formNewValues })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoredServiceData, error, loading, environmentIdentifier, serviceIdentifier])
 

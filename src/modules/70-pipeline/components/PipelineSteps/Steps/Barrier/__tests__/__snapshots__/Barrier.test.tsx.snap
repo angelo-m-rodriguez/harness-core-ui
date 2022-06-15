@@ -16,7 +16,7 @@ exports[`Barrier tests Edit stage- readonly: edit stage readonly 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="barrierStep_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -308,7 +308,7 @@ exports[`Barrier tests Edit view with runtime input values 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="barrierStep_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

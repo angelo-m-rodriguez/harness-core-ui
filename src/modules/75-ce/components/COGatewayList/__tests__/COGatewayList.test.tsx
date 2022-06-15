@@ -14,6 +14,8 @@ import type { CheckFeatureReturn } from 'framework/featureStore/featureStoreUtil
 import { TestWrapper } from '@common/utils/testUtils'
 import COGatewayList from '../COGatewayList'
 import {
+  activeUserMock,
+  mockedConnector,
   mockedEcsClusterServiceData,
   mockedEcsServiceData,
   mockedInstanceServiceData,
@@ -46,15 +48,13 @@ jest.mock('@common/hooks/useFeatures', () => {
   }
 })
 
-const listData = {
-  response: [
-    mockedK8sServiceData,
-    mockedInstanceServiceData,
-    { ...mockedInstanceServiceData, fulfilment: 'spot', disabled: true },
-    mockedEcsServiceData,
-    mockedRdsServiceData
-  ]
-}
+const listData = [
+  mockedK8sServiceData,
+  mockedInstanceServiceData,
+  { ...mockedInstanceServiceData, fulfilment: 'spot', disabled: true },
+  mockedEcsServiceData,
+  mockedRdsServiceData
+]
 
 const mockedCumulativeSavingsData = {
   actual_cost: [],
@@ -95,6 +95,30 @@ const mockedConnectorData = {
   }
 }
 
+const mockedFetchRuleResponse = {
+  response: {
+    records: listData,
+    total: listData.length,
+    pages: 1
+  },
+  loading: false
+}
+
+const mockedSelectedFilter = {
+  name: 'CE AWS',
+  identifier: 'CE_AWS',
+  data: {
+    cloud_account_id: ['mock-kubernetes-id'],
+    created_by: ['123'],
+    kind: ['k8s'],
+    namespace: ['test_namespace']
+  }
+}
+
+const mockedFiltersResponse = {
+  response: [mockedSelectedFilter]
+}
+
 jest.mock('@common/hooks/useFeatureFlag', () => ({
   useFeatureFlag: jest.fn(() => true),
   useFeatureFlags: jest.fn(() => ({}))
@@ -106,16 +130,8 @@ jest.mock('services/lw', () => ({
     loading: false,
     error: null
   })),
-  useGetServices: jest.fn().mockImplementation(() => ({
-    data: listData,
-    loading: false,
-    error: null,
-    refetch: jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        data: listData,
-        loading: false
-      })
-    )
+  useFetchRules: jest.fn().mockImplementation(() => ({
+    mutate: () => Promise.resolve(mockedFetchRuleResponse)
   })),
   useHealthOfService: jest.fn().mockImplementation(() => ({
     data: null,
@@ -132,8 +148,8 @@ jest.mock('services/lw', () => ({
   useGetServiceDiagnostics: jest.fn().mockImplementation(() => ({
     data: null
   })),
-  useCumulativeServiceSavings: jest.fn().mockImplementation(() => ({
-    data: { response: mockedCumulativeSavingsData },
+  useCumulativeServiceSavingsV2: jest.fn().mockImplementation(() => ({
+    mutate: () => Promise.resolve({ response: mockedCumulativeSavingsData }),
     loading: false
   })),
   useToggleAutostoppingRule: jest.fn().mockImplementation(() => ({
@@ -162,6 +178,10 @@ jest.mock('services/lw', () => ({
     data: null,
     loading: false,
     refetch: jest.fn()
+  })),
+  useGetAllRuleFilters: jest.fn().mockImplementation(() => ({
+    data: mockedFiltersResponse,
+    refetch: jest.fn()
   }))
 }))
 
@@ -169,6 +189,15 @@ jest.mock('services/cd-ng', () => ({
   useGetConnector: jest.fn().mockImplementation(() => ({
     data: mockedConnectorData,
     loading: false
+  })),
+  useGetConnectorListV2: jest.fn().mockImplementation(() => ({
+    mutate: jest.fn(() => Promise.resolve({ data: { content: [mockedConnector] } })),
+    loading: false
+  })),
+  useGetAggregatedUsers: jest.fn(() => ({
+    cancel: jest.fn(),
+    loading: false,
+    mutate: jest.fn().mockImplementation(() => activeUserMock)
   }))
 }))
 
@@ -177,14 +206,13 @@ afterEach(() => {
 })
 
 describe('Test COGatewayList', () => {
-  test('renders without crashing', () => {
-    const { container, getByText } = render(
+  test('renders without crashing', async () => {
+    const { getByText } = render(
       <TestWrapper path={testpath} pathParams={testparams}>
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
-    expect(container).toMatchSnapshot()
-
+    await waitFor(() => Promise.resolve())
     const createAsBtn = getByText('ce.co.newAutoStoppingRule')
     expect('createAsBtn').toBeDefined()
     act(() => {
@@ -198,7 +226,7 @@ describe('Test COGatewayList', () => {
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
-
+    await waitFor(() => Promise.resolve())
     const row = container.querySelector('.TableV2--row.TableV2--clickable')
     // const delete =
     expect(row).toBeDefined()
@@ -214,7 +242,7 @@ describe('Test COGatewayList', () => {
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
-
+    await waitFor(() => Promise.resolve())
     const refreshIcon = getByTestId('refreshIconContainer')
     expect(refreshIcon).toBeDefined()
     act(() => {
@@ -230,6 +258,7 @@ describe('Test COGatewayList', () => {
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
+    await waitFor(() => Promise.resolve())
     expect(container).toMatchSnapshot()
 
     const menuBtn = container.querySelector('span[data-icon="Options"]')
@@ -251,15 +280,16 @@ describe('Test COGatewayList', () => {
     })
   })
 
-  test('able to search through the list', () => {
+  test('able to search through the list', async () => {
     const { container } = render(
       <TestWrapper path={testpath} pathParams={testparams}>
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
+    await waitFor(() => Promise.resolve())
     const searchInput = container.querySelector('input[type="search"]') as HTMLInputElement
     expect(searchInput).toBeDefined()
-    act(async () => {
+    await act(async () => {
       await waitFor(() => {
         fireEvent.change(searchInput, { target: { value: 'test' } })
       })
@@ -269,15 +299,13 @@ describe('Test COGatewayList', () => {
     expect(container).toMatchSnapshot()
   })
 
-  test('error from services API should show error', () => {
-    const servicesSpy = jest.spyOn(lwServices, 'useGetServices')
+  test('error from services API should show error', async () => {
+    const servicesSpy = jest.spyOn(lwServices, 'useFetchRules')
     servicesSpy.mockImplementation(
       () =>
         ({
-          data: null,
-          loading: false,
-          error: { data: { errors: ['Fetch Service error'] } },
-          refetch: jest.fn()
+          mutate: () => Promise.reject({ data: { errors: ['Fetch Service error'] } }),
+          loading: false
         } as any)
     )
     const { container } = render(
@@ -285,7 +313,7 @@ describe('Test COGatewayList', () => {
         <COGatewayList></COGatewayList>
       </TestWrapper>
     )
-
+    await waitFor(() => Promise.resolve())
     act(() => {
       expect(container).toMatchSnapshot()
     })
@@ -293,15 +321,13 @@ describe('Test COGatewayList', () => {
   })
 
   describe('render based on the content', () => {
-    test('render page loader on initial loading', () => {
-      const servicesSpy = jest.spyOn(lwServices, 'useGetServices')
+    test('render page loader on initial loading', async () => {
+      const servicesSpy = jest.spyOn(lwServices, 'useFetchRules')
       servicesSpy.mockImplementation(
         () =>
           ({
-            data: null,
-            loading: false,
-            error: null,
-            refetch: jest.fn()
+            mutate: () => Promise.resolve({ response: { records: null } }),
+            loading: false
           } as any)
       )
       const { container } = render(
@@ -309,20 +335,24 @@ describe('Test COGatewayList', () => {
           <COGatewayList />
         </TestWrapper>
       )
+      await waitFor(() => Promise.resolve())
       expect(container).toMatchSnapshot()
       servicesSpy.mockClear()
     })
 
     // eslint-disable-next-line jest/no-disabled-tests
-    test.skip('render empty page component for no rules created', () => {
-      const servicesSpy = jest.spyOn(lwServices, 'useGetServices')
+    test.skip('render empty page component for no rules created', async () => {
+      const servicesSpy = jest.spyOn(lwServices, 'useFetchRules')
       servicesSpy.mockImplementation(
         () =>
           ({
-            data: { response: null },
-            loading: false,
-            error: null,
-            refetch: jest.fn()
+            mutate: () =>
+              Promise.resolve({
+                response: {
+                  records: null
+                }
+              }),
+            loading: false
           } as any)
       )
       const { container, getByText } = render(
@@ -330,6 +360,7 @@ describe('Test COGatewayList', () => {
           <COGatewayList />
         </TestWrapper>
       )
+      await waitFor(() => Promise.resolve())
       expect(container).toMatchSnapshot()
 
       const createAsBtn = getByText('ce.co.newAutoStoppingRule')
@@ -339,14 +370,12 @@ describe('Test COGatewayList', () => {
       })
     })
 
-    test('render table loader component when data is loading', () => {
-      jest.spyOn(lwServices, 'useGetServices').mockImplementation(
+    test('render table loader component when data is loading', async () => {
+      jest.spyOn(lwServices, 'useFetchRules').mockImplementation(
         () =>
           ({
-            data: { response: null },
-            loading: true,
-            error: null,
-            refetch: jest.fn()
+            mutate: () => Promise.resolve(),
+            loading: true
           } as any)
       )
       const { container } = render(
@@ -354,17 +383,16 @@ describe('Test COGatewayList', () => {
           <COGatewayList />
         </TestWrapper>
       )
+      await waitFor(() => Promise.resolve())
       expect(container).toMatchSnapshot()
     })
 
-    test('should show error message on receiving error from services API', () => {
-      jest.spyOn(lwServices, 'useGetServices').mockImplementation(
+    test('should show error message on receiving error from services API', async () => {
+      jest.spyOn(lwServices, 'useFetchRules').mockImplementation(
         () =>
           ({
-            data: { response: null },
-            loading: false,
-            error: { message: 'Some random error' },
-            refetch: jest.fn()
+            mutate: () => Promise.reject({ message: 'Some random error' }),
+            loading: false
           } as any)
       )
       const { container } = render(
@@ -372,6 +400,7 @@ describe('Test COGatewayList', () => {
           <COGatewayList />
         </TestWrapper>
       )
+      await waitFor(() => Promise.resolve())
       expect(container).toMatchSnapshot()
     })
   })

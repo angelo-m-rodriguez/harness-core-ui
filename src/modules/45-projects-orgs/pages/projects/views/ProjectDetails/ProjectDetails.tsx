@@ -36,7 +36,7 @@ const ProjectDetails: React.FC = () => {
   const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
   const { getString } = useStrings()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED } = useFeatureFlags()
+  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED, SECURITY } = useFeatureFlags()
   const invitePermission = {
     resourceScope: {
       accountIdentifier: accountId,
@@ -102,6 +102,7 @@ const ProjectDetails: React.FC = () => {
     if (CFNG_ENABLED && projectData.modules.includes(ModuleName.CF)) infoCards.push(ModuleName.CF)
     if (CENG_ENABLED && projectData.modules.includes(ModuleName.CE)) infoCards.push(ModuleName.CE)
     if (CVNG_ENABLED && projectData.modules.includes(ModuleName.CV)) infoCards.push(ModuleName.CV)
+    if (SECURITY && projectData.modules.includes(ModuleName.STO)) infoCards.push(ModuleName.STO)
 
     return infoCards.map(module => (
       <ModuleListCard

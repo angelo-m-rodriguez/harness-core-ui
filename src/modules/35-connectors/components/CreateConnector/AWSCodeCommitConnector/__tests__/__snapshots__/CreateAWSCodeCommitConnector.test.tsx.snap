@@ -221,7 +221,7 @@ exports[`CreateAWSCodeCommitConnector matches snapshot and goes through steps co
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormCodecommit_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

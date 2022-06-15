@@ -117,6 +117,8 @@ export const getConnectorDisplaySummary = (connector: ConnectorInfoDTO): JSX.Ele
       return getK8DisplaySummary(connector)
     case Connectors.HttpHelmRepo:
       return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.helmRepoUrl))
+    case Connectors.OciHelmRepo:
+      return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.helmRepoUrl))
     case Connectors.Jira:
       return getConnectorDisplaySummaryLabel('UrlLabel', linkRenderer(connector?.spec?.jiraUrl))
     case Connectors.SERVICE_NOW:

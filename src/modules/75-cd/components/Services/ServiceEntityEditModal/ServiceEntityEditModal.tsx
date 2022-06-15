@@ -7,6 +7,7 @@
 
 import React from 'react'
 import { PageSpinner } from '@harness/uicore'
+import { defaultTo } from 'lodash-es'
 import type { ServiceResponseDTO, ServiceYaml } from 'services/cd-ng'
 import ServiceConfigurationWrapper from '@cd/components/Services/ServiceStudio/ServiceConfigWrapper/ServiceConfigWrapper'
 import { ServiceContextProvider } from '@cd/context/ServiceContext'
@@ -17,13 +18,15 @@ interface ServiceEntityEditModalProps {
   isServiceCreateModalView: boolean
   serviceResponse?: ServiceResponseDTO
   isLoading?: boolean
+  serviceCacheKey?: string
 }
 function ServiceEntityEditModal({
   isServiceCreateModalView,
   onServiceCreate,
   onCloseModal,
   serviceResponse,
-  isLoading
+  isLoading,
+  serviceCacheKey
 }: ServiceEntityEditModalProps): React.ReactElement {
   if (isLoading) {
     return (
@@ -41,6 +44,7 @@ function ServiceEntityEditModal({
       onServiceCreate={onServiceCreate}
       isServiceEntityPage={true}
       isServiceCreateModalView={isServiceCreateModalView}
+      serviceCacheKey={defaultTo(serviceCacheKey, '')}
     >
       <ServiceConfigurationWrapper />
     </ServiceContextProvider>

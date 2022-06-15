@@ -22,11 +22,12 @@ import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterfa
 
 import { DeployInfrastructureWidget } from './DeployInfrastructureWidget'
 import DeployInfrastructureInputStep from './DeployInfrastructureInputStep'
+import type { PipelineInfrastructureV2 } from './utils'
 
 const logger = loggerFor(ModuleName.CD)
 const EnvironmentRegex = /^.+stage\.spec\.environment\.environmentRef$/
 
-export class DeployInfrastructureStep extends Step<PipelineInfrastructure> {
+export class DeployInfrastructureStep extends Step<PipelineInfrastructureV2> {
   lastFetched: number
 
   protected invocationMap: Map<
@@ -39,7 +40,7 @@ export class DeployInfrastructureStep extends Step<PipelineInfrastructure> {
   protected stepName = 'Deploy Infrastructure'
   protected stepIcon: IconName = 'main-environments'
 
-  protected defaultValues: PipelineInfrastructure = {}
+  protected defaultValues: PipelineInfrastructureV2 = {}
 
   constructor() {
     super()
@@ -89,7 +90,7 @@ export class DeployInfrastructureStep extends Step<PipelineInfrastructure> {
     })
   }
 
-  renderStep(props: StepProps<PipelineInfrastructure>): JSX.Element {
+  renderStep(props: StepProps<PipelineInfrastructureV2>): JSX.Element {
     const { initialValues, onUpdate, stepViewType, inputSetData, readonly = false, allowableTypes } = props
     if (stepViewType === StepViewType.InputSet || stepViewType === StepViewType.DeploymentForm) {
       return (

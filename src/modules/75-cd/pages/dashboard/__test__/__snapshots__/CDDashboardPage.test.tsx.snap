@@ -281,7 +281,7 @@ exports[`CDDashboardPage snapshot test should render properly 1`] = `
         <p
           class="StyledProps--font StyledProps--main healthCardTitle"
         >
-          Deployments
+          executionsText
         </p>
         <div
           class="StyledProps--font StyledProps--main emptyView"

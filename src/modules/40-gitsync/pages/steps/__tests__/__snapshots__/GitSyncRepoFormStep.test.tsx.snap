@@ -140,7 +140,7 @@ exports[`Test GitSyncRepoFormStep Should not allow saving form if folder name is
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -752,7 +752,7 @@ exports[`Test GitSyncRepoFormStep Should not allow saving form if folder name is
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="gitSyncRepoForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

@@ -33,7 +33,8 @@ import {
   putPipelineV2Promise,
   ResponsePMSPipelineResponseDTO,
   validateTemplateInputsPromise,
-  ValidateTemplateInputsQueryParams
+  ValidateTemplateInputsQueryParams,
+  YamlSchemaErrorWrapperDTO
 } from 'services/pipeline-ng'
 import { useGlobalEventListener, useLocalStorage, useQueryParams } from '@common/hooks'
 import type { GitQueryParams } from '@common/interfaces/RouteInterfaces'
@@ -70,6 +71,7 @@ interface PipelineInfoConfigWithGitDetails extends PipelineInfoConfig {
   gitDetails?: EntityGitDetails
   entityValidityDetails?: EntityValidityDetails
   templateError?: GetDataError<Failure | Error> | null
+  yamlSchemaErrorWrapper?: YamlSchemaErrorWrapperDTO
 }
 
 const logger = loggerFor(ModuleName.CD)
@@ -115,7 +117,8 @@ export const getPipelineByIdentifier = (
       return {
         ...(yamlPipelineDetails !== null && { ...yamlPipelineDetails.pipeline }),
         gitDetails: obj.data.gitDetails ?? {},
-        entityValidityDetails: obj.data.entityValidityDetails ?? {}
+        entityValidityDetails: obj.data.entityValidityDetails ?? {},
+        yamlSchemaErrorWrapper: obj.data.yamlSchemaErrorWrapper ?? {}
       }
     } else {
       return {
@@ -272,6 +275,7 @@ interface PipelinePayload {
   gitDetails: EntityGitDetails
   entityValidityDetails?: EntityValidityDetails
   templateInputsErrorNodeSummary?: ErrorNodeSummary
+  yamlSchemaErrorWrapper?: YamlSchemaErrorWrapperDTO
 }
 
 const getId = (
@@ -399,7 +403,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
       'repo',
       'branch',
       'connectorRef',
-      'filePath'
+      'filePath',
+      'yamlSchemaErrorWrapper'
     )
     const payload: PipelinePayload = {
       [KeyPath]: id,
@@ -414,7 +419,11 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
         pipelineWithGitDetails?.entityValidityDetails,
         defaultTo(data?.entityValidityDetails, {})
       ),
-      templateInputsErrorNodeSummary
+      templateInputsErrorNodeSummary,
+      yamlSchemaErrorWrapper: defaultTo(
+        pipelineWithGitDetails?.yamlSchemaErrorWrapper,
+        defaultTo(data?.yamlSchemaErrorWrapper, {})
+      )
     }
     const templateQueryParams = {
       ...queryParams,
@@ -442,7 +451,11 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
             pipelineWithGitDetails?.entityValidityDetails,
             defaultTo(data?.entityValidityDetails, {})
           ),
-          templateInputsErrorNodeSummary
+          templateInputsErrorNodeSummary,
+          yamlSchemaErrorWrapper: defaultTo(
+            pipelineWithGitDetails?.yamlSchemaErrorWrapper,
+            defaultTo(data?.yamlSchemaErrorWrapper, {})
+          )
         })
       )
     } else {
@@ -462,7 +475,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
           gitDetails: payload.gitDetails,
           entityValidityDetails: payload.entityValidityDetails,
           templateTypes,
-          templateInputsErrorNodeSummary
+          templateInputsErrorNodeSummary,
+          yamlSchemaErrorWrapper: payload?.yamlSchemaErrorWrapper
         })
       )
     }
@@ -487,7 +501,8 @@ const _fetchPipeline = async (props: FetchPipelineBoundProps, params: FetchPipel
         isUpdated: true,
         isBEPipelineUpdated: false,
         gitDetails: defaultTo(data?.gitDetails, {}),
-        entityValidityDetails: defaultTo(data?.entityValidityDetails, {})
+        entityValidityDetails: defaultTo(data?.entityValidityDetails, {}),
+        yamlSchemaErrorWrapper: defaultTo(data?.yamlSchemaErrorWrapper, {})
       })
     )
     dispatch(PipelineContextActions.initialized())

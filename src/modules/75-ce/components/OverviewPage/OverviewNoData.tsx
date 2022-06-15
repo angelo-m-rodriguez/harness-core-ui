@@ -23,7 +23,7 @@ const NoData = ({ onConnectorCreateClick }: { onConnectorCreateClick: () => void
   const { getString } = useStrings()
 
   const handleCreateAutoStoppingClick = () => {
-    history.push(routes.toCECORules({ accountId }))
+    history.push(routes.toCECORules({ accountId, params: '' }))
   }
   return (
     <div className={css.nodata}>

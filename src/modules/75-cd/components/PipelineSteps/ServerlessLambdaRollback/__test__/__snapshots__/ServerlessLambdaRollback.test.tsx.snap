@@ -19,7 +19,7 @@ exports[`Test ServerlessLambdaRollbackStep - Edit view Serverless AWS Lambda Rol
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="ServerlessLambdaRB_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -208,7 +208,7 @@ exports[`Test ServerlessLambdaRollbackStep - Edit view Serverless AWS Lambda Rol
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="ServerlessLambdaRB_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -397,7 +397,7 @@ exports[`Test ServerlessLambdaRollbackStep - Edit view Serverless AWS Lambda Rol
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="ServerlessLambdaRB_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"

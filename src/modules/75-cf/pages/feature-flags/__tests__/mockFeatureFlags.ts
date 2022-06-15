@@ -10,6 +10,14 @@ export default {
   pageCount: 1,
   pageIndex: 0,
   pageSize: 15,
+  featureCounts: {
+    totalActive: 1,
+    totalEnabled: 4,
+    totalFeatures: 13,
+    totalPermanent: 5,
+    totalPotentiallyStale: 1,
+    totalRecentlyAccessed: 0
+  },
   features: [
     {
       archived: false,

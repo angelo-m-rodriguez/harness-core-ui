@@ -21,7 +21,7 @@ exports[`Jira Create fetch projects show error if failed to fetch projects 1`] =
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jiraCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1827,7 +1827,7 @@ exports[`Jira Create tests Edit Stage - readonly view: edit-stage-readonly 1`] =
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="jiraCreate_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

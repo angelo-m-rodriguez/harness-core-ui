@@ -86,7 +86,7 @@ exports[`Create Delegate Wizard render data 1`] = `
                     >
                       <div
                         class="Text--withDocsTooltip"
-                        data-tooltip-id="delegateConfigOverviewForm_identifier"
+                        data-tooltip-id="universalInputNameWithId"
                       >
                         <p
                           class="StyledProps--font StyledProps--main"

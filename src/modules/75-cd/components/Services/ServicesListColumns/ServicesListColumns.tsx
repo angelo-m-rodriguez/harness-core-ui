@@ -31,7 +31,8 @@ import { useStrings } from 'framework/strings'
 import { useDeleteServiceV2 } from 'services/cd-ng'
 
 import RbacMenuItem from '@rbac/components/MenuItem/MenuItem'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { NewEditServiceModal } from '@cd/components/PipelineSteps/DeployServiceStep/NewEditServiceModal'
 import { ServiceTabs } from '../utils/ServiceUtils'
 import css from './ServicesListColumns.module.scss'
@@ -58,7 +59,7 @@ const ServiceMenu = (props: ServiceItemProps): React.ReactElement => {
   const { getRBACErrorMessage } = useRBACError()
   const { getString } = useStrings()
   const history = useHistory()
-  const { NG_SVC_ENV_REDESIGN } = useFeatureFlags()
+  const isSvcEnvEntityEnabled = useFeatureFlag(FeatureFlag.NG_SVC_ENV_REDESIGN)
 
   const { mutate: deleteService } = useDeleteServiceV2({
     queryParams: {
@@ -156,7 +157,7 @@ const ServiceMenu = (props: ServiceItemProps): React.ReactElement => {
   const handleEdit = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     e.stopPropagation()
     setMenuOpen(false)
-    if (NG_SVC_ENV_REDESIGN) {
+    if (isSvcEnvEntityEnabled) {
       history.push({
         pathname: routes.toServiceStudio({
           accountId,

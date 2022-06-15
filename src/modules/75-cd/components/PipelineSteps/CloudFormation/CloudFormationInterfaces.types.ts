@@ -189,8 +189,22 @@ export interface Parameter {
 }
 
 export interface Tags {
+  type: string
   spec: {
     content: string
+    store?: {
+      type?: string
+      spec: {
+        connectorRef?: string
+        paths?: string | string[]
+        urls?: string | string[]
+        repoName?: string
+        branch?: string
+        commitId?: string
+        gitFetchType?: string
+        region?: string
+      }
+    }
   }
 }
 
@@ -278,4 +292,10 @@ export interface CreateStackVariableStepProps {
   metadataMap: Required<VariableMergeServiceResponse>['metadataMap']
   variablesData?: CreateStackData
   stepType?: string
+}
+
+export enum TemplateTypes {
+  Remote = 'Remote',
+  S3URL = 'S3URL',
+  Inline = 'Inline'
 }

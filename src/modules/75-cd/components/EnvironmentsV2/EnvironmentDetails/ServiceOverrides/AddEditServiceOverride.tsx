@@ -8,7 +8,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { FormikProps } from 'formik'
-import { defaultTo } from 'lodash-es'
+import { defaultTo, get } from 'lodash-es'
 import { parse } from 'yaml'
 
 import {
@@ -30,14 +30,14 @@ import { useStrings } from 'framework/strings'
 import {
   NGServiceConfig,
   NGServiceOverrideConfig,
+  NGVariable,
   ResponsePageServiceOverrideResponseDTO,
   ResponsePageServiceResponse,
-  upsertServiceOverridePromise,
-  useGetYamlSchema
+  ServiceOverrideResponseDTO,
+  useUpsertServiceOverride
 } from 'services/cd-ng'
 
 import YAMLBuilder from '@common/components/YAMLBuilder/YamlBuilder'
-import { getScopeFromDTO } from '@common/components/EntityReference/EntityReference'
 import { yamlParse, yamlStringify } from '@common/utils/YamlHelperMethods'
 import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
 import type { EnvironmentPathProps, PipelinePathProps } from '@common/interfaces/RouteInterfaces'
@@ -56,15 +56,18 @@ export interface VariableState {
   serviceRef: string
 }
 
+interface VariableOverride {
+  name?: string
+  type?: 'String' | 'Number' | 'Secret'
+  value?: string
+}
+
 interface AddEditServiceOverrideFormProps {
   serviceRef?: string
   serviceYaml?: SelectOption
   environmentRef?: string
-  variableOverride?: {
-    name?: string
-    type?: 'String' | 'Number' | 'Secret'
-    value?: string
-  }
+  variableOverride?: VariableOverride
+  variables?: VariableOverride[]
 }
 
 export interface AddEditServiceOverrideProps {
@@ -76,8 +79,7 @@ export interface AddEditServiceOverrideProps {
 
 const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
   fileName: `serviceOverrides.yaml`,
-  // TODO: Change to service overrides
-  entityType: 'Environment',
+  entityType: 'Service',
   width: '100%',
   height: 350,
   showSnippetSection: false,
@@ -91,7 +93,8 @@ const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
 export default function AddEditServiceOverride({
   selectedVariable,
   services,
-  closeModal
+  closeModal,
+  serviceOverrides
 }: AddEditServiceOverrideProps): React.ReactElement {
   const { accountId, orgIdentifier, projectIdentifier, environmentIdentifier } = useParams<
     PipelinePathProps & EnvironmentPathProps
@@ -146,17 +149,6 @@ export default function AddEditServiceOverride({
     }
   }, [])
 
-  const { data: environmentGroupSchema } = useGetYamlSchema({
-    queryParams: {
-      // TODO: change to service override
-      entityType: 'EnvironmentGroup',
-      projectIdentifier,
-      orgIdentifier,
-      accountIdentifier: accountId,
-      scope: getScopeFromDTO({ accountIdentifier: accountId, orgIdentifier, projectIdentifier })
-    }
-  })
-
   const handleServiceChange = (item: SelectOption) => {
     setVariablesAvailable(
       defaultTo(
@@ -206,15 +198,13 @@ export default function AddEditServiceOverride({
     /* istanbul ignore next */ (view: SelectedView) => {
       if (view === SelectedView.VISUAL) {
         const yaml = defaultTo(yamlHandler?.getLatestYaml(), '{}')
-        const yamlVisual = parse(yaml).serviceOverride as NGServiceOverrideConfig
-        if (isModified && yamlHandler?.getYAMLValidationErrorMap()?.size) {
-          showError(getString('common.validation.invalidYamlText'))
-          return
-        }
+        const yamlVisual = (parse(yaml) as NGServiceOverrideConfig).serviceOverrides
 
         if (yamlVisual) {
           formikRef.current?.setValues({
-            ...yamlVisual
+            ...yamlVisual,
+            variables: null,
+            variableOverride: yamlVisual.variables?.[defaultTo(yamlVisual.variables?.length, 1) - 1]
           } as any)
         }
       } else {
@@ -229,31 +219,48 @@ export default function AddEditServiceOverride({
     [yamlHandler?.getLatestYaml]
   )
 
+  const formVariableOverrideObject = (serviceOverride?: ServiceOverrideResponseDTO, variableOverride?: NGVariable) => {
+    const parsedYaml = parse(defaultTo(serviceOverride?.yaml, '{}')) as NGServiceOverrideConfig
+    const otherVariables = defaultTo(
+      parsedYaml.serviceOverrides?.variables
+        ?.map(override => ({ name: get(override, 'name'), type: get(override, 'type'), value: get(override, 'value') }))
+
+        ?.filter(override => {
+          return override.name !== variableOverride?.name
+        }),
+      []
+    )
+
+    return [...otherVariables, variableOverride]
+  }
+
+  const { mutate: upsertServiceOverride, loading: upsertServiceOverrideLoading } = useUpsertServiceOverride({
+    queryParams: {
+      accountIdentifier: accountId
+    }
+  })
+
   const onSubmit = async (values: AddEditServiceOverrideFormProps) => {
     try {
-      const response = await upsertServiceOverridePromise({
-        queryParams: {
-          accountIdentifier: accountId
-        },
-        body: {
-          environmentRef: environmentIdentifier,
-          serviceRef: (values as any).serviceRef,
-          orgIdentifier,
-          projectIdentifier,
-          yaml: yamlStringify({
-            serviceOverride: {
-              environmentRef: environmentIdentifier,
-              serviceRef: (values as any).serviceRef,
-              variableOverrides: [
-                {
-                  name: values.variableOverride?.name,
-                  type: values.variableOverride?.type,
-                  value: values.variableOverride?.value
-                } as any
-              ]
-            }
-          } as NGServiceOverrideConfig)
-        }
+      const response = await upsertServiceOverride({
+        environmentRef: environmentIdentifier,
+        serviceRef: (values as any).serviceRef,
+        orgIdentifier,
+        projectIdentifier,
+        yaml: yamlStringify({
+          serviceOverrides: {
+            environmentRef: environmentIdentifier,
+            serviceRef: (values as any).serviceRef,
+            variables:
+              values.variables ||
+              formVariableOverrideObject(
+                serviceOverrides?.data?.content?.filter(
+                  serviceOverride => serviceOverride.serviceRef === values.serviceRef
+                )?.[0],
+                values.variableOverride
+              )
+          }
+        } as NGServiceOverrideConfig)
       })
 
       if (response.status === 'SUCCESS') {
@@ -361,10 +368,14 @@ export default function AddEditServiceOverride({
                   serviceOverrides: {
                     environmentRef: environmentIdentifier,
                     serviceRef: formikProps.values.serviceRef,
-                    variableOverrides: [formikProps.values.variableOverride]
+                    variables: formVariableOverrideObject(
+                      serviceOverrides?.data?.content?.filter(
+                        serviceOverride => serviceOverride.serviceRef === formikProps.values.serviceRef
+                      )?.[0],
+                      formikProps.values.variableOverride
+                    )
                   }
                 }}
-                schema={/* istanbul ignore next */ environmentGroupSchema?.data}
                 bind={setYamlHandler}
                 showSnippetSection={false}
               />
@@ -378,20 +389,21 @@ export default function AddEditServiceOverride({
                   /* istanbul ignore next */ () => {
                     if (selectedView === SelectedView.YAML) {
                       const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), /* istanbul ignore next */ '')
-                      onSubmit(parse(latestYaml)?.serviceOverride)
+                      onSubmit(parse(latestYaml)?.serviceOverrides)
                     } else {
                       formikProps.submitForm()
                     }
                   }
                 }
                 data-testid="addVariableSave"
-                disabled={!isModified}
+                disabled={!isModified || upsertServiceOverrideLoading}
               />
               <Button
                 variation={ButtonVariation.TERTIARY}
                 text={getString('cancel')}
                 onClick={() => closeModal()}
                 data-testid="addVariableCancel"
+                disabled={upsertServiceOverrideLoading}
               />
             </Layout.Horizontal>
           </Container>

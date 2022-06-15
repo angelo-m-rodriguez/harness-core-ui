@@ -13,6 +13,7 @@ import { NavLink, useParams } from 'react-router-dom'
 import { Page } from '@common/exports'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import routes from '@common/RouteDefinitions'
+import { useDocumentTitle } from '@common/hooks/useDocumentTitle'
 import { useStrings } from 'framework/strings'
 import { GetStarted } from './home/GetStarted'
 import { useDashboardsContext } from './DashboardsContext'
@@ -21,10 +22,19 @@ import css from './home/HomePage.module.scss'
 const DashboardsHeader: React.FC = () => {
   const { getString } = useStrings()
   const { breadcrumbs } = useDashboardsContext()
+  const { updateTitle } = useDocumentTitle(getString('common.dashboards'), true)
   const { accountId, folderId } = useParams<{ accountId: string; folderId: string }>()
   const [isOpen, setDrawerOpen] = useState(false)
 
   const title = breadcrumbs.length ? breadcrumbs[breadcrumbs.length - 1].label : getString('common.dashboards')
+
+  React.useEffect(() => {
+    const titleArray: string[] = [getString('common.dashboards')]
+
+    if (breadcrumbs) breadcrumbs.map(breadcrumb => titleArray.push(breadcrumb.label))
+
+    updateTitle(titleArray)
+  }, [breadcrumbs])
 
   return (
     <Page.Header

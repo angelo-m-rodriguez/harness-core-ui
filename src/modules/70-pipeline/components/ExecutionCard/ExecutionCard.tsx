@@ -20,7 +20,7 @@ import { String, useStrings } from 'framework/strings'
 import { FeatureFlag } from '@common/featureFlags'
 import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import routes from '@common/RouteDefinitions'
-import type { PipelineType, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import type { PipelineType, PipelinePathProps, ExecutionPathProps } from '@common/interfaces/RouteInterfaces'
 import { StoreType } from '@common/constants/GitSyncTypes'
 import { usePermission } from '@rbac/hooks/usePermission'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
@@ -118,7 +118,8 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
     isPipelineInvalid,
     showGitDetails = false
   } = props
-  const { orgIdentifier, projectIdentifier, accountId, module } = useParams<PipelineType<ProjectPathProps>>()
+  const { orgIdentifier, projectIdentifier, accountId, module, pipelineIdentifier } =
+    useParams<PipelineType<PipelinePathProps>>()
   const history = useHistory()
   const { getString } = useStrings()
   const SECURITY = useFeatureFlag(FeatureFlag.SECURITY)
@@ -146,19 +147,20 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
     [orgIdentifier, projectIdentifier, accountId, pipelineExecution.pipelineIdentifier]
   )
   const disabled = isExecutionNotStarted(pipelineExecution.status)
-
+  const source: ExecutionPathProps['source'] = pipelineIdentifier ? 'executions' : 'deployments'
   function handleClick(): void {
-    const { pipelineIdentifier, planExecutionId } = pipelineExecution
+    const { pipelineIdentifier: cardPipelineId, planExecutionId } = pipelineExecution
 
-    if (!disabled && pipelineIdentifier && planExecutionId) {
+    if (!disabled && cardPipelineId && planExecutionId) {
       history.push(
         routes.toExecutionPipelineView({
           orgIdentifier,
-          pipelineIdentifier,
+          pipelineIdentifier: cardPipelineId,
           executionIdentifier: planExecutionId,
           projectIdentifier,
           accountId,
-          module
+          module,
+          source
         })
       )
     }
@@ -204,6 +206,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                         repoName={pipelineExecution?.gitDetails?.repoName}
                         branch={pipelineExecution?.gitDetails?.branch}
                         filePath={pipelineExecution?.gitDetails?.filePath}
+                        fileUrl={pipelineExecution?.gitDetails?.fileUrl}
                         flags={{ readOnly: true }}
                       />
                     </div>
@@ -256,6 +259,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                   }}
                   isPipelineInvalid={isPipelineInvalid}
                   canEdit={canEdit}
+                  source={source}
                   canExecute={canExecute}
                   canRetry={pipelineExecution.canRetry}
                   modules={pipelineExecution.modules}
@@ -313,6 +317,7 @@ export default function ExecutionCard(props: ExecutionCardProps): React.ReactEle
                 projectIdentifier={projectIdentifier}
                 orgIdentifier={orgIdentifier}
                 accountId={accountId}
+                source={source}
                 module={module}
               />
             ) : null}

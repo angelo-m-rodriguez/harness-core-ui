@@ -12,22 +12,7 @@ import { parse } from 'yaml'
 import CVHomePage from '@cv/pages/home/CVHomePage'
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
-import {
-  accountPathProps,
-  projectPathProps,
-  connectorPathProps,
-  secretPathProps,
-  delegatePathProps,
-  delegateConfigProps,
-  resourceGroupPathProps,
-  rolePathProps,
-  userGroupPathProps,
-  userPathProps,
-  orgPathProps,
-  modulePathProps,
-  serviceAccountProps,
-  templatePathProps
-} from '@common/utils/routeUtils'
+import { accountPathProps, projectPathProps, templatePathProps } from '@common/utils/routeUtils'
 import type { ModulePathParams, ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { MinimalLayout } from '@common/layouts'
 
@@ -38,47 +23,36 @@ import CVMonitoredService from '@cv/pages/monitored-service/CVMonitoredService/C
 import MonitoredServicePage from '@cv/pages/monitored-service/MonitoredServicePage'
 import type { SidebarContext } from '@common/navigation/SidebarProvider'
 import SideNav from '@cv/components/SideNav/SideNav'
-import ConnectorsPage from '@connectors/pages/connectors/ConnectorsPage'
-import CreateConnectorFromYamlPage from '@connectors/pages/createConnectorFromYaml/CreateConnectorFromYamlPage'
-import SecretsPage from '@secrets/pages/secrets/SecretsPage'
-import DelegatesPage from '@delegates/pages/delegates/DelegatesPage'
-import DelegateListing from '@delegates/pages/delegates/DelegateListing'
-import DelegateConfigurations from '@delegates/pages/delegates/DelegateConfigurations'
-import DelegateDetails from '@delegates/pages/delegates/DelegateDetails'
-import DelegateProfileDetails from '@delegates/pages/delegates/DelegateConfigurationDetailPage'
-import DelegateTokens from '@delegates/components/DelegateTokens/DelegateTokens'
-import ConnectorDetailsPage from '@connectors/pages/connectors/ConnectorDetailsPage/ConnectorDetailsPage'
-import SecretDetails from '@secrets/pages/secretDetails/SecretDetails'
-import { RedirectToSecretDetailHome } from '@secrets/RouteDestinations'
-import SecretReferences from '@secrets/pages/secretReferences/SecretReferences'
-import SecretDetailsHomePage from '@secrets/pages/secretDetailsHomePage/SecretDetailsHomePage'
+import { SecretRouteDestinations } from '@secrets/RouteDestinations'
+import { ConnectorRouteDestinations } from '@connectors/RouteDestinations'
+import { DelegateRouteDestinations } from '@delegates/RouteDestinations'
+import { AccessControlRouteDestinations } from '@rbac/RouteDestinations'
+import { VariableRouteDestinations } from '@variables/RouteDestinations'
 import { ModuleName } from 'framework/types/ModuleName'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
-import AccessControlPage from '@rbac/pages/AccessControl/AccessControlPage'
-import ResourceGroupDetails from '@rbac/pages/ResourceGroupDetails/ResourceGroupDetails'
-import ResourceGroups from '@rbac/pages/ResourceGroups/ResourceGroups'
-import RoleDetails from '@rbac/pages/RoleDetails/RoleDetails'
-import Roles from '@rbac/pages/Roles/Roles'
-import UserDetails from '@rbac/pages/UserDetails/UserDetails'
-import UserGroupDetails from '@rbac/pages/UserGroupDetails/UserGroupDetails'
-import UserGroups from '@rbac/pages/UserGroups/UserGroups'
-import UsersPage from '@rbac/pages/Users/UsersPage'
-import ServiceAccountDetails from '@rbac/pages/ServiceAccountDetails/ServiceAccountDetails'
-import ServiceAccountsPage from '@rbac/pages/ServiceAccounts/ServiceAccounts'
 import { PubSubPipelineActions } from '@pipeline/factories/PubSubPipelineAction'
 import { PipelineActions } from '@pipeline/factories/PubSubPipelineAction/types'
-// import TemplatesPage from '@templates-library/pages/TemplatesPage/TemplatesPage'
+import TemplatesPage from '@templates-library/pages/TemplatesPage/TemplatesPage'
 import { TemplateStudioWrapper } from '@templates-library/components/TemplateStudio/TemplateStudioWrapper'
+import { TemplateSelectorDrawer } from '@templates-library/components/TemplateSelectorDrawer/TemplateSelectorDrawer'
+import { TemplateSelectorContextProvider } from '@templates-library/components/TemplateSelectorContext/TemplateSelectorContext'
 import { inputSetTemplatePromise } from 'services/cv'
 import { yamlStringify } from '@common/utils/YamlHelperMethods'
 import { CVChanges } from '@cv/pages/changes/CVChanges'
-import VariablesPage from '@variables/pages/variables/VariablesPage'
+import ConnectorsPage from '@connectors/pages/connectors/ConnectorsPage'
+import { ResourceType } from '@rbac/interfaces/ResourceType'
+import type { ResourceDTO } from 'services/audit'
+import type { ResourceScope } from 'services/cd-ng'
+import AuditTrailFactory from '@audit-trail/factories/AuditTrailFactory'
+import ChildAppMounter from '../../microfrontends/ChildAppMounter'
 import CVTrialHomePage from './pages/home/CVTrialHomePage'
 import { editParams, isVerifyStepPresent } from './utils/routeUtils'
 import CVSLOsListingPage from './pages/slos/CVSLOsListingPage'
 import CVSLODetailsPage from './pages/slos/CVSLODetailsPage/CVSLODetailsPage'
 import CVCreateSLO from './pages/slos/components/CVCreateSLO/CVCreateSLO'
-import ChildAppMounter from '../../microfrontends/ChildAppMounter'
+import { MonitoredServiceProvider } from './pages/monitored-service/MonitoredServiceContext'
+import MonitoredServiceInputSetsTemplate from './pages/monitored-service/MonitoredServiceInputSetsTemplate'
+import { ErrorTracking } from './ErrorTrackingApp'
 
 PubSubPipelineActions.subscribe(
   PipelineActions.RunPipeline,
@@ -100,23 +74,6 @@ PubSubPipelineActions.subscribe(
   }
 )
 
-const cvModule = ':module(cv)'
-const templateModuleParams: ModulePathParams = {
-  module: cvModule
-}
-
-const RedirectToAccessControlHome = (): React.ReactElement => {
-  const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
-
-  return <Redirect to={routes.toUsers({ accountId, projectIdentifier, orgIdentifier, module: 'cv' })} />
-}
-
-const RedirectToDelegatesHome = (): React.ReactElement => {
-  const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
-
-  return <Redirect to={routes.toDelegateList({ accountId, projectIdentifier, orgIdentifier, module: 'cv' })} />
-}
-
 const RedirectToCVProject = (): React.ReactElement => {
   const params = useParams<ProjectPathProps>()
   const { selectedProject } = useAppStore()
@@ -137,8 +94,51 @@ const RedirectToCVProject = (): React.ReactElement => {
 }
 
 export const cvModuleParams: ModulePathParams = {
-  module: cvModule
+  module: ':module(cv)'
 }
+
+const cvLabel = 'common.purpose.cv.serviceReliability'
+AuditTrailFactory.registerResourceHandler(ResourceType.MONITORED_SERVICE, {
+  moduleIcon: {
+    name: 'cv-main'
+  },
+  moduleLabel: cvLabel,
+  resourceLabel: 'cv.monitoredServices.title',
+  resourceUrl: (resource: ResourceDTO, resourceScope: ResourceScope, module?: any) => {
+    const { accountIdentifier, orgIdentifier, projectIdentifier } = resourceScope
+    if (module && orgIdentifier && projectIdentifier) {
+      return routes.toCVAddMonitoringServicesEdit({
+        module,
+        orgIdentifier,
+        projectIdentifier,
+        accountId: accountIdentifier!,
+        identifier: resource.identifier
+      })
+    }
+    return undefined
+  }
+})
+
+/*AuditTrailFactory.registerResourceHandler(ResourceType.SLO, {
+  moduleIcon: {
+    name: 'cv-main'
+  },
+  moduleLabel: cvLabel,
+  resourceLabel: 'cv.slos.title',
+  resourceUrl: (resource: ResourceDTO, resourceScope: ResourceScope, module?: any) => {
+    const { accountIdentifier, orgIdentifier, projectIdentifier } = resourceScope
+    if (module && orgIdentifier && projectIdentifier) {
+      return routes.toCVSLODetailsPage({
+        module,
+        orgIdentifier,
+        projectIdentifier,
+        accountId: accountIdentifier!,
+        identifier: resource.identifier
+      })
+    }
+    return undefined
+  }
+})*/
 
 const CVSideNavProps: SidebarContext = {
   navComponent: SideNav,
@@ -146,9 +146,6 @@ const CVSideNavProps: SidebarContext = {
   title: 'Reliability',
   icon: 'cv-main'
 }
-
-// eslint-disable-next-line import/no-unresolved
-const ErrorTracking = React.lazy(() => import('errortracking/App'))
 
 export default (
   <>
@@ -173,15 +170,28 @@ export default (
     <RouteWithLayout
       exact
       sidebarProps={CVSideNavProps}
-      path={routes.toCVMonitoringServices({ ...accountPathProps, ...projectPathProps, module: cvModule })}
+      path={routes.toCVMonitoringServices({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
     >
-      <CVMonitoredService />
+      <MonitoredServiceProvider isTemplate={false}>
+        <TemplateSelectorContextProvider>
+          <CVMonitoredService />
+          <TemplateSelectorDrawer />
+        </TemplateSelectorContextProvider>
+      </MonitoredServiceProvider>
     </RouteWithLayout>
 
     <RouteWithLayout
       exact
       sidebarProps={CVSideNavProps}
-      path={routes.toCVChanges({ ...accountPathProps, ...projectPathProps, module: cvModule })}
+      path={routes.toCVMonitoringServicesInputSets({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
+    >
+      <MonitoredServiceInputSetsTemplate />
+    </RouteWithLayout>
+
+    <RouteWithLayout
+      exact
+      sidebarProps={CVSideNavProps}
+      path={routes.toCVChanges({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
     >
       <CVChanges />
     </RouteWithLayout>
@@ -189,22 +199,14 @@ export default (
     <RouteWithLayout
       exact
       sidebarProps={CVSideNavProps}
-      path={routes.toCVSLOs({ ...accountPathProps, ...projectPathProps, module: cvModule })}
+      path={routes.toCVSLOs({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
     >
       <CVSLOsListingPage />
     </RouteWithLayout>
 
     <RouteWithLayout
-      exact
       sidebarProps={CVSideNavProps}
-      path={routes.toErrorTracking({ ...accountPathProps, ...projectPathProps, module: cvModule })}
-    >
-      <ChildAppMounter ChildApp={ErrorTracking} />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toErrorTrackingArc({ ...accountPathProps, ...projectPathProps, module: cvModule })}
+      path={routes.toErrorTracking({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
     >
       <ChildAppMounter ChildApp={ErrorTracking} />
     </RouteWithLayout>
@@ -243,7 +245,9 @@ export default (
         })
       ]}
     >
-      <MonitoredServicePage />
+      <MonitoredServiceProvider isTemplate={false}>
+        <MonitoredServicePage />
+      </MonitoredServiceProvider>
     </RouteWithLayout>
     <RouteWithLayout
       exact
@@ -253,272 +257,63 @@ export default (
       <ConnectorsPage />
     </RouteWithLayout>
     {/* uncomment once BE integration is complete  */}
-    {/* <RouteWithLayout
+    <RouteWithLayout
       exact
       sidebarProps={CVSideNavProps}
       path={routes.toTemplates({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
     >
       <TemplatesPage />
-    </RouteWithLayout> */}
+    </RouteWithLayout>
 
+    {/* Replace TemplateStudioWrapper route with following code once BE integration is complete: */}
+    {/*{*/}
+    {/*  TemplateRouteDestinations({*/}
+    {/*    moduleParams,*/}
+    {/*    sidebarProps: CVSideNavProps*/}
+    {/*  })?.props.children*/}
+    {/*}*/}
     <RouteWithLayout
       sidebarProps={CVSideNavProps}
       exact
-      path={routes.toTemplateStudio({ ...accountPathProps, ...templatePathProps, ...templateModuleParams })}
+      path={routes.toTemplateStudio({ ...accountPathProps, ...templatePathProps, ...cvModuleParams })}
     >
       <TemplateStudioWrapper />
     </RouteWithLayout>
+    {/* Replace above route once BE integration is complete */}
 
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toSecrets({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <SecretsPage />
-    </RouteWithLayout>
+    {
+      SecretRouteDestinations({
+        moduleParams: cvModuleParams,
+        sidebarProps: CVSideNavProps
+      })?.props.children
+    }
 
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toVariables({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <VariablesPage />
-    </RouteWithLayout>
+    {
+      VariableRouteDestinations({
+        moduleParams: cvModuleParams,
+        sidebarProps: CVSideNavProps
+      })?.props.children
+    }
 
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toDelegates({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <RedirectToDelegatesHome />
-    </RouteWithLayout>
+    {
+      DelegateRouteDestinations({
+        moduleParams: cvModuleParams,
+        sidebarProps: CVSideNavProps
+      })?.props.children
+    }
 
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toDelegateList({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <DelegatesPage>
-        <DelegateListing />
-      </DelegatesPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toDelegateConfigs({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <DelegatesPage>
-        <DelegateConfigurations />
-      </DelegatesPage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toDelegatesDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...delegatePathProps,
-        ...cvModuleParams
-      })}
-    >
-      <DelegateDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[
-        routes.toDelegateConfigsDetails({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...delegateConfigProps,
-          ...cvModuleParams
-        }),
-        routes.toEditDelegateConfigsDetails({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...delegateConfigProps,
-          ...cvModuleParams
-        })
-      ]}
-    >
-      <DelegateProfileDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[
-        routes.toDelegateTokens({
-          ...accountPathProps,
-          ...projectPathProps,
-          ...cvModuleParams
-        })
-      ]}
-    >
-      <DelegatesPage>
-        <DelegateTokens />
-      </DelegatesPage>
-    </RouteWithLayout>
+    {
+      ConnectorRouteDestinations({
+        moduleParams: cvModuleParams,
+        sidebarProps: CVSideNavProps
+      })?.props.children
+    }
 
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toConnectorDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...connectorPathProps,
-        ...cvModuleParams
-      })}
-    >
-      <ConnectorDetailsPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toCreateConnectorFromYaml({ ...accountPathProps, ...projectPathProps, ...modulePathProps })}
-    >
-      <CreateConnectorFromYamlPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toCreateConnectorFromYaml({ ...accountPathProps, ...orgPathProps })}
-    >
-      <CreateConnectorFromYamlPage />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toSecretDetails({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...cvModuleParams
-      })}
-    >
-      <RedirectToSecretDetailHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toSecretDetailsOverview({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...cvModuleParams
-      })}
-    >
-      <SecretDetailsHomePage>
-        <SecretDetails />
-      </SecretDetailsHomePage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={routes.toSecretDetailsReferences({
-        ...accountPathProps,
-        ...projectPathProps,
-        ...secretPathProps,
-        ...cvModuleParams
-      })}
-    >
-      <SecretDetailsHomePage>
-        <SecretReferences />
-      </SecretDetailsHomePage>
-    </RouteWithLayout>
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toAccessControl({ ...projectPathProps, ...cvModuleParams })]}
-      exact
-    >
-      <RedirectToAccessControlHome />
-    </RouteWithLayout>
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toUsers({ ...projectPathProps, ...cvModuleParams })]}
-      exact
-    >
-      <AccessControlPage>
-        <UsersPage />
-      </AccessControlPage>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toUserDetails({ ...projectPathProps, ...cvModuleParams, ...userPathProps })}
-      exact
-    >
-      <UserDetails />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toUserGroups({ ...projectPathProps, ...cvModuleParams })]}
-      exact
-    >
-      <AccessControlPage>
-        <UserGroups />
-      </AccessControlPage>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toUserGroupDetails({ ...projectPathProps, ...cvModuleParams, ...userGroupPathProps })}
-      exact
-    >
-      <UserGroupDetails />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toServiceAccounts({ ...projectPathProps, ...cvModuleParams })}
-      exact
-    >
-      <AccessControlPage>
-        <ServiceAccountsPage />
-      </AccessControlPage>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toServiceAccountDetails({ ...projectPathProps, ...cvModuleParams, ...serviceAccountProps })}
-      exact
-    >
-      <ServiceAccountDetails />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toResourceGroups({ ...projectPathProps, ...cvModuleParams })]}
-      exact
-    >
-      <AccessControlPage>
-        <ResourceGroups />
-      </AccessControlPage>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toRoles({ ...projectPathProps, ...cvModuleParams })]}
-      exact
-    >
-      <AccessControlPage>
-        <Roles />
-      </AccessControlPage>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toRoleDetails({ ...projectPathProps, ...cvModuleParams, ...rolePathProps })]}
-      exact
-    >
-      <RoleDetails />
-    </RouteWithLayout>
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={[routes.toResourceGroupDetails({ ...projectPathProps, ...cvModuleParams, ...resourceGroupPathProps })]}
-      exact
-    >
-      <ResourceGroupDetails />
-    </RouteWithLayout>
+    {
+      AccessControlRouteDestinations({
+        moduleParams: cvModuleParams,
+        sidebarProps: CVSideNavProps
+      })?.props.children
+    }
   </>
 )

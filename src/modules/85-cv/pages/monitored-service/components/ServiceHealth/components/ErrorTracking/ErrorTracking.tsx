@@ -6,31 +6,41 @@
  */
 
 import React from 'react'
-import { Container, Layout, Heading, Card, NoDataCard } from '@wings-software/uicore'
-import { FontVariation } from '@harness/design-system'
+import { Container, Card, NoDataCard } from '@wings-software/uicore'
+import { useParams } from 'react-router-dom'
 import noServiceAvailableImage from '@cv/assets/noServiceAvailable.png'
 import { useStrings } from 'framework/strings'
-import ErrorTrackingAnalysis from '@cv/components/ErrorTrackingAnalysis/ErrorTrackingAnalysis'
+import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
+import { ErrorTracking as EventList, EventListProps } from '@cv/ErrorTrackingApp'
+import ChildAppMounter from 'microfrontends/ChildAppMounter'
+import routes from '@common/RouteDefinitions'
 import type { MetricsAndLogsProps } from '../MetricsAndLogs/MetricsAndLogs.types'
 import css from './ErrorTracking.module.scss'
 
 const ErrorTracking: React.FC<MetricsAndLogsProps> = props => {
   const { getString } = useStrings()
-
+  const { accountId, projectIdentifier, orgIdentifier } = useParams<ProjectPathProps>()
   const { startTime, endTime } = props
 
-  return (
-    <Container margin={{ bottom: 'medium' }}>
-      <Heading level={2} font={{ variation: FontVariation.H6 }} padding={{ bottom: 'small' }}>
-        {getString('errors')}
-      </Heading>
+  const componentLocation = {
+    pathname: '/events'
+  }
 
+  return (
+    <Container style={{ height: '100%' }}>
       {startTime && endTime ? (
-        <Layout.Horizontal data-testid="error-tracking-analysis-view" spacing="medium">
-          <Card className={css.metricsAndLogsCard}>
-            <ErrorTrackingAnalysis {...props} startTime={startTime} endTime={endTime} />
-          </Card>
-        </Layout.Horizontal>
+        <ChildAppMounter<EventListProps>
+          ChildApp={EventList}
+          componentLocation={componentLocation}
+          orgId={orgIdentifier}
+          accountId={accountId}
+          projectId={projectIdentifier}
+          serviceId={props.serviceIdentifier}
+          environmentId={props.environmentIdentifier}
+          fromDateTime={Math.floor(startTime / 1000)}
+          toDateTime={Math.floor(endTime / 1000)}
+          routeDefinitions={routes}
+        />
       ) : (
         <Card className={css.noServiceImageCard} data-testid="error-tracking-analysis-image-view">
           <NoDataCard

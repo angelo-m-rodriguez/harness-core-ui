@@ -22,7 +22,7 @@ exports[`Dependency Edit view edit mode fails when cpu present but memory is not
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="dependencyBase_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -495,7 +495,7 @@ exports[`Dependency Edit view edit mode works 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="dependencyBase_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -968,7 +968,7 @@ exports[`Dependency Edit view edit mode works when memory present but cpu is not
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="dependencyBase_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -1441,7 +1441,7 @@ exports[`Dependency Edit view renders runtime inputs 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="dependencyBase_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"
@@ -1962,7 +1962,7 @@ exports[`Dependency Edit view should render properly 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="dependencyBase_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

@@ -118,6 +118,10 @@ buildInfra:
     os: Operating System
     architecture: Achitecture
     isRequiredWhen: '{{field1}} is required in case {{field2}} is provided'
+pipelineSteps:
+  build:
+    infraSpecifications:
+      whereToRunSTO: Where do you want the security tests to run?
 preCommandLabel: Pre-Command
 postCommandLabel: Post-Command
 portBindings: Port Bindings

@@ -32,7 +32,7 @@ import css from './ExecutionStageDetailsHeader.module.scss'
 
 export function ExecutionStageDetailsHeader(): React.ReactElement {
   const { selectedStageId, pipelineStagesMap, refetch, pipelineExecutionDetail, allNodeMap } = useExecutionContext()
-  const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module } =
+  const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
   const { isGitSyncEnabled } = useAppStore()
   const stage = pipelineStagesMap.get(selectedStageId)
@@ -127,6 +127,7 @@ export function ExecutionStageDetailsHeader(): React.ReactElement {
             <ExecutionActions
               executionStatus={stageNode?.status as ExecutionStatus}
               refetch={refetch}
+              source={source}
               params={{
                 orgIdentifier,
                 pipelineIdentifier,

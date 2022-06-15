@@ -34,6 +34,8 @@ import { useQueryParams } from '@common/hooks'
 import type { ConnectorSelectedValue } from '@connectors/components/ConnectorReferenceField/ConnectorReferenceField'
 import { usePermission } from '@rbac/hooks/usePermission'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import type { ManifestStepInitData, ManifestStores } from '../ManifestInterface'
 import {
@@ -76,6 +78,8 @@ function ManifestStore({
   const [isLoadingConnectors, setIsLoadingConnectors] = React.useState<boolean>(true)
   const [selectedStore, setSelectedStore] = useState(prevStepData?.store ?? initialValues.store)
   const [multitypeInputValue, setMultiTypeValue] = useState<MultiTypeInputType | undefined>(undefined)
+
+  const isOciHelmEnabled = useFeatureFlag(FeatureFlag.HELM_OCI_SUPPORT)
 
   function isValidConnectorStore(): boolean {
     return (
@@ -141,11 +145,13 @@ function ManifestStore({
 
   const supportedManifestStores = useMemo(
     () =>
-      manifestStoreTypes.map(store => ({
-        label: getString(ManifestStoreTitle[store]),
-        icon: ManifestIconByType[store] as IconName,
-        value: store
-      })),
+      manifestStoreTypes
+        .filter(store => store !== 'OciHelmChart' || isOciHelmEnabled)
+        .map(store => ({
+          label: getString(ManifestStoreTitle[store]),
+          icon: ManifestIconByType[store] as IconName,
+          value: store
+        })),
     [manifestStoreTypes]
   )
 

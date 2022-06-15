@@ -180,7 +180,7 @@ exports[`Test K8sRolloutDeployStep on edit view update 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8RolloutDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -646,7 +646,7 @@ exports[`Test K8sRolloutDeployStep should render edit view as edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8RolloutDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -911,7 +911,7 @@ exports[`Test K8sRolloutDeployStep should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8RolloutDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

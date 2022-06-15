@@ -96,7 +96,17 @@ const getModulesWithSubscriptionsRoutesMap = ({
       }
     ],
     [ModuleName.CD, cdCiPath],
-    [ModuleName.CI, cdCiPath]
+    [ModuleName.CI, cdCiPath],
+    [
+      ModuleName.STO,
+      {
+        pathname: routes.toSTOProjectOverview({
+          orgIdentifier: projectData?.orgIdentifier || '',
+          projectIdentifier: projectData.identifier,
+          accountId
+        })
+      }
+    ]
   ])
 }
 

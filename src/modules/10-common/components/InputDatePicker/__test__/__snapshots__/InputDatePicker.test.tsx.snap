@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Launch Button test Input date picker render  1`] = `
+<div>
+  <div
+    class="OverlaySpinner--overlaySpinner"
+  >
+    <form
+      action="#"
+      class="FormikForm--main"
+    >
+      <div>
+        <div
+          data-nodeid="inputDatePicker"
+          data-testid="inputDatePicker"
+        >
+          <div
+            class="bp3-form-group"
+            data-id="null-0"
+          >
+            <label
+              class="bp3-label"
+            >
+              common.timeframe
+               
+              <span
+                class="bp3-text-muted"
+              />
+            </label>
+            <div
+              class="bp3-form-content"
+            >
+              <div
+                class="bp3-input-group"
+              >
+                <input
+                  class="bp3-input"
+                  placeholder="1/15/1970 - 2/15/1970"
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

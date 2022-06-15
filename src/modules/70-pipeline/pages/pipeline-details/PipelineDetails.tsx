@@ -214,6 +214,7 @@ export default function PipelineDetails({ children }: React.PropsWithChildren<un
                         repoName={pipeline?.data?.gitDetails?.repoName}
                         branch={pipeline?.data?.gitDetails?.branch}
                         filePath={pipeline?.data?.gitDetails?.filePath}
+                        fileUrl={pipeline?.data?.gitDetails?.fileUrl}
                         flags={{ readOnly: true }}
                       />
                     </div>

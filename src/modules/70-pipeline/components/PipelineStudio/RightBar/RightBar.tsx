@@ -365,7 +365,7 @@ export function RightBar(): JSX.Element {
         text={getString('common.variables')}
         data-testid="input-variable"
       />
-      {!pipeline.template && (
+      {!pipeline?.template && (
         <Button
           className={cx(css.iconButton, {
             [css.selected]: type === DrawerTypes.PipelineNotifications
@@ -390,7 +390,7 @@ export function RightBar(): JSX.Element {
         />
       )}
 
-      {!pipeline.template && (
+      {!pipeline?.template && (
         <Button
           className={cx(css.iconButton, {
             [css.selected]: type === DrawerTypes.FlowControl
@@ -437,7 +437,7 @@ export function RightBar(): JSX.Element {
         />
       )}
 
-      {!pipeline.template && !isYaml && (
+      {!pipeline?.template && !isYaml && (
         <Button
           className={css.iconButton}
           text={getString('codebase')}
@@ -460,7 +460,7 @@ export function RightBar(): JSX.Element {
         />
       )}
 
-      {!pipeline.template && (
+      {!pipeline?.template && (
         <Button
           className={cx(css.iconButton, {
             [css.selected]: type === DrawerTypes.AdvancedOptions

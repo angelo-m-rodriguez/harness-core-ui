@@ -16,7 +16,8 @@ import {
   Container,
   FormError,
   FormikTooltipContext,
-  useToaster
+  useToaster,
+  ButtonVariation
 } from '@wings-software/uicore'
 import { connect, FormikContextType } from 'formik'
 import { Classes, FormGroup, Intent } from '@blueprintjs/core'
@@ -47,6 +48,7 @@ import {
 import { usePermission } from '@rbac/hooks/usePermission'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
+import RbacButton from '@rbac/components/Button/Button'
 import {
   ConnectorReferenceFieldProps,
   getReferenceFieldProps,
@@ -340,30 +342,30 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
   }
   const [pagedConnectorData, setPagedConnectorData] = useState<ResponsePageConnectorResponse>({})
   const [page, setPage] = useState(0)
-
+  const getReferenceFieldPropsValues = getReferenceFieldProps({
+    defaultScope,
+    gitScope,
+    accountIdentifier,
+    projectIdentifier,
+    orgIdentifier,
+    type,
+    category,
+    name,
+    selected,
+    width,
+    placeholder: placeHolderLocal,
+    label,
+    getString,
+    openConnectorModal,
+    setPagedConnectorData
+  })
   const component = (
     <FormGroup {...rest} labelFor={name} helperText={helperText} intent={intent} style={{ marginBottom: 0 }}>
       <MultiTypeReferenceInput<ConnectorReferenceDTO>
         name={name}
         disabled={isDisabled}
         referenceSelectProps={{
-          ...getReferenceFieldProps({
-            defaultScope,
-            gitScope,
-            accountIdentifier,
-            projectIdentifier,
-            orgIdentifier,
-            type,
-            category,
-            name,
-            selected,
-            width,
-            placeholder: placeHolderLocal,
-            label,
-            getString,
-            openConnectorModal,
-            setPagedConnectorData
-          }),
+          ...getReferenceFieldPropsValues,
           // Only Github will have collapse view and not others.
           // Other connectors will need to onboard this and add details in collapsed view.
           // Please update the details in RenderConnectorDetails inside ConnectorReferenceField.
@@ -380,7 +382,24 @@ export const MultiTypeConnectorField = (props: MultiTypeConnectorFieldProps): Re
           ...optionalReferenceSelectProps,
           disabled: isDisabled,
           hideModal: inlineSelection.selected && inlineSelection.inlineModalClosed,
-          createNewLabel: createNewLabel || getString('newConnector')
+          createNewLabel: createNewLabel || getString('newConnector'),
+          createNewBtnComponent: (
+            <RbacButton
+              variation={ButtonVariation.SECONDARY}
+              onClick={() => {
+                optionalReferenceSelectProps.createNewHandler?.()
+              }}
+              text={`+ ${createNewLabel || getString('newConnector')}`}
+              margin={{ right: 'small' }}
+              permission={{
+                permission: PermissionIdentifier.UPDATE_CONNECTOR,
+                resource: {
+                  resourceType: ResourceType.CONNECTOR
+                },
+                resourceScope: { accountIdentifier, orgIdentifier, projectIdentifier }
+              }}
+            ></RbacButton>
+          )
         }}
         onChange={(val, valueType, type1) => {
           if (val && type1 === MultiTypeInputType.FIXED) {

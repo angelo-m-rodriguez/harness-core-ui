@@ -154,7 +154,7 @@ exports[`Create Nexus connector Wizard Should render form 1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormNexus_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1196,7 +1196,7 @@ exports[`Create Nexus connector Wizard Should render form for edit  1`] = `
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="connectorDetailsStepFormNexus_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"

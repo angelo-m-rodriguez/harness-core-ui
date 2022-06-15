@@ -165,7 +165,8 @@ const COGatewayDetails: React.FC<COGatewayDetailsProps> = props => {
       await saveStaticSchedules(response?.id as number)
       history.push(
         routes.toCECORules({
-          accountId
+          accountId,
+          params: response.opts?.dry_run === true ? 'mode=dryrun' : ''
         })
       )
     }
@@ -254,7 +255,7 @@ const COGatewayDetails: React.FC<COGatewayDetailsProps> = props => {
         className={css.breadCrumb}
         links={[
           {
-            url: routes.toCECORules({ accountId }),
+            url: routes.toCECORules({ accountId, params: '' }),
             label: getString('ce.co.breadCrumb.rules')
           },
           {

@@ -247,7 +247,13 @@ function WebhookPipelineInputPanelForm({
   useEffect(() => {
     const shouldInjectCloneCodebase = isCloneCodebaseEnabledAtLeastOneStage(resolvedPipeline)
 
-    if (!gitAwareForTriggerEnabled && !hasEverRendered && shouldInjectCloneCodebase && !isEdit) {
+    if (
+      !gitAwareForTriggerEnabled &&
+      !hasEverRendered &&
+      shouldInjectCloneCodebase &&
+      !isEdit &&
+      formikProps?.values?.triggerType !== TriggerTypes.SCHEDULE
+    ) {
       const formikValues = cloneDeep(formikProps.values)
       const isPipelineFromTemplate = !!formikValues?.pipeline?.template
       const newPipelineObject = getPipelineWithInjectedWithCloneCodebase({

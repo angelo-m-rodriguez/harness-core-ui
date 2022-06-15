@@ -11,8 +11,7 @@ import { useParams } from 'react-router-dom'
 import { pick } from 'lodash-es'
 import { useModalHook } from '@harness/use-modal'
 import { useStrings } from 'framework/strings'
-
-import PerspectiveTimeRangePicker from '@ce/components/PerspectiveTimeRangePicker/PerspectiveTimeRangePicker'
+import TimeRangePicker from '@ce/common/TimeRangePicker/TimeRangePicker'
 import type { setTimeRangeFn } from '@ce/types'
 import {
   AnomalyFilterProperties,
@@ -142,7 +141,7 @@ const AnomalyFilters: React.FC<AnomalyFiltersProps> = ({ applyFilters, timeRange
         )}
       />
       <Container className={css.separator} />
-      <PerspectiveTimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />
+      <TimeRangePicker timeRange={timeRange} setTimeRange={setTimeRange} />
     </Layout.Horizontal>
   )
 }

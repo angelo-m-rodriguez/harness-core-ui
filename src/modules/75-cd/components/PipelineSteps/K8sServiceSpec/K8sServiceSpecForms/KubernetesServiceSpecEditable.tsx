@@ -8,7 +8,6 @@
 import React from 'react'
 import { Card, HarnessDocTooltip } from '@wings-software/uicore'
 import cx from 'classnames'
-import { isEmpty } from 'lodash-es'
 import WorkflowVariables from '@pipeline/components/WorkflowVariablesSelection/WorkflowVariables'
 import ArtifactsSelection from '@pipeline/components/ArtifactsSelection/ArtifactsSelection'
 import ManifestSelection from '@pipeline/components/ManifestSelection/ManifestSelection'
@@ -18,7 +17,6 @@ import type { ServiceDefinition } from 'services/cd-ng'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
-import { useCache } from '@common/hooks/useCache'
 import { setupMode } from '../K8sServiceSpecHelper'
 import type { KubernetesServiceInputFormProps } from '../K8sServiceSpecInterface'
 import css from '../K8sServiceSpec.module.scss'
@@ -47,7 +45,6 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
 
   const {
     state: {
-      pipeline,
       selectionState: { selectedStageId }
     },
     getStageFromPipeline
@@ -55,16 +52,6 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
 
   const { stage } = getStageFromPipeline<DeploymentStageElementConfig>(selectedStageId || '')
   const selectedDeploymentType = deploymentType ?? getSelectedDeploymentType(stage, getStageFromPipeline, isPropagating)
-
-  const getServiceCacheId = `${pipeline.identifier}-${selectedStageId}-service`
-  const { getCache } = useCache([getServiceCacheId])
-
-  const shouldRenderVariables = (): boolean => {
-    if (isReadonlyServiceMode) {
-      return !isEmpty(getCache(getServiceCacheId))
-    }
-    return true
-  }
 
   return (
     <div className={css.serviceDefinition}>
@@ -111,24 +98,22 @@ const KubernetesServiceSpecEditable: React.FC<KubernetesServiceInputFormProps> =
         </>
       )}
 
-      {shouldRenderVariables() && (
-        <div className={css.accordionTitle}>
-          <div className={css.tabHeading} id="advanced">
-            {getString('advancedTitle')}
-          </div>
-          <Card className={css.sectionCard} id={getString('common.variables')}>
-            <div className={css.tabSubHeading}>{getString('common.variables')}</div>
-            <WorkflowVariables
-              tabName={DeployTabs.SERVICE}
-              formName={'addEditServiceCustomVariableForm'}
-              factory={factory as any}
-              isPropagating={isPropagating}
-              isReadonlyServiceMode={isReadonlyServiceMode as boolean}
-              readonly={!!readonly}
-            />
-          </Card>
+      <div className={css.accordionTitle}>
+        <div className={css.tabHeading} id="advanced">
+          {getString('advancedTitle')}
         </div>
-      )}
+        <Card className={css.sectionCard} id={getString('common.variables')}>
+          <div className={css.tabSubHeading}>{getString('common.variables')}</div>
+          <WorkflowVariables
+            tabName={DeployTabs.SERVICE}
+            formName={'addEditServiceCustomVariableForm'}
+            factory={factory as any}
+            isPropagating={isPropagating}
+            isReadonlyServiceMode={isReadonlyServiceMode as boolean}
+            readonly={!!readonly}
+          />
+        </Card>
+      </div>
     </div>
   )
 }

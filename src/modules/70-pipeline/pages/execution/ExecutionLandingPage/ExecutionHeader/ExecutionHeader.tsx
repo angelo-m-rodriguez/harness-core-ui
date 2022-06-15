@@ -35,7 +35,7 @@ import GitRemoteDetails from '@common/components/GitRemoteDetails/GitRemoteDetai
 import css from './ExecutionHeader.module.scss'
 
 export function ExecutionHeader(): React.ReactElement {
-  const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module } =
+  const { orgIdentifier, projectIdentifier, executionIdentifier, accountId, pipelineIdentifier, module, source } =
     useParams<PipelineType<ExecutionPathProps>>()
   const { refetch, pipelineExecutionDetail, selectedStageId, selectedStepId, allNodeMap, isPipelineInvalid } =
     useExecutionContext()
@@ -43,7 +43,6 @@ export function ExecutionHeader(): React.ReactElement {
   const { getString } = useStrings()
   const { pipelineExecutionSummary = {} } = pipelineExecutionDetail || {}
   const history = useHistory()
-
   const [canEdit, canExecute] = usePermission(
     {
       resourceScope: {
@@ -71,27 +70,36 @@ export function ExecutionHeader(): React.ReactElement {
     <header className={css.header}>
       <div className={css.headerTopRow}>
         <NGBreadcrumbs
-          links={[
-            {
-              url: routes.toPipelines({ orgIdentifier, projectIdentifier, accountId, module }),
-              label: getString('pipelines')
-            },
-            {
-              url: routes.toPipelineDeploymentList({
-                orgIdentifier,
-                projectIdentifier,
-                pipelineIdentifier,
-                accountId,
-                module,
-                repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
-                connectorRef: pipelineExecutionSummary?.connectorRef,
-                repoName: pipelineExecutionSummary?.gitDetails?.repoName,
-                branch: pipelineExecutionSummary?.gitDetails?.branch,
-                storeType: pipelineExecutionSummary?.storeType as StoreType
-              }),
-              label: pipelineExecutionSummary.name || getString('common.pipeline')
-            }
-          ]}
+          links={
+            source === 'deployments'
+              ? [
+                  {
+                    url: routes.toDeployments({ orgIdentifier, projectIdentifier, accountId, module }),
+                    label: module === 'ci' ? getString('buildsText') : getString('deploymentsText')
+                  }
+                ]
+              : [
+                  {
+                    url: routes.toPipelines({ orgIdentifier, projectIdentifier, accountId, module }),
+                    label: getString('pipelines')
+                  },
+                  {
+                    url: routes.toPipelineDeploymentList({
+                      orgIdentifier,
+                      projectIdentifier,
+                      pipelineIdentifier,
+                      accountId,
+                      module,
+                      repoIdentifier: pipelineExecutionSummary?.gitDetails?.repoIdentifier,
+                      connectorRef: pipelineExecutionSummary?.connectorRef,
+                      repoName: pipelineExecutionSummary?.gitDetails?.repoName,
+                      branch: pipelineExecutionSummary?.gitDetails?.branch,
+                      storeType: pipelineExecutionSummary?.storeType as StoreType
+                    }),
+                    label: pipelineExecutionSummary.name || getString('common.pipeline')
+                  }
+                ]
+          }
         />
         <div className={css.actionsBar}>
           {pipelineExecutionSummary.status ? (
@@ -158,6 +166,7 @@ export function ExecutionHeader(): React.ReactElement {
           <ExecutionActions
             executionStatus={pipelineExecutionSummary.status as ExecutionStatus}
             refetch={refetch}
+            source={source}
             params={{
               orgIdentifier,
               pipelineIdentifier,
@@ -206,6 +215,7 @@ export function ExecutionHeader(): React.ReactElement {
                 repoName={pipelineExecutionSummary.gitDetails.repoName}
                 branch={pipelineExecutionSummary.gitDetails.branch}
                 filePath={pipelineExecutionSummary.gitDetails.filePath}
+                fileUrl={pipelineExecutionSummary.gitDetails.fileUrl}
                 flags={{ readOnly: true }}
               />
             </div>

@@ -155,7 +155,7 @@ export function useInputSets(props: UseInputSetsProps): UseInputSetsReturn {
       })
     }
 
-    return {}
+    return { pipeline: {} as PipelineInfoConfig }
   }, [
     inputSetData?.data?.pipelineYaml,
     inputSetYamlResponse?.data?.inputSetTemplateYaml,

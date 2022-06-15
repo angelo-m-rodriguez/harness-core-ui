@@ -10,6 +10,7 @@ declare const styles: {
   readonly analyticsColHeader: string
   readonly analyticsContainer: string
   readonly center: string
+  readonly colChartBorderRadius: string
   readonly fulFilmentIcon: string
   readonly gaugeChartWrapper: string
   readonly instanceCount: string

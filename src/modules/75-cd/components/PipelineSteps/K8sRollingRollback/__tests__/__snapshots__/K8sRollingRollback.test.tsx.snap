@@ -183,7 +183,7 @@ exports[`Test K8sRollingRollback Step on edit view update 1`] = `
           >
             <div
               class="Text--withDocsTooltip"
-              data-tooltip-id="k8RollingRB_identifier"
+              data-tooltip-id="universalInputNameWithId"
             >
               <p
                 class="StyledProps--font StyledProps--main"
@@ -438,7 +438,7 @@ exports[`Test K8sRollingRollback Step should render edit view 1`] = `
               >
                 <div
                   class="Text--withDocsTooltip"
-                  data-tooltip-id="k8RollingRB_identifier"
+                  data-tooltip-id="universalInputNameWithId"
                 >
                   <p
                     class="StyledProps--font StyledProps--main"

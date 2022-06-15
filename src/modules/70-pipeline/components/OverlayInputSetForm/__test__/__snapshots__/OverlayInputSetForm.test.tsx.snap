@@ -91,7 +91,7 @@ exports[`OverlayInputSetForm Tests Create OverlayInputSet -  entityValidity fals
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="overlayInputSet_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"
@@ -599,7 +599,7 @@ exports[`OverlayInputSetForm Tests Create OverlayInputSet -  render create Overl
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="saveToGitForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -1210,7 +1210,7 @@ exports[`OverlayInputSetForm Tests Create OverlayInputSet -  render create Overl
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="overlayInputSet_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"
@@ -1893,7 +1893,7 @@ exports[`OverlayInputSetForm Tests Edit OverlayInputSet -  render Edit Overlay I
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="overlayInputSet_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"
@@ -2372,7 +2372,7 @@ exports[`OverlayInputSetForm Tests Edit OverlayInputSet -  render Edit Overlay I
                       >
                         <div
                           class="Text--withDocsTooltip"
-                          data-tooltip-id="saveToGitForm_identifier"
+                          data-tooltip-id="universalInputNameWithId"
                         >
                           <p
                             class="StyledProps--font StyledProps--main"
@@ -2985,7 +2985,7 @@ exports[`OverlayInputSetForm Tests Edit OverlayInputSet -  render Overlay Input 
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="overlayInputSet_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"

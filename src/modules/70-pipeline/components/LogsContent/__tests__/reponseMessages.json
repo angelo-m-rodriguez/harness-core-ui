@@ -1,0 +1,17 @@
+[
+  {
+    "code": "HINT",
+    "level": "INFO",
+    "message": "Unable to fetch the tags for the image",
+    "exception": null,
+    "failureTypes": []
+  },
+  {
+    "code": "EXPLANATION",
+    "level": "INFO",
+    "message": "Check if the image exists and if the permissions are scoped for the authenticated user",
+    "exception": null,
+    "failureTypes": []
+  },
+  { "code": "INVALID_ARTIFACT_SERVER", "level": "ERROR", "message": "Not Found", "exception": null, "failureTypes": [] }
+]

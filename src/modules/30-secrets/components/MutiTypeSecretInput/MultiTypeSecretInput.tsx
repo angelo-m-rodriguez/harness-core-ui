@@ -58,6 +58,7 @@ export interface MultiTypeSecretInputProps extends IFormGroupProps {
   label?: string
   expressions?: string[]
   allowableTypes?: MultiTypeInputType[]
+  useExecutionTimeInput?: boolean
   type?: SecretResponseWrapper['secret']['type']
   onSuccess?: (secret: SecretReference) => void
   secretsListMockData?: ResponsePageSecretResponseWrapper
@@ -81,6 +82,7 @@ export function MultiTypeSecretInput(props: ConnectedMultiTypeSecretInputProps):
     type,
     secretsListMockData,
     isMultiType = true,
+    useExecutionTimeInput,
     ...restProps
   } = props
 
@@ -141,6 +143,7 @@ export function MultiTypeSecretInput(props: ConnectedMultiTypeSecretInputProps):
           onChange={handleChange}
           expressions={expressions}
           allowableTypes={allowableTypes}
+          useExecutionTimeInput={useExecutionTimeInput}
           style={{ flexGrow: 1 }}
           fixedTypeComponentProps={{ onClick: openCreateOrSelectSecretModal }}
           fixedTypeComponent={MultiTypeSecretInputFixedTypeComponent}

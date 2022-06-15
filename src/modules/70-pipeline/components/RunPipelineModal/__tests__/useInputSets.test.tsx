@@ -112,7 +112,7 @@ describe('<useInputSets /> tests', () => {
     const { result } = renderHook(useInputSets, { initialProps: getInitialProps() })
 
     await waitFor(() => expect(result.current.inputSetYamlResponse?.data?.inputSetTemplateYaml).toEqual(''))
-    expect(result.current.inputSet).toEqual({})
+    expect(result.current.inputSet).toEqual({ pipeline: {} })
     expect(result.current.inputSetTemplate).toEqual({})
   })
 

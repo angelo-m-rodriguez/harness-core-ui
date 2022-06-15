@@ -40,6 +40,7 @@ import routes from '@common/RouteDefinitions'
 import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interfaces/YAMLBuilderProps'
 import { usePermission } from '@rbac/hooks/usePermission'
 import type {
+  ExecutionPathProps,
   GitQueryParams,
   InputSetGitQueryParams,
   PipelinePathProps,
@@ -102,6 +103,7 @@ export interface RunPipelineFormProps extends PipelineType<PipelinePathProps & G
   executionInputSetTemplateYaml?: string
   stagesExecuted?: string[]
   executionIdentifier?: string
+  source: ExecutionPathProps['source']
 }
 
 const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
@@ -126,6 +128,7 @@ function RunPipelineFormBasic({
   module,
   executionView,
   branch,
+  source,
   repoIdentifier,
   connectorRef,
   storeType,
@@ -491,7 +494,8 @@ function RunPipelineFormBasic({
                 projectIdentifier,
                 executionIdentifier: defaultTo(data?.planExecution?.uuid, ''),
                 accountId,
-                module
+                module,
+                source
               }),
               state: {
                 shouldShowGovernanceEvaluations:

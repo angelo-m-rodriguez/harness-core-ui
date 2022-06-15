@@ -462,7 +462,7 @@ exports[`Test K8sApplyStep should render edit view as edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8Apply_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1251,7 +1251,7 @@ exports[`Test K8sApplyStep should render edit view as edit step with all runtime
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8Apply_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1815,7 +1815,7 @@ exports[`Test K8sApplyStep should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8Apply_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

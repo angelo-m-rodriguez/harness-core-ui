@@ -74,7 +74,8 @@ export const triggerPathProps: TriggerPathProps = {
 
 export const executionPathProps: ExecutionPathProps = {
   ...pipelinePathProps,
-  executionIdentifier: ':executionIdentifier'
+  executionIdentifier: ':executionIdentifier',
+  source: ':source(deployments|executions|builds)'
 }
 
 export const connectorPathProps: ConnectorPathProps = {

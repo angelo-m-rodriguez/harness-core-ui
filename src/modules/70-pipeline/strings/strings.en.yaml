@@ -105,7 +105,7 @@ approvalStep:
     REJECT: Rejected
   notAuthorizedExecution: User is not authorized to approve/reject the pipeline
   disallowedApproverExecution: This approval step has been configured to disallow pipeline executors to approve this stage.
-lockStep:
+queueStep:
   keyPlaceholder: Enter Resource Key
   resourceKey: Resource Key
   keyRequired: Resource Key is required
@@ -248,6 +248,9 @@ manifestType:
   httpHelmRepoConnectorLabel: 'HTTP Helm'
   manifestIdentifier: Manifest Name
   manifestPlaceholder: Enter Manifest Name
+  ociHelmConnectorLabel: OCI Helm
+  basePathPlaceholder: Enter Base Path
+  basePath: Base Path
   manifestSource: Manifest Source
   manifestDetails: Manifest Details
   manifestRepoType: '{{ $.manifestsText }} {{ $.typeLabel }}'
@@ -300,6 +303,9 @@ manifestType:
     chartNamePlaceHolder: 'Enter Chart Name'
     chartVersionPlaceHolder: 'Enter Chart Version'
     chartVersionRequired: 'Chart Version is required'
+  oci:
+    basePathRequired: 'Base Path is required'
+    chartVersionValidation: '"latest" tag is not supported as chart version'
 manifestTypeLabels:
   K8sManifest: K8s Manifest
   ValuesYaml: Values YAML
@@ -486,6 +492,8 @@ startTime: Start time
 duration: Duration
 and: '{{ $.common.andCaps }}'
 gitDetails: git details
+runtimeInputs: Runtime Inputs
+runtimeInputsSubmittedMsg: Inputs have been submitted successfully
 pipelineInputPanel:
   noRuntimeInputs: 'No Runtime Inputs'
   automaticallyExtractedFromText: Automatically extracted from event payload
@@ -800,6 +808,8 @@ artifactPathDependencyRequired: required to fetch the artifact paths
 artifactRepositoryDependencyRequired: 'Artifactory Connector is required to fetch repositories. You can make this field Runtime input otherwise.'
 myDeploymentsText: My Deployments
 myBuildsText: My Builds
+mySecurityTestsText: My Security Tests
+myPipelineRunsText: My Pipeline Runs
 noBuckets: No buckets found with given region
 gitRepo: Git Repo
 buildRepo: Build Repo
@@ -807,7 +817,7 @@ stepDescription:
   HTTP: Run HTTP requests containing URLs, methods, headers, assertions, and variables.
   SHELLSCRIPT: Execute scripts in the shell session. The scripts can be executed on the pod/instance running a Harness Delegate or on a remote host in the infrastructure.
   Barrier: Synchronize multiple Pipelines to coordinate deployments systematically.
-  Lock: Description of lock step comes here.
+  Queue: Queue pipeline executions to prevent multiple stages or pipelines from requesting the same deployment resources simultaneously.
   K8sRollingRollback: Roll back the workloads deployed by the stage.
   K8sBlueGreenDeploy: Deploy your new app version to the stage environment.
   K8sCanaryDeploy: Define how many pods are deployed for a Canary test of your new service version.
@@ -847,6 +857,7 @@ stepDescription:
   Policy: Evaluate policy during pipeline execution
   ServerlessLambdaDeploy: Create the Lambda functions defined in this Stage.
   ServerlessLambdaRollback: Deploy the previous successful version as a new version.
+  createPR: Create PR
 executionStrategy:
   executionStrategies: Execution Strategies
   useStrategy: Use Strategy
@@ -904,6 +915,7 @@ gitPullRequest: Git Pull Request
 gitPullRequestNumber: Git Pull Request Number
 expressionsEvaluation: Expressions Evaluation
 deploymentFrequency: 'Deployment Frequency'
+executionFrequency: 'Execution Frequency'
 retryPipeline: Retry Failed Pipeline
 openInNewTab: Open in new tab
 stagetoRetryFrom: Select the stage that you would like to resume from

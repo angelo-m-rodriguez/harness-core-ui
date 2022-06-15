@@ -87,7 +87,7 @@ exports[`Unit tests for DefineYourMonitoringSource Ensure card renders passed in
                 >
                   <div
                     class="Text--withDocsTooltip"
-                    data-tooltip-id="wrapperComponentTestForm_identifier"
+                    data-tooltip-id="universalInputNameWithId"
                   >
                     <p
                       class="StyledProps--font StyledProps--main"

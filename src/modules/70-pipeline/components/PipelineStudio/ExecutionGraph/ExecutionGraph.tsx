@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect } from 'react'
-import { cloneDeep, set, isEmpty, get, defaultTo } from 'lodash-es'
+import { cloneDeep, set, isEmpty, get, defaultTo, omit } from 'lodash-es'
 import type { NodeModelListener, LinkModelListener } from '@projectstorm/react-diagrams-core'
 import type { BaseModelListener } from '@projectstorm/react-canvas-core'
 import { Color } from '@harness/design-system'
@@ -804,12 +804,18 @@ function ExecutionGraphRef<T extends StageElementConfig>(
         if (event?.node?.data?.stepGroup && event?.destination?.parentIdentifier) {
           showError(getString('stepGroupInAnotherStepGroup'), undefined, 'pipeline.setgroup.error')
         } else {
+          const stepDetails = omit(event.node.data, [
+            'conditionalExecutionEnabled',
+            'graphType',
+            'isInComplete',
+            'isTemplateNode'
+          ])
           const isRemove = removeStepOrGroup(state, event, undefined, newPipelineStudioEnabled)
           if (isRemove) {
             addStepOrGroup(
               { ...event, node: { ...event?.destination } },
               state.stepsData,
-              event?.node?.data,
+              stepDetails,
               false,
               state.isRollback,
               newPipelineStudioEnabled
@@ -1145,11 +1151,12 @@ function ExecutionGraphRef<T extends StageElementConfig>(
         <DynamicPopover
           className={css.addStepPopover}
           darkMode={true}
-          hoverShowDelay={500}
+          hoverShowDelay={200}
           render={renderPopover}
           bind={setDynamicPopoverHandler}
           usePortal
           portalClassName={css.portalVisibility}
+          closeOnMouseOut
         />
       </div>
     </div>

@@ -6,11 +6,15 @@
  */
 
 import React from 'react'
+import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import BaseContinousVerification from './components/BaseContinousVerification/BaseContinousVerification'
 import type { ContinousVerificationWidgetSectionsProps } from './types'
 import SelectVerificationType from './components/SelectVerificationType/SelectVerificationType'
 import ConfigureFields from './components/ConfigureFields/ConfigureFields'
 import MonitoredService from './components/MonitoredService/MonitoredService'
+import SelectMonitoredServiceType from './components/SelectMonitoredServiceType/SelectMonitoredServiceType'
+import { MONITORED_SERVICE_TYPE } from './components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
+import ConfiguredMonitoredService from './components/ConfiguredMonitoredService/ConfiguredMonitoredService'
 
 export function ContinousVerificationWidgetSections({
   formik,
@@ -18,6 +22,21 @@ export function ContinousVerificationWidgetSections({
   stepViewType,
   allowableTypes
 }: ContinousVerificationWidgetSectionsProps): JSX.Element {
+  const { CVNG_TEMPLATE_VERIFY_STEP } = useFeatureFlags()
+
+  const renderMonitoredService = (): JSX.Element => {
+    if (formik?.values?.spec?.monitoredService?.type === MONITORED_SERVICE_TYPE.CONFIGURED) {
+      return <ConfiguredMonitoredService allowableTypes={allowableTypes} formik={formik} />
+    } else if (
+      formik?.values?.spec?.monitoredService?.type === MONITORED_SERVICE_TYPE.DEFAULT &&
+      stepViewType !== 'Template'
+    ) {
+      return <MonitoredService formik={formik} />
+    } else {
+      return <></>
+    }
+  }
+
   return (
     <>
       <BaseContinousVerification
@@ -27,7 +46,8 @@ export function ContinousVerificationWidgetSections({
         allowableTypes={allowableTypes}
       />
       <SelectVerificationType />
-      <MonitoredService formik={formik} />
+      {CVNG_TEMPLATE_VERIFY_STEP && <SelectMonitoredServiceType />}
+      {CVNG_TEMPLATE_VERIFY_STEP ? renderMonitoredService() : <MonitoredService formik={formik} />}
       {formik?.values?.spec?.type ? <ConfigureFields formik={formik} allowableTypes={allowableTypes} /> : null}
     </>
   )

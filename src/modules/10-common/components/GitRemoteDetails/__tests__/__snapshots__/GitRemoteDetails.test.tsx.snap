@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GitRemoteDetails test default rendering GitRemoteDetails 1`] = `
+exports[`<GitRemoteDetails /> default rendering GitRemoteDetails 1`] = `
 <div>
   <div
     class="wrapper"
@@ -78,7 +78,7 @@ exports[`GitRemoteDetails test default rendering GitRemoteDetails 1`] = `
                   autocomplete="off"
                   class="bp3-input"
                   name="remoteBranch"
-                  placeholder="- select -"
+                  placeholder="- common.git.selectBranchPlaceholder -"
                   style="padding-right: 0px;"
                   type="text"
                   value="main"

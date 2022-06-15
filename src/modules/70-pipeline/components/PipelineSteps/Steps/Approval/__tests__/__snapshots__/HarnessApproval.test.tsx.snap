@@ -1043,7 +1043,7 @@ exports[`Harness Approval tests Edit stage - readonly: edit stage readonly 1`] =
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="harnessApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -1554,7 +1554,7 @@ exports[`Harness Approval tests Edit stage - submit field values as expressions:
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="harnessApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -2528,7 +2528,7 @@ exports[`Harness Approval tests MinimumCount should be greater than 1: minimum c
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="harnessApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"
@@ -3473,7 +3473,7 @@ exports[`Harness Approval tests On submit call: values populating on edit 1`] = 
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="harnessApproval_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

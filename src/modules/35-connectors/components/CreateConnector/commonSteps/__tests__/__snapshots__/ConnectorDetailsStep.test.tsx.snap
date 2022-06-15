@@ -36,7 +36,7 @@ exports[`Connector details step Test for  create  connector step one required fe
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="connectorDetailsStepFormK8sCluster_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"
@@ -314,7 +314,7 @@ exports[`Connector details step Test for going to next step 1`] = `
                   >
                     <div
                       class="Text--withDocsTooltip"
-                      data-tooltip-id="connectorDetailsStepFormK8sCluster_identifier"
+                      data-tooltip-id="universalInputNameWithId"
                     >
                       <p
                         class="StyledProps--font StyledProps--main"

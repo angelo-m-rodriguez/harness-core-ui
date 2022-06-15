@@ -7,18 +7,22 @@
 
 import { getMultiTypeFromValue, MultiTypeInputType, RUNTIME_INPUT_VALUE, SelectOption } from '@wings-software/uicore'
 import { isEmpty, isNull, isUndefined, omit, omitBy, set } from 'lodash-es'
-import { yupToFormErrors } from 'formik'
+import { FormikErrors, yupToFormErrors } from 'formik'
 import * as Yup from 'yup'
 import type { UseStringsReturn } from 'framework/strings'
 import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
-import type { ContinousVerificationData, spec } from './types'
+import type { StringsMap } from 'stringTypes'
+import type { ContinousVerificationData, spec, VerifyStepMonitoredService } from './types'
 import {
   VerificationSensitivityOptions,
   durationOptions,
   baseLineOptions,
   trafficSplitPercentageOptions,
-  SensitivityTypes
+  SensitivityTypes,
+  defaultMonitoredServiceSpec,
+  monitoredServiceRefPath
 } from './constants'
+import { MONITORED_SERVICE_TYPE } from './components/ContinousVerificationWidget/components/ContinousVerificationWidgetSections/components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
 
 /**
  * checks if a field is a runtime input.
@@ -48,6 +52,22 @@ export function validateField(
 ): void {
   if (checkIfRunTimeInput(fieldValue) && isRequired && isEmpty(data?.spec?.spec && data?.spec?.spec[fieldKey])) {
     set(errors, `spec.spec.${fieldKey}`, getString('fieldRequired', { field: fieldKey }))
+  }
+}
+
+export function validateMonitoredService(
+  data: ContinousVerificationData,
+  errors: FormikErrors<ContinousVerificationData>,
+  getString: (key: keyof StringsMap, vars?: Record<string, any> | undefined) => string,
+  isRequired: boolean,
+  monitoredService?: VerifyStepMonitoredService
+): void {
+  if (
+    checkIfRunTimeInput(monitoredService?.spec?.monitoredServiceRef) &&
+    isRequired &&
+    isEmpty(data?.spec?.monitoredService?.spec?.monitoredServiceRef)
+  ) {
+    set(errors, monitoredServiceRefPath, getString('fieldRequired', { field: 'Monitored service' }))
   }
 }
 
@@ -119,6 +139,31 @@ export function getSpecYamlData(specInfo?: spec, type?: string): spec {
   })
 
   return validspec
+}
+
+export function getMonitoredServiceYamlData(spec: ContinousVerificationData['spec']): VerifyStepMonitoredService {
+  let monitoredService: VerifyStepMonitoredService = defaultMonitoredServiceSpec
+
+  switch (spec?.monitoredService?.type) {
+    case MONITORED_SERVICE_TYPE.DEFAULT:
+      monitoredService = defaultMonitoredServiceSpec
+      break
+    case MONITORED_SERVICE_TYPE.CONFIGURED:
+      monitoredService = {
+        type: MONITORED_SERVICE_TYPE.CONFIGURED,
+        spec: {
+          monitoredServiceRef: getMonitoredServiceRef(spec)
+        }
+      }
+      break
+    default:
+      monitoredService = defaultMonitoredServiceSpec
+  }
+  return monitoredService
+}
+
+export function getMonitoredServiceRef(spec: ContinousVerificationData['spec']): string {
+  return spec?.monitoredService?.spec?.monitoredServiceRef as string
 }
 
 /**

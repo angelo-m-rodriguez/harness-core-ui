@@ -28,7 +28,7 @@ import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureO
 import { useHelmCmdFlags } from 'services/cd-ng'
 import { useDeepCompareEffect } from '@common/hooks'
 import { MonacoTextField } from '@common/components/MonacoTextField/MonacoTextField'
-import type { CommandFlags, HelmVersionOptions } from '../ManifestInterface'
+import type { CommandFlags, HelmOCIVersionOptions, HelmVersionOptions } from '../ManifestInterface'
 
 import helmcss from './HelmWithGIT/HelmWithGIT.module.scss'
 import css from './ManifestWizardSteps.module.scss'
@@ -38,7 +38,7 @@ interface HelmAdvancedStepProps {
   formik: FormikValues
   isReadonly?: boolean
   deploymentType: string
-  helmVersion: HelmVersionOptions
+  helmVersion: HelmVersionOptions | HelmOCIVersionOptions
   helmStore: string
 }
 

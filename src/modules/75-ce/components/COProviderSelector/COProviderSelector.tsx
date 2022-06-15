@@ -103,7 +103,7 @@ const COProviderSelector: React.FC<COProviderSelectorProps> = props => {
         className={css.breadCrumb}
         links={[
           {
-            url: routes.toCECORules({ accountId }),
+            url: routes.toCECORules({ accountId, params: '' }),
             label: getString('ce.co.breadCrumb.rules')
           },
           {

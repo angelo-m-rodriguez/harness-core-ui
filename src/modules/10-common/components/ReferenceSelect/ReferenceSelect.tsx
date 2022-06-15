@@ -39,6 +39,7 @@ export interface ReferenceSelectDialogTitleProps {
   componentName?: string
   createNewLabel?: string
   createNewHandler?: () => void
+  createNewBtnComponent?: JSX.Element
   isNewConnectorLabelVisible?: boolean
 }
 export interface ReferenceSelectProps<T extends MinimalObject>
@@ -49,6 +50,7 @@ export interface ReferenceSelectProps<T extends MinimalObject>
   selectAnReferenceLabel: string
   selected?: Item
   createNewLabel?: string
+  createNewBtnComponent?: JSX.Element
   createNewHandler?: () => void
   hideModal?: boolean
   selectedRenderer?: JSX.Element
@@ -62,7 +64,7 @@ export interface ReferenceSelectProps<T extends MinimalObject>
 
 export const ReferenceSelectDialogTitle = (props: ReferenceSelectDialogTitleProps): JSX.Element => {
   const { getString } = useStrings()
-  const { componentName, createNewHandler, createNewLabel } = props
+  const { componentName, createNewHandler, createNewLabel, createNewBtnComponent, isNewConnectorLabelVisible } = props
   return (
     <Layout.Horizontal flex={{ distribution: 'space-between' }}>
       <Layout.Vertical spacing="xsmall">
@@ -73,22 +75,24 @@ export const ReferenceSelectDialogTitle = (props: ReferenceSelectDialogTitleProp
         </Text>
       </Layout.Vertical>
 
-      {createNewLabel &&
-        createNewHandler &&
-        (props.isNewConnectorLabelVisible === undefined ? true : props.isNewConnectorLabelVisible) && (
-          <>
-            <Layout.Horizontal className={Classes.POPOVER_DISMISS}>
-              <Button
-                variation={ButtonVariation.SECONDARY}
-                onClick={() => {
-                  props.createNewHandler?.()
-                }}
-                text={`+ ${createNewLabel}`}
-                margin={{ right: 'small' }}
-              ></Button>
-            </Layout.Horizontal>
-          </>
-        )}
+      {createNewBtnComponent
+        ? createNewBtnComponent
+        : createNewLabel &&
+          createNewHandler &&
+          (isNewConnectorLabelVisible === undefined ? true : isNewConnectorLabelVisible) && (
+            <>
+              <Layout.Horizontal className={Classes.POPOVER_DISMISS}>
+                <Button
+                  variation={ButtonVariation.SECONDARY}
+                  onClick={() => {
+                    props.createNewHandler?.()
+                  }}
+                  text={`+ ${createNewLabel}`}
+                  margin={{ right: 'small' }}
+                ></Button>
+              </Layout.Horizontal>
+            </>
+          )}
     </Layout.Horizontal>
   )
 }
@@ -108,6 +112,7 @@ export function ReferenceSelect<T extends MinimalObject>(props: ReferenceSelectP
     selectedRenderer,
     componentName = '',
     disabled,
+    createNewBtnComponent,
     ...referenceProps
   } = props
   const [isOpen, setOpen] = React.useState(false)
@@ -147,6 +152,7 @@ export function ReferenceSelect<T extends MinimalObject>(props: ReferenceSelectP
           componentName,
           createNewLabel,
           createNewHandler,
+          createNewBtnComponent,
           isNewConnectorLabelVisible
         })}
       >

@@ -97,11 +97,14 @@ pipelineSteps:
   environmentTab:
     specifyYourEnvironment: Specify Environment
     specifyYourInfrastructure: Specify Infrastructure
+    specifyEnvironmentOrGroup: Specify environment or environment group
+    specifyGitOpsClusters: Specify GitOps Clusters
     selectEnvironment: '- Select Environment -'
     selectInfrastructure: '- Select Infrastructure -'
     plusNewEnvironment: '+ {{$.newEnvironment}}'
     newEnvironment: '{{$.newEnvironment}}'
     environmentIsRequired: '{{ $.common.validation.environmentIsRequired }}'
+    deployToAll: Deploy in parallel on all infrastructure
   serviceTab:
     stageOverrides: Stage Overrides
     overrideChanges: Override artifacts, manifests, service variables for this stage
@@ -148,6 +151,7 @@ serviceDashboard:
   deployedBy: Deployed By
   artifact: artifact
   totalPipelines: Total Pipelines
+  totalDeployments: Total Deployments
   noPipelines: No pipeline execution in {{timeRange}} matches the given criteria
   envName: Env Name
   noActiveServiceInstances: No Active Service Instances
@@ -238,8 +242,6 @@ artifactRepoTooltip: Enter the name of the repository where the artifact source 
 serverlessDeployCommandOptions: Serverless Deploy Command Options
 artifactVersion: ARTIFACT VERSION
 useConnectorCredentials: 'Use Connector Credentials'
-serviceOverrides: Service Overrides
-serviceOverridesHelperText: Override existing variables or defined new variables based on the selected service
 configurationVariable: Configuration Variable
 overrideValue: Override Value
 overrideType: Override Type
@@ -251,6 +253,11 @@ environment:
   createSubTitle: An environment is the representation of where your deployments take place
   filters:
     environmentNamePlaceholder: Enter Environment Name
+serviceOverrides:
+  label: Service Overrides
+  helperText: Override existing variables or define new variables based on the selected service
+  deleted: Successfully deleted Service Override
+  deletedOneVariable: Successfully deleted variable from service override
 infrastructure:
   infrastructureDefinitions: Infrastructure Definitions
   noInfrastructureInEnvironment: You have no infrastructures in this environment
@@ -281,6 +288,14 @@ cloudFormation:
   awsURL: S3 URL
   urls: URLs
   parameterFilePaths: Parameter File Paths
+  remoteTags: Specify Remote Tags File...
+  tagsConnector: Tags Connector
+  tagsFileStore: Tags File Store
+  remoteTagsConnector: Remote Tags Connector
+  remoteTagsFileStore: Remote Tags File Store
+  remoteTagsDetails: Remote Tags
+  remoteTagsFilePath: Remote Tags File Path
+  remoteTagsUrlPath: Remote Tags S3 URL
   errors:
     region: AWS Region is required
     role: Role ARN required
@@ -293,6 +308,14 @@ cloudFormation:
     templateRequired: Template file required
   deploymentTypes:
     pdc: PDC
-
+gitOpsCluster: 'GitOps Clusters'
+selectGitopsCluster: 'Select GitOps Clusters to add to Environment'
+clustersSelected: 'Clusters Selected'
+selectClusterLabel: 'Select Cluster(s)'
+noLinkedClusters: 'No Linked Clusters Available'
+selectedLabel: 'Selected'
+successfullyLinkedClusters: 'SuccessFully Linked Clusters'
+unLink: 'UnLink'
+unLinkedCluster: 'Unlinked Successfully'
 overrideYaml: Override Yaml Values
 manifestId: Manifest Id

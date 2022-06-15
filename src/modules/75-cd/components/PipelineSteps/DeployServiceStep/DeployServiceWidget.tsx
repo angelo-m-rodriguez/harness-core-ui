@@ -38,6 +38,7 @@ import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/Depl
 import { getServiceRefSchema } from '@cd/components/PipelineSteps/PipelineStepsUtil'
 import RbacButton from '@rbac/components/Button/Button'
 import ServiceEntityEditModal from '@cd/components/Services/ServiceEntityEditModal/ServiceEntityEditModal'
+import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import type { DeployServiceData, DeployServiceProps, DeployServiceState } from './DeployServiceInterface'
 import { flexStart, isEditService } from './DeployServiceUtils'
 import { NewEditServiceModal } from './NewEditServiceModal'
@@ -51,6 +52,13 @@ function DeployServiceWidget({
   serviceLabel
 }: DeployServiceProps): React.ReactElement {
   const { getString } = useStrings()
+  const {
+    state: {
+      pipeline,
+      selectionState: { selectedStageId }
+    }
+  } = usePipelineContext()
+
   const { accountId, projectIdentifier, orgIdentifier } = useParams<
     PipelineType<{
       orgIdentifier: string
@@ -253,7 +261,8 @@ function DeployServiceWidget({
   const serviceEntityProps = state.isEdit
     ? {
         serviceResponse: selectedServiceResponse?.data?.service as ServiceResponseDTO,
-        isLoading: serviceDataLoading
+        isLoading: serviceDataLoading,
+        serviceCacheKey: `${pipeline.identifier}-${selectedStageId}-service`
       }
     : {}
   const [showModal, hideModal] = useModalHook(

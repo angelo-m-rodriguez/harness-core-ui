@@ -8,6 +8,7 @@
 // this is an auto-generated file, do not update this manually
 declare const styles: {
   readonly lastDeploymentText: string
+  readonly openNewTabStyle: string
   readonly pieChartLabelContainerStyles: string
   readonly pieChartLabelStyles: string
   readonly statusText: string

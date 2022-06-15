@@ -18,7 +18,7 @@ exports[`Test K8sCanaryDeployStep should render edit view 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -375,7 +375,7 @@ exports[`Test K8sCanaryDeployStep should render edit view as edit step with all 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -786,7 +786,7 @@ exports[`Test K8sCanaryDeployStep should render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1882,7 +1882,7 @@ exports[`Test K8sCanaryDeployStep should submit with valid payload for instance 
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2239,7 +2239,7 @@ exports[`Test K8sCanaryDeployStep should submit with valid paylod for instace ty
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -2596,7 +2596,7 @@ exports[`Test K8sCanaryDeployStep should throw validation error without instance
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="k8CanaryDeploy_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

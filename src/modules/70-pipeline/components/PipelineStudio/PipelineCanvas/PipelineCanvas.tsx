@@ -75,6 +75,7 @@ import { DefaultNewPipelineId, DrawerTypes } from '../PipelineContext/PipelineAc
 import PipelineYamlView from '../PipelineYamlView/PipelineYamlView'
 import { RightBar } from '../RightBar/RightBar'
 import StudioGitPopover from '../StudioGitPopover'
+import usePipelineErrors from './PipelineErrors/usePipelineErrors'
 import css from './PipelineCanvas.module.scss'
 
 interface OtherModalProps {
@@ -89,6 +90,7 @@ interface PipelineWithGitContextFormProps extends PipelineInfoConfig {
   connectorRef?: string
   filePath?: string
   remoteType?: string
+  storeType?: string
 }
 
 interface InputSetValue extends SelectOption {
@@ -171,7 +173,8 @@ export function PipelineCanvas({
     gitDetails,
     entityValidityDetails,
     templateError,
-    templateInputsErrorNodeSummary
+    templateInputsErrorNodeSummary,
+    yamlSchemaErrorWrapper
   } = state
 
   const { getString } = useStrings()
@@ -218,6 +221,7 @@ export function PipelineCanvas({
 
   const history = useHistory()
   const { isGitSimplificationEnabled } = useAppStore()
+  const { openPipelineErrorsModal } = usePipelineErrors()
   const isYaml = view === SelectedView.YAML
   const [isYamlError, setYamlError] = React.useState(false)
   const [blockNavigation, setBlockNavigation] = React.useState(false)
@@ -225,6 +229,12 @@ export function PipelineCanvas({
   const [disableVisualView, setDisableVisualView] = React.useState(entityValidityDetails?.valid === false)
   const [useTemplate, setUseTemplate] = React.useState<boolean>(false)
   const isPipelineRemote = isGitSimplificationEnabled && storeType === StoreType.REMOTE
+
+  React.useEffect(() => {
+    if (isGitSyncEnabled || isPipelineRemote) {
+      openPipelineErrorsModal(yamlSchemaErrorWrapper?.schemaErrors)
+    }
+  }, [yamlSchemaErrorWrapper, isGitSyncEnabled, isPipelineRemote])
 
   const { openDialog: openUnsavedChangesDialog } = useConfirmationDialog({
     cancelButtonText: getString('cancel'),
@@ -432,6 +442,7 @@ export function PipelineCanvas({
       delete (pipeline as PipelineWithGitContextFormProps).connectorRef
       delete (pipeline as PipelineWithGitContextFormProps).filePath
       delete (pipeline as PipelineWithGitContextFormProps).remoteType
+      delete (pipeline as PipelineWithGitContextFormProps).storeType
       updatePipeline(pipeline)
       if (currStoreMetadata?.storeType) {
         updatePipelineStoreMetadata(currStoreMetadata, gitDetails)
@@ -588,6 +599,7 @@ export function PipelineCanvas({
               connectorRef={connectorRef}
               repoIdentifier={isPipelineRemote ? repoName : repoIdentifier}
               branch={branch}
+              source="executions"
               onClose={() => {
                 onCloseRunPipelineModal()
               }}
@@ -818,6 +830,7 @@ export function PipelineCanvas({
                   connectorRef={connectorRef}
                   repoName={repoName || gitDetails.repoName || gitDetails.repoIdentifier || ''}
                   filePath={gitDetails.filePath || ''}
+                  fileUrl={gitDetails.fileUrl || ''}
                   branch={branch || ''}
                   onBranchChange={onGitBranchChange}
                   flags={{
@@ -833,6 +846,7 @@ export function PipelineCanvas({
               onChange={nextMode => {
                 handleViewChange(nextMode)
               }}
+              showDisableToggleReason={true}
             />
             <div>
               <div className={css.savePublishContainer}>

@@ -167,7 +167,7 @@ const SideNavItems = () => {
             trackEvent(USER_JOURNEY_EVENTS.AS_NAV_CLICK, {})
           }}
           label={getString('ce.co.breadCrumb.rules')}
-          to={routes.toCECORules({ accountId })}
+          to={routes.toCECORules({ accountId, params: '' })}
         />
         <NavExpandable title={getString('common.setup')} route={routes.toCECOAccessPoints({ accountId })}>
           <Layout.Vertical spacing="small">

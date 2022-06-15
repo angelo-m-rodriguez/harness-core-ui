@@ -146,6 +146,7 @@ const ConnectorsPage: React.FC<ConnectorsListProps> = ({ catalogueMockData, stat
   const isCustomHealthEnabled = useFeatureFlag(FeatureFlag.CHI_CUSTOM_HEALTH)
   const isErrorTrackingEnabled = useFeatureFlag(FeatureFlag.ERROR_TRACKING_ENABLED)
   const isAzureEnabled = useFeatureFlag(FeatureFlag.NG_AZURE)
+  const isOciHelmEnabled = useFeatureFlag(FeatureFlag.HELM_OCI_SUPPORT)
   const { trackEvent } = useTelemetry()
 
   const ConnectorCatalogueNames = new Map<ConnectorCatalogueItem['category'], string>()
@@ -350,6 +351,8 @@ const ConnectorsPage: React.FC<ConnectorsListProps> = ({ catalogueMockData, stat
           return isErrorTrackingEnabled
         case Connectors.AZURE:
           return isAzureEnabled
+        case Connectors.OciHelmRepo:
+          return isOciHelmEnabled
         default:
           return true
       }

@@ -63,6 +63,7 @@ const pathParams = {
   pipelineIdentifier: 'TEST_PIPELINE',
   executionIdentifier: 'TEST_EXECUTION',
   module: 'cd',
+  source: 'executions',
   stageId: 'selectedStageId'
 }
 
@@ -84,7 +85,12 @@ describe('<ExecutionActions /> tests', () => {
     act(() => {
       result = render(
         <TestWrapper path={TEST_PATH} pathParams={pathParams}>
-          <ExecutionActions params={pathParams as any} executionStatus={executionStatus} refetch={jest.fn()} />
+          <ExecutionActions
+            params={pathParams as any}
+            source="executions"
+            executionStatus={executionStatus}
+            refetch={jest.fn()}
+          />
         </TestWrapper>
       )
     })
@@ -119,7 +125,12 @@ describe('<ExecutionActions /> tests', () => {
     act(() => {
       result = render(
         <TestWrapper path={TEST_PATH} pathParams={pathParams}>
-          <ExecutionActions params={pathParams as any} executionStatus={executionStatus} refetch={jest.fn()} />
+          <ExecutionActions
+            params={pathParams as any}
+            source="executions"
+            executionStatus={executionStatus}
+            refetch={jest.fn()}
+          />
         </TestWrapper>
       )
     })
@@ -174,6 +185,7 @@ describe('<ExecutionActions /> tests', () => {
         result = render(
           <TestWrapper path={TEST_PATH} pathParams={pathParams} queryParams={{ stageId: stageId }}>
             <ExecutionActions
+              source="executions"
               params={pathParams as any}
               executionStatus={executionStatus}
               refetch={jest.fn()}
@@ -232,6 +244,7 @@ describe('<ExecutionActions /> tests', () => {
       result = render(
         <TestWrapper path={TEST_PATH} pathParams={pathParams}>
           <ExecutionActions
+            source="executions"
             params={pathParams as any}
             executionStatus="Expired"
             refetch={jest.fn()}
@@ -258,6 +271,7 @@ describe('<ExecutionActions /> tests', () => {
       result = render(
         <TestWrapper path={TEST_PATH} pathParams={pathParams}>
           <ExecutionActions
+            source="executions"
             params={pathParams as any}
             executionStatus="Expired"
             refetch={jest.fn()}
@@ -291,13 +305,15 @@ describe('<ExecutionActions /> tests', () => {
       executionIdentifier,
       projectIdentifier,
       accountId,
-      module
+      module,
+      source: 'executions'
     })
 
     const { getByText } = render(
       <TestWrapper path={pipelineDeploymentListPage} pathParams={pathParams}>
         <ExecutionActions
           params={pathParams as any}
+          source="executions"
           executionStatus="Expired"
           refetch={jest.fn()}
           showEditButton={false}
@@ -328,6 +344,7 @@ describe('<ExecutionActions /> tests', () => {
           params={pathParams as any}
           executionStatus="Expired"
           refetch={jest.fn()}
+          source="executions"
           showEditButton={false}
         />
       </TestWrapper>

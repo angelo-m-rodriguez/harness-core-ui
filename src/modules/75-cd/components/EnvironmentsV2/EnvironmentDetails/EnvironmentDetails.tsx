@@ -44,12 +44,14 @@ import type { YamlBuilderHandlerBinding } from '@common/interfaces/YAMLBuilderPr
 import { useQueryParams, useUpdateQueryParams } from '@common/hooks'
 import { IdentifierSchema, NameSchema } from '@common/utils/Validation'
 import { yamlParse, yamlStringify } from '@common/utils/YamlHelperMethods'
+import { PipelineContextType } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 
 import { PageHeaderTitle, PageHeaderToolbar } from './EnvironmentDetailsPageHeader'
 import EnvironmentConfiguration from './EnvironmentConfiguration/EnvironmentConfiguration'
 import { ServiceOverrides } from './ServiceOverrides/ServiceOverrides'
 import InfrastructureDefinition from './InfrastructureDefinition/InfrastructureDefinition'
 import { EnvironmentDetailsTab } from '../utils'
+import GitOpsCluster from './GitOpsCluster/GitOpsCluster'
 
 import css from './EnvironmentDetails.module.scss'
 
@@ -225,6 +227,8 @@ export default function EnvironmentDetails() {
                             setYamlHandler={setYamlHandler}
                             isModified={isModified}
                             data={data}
+                            isEdit
+                            context={PipelineContextType.Standalone}
                           />
                         )
                       },
@@ -232,7 +236,7 @@ export default function EnvironmentDetails() {
                         id: EnvironmentDetailsTab.SERVICE_OVERRIDES,
                         title: (
                           <Text font={{ size: 'normal' }} color={Color.BLACK}>
-                            {getString('cd.serviceOverrides')}
+                            {getString('cd.serviceOverrides.label')}
                           </Text>
                         ),
                         panel: <ServiceOverrides />
@@ -245,6 +249,15 @@ export default function EnvironmentDetails() {
                           </Text>
                         ),
                         panel: <InfrastructureDefinition />
+                      },
+                      {
+                        id: EnvironmentDetailsTab.GITOPS,
+                        title: (
+                          <Text font={{ size: 'normal' }} color={Color.BLACK}>
+                            {getString('cd.gitOpsCluster')}
+                          </Text>
+                        ),
+                        panel: <GitOpsCluster envRef={identifier} />
                       }
                     ]}
                   >

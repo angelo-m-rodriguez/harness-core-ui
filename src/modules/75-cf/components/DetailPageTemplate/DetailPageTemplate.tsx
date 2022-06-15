@@ -88,7 +88,9 @@ export const DetailPageTemplate: React.FC<DetailPageTemplateProps> = ({
         }
       />
       {toolbar && <Page.SubHeader className={css.toolbar}>{toolbar}</Page.SubHeader>}
-      <div className={css.content}>{children}</div>
+      <div data-name="page-body" className={css.content}>
+        {children}
+      </div>
       {footer && <footer className={css.footer}>{footer}</footer>}
     </main>
   )

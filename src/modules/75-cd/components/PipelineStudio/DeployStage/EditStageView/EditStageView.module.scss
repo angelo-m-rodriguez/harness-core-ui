@@ -24,3 +24,10 @@
 .nameIdDescriptionTags {
   margin-bottom: 0px !important;
 }
+.deploymentType {
+  margin-bottom: var(--spacing-medium);
+}
+.gitOpsCheck {
+  color: var(--grey-700) !important;
+  font-size: var(--font-size-small) !important;
+}

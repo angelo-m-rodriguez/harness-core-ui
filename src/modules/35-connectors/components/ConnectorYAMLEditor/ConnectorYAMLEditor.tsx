@@ -44,8 +44,11 @@ import {
   UseSaveToGitDialogReturn
 } from '@common/modals/SaveToGitDialog/useSaveToGitDialog'
 import type { SaveToGitFormInterface } from '@common/components/SaveToGitForm/SaveToGitForm'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { doesGovernanceHasErrorOrWarning } from '@governance/utils'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import css from './ConnectorYAMLEditor.module.scss'
 
 interface ConnectorYAMLEditorProp {
@@ -172,10 +175,9 @@ const ConnectorYAMLEditor: React.FC<ConnectorYAMLEditorProp> = props => {
   const { mutate: updateConnector, loading: updating } = useUpdateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal, doesGovernanceHasError } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
 
   const { openSaveToGitDialog } = useSaveToGitDialog<Connector>({
     onSuccess: (
@@ -250,17 +252,31 @@ const ConnectorYAMLEditor: React.FC<ConnectorYAMLEditorProp> = props => {
           baseBranch: responsedata.gitDetails?.branch
         }
       })
-      const hasAnyGovernnanceError = doesGovernanceHasError(response)
-      const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-      if (response.status === 'SUCCESS' && response?.data?.connector && !hasAnyGovernnanceError) {
-        setEnableEdit(false)
+      let { governanceMetaDataHasError, governanceMetaDataHasWarning } = doesGovernanceHasErrorOrWarning(
+        response.data?.governanceMetadata
+      )
+      if (!opaFlagEnabled) {
+        governanceMetaDataHasError = false
+        governanceMetaDataHasWarning = false
+      }
+      if (opaFlagEnabled && response.data?.governanceMetadata) {
+        conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+          setEnableEdit(false)
+          refetchConnector()
+        })
+      }
+      if (response.status === 'SUCCESS' && response?.data?.connector && !governanceMetaDataHasError) {
+        if (!governanceMetaDataHasWarning) {
+          setEnableEdit(false)
+        }
         setConnector(response?.data?.connector)
         setConnectorForYaml(response?.data?.connector)
       }
+
       return {
-        status: !hasAnyGovernnanceError ? response.status : 'FAILURE',
+        status: !governanceMetaDataHasError ? response.status : 'FAILURE',
         nextCallback: async () => {
-          if (canGoToNextStep) {
+          if (!governanceMetaDataHasError && !governanceMetaDataHasWarning) {
             refetchConnector()
           }
         },

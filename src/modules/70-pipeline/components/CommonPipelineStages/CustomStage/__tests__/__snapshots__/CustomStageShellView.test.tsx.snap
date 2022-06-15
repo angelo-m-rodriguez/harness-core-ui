@@ -235,11 +235,16 @@ exports[`Custom stage shell view Setup shell view tests: Overview Tab 1`] = `
                         <div
                           class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main InputWithIdentifier--txtIdContainer"
                         >
-                          <p
-                            class="StyledProps--font StyledProps--main"
+                          <div
+                            class="Text--withDocsTooltip"
+                            data-tooltip-id="universalInputNameWithId"
                           >
-                            Id
-                          </p>
+                            <p
+                              class="StyledProps--font StyledProps--main"
+                            >
+                              Id
+                            </p>
+                          </div>
                           <p
                             class="StyledProps--font StyledProps--main"
                           >
@@ -685,11 +690,16 @@ exports[`Custom stage shell view readonly view should work: readonly view custom
                         <div
                           class="Layout--horizontal Layout--layout-spacing-xsmall StyledProps--main InputWithIdentifier--txtIdContainer"
                         >
-                          <p
-                            class="StyledProps--font StyledProps--main"
+                          <div
+                            class="Text--withDocsTooltip"
+                            data-tooltip-id="universalInputNameWithId"
                           >
-                            Id
-                          </p>
+                            <p
+                              class="StyledProps--font StyledProps--main"
+                            >
+                              Id
+                            </p>
+                          </div>
                           <p
                             class="StyledProps--font StyledProps--main"
                           >

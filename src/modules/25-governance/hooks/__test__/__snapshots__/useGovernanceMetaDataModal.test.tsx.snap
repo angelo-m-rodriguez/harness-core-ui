@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Governance Modal Test should work as expected 1`] = `
+<div>
+  <span>
+    has Error
+  </span>
+  <button
+    class="bp3-button Button--button StyledProps--font StyledProps--main governanceBtn Button--with-current-color"
+    type="button"
+  >
+    <span
+      class="bp3-button-text"
+    >
+      governanceBtn
+    </span>
+  </button>
+</div>
+`;
+
+exports[`Governance Modal Test should work as expected 2`] = `
+<div
+  class="bp3-dialog Dialog--dialog"
+  style="width: 70%; height: 600px;"
+>
+  <span
+    class="bp3-icon StyledProps--main Dialog--close"
+    data-icon="Stroke"
+  >
+    <svg
+      fill="none"
+      height="15"
+      width="15"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1 .8l6 6 6-6-12 12 6-6 6 6"
+        stroke="#8F90A6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <div
+    class="StyledProps--font StyledProps--main Dialog--children StyledProps--padding-none"
+  >
+    <div>
+      governance dialog
+    </div>
+  </div>
+  <footer />
+</div>
+`;
+
+exports[`Governance Modal Test should work as expected 3`] = `
+<div>
+  <span>
+    next step
+  </span>
+  <span>
+    has Error
+  </span>
+  <button
+    class="bp3-button Button--button StyledProps--font StyledProps--main governanceBtn Button--with-current-color"
+    type="button"
+  >
+    <span
+      class="bp3-button-text"
+    >
+      governanceBtn
+    </span>
+  </button>
+</div>
+`;

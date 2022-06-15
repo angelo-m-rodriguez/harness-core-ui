@@ -23,7 +23,7 @@ exports[`<ClonePipelineForm /> tests snapshot test 1`] = `
             >
               <div
                 class="Text--withDocsTooltip"
-                data-tooltip-id="clone-pipeline_identifier"
+                data-tooltip-id="universalInputNameWithId"
               >
                 <p
                   class="StyledProps--font StyledProps--main"

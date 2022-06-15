@@ -15,10 +15,11 @@ interface AppDynamicsHealthSource {
   data: any
   onSubmit: (formdata: any, UpdatedHealthSource: UpdatedHealthSource) => Promise<void>
   isTemplate?: boolean
+  expressions?: string[]
 }
 
 export default function AppDHealthSourceContainer(props: AppDynamicsHealthSource): JSX.Element {
-  const { data: sourceData, onSubmit, isTemplate } = props
+  const { data: sourceData, onSubmit, isTemplate, expressions } = props
   const { onPrevious } = useContext(SetupSourceTabsContext)
 
   const handleSubmit = useCallback(
@@ -36,6 +37,7 @@ export default function AppDHealthSourceContainer(props: AppDynamicsHealthSource
         onSubmit={handleSubmit}
         onPrevious={() => onPrevious(sourceData)}
         isTemplate={isTemplate}
+        expressions={expressions}
       />
     </>
   )

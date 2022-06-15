@@ -13,7 +13,7 @@ import css from './ModuleRenderer.module.scss'
 
 const DefaultRenderer: React.FC = () => {
   const { getString } = useStrings()
-  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED } = useFeatureFlags()
+  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED, SECURITY } = useFeatureFlags()
 
   return (
     <Layout.Vertical padding={{ top: 'xlarge' }} className={css.started}>
@@ -26,6 +26,7 @@ const DefaultRenderer: React.FC = () => {
         {CFNG_ENABLED ? <Icon name="cf-main" size={20} /> : null}
         {CENG_ENABLED ? <Icon name="ce-main" size={20} /> : null}
         {CVNG_ENABLED ? <Icon name="cv-main" size={20} /> : null}
+        {SECURITY ? <Icon name="sto-color-filled" size={20} /> : null}
       </Layout.Horizontal>
     </Layout.Vertical>
   )

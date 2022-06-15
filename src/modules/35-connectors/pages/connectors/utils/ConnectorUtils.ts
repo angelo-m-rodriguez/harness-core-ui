@@ -1154,6 +1154,36 @@ export const buildHelmPayload = (formData: FormData) => {
   return { connector: savedData }
 }
 
+export const buildOCIHelmPayload = (formData: FormData) => {
+  const savedData = {
+    name: formData.name,
+    description: formData.description,
+    identifier: formData.identifier,
+    projectIdentifier: formData.projectIdentifier,
+    orgIdentifier: formData.orgIdentifier,
+    tags: formData.tags,
+    type: Connectors.OciHelmRepo,
+    spec: {
+      ...(formData?.delegateSelectors ? { delegateSelectors: formData.delegateSelectors } : {}),
+      helmRepoUrl: formData.helmRepoUrl,
+      auth:
+        formData.authType === AuthTypes.USER_PASSWORD
+          ? {
+              type: formData.authType,
+              spec: {
+                username: formData.username.type === ValueType.TEXT ? formData.username.value : undefined,
+                usernameRef: formData.username.type === ValueType.ENCRYPTED ? formData.username.value : undefined,
+                passwordRef: formData.password.referenceString
+              }
+            }
+          : {
+              type: formData.authType
+            }
+    }
+  }
+  return { connector: savedData }
+}
+
 export const buildPdcPayload = (formData: FormData) => {
   const savedData = {
     name: formData.name,
@@ -1845,6 +1875,8 @@ export const getIconByType = (type: ConnectorInfoDTO['type'] | undefined): IconN
       return 'service-github'
     case Connectors.HttpHelmRepo:
       return 'service-helm'
+    case Connectors.OciHelmRepo:
+      return 'helm-oci'
     case Connectors.GITHUB:
       return 'github'
     case Connectors.GITLAB:
@@ -1965,6 +1997,8 @@ export const getConnectorDisplayName = (type: string) => {
       return 'Azure Vault'
     case Connectors.HttpHelmRepo:
       return 'HTTP Helm Repo'
+    case Connectors.OciHelmRepo:
+      return 'OCI Helm Registry'
     case Connectors.AWSSM:
       return 'AWS Secret Manager'
     case Connectors.AWS_KMS:

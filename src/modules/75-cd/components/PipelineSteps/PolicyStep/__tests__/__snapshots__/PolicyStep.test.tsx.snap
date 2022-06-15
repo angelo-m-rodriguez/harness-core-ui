@@ -16,7 +16,7 @@ exports[`Test Policy Step render edit view as edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="policyStepForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -580,7 +580,7 @@ exports[`Test Policy Step render edit view as new step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="policyStepForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"
@@ -1005,7 +1005,7 @@ exports[`Test Policy Step render runtime inputs in edit step 1`] = `
         >
           <div
             class="Text--withDocsTooltip"
-            data-tooltip-id="policyStepForm_identifier"
+            data-tooltip-id="universalInputNameWithId"
           >
             <p
               class="StyledProps--font StyledProps--main"

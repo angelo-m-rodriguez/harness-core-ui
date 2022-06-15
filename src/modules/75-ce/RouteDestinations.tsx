@@ -238,7 +238,7 @@ const CERoutes: React.FC = () => {
         <RouteWithLayout
           licenseRedirectData={licenseRedirectData}
           sidebarProps={CESideNavProps}
-          path={routes.toCECORules({ ...accountPathProps, ...projectPathProps })}
+          path={routes.toCECORules({ ...accountPathProps, ...projectPathProps, params: '' })}
           exact
           pageName={PAGE_NAME.CECODashboardPage}
         >

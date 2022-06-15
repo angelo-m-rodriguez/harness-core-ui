@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom'
 import { parse } from 'yaml'
 import { defaultTo } from 'lodash-es'
 import type { FormikProps } from 'formik'
+import cx from 'classnames'
 
 import {
   Container,
@@ -35,6 +36,7 @@ import type { YamlBuilderHandlerBinding, YamlBuilderProps } from '@common/interf
 
 import { CustomVariablesEditableStage } from '@pipeline/components/PipelineSteps/Steps/CustomVariables/CustomVariablesEditableStage'
 import type { AllNGVariables } from '@pipeline/utils/types'
+import { PipelineContextType } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 
 import css from '../EnvironmentDetails.module.scss'
 
@@ -59,6 +61,8 @@ export interface EnvironmentConfigurationProps {
   setYamlHandler: Dispatch<SetStateAction<YamlBuilderHandlerBinding | undefined>>
   isModified: boolean
   data: ResponseEnvironmentResponse | null
+  isEdit: boolean
+  context?: PipelineContextType
 }
 
 export default function EnvironmentConfiguration({
@@ -68,7 +72,9 @@ export default function EnvironmentConfiguration({
   yamlHandler,
   setYamlHandler,
   isModified,
-  data
+  data,
+  isEdit,
+  context
 }: EnvironmentConfigurationProps) {
   const { getString } = useStrings()
   const { showError } = useToaster()
@@ -133,9 +139,12 @@ export default function EnvironmentConfiguration({
       </Layout.Horizontal>
       {selectedView === SelectedView.VISUAL ? (
         <>
-          <Card className={css.sectionCard} id="variables">
+          <Card
+            className={cx(css.sectionCard, { [css.fullWidth]: context !== PipelineContextType.Standalone })}
+            id="variables"
+          >
             <Container width={'40%'} padding={{ top: 'small' }} margin={{ bottom: 'large' }}>
-              <NameIdDescriptionTags formikProps={formikProps} identifierProps={{ isIdentifierEditable: false }} />
+              <NameIdDescriptionTags formikProps={formikProps} identifierProps={{ isIdentifierEditable: !isEdit }} />
             </Container>
             <Text
               color={Color.GREY_450}
@@ -160,7 +169,10 @@ export default function EnvironmentConfiguration({
                 }
                 details={
                   <Layout.Vertical spacing="medium" margin={{ bottom: 'small' }}>
-                    <Card className={css.sectionCard} id="variables">
+                    <Card
+                      className={cx(css.sectionCard, { [css.fullWidth]: context !== PipelineContextType.Standalone })}
+                      id="variables"
+                    >
                       <Text color={Color.GREY_700} margin={{ bottom: 'small' }} font={{ weight: 'bold' }}>
                         {getString('common.variables')}
                       </Text>

@@ -145,7 +145,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for App Dynam
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormAppDynamics_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -525,7 +525,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Artifacto
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormArtifactory_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -918,7 +918,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for BITBUCKET
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormBitbucket_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -1300,7 +1300,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for DOCKER 1`
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormDockerRegistry_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -1735,7 +1735,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for GCP 1`] =
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormGcp_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -2132,7 +2132,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for GCP KMS 1
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormGcpKms_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -2524,7 +2524,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Git 1`] =
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormGit_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -2915,7 +2915,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Github 1`
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormGithub_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -3331,7 +3331,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Gitlab 1`
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormGitlab_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -3749,7 +3749,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Jira 1`] 
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormJira_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -4142,7 +4142,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Nexus 1`]
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormNexus_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -4514,7 +4514,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Prometheu
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormPrometheus_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -4905,7 +4905,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for Splunk 1`
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormSplunk_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -5298,7 +5298,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for VAULT 1`]
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormVault_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -5718,7 +5718,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for custom 1`
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormCustomHealth_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"
@@ -6105,7 +6105,7 @@ exports[`Create connector Wizard should open CreateConnectorWizard for k8 1`] = 
                           >
                             <div
                               class="Text--withDocsTooltip"
-                              data-tooltip-id="connectorDetailsStepFormK8sCluster_identifier"
+                              data-tooltip-id="universalInputNameWithId"
                             >
                               <p
                                 class="StyledProps--font StyledProps--main"

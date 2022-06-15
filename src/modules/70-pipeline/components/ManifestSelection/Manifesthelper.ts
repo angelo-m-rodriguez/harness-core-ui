@@ -49,6 +49,7 @@ export const ManifestStoreMap: { [key: string]: ManifestStores } = {
   GitLab: 'GitLab',
   Bitbucket: 'Bitbucket',
   Http: 'Http',
+  OciHelmChart: 'OciHelmChart',
   S3: 'S3',
   Gcs: 'Gcs',
   InheritFromManifest: 'InheritFromManifest',
@@ -78,7 +79,13 @@ export const manifestStoreTypes: Array<ManifestStores> = [
 export const ManifestTypetoStoreMap: Record<ManifestTypes, ManifestStores[]> = {
   K8sManifest: manifestStoreTypes,
   Values: [...manifestStoreTypes, ManifestStoreMap.InheritFromManifest],
-  HelmChart: [...manifestStoreTypes, ManifestStoreMap.Http, ManifestStoreMap.S3, ManifestStoreMap.Gcs],
+  HelmChart: [
+    ...manifestStoreTypes,
+    ManifestStoreMap.Http,
+    ManifestStoreMap.OciHelmChart,
+    ManifestStoreMap.S3,
+    ManifestStoreMap.Gcs
+  ],
   Kustomize: manifestStoreTypes,
   OpenshiftTemplate: manifestStoreTypes,
   OpenshiftParam: [...manifestStoreTypes, ManifestStoreMap.InheritFromManifest],
@@ -119,6 +126,7 @@ export const ManifestIconByType: Record<ManifestStores, IconName> = {
   GitLab: 'service-gotlab',
   Bitbucket: 'bitbucket',
   Http: 'service-helm',
+  OciHelmChart: 'helm-oci',
   S3: 'service-service-s3',
   Gcs: 'gcs-step',
   InheritFromManifest: 'custom-artifact',
@@ -131,6 +139,7 @@ export const ManifestStoreTitle: Record<ManifestStores, StringKeys> = {
   GitLab: 'common.repo_provider.gitlabLabel',
   Bitbucket: 'pipeline.manifestType.bitBucketLabel',
   Http: 'pipeline.manifestType.httpHelmRepoConnectorLabel',
+  OciHelmChart: 'pipeline.manifestType.ociHelmConnectorLabel',
   S3: 'connectors.S3',
   Gcs: 'connectors.GCS.fullName',
   InheritFromManifest: 'pipeline.manifestType.InheritFromManifest',
@@ -143,6 +152,7 @@ export const ManifestToConnectorMap: Record<ManifestStores | string, ConnectorIn
   GitLab: Connectors.GITLAB,
   Bitbucket: Connectors.BITBUCKET,
   Http: Connectors.HttpHelmRepo,
+  OciHelmChart: Connectors.OciHelmRepo,
   S3: Connectors.AWS,
   Gcs: Connectors.GCP
 }
@@ -156,6 +166,7 @@ export const ManifestToConnectorLabelMap: Record<
   GitLab: 'common.repo_provider.gitlabLabel',
   Bitbucket: 'pipeline.manifestType.bitBucketLabel',
   Http: 'connectors.title.helmConnector',
+  OciHelmChart: 'connectors.title.ociHelmConnector',
   S3: 'pipeline.manifestToConnectorLabelMap.AWSLabel',
   Gcs: 'common.gcp'
 }

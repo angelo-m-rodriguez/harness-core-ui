@@ -6,8 +6,10 @@
  */
 
 import React from 'react'
-
 import { Redirect, useParams } from 'react-router-dom'
+import type { SidebarContext } from '@common/navigation/SidebarProvider'
+import { PAGE_NAME } from '@common/pages/pageContext/PageName'
+import type { LicenseRedirectProps } from 'framework/LicenseStore/LicenseStoreContext'
 import { RouteWithLayout } from '@common/router'
 import routes from '@common/RouteDefinitions'
 import {
@@ -16,7 +18,8 @@ import {
   resourceGroupPathProps,
   userGroupPathProps,
   userPathProps,
-  serviceAccountProps
+  serviceAccountProps,
+  projectPathProps
 } from '@common/utils/routeUtils'
 
 import AccessControlPage from '@rbac/pages/AccessControl/AccessControlPage'
@@ -30,7 +33,12 @@ import { ResourceCategory, ResourceType } from '@rbac/interfaces/ResourceType'
 import UserGroupDetails from '@rbac/pages/UserGroupDetails/UserGroupDetails'
 import ResourceGroupDetails from '@rbac/pages/ResourceGroupDetails/ResourceGroupDetails'
 import RbacFactory from '@rbac/factories/RbacFactory'
-import type { AccountPathProps } from '@common/interfaces/RouteInterfaces'
+import type {
+  AccountPathProps,
+  ModulePathParams,
+  PipelineType,
+  ProjectPathProps
+} from '@common/interfaces/RouteInterfaces'
 import UserDetails from '@rbac/pages/UserDetails/UserDetails'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { AccountSideNavProps } from '@common/RouteDestinations'
@@ -39,7 +47,7 @@ import ServiceAccountDetails from '@rbac/pages/ServiceAccountDetails/ServiceAcco
 import ResourceGroupsResourceModalBody from '@rbac/components/ResourceGroupsRenderer/ResourceGroupsResourceModalBody'
 import ResourceGroupsResourceRenderer from '@rbac/components/ResourceGroupsRenderer/ResourceGroupsResourceRenderer'
 import UserGroupsResourceModalBody from '@rbac/components/UserGroupsRenderer/UserGroupsResourceModalBody'
-import UserGroupssResourceRenderer from '@rbac/components/UserGroupsRenderer/UserGroupsResourceRenderer'
+import UserGroupsResourceRenderer from '@rbac/components/UserGroupsRenderer/UserGroupsResourceRenderer'
 import AuditTrailFactory, { ResourceScope } from '@audit-trail/factories/AuditTrailFactory'
 import type { ResourceDTO } from 'services/audit'
 
@@ -75,7 +83,7 @@ RbacFactory.registerResourceTypeHandler(ResourceType.USERGROUP, {
   // eslint-disable-next-line react/display-name
   addResourceModalBody: props => <UserGroupsResourceModalBody {...props} />,
   // eslint-disable-next-line react/display-name
-  staticResourceRenderer: props => <UserGroupssResourceRenderer {...props} />
+  staticResourceRenderer: props => <UserGroupsResourceRenderer {...props} />
 })
 
 RbacFactory.registerResourceTypeHandler(ResourceType.RESOURCEGROUP, {
@@ -305,6 +313,129 @@ export default (
       sidebarProps={AccountSideNavProps}
       path={routes.toResourceGroupDetails({ ...accountPathProps, ...resourceGroupPathProps })}
       exact
+    >
+      <ResourceGroupDetails />
+    </RouteWithLayout>
+  </>
+)
+
+const RedirectToModuleAccessControlHome = (): React.ReactElement => {
+  const { accountId, projectIdentifier, orgIdentifier, module } = useParams<PipelineType<ProjectPathProps>>()
+
+  return <Redirect to={routes.toUsers({ accountId, projectIdentifier, orgIdentifier, module })} />
+}
+
+export const AccessControlRouteDestinations: React.FC<{
+  moduleParams: ModulePathParams
+  licenseRedirectData?: LicenseRedirectProps
+  sidebarProps?: SidebarContext
+}> = ({ moduleParams, licenseRedirectData, sidebarProps }) => (
+  <>
+    <RouteWithLayout
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toAccessControl({ ...projectPathProps, ...moduleParams })]}
+      exact
+    >
+      <RedirectToModuleAccessControlHome />
+    </RouteWithLayout>
+    <RouteWithLayout
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toUsers({ ...projectPathProps, ...moduleParams })]}
+      exact
+      pageName={PAGE_NAME.UsersPage}
+    >
+      <AccessControlPage>
+        <UsersPage />
+      </AccessControlPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toUserDetails({ ...projectPathProps, ...moduleParams, ...userPathProps })}
+      pageName={PAGE_NAME.UserDetails}
+    >
+      <UserDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toUserGroups({ ...projectPathProps, ...moduleParams })]}
+      pageName={PAGE_NAME.UserGroups}
+    >
+      <AccessControlPage>
+        <UserGroups />
+      </AccessControlPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toUserGroupDetails({ ...projectPathProps, ...moduleParams, ...userGroupPathProps })}
+      pageName={PAGE_NAME.UserGroupDetails}
+    >
+      <UserGroupDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toServiceAccounts({ ...projectPathProps, ...moduleParams })}
+      pageName={PAGE_NAME.ServiceAccountsPage}
+    >
+      <AccessControlPage>
+        <ServiceAccountsPage />
+      </AccessControlPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={routes.toServiceAccountDetails({ ...projectPathProps, ...moduleParams, ...serviceAccountProps })}
+      pageName={PAGE_NAME.ServiceAccountDetails}
+    >
+      <ServiceAccountDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toResourceGroups({ ...projectPathProps, ...moduleParams })]}
+      pageName={PAGE_NAME.ResourceGroups}
+    >
+      <AccessControlPage>
+        <ResourceGroups />
+      </AccessControlPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toRoles({ ...projectPathProps, ...moduleParams })]}
+      pageName={PAGE_NAME.Roles}
+    >
+      <AccessControlPage>
+        <Roles />
+      </AccessControlPage>
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toRoleDetails({ ...projectPathProps, ...moduleParams, ...rolePathProps })]}
+      pageName={PAGE_NAME.RoleDetails}
+    >
+      <RoleDetails />
+    </RouteWithLayout>
+    <RouteWithLayout
+      exact
+      licenseRedirectData={licenseRedirectData}
+      sidebarProps={sidebarProps}
+      path={[routes.toResourceGroupDetails({ ...projectPathProps, ...moduleParams, ...resourceGroupPathProps })]}
+      pageName={PAGE_NAME.ResourceGroupDetails}
     >
       <ResourceGroupDetails />
     </RouteWithLayout>

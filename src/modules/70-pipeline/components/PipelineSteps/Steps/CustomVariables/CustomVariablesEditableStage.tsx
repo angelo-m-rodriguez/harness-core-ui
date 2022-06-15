@@ -75,7 +75,6 @@ export function CustomVariablesEditableStage(props: CustomVariableEditableProps)
   }
 
   const { subscribeForm, unSubscribeForm } = React.useContext(StageErrorContext)
-
   const formikRef = React.useRef<FormikProps<unknown> | null>(null)
 
   React.useEffect(() => {

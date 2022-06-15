@@ -22,11 +22,15 @@ import {
   mockedCreatedMonitoredService
 } from './ContinousVerificationMocks'
 import { getSpecYamlData } from '../utils'
+import { MONITORED_SERVICE_TYPE } from '../components/ContinousVerificationWidget/components/ContinousVerificationWidgetSections/components/SelectMonitoredServiceType/SelectMonitoredServiceType.constants'
 
 jest.mock('services/cv', () => ({
   useGetMonitoredServiceFromServiceAndEnvironment: jest
     .fn()
     .mockImplementation(() => ({ loading: false, data: mockedMonitoredServiceAndHealthSources, error: null })),
+  useGetAllMonitoredServicesWithTimeSeriesHealthSources: jest
+    .fn()
+    .mockImplementation(() => ({ loading: false, data: {}, error: null })),
   useCreateDefaultMonitoredService: jest.fn().mockImplementation(() => ({
     error: null,
     loading: false,
@@ -62,13 +66,6 @@ describe('Test ContinousVerificationStep Step', () => {
     jest.clearAllMocks()
   })
 
-  test('should render editView when a new step is added', () => {
-    const { container } = render(
-      <TestStepWidget initialValues={{}} type={StepType.Verify} stepViewType={StepViewType.Edit} />
-    )
-    expect(container).toMatchSnapshot()
-  })
-
   test('should render editView when current step is being edited', () => {
     const initialValues = {
       name: 'CV Step',
@@ -79,6 +76,10 @@ describe('Test ContinousVerificationStep Step', () => {
         monitoredServiceRef: 'monitored-service',
         type: 'Rolling',
         healthSources: [],
+        monitoredService: {
+          type: MONITORED_SERVICE_TYPE.DEFAULT,
+          spec: {}
+        },
         spec: {
           sensitivity: 'Low',
           duration: '15min',
@@ -88,14 +89,6 @@ describe('Test ContinousVerificationStep Step', () => {
         }
       }
     }
-    const { container } = render(
-      <TestStepWidget initialValues={initialValues} type={StepType.Verify} stepViewType={StepViewType.Edit} />
-    )
-    expect(container).toMatchSnapshot()
-  })
-
-  test('should render editView when current step is being edited and runtime inputs are passed', () => {
-    const initialValues = verifyStepInitialValuesWithRunTimeFields
     const { container } = render(
       <TestStepWidget initialValues={initialValues} type={StepType.Verify} stepViewType={StepViewType.Edit} />
     )

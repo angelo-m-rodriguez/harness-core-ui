@@ -27,8 +27,10 @@ import {
   useUpdateConnector
 } from 'services/cd-ng'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
+import { connectorGovernanceModalProps } from '@connectors/utils/utils'
 import { FeatureFlag } from '@common/featureFlags'
-import { useConnectorGovernanceModal } from '@connectors/hooks/useConnectorGovernanceModal'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
 import css from './CreateCeAzureConnector.module.scss'
 
 interface OverviewDetails {
@@ -61,10 +63,9 @@ const AzureBillingInfo: React.FC<StepProps<StepSecretManagerProps> & AzureBillin
   const { mutate: updateConnector } = useUpdateConnector({
     queryParams: { accountIdentifier: accountId }
   })
-  const { hideOrShowGovernanceErrorModal } = useConnectorGovernanceModal({
-    errorOutOnGovernanceWarning: false,
-    featureFlag: FeatureFlag.OPA_CONNECTOR_GOVERNANCE
-  })
+  const opaFlagEnabled = useFeatureFlag(FeatureFlag.OPA_CONNECTOR_GOVERNANCE)
+
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal(connectorGovernanceModalProps())
 
   const handleSubmit = async (values: OverviewDetails): Promise<void> => {
     setIsSaving(true)
@@ -84,10 +85,14 @@ const AzureBillingInfo: React.FC<StepProps<StepSecretManagerProps> & AzureBillin
       const response = props.isEditMode
         ? await updateConnector(connector)
         : await createConnector(connector as ConnectorRequestBody)
-      const { canGoToNextStep } = await hideOrShowGovernanceErrorModal(response)
-      if (canGoToNextStep) {
+      const onSucessCreateOrUpdateNextStep = () => {
         props.onSuccess?.(response.data as ConnectorRequestBody)
         props.nextStep?.({ ...connectorDetails })
+      }
+      if (opaFlagEnabled && response.data?.governanceMetadata) {
+        conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, onSucessCreateOrUpdateNextStep)
+      } else {
+        onSucessCreateOrUpdateNextStep()
       }
     } catch (e) {
       modalErrorHandler?.showDanger(getRBACErrorMessage(e))

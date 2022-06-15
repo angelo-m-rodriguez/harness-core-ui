@@ -5,16 +5,22 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
+import React from 'react'
 import type { Color } from '@harness/design-system'
 import type { TemplateType } from '@templates-library/utils/templatesUtils'
 import type { TemplateFormRef } from '@templates-library/components/TemplateStudio/TemplateStudio'
+import type { TemplateInputsProps } from '../TemplateInputs/TemplateInputs'
 
 export interface TemplateProps<T, U = unknown> {
   customTemplateProps?: U
   formikRef?: TemplateFormRef<T>
 }
 
-export abstract class Template<T> {
+export interface TemplateInputSet {
+  renderTemplateInputsForm: (_props: TemplateInputsProps & { accountId: string }) => JSX.Element
+}
+
+export abstract class Template<T> implements TemplateInputSet {
   protected abstract type: TemplateType
   protected abstract name: string
   protected abstract defaultValues: T
@@ -33,4 +39,8 @@ export abstract class Template<T> {
   }
 
   abstract renderTemplateCanvas(props: TemplateProps<T>): JSX.Element
+
+  renderTemplateInputsForm(_props: TemplateInputsProps & { accountId: string }) {
+    return <> </>
+  }
 }

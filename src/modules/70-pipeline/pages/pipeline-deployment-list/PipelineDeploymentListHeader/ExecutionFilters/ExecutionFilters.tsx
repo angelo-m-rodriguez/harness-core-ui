@@ -127,7 +127,7 @@ export function ExecutionFilters(): React.ReactElement {
           filterVisibility: undefined
         }
       : null
-  const { pipelineName, status, moduleProperties } =
+  const { pipelineName, status, moduleProperties, timeRange } =
     (appliedFilter?.filterProperties as PipelineExecutionFilterProperties) || {}
   const { name = '', filterVisibility, identifier = '' } = appliedFilter || {}
   const { ci, cd } = moduleProperties || {}
@@ -278,6 +278,7 @@ export function ExecutionFilters(): React.ReactElement {
             status: getMultiSelectFormOptions(status),
             branch,
             tag,
+            timeRange,
             sourceBranch,
             targetBranch,
             buildType,

@@ -14,14 +14,17 @@ import * as pipelineNg from 'services/pipeline-ng'
 import { PipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import { TestWrapper } from '@common/utils/testUtils'
 import { useStrings } from 'framework/strings'
+import * as hooks from '@common/hooks'
 import { branchStatusMock, gitConfigs, sourceCodeManagers } from '@connectors/mocks/mock'
 import {
   GetTemplateFromPipelineResponse,
   GetTemplateStageVariablesFromPipelineResponse,
+  GetTemplateStageVariablesFromPipelineResponse2,
   GetTemplateFromPipelineResponseEmpty,
   GetMergeInputSetFromPipelineTemplateWithListInputResponse,
   ConnectorResponse,
   GetInputSetsResponse,
+  GetInputSetsResponse2,
   GetEnvironmentList,
   GetTemplateFromPipelineResponseArtifacts
 } from './sharedMockResponses'
@@ -30,6 +33,12 @@ import WebhookPipelineInputPanel from '../views/WebhookPipelineInputPanel'
 jest.mock('@common/components/YAMLBuilder/YamlBuilder')
 
 jest.mock('@common/utils/YamlUtils', () => ({}))
+
+jest.mock('@common/hooks', () => ({
+  ...(jest.requireActual('@common/hooks') as any),
+
+  useMutateAsGet: jest.fn()
+}))
 
 const getListOfBranchesWithStatus = jest.fn(() => Promise.resolve(branchStatusMock))
 const getListGitSync = jest.fn(() => Promise.resolve(gitConfigs))
@@ -91,12 +100,10 @@ function WrapperComponent(): JSX.Element {
 describe('WebhookPipelineInputPanel Triggers tests', () => {
   describe('Renders/snapshots', () => {
     test('Initial Render - Pipeline Input Panel with no inputs', async () => {
-      jest.spyOn(pipelineNg, 'useGetTemplateFromPipeline').mockReturnValue(GetTemplateFromPipelineResponseEmpty as any)
-
+      jest.spyOn(hooks, 'useMutateAsGet').mockReturnValue(GetTemplateFromPipelineResponseEmpty as any)
       jest.spyOn(pipelineNg, 'useGetMergeInputSetFromPipelineTemplateWithListInput').mockReturnValue({
         mutate: jest.fn().mockReturnValue(GetMergeInputSetFromPipelineTemplateWithListInputResponse) as unknown
       } as UseMutateReturn<any, any, any, any, any>)
-
       jest.spyOn(pipelineNg, 'useGetInputSetsListForPipeline').mockReturnValue(GetInputSetsResponse as any)
 
       const { container } = render(<WrapperComponent />)
@@ -105,14 +112,10 @@ describe('WebhookPipelineInputPanel Triggers tests', () => {
     })
 
     test('Initial Render - Pipeline Input Panel with pipeline artifact runtime inputs', async () => {
-      jest
-        .spyOn(pipelineNg, 'useGetTemplateFromPipeline')
-        .mockReturnValue(GetTemplateFromPipelineResponseArtifacts as any)
-
+      jest.spyOn(hooks, 'useMutateAsGet').mockReturnValue(GetTemplateFromPipelineResponseArtifacts as any)
       jest.spyOn(pipelineNg, 'useGetMergeInputSetFromPipelineTemplateWithListInput').mockReturnValue({
         mutate: jest.fn().mockReturnValue(GetMergeInputSetFromPipelineTemplateWithListInputResponse) as unknown
       } as UseMutateReturn<any, any, any, any, any>)
-
       jest.spyOn(pipelineNg, 'useGetInputSetsListForPipeline').mockReturnValue(GetInputSetsResponse as any)
       const { container } = render(<WrapperComponent />)
       await waitFor(() => expect(result.current.getString('triggers.pipelineInputLabel')).toBeTruthy())
@@ -123,12 +126,10 @@ describe('WebhookPipelineInputPanel Triggers tests', () => {
     })
 
     test('Initial Render - Pipeline Input Panel with pipeline variable runtime inputs', async () => {
-      jest.spyOn(pipelineNg, 'useGetTemplateFromPipeline').mockReturnValue(GetTemplateFromPipelineResponse as any)
-
+      jest.spyOn(hooks, 'useMutateAsGet').mockReturnValue(GetTemplateFromPipelineResponse as any)
       jest.spyOn(pipelineNg, 'useGetMergeInputSetFromPipelineTemplateWithListInput').mockReturnValue({
         mutate: jest.fn().mockReturnValue(GetMergeInputSetFromPipelineTemplateWithListInputResponse) as unknown
       } as UseMutateReturn<any, any, any, any, any>)
-
       jest.spyOn(pipelineNg, 'useGetInputSetsListForPipeline').mockReturnValue(GetInputSetsResponse as any)
       const { container } = render(<WrapperComponent />)
       await waitFor(() => expect(result.current.getString('triggers.pipelineInputLabel')).toBeTruthy())
@@ -146,10 +147,7 @@ describe('WebhookPipelineInputPanel Triggers tests', () => {
     })
 
     test('Initial Render - Pipeline Input Panel with two runtime inputs', async () => {
-      jest
-        .spyOn(pipelineNg, 'useGetTemplateFromPipeline')
-        .mockReturnValue(GetTemplateStageVariablesFromPipelineResponse as any)
-
+      jest.spyOn(hooks, 'useMutateAsGet').mockReturnValue(GetTemplateStageVariablesFromPipelineResponse as any)
       jest.spyOn(pipelineNg, 'useGetMergeInputSetFromPipelineTemplateWithListInput').mockReturnValue({
         mutate: jest.fn().mockReturnValue(GetMergeInputSetFromPipelineTemplateWithListInputResponse) as unknown
       } as UseMutateReturn<any, any, any, any, any>)
@@ -161,6 +159,20 @@ describe('WebhookPipelineInputPanel Triggers tests', () => {
         queryByAttribute('placeholder', container, 'pipeline.infraSpecifications.namespacePlaceholder')
       )
       expect(container).toMatchSnapshot()
+    })
+
+    test('Initial Render - CI Codebase Webhook Custom Trigger renders default trigger branch value', async () => {
+      jest.spyOn(hooks, 'useMutateAsGet').mockReturnValue(GetTemplateStageVariablesFromPipelineResponse2 as any)
+      jest.spyOn(pipelineNg, 'useGetInputSetsListForPipeline').mockReturnValue(GetInputSetsResponse2 as any)
+      const { container } = render(<WrapperComponent />)
+      await waitFor(() => expect(result.current.getString('triggers.pipelineInputLabel')).toBeTruthy())
+      await waitFor(() =>
+        queryByAttribute('placeholder', container, 'pipeline.infraSpecifications.namespacePlaceholder')
+      )
+      expect(container).toMatchSnapshot()
+      expect(container.querySelector('[name="pipeline.properties.ci.codebase.build.spec.branch"]')).toHaveValue(
+        '<+trigger.branch>'
+      )
     })
   })
 })

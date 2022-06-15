@@ -108,7 +108,20 @@ export function PipelineDeploymentListHeader(props: PipelineDeploymentListHeader
         <Checkbox
           font={{ size: 'small', weight: 'semi-bold' }}
           color={Color.GREY_800}
-          label={getString(module === 'ci' ? 'pipeline.myBuildsText' : 'pipeline.myDeploymentsText')}
+          label={getString(
+            (() => {
+              switch (module) {
+                case 'ci':
+                  return 'pipeline.myBuildsText'
+                case 'cd':
+                  return 'pipeline.myDeploymentsText'
+                case 'sto':
+                  return 'pipeline.mySecurityTestsText'
+                default:
+                  return 'pipeline.myPipelineRunsText'
+              }
+            })()
+          )}
           checked={queryParams.myDeployments}
           onChange={e => handleMyDeployments(e.currentTarget.checked)}
           className={cx(css.myDeploymentsCheckbox, { [css.selected]: queryParams.myDeployments })}

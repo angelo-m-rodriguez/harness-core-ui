@@ -197,6 +197,7 @@ export default function RunModalHeader(props: RunModalHeaderProps): React.ReactE
             repoName={pipelineResponse?.data?.gitDetails?.repoName}
             branch={pipelineResponse?.data?.gitDetails?.branch}
             filePath={pipelineResponse?.data?.gitDetails?.filePath}
+            fileUrl={pipelineResponse?.data?.gitDetails?.fileUrl}
             flags={{ readOnly: true }}
           />
         </div>
