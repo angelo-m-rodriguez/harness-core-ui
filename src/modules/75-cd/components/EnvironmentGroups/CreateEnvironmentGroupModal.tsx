@@ -48,6 +48,7 @@ import css from './EnvironmentGroups.module.scss'
 
 interface CreateEnvironmentGroupModalProps {
   closeModal: () => void
+  onCreateOrUpdate?: (values: EnvironmentGroupResponseDTO) => void
 }
 
 const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
@@ -63,7 +64,10 @@ const yamlBuilderReadOnlyModeProps: YamlBuilderProps = {
   }
 }
 
-export default function CreateEnvironmentGroupModal({ closeModal }: CreateEnvironmentGroupModalProps): JSX.Element {
+export default function CreateEnvironmentGroupModal({
+  closeModal,
+  onCreateOrUpdate
+}: CreateEnvironmentGroupModalProps): JSX.Element {
   const { orgIdentifier, projectIdentifier, accountId, module } = useParams<ProjectPathProps & ModulePathParams>()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const formikRef = useRef<FormikProps<EnvironmentGroupResponseDTO>>()
@@ -110,16 +114,20 @@ export default function CreateEnvironmentGroupModal({ closeModal }: CreateEnviro
       if (response.status === 'SUCCESS') {
         clear()
         showSuccess(getString('common.environmentGroup.created'))
-        history.push(
-          routes.toEnvironmentGroupDetails({
-            orgIdentifier,
-            projectIdentifier,
-            accountId,
-            module,
-            environmentGroupIdentifier: defaultTo(/* istanbul ignore next */ response.data?.envGroup?.identifier, ''),
-            sectionId: EnvironmentGroupDetailsTab.ENVIRONMENTS
-          })
-        )
+        if (onCreateOrUpdate) {
+          onCreateOrUpdate(defaultTo(response.data?.envGroup, {}))
+        } else {
+          history.push(
+            routes.toEnvironmentGroupDetails({
+              orgIdentifier,
+              projectIdentifier,
+              accountId,
+              module,
+              environmentGroupIdentifier: defaultTo(/* istanbul ignore next */ response.data?.envGroup?.identifier, ''),
+              sectionId: EnvironmentGroupDetailsTab.ENVIRONMENTS
+            })
+          )
+        }
       } else {
         throw response
       }

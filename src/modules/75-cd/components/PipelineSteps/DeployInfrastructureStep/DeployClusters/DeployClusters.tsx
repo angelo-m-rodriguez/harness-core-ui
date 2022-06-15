@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { defaultTo, get, isNil } from 'lodash-es'
+import { defaultTo, get, isEmpty, isNil } from 'lodash-es'
 import type { FormikProps } from 'formik'
 
 import {
@@ -27,13 +27,11 @@ import type { PipelinePathProps } from '@common/interfaces/RouteInterfaces'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
-
-import type { PipelineInfrastructureV2 } from '../utils'
+import type { PipelineInfrastructureV2 } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
 interface DeployClusterProps {
-  formikRef: React.MutableRefObject<FormikProps<unknown> | null>
+  formikRef: React.MutableRefObject<FormikProps<PipelineInfrastructureV2> | null>
   readonly?: boolean
-  initialValues?: PipelineInfrastructureV2
   environmentIdentifier: string
   allowableTypes: MultiTypeInputType[]
 }
@@ -85,6 +83,19 @@ export default function DeployClusters({
       )
     }
   }, [clusters])
+
+  useEffect(() => {
+    if (!isEmpty(clustersSelectOptions) && !isNil(clustersSelectOptions) && formikRef.current?.values?.clusterRef) {
+      if (getMultiTypeFromValue(formikRef.current?.values?.clusterRef.ref) === MultiTypeInputType.FIXED) {
+        const existingClusters = clustersSelectOptions.filter(
+          infra => infra.value === formikRef.current?.values?.clusterRef.ref
+        )
+        if (existingClusters) {
+          formikRef.current?.setFieldValue('clusterRef', existingClusters)
+        }
+      }
+    }
+  }, [clustersSelectOptions])
 
   useEffect(() => {
     if (!isNil(clustersError)) {

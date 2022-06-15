@@ -8,18 +8,11 @@
 import type { FormikProps } from 'formik'
 import { isEmpty } from 'lodash-es'
 
-import { getMultiTypeFromValue, MultiTypeInputType, SelectOption } from '@harness/uicore'
-import type { EnvironmentResponseDTO, PipelineInfrastructure } from 'services/cd-ng'
+import { getMultiTypeFromValue, MultiTypeInputType } from '@harness/uicore'
+import type { EnvironmentResponseDTO } from 'services/cd-ng'
 
 import type { StepViewType } from '@pipeline/components/AbstractSteps/Step'
-
-export interface PipelineInfrastructureV2 extends PipelineInfrastructure {
-  environmentOrEnvGroupRef?: SelectOption
-  environmentGroup?: any
-  environmentRef2?: any
-  infrastructureRef?: any
-  deployToAll?: boolean
-}
+import type { PipelineInfrastructureV2 } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
 export interface DeployInfrastructureProps {
   initialValues: PipelineInfrastructureV2

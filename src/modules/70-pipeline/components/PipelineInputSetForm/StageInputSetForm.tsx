@@ -64,7 +64,7 @@ import { getScopeFromDTO } from '@common/components/EntityReference/EntityRefere
 import { Scope } from '@common/interfaces/SecretsInterface'
 import { Connectors } from '@connectors/constants'
 import factory from '../PipelineSteps/PipelineStepFactory'
-import { StepType } from '../PipelineSteps/PipelineStepInterface'
+import { PipelineInfrastructureV2, StepType } from '../PipelineSteps/PipelineStepInterface'
 import { CollapseForm } from './CollapseForm'
 import { getStepFromStage } from '../PipelineStudio/StepUtil'
 import { StepWidget } from '../AbstractSteps/StepWidget'
@@ -805,6 +805,21 @@ export function StageInputSetFormInternal({
               />
             )}
           </div>
+        </div>
+      )}
+      {(deploymentStageTemplate.environment || deploymentStageTemplate.environmentGroup) && (
+        <div id={`Stage.${stageIdentifier}.Environment`} className={cx(css.accordionSummary)}>
+          <div className={css.inputheader}>{getString('environment')}</div>
+          <StepWidget<PipelineInfrastructureV2>
+            factory={factory}
+            initialValues={deploymentStageInputSet}
+            template={deploymentStageTemplate?.environment || deploymentStageTemplate.environmentGroup || {}}
+            type={StepType.DeployInfrastructure}
+            stepViewType={viewType}
+            allowableTypes={allowableTypes}
+            path={`${path}.infrastructure`}
+            readonly={readonly || scope !== Scope.PROJECT}
+          />
         </div>
       )}
 

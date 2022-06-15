@@ -124,33 +124,6 @@ export default function DeployEnvSpecifications(props: PropsWithChildren<unknown
             stepViewType={StepViewType.Edit}
           />
         </Card>
-        {/* <SelectWithSubmenu
-          addClearBtn
-          onChange={itemSelect}
-          label={'Select the environment or group that you want to deploy to'}
-          value={selectedItem}
-          items={[
-            {
-              label: getString('environment'),
-              value: getString('environment'),
-              submenuItems: envData?.data?.content?.map(item => ({
-                label: item.environment?.name,
-                value: `${getString('environment')}|${item.environment?.identifier}`
-              })) as SelectOption[]
-            },
-            {
-              label: getString('common.environmentGroup.label'),
-              value: getString('common.environmentGroup.label'),
-              submenuItems: envGroupData?.data?.content?.map(item => ({
-                label: item.envGroup?.name,
-                value: `${getString('common.environmentGroup.label')}|${item.envGroup?.identifier}`,
-                environments: item.envGroup?.envResponse
-              })) as SelectOption[]
-            }
-          ]}
-          itemSelect={itemSelect}
-          loading={envLoading || envGroupLoading}
-        /> */}
         <Container margin={{ top: 'xxlarge' }}>{props.children}</Container>
       </div>
     </div>

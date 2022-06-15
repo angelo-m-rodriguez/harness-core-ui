@@ -47,11 +47,12 @@ import { StageErrorContext } from '@pipeline/context/StageErrorContext'
 import { DeployTabs } from '@pipeline/components/PipelineStudio/CommonUtils/DeployStageSetupShellUtils'
 import { usePipelineContext } from '@pipeline/components/PipelineStudio/PipelineContext/PipelineContext'
 import type { DeploymentStageElementConfig } from '@pipeline/utils/pipelineTypes'
+import type { PipelineInfrastructureV2 } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
 import { getEnvironmentRefSchema } from '@cd/components/PipelineSteps/PipelineStepsUtil'
 import CreateEnvironmentGroupModal from '@cd/components/EnvironmentGroups/CreateEnvironmentGroupModal'
 
-import { DeployInfrastructureProps, isEditEnvironment, PipelineInfrastructureV2 } from './utils'
+import { DeployInfrastructureProps, isEditEnvironment } from './utils'
 import { AddEditEnvironmentModal } from './AddEditEnvironmentModal'
 import DeployInfrastructures from './DeployInfrastructures/DeployInfrastructures'
 import DeployClusters from './DeployClusters/DeployClusters'
@@ -76,12 +77,12 @@ export function DeployInfrastructureWidget({
     MultiTypeInputType.FIXED
   )
 
-  const formikRef = useRef<FormikProps<unknown> | null>(null)
+  const formikRef = useRef<FormikProps<PipelineInfrastructureV2> | null>(null)
 
   const { subscribeForm, unSubscribeForm } = useContext(StageErrorContext)
   useEffect(() => {
-    subscribeForm({ tab: DeployTabs.ENVIRONMENT, form: formikRef })
-    return () => unSubscribeForm({ tab: DeployTabs.ENVIRONMENT, form: formikRef })
+    subscribeForm({ tab: DeployTabs.ENVIRONMENT, form: formikRef as any })
+    return () => unSubscribeForm({ tab: DeployTabs.ENVIRONMENT, form: formikRef as any })
   }, [])
 
   const {
@@ -137,8 +138,8 @@ export function DeployInfrastructureWidget({
   useEffect(() => {
     if (!isEmpty(environmentsSelectOptions) && !isNil(environmentsSelectOptions) && initialValues.environmentRef) {
       if (getMultiTypeFromValue(initialValues.environmentRef) === MultiTypeInputType.FIXED) {
-        const doesExist = environmentsSelectOptions.filter(env => env.value === initialValues.environmentRef).length > 0
-        if (!doesExist) {
+        const existingEnvironment = environmentsSelectOptions.find(env => env.value === initialValues.environmentRef)
+        if (!existingEnvironment) {
           if (!readonly) {
             formikRef.current?.setFieldValue('environmentOrEnvGroupRef', '')
           } else {
@@ -149,6 +150,11 @@ export function DeployInfrastructureWidget({
             })
             setEnvironmentsSelectOptions(options)
           }
+        } else {
+          formikRef.current?.setFieldValue('environmentOrEnvGroupRef', existingEnvironment)
+          setSelectedEnvironment(
+            environments?.find(environment => environment.identifier === existingEnvironment?.value)
+          )
         }
       }
     }
@@ -160,17 +166,21 @@ export function DeployInfrastructureWidget({
     }
   }, [environmentsError])
 
-  const updateEnvironmentsList = (value: EnvironmentResponseDTO) => {
-    formikRef.current?.setValues({ environmentOrEnvGroupRef: { value: value.identifier, label: value.name } })
+  const updateEnvironmentsList = (values: EnvironmentResponseDTO) => {
+    formikRef.current?.setValues({
+      environmentOrEnvGroupRef: { value: defaultTo(values.identifier, ''), label: defaultTo(values.name, '') }
+    })
     if (!isNil(environments) && !isEmpty(environments)) {
       const newEnvironmentsList = [...environments]
-      const existingIndex = newEnvironmentsList.findIndex(item => item.identifier === value.identifier)
+      const existingIndex = newEnvironmentsList.findIndex(item => item.identifier === values.identifier)
       if (existingIndex >= 0) {
-        newEnvironmentsList.splice(existingIndex, 1, value)
+        newEnvironmentsList.splice(existingIndex, 1, values)
       } else {
-        newEnvironmentsList.unshift(value)
+        newEnvironmentsList.unshift(values)
       }
       setEnvironments(newEnvironmentsList)
+      setSelectedEnvironment(newEnvironmentsList?.find(environment => environment.identifier === values?.identifier))
+      setSelectedEnvironmentGroup(undefined)
     }
     hideEnvironmentModal()
   }
@@ -246,12 +256,12 @@ export function DeployInfrastructureWidget({
       initialValues.environmentGroup?.envGroupRef
     ) {
       if (getMultiTypeFromValue(initialValues.environmentGroup.envGroupRef) === MultiTypeInputType.FIXED) {
-        const doesExist =
-          environmentGroupsSelectOptions.filter(env => env.value === initialValues.environmentGroup.envGroupRef)
-            .length > 0
-        if (!doesExist) {
+        const existingEnvironmentGroup = environmentGroupsSelectOptions.find(
+          envGroup => envGroup.value === initialValues.environmentGroup.envGroupRef
+        )
+        if (!existingEnvironmentGroup) {
           if (!readonly) {
-            formikRef.current?.setFieldValue('environmentGroup.envGroupRef', '')
+            formikRef.current?.setFieldValue('environmentOrEnvGroupRef', '')
           } else {
             const options = [...environmentGroupsSelectOptions]
             options.push({
@@ -260,6 +270,11 @@ export function DeployInfrastructureWidget({
             })
             setEnvironmentGroupsSelectOptions(options)
           }
+        } else {
+          formikRef.current?.setFieldValue('environmentOrEnvGroupRef', existingEnvironmentGroup)
+          setSelectedEnvironmentGroup(
+            environmentGroups?.find(environmentGroup => environmentGroup.identifier === existingEnvironmentGroup?.value)
+          )
         }
       }
     }
@@ -282,7 +297,7 @@ export function DeployInfrastructureWidget({
       >
         <CreateEnvironmentGroupModal
           // data={defaultTo({}, {}) as any}
-          // onCreateOrUpdate={updateEnvironmentGroupsList}
+          onCreateOrUpdate={updateEnvironmentGroupsList}
           closeModal={hideEnvironmentGroupModal}
           // isEdit={isEdit}
         />
@@ -291,20 +306,26 @@ export function DeployInfrastructureWidget({
     [environments, updateEnvironmentsList]
   )
 
-  // const updateEnvironmentGroupsList = (value: EnvironmentResponseDTO) => {
-  //   formikRef.current?.setValues({ environmentOrEnvGroupRef: { value: value.identifier, label: value.name } })
-  //   if (!isNil(environments) && !isEmpty(environments)) {
-  //     const newEnvironmentsList = [...environments]
-  //     const existingIndex = newEnvironmentsList.findIndex(item => item.identifier === value.identifier)
-  //     if (existingIndex >= 0) {
-  //       newEnvironmentsList.splice(existingIndex, 1, value)
-  //     } else {
-  //       newEnvironmentsList.unshift(value)
-  //     }
-  //     setEnvironments(newEnvironmentsList)
-  //   }
-  //   hideEnvironmentGroupModal()
-  // }
+  const updateEnvironmentGroupsList = (values: EnvironmentGroupResponseDTO) => {
+    formikRef.current?.setValues({
+      environmentOrEnvGroupRef: { value: defaultTo(values.identifier, ''), label: defaultTo(values.name, '') }
+    })
+    if (!isNil(environmentGroups) && !isEmpty(environmentGroups)) {
+      const newEnvironmentGroupsList = [...environmentGroups]
+      const existingIndex = newEnvironmentGroupsList.findIndex(item => item.identifier === values.identifier)
+      if (existingIndex >= 0) {
+        newEnvironmentGroupsList.splice(existingIndex, 1, values)
+      } else {
+        newEnvironmentGroupsList.unshift(values)
+      }
+      setEnvironmentGroups(newEnvironmentGroupsList)
+      setSelectedEnvironment(undefined)
+      setSelectedEnvironmentGroup(
+        newEnvironmentGroupsList?.find(environmentGroup => environmentGroup.identifier === values?.identifier)
+      )
+    }
+    hideEnvironmentModal()
+  }
 
   return (
     <Formik<PipelineInfrastructureV2>
@@ -314,14 +335,20 @@ export function DeployInfrastructureWidget({
         const commonConfig = {
           deployToAll: defaultTo(values.deployToAll, false),
           ...(!stage?.stage?.spec?.gitOpsEnabled && {
-            infrastructureDefinitions: (values as any).infrastructureDefinitions?.map((infra: string) => ({
-              ref: infra
-            }))
+            infrastructureDefinitions:
+              getMultiTypeFromValue(values.infrastructureRef) === MultiTypeInputType.RUNTIME
+                ? values.infrastructureRef
+                : values.infrastructureDefinitions?.map((infra: string) => ({
+                    ref: infra
+                  }))
           }),
           ...(stage?.stage?.spec?.gitOpsEnabled && {
-            gitOpsClusters: (values as any).gitOpsClusters?.map((infra: string) => ({
-              ref: infra
-            }))
+            gitOpsClusters:
+              getMultiTypeFromValue(values.clusterRef) === MultiTypeInputType.RUNTIME
+                ? values.clusterRef
+                : (values as any).gitOpsClusters?.map((infra: string) => ({
+                    ref: infra
+                  }))
           })
         }
         if (values.environmentRef2) {
@@ -352,7 +379,7 @@ export function DeployInfrastructureWidget({
     >
       {formik => {
         window.dispatchEvent(new CustomEvent('UPDATE_ERRORS_STRIP', { detail: DeployTabs.ENVIRONMENT }))
-        formikRef.current = formik as FormikProps<unknown> | null
+        formikRef.current = formik
 
         const { values, setFieldValue } = formik
         return (
@@ -451,21 +478,17 @@ export function DeployInfrastructureWidget({
                   <DeployClusters
                     environmentIdentifier={selectedEnvironment?.identifier}
                     formikRef={formikRef}
-                    initialValues={initialValues}
                     allowableTypes={allowableTypes}
                   />
                 ) : (
                   <DeployInfrastructures
                     environmentIdentifier={selectedEnvironment?.identifier}
                     formikRef={formikRef}
-                    initialValues={initialValues}
                     allowableTypes={allowableTypes}
                   />
                 )
               ) : null}
             </Layout.Horizontal>
-
-            <FormInput.CheckBox name={'deployToAll'} label={getString('cd.pipelineSteps.environmentTab.deployToAll')} />
           </>
         )
       }}

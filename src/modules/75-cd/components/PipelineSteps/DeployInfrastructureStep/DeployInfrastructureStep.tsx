@@ -18,11 +18,10 @@ import { ModuleName } from 'framework/types/ModuleName'
 
 import type { CompletionItemInterface } from '@common/interfaces/YAMLBuilderProps'
 import { Step, StepProps, StepViewType, ValidateInputSetProps } from '@pipeline/components/AbstractSteps/Step'
-import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
+import { PipelineInfrastructureV2, StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
 import { DeployInfrastructureWidget } from './DeployInfrastructureWidget'
 import DeployInfrastructureInputStep from './DeployInfrastructureInputStep'
-import type { PipelineInfrastructureV2 } from './utils'
 
 const logger = loggerFor(ModuleName.CD)
 const EnvironmentRegex = /^.+stage\.spec\.environment\.environmentRef$/

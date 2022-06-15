@@ -36,15 +36,15 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import { InfrastructureModal } from '@cd/components/EnvironmentsV2/EnvironmentDetails/InfrastructureDefinition/InfrastructureModal'
 
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
+import type { PipelineInfrastructureV2 } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
-import { isEditInfrastructure, PipelineInfrastructureV2 } from '../utils'
+import { isEditInfrastructure } from '../utils'
 
 import css from './DeployInfrastructures.module.scss'
 
 interface DeployInfrastructuresProps {
-  formikRef: React.MutableRefObject<FormikProps<unknown> | null>
+  formikRef: React.MutableRefObject<FormikProps<PipelineInfrastructureV2> | null>
   readonly?: boolean
-  initialValues?: PipelineInfrastructureV2
   environmentIdentifier: string
   allowableTypes: MultiTypeInputType[]
 }
@@ -52,7 +52,6 @@ interface DeployInfrastructuresProps {
 export default function DeployInfrastructures({
   formikRef,
   readonly,
-  initialValues,
   environmentIdentifier,
   allowableTypes
 }: DeployInfrastructuresProps) {
@@ -110,24 +109,25 @@ export default function DeployInfrastructures({
     if (
       !isEmpty(infrastructuresSelectOptions) &&
       !isNil(infrastructuresSelectOptions) &&
-      (initialValues as any)?.infrastructureRef
+      formikRef.current?.values?.infrastructureRef
     ) {
-      if (getMultiTypeFromValue((initialValues as any)?.infrastructureRef) === MultiTypeInputType.FIXED) {
-        const doesExist =
-          infrastructuresSelectOptions.filter(
-            infra => infra.value === ((initialValues as any)?.infrastructureRef as unknown as string)
-          ).length > 0
-        if (!doesExist) {
+      if (getMultiTypeFromValue(formikRef.current?.values?.infrastructureRef.ref) === MultiTypeInputType.FIXED) {
+        const existingInfrastructure = infrastructuresSelectOptions.find(
+          infra => infra.value === formikRef.current?.values?.infrastructureRef.ref
+        )
+        if (!existingInfrastructure) {
           if (!readonly) {
             formikRef.current?.setFieldValue('infrastructureRef', '')
           } else {
             const options = [...infrastructuresSelectOptions]
             options.push({
-              label: (initialValues as any)?.infrastructureRef,
-              value: (initialValues as any)?.infrastructureRef
+              label: formikRef.current?.values?.infrastructureRef,
+              value: formikRef.current?.values?.infrastructureRef
             })
             setInfrastructuresSelectOptions(options)
           }
+        } else {
+          formikRef.current?.setFieldValue('infrastructureRef', existingInfrastructure)
         }
       }
     }
@@ -188,7 +188,6 @@ export default function DeployInfrastructures({
         label={getString('cd.pipelineSteps.environmentTab.specifyYourInfrastructure')}
         tooltipProps={{ dataTooltipId: 'specifyYourInfrastructure' }}
         name="infrastructureRef"
-        useValue
         disabled={readonly || (infrastructureRefType === MultiTypeInputType.FIXED && infrastructuresLoading)}
         placeholder={
           infrastructuresLoading

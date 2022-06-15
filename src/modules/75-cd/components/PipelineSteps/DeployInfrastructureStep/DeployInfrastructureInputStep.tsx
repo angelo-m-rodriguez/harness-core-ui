@@ -25,6 +25,7 @@ import { useStrings } from 'framework/strings'
 import type { PipelineType } from '@common/interfaces/RouteInterfaces'
 import { useToaster } from '@common/exports'
 import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
+import type { PipelineInfrastructureV2 } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 
 import { usePermission } from '@rbac/hooks/usePermission'
 import { ResourceType } from '@rbac/interfaces/ResourceType'
@@ -32,7 +33,7 @@ import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
 import useRBACError from '@rbac/utils/useRBACError/useRBACError'
 import ExperimentalInput from '../K8sServiceSpec/K8sServiceSpecForms/ExperimentalInput'
 import { AddEditEnvironmentModal } from './AddEditEnvironmentModal'
-import type { DeployInfrastructureProps, PipelineInfrastructureV2 } from './utils'
+import type { DeployInfrastructureProps } from './utils'
 import css from './DeployInfrastructureStep.module.scss'
 
 export interface DeployInfrastructureData extends Omit<PipelineInfrastructureV2, 'environmentRef'> {

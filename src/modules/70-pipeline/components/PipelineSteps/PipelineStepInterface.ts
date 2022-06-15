@@ -81,6 +81,9 @@ export enum StepType {
 export interface PipelineInfrastructureV2 extends PipelineInfrastructure {
   environmentOrEnvGroupRef?: SelectOption
   environmentGroup?: any
-  environmentRef2?: SelectOption
-  infrastructureRef?: SelectOption
+  environmentRef2?: any
+  infrastructureRef?: any
+  clusterRef?: any
+  deployToAll?: boolean
+  infrastructureDefinitions?: any
 }
