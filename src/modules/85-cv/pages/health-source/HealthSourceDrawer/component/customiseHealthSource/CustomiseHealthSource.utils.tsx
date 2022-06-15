@@ -28,6 +28,7 @@ import CustomHealthLogSource from '@cv/pages/health-source/connectors/CustomHeal
 import { CustomHealthProduct } from '@cv/pages/health-source/connectors/CustomHealthSource/CustomHealthSource.constants'
 import { SplunkMetricsHealthSource } from '@cv/pages/health-source/connectors/SplunkMetricsHealthSourceV2/SplunkMetricsHealthSource'
 import type { UpdatedHealthSource } from '../../HealthSourceDrawerContent.types'
+import { SplunkProduct } from '../defineHealthSource/DefineHealthSource.constant'
 
 export const LoadSourceByType = ({
   type,
@@ -43,6 +44,7 @@ export const LoadSourceByType = ({
   expressions?: string[]
 }): JSX.Element | null => {
   const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
+  // const isSplunkMetricEnabled = true
 
   switch (type) {
     case HealthSourceTypes.AppDynamics:
@@ -76,7 +78,14 @@ export const LoadSourceByType = ({
     case Connectors.DYNATRACE:
       return <DynatraceHealthSourceContainer data={data} onSubmit={onSubmit} />
     case Connectors.SPLUNK:
-      return <SplunkHealthSource data={data} onSubmit={onSubmit} />
+      if (data?.product?.value === SplunkProduct.SPLUNK_METRICS) {
+        if (!isSplunkMetricEnabled) {
+          return null
+        }
+        return <SplunkMetricsHealthSource data={data} onSubmit={onSubmit} />
+      } else {
+        return <SplunkHealthSource data={data} onSubmit={onSubmit} />
+      }
     case HealthSourceTypes.SplunkMetric:
       if (!isSplunkMetricEnabled) {
         return null

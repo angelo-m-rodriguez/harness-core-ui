@@ -9,7 +9,7 @@ import { Utils } from '@wings-software/uicore'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { MapSplunkToServiceFieldNames } from '@cv/pages/health-source/connectors/SplunkHealthSource/components/MapQueriesToHarnessService/constants'
-import { useGetSplunkSampleData } from 'services/cv'
+import { useGetSplunkMetricSampleData } from 'services/cv'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { QueryViewer } from '@cv/components/QueryViewer/QueryViewer'
@@ -35,7 +35,7 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
     [accountId, projectIdentifier, orgIdentifier, connectorIdentifier]
   )
 
-  const { data: splunkData, loading, refetch, error } = useGetSplunkSampleData({ lazy: true })
+  const { data: splunkData, loading, refetch, error } = useGetSplunkMetricSampleData({ lazy: true })
 
   const fetchSplunkRecords = useCallback(async () => {
     await refetch({

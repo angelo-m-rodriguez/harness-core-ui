@@ -602,7 +602,6 @@ export interface CVConfig {
   deploymentVerificationEnabled?: boolean
   eligibleForDemo?: boolean
   enabled?: boolean
-  envIdentifier: string
   firstTimeDataCollectionStartTime?: number
   firstTimeDataCollectionTimeRange?: TimeRange
   fullyQualifiedIdentifier?: string
@@ -614,11 +613,11 @@ export interface CVConfig {
   orgIdentifier: string
   productName?: string
   projectIdentifier: string
-  serviceIdentifier: string
   slienabled?: boolean
   type?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -684,7 +683,7 @@ export type CVNGMSTeamsChannelSpec = CVNGNotificationChannelSpec & {
 
 export interface CVNGNotificationChannel {
   spec: CVNGNotificationChannelSpec
-  type?: 'Email' | 'Slack' | 'Pagerduty' | 'Msteams'
+  type?: 'Email' | 'Slack' | 'PagerDuty' | 'MsTeams'
 }
 
 export interface CVNGNotificationChannelSpec {
@@ -879,6 +878,8 @@ export interface ConnectorInfoDTO {
     | 'ErrorTracking'
     | 'Pdc'
     | 'AzureRepo'
+    | 'Jenkins'
+    | 'OciHelmRepo'
 }
 
 export interface ControlClusterSummary {
@@ -907,7 +908,7 @@ export type CustomHealthConnectorDTO = ConnectorConfigDTO & {
 }
 
 export interface CustomHealthKeyAndValue {
-  encryptedValueRef?: SecretRefData
+  encryptedValueRef?: string
   key: string
   value?: string
   valueEncrypted?: boolean
@@ -1005,6 +1006,7 @@ export interface DataCollectionRequest {
     | 'DYNATRACE_VALIDATION_REQUEST'
     | 'DYNATRACE_SAMPLE_DATA_REQUEST'
     | 'DYNATRACE_METRIC_LIST_REQUEST'
+    | 'SPLUNK_METRIC_SAMPLE_DATA'
 }
 
 export interface DataCollectionTask {
@@ -1560,9 +1562,11 @@ export interface Error {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -1594,6 +1598,14 @@ export interface Error {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'AWS_INSTANCE_ERROR'
+    | 'AWS_VPC_ERROR'
+    | 'AWS_TAG_ERROR'
+    | 'AWS_ASG_ERROR'
+    | 'AWS_LOAD_BALANCER_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   detailedMessage?: string
   message?: string
@@ -1937,9 +1949,11 @@ export interface Failure {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -1971,6 +1985,14 @@ export interface Failure {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'AWS_INSTANCE_ERROR'
+    | 'AWS_VPC_ERROR'
+    | 'AWS_TAG_ERROR'
+    | 'AWS_ASG_ERROR'
+    | 'AWS_LOAD_BALANCER_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   correlationId?: string
   errors?: ValidationError[]
   message?: string
@@ -2055,7 +2077,7 @@ export type GitSSHAuthenticationDTO = GitAuthenticationDTO & {
 
 export interface GithubApiAccess {
   spec?: GithubApiAccessSpecDTO
-  type: 'GithubApp' | 'Token'
+  type: 'GithubApp' | 'Token' | 'OAuth'
 }
 
 export interface GithubApiAccessSpecDTO {
@@ -2089,11 +2111,15 @@ export interface GithubCredentialsDTO {
 
 export type GithubHttpCredentials = GithubCredentialsDTO & {
   spec: GithubHttpCredentialsSpecDTO
-  type: 'UsernamePassword' | 'UsernameToken'
+  type: 'UsernamePassword' | 'UsernameToken' | 'OAuth'
 }
 
 export interface GithubHttpCredentialsSpecDTO {
   [key: string]: any
+}
+
+export type GithubOauth = GithubHttpCredentialsSpecDTO & {
+  tokenRef: string
 }
 
 export type GithubSshCredentials = GithubCredentialsDTO & {
@@ -2248,6 +2274,7 @@ export interface HealthSource {
     | 'ErrorTracking'
     | 'CustomHealthMetric'
     | 'CustomHealthLog'
+    | 'SplunkMetric'
 }
 
 export interface HealthSourceDTO {
@@ -2256,6 +2283,7 @@ export interface HealthSourceDTO {
   type?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -2359,6 +2387,31 @@ export interface InputSetTemplateResponse {
   inputSetTemplateYaml?: string
 }
 
+export interface JenkinsAuthCredentialsDTO {
+  [key: string]: any
+}
+
+export interface JenkinsAuthenticationDTO {
+  spec?: JenkinsAuthCredentialsDTO
+  type: 'UsernamePassword' | 'Anonymous' | 'Bearer Token(HTTP Header)'
+}
+
+export type JenkinsBearerTokenDTO = JenkinsAuthCredentialsDTO & {
+  tokenRef: string
+}
+
+export type JenkinsConnectorDTO = ConnectorConfigDTO & {
+  auth?: JenkinsAuthenticationDTO
+  delegateSelectors?: string[]
+  jenkinsUrl: string
+}
+
+export type JenkinsUserNamePasswordDTO = JenkinsAuthCredentialsDTO & {
+  passwordRef: string
+  username?: string
+  usernameRef?: string
+}
+
 export type JiraConnector = ConnectorConfigDTO & {
   delegateSelectors?: string[]
   jiraUrl: string
@@ -2382,6 +2435,7 @@ export interface KubernetesAuthDTO {
 
 export type KubernetesChangeEventMetadata = ChangeEventMetadata & {
   action?: 'Add' | 'Update' | 'Delete'
+  dependentMonitoredService?: string
   kind?: string
   message?: string
   namespace?: string
@@ -2528,7 +2582,6 @@ export interface LogAnalysisCluster {
   analysisEndTime?: number
   analysisMinute?: number
   analysisStartTime?: number
-  compressedText?: string[]
   createdAt?: number
   evicted?: boolean
   firstSeenTime?: number
@@ -2739,6 +2792,7 @@ export interface MetricPack {
   dataSourceType:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -2764,6 +2818,7 @@ export interface MetricPackDTO {
   dataSourceType?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -2841,8 +2896,7 @@ export interface MonitoredServiceDTO {
   tags: {
     [key: string]: string
   }
-  templateIdentifier?: string
-  templateVersionLabel?: string
+  template?: TemplateDTO
   type: 'Application' | 'Infrastructure'
 }
 
@@ -3001,6 +3055,27 @@ export interface NotificationRuleResponse {
   enabled?: boolean
   lastModifiedAt?: number
   notificationRule: NotificationRuleDTO
+}
+
+export interface OciHelmAuthCredentialsDTO {
+  [key: string]: any
+}
+
+export interface OciHelmAuthenticationDTO {
+  spec?: OciHelmAuthCredentialsDTO
+  type: 'UsernamePassword' | 'Anonymous'
+}
+
+export type OciHelmConnectorDTO = ConnectorConfigDTO & {
+  auth?: OciHelmAuthenticationDTO
+  delegateSelectors?: string[]
+  helmRepoUrl: string
+}
+
+export type OciHelmUsernamePasswordDTO = OciHelmAuthCredentialsDTO & {
+  passwordRef: string
+  username?: string
+  usernameRef?: string
 }
 
 export interface OnboardingRequestDTO {
@@ -3318,7 +3393,10 @@ export interface ProjectParams {
 
 export type PrometheusConnectorDTO = ConnectorConfigDTO & {
   delegateSelectors?: string[]
+  headers?: CustomHealthKeyAndValue[]
+  passwordRef?: string
   url: string
+  username?: string
 }
 
 export interface PrometheusFilter {
@@ -3811,9 +3889,11 @@ export interface ResponseMessage {
     | 'HTTP_RESPONSE_EXCEPTION'
     | 'SCM_NOT_FOUND_ERROR'
     | 'SCM_CONFLICT_ERROR'
+    | 'SCM_CONFLICT_ERROR_V2'
     | 'SCM_UNPROCESSABLE_ENTITY'
     | 'PROCESS_EXECUTION_EXCEPTION'
     | 'SCM_UNAUTHORIZED'
+    | 'SCM_BAD_REQUEST'
     | 'SCM_INTERNAL_SERVER_ERROR'
     | 'DATA'
     | 'CONTEXT'
@@ -3845,6 +3925,14 @@ export interface ResponseMessage {
     | 'INVALID_AZURE_AKS_REQUEST'
     | 'AWS_IAM_ERROR'
     | 'AWS_CF_ERROR'
+    | 'AWS_INSTANCE_ERROR'
+    | 'AWS_VPC_ERROR'
+    | 'AWS_TAG_ERROR'
+    | 'AWS_ASG_ERROR'
+    | 'AWS_LOAD_BALANCER_ERROR'
+    | 'SCM_INTERNAL_SERVER_ERROR_V2'
+    | 'SCM_UNAUTHORIZED_ERROR_V2'
+    | 'SPOTINST_NULL_ERROR'
   exception?: Throwable
   failureTypes?: (
     | 'EXPIRED'
@@ -4500,6 +4588,14 @@ export interface RestResponseSetString {
   responseMessages?: ResponseMessage[]
 }
 
+export interface RestResponseSortedSetTimeSeriesSampleDTO {
+  metaData?: {
+    [key: string]: { [key: string]: any }
+  }
+  resource?: TimeSeriesSampleDTO[]
+  responseMessages?: ResponseMessage[]
+}
+
 export interface RestResponseString {
   metaData?: {
     [key: string]: { [key: string]: any }
@@ -4753,13 +4849,6 @@ export type ScmErrorMetadataDTO = ErrorMetadataDTO & {
   conflictCommitId?: string
 }
 
-export interface SecretRefData {
-  decryptedValue?: string[]
-  identifier?: string
-  null?: boolean
-  scope?: 'account' | 'org' | 'project' | 'unknown'
-}
-
 export interface ServiceDependencyDTO {
   dependencyMetadata?: ServiceDependencyMetadata
   monitoredServiceIdentifier?: string
@@ -4930,16 +5019,34 @@ export type SplunkHealthSourceSpec = HealthSourceSpec & {
   queries: QueryDTO[]
 }
 
+export interface SplunkMetricDefinition {
+  analysis?: AnalysisDTO
+  groupName: string
+  identifier: string
+  metricName: string
+  query: string
+  riskProfile?: RiskProfile
+  sli?: Slidto
+}
+
+export type SplunkMetricHealthSourceSpec = HealthSourceSpec & {
+  feature: string
+  metricDefinitions?: SplunkMetricDefinition[]
+}
+
 export interface SplunkSavedSearch {
   searchQuery?: string
   title?: string
 }
 
 export interface StackTraceElement {
+  classLoaderName?: string
   className?: string
   fileName?: string
   lineNumber?: number
   methodName?: string
+  moduleName?: string
+  moduleVersion?: string
   nativeMethod?: boolean
 }
 
@@ -4985,6 +5092,11 @@ export type SumoLogicConnectorDTO = ConnectorConfigDTO & {
 
 export interface TaskInfo {
   taskType?: 'LIVE_MONITORING' | 'DEPLOYMENT' | 'SLI'
+}
+
+export interface TemplateDTO {
+  templateRef: string
+  versionLabel: string
 }
 
 export interface TemplateInputsErrorDTO {
@@ -5117,6 +5229,7 @@ export interface TimeSeriesMetricDataDTO {
   dataSourceType?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -5211,6 +5324,7 @@ export interface TimeSeriesThreshold {
   dataSourceType:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -5247,6 +5361,7 @@ export interface TimeSeriesThresholdDTO {
   dataSourceType?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -5298,6 +5413,7 @@ export interface TransactionMetricInfo {
   dataSourceType?:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -5384,9 +5500,11 @@ export interface VerificationJob {
   activitySourceIdentifier?: string
   allMonitoringSourcesEnabled?: boolean
   createdAt?: number
+  cvConfigs?: CVConfig[]
   dataSources?: (
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -5406,6 +5524,7 @@ export interface VerificationJob {
   identifier: string
   jobName: string
   lastUpdatedAt?: number
+  monitoredServiceIdentifier?: string
   monitoringSources?: string[]
   orgIdentifier?: string
   projectIdentifier?: string
@@ -5422,6 +5541,7 @@ export interface VerificationJobDTO {
   dataSources?: (
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -8282,6 +8402,7 @@ export interface GetMetricPacksQueryParams {
   dataSourceType:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -8346,6 +8467,7 @@ export interface SaveMetricPacksQueryParams {
   dataSourceType:
     | 'APP_DYNAMICS'
     | 'SPLUNK'
+    | 'SPLUNK_METRIC'
     | 'STACKDRIVER'
     | 'STACKDRIVER_LOG'
     | 'KUBERNETES'
@@ -8410,10 +8532,10 @@ export interface ListMonitoredServiceQueryParams {
   orgIdentifier: string
   projectIdentifier: string
   environmentIdentifier?: string
-  offset?: number
-  pageSize?: number
+  offset: number
+  pageSize: number
   filter?: string
-  servicesAtRiskFilter?: boolean
+  servicesAtRiskFilter: boolean
 }
 
 export type ListMonitoredServiceProps = Omit<
@@ -8727,9 +8849,9 @@ export const createDefaultMonitoredServicePromise = (
   )
 
 export interface GetMonitoredServiceListEnvironmentsQueryParams {
-  accountId?: string
-  orgIdentifier?: string
-  projectIdentifier?: string
+  accountId: string
+  orgIdentifier: string
+  projectIdentifier: string
 }
 
 export type GetMonitoredServiceListEnvironmentsProps = Omit<
@@ -8848,8 +8970,8 @@ export interface GetMonitoredServiceListQueryParams {
   projectIdentifier: string
   environmentIdentifier?: string
   environmentIdentifiers?: string[]
-  offset?: number
-  pageSize?: number
+  offset: number
+  pageSize: number
   filter?: string
 }
 
@@ -8901,8 +9023,8 @@ export interface GetMonitoredServiceFromServiceAndEnvironmentQueryParams {
   accountId: string
   orgIdentifier: string
   projectIdentifier: string
-  serviceIdentifier?: string
-  environmentIdentifier?: string
+  serviceIdentifier: string
+  environmentIdentifier: string
 }
 
 export type GetMonitoredServiceFromServiceAndEnvironmentProps = Omit<
@@ -9365,7 +9487,7 @@ export interface SetHealthMonitoringFlagQueryParams {
   accountId: string
   orgIdentifier: string
   projectIdentifier: string
-  enable?: boolean
+  enable: boolean
 }
 
 export interface SetHealthMonitoringFlagPathParams {
@@ -9552,8 +9674,8 @@ export interface GetMonitoredServiceOverAllHealthScoreQueryParams {
   accountId: string
   orgIdentifier: string
   projectIdentifier: string
-  duration?: 'FOUR_HOURS' | 'TWENTY_FOUR_HOURS' | 'THREE_DAYS' | 'SEVEN_DAYS' | 'THIRTY_DAYS'
-  endTime?: number
+  duration: 'FOUR_HOURS' | 'TWENTY_FOUR_HOURS' | 'THREE_DAYS' | 'SEVEN_DAYS' | 'THIRTY_DAYS'
+  endTime: number
 }
 
 export interface GetMonitoredServiceOverAllHealthScorePathParams {
@@ -12013,6 +12135,64 @@ export const resetErrorBudgetPromise = (
     ResetErrorBudgetPathParams
   >('POST', getConfig('cv/api'), `/slo/${identifier}/resetErrorBudget`, props, signal)
 
+export interface GetSplunkMetricSampleDataQueryParams {
+  accountId: string
+  orgIdentifier: string
+  projectIdentifier: string
+  connectorIdentifier: string
+  query: string
+  requestGuid: string
+}
+
+export type GetSplunkMetricSampleDataProps = Omit<
+  GetProps<RestResponseSortedSetTimeSeriesSampleDTO, unknown, GetSplunkMetricSampleDataQueryParams, void>,
+  'path'
+>
+
+/**
+ * validates given setting for splunk data source
+ */
+export const GetSplunkMetricSampleData = (props: GetSplunkMetricSampleDataProps) => (
+  <Get<RestResponseSortedSetTimeSeriesSampleDTO, unknown, GetSplunkMetricSampleDataQueryParams, void>
+    path={`/splunk/metric-sample-data`}
+    base={getConfig('cv/api')}
+    {...props}
+  />
+)
+
+export type UseGetSplunkMetricSampleDataProps = Omit<
+  UseGetProps<RestResponseSortedSetTimeSeriesSampleDTO, unknown, GetSplunkMetricSampleDataQueryParams, void>,
+  'path'
+>
+
+/**
+ * validates given setting for splunk data source
+ */
+export const useGetSplunkMetricSampleData = (props: UseGetSplunkMetricSampleDataProps) =>
+  useGet<RestResponseSortedSetTimeSeriesSampleDTO, unknown, GetSplunkMetricSampleDataQueryParams, void>(
+    `/splunk/metric-sample-data`,
+    { base: getConfig('cv/api'), ...props }
+  )
+
+/**
+ * validates given setting for splunk data source
+ */
+export const getSplunkMetricSampleDataPromise = (
+  props: GetUsingFetchProps<
+    RestResponseSortedSetTimeSeriesSampleDTO,
+    unknown,
+    GetSplunkMetricSampleDataQueryParams,
+    void
+  >,
+  signal?: RequestInit['signal']
+) =>
+  getUsingFetch<RestResponseSortedSetTimeSeriesSampleDTO, unknown, GetSplunkMetricSampleDataQueryParams, void>(
+    getConfig('cv/api'),
+    `/splunk/metric-sample-data`,
+    props,
+    signal
+  )
+
 export interface GetSplunkSampleDataQueryParams {
   accountId: string
   orgIdentifier: string
@@ -13193,7 +13373,7 @@ export type GetVerifyStepDeploymentRadarChartLogAnalysisClustersProps = Omit<
   GetVerifyStepDeploymentRadarChartLogAnalysisClustersPathParams
 
 /**
- * get radar chart logs for given verify step
+ * get radar chart logs clusters for given verify step
  */
 export const GetVerifyStepDeploymentRadarChartLogAnalysisClusters = ({
   verifyStepExecutionId,
@@ -13223,7 +13403,7 @@ export type UseGetVerifyStepDeploymentRadarChartLogAnalysisClustersProps = Omit<
   GetVerifyStepDeploymentRadarChartLogAnalysisClustersPathParams
 
 /**
- * get radar chart logs for given verify step
+ * get radar chart logs clusters for given verify step
  */
 export const useGetVerifyStepDeploymentRadarChartLogAnalysisClusters = ({
   verifyStepExecutionId,
@@ -13241,7 +13421,7 @@ export const useGetVerifyStepDeploymentRadarChartLogAnalysisClusters = ({
   )
 
 /**
- * get radar chart logs for given verify step
+ * get radar chart logs clusters for given verify step
  */
 export const getVerifyStepDeploymentRadarChartLogAnalysisClustersPromise = (
   {

@@ -15,6 +15,7 @@ allowpaths:
   - /splunk/validation
   - /splunk/saved-searches
   - /splunk/sample-data
+  - /splunk/metric-sample-data
   - /timeseries/metric-group-data
   - /timeseries/metric-template
   - /heatmap
