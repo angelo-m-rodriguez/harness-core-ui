@@ -148,7 +148,7 @@ exports[`Failure Strategy: Retry strategy works with simple fallback 1`] = `
                   <input
                     class="bp3-input-ghost bp3-multi-select-tag-input-input"
                     name="failureStrategies[0].onFailure.errors"
-                    placeholder="Search..."
+                    placeholder="pipeline.failureTypetext"
                     value=""
                   />
                 </div>

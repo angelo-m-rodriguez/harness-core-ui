@@ -139,6 +139,7 @@ export function FailureTypeMultiSelect(props: ConnectedFailureTypeMultiSelectPro
           popoverProps={{ minimal: true }}
           itemRenderer={itemRenderer}
           tagRenderer={tagRenderer}
+          placeholder={getString('pipeline.failureTypetext')}
           tagInputProps={{
             onRemove,
             tagProps: { className: css.tag },

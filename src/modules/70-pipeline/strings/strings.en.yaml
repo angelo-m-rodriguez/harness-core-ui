@@ -809,6 +809,7 @@ myBuildsText: My Builds
 noBuckets: No buckets found with given region
 gitRepo: Git Repo
 buildRepo: Build Repo
+failureTypetext: Select Failure Type
 stepDescription:
   HTTP: Run HTTP requests containing URLs, methods, headers, assertions, and variables.
   SHELLSCRIPT: Execute scripts in the shell session. The scripts can be executed on the pod/instance running a Harness Delegate or on a remote host in the infrastructure.
