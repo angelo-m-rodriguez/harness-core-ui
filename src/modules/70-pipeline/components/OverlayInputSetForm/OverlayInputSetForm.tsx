@@ -455,8 +455,7 @@ export function OverlayInputSetForm({
         'connectorRef',
         'repoName',
         'filePath',
-        'storeType',
-        'remoteType'
+        'storeType'
       )
       setSavedInputSetObj(inputSetObj)
       setInitialGitDetails(defaultTo(isEdit ? overlayInputSetResponse?.data?.gitDetails : gitDetails, {}))
@@ -589,10 +588,10 @@ export function OverlayInputSetForm({
             onSubmit={values => {
               handleSubmit(
                 { ...values, inputSetReferences: selectedInputSetReferences },
-                { repoIdentifier: values.repo, branch: values.branch },
+                { repoIdentifier: values.repo, branch: values.branch, repoName: values.repo },
                 {
                   connectorRef: values.connectorRef,
-                  repoName: values.repoName,
+                  repoName: values.repo,
                   branch: values.branch,
                   filePath: values.filePath,
                   storeType: values.storeType
@@ -715,8 +714,7 @@ export function OverlayInputSetForm({
                                 'connectorRef',
                                 'repoName',
                                 'filePath',
-                                'storeType',
-                                'remoteType'
+                                'storeType'
                               ),
                               inputSetReferences: selectedInputSetReferences
                             }
@@ -741,11 +739,12 @@ export function OverlayInputSetForm({
                               parse(latestYaml)?.overlayInputSet,
                               {
                                 repoIdentifier: formikProps.values.repo,
-                                branch: formikProps.values.branch
+                                branch: formikProps.values.branch,
+                                repoName: formikProps.values.repo
                               },
                               {
                                 connectorRef: formikProps.values.connectorRef,
-                                repoName: formikProps.values.repoName,
+                                repoName: formikProps.values.repo,
                                 branch: formikProps.values.branch,
                                 filePath: formikProps.values.filePath,
                                 storeType: formikProps.values.storeType

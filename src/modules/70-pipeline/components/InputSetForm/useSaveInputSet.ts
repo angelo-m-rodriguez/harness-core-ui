@@ -203,8 +203,7 @@ export function useSaveInputSet(inputSetInfo: InputSetInfo): UseSaveInputSetRetu
         'connectorRef',
         'repoName',
         'filePath',
-        'storeType',
-        'remoteType'
+        'storeType'
       )
       setSavedInputSetObj(inputSetObj)
       setInitialGitDetails(defaultTo(isEdit ? inputSetResponse?.data?.gitDetails : gitDetails, {}))

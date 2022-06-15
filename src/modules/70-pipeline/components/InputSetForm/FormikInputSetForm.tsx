@@ -432,8 +432,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                             'connectorRef',
                             'repoName',
                             'filePath',
-                            'storeType',
-                            'remoteType'
+                            'storeType'
                           )
                         }}
                         bind={setYamlHandler}

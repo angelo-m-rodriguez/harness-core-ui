@@ -67,7 +67,6 @@ interface PipelineInfoConfigWithGitDetails extends PipelineInfoConfig {
   branch: string
   connectorRef?: string
   storeType?: string
-  remoteType?: string
   importYaml?: string
   filePath?: string
 }
@@ -96,7 +95,6 @@ export default function CreatePipelines({
     repo: '',
     branch: '',
     storeType: StoreType.INLINE,
-    remoteType: 'create',
     stages: [],
     connectorRef: ''
   },
@@ -198,7 +196,7 @@ export default function CreatePipelines({
         : undefined
 
     afterSave?.(
-      omit(values, 'storeType', 'remoteType', 'connectorRef', 'repo', 'branch', 'filePath', 'useTemplate'),
+      omit(values, 'storeType', 'connectorRef', 'repo', 'branch', 'filePath', 'useTemplate'),
       {
         storeType: values.storeType as StoreMetadata['storeType'],
         connectorRef:
@@ -264,7 +262,6 @@ export default function CreatePipelines({
                   onChange={(item: CardInterface) => {
                     if (pipelineIdentifier === DefaultNewPipelineId) {
                       formikProps?.setFieldValue('storeType', item.type)
-                      formikProps?.setFieldValue('remoteType', item.type === StoreType.REMOTE ? 'create' : '')
                       setStoreType(item)
                     }
                   }}

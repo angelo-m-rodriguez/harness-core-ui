@@ -89,7 +89,6 @@ interface PipelineWithGitContextFormProps extends PipelineInfoConfig {
   branch?: string
   connectorRef?: string
   filePath?: string
-  remoteType?: string
   storeType?: string
 }
 
@@ -333,7 +332,6 @@ export function PipelineCanvas({
                 branch: branch || gitDetails.branch || '',
                 connectorRef: connectorRef || '',
                 storeType: storeType || '',
-                remoteType: 'create',
                 filePath: gitDetails.filePath
               })}
               closeModal={onCloseCreate}
@@ -441,7 +439,6 @@ export function PipelineCanvas({
       delete (pipeline as PipelineWithGitContextFormProps).branch
       delete (pipeline as PipelineWithGitContextFormProps).connectorRef
       delete (pipeline as PipelineWithGitContextFormProps).filePath
-      delete (pipeline as PipelineWithGitContextFormProps).remoteType
       delete (pipeline as PipelineWithGitContextFormProps).storeType
       updatePipeline(pipeline)
       if (currStoreMetadata?.storeType) {

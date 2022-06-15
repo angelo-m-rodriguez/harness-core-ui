@@ -236,8 +236,7 @@ function SaveAsInputSet({
         'connectorRef',
         'repoName',
         'filePath',
-        'storeType',
-        'remoteType'
+        'storeType'
       )
       setSavedInputSetObj(inputSetObj)
       setInitialGitDetails(gitDetails as EntityGitDetails)
