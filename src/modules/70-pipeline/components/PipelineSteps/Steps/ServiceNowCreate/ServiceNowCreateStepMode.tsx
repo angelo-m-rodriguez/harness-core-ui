@@ -309,6 +309,7 @@ function FormContent({
               placeholder: getString('pipeline.stepNamePlaceholder'),
               disabled: isApprovalStepFieldDisabled(readonly)
             }}
+            // data-tooltip-id="serviceNowCreate_identifier"
           />
         </div>
       )}
@@ -609,7 +610,10 @@ function FormContent({
                     />
                   )}
                 </div>
-                <ServiceNowTemplateFieldsRenderer templateFields={formik.values.spec.templateFields} />
+                <ServiceNowTemplateFieldsRenderer
+                  templateFields={formik.values.spec.templateFields}
+                  templateName={formik.values.spec.templateName}
+                />
               </>
             )}
           </div>

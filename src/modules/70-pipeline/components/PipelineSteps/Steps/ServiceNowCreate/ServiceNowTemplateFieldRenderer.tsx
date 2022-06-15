@@ -6,13 +6,14 @@
  */
 
 import React from 'react'
-import { FormInput, Layout, Text } from '@wings-software/uicore'
+import { FormInput, getMultiTypeFromValue, Layout, MultiTypeInputType, Text } from '@wings-software/uicore'
 import type { ServiceNowFieldValueNG } from 'services/cd-ng'
 import { useStrings } from 'framework/strings'
 import css from './ServiceNowCreate.module.scss'
 
 export interface ServiceNowTemplateFieldsRendererProps {
   templateFields?: ServiceNowFieldValueNG[]
+  templateName?: string
 }
 interface ServiceNowTemplateFieldInterface {
   templateField: ServiceNowFieldValueNG
@@ -32,7 +33,7 @@ function GetServiceNowTemplateFieldComponent({ templateField, index }: ServiceNo
 }
 
 export function ServiceNowTemplateFieldsRenderer(props: ServiceNowTemplateFieldsRendererProps) {
-  const { templateFields } = props
+  const { templateFields, templateName } = props
   const { getString } = useStrings()
   return templateFields && templateFields.length > 0 ? (
     <>
@@ -42,7 +43,7 @@ export function ServiceNowTemplateFieldsRenderer(props: ServiceNowTemplateFields
         </Layout.Horizontal>
       ))}
     </>
-  ) : (
+  ) : getMultiTypeFromValue(templateName) !== MultiTypeInputType.FIXED ? null : (
     <Layout.Horizontal className={css.alignCenter}>
       <Text>{getString('pipeline.serviceNowCreateStep.noSuchTemplateFound')}</Text>
     </Layout.Horizontal>
