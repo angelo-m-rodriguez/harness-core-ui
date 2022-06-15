@@ -153,7 +153,8 @@ const NewFileForm: React.FC<NewFileModalData> = props => {
               {
                 setNewCurrentNode: true,
                 type: FileStoreNodeTypes.FILE,
-                identifier: values.identifier
+                identifier: values.identifier,
+                parentName: currentNode.parentName || ''
               }
             )
             close()

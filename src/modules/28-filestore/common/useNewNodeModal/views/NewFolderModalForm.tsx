@@ -40,7 +40,7 @@ interface NewFolderModalData {
 }
 
 const NewFolderForm: React.FC<NewFolderModalData> = props => {
-  const { close, fileStoreContext, editMode, currentNode, notCurrentNode } = props
+  const { close, fileStoreContext, editMode, currentNode, notCurrentNode, parentIdentifier } = props
   const { getNode, queryParams, updateCurrentNode } = fileStoreContext
   const [initialValues, setInitialValues] = useState<NewFolderDTO>({
     name: '',
@@ -99,7 +99,7 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
         data.append('parentIdentifier', fileStoreContext?.currentNode?.parentIdentifier as string)
       } else {
         if (fileStoreContext.currentNode.identifier === SEARCH_FILES) {
-          data.append('parentIdentifier', FILE_STORE_ROOT)
+          data.append('parentIdentifier', parentIdentifier)
         } else {
           data.append('parentIdentifier', fileStoreContext.currentNode.identifier)
         }
@@ -110,10 +110,10 @@ const NewFolderForm: React.FC<NewFolderModalData> = props => {
         if (updateResponse.status === 'SUCCESS') {
           updateCurrentNode({
             ...fileStoreContext.currentNode,
-            name,
+            name: notCurrentNode ? fileStoreContext.currentNode.name : name,
             children: fileStoreContext.currentNode?.children?.map(node => ({
               ...node,
-              parentName: name
+              parentName: notCurrentNode ? fileStoreContext.currentNode.name : name
             }))
           })
           getNode(getConfig)

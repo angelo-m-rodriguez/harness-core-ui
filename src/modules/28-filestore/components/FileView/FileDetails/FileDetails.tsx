@@ -117,13 +117,16 @@ function FileDetails({ handleError }: FileDetailsProps): React.ReactElement {
     queryParams
   })
 
-  const [canEdit] = usePermission({
-    resource: {
-      resourceType: ResourceType.FILE,
-      resourceIdentifier: currentNode.identifier
+  const [canEdit] = usePermission(
+    {
+      resource: {
+        resourceType: ResourceType.FILE,
+        resourceIdentifier: currentNode.identifier
+      },
+      permissions: [PermissionIdentifier.EDIT_FILE]
     },
-    permissions: [PermissionIdentifier.EDIT_FILE]
-  })
+    [errorMessage, isCachedNode, setIsUnsupported, currentNode]
+  )
 
   const handleSubmit = async (values: any): Promise<void> => {
     if (!currentNode.fileUsage) {
