@@ -186,10 +186,10 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
         projectIdentifier,
         orgIdentifier,
         ...(currStoreMetadata?.storeType ? { storeType: currStoreMetadata?.storeType } : {}),
-        ...(currStoreMetadata?.storeType === 'REMOTE' ? { connectorRef: currStoreMetadata?.connectorRef } : {}),
+        ...(currStoreMetadata?.storeType === StoreType.REMOTE ? { connectorRef: currStoreMetadata?.connectorRef } : {}),
         ...(updatedGitDetails ?? {}),
         ...(lastObject ?? {}),
-        ...(updatedGitDetails && currStoreMetadata?.storeType !== 'REMOTE' && updatedGitDetails?.isNewBranch
+        ...(updatedGitDetails && currStoreMetadata?.storeType !== StoreType.REMOTE && updatedGitDetails?.isNewBranch
           ? { baseBranch: branch }
           : {})
       },
@@ -208,7 +208,13 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
       }
       // Handling cache and page navigation only when Governance is disabled, or Governance Evaluation is successful
       // Otherwise, keep current pipeline editing states, and show Governance evaluation error
-      if (governanceData?.status !== 'error' && governanceData?.status !== 'warning') {
+      if (
+        governanceData?.status !== 'error' &&
+        governanceData?.status !== 'warning' &&
+        (!isGitSyncEnabled || storeMetadata?.storeType === StoreType.REMOTE)
+      ) {
+        // do not do this for gitSync, it will hide progress overlay
+        // While saving pipeline in git, publishPipeline is done as next callback
         await publishPipeline(newPipelineId, updatedGitDetails)
       }
       if (isEdit) {
@@ -235,7 +241,7 @@ export function SavePipelinePopover({ toPipelineStudio }: SavePipelinePopoverPro
         )
       }
     }
-    return { status: response?.status }
+    return { status: response?.status, nextCallback: () => publishPipeline(newPipelineId, updatedGitDetails) }
   }
 
   const saveAngPublishWithGitInfo = async (
