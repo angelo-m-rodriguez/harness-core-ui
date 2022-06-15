@@ -13,7 +13,6 @@ import { useGetSplunkSampleData } from 'services/cv'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { QueryViewer } from '@cv/components/QueryViewer/QueryViewer'
-import Card from '@cv/components/Card/Card'
 import type { MapQueriesToHarnessServiceLayoutProps } from './SplunkMetricsQueryViewer.types'
 import css from './SplunkMetricsQueryViewer.module.scss'
 
@@ -36,23 +35,6 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
     [accountId, projectIdentifier, orgIdentifier, connectorIdentifier]
   )
 
-  //   const [labelNameTracingId] = useMemo(() => [Utils.randomId(), Utils.randomId()], [])
-  //   const metricPackResponse = useGetMetricPacks({
-  //     queryParams: { projectIdentifier, orgIdentifier, accountId, dataSourceType: 'PROMETHEUS' }
-  //   })
-  //   const labelNamesResponse = useGetLabelNames({
-  //     queryParams: { projectIdentifier, orgIdentifier, accountId, connectorIdentifier, tracingId: labelNameTracingId }
-  //   })
-
-  //   const { data: savedQuery, loading: loadingSavedQuery } = useGetSplunkSavedSearches({
-  //     queryParams: {
-  //       accountId,
-  //       orgIdentifier,
-  //       projectIdentifier,
-  //       connectorIdentifier,
-  //       requestGuid: queryParams?.tracingId
-  //     }
-  //   })
   const { data: splunkData, loading, refetch, error } = useGetSplunkSampleData({ lazy: true })
 
   const fetchSplunkRecords = useCallback(async () => {
@@ -83,7 +65,6 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
   )
 
   return (
-    // <Card>
     <div className={css.queryViewContainer}>
       <QueryViewer
         isQueryExecuted={isQueryExecuted}
@@ -104,6 +85,5 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
         dataTooltipId={'splunkQuery'}
       />
     </div>
-    // </Card>
   )
 }

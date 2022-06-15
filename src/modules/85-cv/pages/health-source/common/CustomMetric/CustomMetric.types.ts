@@ -23,6 +23,7 @@ import type {
   MapNewRelicMetric
 } from '../../connectors/NewRelic/NewRelicHealthSource.types'
 import type { MapPrometheusQueryToService } from '../../connectors/PrometheusHealthSource/PrometheusHealthSource.constants'
+import type { MapSplunkMetricQueryToService } from '../../connectors/SplunkMetricsHealthSourceV2/SplunkMetricsHealthSource.constants'
 
 export type CustomMappedMetric =
   | MapAppDynamicsMetric
@@ -30,6 +31,7 @@ export type CustomMappedMetric =
   | MapCustomHealthToService
   | MapPrometheusQueryToService
   | DynatraceFormDataInterface
+  | MapSplunkMetricQueryToService
 
 export type InitCustomFormData =
   | InitAppDCustomFormInterface

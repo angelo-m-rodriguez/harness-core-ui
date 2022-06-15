@@ -16,7 +16,7 @@ import {
   PrometheusMonitoringSourceFieldNames,
   SelectedAndMappedMetrics,
   PrometheusSetupSource,
-  MapPrometheusQueryToService
+  MapSplunkMetricQueryToService
 } from './SplunkMetricsHealthSource.constants'
 import { HealthSourceTypes } from '../../types'
 import type { UpdatedHealthSource } from '../../HealthSourceDrawer/HealthSourceDrawerContent.types'
@@ -25,8 +25,8 @@ import type { CustomMappedMetric } from '../../common/CustomMetric/CustomMetric.
 type UpdateSelectedMetricsMap = {
   updatedMetric: string
   oldMetric: string
-  mappedMetrics: Map<string, MapPrometheusQueryToService>
-  formikProps: FormikProps<MapPrometheusQueryToService | undefined>
+  mappedMetrics: Map<string, MapSplunkMetricQueryToService>
+  formikProps: FormikProps<MapSplunkMetricQueryToService | undefined>
 }
 
 export function updateSelectedMetricsMap({
@@ -53,14 +53,14 @@ export function updateSelectedMetricsMap({
 
   // update map with current form data
   if (formikProps.values?.metricName) {
-    updatedMap.set(formikProps.values.metricName, formikProps.values as MapPrometheusQueryToService)
+    updatedMap.set(formikProps.values.metricName, formikProps.values as MapSplunkMetricQueryToService)
   }
   return { selectedMetric: updatedMetric, mappedMetrics: updatedMap }
 }
 
 export function initializeSelectedMetricsMap(
   defaultSelectedMetricName: string,
-  mappedServicesAndEnvs?: Map<string, MapPrometheusQueryToService>
+  mappedServicesAndEnvs?: Map<string, MapSplunkMetricQueryToService>
 ): SelectedAndMappedMetrics {
   return {
     selectedMetric: (Array.from(mappedServicesAndEnvs?.keys() || [])?.[0] as string) || defaultSelectedMetricName,
@@ -90,7 +90,7 @@ export function validateMappings(
   getString: UseStringsReturn['getString'],
   createdMetrics: string[],
   selectedMetricIndex: number,
-  values?: MapPrometheusQueryToService,
+  values?: MapSplunkMetricQueryToService,
   mappedMetrics?: Map<string, CustomMappedMetric>
 ): { [fieldName: string]: string } {
   let requiredFieldErrors = {
@@ -109,7 +109,9 @@ export function validateMappings(
   }
 
   for (const fieldName of Object.keys(requiredFieldErrors)) {
-    if ((values as any)[fieldName]) delete requiredFieldErrors[fieldName]
+    if ((values as any)[fieldName]) {
+      delete requiredFieldErrors[fieldName]
+    }
   }
 
   requiredFieldErrors = validateGroupName(requiredFieldErrors, getString, values.groupName)
@@ -121,7 +123,7 @@ export function validateMappings(
   })
 
   const identifiers = createdMetrics.map(metricName => {
-    const metricData = mappedMetrics?.get(metricName) as MapPrometheusQueryToService
+    const metricData = mappedMetrics?.get(metricName) as MapSplunkMetricQueryToService
     return metricData?.identifier
   })
 
@@ -172,7 +174,7 @@ const validateGroupName = (
 }
 
 export function initializePrometheusGroupNames(
-  mappedMetrics: Map<string, MapPrometheusQueryToService>,
+  mappedMetrics: Map<string, MapSplunkMetricQueryToService>,
   getString: UseStringsReturn['getString']
 ): SelectOption[] {
   const groupNames = Array.from(mappedMetrics?.entries())
@@ -264,7 +266,7 @@ export function transformPrometheusSetupSourceToHealthSource(setupSource: Promet
   }
 
   for (const entry of setupSource.mappedServicesAndEnvs.entries()) {
-    const { metricName, identifier, groupName, query, sli }: MapPrometheusQueryToService = entry[1]
+    const { metricName, identifier, groupName, query, sli }: MapSplunkMetricQueryToService = entry[1]
 
     ;(dsConfig.spec as any).metricDefinitions.push({
       identifier,

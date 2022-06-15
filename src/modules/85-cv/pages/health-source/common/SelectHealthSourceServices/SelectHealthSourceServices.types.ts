@@ -10,8 +10,8 @@ import type { useGetMetricPacks, useGetLabelNames } from 'services/cv'
 export type SelectHealthSourceServicesProps = {
   values: {
     sli: boolean
-    healthScore: boolean
-    continuousVerification: boolean
+    healthScore?: boolean
+    continuousVerification?: boolean
     serviceInstance?: string
     riskCategory?: string
   }

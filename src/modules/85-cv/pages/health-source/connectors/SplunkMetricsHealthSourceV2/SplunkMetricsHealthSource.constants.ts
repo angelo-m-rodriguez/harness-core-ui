@@ -30,14 +30,14 @@ export const PrometheusMonitoringSourceFieldNames = {
 
 export interface PrometheusSetupSource {
   isEdit: boolean
-  mappedServicesAndEnvs: Map<string, MapPrometheusQueryToService> // metricName to MapPrometheusQueryToService
+  mappedServicesAndEnvs: Map<string, MapSplunkMetricQueryToService> // metricName to MapPrometheusQueryToService
   healthSourceIdentifier: string
   healthSourceName: string
   product: SelectOption
   connectorRef?: string
 }
 
-export type MapPrometheusQueryToService = {
+export type MapSplunkMetricQueryToService = {
   identifier: string
   metricName: string
   query: string
@@ -51,7 +51,7 @@ export type PrometheusFilter = { labelName: string; labelValue: string }
 
 export type SelectedAndMappedMetrics = {
   selectedMetric: string
-  mappedMetrics: Map<string, MapPrometheusQueryToService>
+  mappedMetrics: Map<string, MapSplunkMetricQueryToService>
 }
 
 export type CreatedMetricsWithSelectedIndex = {

@@ -43,7 +43,7 @@ export const LoadSourceByType = ({
   expressions?: string[]
 }): JSX.Element | null => {
   const isSplunkMetricEnabled = useFeatureFlag(FeatureFlag.CVNG_SPLUNK_METRICS)
-  // const isSplunkMetricEnabled = true
+
   switch (type) {
     case HealthSourceTypes.AppDynamics:
       return (
@@ -78,7 +78,9 @@ export const LoadSourceByType = ({
     case Connectors.SPLUNK:
       return <SplunkHealthSource data={data} onSubmit={onSubmit} />
     case HealthSourceTypes.SplunkMetric:
-      if (!isSplunkMetricEnabled) return null
+      if (!isSplunkMetricEnabled) {
+        return null
+      }
       return <SplunkMetricsHealthSource data={data} onSubmit={onSubmit} />
     case HealthSourceTypes.CustomHealth:
       if (data.product?.value === CustomHealthProduct.METRICS) {

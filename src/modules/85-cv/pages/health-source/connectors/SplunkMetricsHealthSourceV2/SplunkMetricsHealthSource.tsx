@@ -25,7 +25,7 @@ import {
 } from './SplunkMetricsHealthSource.utils'
 import {
   PrometheusMonitoringSourceFieldNames,
-  MapPrometheusQueryToService,
+  MapSplunkMetricQueryToService,
   PrometheusSetupSource
 } from './SplunkMetricsHealthSource.constants'
 import { initializeGroupNames } from '../../common/GroupName/GroupName.utils'
@@ -42,8 +42,6 @@ export interface SplunkMetricsHealthSourceProps {
 
 export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps): JSX.Element {
   const { data: sourceData, onSubmit } = props
-
-  console.log('sourceData', sourceData)
 
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps & { identifier: string }>()
 
@@ -89,10 +87,10 @@ export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps)
     initializeGroupNames(mappedMetrics, getString)
   )
 
-  const initialFormValues = mappedMetrics.get(selectedMetric || '') as MapPrometheusQueryToService
+  const initialFormValues = mappedMetrics.get(selectedMetric || '') as MapSplunkMetricQueryToService
 
   return (
-    <Formik<MapPrometheusQueryToService>
+    <Formik<MapSplunkMetricQueryToService>
       formName="mapSplunkMetrics"
       initialValues={initialFormValues}
       isInitialValid={(args: any) =>
@@ -230,12 +228,14 @@ export function SplunkMetricsHealthSource(props: SplunkMetricsHealthSourceProps)
                   return
                 }
                 const updatedMetric = formikProps.values
-                if (updatedMetric) mappedMetrics.set(selectedMetric, updatedMetric)
+                if (updatedMetric) {
+                  mappedMetrics.set(selectedMetric, updatedMetric)
+                }
                 await onSubmit(
                   sourceData,
                   transformPrometheusSetupSourceToHealthSource({
                     ...transformedSourceData,
-                    mappedServicesAndEnvs: mappedMetrics as Map<string, MapPrometheusQueryToService>
+                    mappedServicesAndEnvs: mappedMetrics as Map<string, MapSplunkMetricQueryToService>
                   })
                 )
               }}
