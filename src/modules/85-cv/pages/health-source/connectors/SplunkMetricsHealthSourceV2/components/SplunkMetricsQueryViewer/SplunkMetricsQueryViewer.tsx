@@ -5,20 +5,25 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import { Utils } from '@wings-software/uicore'
 import React, { useCallback, useMemo, useState } from 'react'
+import { Utils } from '@wings-software/uicore'
+import { Container, Text } from '@harness/uicore'
+import { FontVariation } from '@harness/design-system'
 import { useParams } from 'react-router-dom'
+import { Records } from '@cv/components/Records/Records'
 import { MapSplunkToServiceFieldNames } from '@cv/pages/health-source/connectors/SplunkHealthSource/components/MapQueriesToHarnessService/constants'
 import { useGetSplunkMetricSampleData } from 'services/cv'
 import { useStrings } from 'framework/strings'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
-import { QueryViewer } from '@cv/components/QueryViewer/QueryViewer'
+import { QueryContent } from '@cv/components/QueryViewer/QueryViewer'
 import type { MapQueriesToHarnessServiceLayoutProps } from './SplunkMetricsQueryViewer.types'
+import SplunkMetricsQueryViewerChart from './SplunkMetricsQueryViewerChart'
 import css from './SplunkMetricsQueryViewer.module.scss'
 
 export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServiceLayoutProps): JSX.Element {
   const { formikProps, connectorIdentifier, onChange } = props
   const [isQueryExecuted, setIsQueryExecuted] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { projectIdentifier, orgIdentifier, accountId } = useParams<ProjectPathProps>()
   const { getString } = useStrings()
   const values = formikProps?.values
@@ -64,9 +69,17 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
     [values?.isStaleRecord]
   )
 
+  const handleFetchRecords = useCallback(() => {
+    fetchSplunkRecords()
+    if (postFetchingRecords) {
+      postFetchingRecords()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query])
+
   return (
     <div className={css.queryViewContainer}>
-      <QueryViewer
+      {/* <QueryViewer
         isQueryExecuted={isQueryExecuted}
         className={css.validationContainer}
         records={splunkData?.resource}
@@ -83,7 +96,40 @@ export default function SplunkMetricsQueryViewer(props: MapQueriesToHarnessServi
         }}
         staleRecordsWarning={staleRecordsWarningMessage}
         dataTooltipId={'splunkQuery'}
-      />
+      /> */}
+      <Container className={css.validationContainer}>
+        <Text font={{ variation: FontVariation.SMALL }} tooltipProps={{ dataTooltipId: 'splunkQuery' }}>
+          {getString('cv.query')}
+        </Text>
+
+        <Container margin={{ bottom: 'medium' }}>
+          <QueryContent
+            onClickExpand={setIsDialogOpen}
+            query={query}
+            isDialogOpen={isDialogOpen}
+            loading={loading}
+            handleFetchRecords={handleFetchRecords}
+            textAreaProps={{
+              onChangeCapture: () => {
+                onChange(MapSplunkToServiceFieldNames.IS_STALE_RECORD, true)
+              }
+            }}
+            staleRecordsWarning={staleRecordsWarningMessage}
+          />
+        </Container>
+
+        <SplunkMetricsQueryViewerChart data={splunkData?.resource} />
+
+        <Records
+          fetchRecords={handleFetchRecords}
+          loading={loading}
+          data={splunkData?.resource}
+          error={error}
+          query={query}
+          isQueryExecuted={isQueryExecuted}
+          queryNotExecutedMessage={getString('cv.monitoringSources.splunk.submitQueryToSeeRecords')}
+        />
+      </Container>
     </div>
   )
 }

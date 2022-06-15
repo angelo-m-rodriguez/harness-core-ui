@@ -129,6 +129,7 @@ export function QueryViewer(props: QueryViewerProps): JSX.Element {
         isAutoFetch={isAutoFetch}
         mandatoryFields={queryContentMandatoryProps}
       />
+
       <Records
         fetchRecords={handleFetchRecords}
         recordsClassName={recordsClassName}
