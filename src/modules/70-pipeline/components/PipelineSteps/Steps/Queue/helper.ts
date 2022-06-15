@@ -44,6 +44,5 @@ export const getScopeOptions = (
 ) => [
   { label: getString('common.pipeline'), value: SCOPE_KEYS.PIPELINE },
   { label: getString('common.stage'), value: SCOPE_KEYS.STAGE },
-  { label: getString('stepGroup'), value: SCOPE_KEYS.STEP_GROUP },
-  { label: getString('common.subscriptions.overview.plan'), value: SCOPE_KEYS.PLAN }
+  { label: getString('stepGroup'), value: SCOPE_KEYS.STEP_GROUP }
 ]
