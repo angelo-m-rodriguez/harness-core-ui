@@ -32,21 +32,22 @@ interface LayoutStyles {
 }
 const COLLAPSED_MATRIX_NODE_LENGTH = 8
 const MAX_ALLOWED_MATRIX__COLLAPSED_NODES = 4
+const DEFAULT_MATRIX_PARALLELISM = 1
 
 const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAllNodes?: boolean): LayoutStyles => {
   const nodeWidth = data?.[0]?.nodeType === 'Approval' ? 170 : 200
   const nodeHeight = data?.[0]?.nodeType === 'Approval' ? 130 : 100
+  parallelism = parallelism || DEFAULT_MATRIX_PARALLELISM
   if (showAllNodes) {
     const maxChildLength = defaultTo(data.length, 0)
     const finalHeight =
-      (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * 150 // 100-PipelineStage , 130(Diamond) + 20(text)
-    const finalWidth = 200 * parallelism
+      (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * nodeHeight // 100-PipelineStage , 130(Diamond) + 20(text)
+    const finalWidth = nodeWidth * parallelism
     return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
   } else {
     const updatedParallelism = Math.min(parallelism, MAX_ALLOWED_MATRIX__COLLAPSED_NODES)
-    const maxChildLength = !showAllNodes
-      ? Math.min(data.length, COLLAPSED_MATRIX_NODE_LENGTH)
-      : defaultTo(data.length, 0)
+    const maxChildLength = Math.min(data.length, COLLAPSED_MATRIX_NODE_LENGTH)
+
     const finalHeight =
       (Math.floor(maxChildLength / updatedParallelism) +
         Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
@@ -128,7 +129,7 @@ export function MatrixNode(props: any): JSX.Element {
     if (state?.length) {
       setLayoutStyles(getCalculatedStyles(state, props?.data?.maxParallelism, showAllNodes))
     }
-  }, [state, props?.isNodeCollapsed, showAllNodes])
+  }, [state, props?.isNodeCollapsed, showAllNodes, isNodeCollapsed])
 
   const isSelectedNode = React.useMemo(() => {
     return state.some(node => node.id === queryParams?.stageExecId)
