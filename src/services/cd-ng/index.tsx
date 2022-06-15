@@ -10299,7 +10299,7 @@ export interface SecretResponseWrapper {
   createdAt?: number
   draft?: boolean
   secret: SecretDTOV2
-  updatedAt?: number,
+  updatedAt?: number
   governanceMetadata?: GovernanceMetadata
 }
 
