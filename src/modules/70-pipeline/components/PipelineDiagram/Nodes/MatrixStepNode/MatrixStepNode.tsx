@@ -210,6 +210,8 @@ export function MatrixStepNode(props: any): JSX.Element {
                     return (
                       <NodeComponent
                         {...node}
+                        id={node?.uuid}
+                        nodeType={node?.type}
                         parentIdentifier={node.parentIdentifier}
                         key={node.data?.identifier}
                         getNode={props.getNode}
