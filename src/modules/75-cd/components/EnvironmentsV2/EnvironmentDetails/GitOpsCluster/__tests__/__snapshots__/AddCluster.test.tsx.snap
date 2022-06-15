@@ -128,7 +128,7 @@ exports[`AddCluster tests initial render 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-a
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -173,7 +173,7 @@ exports[`AddCluster tests initial render 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-b
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -218,7 +218,7 @@ exports[`AddCluster tests initial render 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-3
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -908,7 +908,7 @@ exports[`AddCluster tests select a cluster 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-a
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -953,7 +953,7 @@ exports[`AddCluster tests select a cluster 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-b
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -998,7 +998,7 @@ exports[`AddCluster tests select a cluster 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-3
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -1698,7 +1698,7 @@ exports[`AddCluster tests when no clusters 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-a
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -1743,7 +1743,7 @@ exports[`AddCluster tests when no clusters 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-b
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -1788,7 +1788,7 @@ exports[`AddCluster tests when no clusters 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-3
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"

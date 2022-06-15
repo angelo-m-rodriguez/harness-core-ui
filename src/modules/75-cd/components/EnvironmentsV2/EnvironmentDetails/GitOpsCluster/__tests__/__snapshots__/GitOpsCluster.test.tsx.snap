@@ -128,7 +128,7 @@ exports[`GitOps Cluster tests click on select cluster 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-a
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
@@ -173,7 +173,7 @@ exports[`GitOps Cluster tests click on select cluster 1`] = `
                     data-id="cluster-id-label"
                     style="--text-line-clamp: 1; width: 200px;"
                   >
-                    
+                    test-cluster-b
                   </p>
                   <p
                     class="StyledProps--font Text--lineclamp StyledProps--main clusterId StyledProps--font-variation-form-label StyledProps--color StyledProps--color-grey400"
