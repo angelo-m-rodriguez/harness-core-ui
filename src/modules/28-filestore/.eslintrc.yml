@@ -7,6 +7,7 @@ rules:
         - '!microfrontends/ChildAppMounter'
         - modules/30-delegates/*
         - modules/30-secrets/*
+        - modules/31-variables/*
         - modules/33-auth-settings/*
         - modules/35-connectors/*
         - modules/35-user-profile/*
@@ -19,11 +20,14 @@ rules:
         - modules/75-cd/*
         - modules/75-ce/*
         - modules/75-cf/*
+        - modules/75-chaos/*
         - modules/75-ci/*
         - modules/85-cv/*
         - modules/85-sto-steps/*
+        - modules/90-gitops/*
         - '@delegates/*'
         - '@secrets/*'
+        - '@variables/*'
         - '@auth-settings/*'
         - '@connectors/*'
         - '@user-profile/*'
@@ -36,9 +40,11 @@ rules:
         - '@cd/*'
         - '@ce/*'
         - '@cf/*'
+        - '@chaos/*'
         - '@ci/*'
         - '@cv/*'
         - '@sto-steps/*'
+        - '@gitops/*'
       paths:
         - lodash
         - name: yaml
