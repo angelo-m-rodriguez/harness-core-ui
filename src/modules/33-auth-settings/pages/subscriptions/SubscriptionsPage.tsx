@@ -72,7 +72,8 @@ const SubscriptionsPage: React.FC = () => {
   const { getString } = useStrings()
   const { accountId } = useParams<AccountPathProps>()
   const { moduleCard } = useQueryParams<{ moduleCard?: ModuleName }>()
-  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED } = useFeatureFlags()
+  const { CDNG_ENABLED, CVNG_ENABLED, CING_ENABLED, CENG_ENABLED, CFNG_ENABLED, SRM_LICENSE_ENABLED } =
+    useFeatureFlags()
   const { licenseInformation, updateLicenseStore } = useLicenseStore()
   const history = useHistory()
   const isCommunity = isCommunityPlan()
@@ -86,7 +87,7 @@ const SubscriptionsPage: React.FC = () => {
           CDNG_ENABLED && accumulator.push(card)
           return accumulator
         case ModuleName.CV:
-          CVNG_ENABLED && accumulator.push(card)
+          CVNG_ENABLED && SRM_LICENSE_ENABLED && accumulator.push(card)
           return accumulator
         case ModuleName.CI:
           CING_ENABLED && accumulator.push(card)

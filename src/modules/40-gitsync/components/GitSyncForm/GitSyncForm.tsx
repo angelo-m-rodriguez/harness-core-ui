@@ -61,11 +61,13 @@ export function GitSyncForm(props: GitSyncFormProps<GitSyncFormFields>): React.R
   const [errorResponse, setErrorResponse] = useState<ResponseMessage[]>([])
 
   useEffect(() => {
-    !isEdit &&
-      filePathTouched !== 'true' &&
-      formikProps?.values?.identifier &&
-      formikProps.setFieldValue('filePath', `.harness/${formikProps.values.identifier}.yaml`)
-  }, [formikProps?.values?.identifier, isEdit, filePathTouched])
+    if (!isEdit && filePathTouched !== 'true' && formikProps?.values?.identifier) {
+      // setTimeout resovles issue when switching visual/yaml view
+      setTimeout(() => {
+        formikProps.setFieldValue('filePath', `.harness/${formikProps.values.identifier}.yaml`)
+      }, 0)
+    }
+  }, [formikProps.values.identifier, isEdit, filePathTouched])
 
   useEffect(() => {
     if (!filePathTouched && formikProps?.touched?.filePath) updateQueryParams({ filePathTouched: 'true' })

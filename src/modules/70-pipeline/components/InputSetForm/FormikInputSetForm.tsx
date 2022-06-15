@@ -296,7 +296,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
             connectorRef: defaultTo(connectorRef, ''),
             repoName: defaultTo(repoName, ''),
             storeType: defaultTo(storeType, StoreType.INLINE),
-            filePath: defaultTo(inputSet.gitDetails?.filePath, formikRef.current?.values.filePath)
+            filePath: inputSet.gitDetails?.filePath
           }}
           enableReinitialize={true}
           formName="inputSetForm"
@@ -448,6 +448,9 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                         onClick={() => {
                           const latestYaml = defaultTo(yamlHandler?.getLatestYaml(), '')
                           const inputSetDto: InputSetDTO = parse(latestYaml)?.inputSet
+                          const identifier = inputSetDto.identifier
+                          const defaultFilePath = identifier ? `.harness/${identifier}.yaml` : ''
+
                           handleSubmit(
                             inputSetDto,
                             {
@@ -458,7 +461,7 @@ export default function FormikInputSetForm(props: FormikInputSetFormProps): Reac
                               connectorRef: formikProps.values.connectorRef,
                               repoName: formikProps.values.repoName,
                               branch: formikProps.values.branch,
-                              filePath: formikProps.values.filePath,
+                              filePath: defaultTo(formikProps.values.filePath, defaultFilePath),
                               storeType: formikProps.values.storeType
                             }
                           )
