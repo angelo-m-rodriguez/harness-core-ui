@@ -5,10 +5,10 @@
  * https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt.
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { TextInput } from '@wings-software/uicore'
 import { Popover, PopoverInteractionKind, Position, TagInput } from '@blueprintjs/core'
-import { debounce } from 'lodash-es'
+import { debounce, isEqual } from 'lodash-es'
 import { useStrings } from 'framework/strings'
 import { QlceViewFilterOperator, Maybe } from 'services/ce/services'
 import PerspectiveBuilderMultiValueSelector from '@ce/components/MultiValueSelectorComponent/PerspectiveBuilderMultiValueSelector'
@@ -84,6 +84,8 @@ const ValuesSelector: React.FC<ValuesSelectorProps> = ({
     }))
   }
 
+  const tagInputRef = useRef<TagInput | null>()
+
   return operator === QlceViewFilterOperator.Like ? (
     <TextInput
       wrapperClassName={css.conditionInputWrapper}
@@ -107,7 +109,12 @@ const ValuesSelector: React.FC<ValuesSelectorProps> = ({
         preventOverflow: { enabled: true }
       }}
       onClosing={() => {
-        onValueChange(Object.keys(selectedValues).filter(val => selectedValues[val]))
+        const values = Object.keys(selectedValues).filter(val => selectedValues[val])
+        onValueChange(values)
+        if (!isEqual(tagInputRef.current?.props.values, values)) {
+          tagInputRef.current?.setState({ inputValue: '' })
+          debouncedInputChange('')
+        }
       }}
       fill={true}
       usePortal={true}
@@ -126,6 +133,7 @@ const ValuesSelector: React.FC<ValuesSelectorProps> = ({
     >
       <TagInput
         values={selectedVal}
+        ref={input => (tagInputRef.current = input)}
         placeholder={getString('ce.perspectives.createPerspective.filters.selectValues')}
         onAdd={handleAddNewTag}
         onRemove={handleRemoveTag}
