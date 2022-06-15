@@ -100,7 +100,7 @@ exports[`Test cases for perspective folder side nav Should render the folders li
                 />
               </svg>
             </span>
-            ce.perspectives.folders.harnessFolders
+            Out of the box Folder
           </p>
         </div>
       </li>
