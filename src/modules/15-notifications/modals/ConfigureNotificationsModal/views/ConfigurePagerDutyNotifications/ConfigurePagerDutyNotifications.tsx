@@ -17,7 +17,8 @@ import {
   Text,
   Heading,
   ButtonProps,
-  MultiTypeInputType
+  MultiTypeInputType,
+  getMultiTypeFromValue
 } from '@wings-software/uicore'
 import { useParams } from 'react-router-dom'
 import cx from 'classnames'
@@ -96,6 +97,9 @@ export const TestPagerDutyNotifications: React.FC<{
 
 const ConfigurePagerDutyNotifications: React.FC<ConfigurePagerDutyNotificationsProps> = props => {
   const { getString } = useStrings()
+  const [selectedInputType, setSelectedInputType] = useState<MultiTypeInputType>(
+    getMultiTypeFromValue(props.config?.key)
+  )
 
   const handleSubmit = (formData: PagerDutyNotificationData): void => {
     props.onSuccess({
@@ -135,7 +139,8 @@ const ConfigurePagerDutyNotifications: React.FC<ConfigurePagerDutyNotificationsP
                     label={getString('notifications.labelPDKey')}
                     multiTextInputProps={{
                       expressions: props.expressions,
-                      allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION]
+                      allowableTypes: [MultiTypeInputType.FIXED, MultiTypeInputType.EXPRESSION],
+                      onTypeChange: setSelectedInputType
                     }}
                   />
                 ) : (
@@ -143,7 +148,10 @@ const ConfigurePagerDutyNotifications: React.FC<ConfigurePagerDutyNotificationsP
                 )}
 
                 <Layout.Horizontal margin={{ bottom: 'xxlarge' }} style={{ alignItems: 'center' }}>
-                  <TestPagerDutyNotifications data={formik.values} />
+                  <TestPagerDutyNotifications
+                    data={formik.values}
+                    buttonProps={{ disabled: selectedInputType === MultiTypeInputType.EXPRESSION }}
+                  />
                 </Layout.Horizontal>
                 <UserGroupsInput name="userGroups" label={getString('notifications.labelSlackUserGroups')} />
                 {props.isStep ? (
