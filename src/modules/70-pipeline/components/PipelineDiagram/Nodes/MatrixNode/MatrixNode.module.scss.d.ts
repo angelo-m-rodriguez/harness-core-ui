@@ -9,6 +9,7 @@
 declare const styles: {
   readonly closeNode: string
   readonly collapseIcon: string
+  readonly collapsedMatrixWrapper: string
   readonly conditional: string
   readonly createnodeci: string
   readonly createnodecimain: string
@@ -25,9 +26,11 @@ declare const styles: {
   readonly nestedGroup: string
   readonly nodeNameText: string
   readonly readonly: string
+  readonly runningAnimation: string
   readonly showNodeText: string
   readonly showNodes: string
   readonly stageName: string
+  readonly stepCount: string
   readonly stepGroup: string
   readonly stepGroupBody: string
   readonly stepGroupHeader: string

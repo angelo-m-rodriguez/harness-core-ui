@@ -92,6 +92,32 @@ export function MatrixNode(props: any): JSX.Element {
 
   const stagePath = getStagePathFromPipeline(props?.identifier || '', 'pipeline.stages')
 
+  function GetSuccessFailureStageCount(): JSX.Element {
+    let successfulStagesCount = 0
+    let failedStagesCount = 0
+
+    state.forEach((stateVal: PipelineGraphState) => {
+      if (stateVal.status === 'Success') {
+        successfulStagesCount += 1
+      } else if (stateVal.status === 'Failed') {
+        failedStagesCount += 1
+      }
+    })
+    return (
+      <Layout.Horizontal padding={0}>
+        <div className={css.stepCount} data-status="success">
+          <Icon name={'success-tick'} size={14} />
+          {successfulStagesCount}
+        </div>
+        |
+        <div className={css.stepCount} data-status="failed">
+          <Icon name={'execution-warning'} size={16} data-status="failed" />
+          {failedStagesCount}
+        </div>
+      </Layout.Horizontal>
+    )
+  }
+
   React.useEffect(() => {
     props?.updateGraphLinks?.()
   }, [isNodeCollapsed])
@@ -137,71 +163,62 @@ export function MatrixNode(props: any): JSX.Element {
 
   return (
     <>
-      {isNodeCollapsed && DefaultNode ? (
-        <DefaultNode
-          onClick={() => {
-            setNodeCollapsed(false)
+      <div style={{ position: 'relative' }}>
+        <Layout.Horizontal className={css.matrixLabel}>
+          <Icon size={16} name="looping" style={{ marginRight: '5px' }} color={Color.WHITE} />
+          <Text color={Color.WHITE} font="small" style={{ paddingRight: '5px' }}>
+            {props?.data?.nodeType}
+          </Text>
+        </Layout.Horizontal>
+        <div
+          onMouseOver={e => {
+            e.stopPropagation()
+            allowAdd && setVisibilityOfAdd(true)
           }}
-          {...props}
-          isSelected={isSelectedNode}
-          icon="step-group"
-        />
-      ) : (
-        <div style={{ position: 'relative' }}>
-          <Layout.Horizontal className={css.matrixLabel}>
-            <Icon size={16} name="looping" style={{ marginRight: '5px' }} color={Color.WHITE} />
-            <Text color={Color.WHITE} font="small" style={{ paddingRight: '5px' }}>
-              {props?.data?.nodeType}
-            </Text>
-          </Layout.Horizontal>
-          <div
-            onMouseOver={e => {
-              e.stopPropagation()
-              allowAdd && setVisibilityOfAdd(true)
-            }}
-            onMouseLeave={e => {
-              e.stopPropagation()
-              allowAdd && setVisibilityOfAdd(false)
-            }}
-            onDragLeave={() => allowAdd && setVisibilityOfAdd(false)}
-            style={stepGroupData?.containerCss ? stepGroupData?.containerCss : undefined}
-            className={cx(
-              css.stepGroup,
-              { [css.firstnode]: !props?.isParallelNode },
-              { [css.marginBottom]: props?.isParallelNode },
-              { [css.nestedGroup]: isNestedStepGroup },
-              { [css.stepGroupParent]: hasStepGroupChild },
-              { [css.stepGroupNormal]: !isNestedStepGroup && !hasStepGroupChild }
-            )}
-          >
-            <div id={props?.id} className={css.horizontalBar}></div>
-            {props.data?.skipCondition && (
-              <div className={css.conditional}>
-                <Text
-                  tooltip={`Skip condition:\n${props.data?.skipCondition}`}
-                  tooltipProps={{
-                    isDark: true
-                  }}
-                >
-                  <Icon size={26} name={'conditional-skip-new'} color="white" />
-                </Text>
-              </div>
-            )}
-            {props.data?.conditionalExecutionEnabled && (
-              <div className={css.conditional}>
-                <Text
-                  tooltip={getString('pipeline.conditionalExecution.title')}
-                  tooltipProps={{
-                    isDark: true
-                  }}
-                >
-                  <Icon size={26} name={'conditional-skip-new'} color="white" />
-                </Text>
-              </div>
-            )}
-            <div className={css.stepGroupHeader}>
+          onMouseLeave={e => {
+            e.stopPropagation()
+            allowAdd && setVisibilityOfAdd(false)
+          }}
+          onDragLeave={() => allowAdd && setVisibilityOfAdd(false)}
+          style={stepGroupData?.containerCss ? stepGroupData?.containerCss : undefined}
+          className={cx(
+            css.stepGroup,
+            { [css.firstnode]: !props?.isParallelNode },
+            { [css.marginBottom]: props?.isParallelNode },
+            { [css.nestedGroup]: isNestedStepGroup },
+            { [css.stepGroupParent]: hasStepGroupChild },
+            { [css.stepGroupNormal]: !isNestedStepGroup && !hasStepGroupChild }
+          )}
+        >
+          <div id={props?.id} className={css.horizontalBar}></div>
+          {props.data?.skipCondition && (
+            <div className={css.conditional}>
+              <Text
+                tooltip={`Skip condition:\n${props.data?.skipCondition}`}
+                tooltipProps={{
+                  isDark: true
+                }}
+              >
+                <Icon size={26} name={'conditional-skip-new'} color="white" />
+              </Text>
+            </div>
+          )}
+          {props.data?.conditionalExecutionEnabled && (
+            <div className={css.conditional}>
+              <Text
+                tooltip={getString('pipeline.conditionalExecution.title')}
+                tooltipProps={{
+                  isDark: true
+                }}
+              >
+                <Icon size={26} name={'conditional-skip-new'} color="white" />
+              </Text>
+            </div>
+          )}
+          <div className={css.stepGroupHeader}>
+            <Layout.Horizontal flex={{ justifyContent: 'space-between' }}>
               <Layout.Horizontal
-                spacing="xsmall"
+                spacing="small"
                 onMouseOver={e => {
                   e.stopPropagation()
                 }}
@@ -211,10 +228,10 @@ export function MatrixNode(props: any): JSX.Element {
               >
                 <Icon
                   className={css.collapseIcon}
-                  name="minus"
+                  name={isNodeCollapsed ? 'plus' : 'minus'}
                   onClick={e => {
                     e.stopPropagation()
-                    setNodeCollapsed(true)
+                    setNodeCollapsed(!isNodeCollapsed)
                   }}
                 />
                 <Text
@@ -251,167 +268,187 @@ export function MatrixNode(props: any): JSX.Element {
                   {props.name}
                 </Text>
               </Layout.Horizontal>
-            </div>
-            <div className={css.stepGroupBody} style={layoutStyles}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '80px', rowGap: '20px' }}>
-                {state.slice(0, showAllNodes ? state.length : COLLAPSED_MATRIX_NODE_LENGTH).map((node: any) => {
-                  const NodeComponent: React.FC<BaseReactComponentProps> = defaultTo(
-                    props.getNode?.(node?.type)?.component,
-                    defaultNode
-                  ) as React.FC<BaseReactComponentProps>
-                  return (
-                    <NodeComponent
-                      {...node}
-                      parentIdentifier={node.parentIdentifier}
-                      key={node.data?.identifier}
-                      getNode={props.getNode}
-                      fireEvent={props.fireEvent}
-                      getDefaultNode={props.getDxefaultNode}
-                      className={cx(css.graphNode, node.className)}
-                      isSelected={node.selectedNode === node.data?.id}
-                      isParallelNode={node.isParallelNode}
-                      allowAdd={
-                        (!node.data?.children?.length && !node.isParallelNode) ||
-                        (node.isParallelNode && node.isLastChild)
-                      }
-                      isFirstParallelNode={true}
-                      prevNodeIdentifier={node.prevNodeIdentifier}
-                      prevNode={node.prevNode}
-                      nextNode={node.nextNode}
-                      updateGraphLinks={node.updateGraphLinks}
-                      readonly={props.readonly}
-                      selectedNodeId={props?.selectedNodeId || queryParams?.stageExecId}
-                      showMarkers={false}
-                      name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
-                    />
-                  )
-                })}
-              </div>
-            </div>
-            {!props.readonly && props?.identifier !== STATIC_SERVICE_GROUP_NAME && (
-              <Button
-                className={cx(css.closeNode, { [css.readonly]: props.readonly })}
-                minimal
-                icon="cross"
-                variation={ButtonVariation.PRIMARY}
-                iconProps={{ size: 10 }}
-                onMouseDown={e => {
-                  e.stopPropagation()
-                  props?.fireEvent?.({
-                    type: Event.RemoveNode,
-                    data: {
-                      identifier: props?.identifier,
-                      node: props
-                    }
-                  })
-                }}
-                withoutCurrentColor={true}
-              />
-            )}
-            <Layout.Horizontal className={css.matrixFooter}>
-              <Layout.Horizontal margin={0} className={css.showNodes}>
-                <Text padding={0}>{`${
-                  !showAllNodes ? Math.min(state.length, COLLAPSED_MATRIX_NODE_LENGTH) : state.length
-                }/ ${state.length}`}</Text>
-                {state.length > COLLAPSED_MATRIX_NODE_LENGTH && (
-                  <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
-                    {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
-                  </Text>
-                )}
-              </Layout.Horizontal>
-              <Text font="normal" margin={0}>
-                {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism || 1}
-              </Text>
+              {/* Execution summary on collapse */}
+              {isNodeCollapsed && <GetSuccessFailureStageCount />}
             </Layout.Horizontal>
           </div>
-          {!props.isParallelNode && !props.readonly && (
-            <div
-              style={{ left: getPositionOfAddIcon(props) }}
-              data-linkid={props?.identifier}
-              onMouseOver={event => event.stopPropagation()}
-              onClick={event => {
-                event.stopPropagation()
-                props?.fireEvent?.({
-                  type: Event.AddLinkClicked,
-                  target: event.target,
-                  data: {
-                    entityType: DiagramType.Link,
-                    node: props,
-                    prevNodeIdentifier: props?.prevNodeIdentifier,
-                    parentIdentifier: props?.parentIdentifier,
-                    identifier: props?.identifier
-                  }
-                })
-              }}
-              onDragOver={event => {
-                event.stopPropagation()
-                event.preventDefault()
-                setShowAddLink(true)
-              }}
-              onDragLeave={event => {
-                event.stopPropagation()
-                event.preventDefault()
-                setShowAddLink(false)
-              }}
-              onDrop={event => {
-                event.stopPropagation()
-                setShowAddLink(false)
-                props?.fireEvent?.({
-                  type: Event.DropLinkEvent,
-                  target: event.target,
-                  data: {
-                    linkBeforeStepGroup: false,
-                    entityType: DiagramType.Link,
-                    node: JSON.parse(event.dataTransfer.getData(DiagramDrag.NodeDrag)),
-                    destination: props
-                  }
-                })
-              }}
-              className={cx(defaultCss.addNodeIcon, defaultCss.stepAddIcon, defaultCss.stepGroupAddIcon, {
-                [defaultCss.show]: showAddLink
-              })}
-            >
-              <Icon name="plus" color={Color.WHITE} />
-            </div>
-          )}
-          {allowAdd && !props.readonly && CreateNode && (
-            <CreateNode
-              className={cx(
-                defaultCss.addNode,
-                { [defaultCss.visible]: showAdd },
-                { [defaultCss.marginBottom]: props?.isParallelNode }
-              )}
-              onMouseOver={() => allowAdd && setVisibilityOfAdd(true)}
-              onMouseLeave={() => allowAdd && setVisibilityOfAdd(false)}
-              onDrop={(event: any) => {
-                props?.fireEvent?.({
-                  type: Event.DropNodeEvent,
-                  data: {
-                    entityType: DiagramType.Default,
-                    node: JSON.parse(event.dataTransfer.getData(DiagramDrag.NodeDrag)),
-                    destination: props
-                  }
-                })
-              }}
-              onClick={(event: any): void => {
-                event.stopPropagation()
-                props?.fireEvent?.({
-                  type: Event.AddParallelNode,
-                  target: event.target,
-                  data: {
-                    identifier: props?.identifier,
-                    parentIdentifier: props?.parentIdentifier,
-                    entityType: DiagramType.MatrixNode,
-                    node: props
-                  }
-                })
-              }}
-              name={''}
-              hidden={!showAdd}
-            />
-          )}
+          <div className={css.collapsedMatrixWrapper}>
+            {isNodeCollapsed && DefaultNode ? (
+              <DefaultNode
+                onClick={() => {
+                  setNodeCollapsed(false)
+                }}
+                {...props}
+                isSelected={isSelectedNode}
+                icon="looping"
+                showMarkers={false}
+                name={`[+] ${state.length} Stages`} //matrix collapsed node
+              />
+            ) : (
+              <>
+                <div className={css.stepGroupBody} style={layoutStyles}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '80px', rowGap: '20px' }}>
+                    {state.slice(0, showAllNodes ? state.length : COLLAPSED_MATRIX_NODE_LENGTH).map((node: any) => {
+                      const NodeComponent: React.FC<BaseReactComponentProps> = defaultTo(
+                        props.getNode?.(node?.type)?.component,
+                        defaultNode
+                      ) as React.FC<BaseReactComponentProps>
+                      return (
+                        <NodeComponent
+                          {...node}
+                          parentIdentifier={node.parentIdentifier}
+                          key={node.data?.identifier}
+                          getNode={props.getNode}
+                          fireEvent={props.fireEvent}
+                          getDefaultNode={props.getDxefaultNode}
+                          className={cx(css.graphNode, node.className)}
+                          isSelected={node.selectedNode === node.data?.id}
+                          isParallelNode={node.isParallelNode}
+                          allowAdd={
+                            (!node.data?.children?.length && !node.isParallelNode) ||
+                            (node.isParallelNode && node.isLastChild)
+                          }
+                          isFirstParallelNode={true}
+                          prevNodeIdentifier={node.prevNodeIdentifier}
+                          prevNode={node.prevNode}
+                          nextNode={node.nextNode}
+                          updateGraphLinks={node.updateGraphLinks}
+                          readonly={props.readonly}
+                          selectedNodeId={props?.selectedNodeId || queryParams?.stageExecId}
+                          showMarkers={false}
+                          name={node?.matrixNodeName ? `${node?.matrixNodeName}${node?.name}` : node?.name}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
+                {!props.readonly && props?.identifier !== STATIC_SERVICE_GROUP_NAME && (
+                  <Button
+                    className={cx(css.closeNode, { [css.readonly]: props.readonly })}
+                    minimal
+                    icon="cross"
+                    variation={ButtonVariation.PRIMARY}
+                    iconProps={{ size: 10 }}
+                    onMouseDown={e => {
+                      e.stopPropagation()
+                      props?.fireEvent?.({
+                        type: Event.RemoveNode,
+                        data: {
+                          identifier: props?.identifier,
+                          node: props
+                        }
+                      })
+                    }}
+                    withoutCurrentColor={true}
+                  />
+                )}
+                <Layout.Horizontal className={css.matrixFooter}>
+                  <Layout.Horizontal margin={0} className={css.showNodes}>
+                    <Text padding={0}>{`${
+                      !showAllNodes ? Math.min(state.length, COLLAPSED_MATRIX_NODE_LENGTH) : state.length
+                    }/ ${state.length}`}</Text>
+                    {state.length > COLLAPSED_MATRIX_NODE_LENGTH && (
+                      <Text className={css.showNodeText} padding={0} onClick={() => setShowAllNodes(!showAllNodes)}>
+                        {`${!showAllNodes ? 'Show All' : 'Hide All'}`}
+                      </Text>
+                    )}
+                  </Layout.Horizontal>
+                  <Text font="normal" margin={0}>
+                    {getString('pipeline.MatrixNode.maxParallelism')} {props?.data?.maxParallelism || 1}
+                  </Text>
+                </Layout.Horizontal>
+
+                {!props.isParallelNode && !props.readonly && (
+                  <div
+                    style={{ left: getPositionOfAddIcon(props) }}
+                    data-linkid={props?.identifier}
+                    onMouseOver={event => event.stopPropagation()}
+                    onClick={event => {
+                      event.stopPropagation()
+                      props?.fireEvent?.({
+                        type: Event.AddLinkClicked,
+                        target: event.target,
+                        data: {
+                          entityType: DiagramType.Link,
+                          node: props,
+                          prevNodeIdentifier: props?.prevNodeIdentifier,
+                          parentIdentifier: props?.parentIdentifier,
+                          identifier: props?.identifier
+                        }
+                      })
+                    }}
+                    onDragOver={event => {
+                      event.stopPropagation()
+                      event.preventDefault()
+                      setShowAddLink(true)
+                    }}
+                    onDragLeave={event => {
+                      event.stopPropagation()
+                      event.preventDefault()
+                      setShowAddLink(false)
+                    }}
+                    onDrop={event => {
+                      event.stopPropagation()
+                      setShowAddLink(false)
+                      props?.fireEvent?.({
+                        type: Event.DropLinkEvent,
+                        target: event.target,
+                        data: {
+                          linkBeforeStepGroup: false,
+                          entityType: DiagramType.Link,
+                          node: JSON.parse(event.dataTransfer.getData(DiagramDrag.NodeDrag)),
+                          destination: props
+                        }
+                      })
+                    }}
+                    className={cx(defaultCss.addNodeIcon, defaultCss.stepAddIcon, defaultCss.stepGroupAddIcon, {
+                      [defaultCss.show]: showAddLink
+                    })}
+                  >
+                    <Icon name="plus" color={Color.WHITE} />
+                  </div>
+                )}
+                {allowAdd && !props.readonly && CreateNode && (
+                  <CreateNode
+                    className={cx(
+                      defaultCss.addNode,
+                      { [defaultCss.visible]: showAdd },
+                      { [defaultCss.marginBottom]: props?.isParallelNode }
+                    )}
+                    onMouseOver={() => allowAdd && setVisibilityOfAdd(true)}
+                    onMouseLeave={() => allowAdd && setVisibilityOfAdd(false)}
+                    onDrop={(event: any) => {
+                      props?.fireEvent?.({
+                        type: Event.DropNodeEvent,
+                        data: {
+                          entityType: DiagramType.Default,
+                          node: JSON.parse(event.dataTransfer.getData(DiagramDrag.NodeDrag)),
+                          destination: props
+                        }
+                      })
+                    }}
+                    onClick={(event: any): void => {
+                      event.stopPropagation()
+                      props?.fireEvent?.({
+                        type: Event.AddParallelNode,
+                        target: event.target,
+                        data: {
+                          identifier: props?.identifier,
+                          parentIdentifier: props?.parentIdentifier,
+                          entityType: DiagramType.MatrixNode,
+                          node: props
+                        }
+                      })
+                    }}
+                    name={''}
+                    hidden={!showAdd}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </>
   )
 }

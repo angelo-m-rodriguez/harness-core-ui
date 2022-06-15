@@ -37,7 +37,8 @@ export enum StageType {
   Template = 'Template',
   SECURITY = 'SecurityTests',
   MATRIX = 'MATRIX',
-  FOR = 'FOR'
+  FOR = 'FOR',
+  PARALLELISM = 'PARALLELISM'
 }
 
 export enum ServiceDeploymentType {

@@ -166,13 +166,12 @@ export function getPipelineStagesMap(
   const map = new Map<string, GraphLayoutNode>()
 
   function recursiveSetInMap(node: GraphLayoutNode): void {
-    if (node.nodeType === NodeTypes.Parallel || node.nodeType === NodeTypes.Matrix || node.nodeType === NodeTypes.For) {
+    if (node.nodeType === NodeTypes.Parallel || isNodeTypeMatrixOrFor(node.nodeType)) {
       node.edgeLayoutList?.currentNodeChildren?.forEach(item => {
         if (item && layoutNodeMap?.[item]) {
-          const nodeId =
-            node.nodeType === NodeTypes.Matrix || node.nodeType === NodeTypes.For
-              ? defaultTo(layoutNodeMap[item]?.nodeExecutionId, layoutNodeMap[item].nodeUuid)
-              : layoutNodeMap[item].nodeUuid
+          const nodeId = isNodeTypeMatrixOrFor(node.nodeType)
+            ? defaultTo(layoutNodeMap[item]?.nodeExecutionId, layoutNodeMap[item].nodeUuid)
+            : layoutNodeMap[item].nodeUuid
           map.set(nodeId || '', layoutNodeMap[item])
           return
         }
@@ -201,7 +200,8 @@ enum NodeTypes {
   Parallel = 'parallel',
   Stage = 'stage',
   Matrix = 'MATRIX',
-  For = 'FOR'
+  For = 'FOR',
+  Parallelism = 'PARALLELISM'
 }
 export interface ProcessLayoutNodeMapResponse {
   stage?: GraphLayoutNode
@@ -828,7 +828,7 @@ export const getChildNodeDataForMatrix = (
 }
 
 export const isNodeTypeMatrixOrFor = (nodeType?: string): boolean => {
-  return nodeType === NodeTypes.Matrix || nodeType === NodeTypes.For
+  return [NodeTypes.Matrix, NodeTypes.For, NodeTypes.Parallelism].includes(nodeType as NodeTypes)
 }
 export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSummary): PipelineGraphState[] => {
   const response: PipelineGraphState[] = []
@@ -982,7 +982,9 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
         ...currentStage,
         icon: getIconFromStageModule(currentStageData?.module, currentStageData?.nodeType),
         status: currentStageData?.status as any,
-        type: currentStage?.type === StageType.FOR ? ExecutionPipelineNodeType.MATRIX : currentStage?.type,
+        type: [StageType.FOR, StageType.PARALLELISM].includes(currentStage?.type as StageType)
+          ? ExecutionPipelineNodeType.MATRIX
+          : currentStage?.type,
         data: {
           ...currentStage.data,
           identifier: currentStageData?.nodeUuid || /* istanbul ignore next */ '',
@@ -993,7 +995,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             currentStageData?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
-              : [StageType.MATRIX, StageType.FOR].includes(currentStageData?.nodeType)
+              : [StageType.MATRIX, StageType.FOR, StageType.PARALLELISM].includes(currentStageData?.nodeType)
               ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: currentStageData?.skipInfo?.evaluatedCondition
@@ -1038,7 +1040,9 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
         ...currentStage,
         icon: getIconFromStageModule(stage?.module, stage?.nodeType),
         status: stage?.status as any,
-        type: currentStage?.type === StageType.FOR ? ExecutionPipelineNodeType.MATRIX : currentStage?.type,
+        type: [StageType.FOR, StageType.PARALLELISM].includes(currentStage?.type as StageType)
+          ? ExecutionPipelineNodeType.MATRIX
+          : currentStage?.type,
         data: {
           ...stage,
           identifier: stage?.nodeUuid || /* istanbul ignore next */ '',
@@ -1049,7 +1053,7 @@ export const processExecutionDataForGraph = (stages?: PipelineGraphState[]): Pip
           type:
             stage?.nodeType === StageType.APPROVAL
               ? ExecutionPipelineNodeType.DIAMOND
-              : [StageType.MATRIX, StageType.FOR].includes(stage?.nodeType)
+              : [StageType.MATRIX, StageType.FOR, StageType.PARALLELISM].includes(stage?.nodeType)
               ? ExecutionPipelineNodeType.MATRIX
               : ExecutionPipelineNodeType.NORMAL,
           skipCondition: stage?.skipInfo?.evaluatedCondition ? stage.skipInfo.skipCondition : undefined,
