@@ -52,7 +52,7 @@ const ClusterCard = (props: ClusterCardProps): React.ReactElement => {
           color={Color.BLACK}
           className={css.clusterName}
         >
-          {defaultTo(cluster.name, '')}
+          {defaultTo(cluster.identifier, '')}
         </Text>
         <Text
           data-id="cluster-id-text"

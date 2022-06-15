@@ -188,4 +188,19 @@ describe('Test delegate buttons', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  test('Open filter drawer', async () => {
+    const { container } = render(
+      <TestWrapper path="/account/:accountId/resources/delegates" pathParams={{ accountId: 'multipleDelegates' }}>
+        <DelegatesListing />
+      </TestWrapper>
+    )
+    await waitFor(() => container.querySelector('#ngfilterbtn')!)
+    const filterBtn = container.querySelector('#ngfilterbtn')!
+    act(() => {
+      fireEvent.click(filterBtn!)
+    })
+    const filterDrawer = document.querySelector('.bp3-portal')
+    expect(filterDrawer).toBeTruthy()
+  })
 })
