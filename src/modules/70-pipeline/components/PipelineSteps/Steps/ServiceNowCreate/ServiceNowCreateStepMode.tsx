@@ -309,7 +309,7 @@ function FormContent({
               placeholder: getString('pipeline.stepNamePlaceholder'),
               disabled: isApprovalStepFieldDisabled(readonly)
             }}
-            // data-tooltip-id="serviceNowCreate_identifier"
+            data-tooltip-id="serviceNowCreate_identifier"
           />
         </div>
       )}
