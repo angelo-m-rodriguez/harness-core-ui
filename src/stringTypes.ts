@@ -1270,6 +1270,8 @@ export interface StringsMap {
   'secrets.labelType': string
   'secrets.labelValue': string
   'secrets.noSecrets': string
+  'secrets.policyEvaluations.failedToSave': string
+  'secrets.policyEvaluations.warning': string
   'secrets.secret.configureSecret': string
   'secrets.secret.inlineSecret': string
   'secrets.secret.labelFile': string

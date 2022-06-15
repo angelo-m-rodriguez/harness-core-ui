@@ -29,6 +29,7 @@ import { buildAuthConfig } from '@secrets/utils/SSHAuthUtils'
 import { useToaster } from '@common/exports'
 import type { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
+import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
 import type { SSHCredSharedObj } from '../CreateSSHCredWizard'
 
 export interface SSHConfigFormData {
@@ -59,6 +60,11 @@ const StepAuthentication: React.FC<StepProps<SSHCredSharedObj> & StepAuthenticat
   const [saving, setSaving] = useState(false)
   const { getString } = useStrings()
   const { showSuccess } = useToaster()
+  const { conditionallyOpenGovernanceErrorModal } = useGovernanceMetaDataModal({
+    considerWarningAsError: false,
+    errorHeaderMsg: 'secrets.policyEvaluations.failedToSave',
+    warningHeaderMsg: 'secrets.policyEvaluations.warning'
+  })
   const { mutate: createSecret } = usePostSecret({
     queryParams: { accountIdentifier: accountId, orgIdentifier, projectIdentifier }
   })
@@ -94,11 +100,13 @@ const StepAuthentication: React.FC<StepProps<SSHCredSharedObj> & StepAuthenticat
         }
       }
       // finally create the connector
-      isEdit ? await editSecret(dataToSubmit) : await createSecret(dataToSubmit)
+      const response = isEdit ? await editSecret(dataToSubmit) : await createSecret(dataToSubmit)
       setSaving(false)
-      isEdit ? showSuccess(getString('ssh.editmessageSuccess')) : showSuccess(getString('ssh.createmessageSuccess'))
-      onSuccess?.(dataToSubmit.secret)
-      nextStep?.({ ...prevStepData, authData: formData, isEdit: true })
+      conditionallyOpenGovernanceErrorModal(response.data?.governanceMetadata, () => {
+        isEdit ? showSuccess(getString('ssh.editmessageSuccess')) : showSuccess(getString('ssh.createmessageSuccess'))
+        onSuccess?.(dataToSubmit.secret)
+        nextStep?.({ ...prevStepData, authData: formData, isEdit: true })
+      })
     } catch (err) {
       setSaving(false)
       modalErrorHandler?.show(err.data)
