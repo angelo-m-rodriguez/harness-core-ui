@@ -27,6 +27,15 @@ const NOW = Date.now()
 const PAGE_SIZE = 10
 const COPY_CLIPBOARD_ICON_WIDTH = 16
 const SAFETY_TABLE_WIDTH = 216
+const ORDER = 'order'
+const STATUS = 'status'
+
+const TestCaseColumns: { [key: string]: keyof TestCase } = {
+  NAME: 'name',
+  CLASS_NAME: 'class_name',
+  RESULT: 'result',
+  DURATION_MS: 'duration_ms'
+}
 
 interface SortByObjInterface {
   sort?: sortType
@@ -91,8 +100,8 @@ const getServerSortProps = ({
     return { enableServerSort: false }
   } else {
     let sortName = accessor
-    if (sortName === 'result') {
-      sortName = 'status'
+    if (sortName === TestCaseColumns.RESULT) {
+      sortName = STATUS
     }
     return {
       enableServerSort: true,
@@ -101,7 +110,7 @@ const getServerSortProps = ({
       getSortedColumn: ({ sort }: { sort?: sortType }) =>
         getServerSort({
           queryParams,
-          sort: sort === 'result' ? 'status' : sort,
+          sort: sort === TestCaseColumns.RESULT ? STATUS : sort,
           sortByObj,
           setSortByObj,
           refetchData
@@ -121,7 +130,7 @@ const getColumnText = ({
   getString,
   failed
 }: {
-  col: keyof TestCase | 'order'
+  col: keyof TestCase | typeof ORDER
   pageIndex: number
   itemOrderNumber: number
   row: { original: TestCase }
@@ -131,22 +140,22 @@ const getColumnText = ({
   getString: UseStringsReturn['getString']
   failed: boolean
 }): string | JSX.Element => {
-  if (col === 'order') {
+  if (col === ORDER) {
     return PAGE_SIZE * pageIndex + itemOrderNumber + '.'
-  } else if (col === 'result') {
-    return row.original[col]?.status || ''
-  } else if (col === 'duration_ms') {
+  } else if (col === TestCaseColumns.RESULT) {
+    return (row.original[col] as any)?.status || ''
+  } else if (col === TestCaseColumns.DURATION_MS) {
     return (
       <Duration
         icon={undefined}
         durationText=" "
         startTime={NOW}
-        endTime={NOW + (row.original[col] || 0)}
+        endTime={NOW + ((row.original[col] as number) || 0)}
         showMsLessThanOneSecond={true}
       />
     )
-  } else if (col === 'name') {
-    const textToCopy = row.original[col] || ''
+  } else if (col === TestCaseColumns.NAME) {
+    const textToCopy = (row.original[col] as string) || ''
     const {
       name,
       class_name,
@@ -188,15 +197,15 @@ const getColumnText = ({
         </span>
       </CopyText>
     )
-  } else if (col === 'class_name') {
-    const textToCopy = row.original[col] || ''
+  } else if (col === TestCaseColumns.CLASS_NAME) {
+    const textToCopy = (row.original[col] as string) || ''
     return (
       <CopyText iconName="clipboard-alt" textToCopy={textToCopy}>
         {row.original[col]}
       </CopyText>
     )
   } else {
-    return row.original[col] || ''
+    return (row.original[col] as string) || ''
   }
 }
 
@@ -212,7 +221,7 @@ function ColumnText({
   getString
 }: {
   failed: boolean
-  col: keyof TestCase | 'order'
+  col: keyof TestCase | typeof ORDER
   pageIndex: number
   itemOrderNumber: number
   row: { original: TestCase }
@@ -222,7 +231,7 @@ function ColumnText({
   getString: UseStringsReturn['getString']
 }): JSX.Element {
   return (
-    <Text className={cx(css.text)} color={failed && col !== 'order' ? Color.RED_700 : Color.GREY_700}>
+    <Text className={cx(css.text)} color={failed && col !== ORDER ? Color.RED_700 : Color.GREY_700}>
       {getColumnText({
         col,
         pageIndex,
@@ -329,7 +338,7 @@ export function TestsExecutionItem({
         openTestsFailedModal,
         closeTestsFailedModal
       }: {
-        col: keyof TestCase | 'order'
+        col: keyof TestCase | typeof ORDER
         openTestsFailedModal?: (errorContent: JSX.Element) => void
         closeTestsFailedModal?: () => void
       }) => {
@@ -369,17 +378,17 @@ export function TestsExecutionItem({
     return [
       {
         Header: '#',
-        accessor: 'order' as 'name',
+        accessor: ORDER as keyof TestCase,
         width: 50,
-        Cell: renderColumn({ col: 'order' }),
+        Cell: renderColumn({ col: ORDER }),
         disableSortBy: true
       },
       {
         Header: getString('pipeline.testsReports.testCaseName').toUpperCase(),
-        accessor: 'name',
+        accessor: TestCaseColumns.NAME,
         width: nameClassNameWidth,
         Cell: renderColumn({
-          col: 'name',
+          col: TestCaseColumns.NAME,
           openTestsFailedModal: openErrorModal,
           closeTestsFailedModal: hideErrorModal
         }),
@@ -387,7 +396,7 @@ export function TestsExecutionItem({
         openErrorModal,
         serverSortProps: getServerSortProps({
           enableServerSort: isUngroupedList,
-          accessor: 'name',
+          accessor: TestCaseColumns.NAME,
           sortByObj,
           queryParams,
           refetchData,
@@ -396,13 +405,13 @@ export function TestsExecutionItem({
       },
       {
         Header: getString('pipeline.testsReports.className').toUpperCase(),
-        accessor: 'class_name',
+        accessor: TestCaseColumns.CLASS_NAME,
         width: nameClassNameWidth,
-        Cell: renderColumn({ col: 'class_name' }),
+        Cell: renderColumn({ col: TestCaseColumns.CLASS_NAME }),
         disableSortBy: data?.content?.length === 1,
         serverSortProps: getServerSortProps({
           enableServerSort: isUngroupedList,
-          accessor: 'class_name',
+          accessor: TestCaseColumns.CLASS_NAME,
           sortByObj,
           queryParams,
           refetchData,
@@ -411,13 +420,13 @@ export function TestsExecutionItem({
       },
       {
         Header: getString('pipeline.testsReports.result'),
-        accessor: 'result',
+        accessor: TestCaseColumns.RESULT,
         width: 100,
-        Cell: renderColumn({ col: 'result' }),
+        Cell: renderColumn({ col: TestCaseColumns.RESULT }),
         disableSortBy: data?.content?.length === 1,
         serverSortProps: getServerSortProps({
           enableServerSort: isUngroupedList,
-          accessor: 'result',
+          accessor: TestCaseColumns.RESULT,
           sortByObj,
           queryParams,
           refetchData,
@@ -426,13 +435,13 @@ export function TestsExecutionItem({
       },
       {
         Header: getString('pipeline.duration').toUpperCase(),
-        accessor: 'duration_ms',
+        accessor: TestCaseColumns.DURATION_MS,
         width: 100,
-        Cell: renderColumn({ col: 'duration_ms' }),
+        Cell: renderColumn({ col: TestCaseColumns.DURATION_MS }),
         disableSortBy: data?.content?.length === 1,
         serverSortProps: getServerSortProps({
           enableServerSort: isUngroupedList,
-          accessor: 'duration_ms',
+          accessor: TestCaseColumns.DURATION_MS,
           sortByObj,
           queryParams,
           refetchData,
