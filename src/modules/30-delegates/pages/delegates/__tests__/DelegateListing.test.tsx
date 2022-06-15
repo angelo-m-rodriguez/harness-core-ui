@@ -101,6 +101,29 @@ describe('Feature flag enabled', () => {
   })
 })
 
+describe('search delegate', () => {
+  test('render search delegates', async () => {
+    const { container } = render(
+      <TestWrapper path="/account/:accountId/resources/delegates" pathParams={{ accountId: 'multipleDelegates' }}>
+        <DelegatesListing />
+      </TestWrapper>
+    )
+
+    await waitFor(() => {
+      expect(container.innerHTML).toContain('delegate-1')
+    })
+
+    await waitFor(async () => {
+      expect(container.querySelector('#ngfilterbtn')).toBeDefined()
+      const searchBox = container.querySelector('.bp3-input')
+      act(() => {
+        fireEvent.click(searchBox!, { target: { value: 'Group1' } })
+      })
+      expect(container.innerHTML).toContain('Group1')
+    })
+  })
+})
+
 describe('Delegates Listing With Groups', () => {
   test('render data', () => {
     const { container } = render(
@@ -187,20 +210,5 @@ describe('Test delegate buttons', () => {
     })
 
     expect(container).toMatchSnapshot()
-  })
-
-  test('Open filter drawer', async () => {
-    const { container } = render(
-      <TestWrapper path="/account/:accountId/resources/delegates" pathParams={{ accountId: 'multipleDelegates' }}>
-        <DelegatesListing />
-      </TestWrapper>
-    )
-    await waitFor(() => container.querySelector('#ngfilterbtn')!)
-    const filterBtn = container.querySelector('#ngfilterbtn')!
-    act(() => {
-      fireEvent.click(filterBtn!)
-    })
-    const filterDrawer = document.querySelector('.bp3-portal')
-    expect(filterDrawer).toBeTruthy()
   })
 })
