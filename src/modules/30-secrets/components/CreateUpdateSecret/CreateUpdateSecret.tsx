@@ -49,7 +49,6 @@ import { Category, SecretActions } from '@common/constants/TrackingConstants'
 import { useGovernanceMetaDataModal } from '@governance/hooks/useGovernanceMetaDataModal'
 import VaultFormFields from './views/VaultFormFields'
 import LocalFormFields from './views/LocalFormFields'
-import createSecretMockWithGovernance from './__tests__/createSecretWithGovernanceMock.json'
 
 export type SecretFormData = Omit<SecretDTOV2, 'spec'> & SecretTextSpecDTO & SecretFileSpecDTO
 
@@ -154,12 +153,7 @@ const CreateUpdateSecret: React.FC<CreateUpdateSecretProps> = props => {
     lazy: true
   })
   const { mutate: createSecretText, loading: loadingCreateText } = usePostSecret({
-    queryParams: { accountIdentifier, orgIdentifier, projectIdentifier, privateSecret },
-    mock: {
-      mutate: () => {
-        return createSecretMockWithGovernance
-      }
-    }
+    queryParams: { accountIdentifier, orgIdentifier, projectIdentifier, privateSecret }
   })
   const { mutate: createSecretFile, loading: loadingCreateFile } = usePostSecretFileV2({
     queryParams: { accountIdentifier, orgIdentifier, projectIdentifier, privateSecret }
