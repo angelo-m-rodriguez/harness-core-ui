@@ -6,7 +6,9 @@
  */
 
 import React from 'react'
-import { Formik, getMultiTypeFromValue, IconName, MultiTypeInputType } from '@wings-software/uicore'
+import cx from 'classnames'
+
+import { Formik, FormInput, getMultiTypeFromValue, IconName, MultiTypeInputType } from '@wings-software/uicore'
 import * as Yup from 'yup'
 import { Color } from '@harness/design-system'
 import { FormikErrors, FormikProps, yupToFormErrors } from 'formik'
@@ -19,86 +21,118 @@ import type { StepElementConfig } from 'services/cd-ng'
 
 import { useStrings } from 'framework/strings'
 
-import { getDurationValidationSchema } from '@common/components/MultiTypeDuration/MultiTypeDuration'
+import {
+  FormMultiTypeDurationField,
+  getDurationValidationSchema
+} from '@common/components/MultiTypeDuration/MultiTypeDuration'
 
 import { getNameAndIdentifierSchema } from '@pipeline/components/PipelineSteps/Steps/StepsValidateUtils'
 import { StepType } from '@pipeline/components/PipelineSteps/PipelineStepInterface'
 import { PipelineStep } from '@pipeline/components/PipelineSteps/PipelineStep'
 import type { StringsMap } from 'stringTypes'
-import CreatePRScript from './CreatePrScript'
 
-import CreatePRInputStep from './CreatePRInputStep'
-import { CreatePRVariableStepProps, CreatePRVariableView } from './CreatePRVariableStep'
+import { ConfigureOptions } from '@common/components/ConfigureOptions/ConfigureOptions'
+import { useVariablesExpression } from '@pipeline/components/PipelineStudio/PiplineHooks/useVariablesExpression'
+import { MergePRVariableStepProps, MergePRVariableView } from './MergePrVariableView'
+import MergePRInputStep from './MergePrInputStep'
+import stepCss from '@pipeline/components/PipelineSteps/Steps/Steps.module.scss'
 
-export interface CreatePRStepData extends StepElementConfig {
-  spec?: {
-    overrideConfig: boolean
-    shell?: string
-    source?: {
-      type: string
-      spec: {
-        updateConfigScript?: string
-      }
-    }
-  }
-}
-
-interface CreatePrProps {
-  initialValues: CreatePRStepData
-  onUpdate?: (data: CreatePRStepData) => void
-  onChange?: (data: CreatePRStepData) => void
+interface MergePrProps {
+  initialValues: StepElementConfig
+  onUpdate?: (data: StepElementConfig) => void
+  onChange?: (data: StepElementConfig) => void
   allowableTypes: MultiTypeInputType[]
   stepViewType?: StepViewType
   isNewStep?: boolean
   readonly?: boolean
   inputSetData?: {
-    template?: CreatePRStepData
+    template?: StepElementConfig
     path?: string
     readonly?: boolean
   }
 }
 
-function CreatePRWidget(props: CreatePrProps, formikRef: StepFormikFowardRef<CreatePRStepData>): React.ReactElement {
+function MergePRWidget(props: MergePrProps, formikRef: StepFormikFowardRef<StepElementConfig>): React.ReactElement {
   const { initialValues, onUpdate, isNewStep, readonly, allowableTypes, onChange, stepViewType } = props
   const { getString } = useStrings()
+  const { expressions } = useVariablesExpression()
+
   return (
     <>
-      <Formik<CreatePRStepData>
+      <Formik<StepElementConfig>
         onSubmit={
           /* istanbul ignore next */
-          (values: CreatePRStepData) => {
+          (values: StepElementConfig) => {
             /* istanbul ignore next */
             onUpdate?.(values)
           }
         }
         validate={
           /* istanbul ignore next */
-          (values: CreatePRStepData) => {
+          (values: StepElementConfig) => {
             /* istanbul ignore next */
             onChange?.(values)
           }
         }
-        formName="createpr"
+        formName="mergepr"
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           ...getNameAndIdentifierSchema(getString, stepViewType),
           timeout: getDurationValidationSchema({ minimum: '10s' }).required(getString('validation.timeout10SecMinimum'))
         })}
       >
-        {(formik: FormikProps<CreatePRStepData>) => {
+        {(formik: FormikProps<StepElementConfig>) => {
           // this is required
           setFormikRef(formikRef, formik)
 
           return (
-            <React.Fragment>
-              <CreatePRScript
-                isNewStep={defaultTo(isNewStep, true)}
-                stepViewType={stepViewType}
-                formik={formik}
-                readonly={readonly}
-                allowableTypes={allowableTypes}
-              />
-            </React.Fragment>
+            <>
+              {stepViewType !== StepViewType.Template && (
+                <div className={cx(stepCss.formGroup, stepCss.lg)}>
+                  <FormInput.InputWithIdentifier
+                    inputLabel={getString('pipelineSteps.stepNameLabel')}
+                    isIdentifierEditable={isNewStep && !readonly}
+                    inputGroupProps={{
+                      placeholder: getString('pipeline.stepNamePlaceholder'),
+                      disabled: readonly
+                    }}
+                  />
+                </div>
+              )}
+              <div className={cx(stepCss.formGroup, stepCss.sm)}>
+                <FormMultiTypeDurationField
+                  name="timeout"
+                  label={getString('pipelineSteps.timeoutLabel')}
+                  multiTypeDurationProps={{
+                    enableConfigureOptions: false,
+                    expressions,
+                    disabled: readonly,
+                    allowableTypes
+                  }}
+                  className={stepCss.duration}
+                  disabled={readonly}
+                />
+                {getMultiTypeFromValue(formik.values.timeout) === MultiTypeInputType.RUNTIME && (
+                  <ConfigureOptions
+                    value={formik.values.timeout as string}
+                    type="String"
+                    variableName="step.timeout"
+                    showRequiredField={false}
+                    showDefaultField={false}
+                    showAdvanced={true}
+                    // istanbul ignore next
+                    onChange={
+                      // istanbul ignore next
+                      value => {
+                        // istanbul ignore next
+                        formik.setFieldValue('timeout', value)
+                      }
+                    }
+                    isReadonly={readonly}
+                  />
+                )}
+              </div>
+            </>
           )
         }}
       </Formik>
@@ -106,14 +140,14 @@ function CreatePRWidget(props: CreatePrProps, formikRef: StepFormikFowardRef<Cre
   )
 }
 
-const CreatePRWidgetWithRef = React.forwardRef(CreatePRWidget)
-export class CreatePr extends PipelineStep<CreatePRStepData> {
+const MergePRWidgetWithRef = React.forwardRef(MergePRWidget)
+export class MergePR extends PipelineStep<StepElementConfig> {
   constructor() {
     super()
     this._hasStepVariables = true
     this._hasDelegateSelectionVisible = true
   }
-  renderStep(props: StepProps<CreatePRStepData>): JSX.Element {
+  renderStep(props: StepProps<StepElementConfig>): JSX.Element {
     const {
       initialValues,
       onUpdate,
@@ -129,7 +163,7 @@ export class CreatePr extends PipelineStep<CreatePRStepData> {
 
     if (stepViewType === StepViewType.InputSet || stepViewType === StepViewType.DeploymentForm) {
       return (
-        <CreatePRInputStep
+        <MergePRInputStep
           initialValues={initialValues}
           onUpdate={onUpdate}
           stepViewType={stepViewType}
@@ -140,10 +174,10 @@ export class CreatePr extends PipelineStep<CreatePRStepData> {
         />
       )
     } else if (stepViewType === StepViewType.InputVariable) {
-      return <CreatePRVariableView {...(customStepProps as CreatePRVariableStepProps)} originalData={initialValues} />
+      return <MergePRVariableView {...(customStepProps as MergePRVariableStepProps)} originalData={initialValues} />
     }
     return (
-      <CreatePRWidgetWithRef
+      <MergePRWidgetWithRef
         initialValues={initialValues}
         onUpdate={onUpdate}
         isNewStep={defaultTo(isNewStep, true)}
@@ -156,8 +190,8 @@ export class CreatePr extends PipelineStep<CreatePRStepData> {
     )
   }
 
-  protected type = StepType.CreatePR
-  protected stepName = 'Create PR'
+  protected type = StepType.MergePR
+  protected stepName = 'Merge PR'
   protected stepIconColor = Color.GREY_700
   protected stepIcon: IconName = 'create-pr'
   protected stepDescription: keyof StringsMap = 'pipeline.stepDescription.createPR'
@@ -168,7 +202,7 @@ export class CreatePr extends PipelineStep<CreatePRStepData> {
     template,
     getString,
     viewType
-  }: ValidateInputSetProps<CreatePRStepData>): FormikErrors<CreatePRStepData> {
+  }: ValidateInputSetProps<StepElementConfig>): FormikErrors<StepElementConfig> {
     const isRequired = viewType === StepViewType.DeploymentForm || viewType === StepViewType.TriggerForm
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const errors = {} as any
@@ -200,14 +234,10 @@ export class CreatePr extends PipelineStep<CreatePRStepData> {
     return errors
   }
 
-  protected defaultValues: CreatePRStepData = {
+  protected defaultValues: StepElementConfig = {
     name: '',
     identifier: '',
-    type: StepType.CreatePR,
-    timeout: '10m',
-    spec: {
-      overrideConfig: false,
-      shell: 'Bash'
-    }
+    type: StepType.MergePR,
+    timeout: '10m'
   }
 }

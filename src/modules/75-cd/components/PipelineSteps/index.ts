@@ -44,6 +44,7 @@ import { CFRollbackStack } from './CloudFormation/RollbackStack/RollbackStack'
 import { CFDeleteStack } from './CloudFormation/DeleteStack/DeleteStack'
 import { CFCreateStack } from './CloudFormation/CreateStack/CreateStack'
 import { CreatePr } from './CreatePrStep/CreatePrStep'
+import { MergePR } from './MergePrStep/MergePrStep'
 
 factory.registerStep(new HttpStep())
 factory.registerStep(new K8RolloutDeployStep())
@@ -82,3 +83,4 @@ factory.registerStep(new CFRollbackStack())
 factory.registerStep(new CFDeleteStack())
 factory.registerStep(new CFCreateStack())
 factory.registerStep(new CreatePr())
+factory.registerStep(new MergePR())
