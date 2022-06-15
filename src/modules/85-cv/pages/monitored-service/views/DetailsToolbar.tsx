@@ -31,21 +31,50 @@ const DetailsToolbar: React.FC<ToolbarProps> = ({ loading, monitoredService, las
   }
 
   return (
-    <Layout.Vertical spacing="xsmall">
-      <Text color={Color.BLACK} font={{ variation: FontVariation.SMALL_SEMI }}>
-        {`${getString('lastUpdated')}: ${moment(lastModifiedAt).format('lll')}`}
-      </Text>
-      <EnvironmentToolTipDisplay
-        type={monitoredService?.type}
-        color={Color.BLACK}
-        font={{ variation: FontVariation.SMALL_SEMI }}
-        envRefList={envRefList}
-        environmentRef={monitoredService?.environmentRef}
-        shouldAddEnvPrefix={true}
-      />
-      <Text color={Color.BLACK} font={{ variation: FontVariation.SMALL_SEMI }}>
-        {`${getString('typeLabel')}: ${monitoredService?.type}`}
-      </Text>
+    <Layout.Vertical spacing="xsmall" style={{ textAlign: 'right' }}>
+      <Layout.Horizontal flex={{ justifyContent: 'flex-end' }}>
+        <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>{`${getString('lastUpdated')}: `}</Text>
+        <Text color={Color.BLACK} font={{ variation: FontVariation.SMALL_SEMI }}>
+          &nbsp; {`${moment(lastModifiedAt).format('lll')}`}
+        </Text>
+      </Layout.Horizontal>
+      {monitoredService?.type === 'Infrastructure' ? (
+        <Layout.Horizontal>
+          <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+            {`${getString('environment')}:`}
+          </Text>
+          <Text color={Color.BLACK} font={{ variation: FontVariation.SMALL_SEMI }}>
+            {`${envRefList?.slice(0, 1).join(',')}`}
+
+            {envRefList && envRefList?.length > 1 ? <span>+{envRefList.length - 1}</span> : ''}
+          </Text>
+        </Layout.Horizontal>
+      ) : (
+        <Layout.Horizontal flex={{ justifyContent: 'flex-end' }}>
+          <Text
+            color={Color.GREY_500}
+            title={monitoredService?.environmentRef}
+            font={{ variation: FontVariation.SMALL }}
+          >
+            {`${getString('environment')}:`}
+          </Text>
+          <Text
+            color={Color.BLACK}
+            title={monitoredService?.environmentRef}
+            font={{ variation: FontVariation.SMALL_SEMI }}
+          >
+            &nbsp; {monitoredService?.environmentRef}
+          </Text>
+        </Layout.Horizontal>
+      )}
+      <Layout.Horizontal flex={{ justifyContent: 'flex-end' }}>
+        <Text color={Color.GREY_500} font={{ variation: FontVariation.SMALL }}>
+          {`${getString('typeLabel')}:`}
+        </Text>
+        <Text color={Color.BLACK} font={{ variation: FontVariation.SMALL_SEMI }}>
+          &nbsp; {` ${monitoredService?.type}`}
+        </Text>
+      </Layout.Horizontal>
     </Layout.Vertical>
   )
 }
