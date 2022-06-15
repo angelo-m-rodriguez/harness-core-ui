@@ -11,7 +11,6 @@ import { Classes } from '@blueprintjs/core'
 import { Layout, Container, Text } from '@wings-software/uicore'
 import { FontVariation, Color } from '@harness/design-system'
 import { useStrings } from 'framework/strings'
-import { EnvironmentToolTipDisplay } from '@cv/components/HarnessServiceAndEnvironment/components/EnvironmentToolTipDisplay'
 import type { ToolbarProps } from '../MonitoredServicePage.types'
 import type { ExtendedMonitoredServiceDTO } from '../components/Configurations/Configurations.utils'
 
