@@ -338,7 +338,6 @@ function SaveAsInputSet({
                           formikProps={createInputSetFormikProps as any}
                           handleSubmit={noop}
                           isEdit={false}
-                          showRemoteTypeSelection={false}
                           disableFields={{
                             connectorRef: true,
                             repoName: true,

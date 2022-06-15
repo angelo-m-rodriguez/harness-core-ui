@@ -8,7 +8,7 @@
 import React, { useEffect, useState } from 'react'
 import cx from 'classnames'
 import { useParams } from 'react-router-dom'
-import { noop, omit } from 'lodash-es'
+import { noop, omit, pick } from 'lodash-es'
 import produce from 'immer'
 import * as Yup from 'yup'
 import {
@@ -65,15 +65,7 @@ interface UseTemplate {
 interface PipelineInfoConfigWithGitDetails extends PipelineInfoConfig {
   repo?: string
   branch: string
-  connectorRef?:
-    | string
-    | {
-        label?: string
-        value?: string
-        scope?: string
-        live?: boolean
-        connector?: any
-      }
+  connectorRef?: string
   storeType?: string
   remoteType?: string
   importYaml?: string
@@ -209,7 +201,8 @@ export default function CreatePipelines({
       omit(values, 'storeType', 'remoteType', 'connectorRef', 'repo', 'branch', 'filePath', 'useTemplate'),
       {
         storeType: values.storeType as StoreMetadata['storeType'],
-        connectorRef: typeof values.connectorRef !== 'string' ? values.connectorRef?.value : ''
+        connectorRef:
+          typeof values.connectorRef !== 'string' ? (values.connectorRef as any)?.value : values.connectorRef
       },
       formGitDetails,
       values.useTemplate
@@ -279,7 +272,12 @@ export default function CreatePipelines({
               </>
             ) : null}
             {storeType?.type === StoreType.REMOTE ? (
-              <GitSyncForm formikProps={formikProps as any} handleSubmit={noop} isEdit={isEdit} />
+              <GitSyncForm
+                formikProps={formikProps as any}
+                handleSubmit={noop}
+                isEdit={isEdit}
+                initialValues={pick(newInitialValues, 'repo', 'branch', 'filePath', 'connectorRef')}
+              />
             ) : null}
 
             {isGitSimplificationEnabled ? (

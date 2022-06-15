@@ -47,7 +47,6 @@ describe('GitSyncForm test', () => {
         <Formik<GitSyncFormFields>
           initialValues={{
             identifier: 'testIdentifier',
-            remoteType: 'create',
             connectorRef: {} as ConnectorSelectedValue,
             repo: '',
             branch: '',
@@ -100,7 +99,6 @@ describe('GitSyncForm test', () => {
         <Formik<GitSyncFormFields>
           initialValues={{
             identifier: 'testIdentifier',
-            remoteType: 'create',
             connectorRef: {
               label: 'ValidGithubRepo',
               value: 'ValidGithubRepo',

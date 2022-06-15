@@ -647,7 +647,6 @@ export function OverlayInputSetForm({
                                 formikProps={formikProps as any}
                                 handleSubmit={noop}
                                 isEdit={isEdit}
-                                showRemoteTypeSelection={false}
                                 disableFields={
                                   !isEdit
                                     ? {

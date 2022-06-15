@@ -453,11 +453,23 @@ export function PipelineCanvas({
           updatedGitDetails = { ...gitDetails, ...updatedGitDetails }
         }
         updateGitDetails(updatedGitDetails).then(() => {
-          if (updatedGitDetails && !currStoreMetadata?.storeType) {
-            updateQueryParams(
-              { repoIdentifier: updatedGitDetails.repoIdentifier, branch: updatedGitDetails.branch },
-              { skipNulls: true }
-            )
+          if (updatedGitDetails) {
+            if (isGitSyncEnabled) {
+              updateQueryParams(
+                { repoIdentifier: updatedGitDetails.repoIdentifier, branch: updatedGitDetails.branch },
+                { skipNulls: true }
+              )
+            } else if (isGitSimplificationEnabled && currStoreMetadata?.storeType === StoreType.REMOTE) {
+              updateQueryParams(
+                {
+                  connectorRef: currStoreMetadata.connectorRef,
+                  repoName: updatedGitDetails?.repoName,
+                  branch: updatedGitDetails.branch,
+                  storeType: currStoreMetadata.storeType as StoreType
+                },
+                { skipNulls: true }
+              )
+            }
           }
         })
       }
@@ -579,7 +591,7 @@ export function PipelineCanvas({
       gitDetails.repoName &&
       gitDetails.branch &&
       updatePipelineStoreMetadata({ connectorRef, storeType }, gitDetails)
-  }, [isPipelineRemote, gitDetails])
+  }, [isPipelineRemote, gitDetails, connectorRef, storeType])
 
   const [openRunPipelineModal, closeRunPipelineModal] = useModalHook(
     () =>
