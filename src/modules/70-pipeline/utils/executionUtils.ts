@@ -892,7 +892,7 @@ export const processLayoutNodeMapV1 = (executionSummary?: PipelineExecutionSumma
       } else if (
         isNodeTypeMatrixOrFor(nodeDetails?.nodeType) &&
         currentNodeChildren &&
-        currentNodeChildren.length > 1
+        currentNodeChildren.length >= 1
       ) {
         const childData: PipelineGraphState[] = []
         currentNodeChildren.forEach(item => {

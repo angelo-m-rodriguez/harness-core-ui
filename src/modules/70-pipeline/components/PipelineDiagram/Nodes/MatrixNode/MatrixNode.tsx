@@ -42,7 +42,7 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAl
     const maxChildLength = defaultTo(data.length, 0)
     const finalHeight =
       (Math.floor(maxChildLength / parallelism) + Math.ceil((maxChildLength % parallelism) / parallelism)) * nodeHeight // 100-PipelineStage , 130(Diamond) + 20(text)
-    const finalWidth = nodeWidth * parallelism
+    const finalWidth = nodeWidth * Math.min(parallelism, (data || []).length)
     return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is link gap that we dont need for last stepgroup node
   } else {
     const updatedParallelism = Math.min(parallelism, MAX_ALLOWED_MATRIX__COLLAPSED_NODES)
@@ -52,7 +52,7 @@ const getCalculatedStyles = (data: PipelineGraphState[], parallelism = 1, showAl
       (Math.floor(maxChildLength / updatedParallelism) +
         Math.ceil((maxChildLength % updatedParallelism) / updatedParallelism)) *
       nodeHeight
-    const finalWidth = nodeWidth * updatedParallelism
+    const finalWidth = nodeWidth * Math.min(updatedParallelism, (data || []).length)
     return { height: `${finalHeight + 100}px`, width: `${finalWidth - 40}px` } // 80 is
   }
 }
