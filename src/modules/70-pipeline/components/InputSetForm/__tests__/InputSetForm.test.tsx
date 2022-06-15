@@ -453,7 +453,7 @@ describe('Render Forms - Snapshot Testing', () => {
         storeType: 'INLINE',
         pipeline: { identifier: 'testqqq', name: '' }
       },
-      { branch: '', repoIdentifier: '' },
+      { branch: '', repoIdentifier: '', repoName: '' },
       { branch: '', connectorRef: '', filePath: undefined, repoName: '', storeType: 'INLINE' }
     )
     //ErrorStrip
