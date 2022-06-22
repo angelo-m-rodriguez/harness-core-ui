@@ -63,7 +63,7 @@ describe('RunTests Step', () => {
       jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
         TI_DOTNET: true
       })
-      const { container, getByText } = render(
+      const { container, getByText, findByText } = render(
         <TestStepWidget initialValues={{}} type={StepType.RunTests} stepViewType={StepViewType.Edit} />
       )
 
@@ -82,6 +82,7 @@ describe('RunTests Step', () => {
         expect(menuItemLabels?.length).toEqual(2)
         expect(menuItemLabels?.[0].innerHTML).toEqual('ci.runTestsStep.csharp')
         expect(menuItemLabels?.[1].innerHTML).toEqual('ci.runTestsStep.java')
+        expect(findByText('ci.runTestsErrorTrackingSetupText')).not.toBeNull()
       })
 
       try {
@@ -91,7 +92,34 @@ describe('RunTests Step', () => {
       }
     })
 
+    test('Error tracking should render properly', async () => {
+      jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
+        TI_DOTNET: true,
+        ERROR_TRACKING_ENABLED: true
+      })
+      const { container, getByText } = render(
+        <TestStepWidget initialValues={{}} type={StepType.RunTests} stepViewType={StepViewType.Edit} />
+      )
+
+      fireEvent.click(getByText('pipeline.additionalConfiguration'))
+      const dropdownSelects = container.querySelectorAll('[icon="chevron-down"]')
+      expect(dropdownSelects.length).toEqual(5)
+
+      fireEvent.click(dropdownSelects[1])
+
+      const menuItemLabels = findPopoverContainer()?.querySelectorAll('[class*="menuItemLabel"]')
+      expect(menuItemLabels?.length).toBe(2)
+
+      menuItemLabels ? fireEvent.click(menuItemLabels[1]) : fail('Language menu items are not present')
+      expect(getByText('ci.runTestsErrorTrackingSetupText')).toBeDefined()
+
+      expect(container).toMatchSnapshot()
+    })
+
     test('renders runtime inputs', async () => {
+      jest.spyOn(FeatureFlag, 'useFeatureFlags').mockReturnValue({
+        TI_DOTNET: true
+      })
       const initialValues = {
         identifier: 'My_Run_Step',
         name: 'My RunTests Step',
