@@ -76,7 +76,7 @@ const ET_COMMANDS =
   '\n' +
   'PROJ_DIR=$PWD\n' +
   'cd /opt\n' +
-  'arch=`uname -m\n`' +
+  'arch=`uname -m`\n' +
   'if [ $arch = "x86_64" ]; then\n' +
   '  wget -qO- https://get.et.harness.io/releases/latest/nix/harness-et-agent.tar.gz | tar -xz\n' +
   'elif [ $arch = "aarch64" ]; then\n' +
@@ -337,10 +337,9 @@ export const RunTestsStepBase = (
         // This is required
         setFormikRef?.(formikRef, formik)
         const selectedLanguageValue = (formik.values?.spec?.language as any)?.value
-        const errorTrackingOn =
+        const isErrorTrackingCurrentlyOn =
           selectedLanguageValue === Language.Java &&
           formik?.values?.spec?.preCommand &&
-          getMultiTypeFromValue(formik?.values?.spec?.preCommand) === MultiTypeInputType.RUNTIME &&
           formik.values.spec.preCommand.indexOf(ET_COMMANDS_START) >= 0 &&
           formik.values.spec.preCommand.indexOf(ET_COMMANDS_END) >= 0
 
@@ -396,23 +395,23 @@ export const RunTestsStepBase = (
                 <RadioButtonGroup
                   name="error-tracking-setup"
                   inline={true}
-                  selectedValue={errorTrackingOn ? 'yes' : 'no'}
+                  selectedValue={isErrorTrackingCurrentlyOn ? 'yes' : 'no'}
                   onChange={(e: FormEvent<HTMLInputElement>) => {
-                    let preCommand = formik?.values?.spec?.preCommand as string
-                    const isErrorTrackingOn = e.currentTarget.value === 'yes'
+                    const preCommand = formik?.values?.spec?.preCommand as string
+                    const turnErrorTrackingOn = e.currentTarget.value === 'yes'
                     if (
-                      isErrorTrackingOn &&
+                      turnErrorTrackingOn &&
                       preCommand.indexOf(ET_COMMANDS_START) < 0 &&
                       preCommand.indexOf(ET_COMMANDS_END) < 0
                     ) {
                       formik?.setFieldValue('spec.preCommand', ET_COMMANDS + '\n' + preCommand)
                     } else if (
-                      !isErrorTrackingOn &&
+                      !turnErrorTrackingOn &&
                       preCommand.indexOf(ET_COMMANDS_START) >= 0 &&
                       preCommand.indexOf(ET_COMMANDS_END) >= 0
                     ) {
                       let updatedCommand = ''
-                      let startIndex = preCommand.indexOf(ET_COMMANDS_START)
+                      const startIndex = preCommand.indexOf(ET_COMMANDS_START)
                       let endIndex = preCommand.indexOf(ET_COMMANDS_END)
                       if (startIndex >= 0 && endIndex >= 0) {
                         if (startIndex > 0) {
