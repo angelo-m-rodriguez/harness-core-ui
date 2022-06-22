@@ -73,6 +73,11 @@ interface FieldRenderProps {
 
 const qaLocation = 'https://qa.harness.io'
 
+enum ErrorTrackingStatus {
+  ON = 'on',
+  OFF = 'off'
+}
+
 const BuildTool = {
   BAZEL: 'Bazel',
   MAVEN: 'Maven',
@@ -114,6 +119,11 @@ const getJavaBuildToolOptions = (getString: UseStringsReturn['getString']): Sele
 
 export const getBuildEnvironmentOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
   { label: getString('ci.runTestsStep.dotNetCore'), value: 'Core' }
+]
+
+export const getErrorTrackingOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
+  { label: 'Yes', value: ErrorTrackingStatus.ON },
+  { label: 'No', value: ErrorTrackingStatus.OFF }
 ]
 
 export const getFrameworkVersionOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
@@ -159,6 +169,34 @@ const getArgsPlaceholder = (buildTool?: string): string => {
     return '. "path/to/nunit3-console.exe" path/to/TestProject.dll --result="UnitTestResults.xml"'
   }
   return ''
+}
+
+const getUpdatedPreCommand = (preCommand: string, isErrorTrackingOn: boolean): string => {
+  let updatedCommand = preCommand
+  if (isErrorTrackingOn && preCommand.indexOf(ET_COMMANDS_START) < 0 && preCommand.indexOf(ET_COMMANDS_END) < 0) {
+    updatedCommand = ET_COMMANDS + '\n' + preCommand
+  } else if (
+    !isErrorTrackingOn &&
+    preCommand.indexOf(ET_COMMANDS_START) >= 0 &&
+    preCommand.indexOf(ET_COMMANDS_END) >= 0
+  ) {
+    updatedCommand = ''
+    const startIndex = preCommand.indexOf(ET_COMMANDS_START)
+    let endIndex = preCommand.indexOf(ET_COMMANDS_END)
+    if (startIndex >= 0 && endIndex >= 0) {
+      if (startIndex > 0) {
+        updatedCommand = preCommand.substring(0, startIndex)
+      }
+      endIndex += ET_COMMANDS_END.length
+      if (endIndex < preCommand.length && preCommand.charAt(endIndex) === '\n') {
+        endIndex++
+      }
+      if (endIndex < preCommand.length - 1) {
+        updatedCommand = updatedCommand + preCommand.substring(endIndex)
+      }
+    }
+  }
+  return updatedCommand
 }
 
 export const RunTestsStepBase = (
@@ -482,49 +520,21 @@ export const RunTestsStepBase = (
                 allowableTypes: [MultiTypeInputType.FIXED]
               })}
             </Container>
-            {ERROR_TRACKING_ENABLED && (formik.values?.spec?.language as any)?.value === Language.Java && (
+            {ERROR_TRACKING_ENABLED && selectedLanguageValue === Language.Java && (
               <>
-                <Text font={{ size: 'small' }}>{getString('ci.runTestsErrorTrackingSetupText')}</Text>
+                <Text tooltipProps={{ dataTooltipId: 'runTestErrorTracking' }} font={{ size: 'small' }}>
+                  {getString('ci.runTestsErrorTrackingSetupText')}
+                </Text>
                 <RadioButtonGroup
                   name="error-tracking-setup"
                   inline={true}
-                  selectedValue={isErrorTrackingCurrentlyOn ? 'yes' : 'no'}
+                  selectedValue={isErrorTrackingCurrentlyOn ? ErrorTrackingStatus.ON : ErrorTrackingStatus.OFF}
                   onChange={(e: FormEvent<HTMLInputElement>) => {
                     const preCommand = formik?.values?.spec?.preCommand as string
-                    const turnErrorTrackingOn = e.currentTarget.value === 'yes'
-                    if (
-                      turnErrorTrackingOn &&
-                      preCommand.indexOf(ET_COMMANDS_START) < 0 &&
-                      preCommand.indexOf(ET_COMMANDS_END) < 0
-                    ) {
-                      formik?.setFieldValue('spec.preCommand', ET_COMMANDS + '\n' + preCommand)
-                    } else if (
-                      !turnErrorTrackingOn &&
-                      preCommand.indexOf(ET_COMMANDS_START) >= 0 &&
-                      preCommand.indexOf(ET_COMMANDS_END) >= 0
-                    ) {
-                      let updatedCommand = ''
-                      const startIndex = preCommand.indexOf(ET_COMMANDS_START)
-                      let endIndex = preCommand.indexOf(ET_COMMANDS_END)
-                      if (startIndex >= 0 && endIndex >= 0) {
-                        if (startIndex > 0) {
-                          updatedCommand = preCommand.substring(0, startIndex)
-                        }
-                        endIndex += ET_COMMANDS_END.length
-                        if (endIndex < preCommand.length && preCommand.charAt(endIndex) === '\n') {
-                          endIndex++
-                        }
-                        if (endIndex < preCommand.length - 1) {
-                          updatedCommand = updatedCommand + preCommand.substring(endIndex)
-                        }
-                        formik?.setFieldValue('spec.preCommand', updatedCommand)
-                      }
-                    }
+                    const turnErrorTrackingOn = e.currentTarget.value === ErrorTrackingStatus.ON
+                    formik?.setFieldValue('spec.preCommand', getUpdatedPreCommand(preCommand, turnErrorTrackingOn))
                   }}
-                  options={[
-                    { label: 'Yes', value: 'yes' },
-                    { label: 'No', value: 'no' }
-                  ]}
+                  options={getErrorTrackingOptions(getString)}
                   margin={{ bottom: 'small' }}
                 />
               </>
