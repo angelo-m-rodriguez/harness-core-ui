@@ -5663,6 +5663,7 @@ export interface StringsMap {
   'ci.remoteCacheImage.dockerInfo': string
   'ci.remoteCacheImage.label': string
   'ci.remoteCacheRepository.label': string
+  'ci.runTestsErrorTrackingSetupText': string
   'ci.runTestsMavenSetupSample': string
   'ci.runTestsMavenSetupText1': string
   'ci.runTestsMavenSetupText2': string

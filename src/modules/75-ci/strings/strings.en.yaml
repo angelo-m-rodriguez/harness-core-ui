@@ -58,6 +58,7 @@ runTestsStep:
   testReportPaths: Test Report Paths
   validation:
     namespacesRequiredWhenCsharp: 'Namespaces is required in case Language is C#'
+runTestsErrorTrackingSetupText: Do you want to enable Error Tracking?
 runTestsMavenSetupTitle: Maven setup
 runTestsMavenSetupText1: Does your pom.xml contain <argLine>? Or do you attach Jacoco or any agent while running unit tests?
 runTestsMavenSetupText2: Update pom.xml by adding the following plugin with <harnessArgLine>
