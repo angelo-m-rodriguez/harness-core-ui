@@ -14,7 +14,6 @@ import {
   FormikForm,
   Accordion,
   RadioButtonGroup,
-  RadioButtonProps,
   CodeBlock,
   Container,
   Layout,
@@ -112,6 +111,10 @@ const ET_COMMANDS =
   'cd $PROJ_DIR\n' +
   ET_COMMANDS_END
 
+interface RadioButtonOption {
+  label: string
+  value: string
+}
 const getJavaBuildToolOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
   { label: getString('ci.runTestsStep.bazel'), value: BuildTool.BAZEL },
   { label: getString('ci.runTestsStep.maven'), value: BuildTool.MAVEN },
@@ -132,9 +135,7 @@ export const getCSharpBuildToolOptions = (getString: UseStringsReturn['getString
   { label: getString('ci.runTestsStep.nUnitConsole'), value: BuildTool.NUNITCONSOLE }
 ]
 
-export const getErrorTrackingOptions = (
-  getString: UseStringsReturn['getString']
-): Array<Pick<RadioButtonProps, 'label' | 'value' | 'disabled' | 'tooltipId'>> => [
+export const getErrorTrackingOptions = (getString: UseStringsReturn['getString']): Array<RadioButtonOption> => [
   { label: getString('yes'), value: ErrorTrackingStatus.ON },
   { label: getString('no'), value: ErrorTrackingStatus.OFF }
 ]
