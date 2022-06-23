@@ -112,6 +112,8 @@ describe('RunTests Step', () => {
 
       menuItemLabels ? fireEvent.click(menuItemLabels[1]) : fail('Language menu items are not present')
       expect(getByText('ci.runTestsErrorTrackingSetupText')).toBeDefined()
+
+      expect(container).toMatchSnapshot()
     })
 
     test('renders runtime inputs', async () => {
