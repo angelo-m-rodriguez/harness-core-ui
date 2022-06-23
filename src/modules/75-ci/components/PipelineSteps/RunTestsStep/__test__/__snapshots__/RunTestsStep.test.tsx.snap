@@ -495,7 +495,7 @@ exports[`RunTests Step Edit View Error tracking should render properly 1`] = `
               <span
                 class="RadioButton--radioIcon"
               />
-              Yes
+              yes
             </label>
             <label
               class="RadioButton--radio StyledProps--main"
@@ -510,7 +510,7 @@ exports[`RunTests Step Edit View Error tracking should render properly 1`] = `
               <span
                 class="RadioButton--radioIcon"
               />
-              No
+              no
             </label>
           </div>
         </div>
