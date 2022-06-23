@@ -14,6 +14,7 @@ import {
   FormikForm,
   Accordion,
   RadioButtonGroup,
+  RadioButtonProps,
   CodeBlock,
   Container,
   Layout,
@@ -131,6 +132,13 @@ export const getCSharpBuildToolOptions = (getString: UseStringsReturn['getString
   { label: getString('ci.runTestsStep.nUnitConsole'), value: BuildTool.NUNITCONSOLE }
 ]
 
+export const getErrorTrackingOptions = (
+  getString: UseStringsReturn['getString']
+): Array<Pick<RadioButtonProps, 'label' | 'value' | 'disabled' | 'tooltipId'>> => [
+  { label: getString('yes'), value: ErrorTrackingStatus.ON },
+  { label: getString('no'), value: ErrorTrackingStatus.OFF }
+]
+
 const enum Language {
   Java = 'Java',
   Csharp = 'Csharp'
@@ -168,8 +176,11 @@ const getArgsPlaceholder = (buildTool?: string): string => {
 
 const getUpdatedPreCommand = (preCommand: string, isErrorTrackingOn: boolean): string => {
   let updatedCommand = preCommand
-  if (isErrorTrackingOn && preCommand.indexOf(ET_COMMANDS_START) < 0 && preCommand.indexOf(ET_COMMANDS_END) < 0) {
-    updatedCommand = ET_COMMANDS + '\n' + preCommand
+  if (
+    isErrorTrackingOn &&
+    (!preCommand || (preCommand.indexOf(ET_COMMANDS_START) < 0 && preCommand.indexOf(ET_COMMANDS_END) < 0))
+  ) {
+    updatedCommand = ET_COMMANDS + '\n' + (preCommand ? preCommand : '')
   } else if (
     !isErrorTrackingOn &&
     preCommand.indexOf(ET_COMMANDS_START) >= 0 &&
@@ -529,10 +540,7 @@ export const RunTestsStepBase = (
                     const turnErrorTrackingOn = e.currentTarget.value === ErrorTrackingStatus.ON
                     formik?.setFieldValue('spec.preCommand', getUpdatedPreCommand(preCommand, turnErrorTrackingOn))
                   }}
-                  options={[
-                    { label: 'Yes', value: ErrorTrackingStatus.ON },
-                    { label: 'No', value: ErrorTrackingStatus.OFF }
-                  ]}
+                  options={getErrorTrackingOptions(getString)}
                   margin={{ bottom: 'small' }}
                 />
               </>
