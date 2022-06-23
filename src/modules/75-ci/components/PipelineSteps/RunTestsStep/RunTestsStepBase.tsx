@@ -121,11 +121,6 @@ export const getBuildEnvironmentOptions = (getString: UseStringsReturn['getStrin
   { label: getString('ci.runTestsStep.dotNetCore'), value: 'Core' }
 ]
 
-export const getErrorTrackingOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
-  { label: 'Yes', value: ErrorTrackingStatus.ON },
-  { label: 'No', value: ErrorTrackingStatus.OFF }
-]
-
 export const getFrameworkVersionOptions = (getString: UseStringsReturn['getString']): SelectOption[] => [
   { label: getString('ci.runTestsStep.sixPointZero'), value: '6.0' },
   { label: getString('ci.runTestsStep.fivePointZero'), value: '5.0' }
@@ -534,7 +529,10 @@ export const RunTestsStepBase = (
                     const turnErrorTrackingOn = e.currentTarget.value === ErrorTrackingStatus.ON
                     formik?.setFieldValue('spec.preCommand', getUpdatedPreCommand(preCommand, turnErrorTrackingOn))
                   }}
-                  options={getErrorTrackingOptions(getString)}
+                  options={[
+                    { label: 'Yes', value: ErrorTrackingStatus.ON },
+                    { label: 'No', value: ErrorTrackingStatus.OFF }
+                  ]}
                   margin={{ bottom: 'small' }}
                 />
               </>
