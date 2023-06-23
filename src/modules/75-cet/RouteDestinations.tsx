@@ -26,6 +26,8 @@ import DelegateListing from '@delegates/pages/delegates/DelegateListing'
 import AccessControlPage from '@rbac/pages/AccessControl/AccessControlPage'
 import UsersPage from '@rbac/pages/Users/UsersPage'
 import SettingsList from '@default-settings/pages/SettingsList'
+import AuditTrailFactory, { ResourceScope } from 'framework/AuditTrail/AuditTrailFactory'
+import type { ResourceDTO } from 'services/audit'
 import { CETMonitoredServices } from './pages/CETMonitoredServices'
 import SideNav from './components/SideNav/SideNav'
 import CETHomePage from './pages/CETHomePage'
@@ -33,6 +35,40 @@ import CETTrialPage from './pages/trialPage/CETTrialPage'
 import { CETEventsSummary } from './pages/events-summary/CETEventsSummary'
 import { CETAgents } from './pages/CET-agent-control/CET-agents/CETAgents'
 import CETSettings from './pages/CET-agent-control/CETSettings'
+
+AuditTrailFactory.registerResourceHandler('CET_AGENT_TOKEN', {
+  moduleIcon: {
+    name: 'cet'
+  },
+  moduleLabel: 'common.purpose.cet.continuous',
+  resourceLabel: 'common.purpose.cet.agentToken',
+  resourceUrl: (_resource_: ResourceDTO, resourceScope: ResourceScope) => {
+    const { accountIdentifier, orgIdentifier, projectIdentifier } = resourceScope
+    const url = routes.toCETAgentsTokens({
+      orgIdentifier: orgIdentifier || '',
+      accountId: accountIdentifier,
+      projectIdentifier: projectIdentifier || ''
+    })
+    return url
+  }
+})
+
+AuditTrailFactory.registerResourceHandler('CET_CRITICAL_EVENT', {
+  moduleIcon: {
+    name: 'cet'
+  },
+  moduleLabel: 'common.purpose.cet.continuous',
+  resourceLabel: 'common.purpose.cet.criticalEvent',
+  resourceUrl: (_resource_: ResourceDTO, resourceScope: ResourceScope) => {
+    const { accountIdentifier, orgIdentifier, projectIdentifier } = resourceScope
+    const url = routes.toCETCriticalEvents({
+      orgIdentifier: orgIdentifier || '',
+      accountId: accountIdentifier,
+      projectIdentifier: projectIdentifier || ''
+    })
+    return url
+  }
+})
 
 export const CETSideNavProps: SidebarContext = {
   navComponent: SideNav,

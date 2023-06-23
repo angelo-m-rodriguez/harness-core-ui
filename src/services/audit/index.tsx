@@ -1597,7 +1597,8 @@ export interface ResourceDTO {
     | 'NG_ACCOUNT_DETAILS'
     | 'BUDGET_GROUP'
     | 'IP_ALLOWLIST_CONFIG'
-    | 'NETWORK_MAP'
+    | 'CET_AGENT_TOKEN'
+    | 'CET_CRITICAL_EVENT'
 }
 
 export interface ResourceFilter {

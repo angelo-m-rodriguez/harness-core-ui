@@ -835,7 +835,9 @@ export interface StringsMap {
   'common.purpose.ce.optimizationCard.description': string
   'common.purpose.ce.subtitle': string
   'common.purpose.ce.visibilityCard.description': string
+  'common.purpose.cet.agentToken': string
   'common.purpose.cet.continuous': string
+  'common.purpose.cet.criticalEvent': string
   'common.purpose.cet.moduleSelectionSubHeading': string
   'common.purpose.cf.continuous': string
   'common.purpose.cf.description': string

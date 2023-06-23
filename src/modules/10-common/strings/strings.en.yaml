@@ -351,6 +351,8 @@ purpose:
     shortName: IDP
   cet:
     continuous: Continuous Error Tracking
+    criticalEvent: Critical Event
+    agentToken: Agent Token
     moduleSelectionSubHeading: Identify and fix errors faster with complete visibility into code level data using Harness Continuous Error Tracking.
 trialCommingSoon: Trial - Coming soon
 trialInProgress: Trial in progress
