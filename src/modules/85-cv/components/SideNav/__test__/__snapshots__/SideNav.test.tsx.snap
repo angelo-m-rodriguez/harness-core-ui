@@ -102,16 +102,6 @@ exports[`Sidenav render 1`] = `
               changes
             </p>
           </a>
-          <a
-            class="link"
-            href="/account/dummy/cv/orgs/dummy/projects/dummy/eventsummary"
-          >
-            <p
-              class="StyledProps--font StyledProps--main text"
-            >
-              cv.codeErrors.title
-            </p>
-          </a>
           <div>
             <div
               class="border"
