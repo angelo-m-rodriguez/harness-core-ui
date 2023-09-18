@@ -107,8 +107,6 @@ import GitSyncConfigTab from '@gitsync/pages/config/GitSyncConfigTab'
 import DiscoveryPage from '@discovery/pages/home/DiscoveryPage'
 import DiscoveryDetails from '@discovery/pages/discovery-details/DiscoveryDetails'
 import NetworkMapStudio from '@discovery/pages/network-map-studio/NetworkMapStudio'
-import CVCodeErrorsSettings from '@cv/pages/code-errors-agent-control/CVCodeErrorsSettings'
-import { CVCodeErrorsAgents } from '@cv/pages/code-errors-agent-control/code-errors-agents/CVCodeErrorsAgents'
 import { CESettingsRouteDestination } from '@ce/CERouteDestinations'
 import MonitoredServiceListWidget from '@cv/components/MonitoredServiceListWidget/MonitoredServiceListWidget'
 import {
@@ -635,22 +633,6 @@ function SettingsRouteDestinations({ mode }: { mode: NAV_MODE }): React.ReactEle
         <React.Suspense fallback={<PageSpinner />}>
           <NetworkMapStudio />
         </React.Suspense>
-      </RouteWithContext>
-
-      <RouteWithContext exact path={pathArrayForAllScopes(routes.toCVCodeErrorsAgentsSettings, mode)}>
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/agents'} />
-        </CVCodeErrorsSettings>
-      </RouteWithContext>
-      <RouteWithContext exact path={pathArrayForAllScopes(routes.toCVCodeErrorsTokensSettings, mode)}>
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/tokens'} />
-        </CVCodeErrorsSettings>
-      </RouteWithContext>
-      <RouteWithContext exact path={pathArrayForAllScopes(routes.toCVCodeErrorsCriticalEventSettings, mode)}>
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/criticalevents'} />
-        </CVCodeErrorsSettings>
       </RouteWithContext>
 
       <RouteWithContext

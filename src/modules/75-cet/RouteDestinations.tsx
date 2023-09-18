@@ -27,7 +27,6 @@ import UsersPage from '@rbac/pages/Users/UsersPage'
 import SettingsList from '@default-settings/pages/SettingsList'
 import AuditTrailFactory, { ResourceScope } from 'framework/AuditTrail/AuditTrailFactory'
 import type { ResourceDTO } from 'services/audit'
-import { useQueryParams } from '@common/hooks'
 import RbacFactory from '@rbac/factories/RbacFactory'
 import { ResourceCategory, ResourceType } from '@rbac/interfaces/ResourceType'
 import { PermissionIdentifier } from '@rbac/interfaces/PermissionIdentifier'
@@ -124,21 +123,6 @@ const RedirectToCETProject = (): React.ReactElement => {
   }
 }
 
-export const RedirectToCETEventSummaryDetail = (): React.ReactElement => {
-  const params = useParams<ProjectPathProps & { identifier: string }>()
-  const query = useQueryParams<any>()
-  return (
-    <Redirect
-      to={routes.toCETEventsSummaryDetail({
-        accountId: params.accountId,
-        orgIdentifier: params.orgIdentifier || '',
-        projectIdentifier: params.projectIdentifier,
-        ...query
-      })}
-    />
-  )
-}
-
 const RedirectToModuleTrialHome = (): React.ReactElement => {
   const { accountId } = useParams<{
     accountId: string
@@ -186,8 +170,8 @@ const ETRoutes: FC = () => {
 
   RbacFactory.registerResourceTypeHandler(ResourceType.CET_CRITICAL_EVENT, {
     icon: 'cet',
-    label: 'cv.codeErrors.criticalEvents',
-    labelSingular: 'cv.codeErrors.criticalEvents',
+    label: 'common.purpose.errorTracking.criticalEvents',
+    labelSingular: 'common.purpose.errorTracking.criticalEvents',
     category: ResourceCategory.CET,
 
     permissionLabels: {

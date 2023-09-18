@@ -32,6 +32,8 @@ import SSCASideNavLinks from '@ssca/components/SSCASideNavLinks'
 import SSCARouteDestinations from '@ssca/SSCARouteDestinations'
 import IACMSideNavLinks from '@iacm/components/IACMSideNav/Nav2'
 import IACMRouteDestinations from '@iacm/RouteDestinationsV2'
+import CETRouteDestinations from '@cet/CETRouteDestinations'
+import CETSideNavLinks from '@cet/components/SideNav/CETSideNavLinks'
 
 interface IModuleRouteConfig {
   sideNavLinks: (mode: NAV_MODE) => React.ReactElement
@@ -64,8 +66,8 @@ const ModuleRouteConfig: Record<NavModuleName, IModuleRouteConfig> = {
     routes: () => <></>
   },
   [ModuleName.CET]: {
-    sideNavLinks: () => <></>,
-    routes: () => <></>
+    sideNavLinks: CETSideNavLinks,
+    routes: CETRouteDestinations
   },
   [ModuleName.CE]: {
     sideNavLinks: CCMSideNavLinks,

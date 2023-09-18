@@ -40,7 +40,6 @@ export const ProjectSettingsPage: React.FC = () => {
     STO_JIRA_INTEGRATION,
     PL_DISCOVERY_ENABLE,
     USE_OLD_GIT_SYNC,
-    SRM_ET_EXPERIMENTAL,
     SRM_DOWNTIME,
     CVNG_TEMPLATE_MONITORED_SERVICE,
     SRM_COMMON_MONITORED_SERVICE
@@ -191,13 +190,6 @@ export const ProjectSettingsPage: React.FC = () => {
               route={routesV2.toDiscoverySettings({ accountId, orgIdentifier, projectIdentifier, module })}
               hidden={!(PL_DISCOVERY_ENABLE && isActiveLicense(CHAOS_LICENSE_STATE))}
             />
-            <SettingsResourceCard //todo-test
-              label={<String stringID="common.codeErrorsSettings" />}
-              id={SettingsResources.CodeErrorsSettings}
-              icon={'setting'}
-              route={routesV2.toCVCodeErrorsAgentsSettings({ accountId, orgIdentifier, projectIdentifier, module })}
-              hidden={!SRM_ET_EXPERIMENTAL}
-            />
             <SettingsResourceCard
               label={<String stringID="common.monitoredServices" />}
               id={SettingsResources.MonitoredServices}
@@ -211,6 +203,24 @@ export const ProjectSettingsPage: React.FC = () => {
               icon={'layers-outline'}
               route={routesV2.toSettingsServiceOverrides({ accountId, orgIdentifier, projectIdentifier, module })}
               hidden={!(isServiceOverridesEnabled && haveCD)}
+            />
+            <SettingsResourceCard
+              label={<String stringID="common.agents" />}
+              id={SettingsResources.CETAgents}
+              icon={'connectors-blue'}
+              route={routesV2.toCETAgents({ accountId, orgIdentifier, projectIdentifier, module: 'cet' })}
+            />
+            <SettingsResourceCard
+              label={<String stringID="common.purpose.errorTracking.agentTokens" />}
+              id={SettingsResources.CETTokens}
+              icon={'connectors-blue'}
+              route={routesV2.toCETAgentsTokens({ accountId, orgIdentifier, projectIdentifier, module: 'cet' })}
+            />
+            <SettingsResourceCard
+              label={<String stringID="common.purpose.errorTracking.criticalEvents" />}
+              id={SettingsResources.CETCriticalEvents}
+              icon={'connectors-blue'}
+              route={routesV2.toCETCriticalEvents({ accountId, orgIdentifier, projectIdentifier, module: 'cet' })}
             />
           </SettingsPage.group>
           <SettingsPage.group

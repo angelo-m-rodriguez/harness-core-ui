@@ -909,16 +909,23 @@ const routes = {
     params => `/settings/discovery/${params?.dAgentId}/create-network-map`
   ),
 
-  toCVCodeErrorsAgentsSettings: withModeModuleAndScopePrefix(() => `/settings/agents`),
-  toCVCodeErrorsTokensSettings: withModeModuleAndScopePrefix(() => `/settings/tokens`),
-  toCVCodeErrorsCriticalEventSettings: withModeModuleAndScopePrefix(() => `/settings/criticalevents`),
-
   toMonitoredServicesSettings: withModeModuleAndScopePrefix(() => '/settings/monitoredservices'),
   toMonitoredServicesSetupSettings: withModeModuleAndScopePrefix(() => `/settings/monitoringservices/setup`),
 
   // ssca module routes
   toSSCAArtifacts: withModeModuleAndScopePrefix(() => '/artifacts'),
   toSSCAComponents: withModeModuleAndScopePrefix(() => '/components'),
+
+  //cet routes
+  toCET: withModeModuleAndScopePrefix<ModulePathParams>(() => ''),
+  toCETHome: withModeModuleAndScopePrefix<ModulePathParams>(() => '/home'),
+  toCETSettings: withModeModuleAndScopePrefix<ModulePathParams>(() => '/settings'),
+  toCETTrial: withModeModuleAndScopePrefix(() => '/home/trial'),
+  toCETEventsSummary: withModeModuleAndScopePrefix<ModulePathParams>(() => '/eventsummary'),
+  toCETMonitoredServices: withModeModuleAndScopePrefix<ModulePathParams>(() => '/etmonitoredservices'),
+  toCETAgents: withModeModuleAndScopePrefix<ModulePathParams>(() => '/settings/agents'),
+  toCETAgentsTokens: withModeModuleAndScopePrefix<ModulePathParams>(() => '/settings/tokens'),
+  toCETCriticalEvents: withModeModuleAndScopePrefix<ModulePathParams>(() => '/settings/criticalevents'),
 
   // cf routes
   toCF: (params: Partial<ProjectPathProps>) =>

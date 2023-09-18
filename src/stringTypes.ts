@@ -953,6 +953,8 @@ export interface StringsMap {
   'common.purpose.cv.subtitle': string
   'common.purpose.cv.verification': string
   'common.purpose.developer': string
+  'common.purpose.errorTracking.agentTokens': string
+  'common.purpose.errorTracking.criticalEvents': string
   'common.purpose.errorTracking.title': string
   'common.purpose.howToProceed': string
   'common.purpose.idp.fullName': string
@@ -9426,7 +9428,6 @@ export interface StringsMap {
   'cv.clusterType': string
   'cv.codeErrors.agentTokens': string
   'cv.codeErrors.agents': string
-  'cv.codeErrors.criticalEvents': string
   'cv.codeErrors.title': string
   'cv.commonMonitoredServices.agentConfiguration': string
   'cv.commonMonitoredServices.changeSource': string

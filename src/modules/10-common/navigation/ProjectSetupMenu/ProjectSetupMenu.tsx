@@ -36,7 +36,6 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module, defaultExpa
 
   const {
     CVNG_TEMPLATE_MONITORED_SERVICE,
-    SRM_ET_EXPERIMENTAL,
     SRM_DOWNTIME,
     STO_JIRA_INTEGRATION,
     USE_OLD_GIT_SYNC,
@@ -132,12 +131,6 @@ const ProjectSetupMenu: React.FC<ProjectSetupMenuProps> = ({ module, defaultExpa
           <SidebarLink label={getString('getStarted')} to={routes.toGetStartedWithCD({ ...params, module })} />
         )}
         {showDiscovery && <SidebarLink label={getString('common.discovery')} to={routes.toDiscovery(params)} />}
-        {SRM_ET_EXPERIMENTAL && module === 'cv' && (
-          <SidebarLink
-            label={getString('common.codeErrorsSettings')}
-            to={routes.toCVCodeErrorsSettings({ ...params })}
-          />
-        )}
         {SRM_DOWNTIME && isCV && (
           <SidebarLink label={getString('common.sloDowntimeLabel')} to={routes.toCVSLODowntime({ ...params })} />
         )}

@@ -17,15 +17,12 @@ import { ResourceType } from '@rbac/interfaces/ResourceType'
 import { isUpdated, showDependencies } from '@cv/pages/monitored-service/components/Configurations/Configurations.utils'
 import { useStrings } from 'framework/strings'
 import { useLicenseStore } from 'framework/LicenseStore/LicenseStoreContext'
-import { useFeatureFlags } from '@common/hooks/useFeatureFlag'
 import { LICENSE_STATE_VALUES } from 'framework/LicenseStore/licenseStoreUtil'
-import { CETAgentConfig } from '@cet/pages/CETAgentConfig'
 import { ModuleName } from 'framework/types/ModuleName'
 import { MonitoredServiceEnum } from '@cv/pages/monitored-service/MonitoredServicePage.constants'
 import { ProjectPathProps } from '@common/interfaces/RouteInterfaces'
 import { useQueryParams } from '@common/hooks'
 import {
-  getIsAgentConfigSectionHidden,
   getIsChangeSrcSectionHidden,
   getIsHealthSrcSectionHidden,
   getIsNotifcationsSectionHidden,
@@ -92,16 +89,8 @@ export default function CommonMonitoredServiceConfigurations(
   } = props
   const formik = useFormikContext<MonitoredServiceForm>()
   const { licenseInformation } = useLicenseStore()
-  const { CET_PLATFORM_MONITORED_SERVICE } = useFeatureFlags()
-  const isCETLicensePresentAndActive = licenseInformation[ModuleName.CET]?.status === LICENSE_STATE_VALUES.ACTIVE
   const isChangeSrcSectionHidden = getIsChangeSrcSectionHidden(config, identifier)
   const isHealthSrcSectionHidden = getIsHealthSrcSectionHidden(config, identifier)
-  const isAgentConfigSectionHidden = getIsAgentConfigSectionHidden(
-    config,
-    identifier,
-    isCETLicensePresentAndActive,
-    CET_PLATFORM_MONITORED_SERVICE
-  )
   const { getString } = useStrings()
   const history = useHistory()
   const isNotificationsSectionHidden = getIsNotifcationsSectionHidden(isTemplate, config, identifier)
@@ -288,16 +277,6 @@ export default function CommonMonitoredServiceConfigurations(
                   onSuccess={onSuccessChangeSource}
                 />
               </>
-            }
-          />
-        )}
-        {isAgentConfigSectionHidden ? null : (
-          <Tab
-            disabled={areOtherTabsDisabled}
-            id={MonitoredServiceConfigurationsTabsEnum.AGENT_CONFIG}
-            title={getString('cet.monitoredservice.agentconfig')}
-            panel={
-              <CETAgentConfig serviceRef={formik.values?.serviceRef} environmentRef={formik.values?.environmentRef} />
             }
           />
         )}

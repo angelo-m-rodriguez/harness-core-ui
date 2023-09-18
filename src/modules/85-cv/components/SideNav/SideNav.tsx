@@ -18,8 +18,6 @@ import { useStrings } from 'framework/strings'
 import { useAppStore } from 'framework/AppStore/AppStoreContext'
 import { ModuleName } from 'framework/types/ModuleName'
 import ProjectSetupMenu from '@common/navigation/ProjectSetupMenu/ProjectSetupMenu'
-import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
-import { FeatureFlag } from '@common/featureFlags'
 import css from './SideNav.module.scss'
 
 export default function CVSideNav(): React.ReactElement {
@@ -29,7 +27,6 @@ export default function CVSideNav(): React.ReactElement {
   const { getString } = useStrings()
   const history = useHistory()
   const { updateAppStore } = useAppStore()
-  const SRM_ET_EXPERIMENTAL = useFeatureFlag(FeatureFlag.SRM_ET_EXPERIMENTAL)
 
   enum CVSideNavTabIds {
     AccountTab = 'AccountTab',
@@ -80,12 +77,6 @@ export default function CVSideNav(): React.ReactElement {
             label={getString('changes')}
             to={routes.toCVChanges({ accountId, projectIdentifier, orgIdentifier })}
           />
-          {SRM_ET_EXPERIMENTAL ? (
-            <SidebarLink
-              label={getString('cv.codeErrors.title')}
-              to={routes.toCVCodeErrors({ accountId, projectIdentifier, orgIdentifier })}
-            />
-          ) : null}
           <ProjectSetupMenu module="cv" />
         </React.Fragment>
       ) : (

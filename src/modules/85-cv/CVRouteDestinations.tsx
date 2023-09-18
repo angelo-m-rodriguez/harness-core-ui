@@ -42,9 +42,6 @@ import { CVChanges } from './pages/changes/CVChanges'
 import CVSLODetailsPage from './pages/slos/CVSLODetailsPage/CVSLODetailsPage'
 import MonitoredServicePage from './pages/monitored-service/MonitoredServicePage'
 import { MonitoredServiceProvider } from './pages/monitored-service/MonitoredServiceContext'
-import { CVCodeErrors } from './pages/code-errors/CVCodeErrors'
-import CVCodeErrorsSettings from './pages/code-errors-agent-control/CVCodeErrorsSettings'
-import { CVCodeErrorsAgents } from './pages/code-errors-agent-control/code-errors-agents/CVCodeErrorsAgents'
 import CVCreateSLOV2 from './pages/slos/components/CVCreateSLOV2/CVCreateSLOV2'
 import CVHomePage from './pages/home/CVHomePage'
 import CVSLOsListingPage from './pages/slos/CVSLOsListingPage'
@@ -105,25 +102,6 @@ const CVRedirect: React.FC = () => {
 
   // Open scope selector
   return <CVHomePage />
-}
-
-const RedirectToCVCodeErrorsControl = (): React.ReactElement => {
-  const params = useParams<ProjectPathProps>()
-  const { selectedProject } = useAppStore()
-
-  if (selectedProject?.modules?.includes(ModuleName.CV)) {
-    return (
-      <Redirect
-        to={routes.toCVCodeErrorsAgents({
-          accountId: params.accountId,
-          orgIdentifier: selectedProject.orgIdentifier || '',
-          projectIdentifier: selectedProject.identifier
-        })}
-      />
-    )
-  } else {
-    return <Redirect to={routes.toCVHome(params)} />
-  }
 }
 
 const RedirectToCVProject = (): React.ReactElement => {
@@ -287,45 +265,6 @@ const CVRouteDestinations = (mode = NAV_MODE.MODULE): React.ReactElement => {
         path={routes.toCVChanges({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })}
       >
         <CVChanges />
-      </RouteWithContext>
-      <RouteWithContext
-        path={routes.toCVCodeErrors({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })}
-      >
-        <CVCodeErrors />
-      </RouteWithContext>
-      <RouteWithContext
-        exact
-        path={[routes.toCVCodeErrorsSettings({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })]}
-      >
-        <RedirectToCVCodeErrorsControl />
-      </RouteWithContext>
-      <RouteWithContext
-        exact
-        path={[routes.toCVCodeErrorsAgents({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })]}
-      >
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/agents'} />
-        </CVCodeErrorsSettings>
-      </RouteWithContext>
-      <RouteWithContext
-        exact
-        path={[
-          routes.toCVCodeErrorsAgentsTokens({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })
-        ]}
-      >
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/tokens'} />
-        </CVCodeErrorsSettings>
-      </RouteWithContext>
-      <RouteWithContext
-        exact
-        path={[
-          routes.toCVCodeErrorsCriticalEvents({ ...accountPathProps, ...projectPathProps, ...cvModuleParams, mode })
-        ]}
-      >
-        <CVCodeErrorsSettings>
-          <CVCodeErrorsAgents pathComponentLocation={'/criticalevents'} />
-        </CVCodeErrorsSettings>
       </RouteWithContext>
       <RouteWithContext
         exact

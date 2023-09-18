@@ -157,19 +157,6 @@ describe('Project Setup Menu', () => {
     expect(queryByText('resourcePage.fileStore')).toBeInTheDocument()
   })
 
-  test('Show Code Error Settings Link if SRM_ET_EXPERIMENTAL is true and module is CV', async () => {
-    const { queryByText } = render(
-      <TestWrapper
-        defaultFeatureFlagValues={{
-          SRM_ET_EXPERIMENTAL: true
-        }}
-      >
-        <ProjectSetupMenu module="cv" defaultExpanded />
-      </TestWrapper>
-    )
-    expect(queryByText('common.codeErrorsSettings')).toBeInTheDocument()
-  })
-
   test('Show STO Downtime Link if SRM_DOWNTIME is true and module is CV', async () => {
     const { queryByText } = render(
       <TestWrapper

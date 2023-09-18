@@ -8,17 +8,17 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import routes from '@common/RouteDefinitionsV2'
-import { AccountPathProps } from '@common/interfaces/RouteInterfaces'
-import { Module } from 'framework/types/ModuleName'
+import { AccountPathProps, Module } from '@common/interfaces/RouteInterfaces'
 import { useStrings } from 'framework/strings'
-import { SideNav } from '@common/navigation/SideNavV2/SideNavV2'
 import { Scope } from 'framework/types/types'
 import { NAV_MODE } from '@common/utils/routeUtils'
+import { SideNav } from '@common/navigation/SideNavV2/SideNavV2'
 import { useGetSelectedScope } from '@common/navigation/SideNavV2/SideNavV2.utils'
 
-const module: Module = 'cv'
-const CVSideNavLinks = (mode: NAV_MODE): React.ReactElement => {
+const module: Module = 'cet'
+const CETSideNavLinks = (mode: NAV_MODE): React.ReactElement => {
   const { getString } = useStrings()
+
   const { accountId } = useParams<AccountPathProps>()
   const { params } = useGetSelectedScope()
   const { projectIdentifier, orgIdentifier } = params || {}
@@ -26,24 +26,21 @@ const CVSideNavLinks = (mode: NAV_MODE): React.ReactElement => {
   return (
     <SideNav.Main>
       <SideNav.Section>
-        <SideNav.Scope scope={[Scope.PROJECT, Scope.ACCOUNT]}>
-          <SideNav.Link
-            label={getString('cv.slos.title')}
-            to={routes.toCVSLOs({ accountId, projectIdentifier, orgIdentifier, module })}
-            iconProps={{ padding: { top: 'xsmall' } }}
-            icon="slo"
-          />
-        </SideNav.Scope>
         <SideNav.Scope scope={Scope.PROJECT}>
           <SideNav.Link
-            label={getString('cv.monitoredServices.title')}
-            to={routes.toCVMonitoringServices({ accountId, projectIdentifier, orgIdentifier, module })}
-            icon="monitored-service"
+            icon="nav-home"
+            label={getString('overview')}
+            to={routes.toCETHome({ accountId, projectIdentifier, orgIdentifier, module })}
           />
           <SideNav.Link
-            label={getString('changes')}
-            to={routes.toCVChanges({ accountId, projectIdentifier, orgIdentifier, module })}
-            icon="changes"
+            icon="services"
+            label={getString('auditTrail.eventSummary')}
+            to={routes.toCETEventsSummary({ accountId, projectIdentifier, orgIdentifier, module })}
+          />
+          <SideNav.Link
+            icon="services"
+            label={getString('common.monitoredServices')}
+            to={routes.toCETMonitoredServices({ accountId, projectIdentifier, orgIdentifier, module })}
           />
         </SideNav.Scope>
       </SideNav.Section>
@@ -52,4 +49,4 @@ const CVSideNavLinks = (mode: NAV_MODE): React.ReactElement => {
   )
 }
 
-export default CVSideNavLinks
+export default CETSideNavLinks

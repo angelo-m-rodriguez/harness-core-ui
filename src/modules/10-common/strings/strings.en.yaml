@@ -347,6 +347,8 @@ purpose:
     tests: '{{$.tests}}'
   errorTracking:
     title: Error Tracking
+    agentTokens: Agent Tokens
+    criticalEvents: Critical Events
   code:
     name: Code
     title: Soucre Code Management

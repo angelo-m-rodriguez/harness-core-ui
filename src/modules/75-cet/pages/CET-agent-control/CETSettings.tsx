@@ -14,6 +14,8 @@ import routes from '@common/RouteDefinitions'
 import { NGBreadcrumbs } from '@common/components/NGBreadcrumbs/NGBreadcrumbs'
 import { useStrings } from 'framework/strings'
 import ScopedTitle from '@common/components/Title/ScopedTitle'
+import { useFeatureFlag } from '@common/hooks/useFeatureFlag'
+import { FeatureFlag } from '@common/featureFlags'
 
 const CETSettings: React.FC = ({ children }) => {
   const { getString } = useStrings()
@@ -40,6 +42,10 @@ const CETSettings: React.FC = ({ children }) => {
     to: routes.toCETCriticalEvents({ accountId, orgIdentifier, projectIdentifier })
   })
 
+  const navigationTabs = !useFeatureFlag(FeatureFlag.CDS_NAV_2_0) ? (
+    <TabNavigation size={'small'} links={settingsLinks.map(link => ({ label: link.label, to: link.to }))} />
+  ) : undefined
+
   useDocumentTitle(['ET', getString('common.codeErrorsSettings')])
 
   return (
@@ -47,9 +53,7 @@ const CETSettings: React.FC = ({ children }) => {
       <Page.Header
         breadcrumbs={<NGBreadcrumbs />}
         title={<ScopedTitle title={getString('common.codeErrorsSettings')} />}
-        toolbar={
-          <TabNavigation size={'small'} links={settingsLinks.map(link => ({ label: link.label, to: link.to }))} />
-        }
+        toolbar={navigationTabs}
       />
       <Page.Body>{children}</Page.Body>
     </>

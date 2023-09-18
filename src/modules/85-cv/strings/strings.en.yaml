@@ -1304,7 +1304,6 @@ codeErrors:
   title: Code Errors
   agents: '{{ $.common.agents }}'
   agentTokens: '{{ $.common.tokens }}'
-  criticalEvents: 'Critical Events'
 licenseBanner:
   freePlanUsageMessage: You have used {{activeServicesCount}}/{{totalServices}} Services included in the free plan
   teamPlanUsageMessage: You have used {{activeServicesCount}}/{{totalServices}} Services included in the team plan

@@ -65,7 +65,6 @@ import { NameIdDescriptionTags, TimeSeriesAreaChart } from '@common/components'
 import { useHarnessServicetModal } from '@common/modals/HarnessServiceModal/HarnessServiceModal'
 import { Ticker } from '@common/components/Ticker/Ticker'
 import { DateTimePicker } from '@common/components/DateTimePicker/DateTimePicker'
-import { RedirectToCETEventSummaryDetail, etModuleParams } from '@cet/RouteDestinations'
 import { MultiTypeConnectorField } from '@connectors/components/ConnectorReferenceField/FormMultiTypeConnectorField'
 import ChildAppMounter from '../../microfrontends/ChildAppMounter'
 import CVTrialHomePage from './pages/home/CVTrialHomePage'
@@ -74,9 +73,6 @@ import CVSLOsListingPage from './pages/slos/CVSLOsListingPage'
 import CVSLODetailsPage from './pages/slos/CVSLODetailsPage/CVSLODetailsPage'
 import { MonitoredServiceProvider } from './pages/monitored-service/MonitoredServiceContext'
 import MonitoredServiceInputSetsTemplate from './pages/monitored-service/MonitoredServiceInputSetsTemplate/MonitoredServiceInputSetsTemplate'
-import { CVCodeErrors } from './pages/code-errors/CVCodeErrors'
-import { CVCodeErrorsAgents } from './pages/code-errors-agent-control/code-errors-agents/CVCodeErrorsAgents'
-import CVCodeErrorsSettings from './pages/code-errors-agent-control/CVCodeErrorsSettings'
 import CVCreateSLOV2 from './pages/slos/components/CVCreateSLOV2/CVCreateSLOV2'
 import { getIsValuePresent } from './utils/licenseBannerUtils'
 import { ThresholdPercentageToShowBanner } from './constants'
@@ -350,25 +346,6 @@ const CVSideNavProps: SidebarContext = {
   icon: 'cv-main'
 }
 
-const RedirectToCVCodeErrorsControl = (): React.ReactElement => {
-  const params = useParams<ProjectPathProps>()
-  const { selectedProject } = useAppStore()
-
-  if (selectedProject?.modules?.includes(ModuleName.CV)) {
-    return (
-      <Redirect
-        to={routes.toCVCodeErrorsAgents({
-          accountId: params.accountId,
-          orgIdentifier: selectedProject.orgIdentifier || '',
-          projectIdentifier: selectedProject.identifier
-        })}
-      />
-    )
-  } else {
-    return <Redirect to={routes.toCVHome(params)} />
-  }
-}
-
 export const SRMRoutes = (
   <>
     <RouteWithLayout
@@ -489,51 +466,6 @@ export const SRMRoutes = (
     </RouteWithLayout>
 
     <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toCVCodeErrors({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })}
-    >
-      <CVCodeErrors />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[routes.toCVCodeErrorsSettings({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })]}
-    >
-      <RedirectToCVCodeErrorsControl />
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[routes.toCVCodeErrorsAgents({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })]}
-    >
-      <CVCodeErrorsSettings>
-        <CVCodeErrorsAgents pathComponentLocation={'/agents'} />
-      </CVCodeErrorsSettings>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[routes.toCVCodeErrorsAgentsTokens({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })]}
-    >
-      <CVCodeErrorsSettings>
-        <CVCodeErrorsAgents pathComponentLocation={'/tokens'} />
-      </CVCodeErrorsSettings>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      exact
-      sidebarProps={CVSideNavProps}
-      path={[routes.toCVCodeErrorsCriticalEvents({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })]}
-    >
-      <CVCodeErrorsSettings>
-        <CVCodeErrorsAgents pathComponentLocation={'/criticalevents'} />
-      </CVCodeErrorsSettings>
-    </RouteWithLayout>
-
-    <RouteWithLayout
       exact
       sidebarProps={CVSideNavProps}
       path={[routes.toCVSLODowntime({ ...accountPathProps, ...projectPathProps, ...cvModuleParams })]}
@@ -602,18 +534,6 @@ export const SRMRoutes = (
       <MonitoredServiceProvider isTemplate={false}>
         <MonitoredServicePage />
       </MonitoredServiceProvider>
-    </RouteWithLayout>
-
-    <RouteWithLayout
-      sidebarProps={CVSideNavProps}
-      path={routes.toCETEventSummaryDetailOldNotifLink({
-        ...accountPathProps,
-        ...orgPathProps,
-        ...projectPathProps,
-        ...etModuleParams
-      })}
-    >
-      <RedirectToCETEventSummaryDetail />
     </RouteWithLayout>
 
     <RouteWithLayout
